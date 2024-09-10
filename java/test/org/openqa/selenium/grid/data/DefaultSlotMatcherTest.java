@@ -19,6 +19,7 @@ package org.openqa.selenium.grid.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
@@ -536,7 +537,37 @@ class DefaultSlotMatcherTest {
   }
 
   @Test
-  void vendorExtensionPrefixedCapabilitiesAreIgnoredForMatching() {
+  void seleniumExtensionCapabilitiesAreIgnoredForMatching() {
+    Capabilities stereotype =
+      new ImmutableCapabilities(
+        CapabilityType.BROWSER_NAME,
+        "chrome",
+        CapabilityType.BROWSER_VERSION,
+        "84",
+        CapabilityType.PLATFORM_NAME,
+        Platform.WINDOWS,
+        "se:cdpVersion",
+        1,
+        "se:downloadsEnabled",
+        true);
+
+    Capabilities capabilities =
+      new ImmutableCapabilities(
+        CapabilityType.BROWSER_NAME,
+        "chrome",
+        CapabilityType.BROWSER_VERSION,
+        "84",
+        CapabilityType.PLATFORM_NAME,
+        Platform.WINDOWS,
+        "se:cdpVersion",
+        2,
+        "se:downloadsEnabled",
+        false);
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void vendorOptionsCapabilitiesAreIgnoredForMatching() {
     Capabilities stereotype =
         new ImmutableCapabilities(
             CapabilityType.BROWSER_NAME,
@@ -545,10 +576,10 @@ class DefaultSlotMatcherTest {
             "84",
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
-            "goog:cheese",
-            "amsterdam",
-            "ms:fruit",
-            "mango");
+            "food:fruitOptions",
+            "mango",
+            "dairy:options",
+            Map.of("cheese", "amsterdam"));
 
     Capabilities capabilities =
         new ImmutableCapabilities(
@@ -558,10 +589,40 @@ class DefaultSlotMatcherTest {
             "84",
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
-            "goog:cheese",
-            "gouda",
-            "ms:fruit",
-            "orange");
+            "food:fruitOptions",
+            "orange",
+            "dairy:options",
+            Map.of("cheese", "gouda"));
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void specialExtensionCapabilitiesAreIgnoredForMatching() {
+    Capabilities stereotype =
+      new ImmutableCapabilities(
+        CapabilityType.BROWSER_NAME,
+        "chrome",
+        CapabilityType.BROWSER_VERSION,
+        "84",
+        CapabilityType.PLATFORM_NAME,
+        Platform.WINDOWS,
+        "food:loggingPrefs",
+        "mango",
+        "food:debuggerAddress",
+        Map.of("cheese", "amsterdam"));
+
+    Capabilities capabilities =
+      new ImmutableCapabilities(
+        CapabilityType.BROWSER_NAME,
+        "chrome",
+        CapabilityType.BROWSER_VERSION,
+        "84",
+        CapabilityType.PLATFORM_NAME,
+        Platform.WINDOWS,
+        "food:loggingPrefs",
+        "orange",
+        "food:debuggerAddress",
+        Map.of("cheese", "gouda"));
     assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
   }
 
