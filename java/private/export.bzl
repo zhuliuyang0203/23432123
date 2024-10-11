@@ -1,3 +1,4 @@
+load("@contrib_rules_jvm//java:defs.bzl", "java_library")
 load(
     "@rules_jvm_external//:defs.bzl",
     "javadoc",
@@ -24,7 +25,7 @@ def java_export(
     lib_name = "%s-lib" % name
 
     # Construct the java_library we'll export from here.
-    native.java_library(
+    java_library(
         name = lib_name,
         tags = tags,
         exports = exports,
