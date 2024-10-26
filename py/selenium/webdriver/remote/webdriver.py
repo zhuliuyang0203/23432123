@@ -54,10 +54,12 @@ from selenium.webdriver.common.virtual_authenticator import (
 from selenium.webdriver.support.relative_locator import RelativeBy
 
 from .bidi_connection import BidiConnection
+from .client_config import ClientConfig
 from .command import Command
 from .errorhandler import ErrorHandler
 from .file_detector import FileDetector
 from .file_detector import LocalFileDetector
+from .locator_converter import LocatorConverter
 from .mobile import Mobile
 from .remote_connection import RemoteConnection
 from .script_key import ScriptKey
@@ -95,7 +97,17 @@ def _create_caps(caps):
     return {"capabilities": {"firstMatch": [{}], "alwaysMatch": always_match}}
 
 
-def get_remote_connection(capabilities, command_executor, keep_alive, ignore_local_proxy=False):
+def get_remote_connection(
+    capabilities: dict,
+    command_executor: Union[str, RemoteConnection],
+    keep_alive: bool,
+    ignore_local_proxy: bool,
+    client_config: Optional[ClientConfig] = None,
+) -> RemoteConnection:
+    if isinstance(command_executor, str):
+        client_config = client_config or ClientConfig(remote_server_addr=command_executor)
+        client_config.remote_server_addr = command_executor
+        command_executor = RemoteConnection(client_config=client_config)
     from selenium.webdriver.chrome.remote_connection import ChromeRemoteConnection
     from selenium.webdriver.edge.remote_connection import EdgeRemoteConnection
     from selenium.webdriver.firefox.remote_connection import FirefoxRemoteConnection
@@ -104,7 +116,12 @@ def get_remote_connection(capabilities, command_executor, keep_alive, ignore_loc
     candidates = [ChromeRemoteConnection, EdgeRemoteConnection, SafariRemoteConnection, FirefoxRemoteConnection]
     handler = next((c for c in candidates if c.browser_name == capabilities.get("browserName")), RemoteConnection)
 
-    return handler(command_executor, keep_alive=keep_alive, ignore_proxy=ignore_local_proxy)
+    return handler(
+        remote_server_addr=command_executor,
+        keep_alive=keep_alive,
+        ignore_proxy=ignore_local_proxy,
+        client_config=client_config,
+    )
 
 
 def create_matches(options: List[BaseOptions]) -> Dict:
@@ -171,6 +188,9 @@ class WebDriver(BaseWebDriver):
         keep_alive: bool = True,
         file_detector: Optional[FileDetector] = None,
         options: Optional[Union[BaseOptions, List[BaseOptions]]] = None,
+        locator_converter: Optional[LocatorConverter] = None,
+        web_element_cls: Optional[type] = None,
+        client_config: Optional[ClientConfig] = None,
     ) -> None:
         """Create a new driver that will issue commands using the wire
         protocol.
@@ -178,11 +198,14 @@ class WebDriver(BaseWebDriver):
         :Args:
          - command_executor - Either a string representing URL of the remote server or a custom
              remote_connection.RemoteConnection object. Defaults to 'http://127.0.0.1:4444/wd/hub'.
-         - keep_alive - Whether to configure remote_connection.RemoteConnection to use
+         - keep_alive - (Deprecated) Whether to configure remote_connection.RemoteConnection to use
              HTTP keep-alive. Defaults to True.
          - file_detector - Pass custom file detector object during instantiation. If None,
              then default LocalFileDetector() will be used.
          - options - instance of a driver options.Options class
+         - locator_converter - Custom locator converter to use. Defaults to None.
+         - web_element_cls - Custom class to use for web elements. Defaults to WebElement.
+         - client_config - Custom client configuration to use. Defaults to None.
         """
 
         if isinstance(options, list):
@@ -198,6 +221,7 @@ class WebDriver(BaseWebDriver):
                 command_executor=command_executor,
                 keep_alive=keep_alive,
                 ignore_local_proxy=_ignore_local_proxy,
+                client_config=client_config,
             )
         self._is_remote = True
         self.session_id = None
@@ -207,6 +231,8 @@ class WebDriver(BaseWebDriver):
         self._switch_to = SwitchTo(self)
         self._mobile = Mobile(self)
         self.file_detector = file_detector or LocalFileDetector()
+        self.locator_converter = locator_converter or LocatorConverter()
+        self._web_element_cls = web_element_cls or self._web_element_cls
         self._authenticator_id = None
         self.start_client()
         self.start_session(capabilities)
@@ -729,21 +755,13 @@ class WebDriver(BaseWebDriver):
 
         :rtype: WebElement
         """
+        by, value = self.locator_converter.convert(by, value)
+
         if isinstance(by, RelativeBy):
             elements = self.find_elements(by=by, value=value)
             if not elements:
                 raise NoSuchElementException(f"Cannot locate relative element with: {by.root}")
             return elements[0]
-
-        if by == By.ID:
-            by = By.CSS_SELECTOR
-            value = f'[id="{value}"]'
-        elif by == By.CLASS_NAME:
-            by = By.CSS_SELECTOR
-            value = f".{value}"
-        elif by == By.NAME:
-            by = By.CSS_SELECTOR
-            value = f'[name="{value}"]'
 
         return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
 
@@ -757,21 +775,13 @@ class WebDriver(BaseWebDriver):
 
         :rtype: list of WebElement
         """
+        by, value = self.locator_converter.convert(by, value)
+
         if isinstance(by, RelativeBy):
             _pkg = ".".join(__name__.split(".")[:-1])
             raw_function = pkgutil.get_data(_pkg, "findElements.js").decode("utf8")
             find_element_js = f"/* findElements */return ({raw_function}).apply(null, arguments);"
             return self.execute_script(find_element_js, by.to_dict())
-
-        if by == By.ID:
-            by = By.CSS_SELECTOR
-            value = f'[id="{value}"]'
-        elif by == By.CLASS_NAME:
-            by = By.CSS_SELECTOR
-            value = f".{value}"
-        elif by == By.NAME:
-            by = By.CSS_SELECTOR
-            value = f'[name="{value}"]'
 
         # Return empty list if driver returns null
         # See https://github.com/SeleniumHQ/selenium/issues/4555

@@ -173,7 +173,7 @@ maven.install(
         "com.github.spotbugs:spotbugs:4.8.6",
         "com.github.stephenc.jcip:jcip-annotations:1.0-1",
         "com.google.code.gson:gson:2.11.0",
-        "com.google.guava:guava:33.3.0-jre",
+        "com.google.guava:guava:33.3.1-jre",
         "com.google.auto:auto-common:1.2.2",
         "com.google.auto.service:auto-service:1.1.1",
         "com.google.auto.service:auto-service-annotations:1.1.1",
