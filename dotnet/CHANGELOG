@@ -1,3 +1,114 @@
+v4.26.0
+======
+--> [dotnet] Reuse bazel build cache in IDE to optimize build process
+--> [dotnet] [cdp] Reveal original exception message even if error `code` is missing in payload
+Fix #14483
+--> [dotnet] [bidi] Fix web socket communication for .net framework
+Related to #14537
+--> [dotnet] Don't include http headers in internal logs (#14546)
+* [dotnet] Don't include http headers in internal logs
+* Update dotnet/src/webdriver/Remote/HttpCommandExecutor.cs
+* Update dotnet/src/webdriver/Remote/HttpCommandExecutor.cs
+--> [dotnet] Don't write trace log message when waiting until driver service is initialized (#14557)
+* [dotnet] Don't write trace log message when waiting until driver service is initialized
+On CI execution we see a lot of exceptions logged to output. Given that timeout is 5 seconds only, it is good just to suppress these exceptions even in internal logs.
+--> [dotnet] Support GetLog command by Remote Web Driver (#14549)
+* [dotnet] Support GetLog command by Remote Web Driver
+* Don't swallow not implemented exception, user should see it
+--> [dotnet] Suppressed not yet initialized safari driver service in internal logs
+--> [dotnet] Add more internal logs around CDP DevTools communication (#14558)
+* [dotnet] Add more internal logs around CDP DevTools communications
+* Warn only if this level is enabled
+* Log error and throw
+* One line cdp command params
+--> [dotnet] Remove obsolete alert exception ctor overload
+--> [dotnet] Remove obsolete ctor overload in WebDriverException
+--> [dotnet] Remove all obsolete exception ctors in inherited exceptions
+--> [dotnet] Remove obsolete exception ctors in support package
+--> [dotnet] Json serializer gen context for SM output (#14481)
+* [dotnet] Json serializer gen context for SM output
+* Add System.Text.Encodings.Web dep for json context
+* Update bazel dotnet rules to 0.16
+--> [dotnet] Allow setting of PageDimensions and PageMargins in PrintOptions directly (#14593)
+And make possibility to use object initializer language feature
+--> [dotnet] The prebuild scripts is already decommissioned (#14591)
+* [dotnet] The prebuild scripts is already decommissioned
+* And don't specify exact cdp version in csproj
+--> [dotnet] Fix devtools check in `NetworkManager` (#14638)
+[dotnet] Fix devtools check in NetworkManager
+--> [dotnet] Lazy-load Selenium manager binary location (#14639)
+* [dotnet] Lazy-load Selenium manager binary location
+* PR suggestions
+* Enable NRT for `SeleniumManager`
+* fix last hypothetical null reference exception in selenium manager
+* Do not use nullable json properties
+* fix ResultResponse deserizalization
+* Fix ResultResponse again
+* Make ResultResponse properties required
+--> [dotnet] Declare proper nullable Selenium Manager ResultResponse DTO
+--> [dotnet] [bidi] Second round of BiDi implementation (#14566)
+* Refactor
+* Auth
+* Log tests
+* Auth tests
+* Intercept options
+* Stabilize tests
+* Finish network tests
+* Stabilize
+* Browser tests
+* Update InputModule.cs
+* Parallelize
+* Storage tests
+* Stabilize
+* Enumerable cookies
+* Update Subscription.cs
+* Script tests
+* Evaluate tests
+* Script events
+* Script commands
+* Temp input
+* Temp input tests
+* Experimenting input via paint
+* Update DefaultMouseTest.cs
+* Make actions required
+* Don't introduce any helpers
+* Input wheel
+* Simplify hierarchy
+* Better
+* GetUserContextsResult as enumerable
+* LocateNodesResult as enumerable
+* GetRealmsResult as Enumerable
+* Better?
+* Should be TestFixture?
+* And make fixture public magically
+* Fix CanListenToFetchError test
+* Fix CanListenToOnAuthRequiredEvent test
+* Remove demo test
+* Fix CanFailRequest test
+* Update ScriptCommandsTest.cs
+* Fix CanFailRequest test
+* Ignore auth req continue for firefox
+* Don't output command length in logs
+* Hide transport
+* Enable nullable context for bidi namespace
+* Even more warnings
+* Intercept is cls compliant
+* String remote value not null?
+* Options in browsing context log as optional
+* Fix warnings for UrlPattern and Locator
+* Remove extra experiment
+* Make sure unions don't contain extra nested classes
+* None input action
+* Source input actions as interface
+* Update SourceActions.cs
+* Open door to sequential input actions
+* Pause as ISourceAction
+* TODO Node as shared reference
+* Add input tests
+* Simplified required properties dto
+* Tests for Input module temporary are out
+--> Update supported versions for Chrome DevTools
+
 v4.25.0
 ======
 * Add CDP for Chrome 129 and remove 126

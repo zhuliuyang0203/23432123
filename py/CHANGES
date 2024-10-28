@@ -1,3 +1,34 @@
+Selenium 4.26.0
+--> [ci] Setting nightly versions
+--> [py] fixed a bug in `bidi/session.py` by removing mutable object as default value for function argument. (#14286)
+--> [py] remove un-needed print (#14562)
+--> [py] Allow driver path to be set using ENV variables (#14528)
+--> [py] remove deprecated parameter from EdgeService (#14563)
+[py] remove deprecated parameter in EdgeService
+--> [py] Remote connection throws resp status code when data is empty (#14601)
+--> [py] allow logging diagnose in safari driver (#14606)
+--> [py] Avoid waiting indefinitely on a frozen chromedriver process (#14578)
+Add a default timeout of 2 minutes two requests to the webdriver
+--> [🚀 Feature] [py]: Better compatibility with Appium-python (#14587)
+* [py] override default locator converter for python
+* Support registering custom finders in py
+* Support registering extra HTTP commands and methods in python
+* Support overriding User-Agent in python
+* Support registering extra headers
+* [py] Support ignore certificates
+* Support using custom element classes
+* tests for custom element test
+* address review comments
+* close parenthesis
+* pass `init_args_for_pool_manager` in constructor
+* use existing driver fixture in tests
+* convert `add_command` to instance method
+--> [py] implement configurable configuration class for the http client (#13286)
+--> [py] webkitgtk: log_path -> log_output (#14618)
+* [py] webkitgtk: log_path -> log_output
+* apply suggestion
+* add warning for old para
+
 Selenium 4.25.0
 * Add CDP for Chrome 129 and remove 126
 * fix type errors for `service.py`, `cdp.py`, `webelement.py` and `remote_connection.py` (#14448)

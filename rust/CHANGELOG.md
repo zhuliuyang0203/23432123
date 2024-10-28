@@ -1,3 +1,10 @@
+0.4.26
+======
+--> selenium manager: check invalid browser version (#14511)
+* selenium manager: check invalid browser version
+* add more checks
+* apply suggestions from reviewer
+
 0.4.25
 ======
 

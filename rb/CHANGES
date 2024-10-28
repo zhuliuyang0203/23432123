@@ -1,3 +1,10 @@
+4.26.0 (2024-10-28)
+=========================
+--> [ci] Setting nightly versions
+--> Update Ruby BiDi script structs to match spec
+This updates the structs used by the BiDi `Script` and `LogHandler` classes to match the W3C spec as of 2024-07-08. It also makes the tests slightly more detailed.
+--> Update supported versions for Chrome DevTools
+
 4.25.0 (2024-09-19)
 =========================
 * Add CDP for Chrome 129 and remove 126

@@ -1,3 +1,23 @@
+v4.26.0
+======
+--> [java] increasing of properties scope for better appium compatibility  (#14183)
+--> [java]: fix decoding of line endings (#14539)
+--> [java] Add PAC proxy url to arguments for Selenium Manager (#14506)
+Fixes #14503
+--> [java] prevent closing the stdin, stdout, stderr streams #14569
+--> [java] update graphql-java dependency
+--> [grid]: Capability se:vncEnabled value based on list of vnc-env-var (#14584)
+--> [grid]: Add node sessionTimeout to Grid status (#14582)
+[grid]: Node sessionTimeout include in Grid status
+--> [java] Fix `v*Network.java` conditions (#14585)
+--> [java] Fix SpotBugs findings in `ChromiumDriver` and `PortProber` (#14589)
+--> [grid] Fix tests for Grid status endpoint and UI (#14605)
+--> [grid] Improvement for Node handling (#14628)
+* [grid] Update for node shutdown gracefully
+* Return HTTP response in case session is not owned
+* Fix test
+--> Update supported versions for Chrome DevTools
+
 v4.25.0
 ======
 * Add CDP for Chrome 129 and remove 126
