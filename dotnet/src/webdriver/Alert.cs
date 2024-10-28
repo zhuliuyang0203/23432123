@@ -71,7 +71,7 @@ namespace OpenQA.Selenium
         /// Sends keys to the alert.
         /// </summary>
         /// <param name="keysToSend">The keystrokes to send.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="keysToSend" /> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="keysToSend" /> is <see langword="null"/>.</exception>
         public void SendKeys(string keysToSend)
         {
             if (keysToSend == null)
