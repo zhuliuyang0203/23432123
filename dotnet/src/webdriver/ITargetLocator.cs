@@ -16,6 +16,8 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -59,6 +61,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="windowName">The name of the window to select.</param>
         /// <returns>An <see cref="IWebDriver"/> instance focused on the given window.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="windowName"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoSuchWindowException">If the window cannot be found.</exception>
         IWebDriver Window(string windowName);
 

@@ -19,6 +19,8 @@
 using System;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -29,18 +31,19 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a browser sends a network request.
         /// </summary>
-        event EventHandler<NetworkRequestSentEventArgs> NetworkRequestSent;
+        event EventHandler<NetworkRequestSentEventArgs>? NetworkRequestSent;
 
         /// <summary>
         /// Occurs when a browser receives a network response.
         /// </summary>
-        event EventHandler<NetworkResponseReceivedEventArgs> NetworkResponseReceived;
+        event EventHandler<NetworkResponseReceivedEventArgs>? NetworkResponseReceived;
 
         /// <summary>
         /// Adds a <see cref="NetworkRequestHandler"/> to examine incoming network requests,
         /// and optionally modify the request or provide a response. 
         /// </summary>
         /// <param name="handler">The <see cref="NetworkRequestHandler"/> to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="handler"/> is <see langword="null"/>.</exception>
         void AddRequestHandler(NetworkRequestHandler handler);
 
         /// <summary>

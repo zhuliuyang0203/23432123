@@ -16,7 +16,10 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.ObjectModel;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -34,6 +37,7 @@ namespace OpenQA.Selenium
         /// Adds a cookie to the current page.
         /// </summary>
         /// <param name="cookie">The <see cref="Cookie"/> object to be added.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="cookie"/> is <see langword="null"/>.</exception>
         void AddCookie(Cookie cookie);
 
         /// <summary>
@@ -42,19 +46,19 @@ namespace OpenQA.Selenium
         /// <param name="name">The name of the cookie to retrieve.</param>
         /// <returns>The <see cref="Cookie"/> containing the name. Returns <see langword="null"/>
         /// if no cookie with the specified name is found.</returns>
-        Cookie GetCookieNamed(string name);
+        Cookie? GetCookieNamed(string? name);
 
         /// <summary>
         /// Deletes the specified cookie from the page.
         /// </summary>
         /// <param name="cookie">The <see cref="Cookie"/> to be deleted.</param>
-        void DeleteCookie(Cookie cookie);
+        void DeleteCookie(Cookie? cookie);
 
         /// <summary>
         /// Deletes the cookie with the specified name from the page.
         /// </summary>
         /// <param name="name">The name of the cookie to be deleted.</param>
-        void DeleteCookieNamed(string name);
+        void DeleteCookieNamed(string? name);
 
         /// <summary>
         /// Deletes all cookies from the page.

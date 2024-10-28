@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -27,7 +29,7 @@ namespace OpenQA.Selenium
     /// </summary>
     internal class CookieJar : ICookieJar
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CookieJar"/> class.
@@ -50,8 +52,14 @@ namespace OpenQA.Selenium
         /// Method for creating a cookie in the browser
         /// </summary>
         /// <param name="cookie"><see cref="Cookie"/> that represents a cookie in the browser</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="cookie"/> is <see langword="null"/>.</exception>
         public void AddCookie(Cookie cookie)
         {
+            if (cookie == null)
+            {
+                throw new ArgumentNullException(nameof(cookie));
+            }
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("cookie", cookie);
             this.driver.InternalExecute(DriverCommand.AddCookie, parameters);
@@ -61,9 +69,9 @@ namespace OpenQA.Selenium
         /// Delete the cookie by passing in the name of the cookie
         /// </summary>
         /// <param name="name">The name of the cookie that is in the browser</param>
-        public void DeleteCookieNamed(string name)
+        public void DeleteCookieNamed(string? name)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object?> parameters = new Dictionary<string, object?>();
             parameters.Add("name", name);
             this.driver.InternalExecute(DriverCommand.DeleteCookie, parameters);
         }
@@ -72,7 +80,7 @@ namespace OpenQA.Selenium
         /// Delete a cookie in the browser by passing in a copy of a cookie
         /// </summary>
         /// <param name="cookie">An object that represents a copy of the cookie that needs to be deleted</param>
-        public void DeleteCookie(Cookie cookie)
+        public void DeleteCookie(Cookie? cookie)
         {
             if (cookie != null)
             {
@@ -92,10 +100,10 @@ namespace OpenQA.Selenium
         /// Method for returning a getting a cookie by name
         /// </summary>
         /// <param name="name">name of the cookie that needs to be returned</param>
-        /// <returns>A Cookie from the name</returns>
-        public Cookie GetCookieNamed(string name)
+        /// <returns>A Cookie from the name, or <see langword="null"/> if not found.</returns>
+        public Cookie? GetCookieNamed(string? name)
         {
-            Cookie cookieToReturn = null;
+            Cookie? cookieToReturn = null;
             if (name != null)
             {
                 ReadOnlyCollection<Cookie> allCookies = this.AllCookies;
@@ -123,12 +131,12 @@ namespace OpenQA.Selenium
 
             try
             {
-                object[] cookies = returned as object[];
+                object[]? cookies = returned as object[];
                 if (cookies != null)
                 {
                     foreach (object rawCookie in cookies)
                     {
-                        Dictionary<string, object> cookieDictionary = rawCookie as Dictionary<string, object>;
+                        Dictionary<string, object> cookieDictionary = (Dictionary<string, object>)rawCookie;
                         if (rawCookie != null)
                         {
                             toReturn.Add(Cookie.FromDictionary(cookieDictionary));

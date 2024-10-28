@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -49,12 +51,12 @@ namespace OpenQA.Selenium
                 try
                 {
                     Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAvailableLogTypes, null);
-                    object[] responseValue = commandResponse.Value as object[];
+                    object[]? responseValue = commandResponse.Value as object[];
                     if (responseValue != null)
                     {
                         foreach (object logKind in responseValue)
                         {
-                            availableLogTypes.Add(logKind.ToString());
+                            availableLogTypes.Add(logKind.ToString()!);
                         }
                     }
                 }
@@ -73,20 +75,26 @@ namespace OpenQA.Selenium
         /// <param name="logKind">The log for which to retrieve the log entries.
         /// Log types can be found in the <see cref="LogType"/> class.</param>
         /// <returns>The list of <see cref="LogEntry"/> objects for the specified log.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="logKind"/> is null.</exception>
         public ReadOnlyCollection<LogEntry> GetLog(string logKind)
         {
+            if (logKind == null)
+            {
+                throw new ArgumentNullException(nameof(logKind));
+            }
+
             List<LogEntry> entries = new List<LogEntry>();
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", logKind);
             Response commandResponse = this.driver.InternalExecute(DriverCommand.GetLog, parameters);
 
-            object[] responseValue = commandResponse.Value as object[];
+            object[]? responseValue = commandResponse.Value as object[];
             if (responseValue != null)
             {
                 foreach (object rawEntry in responseValue)
                 {
-                    Dictionary<string, object> entryDictionary = rawEntry as Dictionary<string, object>;
+                    Dictionary<string, object> entryDictionary = (Dictionary<string, object>)rawEntry;
                     if (entryDictionary != null)
                     {
                         entries.Add(LogEntry.FromDictionary(entryDictionary));

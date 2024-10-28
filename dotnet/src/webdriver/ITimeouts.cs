@@ -18,6 +18,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>

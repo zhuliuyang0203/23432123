@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -26,7 +28,7 @@ namespace OpenQA.Selenium
     /// </summary>
     internal class Alert : IAlert
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Alert"/> class.
@@ -45,7 +47,7 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAlertText, null);
-                return commandResponse.Value.ToString();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -69,6 +71,7 @@ namespace OpenQA.Selenium
         /// Sends keys to the alert.
         /// </summary>
         /// <param name="keysToSend">The keystrokes to send.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="keysToSend" /> is null.</exception>
         public void SendKeys(string keysToSend)
         {
             if (keysToSend == null)

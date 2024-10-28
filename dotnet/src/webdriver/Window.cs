@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -95,7 +97,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Maximize()
         {
-            Dictionary<string, object> parameters = null;
+            Dictionary<string, object>? parameters = null;
             this.driver.InternalExecute(DriverCommand.MaximizeWindow, parameters);
         }
 
@@ -104,7 +106,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Minimize()
         {
-            Dictionary<string, object> parameters = null;
+            Dictionary<string, object>? parameters = null;
             this.driver.InternalExecute(DriverCommand.MinimizeWindow, parameters);
         }
 
@@ -113,7 +115,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void FullScreen()
         {
-            Dictionary<string, object> parameters = null;
+            Dictionary<string, object>? parameters = null;
             this.driver.InternalExecute(DriverCommand.FullScreenWindow, parameters);
         }
     }
