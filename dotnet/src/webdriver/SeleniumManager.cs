@@ -195,28 +195,12 @@ namespace OpenQA.Selenium
 
             if (jsonResponse.Logs is not null)
             {
-                foreach (var entry in jsonResponse.Logs)
+                // Treat SM's logs always as Trace to avoid SM writing at Info level
+                if (_logger.IsEnabled(LogEventLevel.Trace))
                 {
-                    switch (entry.Level)
+                    foreach (var entry in jsonResponse.Logs)
                     {
-                        case "WARN":
-                            if (_logger.IsEnabled(LogEventLevel.Warn))
-                            {
-                                _logger.Warn(entry.Message);
-                            }
-                            break;
-                        case "DEBUG":
-                            if (_logger.IsEnabled(LogEventLevel.Debug))
-                            {
-                                _logger.Debug(entry.Message);
-                            }
-                            break;
-                        case "INFO":
-                            if (_logger.IsEnabled(LogEventLevel.Info))
-                            {
-                                _logger.Info(entry.Message);
-                            }
-                            break;
+                        _logger.Trace($"{entry.Level} {entry.Message}");
                     }
                 }
             }
