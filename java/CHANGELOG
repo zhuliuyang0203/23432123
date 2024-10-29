@@ -1,22 +1,19 @@
 v4.26.0
 ======
---> [java] increasing of properties scope for better appium compatibility  (#14183)
---> [java]: fix decoding of line endings (#14539)
---> [java] Add PAC proxy url to arguments for Selenium Manager (#14506)
-Fixes #14503
---> [java] prevent closing the stdin, stdout, stderr streams #14569
---> [java] update graphql-java dependency
---> [grid]: Capability se:vncEnabled value based on list of vnc-env-var (#14584)
---> [grid]: Add node sessionTimeout to Grid status (#14582)
-[grid]: Node sessionTimeout include in Grid status
---> [java] Fix `v*Network.java` conditions (#14585)
---> [java] Fix SpotBugs findings in `ChromiumDriver` and `PortProber` (#14589)
---> [grid] Fix tests for Grid status endpoint and UI (#14605)
---> [grid] Improvement for Node handling (#14628)
-* [grid] Update for node shutdown gracefully
-* Return HTTP response in case session is not owned
-* Fix test
---> Update supported versions for Chrome DevTools
+* Add CDP for Chrome 130 and remove 127
+* Add PAC proxy url to arguments for Selenium Manager (#14506)
+* Prevent closing the stdin, stdout, stderr streams (#14569)
+* Increasing of properties scope for better Appium compatibility (#14183)
+* [grid] Limit the number of websocket connections per session (#14410)
+* [grid] Improvement for Node handling (#14628)
+* [grid] Add node sessionTimeout to Grid status (#14582)
+* [grid] Capability se:vncEnabled value based on list of vnc-env-var (#14584)
+* [grid] UI Sessions view sort Duration in ascending by default (#14599)
+* [grid] UI Liveview disconnect noVNC websocket when closing dialog (#14598)
+* [grid] UI Overview is able to sort Nodes (#14571)
+* Fix decoding of line endings (#14539)
+* Fix SpotBugs findings in `ChromiumDriver` and `PortProber` (#14589)
+* Fix `v*Network.java` conditions (#14585)
 
 v4.25.0
 ======
