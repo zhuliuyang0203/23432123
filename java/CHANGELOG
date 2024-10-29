@@ -4,6 +4,7 @@ v4.26.0
 * Add PAC proxy url to arguments for Selenium Manager (#14506)
 * Prevent closing the stdin, stdout, stderr streams (#14569)
 * Increasing of properties scope for better Appium compatibility (#14183)
+* [grid] Enable the httpclient to perform async requests (#14409)
 * [grid] Limit the number of websocket connections per session (#14410)
 * [grid] Improvement for Node handling (#14628)
 * [grid] Add node sessionTimeout to Grid status (#14582)
