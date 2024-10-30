@@ -32,9 +32,8 @@ class SafariRemoteConnection(RemoteConnection):
         ignore_proxy: Optional[bool] = False,
         client_config: Optional[ClientConfig] = None,
     ) -> None:
+        client_config = client_config or ClientConfig(remote_server_addr=remote_server_addr, keep_alive=keep_alive)
         super().__init__(
-            remote_server_addr=remote_server_addr,
-            keep_alive=keep_alive,
             ignore_proxy=ignore_proxy,
             client_config=client_config,
         )

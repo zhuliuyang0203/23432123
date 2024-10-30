@@ -16,6 +16,7 @@
 # under the License.
 
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.remote.client_config import ClientConfig
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 
 from ..common.driver_finder import DriverFinder
@@ -50,10 +51,10 @@ class WebDriver(RemoteWebDriver):
         if not self.service.reuse_service:
             self.service.start()
 
+        client_config = ClientConfig(remote_server_addr=self.service.service_url, keep_alive=keep_alive)
         executor = SafariRemoteConnection(
-            remote_server_addr=self.service.service_url,
-            keep_alive=keep_alive,
             ignore_proxy=options._ignore_local_proxy,
+            client_config=client_config,
         )
 
         try:
