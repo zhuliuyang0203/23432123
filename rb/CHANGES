@@ -1,3 +1,10 @@
+4.26.0 (2024-10-28)
+=========================
+* Add CDP for Chrome 130 and remove 127
+* Add missing RBS methods (#14621)
+* Update Ruby BiDi script structs to match spec
+* Add RBS type support for BiDi related classes (#14611)
+
 4.25.0 (2024-09-19)
 =========================
 * Add CDP for Chrome 129 and remove 126

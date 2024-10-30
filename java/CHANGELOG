@@ -1,3 +1,21 @@
+v4.26.0
+======
+* Add CDP for Chrome 130 and remove 127
+* Add PAC proxy url to arguments for Selenium Manager (#14506)
+* Prevent closing the stdin, stdout, stderr streams (#14569)
+* Increasing of properties scope for better Appium compatibility (#14183)
+* Fix decoding of line endings (#14539)
+* Fix SpotBugs findings in `ChromiumDriver` and `PortProber` (#14589)
+* Fix `v*Network.java` conditions (#14585)
+* [grid] Enable the httpclient to perform async requests (#14409)
+* [grid] Limit the number of websocket connections per session (#14410)
+* [grid] Improvement for Node handling (#14628)
+* [grid] Add node sessionTimeout to Grid status (#14582)
+* [grid] Capability se:vncEnabled value based on list of vnc-env-var (#14584)
+* [grid] UI Sessions list view sort Duration in ascending by default (#14599)
+* [grid] UI Liveview disconnect noVNC websocket when closing dialog (#14598)
+* [grid] UI Overview is able to sort Nodes capabilities (#14571)
+
 v4.25.0
 ======
 * Add CDP for Chrome 129 and remove 126
