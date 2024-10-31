@@ -932,6 +932,32 @@ describe('WebDriver', function () {
 
       return driver.findElement(By.id('foo')).sendKeys('original/', 'path')
     })
+
+    it('sendKeysWithAFileDetector_handlerError', function () {
+      let executor = new FakeExecutor()
+        .expect(CName.FIND_ELEMENT, {
+          using: 'css selector',
+          value: '*[id="foo"]',
+        })
+        .andReturnSuccess(WebElement.buildId('one'))
+        .expect(CName.SEND_KEYS_TO_ELEMENT, {
+          id: WebElement.buildId('one'),
+          text: 'original/path',
+          value: 'original/path'.split(''),
+        })
+        .andReturnSuccess()
+        .end()
+
+      let driver = executor.createDriver()
+      let handleFile = function (d, path) {
+        assert.strictEqual(driver, d)
+        assert.strictEqual(path, 'original/path')
+        return Promise.reject('unhandled file error')
+      }
+      driver.setFileDetector({ handleFile })
+
+      return driver.findElement(By.id('foo')).sendKeys('original/', 'path')
+    })
   })
 
   describe('switchTo()', function () {

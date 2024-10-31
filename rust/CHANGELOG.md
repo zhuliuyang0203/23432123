@@ -1,3 +1,7 @@
+0.4.26
+======
+* Selenium Manager checks invalid browser version (#14511)
+
 0.4.25
 ======
 

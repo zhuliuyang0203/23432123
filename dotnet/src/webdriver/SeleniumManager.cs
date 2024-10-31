@@ -25,6 +25,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static OpenQA.Selenium.SeleniumManagerResponse;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -36,27 +39,25 @@ namespace OpenQA.Selenium
     {
         private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
-        private static readonly string BinaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
-
         private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = SeleniumManagerSerializerContext.Default };
 
-        static SeleniumManager()
+        private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
         {
-
-            if (BinaryFullPath == null)
+            string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
+            if (binaryFullPath == null)
             {
                 var currentDirectory = AppContext.BaseDirectory;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager");
                 }
                 else
                 {
@@ -65,11 +66,13 @@ namespace OpenQA.Selenium
                 }
             }
 
-            if (!File.Exists(BinaryFullPath))
+            if (!File.Exists(binaryFullPath))
             {
-                throw new WebDriverException($"Unable to locate or obtain Selenium Manager binary at {BinaryFullPath}");
+                throw new WebDriverException($"Unable to locate or obtain Selenium Manager binary at {binaryFullPath}");
             }
-        }
+
+            return binaryFullPath;
+        });
 
         /// <summary>
         /// Determines the location of the browser and driver binaries.
@@ -88,7 +91,7 @@ namespace OpenQA.Selenium
                 argsBuilder.Append(" --debug");
             }
 
-            var smCommandResult = RunCommand(BinaryFullPath, argsBuilder.ToString());
+            var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
             Dictionary<string, string> binaryPaths = new()
             {
                 { "browser_path", smCommandResult.BrowserPath },
@@ -112,10 +115,10 @@ namespace OpenQA.Selenium
         /// <returns>
         /// the standard output of the execution.
         /// </returns>
-        private static SeleniumManagerResponse.ResultResponse RunCommand(string fileName, string arguments)
+        private static ResultResponse RunCommand(string fileName, string arguments)
         {
             Process process = new Process();
-            process.StartInfo.FileName = BinaryFullPath;
+            process.StartInfo.FileName = _lazyBinaryFullPath.Value;
             process.StartInfo.Arguments = arguments;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
@@ -183,7 +186,7 @@ namespace OpenQA.Selenium
 
             try
             {
-                jsonResponse = JsonSerializer.Deserialize<SeleniumManagerResponse>(output, _serializerOptions);
+                jsonResponse = JsonSerializer.Deserialize<SeleniumManagerResponse>(output, _serializerOptions)!;
             }
             catch (Exception ex)
             {
@@ -192,28 +195,12 @@ namespace OpenQA.Selenium
 
             if (jsonResponse.Logs is not null)
             {
-                foreach (var entry in jsonResponse.Logs)
+                // Treat SM's logs always as Trace to avoid SM writing at Info level
+                if (_logger.IsEnabled(LogEventLevel.Trace))
                 {
-                    switch (entry.Level)
+                    foreach (var entry in jsonResponse.Logs)
                     {
-                        case "WARN":
-                            if (_logger.IsEnabled(LogEventLevel.Warn))
-                            {
-                                _logger.Warn(entry.Message);
-                            }
-                            break;
-                        case "DEBUG":
-                            if (_logger.IsEnabled(LogEventLevel.Debug))
-                            {
-                                _logger.Debug(entry.Message);
-                            }
-                            break;
-                        case "INFO":
-                            if (_logger.IsEnabled(LogEventLevel.Info))
-                            {
-                                _logger.Info(entry.Message);
-                            }
-                            break;
+                        _logger.Trace($"{entry.Level} {entry.Message}");
                     }
                 }
             }
@@ -222,32 +209,19 @@ namespace OpenQA.Selenium
         }
     }
 
-    internal class SeleniumManagerResponse
+    internal record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
     {
-        public IReadOnlyList<LogEntryResponse> Logs { get; set; }
+        public record LogEntryResponse(string Level, string Message);
 
-        public ResultResponse Result { get; set; }
-
-        public class LogEntryResponse
-        {
-            public string Level { get; set; }
-
-            public string Message { get; set; }
-        }
-
-        public class ResultResponse
-        {
-            [JsonPropertyName("driver_path")]
-            public string DriverPath { get; set; }
-
-            [JsonPropertyName("browser_path")]
-            public string BrowserPath { get; set; }
-        }
+        public record ResultResponse
+        (
+            [property: JsonPropertyName("driver_path")]
+            string DriverPath,
+            [property: JsonPropertyName("browser_path")]
+            string BrowserPath
+        );
     }
 
     [JsonSerializable(typeof(SeleniumManagerResponse))]
-    internal partial class SeleniumManagerSerializerContext : JsonSerializerContext
-    {
-
-    }
+    internal partial class SeleniumManagerSerializerContext : JsonSerializerContext;
 }

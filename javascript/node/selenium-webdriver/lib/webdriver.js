@@ -2752,6 +2752,7 @@ class WebElement {
       keys = await this.driver_.fileDetector_.handleFile(this.driver_, keys.join(''))
     } catch (ex) {
       this.log_.severe('Error trying parse string as a file with file detector; sending keys instead' + ex)
+      keys = keys.join('')
     }
 
     return this.execute_(

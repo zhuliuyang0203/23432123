@@ -1,3 +1,22 @@
+v4.26.1
+======
+* [bidi] Reveal browsing context module in bidi instance (#14684)
+* Fix adding cookies when ReturnedCookie class is used (#14697)
+
+v4.26.0
+======
+* [bidi] Fix web socket communication for .net framework
+* Don't include http headers in internal logs (#14546)
+* Don't write trace log message when waiting until driver service is initialized (#14557)
+* Support GetLog command by Remote Web Driver (#14549)
+* Add more internal logs around CDP DevTools communication (#14558)
+* Interactions with Selenium Manager are AOT compatible (#14481)
+* Allow setting of PageDimensions and PageMargins in PrintOptions directly (#14593)
+* Fix devtools check in `NetworkManager` to determine CDP is supported (#14638)
+* Lazy-load Selenium manager binary location (#14639)
+* [bidi] Second round of BiDi implementation (#14566)
+* Add CDP for Chrome 130 and remove 127
+
 v4.25.0
 ======
 * Add CDP for Chrome 129 and remove 126
