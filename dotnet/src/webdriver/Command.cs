@@ -159,6 +159,7 @@ namespace OpenQA.Selenium
     [JsonSerializable(typeof(byte[]))]
     [JsonSerializable(typeof(Dictionary<string, object>))]
     [JsonSerializable(typeof(Cookie))]
+    [JsonSerializable(typeof(ReturnedCookie))]
     [JsonSerializable(typeof(Proxy))]
     internal partial class CommandJsonSerializerContext : JsonSerializerContext
     {
