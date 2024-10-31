@@ -39,7 +39,7 @@ public class BiDi : IAsyncDisposable
     }
 
     internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
-    internal Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
+    public Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
     public Modules.Browser.BrowserModule Browser => _browserModule.Value;
     public Modules.Network.NetworkModule Network => _networkModule.Value;
     internal Modules.Input.InputModule InputModule => _inputModule.Value;

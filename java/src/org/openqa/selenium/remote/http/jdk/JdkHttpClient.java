@@ -388,17 +388,16 @@ public class JdkHttpClient implements HttpClient {
               }
             });
 
-    // try to interrupt the http request in case of a timeout, to avoid
-    // https://bugs.openjdk.org/browse/JDK-8258397
-    cf.exceptionally(
-        (throwable) -> {
-          if (throwable instanceof java.util.concurrent.TimeoutException) {
-            // interrupts the thread
+    cf.whenComplete(
+        (result, throwable) -> {
+          if (throwable instanceof java.util.concurrent.CancellationException) {
+            // try to interrupt the http request in case someone canceled the future returned
+            future.cancel(true);
+          } else if (throwable instanceof java.util.concurrent.TimeoutException) {
+            // try to interrupt the http request in case of a timeout, to avoid
+            // https://bugs.openjdk.org/browse/JDK-8258397
             future.cancel(true);
           }
-
-          // nobody will read this result
-          return null;
         });
 
     // will complete exceptionally with a java.util.concurrent.TimeoutException
@@ -407,13 +406,15 @@ public class JdkHttpClient implements HttpClient {
 
   @Override
   public HttpResponse execute(HttpRequest req) throws UncheckedIOException {
+    Future<HttpResponse> async = executeAsync(req);
     try {
       // executeAsync does define a timeout, no need to use a timeout here
-      return executeAsync(req).get();
+      return async.get();
     } catch (CancellationException e) {
       throw new WebDriverException(e.getMessage(), e);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
+      async.cancel(true);
       throw new WebDriverException(e.getMessage(), e);
     } catch (ExecutionException e) {
       Throwable cause = e.getCause();
@@ -495,7 +496,7 @@ public class JdkHttpClient implements HttpClient {
       throw new UncheckedIOException(e);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
+      throw new WebDriverException(e.getMessage(), e);
     } finally {
       LOG.log(
           Level.FINE,

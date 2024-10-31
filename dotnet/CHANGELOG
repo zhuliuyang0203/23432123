@@ -1,3 +1,8 @@
+v4.26.1
+======
+* [bidi] Reveal browsing context module in bidi instance (#14684)
+* Fix adding cookies when ReturnedCookie class is used (#14697)
+
 v4.26.0
 ======
 * [bidi] Fix web socket communication for .net framework
