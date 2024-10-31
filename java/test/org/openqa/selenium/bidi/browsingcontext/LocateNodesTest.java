@@ -162,8 +162,6 @@ public class LocateNodesTest extends JupiterTestBase {
   }
 
   @Test
-  @NotYetImplemented(CHROME)
-  @NotYetImplemented(EDGE)
   void canLocateNodesGivenStartNodes() {
     String handle = driver.getWindowHandle();
     BrowsingContext browsingContext = new BrowsingContext(driver, handle);
