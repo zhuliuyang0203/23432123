@@ -47,7 +47,7 @@ module Selenium
           def close
             # hook for subclasses - will be called on Driver#quit
           end
-
+          # steep:ignore:start
           def call(verb, url, command_hash)
             url      = server_url.merge(url) unless url.is_a?(URI)
             headers  = common_headers.dup
@@ -66,7 +66,7 @@ module Selenium
 
             request verb, url, headers, payload
           end
-
+          # steep:ignore:end
           private
 
           def common_headers

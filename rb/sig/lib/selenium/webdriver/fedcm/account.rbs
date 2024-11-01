@@ -25,8 +25,7 @@ module Selenium
         attr_reader terms_of_service_url: String
         attr_reader privacy_policy_url: String
 
-        # Update initialize to accept a hash with string keys
-        def initialize: (Hash[String, untyped] args) -> void
+        def initialize: (**String args) -> void
       end
     end
   end
