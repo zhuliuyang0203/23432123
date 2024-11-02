@@ -15,7 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Union, Dict, Any, Optional
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.remote.webelement import WebElement

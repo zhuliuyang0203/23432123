@@ -15,7 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional, List, Mapping
+from typing import List
+from typing import Mapping
+from typing import Optional
+
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
 

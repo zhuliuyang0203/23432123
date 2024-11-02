@@ -33,9 +33,8 @@ from importlib import import_module
 from typing import Dict
 from typing import List
 from typing import Optional
-from typing import Union
 from typing import Type
-
+from typing import Union
 
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.common.exceptions import JavascriptException

@@ -15,8 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 from dataclasses import dataclass
+from typing import List
 
 from .session import session_subscribe
 from .session import session_unsubscribe

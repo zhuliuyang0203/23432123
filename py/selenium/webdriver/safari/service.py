@@ -16,9 +16,12 @@
 # under the License.
 
 
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
-from typing import Optional, List, Mapping
+
 
 class Service(service.Service):
     """A Service class that is responsible for the starting and stopping of

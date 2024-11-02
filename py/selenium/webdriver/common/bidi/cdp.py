@@ -30,12 +30,16 @@ import itertools
 import json
 import logging
 import pathlib
-
 from collections import defaultdict
 from contextlib import asynccontextmanager
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import TypeVar, Any, Generator, Type, AsyncGenerator, AsyncIterator
+from typing import Any
+from typing import AsyncGenerator
+from typing import AsyncIterator
+from typing import Generator
+from typing import Type
+from typing import TypeVar
 
 import trio
 from trio_websocket import ConnectionClosed as WsConnectionClosed

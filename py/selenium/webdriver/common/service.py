@@ -24,13 +24,13 @@ from io import IOBase
 from platform import system
 from subprocess import PIPE
 from time import sleep
-from typing import cast
-from typing import Mapping
+from typing import IO
 from typing import Any
+from typing import List
+from typing import Mapping
 from typing import Optional
 from typing import Union
-from typing import List
-from typing import IO
+from typing import cast
 from urllib import request
 from urllib.error import URLError
 

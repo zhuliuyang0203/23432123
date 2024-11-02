@@ -15,7 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Tuple, List, Any
+from typing import Any
+from typing import List
+from typing import Tuple
+
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -106,9 +109,7 @@ class EventFiringWebDriver:
     def find_elements(self, by=By.ID, value=None) -> List[WebElement]:
         return self._dispatch("find", (by, value, self._driver), "find_elements", (by, value))
 
-    def _dispatch(
-        self, l_call: str, l_args: Tuple[Any, ...], d_call: str, d_args: Tuple[Any, ...]
-    ):
+    def _dispatch(self, l_call: str, l_args: Tuple[Any, ...], d_call: str, d_args: Tuple[Any, ...]):
         getattr(self._listener, f"before_{l_call}")(*l_args)
         try:
             result = getattr(self._driver, d_call)(*d_args)

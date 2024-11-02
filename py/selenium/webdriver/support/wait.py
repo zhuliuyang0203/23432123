@@ -19,11 +19,11 @@ import time
 from typing import Callable
 from typing import Generic
 from typing import Literal
-from typing import TypeVar
-from typing import Union
+from typing import Optional
 from typing import Tuple
 from typing import Type
-from typing import Optional
+from typing import TypeVar
+from typing import Union
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException

@@ -20,6 +20,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 from enum import Enum
 from typing import Optional
+
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.common.proxy import Proxy
 

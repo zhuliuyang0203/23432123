@@ -16,10 +16,13 @@
 # under the License.
 
 import functools
-from typing import Any, Dict, Optional, Union
 from base64 import urlsafe_b64decode
 from base64 import urlsafe_b64encode
 from enum import Enum
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 
 class Protocol(str, Enum):

@@ -16,9 +16,12 @@
 # under the License.
 
 
+from typing import List
+from typing import Mapping
+from typing import Optional
+
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
-from typing import Optional,Mapping, List
 
 
 class Service(service.ChromiumService):

@@ -15,9 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 import warnings
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
-from typing import Optional, List, Mapping
+
 DEFAULT_EXECUTABLE_PATH: str = "WebKitWebDriver"
 
 
