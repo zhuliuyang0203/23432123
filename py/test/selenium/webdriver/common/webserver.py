@@ -58,28 +58,51 @@ DEFAULT_HOST_IP = "127.0.0.1"
 DEFAULT_PORT = 8000
 
 
-class HtmlOnlyHandler(BaseHTTPRequestHandler):
+class ExtendedHandler(BaseHTTPRequestHandler):
     """Http handler."""
+
+    def _set_headers(self, content_type="text/html"):
+        """Sets response headers with CORS support."""
+        self.send_response(200)
+        self.send_header("Content-type", content_type)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
 
     def do_GET(self):
         """GET method handler."""
         try:
             path = self.path[1:].split("?")[0]
-            if path[:5] == "page/":
-                html = """<html><head><title>Page{page_number}</title></head>
-                <body>Page number <span id=\"pageNumber\">{page_number}</span>
-                <p><a href=\"../xhtmlTest.html\" target=\"_top\">top</a>
-                </body></html>""".format(
-                    page_number=path[5:]
-                )
-                html = html.encode("utf-8")
+            file_path = os.path.join(HTML_ROOT, path)
+            file_extension = os.path.splitext(path)[1]
+
+            # Serve dynamic HTML page for specific "page/" paths
+            if path.startswith("page/"):
+                page_number = path[5:]
+                html = f"""<html><head><title>Page{page_number}</title></head>
+                <body>Page number <span id="pageNumber">{page_number}</span>
+                <p><a href="../xhtmlTest.html" target="_top">top</a></p>
+                </body></html>"""
+                self._set_headers("text/html")
+                self.wfile.write(html.encode("utf-8"))
+                return
+
+            # Serve file contents based on file extension
+            if os.path.isfile(file_path):
+                if file_extension == ".json":
+                    content_type = "application/json"
+                elif file_extension == ".html":
+                    content_type = "text/html"
+                else:
+                    content_type = "application/octet-stream"
+
+                with open(file_path, encoding="latin-1") as f:
+                    content = f.read().encode("utf-8")
+                self._set_headers(content_type)
+                self.wfile.write(content)
             else:
-                with open(os.path.join(HTML_ROOT, path), encoding="latin-1") as f:
-                    html = f.read().encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(html)
+                self.send_error(404, f"File Not Found: {path}")
         except OSError:
             self.send_error(404, f"File Not Found: {path}")
 
@@ -87,39 +110,23 @@ class HtmlOnlyHandler(BaseHTTPRequestHandler):
         """POST method handler."""
         try:
             remaining_bytes = int(self.headers["content-length"])
-            contents = ""
-            line = self.rfile.readline()
-            contents += line.decode("utf-8")
-            remaining_bytes -= len(line)
-            line = self.rfile.readline()
-            contents += line.decode("utf-8")
-            remaining_bytes -= len(line)
-            fn = re.findall(r'Content-Disposition.*name="upload"; filename="(.*)"', line.decode("utf-8"))
-            if not fn:
-                self.send_error(500, f"File not found. {contents}")
+            contents = self.rfile.read(remaining_bytes).decode("utf-8")
+
+            # Check for file upload in POST content
+            fn_match = re.search(r'Content-Disposition.*name="upload"; filename="(.*)"', contents)
+            if not fn_match:
+                self.send_error(500, f"File not found in content. {contents}")
                 return
-            line = self.rfile.readline()
-            remaining_bytes -= len(line)
-            contents += line.decode("utf-8")
-            line = self.rfile.readline()
-            remaining_bytes -= len(line)
-            contents += line.decode("utf-8")
-            preline = self.rfile.readline()
-            remaining_bytes -= len(preline)
-            while remaining_bytes > 0:
-                line = self.rfile.readline()
-                remaining_bytes -= len(line)
-                contents += line.decode("utf-8")
 
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-
+            # Send response with the uploaded content and completion script
+            self._set_headers("text/html")
             self.wfile.write(
                 f"""<!doctype html>
                 {contents}
                 <script>window.top.window.onUploadDone();</script>
-                """.encode()
+                """.encode(
+                    "utf-8"
+                )
             )
         except Exception as e:
             self.send_error(500, f"Error found: {e}")
@@ -142,7 +149,7 @@ class SimpleWebServer:
         port = port
         while True:
             try:
-                self.server = ThreadedHTTPServer((host, port), HtmlOnlyHandler)
+                self.server = ThreadedHTTPServer((host, port), ExtendedHandler)
                 self.host = host
                 self.port = port
                 break
