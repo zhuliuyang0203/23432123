@@ -173,6 +173,13 @@ class WebElement(BaseWebElement):
             # Check if the "active" CSS class is applied to an element.
             is_active = "active" in target_element.get_attribute("class")
         """
+
+        warnings.warn(
+            "using WebElement.get_attribute() has been deprecated. Please use get_dom_attribute() instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         if getAttribute_js is None:
             _load_js()
         attribute_value = self.parent.execute_script(

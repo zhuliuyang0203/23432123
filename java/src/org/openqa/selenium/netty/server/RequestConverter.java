@@ -96,7 +96,7 @@ class RequestConverter extends SimpleChannelInboundHandler<HttpObject> {
       length = -1;
     }
 
-    if (msg instanceof HttpContent) {
+    if (request != null && msg instanceof HttpContent) {
       ByteBuf buf = ((HttpContent) msg).content().retain();
       int nBytes = buf.readableBytes();
 
