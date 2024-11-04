@@ -19,8 +19,6 @@ import typing
 from dataclasses import dataclass
 
 from selenium.webdriver.common.bidi.cdp import import_devtools
-from selenium.webdriver.common.bidi.session import session_subscribe
-from selenium.webdriver.common.bidi.session import session_unsubscribe
 
 from . import browsing_context
 from . import script

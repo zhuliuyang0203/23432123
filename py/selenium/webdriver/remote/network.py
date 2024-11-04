@@ -57,7 +57,6 @@ class Network:
         except trio.ClosedResourceError:
             pass
 
-
     async def add_handler(self, event, handler, urlPatterns=None, conn=None, task_status=trio.TASK_STATUS_IGNORED):
         if not self.conn:
             self.conn = conn

@@ -18,10 +18,7 @@ import pytest
 import trio
 
 from selenium.webdriver.common.bidi.cdp import open_cdp
-from selenium.webdriver.common.bidi.network import BeforeRequestSentParameters
-from selenium.webdriver.common.bidi.network import ContinueRequestParameters
 from selenium.webdriver.common.bidi.network import UrlPatternString
-from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 
 
 @pytest.mark.xfail_firefox
@@ -48,16 +45,16 @@ async def test_request_handler(driver, pages):
             intercept1 = await nursery.start(driver.network.add_request_handler, request_handler, pattern1, conn)
             intercept2 = await nursery.start(driver.network.add_request_handler, request_handler, pattern2, conn)
             await driver.network.get(url1, conn)
-            assert driver.title ==  "We Leave From Here"
+            assert driver.title == "We Leave From Here"
             await driver.network.get(url2, conn)
-            assert  driver.title == "We Leave From Here"
-            
+            assert driver.title == "We Leave From Here"
+
             # Removal of a single intercept
             await driver.network.remove_intercept(intercept2)
             await driver.network.get(url2, conn)
-            assert  driver.title == "clicks"
+            assert driver.title == "clicks"
             await driver.network.get(url1, conn)
             assert driver.title == "We Leave From Here"
-            
+
             await driver.network.remove_intercept(intercept1)
             assert driver.title == "We Leave From Here"
