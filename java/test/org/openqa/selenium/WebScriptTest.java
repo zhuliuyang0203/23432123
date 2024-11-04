@@ -28,43 +28,29 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.log.ConsoleLogEntry;
 import org.openqa.selenium.bidi.log.JavascriptLogEntry;
 import org.openqa.selenium.bidi.log.LogLevel;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.DomMutation;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 
 class WebScriptTest extends JupiterTestBase {
 
   String page;
-  private AppServer server;
-
-  @BeforeEach
-  public void setUp() {
-    server = new NettyAppServer();
-    server.start();
-  }
-
-  @AfterEach
-  public void cleanUp() {
-    driver.quit();
-  }
 
   @Test
+  @NeedsFreshDriver
   void canAddConsoleMessageHandler()
       throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<ConsoleLogEntry> future = new CompletableFuture<>();
 
     long id = ((RemoteWebDriver) driver).script().addConsoleMessageHandler(future::complete);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
     driver.findElement(By.id("consoleLog")).click();
 
@@ -81,6 +67,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canRemoveConsoleMessageHandler()
       throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<ConsoleLogEntry> future1 = new CompletableFuture<>();
@@ -96,7 +83,7 @@ class WebScriptTest extends JupiterTestBase {
     // Removing the second consumer, so it will no longer get the console message.
     ((RemoteWebDriver) driver).script().removeConsoleMessageHandler(id2);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
     driver.findElement(By.id("consoleLog")).click();
 
@@ -113,12 +100,13 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canAddJsErrorHandler() throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<JavascriptLogEntry> future = new CompletableFuture<>();
 
     long id = ((RemoteWebDriver) driver).script().addJavaScriptErrorHandler(future::complete);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
     driver.findElement(By.id("jsException")).click();
 
@@ -132,6 +120,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canRemoveJsErrorHandler() throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<JavascriptLogEntry> future1 = new CompletableFuture<>();
     CompletableFuture<JavascriptLogEntry> future2 = new CompletableFuture<>();
@@ -146,7 +135,7 @@ class WebScriptTest extends JupiterTestBase {
     // Removing the second consumer, so it will no longer get the JS error.
     ((RemoteWebDriver) driver).script().removeJavaScriptErrorHandler(id2);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
     driver.findElement(By.id("jsException")).click();
 
@@ -166,6 +155,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canAddMultipleHandlers() throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<JavascriptLogEntry> future1 = new CompletableFuture<>();
     CompletableFuture<JavascriptLogEntry> future2 = new CompletableFuture<>();
@@ -177,7 +167,7 @@ class WebScriptTest extends JupiterTestBase {
     long id1 = ((RemoteWebDriver) driver).script().addJavaScriptErrorHandler(consumer1);
     long id2 = ((RemoteWebDriver) driver).script().addJavaScriptErrorHandler(consumer2);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
     driver.findElement(By.id("jsException")).click();
 
@@ -193,6 +183,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canAddDomMutationHandler() throws InterruptedException {
     AtomicReference<DomMutation> seen = new AtomicReference<>();
     CountDownLatch latch = new CountDownLatch(1);
@@ -220,6 +211,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canRemoveDomMutationHandler() throws InterruptedException {
     AtomicReference<DomMutation> seen = new AtomicReference<>();
     CountDownLatch latch = new CountDownLatch(1);
@@ -247,6 +239,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canPinScript() throws ExecutionException, InterruptedException, TimeoutException {
     CompletableFuture<ConsoleLogEntry> future = new CompletableFuture<>();
 
@@ -254,7 +247,7 @@ class WebScriptTest extends JupiterTestBase {
 
     long id = ((RemoteWebDriver) driver).script().addConsoleMessageHandler(future::complete);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
 
     ConsoleLogEntry logEntry = future.get(5, TimeUnit.SECONDS);
@@ -265,6 +258,7 @@ class WebScriptTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canUnpinScript() throws ExecutionException, InterruptedException, TimeoutException {
     CountDownLatch latch = new CountDownLatch(2);
 
@@ -276,7 +270,7 @@ class WebScriptTest extends JupiterTestBase {
             .script()
             .addConsoleMessageHandler(consoleLogEntry -> latch.countDown());
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     driver.get(page);
 
