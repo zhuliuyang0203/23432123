@@ -21,6 +21,8 @@ import pytest
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 @pytest.fixture
@@ -39,9 +41,8 @@ def test_can_upload_file(driver, pages, get_local_path):
     driver.find_element(By.ID, "upload").send_keys(get_local_path("test_file.txt"))
     driver.find_element(By.ID, "go").click()
     driver.switch_to.frame(driver.find_element(By.ID, "upload_target"))
-    body = driver.find_element(By.CSS_SELECTOR, "body").text
 
-    assert "test_file.txt" in body
+    WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "body"), "test_file.txt"))
 
 
 def test_can_upload_two_files(driver, pages, get_local_path):
@@ -50,10 +51,9 @@ def test_can_upload_two_files(driver, pages, get_local_path):
     driver.find_element(By.ID, "upload").send_keys(two_file_paths)
     driver.find_element(By.ID, "go").click()
     driver.switch_to.frame(driver.find_element(By.ID, "upload_target"))
-    body = driver.find_element(By.CSS_SELECTOR, "body").text
 
-    assert "test_file.txt" in body
-    assert "test_file2.txt" in body
+    WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "body"), "test_file.txt"))
+    WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "body"), "test_file2.txt"))
 
 
 @pytest.mark.xfail_firefox
