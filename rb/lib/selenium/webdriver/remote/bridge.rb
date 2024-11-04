@@ -35,10 +35,10 @@ module Selenium
           attr_reader :extra_commands
           attr_writer :element_class, :locator_converter
 
-          def add_command(name, verb, url, &block)
+          def add_command(name, verb, url, &)
             @extra_commands ||= {}
             @extra_commands[name] = [verb, url]
-            define_method(name, &block)
+            define_method(name, &)
           end
 
           def locator_converter

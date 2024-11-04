@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.node.config;
 
 import static org.openqa.selenium.grid.config.StandardGridRoles.NODE_ROLE;
+import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_CONNECTION_LIMIT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_DETECT_DRIVERS;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_DRAIN_AFTER_SESSION_COUNT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_ENABLE_BIDI;
@@ -30,7 +31,7 @@ import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_REGISTER_
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_REGISTER_PERIOD;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_SESSION_TIMEOUT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_USE_SELENIUM_MANAGER;
-import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_VNC_ENV_VAR;
+import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_VNC_ENV_VARS;
 import static org.openqa.selenium.grid.node.config.NodeOptions.NODE_SECTION;
 import static org.openqa.selenium.grid.node.config.NodeOptions.OVERRIDE_MAX_SESSIONS;
 
@@ -76,6 +77,14 @@ public class NodeFlags implements HasRoles {
               + "This will release the slot for other tests.")
   @ConfigValue(section = NODE_SECTION, name = "session-timeout", example = "60")
   public int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
+
+  @Parameter(
+      names = {"--connection-limit-per-session"},
+      description =
+          "Let X be the maximum number of websocket connections per session.This will ensure one"
+              + " session is not able to exhaust the connection limit of the host")
+  @ConfigValue(section = NODE_SECTION, name = "connection-limit-per-session", example = "8")
+  public int connectionLimitPerSession = DEFAULT_CONNECTION_LIMIT;
 
   @Parameter(
       names = {"--detect-drivers"},
@@ -202,8 +211,11 @@ public class NodeFlags implements HasRoles {
       description =
           "Environment variable to check in order to determine if a vnc stream is "
               + "available or not.")
-  @ConfigValue(section = NODE_SECTION, name = "vnc-env-var", example = "SE_START_XVFB")
-  public String vncEnvVar = DEFAULT_VNC_ENV_VAR;
+  @ConfigValue(
+      section = NODE_SECTION,
+      name = "vnc-env-var",
+      example = "[\"SE_START_XVFB\", \"SE_START_VNC\", \"SE_START_NO_VNC\"]")
+  public List<String> vncEnvVar = DEFAULT_VNC_ENV_VARS;
 
   @Parameter(
       names = "--no-vnc-port",

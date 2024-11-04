@@ -261,12 +261,15 @@ js_library(
 
 
 def edgedriver():
-    r = http.request("GET", "https://msedgedriver.azureedge.net/LATEST_STABLE")
-    v = r.data.decode("utf-16").strip()
+    r_stable = http.request("GET", "https://msedgedriver.azureedge.net/LATEST_STABLE")
+    stable_version = r_stable.data.decode("utf-16").strip()
+    major_version = stable_version.split('.')[0]
+    r = http.request("GET", f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_LINUX")
+    linux_version = r.data.decode("utf-16").strip()
 
     content = ""
 
-    linux = "https://msedgedriver.azureedge.net/%s/edgedriver_linux64.zip" % v
+    linux = "https://msedgedriver.azureedge.net/%s/edgedriver_linux64.zip" % linux_version
     sha = calculate_hash(linux)
     content = (
         content
@@ -291,7 +294,9 @@ js_library(
         % (linux, sha)
     )
 
-    mac = "https://msedgedriver.azureedge.net/%s/edgedriver_mac64.zip" % v
+    r = http.request("GET", f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_MACOS")
+    macos_version = r.data.decode("utf-16").strip()
+    mac = "https://msedgedriver.azureedge.net/%s/edgedriver_mac64.zip" % macos_version
     sha = calculate_hash(mac)
     content = (
         content

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public record ResponseData(string Url,
@@ -9,7 +11,7 @@ public record ResponseData(string Url,
                           string StatusText,
                           bool FromCache,
                           IReadOnlyList<Header> Headers,
-                          string MymeType,
+                          string MimeType,
                           long BytesReceived,
                           long? HeadersSize,
                           long? BodySize,

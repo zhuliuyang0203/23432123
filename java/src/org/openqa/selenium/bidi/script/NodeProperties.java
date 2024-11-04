@@ -25,7 +25,7 @@ import org.openqa.selenium.json.TypeToken;
 public class NodeProperties {
   private enum Mode {
     OPEN("open"),
-    CLOSE("close");
+    CLOSED("closed");
 
     private final String value;
 

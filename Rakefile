@@ -99,7 +99,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v128:v128.publish
   //java/src/org/openqa/selenium/devtools/v129:v129.publish
-  //java/src/org/openqa/selenium/devtools/v127:v127.publish
+  //java/src/org/openqa/selenium/devtools/v130:v130.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
@@ -483,7 +483,6 @@ namespace :node do
     new_version = updated_version(old_version, arguments[:version], nightly)
 
     ['javascript/node/selenium-webdriver/package.json',
-     'package-lock.json',
      'javascript/node/selenium-webdriver/BUILD.bazel'].each do |file|
       text = File.read(file).gsub(old_version, new_version)
       File.open(file, 'w') { |f| f.puts text }
@@ -792,7 +791,7 @@ namespace :dotnet do
       sh 'docfx dotnet/docs/docfx.json'
     rescue StandardError
       case $CHILD_STATUS.exitstatus
-      when 127
+      when 130
         raise 'Ensure the dotnet/tools directory is added to your PATH environment variable (e.g., `~/.dotnet/tools`)'
       when 255
         puts '.NET documentation build failed, likely because of DevTools namespacing. This is ok; continuing'
@@ -1050,8 +1049,7 @@ namespace :all do
                                            'py/BUILD.bazel',
                                            'py/setup.py',
                                            'rb/lib/selenium/webdriver/version.rb',
-                                           'rb/Gemfile.lock',
-                                           'package-lock.json'])
+                                           'rb/Gemfile.lock'])
 
     print 'Do you want to push the committed changes? (Y/n): '
     response = $stdin.gets.chomp.downcase
@@ -1106,7 +1104,6 @@ namespace :all do
              'java/version.bzl',
              'javascript/node/selenium-webdriver/CHANGES.md',
              'javascript/node/selenium-webdriver/package.json',
-             'package-lock.json',
              'py/docs/source/conf.py',
              'py/selenium/__init__.py',
              'py/selenium/webdriver/__init__.py',

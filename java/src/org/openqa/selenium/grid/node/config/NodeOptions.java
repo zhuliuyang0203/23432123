@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -72,13 +73,15 @@ public class NodeOptions {
   public static final int DEFAULT_HEARTBEAT_PERIOD = 60;
   public static final int DEFAULT_SESSION_TIMEOUT = 300;
   public static final int DEFAULT_DRAIN_AFTER_SESSION_COUNT = 0;
+  public static final int DEFAULT_CONNECTION_LIMIT = 10;
   public static final boolean DEFAULT_ENABLE_CDP = true;
   public static final boolean DEFAULT_ENABLE_BIDI = true;
   static final String NODE_SECTION = "node";
   static final boolean DEFAULT_DETECT_DRIVERS = true;
   static final boolean DEFAULT_USE_SELENIUM_MANAGER = false;
   static final boolean OVERRIDE_MAX_SESSIONS = false;
-  static final String DEFAULT_VNC_ENV_VAR = "SE_START_XVFB";
+  static final List<String> DEFAULT_VNC_ENV_VARS =
+      Arrays.asList("SE_START_XVFB", "SE_START_VNC", "SE_START_NO_VNC");
   static final int DEFAULT_NO_VNC_PORT = 7900;
   static final int DEFAULT_REGISTER_CYCLE = 10;
   static final int DEFAULT_REGISTER_PERIOD = 120;
@@ -260,6 +263,15 @@ public class NodeOptions {
     return Math.min(maxSessions, DEFAULT_MAX_SESSIONS);
   }
 
+  public int getConnectionLimitPerSession() {
+    int connectionLimit =
+        config
+            .getInt(NODE_SECTION, "connection-limit-per-session")
+            .orElse(DEFAULT_CONNECTION_LIMIT);
+    Require.positive("Session connection limit", connectionLimit);
+    return connectionLimit;
+  }
+
   public Duration getSessionTimeout() {
     // If the user sets 10s or less, we default to 10s.
     int seconds =
@@ -286,9 +298,16 @@ public class NodeOptions {
 
   @VisibleForTesting
   boolean isVncEnabled() {
-    String vncEnvVar = config.get(NODE_SECTION, "vnc-env-var").orElse(DEFAULT_VNC_ENV_VAR);
+    List<String> vncEnvVars = DEFAULT_VNC_ENV_VARS;
+    if (config.getAll(NODE_SECTION, "vnc-env-var").isPresent()) {
+      vncEnvVars = config.getAll(NODE_SECTION, "vnc-env-var").get();
+    }
     if (!vncEnabledValueSet.getAndSet(true)) {
-      vncEnabled.set(Boolean.parseBoolean(System.getenv(vncEnvVar)));
+      boolean allEnabled =
+          vncEnvVars.stream()
+              .allMatch(
+                  env -> "true".equalsIgnoreCase(System.getProperty(env, System.getenv(env))));
+      vncEnabled.set(allEnabled);
     }
     return vncEnabled.get();
   }
