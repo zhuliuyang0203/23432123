@@ -154,12 +154,7 @@ public abstract class Node implements HasReadyState, Routable {
         combine(
             // "getSessionId" is aggressive about finding session ids, so this needs to be the last
             // route that is checked.
-            matching(
-                    req ->
-                        getSessionId(req.getUri())
-                            .map(SessionId::new)
-                            .map(sessionId -> this.getSession(sessionId) != null)
-                            .orElse(false))
+            matching(req -> getSessionId(req.getUri()).map(SessionId::new).isPresent())
                 .to(() -> new ForwardWebDriverCommand(this))
                 .with(spanDecorator("node.forward_command")),
             new CustomLocatorHandler(this, registrationSecret, customLocators),

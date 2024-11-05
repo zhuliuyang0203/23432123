@@ -157,12 +157,27 @@ namespace OpenQA.Selenium
     // Selenium WebDriver types
     [JsonSerializable(typeof(char[]))]
     [JsonSerializable(typeof(byte[]))]
-    [JsonSerializable(typeof(Dictionary<string, object>))]
     [JsonSerializable(typeof(Cookie))]
     [JsonSerializable(typeof(ReturnedCookie))]
     [JsonSerializable(typeof(Proxy))]
-    internal partial class CommandJsonSerializerContext : JsonSerializerContext
-    {
 
-    }
+    // Selenium Dictionaries, primarily used in Capabilities
+    [JsonSerializable(typeof(Dictionary<string, object>))]
+
+    [JsonSerializable(typeof(Dictionary<string, bool>))]
+    [JsonSerializable(typeof(Dictionary<string, byte>))]
+    [JsonSerializable(typeof(Dictionary<string, sbyte>))]
+    [JsonSerializable(typeof(Dictionary<string, char>))]
+    [JsonSerializable(typeof(Dictionary<string, decimal>))]
+    [JsonSerializable(typeof(Dictionary<string, double>))]
+    [JsonSerializable(typeof(Dictionary<string, float>))]
+    [JsonSerializable(typeof(Dictionary<string, int>))]
+    [JsonSerializable(typeof(Dictionary<string, uint>))]
+    [JsonSerializable(typeof(Dictionary<string, nint>))]
+    [JsonSerializable(typeof(Dictionary<string, nuint>))]
+    [JsonSerializable(typeof(Dictionary<string, long>))]
+    [JsonSerializable(typeof(Dictionary<string, ulong>))]
+    [JsonSerializable(typeof(Dictionary<string, short>))]
+    [JsonSerializable(typeof(Dictionary<string, ushort>))]
+    internal partial class CommandJsonSerializerContext : JsonSerializerContext;
 }

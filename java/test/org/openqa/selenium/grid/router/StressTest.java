@@ -77,6 +77,11 @@ class StressTest {
                         + "\n"
                         + "session-timeout = 11"
                         + "\n"
+                        + "overwrite-max-sessions = true"
+                        + "\n"
+                        + "max-sessions = "
+                        + Runtime.getRuntime().availableProcessors() * 2
+                        + "\n"
                         + "enable-managed-downloads = true")));
     tearDowns.add(deployment);
 

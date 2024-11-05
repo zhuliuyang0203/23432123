@@ -17,12 +17,12 @@
 
 package org.openqa.selenium.grid.node;
 
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.openqa.selenium.remote.http.Contents.asJson;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,11 +69,18 @@ class ForwardWebDriverCommandTest {
     HttpResponse actualResponse = command.execute(mockRequest);
     HttpResponse expectResponse =
         new HttpResponse()
-            .setStatus(HTTP_INTERNAL_ERROR)
+            .setStatus(HTTP_NOT_FOUND)
             .setContent(
                 asJson(
-                    ImmutableMap.of(
-                        "error", String.format("Session not found in node %s", mockNode.getId()))));
+                    Map.of(
+                        "value",
+                        Map.of(
+                            "error",
+                            "invalid session id",
+                            "message",
+                            "Cannot find session with id: " + sessionId,
+                            "stacktrace",
+                            ""))));
     assertEquals(expectResponse.getStatus(), actualResponse.getStatus());
     assertEquals(expectResponse.getContentEncoding(), actualResponse.getContentEncoding());
   }
