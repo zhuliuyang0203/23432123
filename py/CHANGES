@@ -1,3 +1,23 @@
+Selenium 4.26.1
+* DeprecationWarning raised in default webdriver init (#14690)
+* Remote connection use timeout from ClientConfig (#14692)
+* Add backward compatibility for AppiumConnection (#14696)
+
+Selenium 4.26.0
+* Add CDP for Chrome 130 and remove 127
+* Added more internal logging for CDP (#14668)
+* Set consistent polling across java and python for `WebDriverWait` methods (#14626)
+* webkitgtk: log_path -> log_output (#14618)
+* Implement configurable configuration class for the http client (#13286)
+* Better compatibility with Appium-python (#14587)
+* Avoid waiting indefinitely on a frozen chromedriver process (#14578)
+* Allow logging diagnose in safari driver (#14606)
+* Remote connection throws response status code when data is empty (#14601)
+* Remove deprecated parameter from EdgeService (#14563)
+* Allow driver path to be set using ENV variables (#14528)
+* Remove un-needed print (#14562)
+* Fix a bug in `bidi/session.py` by removing mutable object as default value for function argument (#14286)
+
 Selenium 4.25.0
 * Add CDP for Chrome 129 and remove 126
 * fix type errors for `service.py`, `cdp.py`, `webelement.py` and `remote_connection.py` (#14448)

@@ -25,13 +25,13 @@ module Selenium
       end
 
       # @return [int] id of the handler
-      def add_console_message_handler(&block)
-        @log_handler.add_message_handler('console', &block)
+      def add_console_message_handler(&)
+        @log_handler.add_message_handler('console', &)
       end
 
       # @return [int] id of the handler
-      def add_javascript_error_handler(&block)
-        @log_handler.add_message_handler('javascript', &block)
+      def add_javascript_error_handler(&)
+        @log_handler.add_message_handler('javascript', &)
       end
 
       # @param [int] id of the handler previously added

@@ -307,6 +307,19 @@ def test_register_extra_headers(mock_request, remote_connection):
     assert headers["Foo"] == "bar"
 
 
+def test_backwards_compatibility_with_appium_connection():
+    # Keep backward compatibility for AppiumConnection - https://github.com/SeleniumHQ/selenium/issues/14694
+    client_config = ClientConfig(remote_server_addr="http://remote", ca_certs="/path/to/cacert.pem", timeout=300)
+    remote_connection = RemoteConnection(client_config=client_config)
+    assert remote_connection._ca_certs == "/path/to/cacert.pem"
+    assert remote_connection._timeout == 300
+    assert remote_connection._client_config == client_config
+    remote_connection.set_timeout(120)
+    assert remote_connection.get_timeout() == 120
+    remote_connection.set_certificate_bundle_path("/path/to/cacert2.pem")
+    assert remote_connection.get_certificate_bundle_path() == "/path/to/cacert2.pem"
+
+
 def test_get_connection_manager_with_timeout_from_client_config():
     remote_connection = RemoteConnection(remote_server_addr="http://remote", keep_alive=False)
     remote_connection.set_timeout(10)

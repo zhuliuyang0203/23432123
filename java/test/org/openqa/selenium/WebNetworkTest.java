@@ -22,33 +22,19 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.net.URI;
 import java.util.function.Predicate;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 import org.openqa.selenium.testing.drivers.Browser;
 
 class WebNetworkTest extends JupiterTestBase {
 
   private String page;
-  private AppServer server;
-
-  @BeforeEach
-  public void setUp() {
-    server = new NettyAppServer();
-    server.start();
-  }
-
-  @AfterEach
-  public void cleanUp() {
-    driver.quit();
-  }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddAuthenticationHandler() {
@@ -56,13 +42,14 @@ class WebNetworkTest extends JupiterTestBase {
         .network()
         .addAuthenticationHandler(new UsernameAndPassword("test", "test"));
 
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("authorized");
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddAuthenticationHandlerWithFilter() {
@@ -72,13 +59,14 @@ class WebNetworkTest extends JupiterTestBase {
         .network()
         .addAuthenticationHandler(filter, new UsernameAndPassword("test", "test"));
 
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("authorized");
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddMultipleAuthenticationHandlersWithFilter() {
@@ -92,13 +80,14 @@ class WebNetworkTest extends JupiterTestBase {
         .addAuthenticationHandler(
             uri -> uri.getPath().contains("test"), new UsernameAndPassword("test1", "test1"));
 
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("authorized");
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddMultipleAuthenticationHandlersWithTheSameFilter() {
@@ -112,13 +101,14 @@ class WebNetworkTest extends JupiterTestBase {
         .addAuthenticationHandler(
             uri -> uri.getPath().contains("basicAuth"), new UsernameAndPassword("test", "test"));
 
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("authorized");
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canRemoveAuthenticationHandler() {
@@ -128,7 +118,7 @@ class WebNetworkTest extends JupiterTestBase {
             .addAuthenticationHandler(new UsernameAndPassword("test", "test"));
 
     ((RemoteWebDriver) driver).network().removeAuthenticationHandler(id);
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThatExceptionOfType(UnhandledAlertException.class)
@@ -136,11 +126,12 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canRemoveAuthenticationHandlerThatDoesNotExist() {
     ((RemoteWebDriver) driver).network().removeAuthenticationHandler(5);
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThatExceptionOfType(UnhandledAlertException.class)
@@ -148,6 +139,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canClearAuthenticationHandlers() {
@@ -165,7 +157,7 @@ class WebNetworkTest extends JupiterTestBase {
         .addAuthenticationHandler(new UsernameAndPassword("test1", "test1"));
 
     ((RemoteWebDriver) driver).network().clearAuthenticationHandlers();
-    page = server.whereIs("basicAuth");
+    page = appServer.whereIs("basicAuth");
     driver.get(page);
 
     assertThatExceptionOfType(UnhandledAlertException.class)

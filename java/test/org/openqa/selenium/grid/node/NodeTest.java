@@ -23,8 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.openqa.selenium.json.Json.MAP_TYPE;
 import static org.openqa.selenium.remote.http.Contents.string;
 import static org.openqa.selenium.remote.http.HttpMethod.DELETE;
@@ -402,20 +400,14 @@ class NodeTest {
     assertThat(node2.matches(req2)).isTrue();
 
     // Assert that should not respond to commands for sessions Node 1 does not own
-    NoSuchSessionException exception =
-        assertThrows(NoSuchSessionException.class, () -> node.execute(req2));
-    assertTrue(
-        exception
-            .getMessage()
-            .startsWith(String.format("Cannot find session with id: %s", session2.getId())));
+    HttpResponse res1 = node.execute(req2);
+    assertThat(res1.getStatus()).isEqualTo(404);
+    assertThat(Contents.string(res1)).contains("invalid session id");
 
     // Assert that should not respond to commands for sessions Node 2 does not own
-    NoSuchSessionException exception2 =
-        assertThrows(NoSuchSessionException.class, () -> node2.execute(req));
-    assertTrue(
-        exception2
-            .getMessage()
-            .startsWith(String.format("Cannot find session with id: %s", session.getId())));
+    HttpResponse res2 = node2.execute(req);
+    assertThat(res2.getStatus()).isEqualTo(404);
+    assertThat(Contents.string(res2)).contains("invalid session id");
   }
 
   @Test
