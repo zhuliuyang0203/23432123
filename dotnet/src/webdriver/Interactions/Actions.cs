@@ -77,15 +77,12 @@ namespace OpenQA.Selenium.Interactions
         {
             InputDevice device = FindDeviceById(name);
 
-            if (device == null)
+            this.activePointer = device switch
             {
-                this.activePointer = new PointerInputDevice(kind, name);
-            }
-            else
-            {
-                this.activePointer = device as PointerInputDevice
-                    ?? throw new InvalidOperationException($"Device under the name \"{name}\" is not a pointer. Actual input type: {device.DeviceKind}");
-            }
+                null => new PointerInputDevice(kind, name),
+                PointerInputDevice pointerDevice => pointerDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a pointer. Actual input type: {device.DeviceKind}"),
+            };
 
             return this;
         }
@@ -100,16 +97,12 @@ namespace OpenQA.Selenium.Interactions
         {
             InputDevice device = FindDeviceById(name);
 
-            if (device == null)
+            this.activeKeyboard = device switch
             {
-                this.activeKeyboard = new KeyInputDevice(name);
-            }
-            else
-            {
-                this.activeKeyboard = device as KeyInputDevice
-                    ?? throw new InvalidOperationException($"Device under the name \"{name}\" is not a keyboard. Actual input type: {device.DeviceKind}");
-
-            }
+                null => new KeyInputDevice(name),
+                KeyInputDevice keyDevice => keyDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a keyboard. Actual input type: {device.DeviceKind}"),
+            };
 
             return this;
         }
@@ -124,15 +117,12 @@ namespace OpenQA.Selenium.Interactions
         {
             InputDevice device = FindDeviceById(name);
 
-            if (device == null)
+            this.activeWheel = device switch
             {
-                this.activeWheel = new WheelInputDevice(name);
-            }
-            else
-            {
-                this.activeWheel = device as WheelInputDevice
-                    ?? throw new InvalidOperationException($"Device under the name \"{name}\" is not a wheel. Actual input type: {device.DeviceKind}");
-            }
+                null => new WheelInputDevice(name),
+                WheelInputDevice wheelDevice => wheelDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a wheel. Actual input type: {device.DeviceKind}"),
+            };
 
             return this;
         }
