@@ -1,0 +1,53 @@
+name: CI - Renovate - RBE
+
+on:
+  push:
+    branches:
+      - renovate/*
+  workflow_dispatch:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'seleniumhq'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Repin Dependencies
+        run: |
+          REPIN=1 bazel run @maven//:pin
+      - name: Run format script
+        run: ./scripts/format.sh
+      - name: Commit files
+        run: |
+          export CHANGES=$(git status -s)
+          if [ -n "$CHANGES" ]; then
+            git config --local user.email "selenium-ci@users.noreply.github.com"
+            git config --local user.name "Selenium CI Bot"
+            git add ./java/maven_install.json
+            git commit -m 'Repin maven dependencies'
+            echo "code_changes=true" >> $GITHUB_ENV
+          fi
+      - name: Push changes
+        if: ${{ env.code_changes }} == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.SELENIUM_CI_TOKEN }}
+          branch: ${{ github.ref }}
+      - name: Format
+        uses: ./.github/workflows/bazel.yml
+        with:
+          name: Check format script run
+          caching: false
+          ruby-version: jruby-9.4.8.0
+          run: ./scripts/github-actions/check-format.sh
+
+  test:
+    name: Test
+    if: github.repository_owner == 'seleniumhq'
+    uses: ./.github/workflows/bazel.yml
+    with:
+      name: All RBE tests
+      caching: false
+      ruby-version: jruby-9.4.8.0
+      run: ./scripts/github-actions/ci-build.sh
