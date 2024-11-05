@@ -83,7 +83,7 @@ public enum Browser {
       }
 
       if (Boolean.getBoolean("webdriver.headless")) {
-        options.addArguments("--headless=chrome");
+        options.addArguments("--headless=new");
       }
 
       options.addArguments(

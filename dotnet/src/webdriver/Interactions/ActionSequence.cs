@@ -29,7 +29,6 @@ namespace OpenQA.Selenium.Interactions
     public class ActionSequence
     {
         private List<Interaction> interactions = new List<Interaction>();
-        private InputDevice device;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionSequence"/> class.
@@ -52,7 +51,7 @@ namespace OpenQA.Selenium.Interactions
                 throw new ArgumentNullException(nameof(device), "Input device cannot be null.");
             }
 
-            this.device = device;
+            this.InputDevice = device;
 
             for (int i = 0; i < initialSize; i++)
             {
@@ -71,10 +70,13 @@ namespace OpenQA.Selenium.Interactions
         /// <summary>
         /// Gets the input device for this Action sequence.
         /// </summary>
-        public InputDevice inputDevice
-        {
-            get { return this.inputDevice; }
-        }
+        [Obsolete("This property has been renamed to InputDevice and will be removed in a future version")]
+        public InputDevice inputDevice => InputDevice;
+
+        /// <summary>
+        /// Gets the input device for this Action sequence.
+        /// </summary>
+        public InputDevice InputDevice { get; }
 
         /// <summary>
         /// Adds an action to the sequence.
@@ -88,9 +90,9 @@ namespace OpenQA.Selenium.Interactions
                 throw new ArgumentNullException(nameof(interactionToAdd), "Interaction to add to sequence must not be null");
             }
 
-            if (!interactionToAdd.IsValidFor(this.device.DeviceKind))
+            if (!interactionToAdd.IsValidFor(this.InputDevice.DeviceKind))
             {
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Interaction {0} is invalid for device type {1}.", interactionToAdd.GetType(), this.device.DeviceKind), nameof(interactionToAdd));
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Interaction {0} is invalid for device type {1}.", interactionToAdd.GetType(), this.InputDevice.DeviceKind), nameof(interactionToAdd));
             }
 
             this.interactions.Add(interactionToAdd);
@@ -103,7 +105,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> containing the actions in this sequence.</returns>
         public Dictionary<string, object> ToDictionary()
         {
-            Dictionary<string, object> toReturn = this.device.ToDictionary();
+            Dictionary<string, object> toReturn = this.InputDevice.ToDictionary();
 
             List<object> encodedActions = new List<object>();
             foreach (Interaction action in this.interactions)
@@ -122,7 +124,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A string that represents the current <see cref="ActionSequence"/>.</returns>
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder("Action sequence - ").Append(this.device.ToString());
+            StringBuilder builder = new StringBuilder("Action sequence - ").Append(this.InputDevice.ToString());
             foreach (Interaction action in this.interactions)
             {
                 builder.AppendLine();
