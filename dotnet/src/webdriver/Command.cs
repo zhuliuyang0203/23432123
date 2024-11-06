@@ -151,19 +151,18 @@ namespace OpenQA.Selenium
     [JsonSerializable(typeof(ulong))]
     [JsonSerializable(typeof(short))]
     [JsonSerializable(typeof(ushort))]
-
     [JsonSerializable(typeof(string))]
 
     // Selenium WebDriver types
     [JsonSerializable(typeof(char[]))]
     [JsonSerializable(typeof(byte[]))]
+    [JsonSerializable(typeof(Chromium.ChromiumNetworkConditions))]
     [JsonSerializable(typeof(Cookie))]
     [JsonSerializable(typeof(ReturnedCookie))]
     [JsonSerializable(typeof(Proxy))]
 
     // Selenium Dictionaries, primarily used in Capabilities
     [JsonSerializable(typeof(Dictionary<string, object>))]
-
     [JsonSerializable(typeof(Dictionary<string, bool>))]
     [JsonSerializable(typeof(Dictionary<string, byte>))]
     [JsonSerializable(typeof(Dictionary<string, sbyte>))]
@@ -179,5 +178,6 @@ namespace OpenQA.Selenium
     [JsonSerializable(typeof(Dictionary<string, ulong>))]
     [JsonSerializable(typeof(Dictionary<string, short>))]
     [JsonSerializable(typeof(Dictionary<string, ushort>))]
+    [JsonSerializable(typeof(Dictionary<string, string>))]
     internal partial class CommandJsonSerializerContext : JsonSerializerContext;
 }

@@ -73,7 +73,7 @@ class StressTest {
                 new StringReader(
                     "[node]\n"
                         + "driver-implementation = "
-                        + browser.displayName()
+                        + String.format("\"%s\"", browser.displayName())
                         + "\n"
                         + "session-timeout = 11"
                         + "\n"

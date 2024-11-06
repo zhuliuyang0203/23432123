@@ -84,11 +84,11 @@ class RemoteWebDriverDownloadTest {
                         + "selenium-manager = true\n"
                         + "enable-managed-downloads = true\n"
                         + "driver-implementation = "
-                        + browser.displayName())));
+                        + String.format("\"%s\"", browser.displayName()))));
     tearDowns.add(deployment);
 
     server = deployment.getServer();
-    appServer = new NettyAppServer();
+    appServer = new NettyAppServer(false);
     tearDowns.add(() -> appServer.stop());
     appServer.start();
   }

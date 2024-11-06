@@ -61,7 +61,7 @@ class RemoteWebDriverBiDiTest {
 
   @BeforeAll
   static void serverSetup() {
-    server = new NettyAppServer();
+    server = new NettyAppServer(false);
     server.start();
   }
 
@@ -77,7 +77,7 @@ class RemoteWebDriverBiDiTest {
                     "[node]\n"
                         + "selenium-manager = false\n"
                         + "driver-implementation = "
-                        + browser.displayName())));
+                        + String.format("\"%s\"", browser.displayName()))));
 
     driver = new RemoteWebDriver(deployment.getServer().getUrl(), browser.getCapabilities());
     driver = new Augmenter().augment(driver);
