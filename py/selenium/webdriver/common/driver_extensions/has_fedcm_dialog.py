@@ -22,18 +22,22 @@ class HasFedCmDialog(WebDriver):
     """Mixin that provides FedCM-specific functionality."""
 
     @property
-    def fedcm_dialog(self):
+    def dialog(self):
         """Returns the FedCM dialog object for interaction."""
         return Dialog(self)
 
-    def enable_fedcm_delay(self, enable):
-        """Disables the promise rejection delay for FedCm.
+    def enable_fedcm_delay(self):
+        """Re-enables the promise rejection delay for FedCM."""
+        self.fedcm.enable_delay()
+
+    def disable_fedcm_delay(self):
+        """Disables the promise rejection delay for FedCM.
 
         FedCm by default delays promise resolution in failure cases for
         privacy reasons. This method allows turning it off to let tests
         run faster where this is not relevant.
         """
-        self.set_fedcm_delay(enable)
+        self.fedcm.disable_delay()
 
     def fedcm_cooldown(self):
         """Resets the FedCm dialog cooldown.
@@ -42,9 +46,9 @@ class HasFedCmDialog(WebDriver):
         dismissed, this method resets that cooldown so that the dialog
         can be triggered again immediately.
         """
-        self.reset_fedcm_cooldown()
+        self.fedcm.reset_cooldown()
 
-    def wait_for_fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
+    def fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
         """Waits for the FedCM dialog to appear."""
         from selenium.common.exceptions import NoAlertPresentException
         from selenium.webdriver.support.wait import WebDriverWait
@@ -52,11 +56,11 @@ class HasFedCmDialog(WebDriver):
         if ignored_exceptions is None:
             ignored_exceptions = (NoAlertPresentException,)
 
-        def check_fedcm():
+        def _check_fedcm():
             try:
-                return self.fedcm_dialog if self.fedcm_dialog.type else None
+                return self.dialog if self.dialog.type else None
             except NoAlertPresentException:
                 return None
 
         wait = WebDriverWait(self, timeout, poll_frequency=poll_frequency, ignored_exceptions=ignored_exceptions)
-        return wait.until(lambda _: check_fedcm())
+        return wait.until(lambda _: _check_fedcm())
