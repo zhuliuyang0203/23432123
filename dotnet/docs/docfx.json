@@ -3,29 +3,40 @@
     {
       "src": [
         {
+          "src": "../src/webdriver",
           "files": [
-            "src/webdriver/WebDriver.csproj",
-            "src/support/WebDriver.Support.csproj",
-            "bin/**/*.dll"
-          ],
-          "src": "../"
+            "**/*.csproj"
+          ]
         }
       ],
-      "dest": "api",
-      "includePrivateMembers": false,
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false,
-      "noRestore": false,
-      "namespaceLayout": "flattened",
-      "memberLayout": "samePage",
-      "allowCompilationErrors": false
+      "dest": "webdriver",
+      "namespaceLayout": "nested",
+      "outputFormat": "apiPage"
+    },
+    {
+      "src": [
+        {
+          "src": "../src/support",
+          "files": [
+            "**/*.csproj"
+          ]
+        }
+      ],
+      "dest": "support",
+      "namespaceLayout": "nested",
+      "outputFormat": "apiPage"
     }
+
   ],
   "build": {
     "content": [
       {
-        "files": "**/*.{md|yml}",
-        "src": "api"
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
       }
     ],
     "resource": [
@@ -35,15 +46,16 @@
         ]
       }
     ],
-    "dest": "../../build/docs/api/dotnet",
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
+    "output": "../../build/docs/api/dotnet",
     "template": [
       "default",
       "modern"
     ],
-    "postProcessors": [],
-    "keepFileLink": false,
-    "disableGitFeatures": false
+    "globalMetadata": {
+      "_appName": "Selenium .NET API",
+      "_appLogoPath": "images/logo.svg",
+      "_appFaviconPath": "images/favicon.ico",
+      "_enableSearch": true
+    }
   }
 }

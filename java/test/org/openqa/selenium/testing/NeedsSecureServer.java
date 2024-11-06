@@ -15,12 +15,16 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.environment.webserver;
+package org.openqa.selenium.testing;
 
-class NettyAppServerTest extends AppServerTestBase {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  @Override
-  protected AppServer createAppServer() {
-    return new NettyAppServer(false);
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface NeedsSecureServer {
+
+  boolean value() default true;
 }
