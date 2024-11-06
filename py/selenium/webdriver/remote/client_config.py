@@ -40,6 +40,8 @@ class ClientConfig:
         password: Optional[str] = None,
         auth_type: Optional[str] = "Basic",
         token: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        extra_headers: Optional[dict] = None,
     ) -> None:
         self.remote_server_addr = remote_server_addr
         self.keep_alive = keep_alive
@@ -51,6 +53,8 @@ class ClientConfig:
         self.password = password
         self.auth_type = auth_type
         self.token = token
+        self.user_agent = user_agent
+        self.extra_headers = extra_headers
 
         self.timeout = (
             (
@@ -216,8 +220,31 @@ class ClientConfig:
     @token.setter
     def token(self, value: str) -> None:
         """Sets the token used for authentication to the remote server if
-        auth_type is not basic."""
+        auth_type is not basic.
+
+        Support values: Bearer, X-API-Key. For others, please use `extra_headers` instead.
+        """
         self._token = value
+
+    @property
+    def user_agent(self) -> str:
+        """Returns user agent to be added to the request headers."""
+        return self._user_agent
+
+    @user_agent.setter
+    def user_agent(self, value: str) -> None:
+        """Sets user agent to be added to the request headers."""
+        self._user_agent = value
+
+    @property
+    def extra_headers(self) -> dict:
+        """Returns extra headers to be added to the request."""
+        return self._extra_headers
+
+    @extra_headers.setter
+    def extra_headers(self, value: dict) -> None:
+        """Sets extra headers to be added to the request."""
+        self._extra_headers = value
 
     def get_proxy_url(self) -> Optional[str]:
         """Returns the proxy URL to use for the connection."""
@@ -253,6 +280,6 @@ class ClientConfig:
             return {"Authorization": f"Basic {encoded_credentials}"}
         if auth_type == "bearer" and self.token:
             return {"Authorization": f"Bearer {self.token}"}
-        if auth_type == "oauth" and self.token:
-            return {"Authorization": f"OAuth {self.token}"}
+        if auth_type == "x-api-key" and self.token:
+            return {"X-API-Key": f"{self.token}"}
         return None

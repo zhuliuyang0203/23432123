@@ -243,6 +243,9 @@ class RemoteConnection:
         }
 
         if parsed_url.username:
+            warnings.warn(
+                "Embedding username and password in URL could be insecure, use ClientConfig instead", stacklevel=2
+            )
             base64string = b64encode(f"{parsed_url.username}:{parsed_url.password}".encode())
             headers.update({"Authorization": f"Basic {base64string.decode()}"})
 
@@ -312,6 +315,8 @@ class RemoteConnection:
         RemoteConnection._timeout = self._client_config.timeout
         RemoteConnection._ca_certs = self._client_config.ca_certs
         RemoteConnection._client_config = self._client_config
+        RemoteConnection.extra_headers = self._client_config.extra_headers or RemoteConnection.extra_headers
+        RemoteConnection.user_agent = self._client_config.user_agent or RemoteConnection.user_agent
 
         if remote_server_addr:
             warnings.warn(
