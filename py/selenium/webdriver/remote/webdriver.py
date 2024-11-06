@@ -43,6 +43,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.options import ArgOptions
 from selenium.webdriver.common.options import BaseOptions
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
@@ -53,6 +54,7 @@ from selenium.webdriver.common.virtual_authenticator import (
 )
 from selenium.webdriver.support.relative_locator import RelativeBy
 
+from ..common.fedcm.dialog import Dialog
 from .bidi_connection import BidiConnection
 from .client_config import ClientConfig
 from .command import Command
@@ -1245,3 +1247,90 @@ class WebDriver(BaseWebDriver):
                 driver.fedcm.reset_cooldown()
         """
         return self._fedcm
+
+    @property
+    def supports_fedcm(self) -> bool:
+        """Returns whether the browser supports FedCM capabilities."""
+        return self.capabilities.get(ArgOptions.FEDCM_CAPABILITY, False)
+
+    def _require_fedcm_support(self):
+        """Raises an exception if FedCM is not supported."""
+        if not self.supports_fedcm:
+            raise WebDriverException(
+                "This browser does not support Federated Credential Management. "
+                "Please ensure you're using a supported browser."
+            )
+
+    @property
+    def dialog(self):
+        """Returns the FedCM dialog object for interaction."""
+        self._require_fedcm_support()
+        return Dialog(self)
+
+    def enable_fedcm_delay(self):
+        """Enables the promise rejection delay for FedCM.
+
+        Raises:
+            WebDriverException if FedCM not supported
+        """
+        self._require_fedcm_support()
+        self.fedcm.enable_delay()
+
+    def disable_fedcm_delay(self):
+        """Disables the promise rejection delay for FedCM.
+
+        FedCM by default delays promise resolution in failure cases for
+        privacy reasons. This method allows turning it off to let tests
+        run faster where this is not relevant.
+
+        Raises:
+            WebDriverException if FedCM not supported
+        """
+        self._require_fedcm_support()
+        self.fedcm.disable_delay()
+
+    def reset_fedcm_cooldown(self):
+        """Resets the FedCM dialog cooldown.
+
+        If a user agent triggers a cooldown when the account chooser is
+        dismissed, this method resets that cooldown so that the dialog
+        can be triggered again immediately.
+
+        Raises:
+            WebDriverException if FedCM not supported
+        """
+        self._require_fedcm_support()
+        self.fedcm.reset_cooldown()
+
+    def fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
+        """Waits for and returns the FedCM dialog.
+
+        Args:
+            timeout: How long to wait for the dialog
+            poll_frequency: How frequently to poll
+            ignored_exceptions: Exceptions to ignore while waiting
+
+        Returns:
+            The FedCM dialog object if found
+
+        Raises:
+            TimeoutException if dialog doesn't appear
+            WebDriverException if FedCM not supported
+        """
+        from selenium.common.exceptions import NoAlertPresentException
+        from selenium.webdriver.support.wait import WebDriverWait
+
+        self._require_fedcm_support()
+
+        if ignored_exceptions is None:
+            ignored_exceptions = (NoAlertPresentException,)
+
+        def _check_fedcm():
+            try:
+                dialog = Dialog(self)
+                return dialog if dialog.type else None
+            except NoAlertPresentException:
+                return None
+
+        wait = WebDriverWait(self, timeout, poll_frequency=poll_frequency, ignored_exceptions=ignored_exceptions)
+        return wait.until(lambda _: _check_fedcm())

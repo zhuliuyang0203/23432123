@@ -491,6 +491,8 @@ class BaseOptions(metaclass=ABCMeta):
 
 class ArgOptions(BaseOptions):
     BINARY_LOCATION_ERROR = "Binary Location Must be a String"
+    # FedCM capability key
+    FEDCM_CAPABILITY = "fedcm:accounts"
 
     def __init__(self) -> None:
         super().__init__()
