@@ -96,5 +96,4 @@ jobs:
       browser: safari
       os: macos
       cache-key: py-safari
-      run: |
-        bazel test --local_test_jobs 1 --flaky_test_attempts 3 //py:test-safari-test/selenium/webdriver/safari/launcher_tests.py
+      run: bazel test --local_test_jobs 1 --flaky_test_attempts 3 //py:test-safari

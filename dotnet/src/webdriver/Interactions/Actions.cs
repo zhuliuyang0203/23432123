@@ -31,16 +31,15 @@ namespace OpenQA.Selenium.Interactions
         private PointerInputDevice activePointer;
         private KeyInputDevice activeKeyboard;
         private WheelInputDevice activeWheel;
-        private IActionExecutor actionExecutor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Actions"/> class.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver"/> object on which the actions built will be performed.</param>
+        /// <exception cref="ArgumentException">If <paramref name="driver"/> does not implement <see cref="IActionExecutor"/>.</exception>
         public Actions(IWebDriver driver)
             : this(driver, TimeSpan.FromMilliseconds(250))
         {
-
         }
 
         /// <summary>
@@ -48,6 +47,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver"/> object on which the actions built will be performed.</param>
         /// <param name="duration">How long durable action is expected to take.</param>
+        /// <exception cref="ArgumentException">If <paramref name="driver"/> does not implement <see cref="IActionExecutor"/>.</exception>
         public Actions(IWebDriver driver, TimeSpan duration)
         {
             IActionExecutor actionExecutor = GetDriverAs<IActionExecutor>(driver);
@@ -56,7 +56,7 @@ namespace OpenQA.Selenium.Interactions
                 throw new ArgumentException("The IWebDriver object must implement or wrap a driver that implements IActionExecutor.", nameof(driver));
             }
 
-            this.actionExecutor = actionExecutor;
+            this.ActionExecutor = actionExecutor;
 
             this.duration = duration;
         }
@@ -64,10 +64,7 @@ namespace OpenQA.Selenium.Interactions
         /// <summary>
         /// Returns the <see cref="IActionExecutor"/> for the driver.
         /// </summary>
-        protected IActionExecutor ActionExecutor
-        {
-            get { return this.actionExecutor; }
-        }
+        protected IActionExecutor ActionExecutor { get; }
 
         /// <summary>
         /// Sets the active pointer device for this Actions class.
@@ -75,33 +72,17 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="kind">The kind of pointer device to set as active.</param>
         /// <param name="name">The name of the pointer device to set as active.</param>
         /// <returns>A self-reference to this Actions class.</returns>
+        /// <exception cref="InvalidOperationException">If a device with this name exists but is not a pointer.</exception>
         public Actions SetActivePointer(PointerKind kind, string name)
         {
-            IList<ActionSequence> sequences = this.actionBuilder.ToActionSequenceList();
+            InputDevice device = FindDeviceById(name);
 
-            InputDevice device = null;
-
-            foreach (var sequence in sequences)
+            this.activePointer = device switch
             {
-                Dictionary<string, object> actions = sequence.ToDictionary();
-
-                string id = (string)actions["id"];
-
-                if (id == name)
-                {
-                    device = sequence.inputDevice;
-                    break;
-                }
-            }
-
-            if (device == null)
-            {
-                this.activePointer = new PointerInputDevice(kind, name);
-            }
-            else
-            {
-                this.activePointer = (PointerInputDevice)device;
-            }
+                null => new PointerInputDevice(kind, name),
+                PointerInputDevice pointerDevice => pointerDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a pointer. Actual input type: {device.DeviceKind}"),
+            };
 
             return this;
         }
@@ -111,33 +92,17 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         /// <param name="name">The name of the keyboard device to set as active.</param>
         /// <returns>A self-reference to this Actions class.</returns>
+        /// <exception cref="InvalidOperationException">If a device with this name exists but is not a keyboard.</exception>
         public Actions SetActiveKeyboard(string name)
         {
-            IList<ActionSequence> sequences = this.actionBuilder.ToActionSequenceList();
+            InputDevice device = FindDeviceById(name);
 
-            InputDevice device = null;
-
-            foreach (var sequence in sequences)
+            this.activeKeyboard = device switch
             {
-                Dictionary<string, object> actions = sequence.ToDictionary();
-
-                string id = (string)actions["id"];
-
-                if (id == name)
-                {
-                    device = sequence.inputDevice;
-                    break;
-                }
-            }
-
-            if (device == null)
-            {
-                this.activeKeyboard = new KeyInputDevice(name);
-            }
-            else
-            {
-                this.activeKeyboard = (KeyInputDevice)device;
-            }
+                null => new KeyInputDevice(name),
+                KeyInputDevice keyDevice => keyDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a keyboard. Actual input type: {device.DeviceKind}"),
+            };
 
             return this;
         }
@@ -147,13 +112,24 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         /// <param name="name">The name of the wheel device to set as active.</param>
         /// <returns>A self-reference to this Actions class.</returns>
+        /// <exception cref="InvalidOperationException">If a device with this name exists but is not a wheel.</exception>
         public Actions SetActiveWheel(string name)
         {
-            IList<ActionSequence> sequences = this.actionBuilder.ToActionSequenceList();
+            InputDevice device = FindDeviceById(name);
 
-            InputDevice device = null;
+            this.activeWheel = device switch
+            {
+                null => new WheelInputDevice(name),
+                WheelInputDevice wheelDevice => wheelDevice,
+                _ => throw new InvalidOperationException($"Device under the name \"{name}\" is not a wheel. Actual input type: {device.DeviceKind}"),
+            };
 
-            foreach (var sequence in sequences)
+            return this;
+        }
+
+        private InputDevice FindDeviceById(string name)
+        {
+            foreach (var sequence in this.actionBuilder.ToActionSequenceList())
             {
                 Dictionary<string, object> actions = sequence.ToDictionary();
 
@@ -161,21 +137,11 @@ namespace OpenQA.Selenium.Interactions
 
                 if (id == name)
                 {
-                    device = sequence.inputDevice;
-                    break;
+                    return sequence.inputDevice;
                 }
             }
 
-            if (device == null)
-            {
-                this.activeWheel = new WheelInputDevice(name);
-            }
-            else
-            {
-                this.activeWheel = (WheelInputDevice)device;
-            }
-
-            return this;
+            return null;
         }
 
         /// <summary>
@@ -619,7 +585,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         public void Perform()
         {
-            this.actionExecutor.PerformActions(this.actionBuilder.ToActionSequenceList());
+            this.ActionExecutor.PerformActions(this.actionBuilder.ToActionSequenceList());
             this.actionBuilder.ClearSequences();
         }
 

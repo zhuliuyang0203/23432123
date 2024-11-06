@@ -52,7 +52,7 @@ public class ByChained extends By implements Serializable {
   public WebElement findElement(SearchContext context) {
     List<WebElement> elements = findElements(context);
     if (elements.isEmpty())
-      throw new NoSuchElementException("Cannot locate an element using " + toString());
+      throw new NoSuchElementException("Cannot locate an element using " + this);
     return elements.get(0);
   }
 

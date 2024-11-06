@@ -16,6 +16,7 @@
 # under the License.
 
 import os
+import textwrap
 
 import pytest
 
@@ -30,11 +31,13 @@ def get_local_path():
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
     def wrapped(filename):
-        return os.path.join(current_dir, filename)
+        full_path = os.path.join(current_dir, filename)
+        return textwrap.fill(full_path, width=512)
 
     return wrapped
 
 
+@pytest.mark.xfail_safari
 def test_can_upload_file(driver, pages, get_local_path):
     pages.load("upload.html")
 
@@ -45,6 +48,7 @@ def test_can_upload_file(driver, pages, get_local_path):
     WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "body"), "test_file.txt"))
 
 
+@pytest.mark.xfail_safari
 def test_can_upload_two_files(driver, pages, get_local_path):
     pages.load("upload.html")
     two_file_paths = get_local_path("test_file.txt") + "\n" + get_local_path("test_file2.txt")

@@ -18,29 +18,19 @@
 package org.openqa.selenium.bidi.script;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.openqa.selenium.testing.Safely.safelyCall;
 
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.bidi.module.Script;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 
 public class EvaluateParametersTest extends JupiterTestBase {
-  private AppServer server;
-
-  @BeforeEach
-  public void setUp() {
-    server = new NettyAppServer();
-    server.start();
-  }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateScript() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -58,6 +48,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateScriptWithUserActivationTrue() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -85,6 +76,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateScriptWithUserActivationFalse() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -112,6 +104,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateScriptThatThrowsException() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -133,6 +126,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateScriptWithResulWithOwnership() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -152,6 +146,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateInASandBox() {
     String id = driver.getWindowHandle();
     try (Script script = new Script(id, driver)) {
@@ -191,6 +186,7 @@ public class EvaluateParametersTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canEvaluateInARealm() {
     String firstTab = driver.getWindowHandle();
     String secondTab = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
@@ -228,13 +224,5 @@ public class EvaluateParametersTest extends JupiterTestBase {
       assertThat(successSecondContextResult.getResult().getValue().isPresent()).isTrue();
       assertThat((Long) successSecondContextResult.getResult().getValue().get()).isEqualTo(5L);
     }
-  }
-
-  @AfterEach
-  public void quitDriver() {
-    if (driver != null) {
-      driver.quit();
-    }
-    safelyCall(server::stop);
   }
 }
