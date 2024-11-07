@@ -26,7 +26,7 @@ from selenium.webdriver.edge.service import Service
 
 @pytest.mark.xfail_edge(raises=WebDriverException)
 @pytest.mark.no_driver_after_test
-def test_uses_chromedriver_logging(clean_driver, driver_executable) -> None:
+def test_uses_edgedriver_logging(clean_driver, driver_executable) -> None:
     log_file = "msedgedriver.log"
     service_args = ["--append-log"]
 
@@ -103,7 +103,7 @@ def service():
 
 
 @pytest.mark.usefixtures("service")
-class TestChromeDriverService:
+class TestEdgeDriverService:
     service_path = "/path/to/msedgedriver"
 
     @pytest.fixture(autouse=True)
