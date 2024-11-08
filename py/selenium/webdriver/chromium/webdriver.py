@@ -77,9 +77,9 @@ class ChromiumDriver(RemoteWebDriver):
     def get_network_conditions(self):
         """Gets Chromium network emulation settings.
 
-        :Returns:     A dict. For example:     {'latency': 4,
-        'download_throughput': 2, 'upload_throughput': 2,     'offline':
-        False}
+        :Returns:
+            A dict.
+            For example:     {'latency': 4, 'download_throughput': 2, 'upload_throughput': 2, 'offline': False}
         """
         return self.execute("getNetworkConditions")["value"]
 

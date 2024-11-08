@@ -155,6 +155,25 @@ class SelectTest {
   }
 
   @Test
+  void shouldAllowOptionsToBeSelectedByContainsVisibleText() {
+    String parameterText = "foo";
+
+    final WebElement firstOption = mockOption("first", false);
+
+    final WebElement element = mockSelectWebElement("multiple");
+    when(element.findElements(
+            By.xpath(".//option[contains(., " + Quotes.escape(parameterText) + ")]")))
+        .thenReturn(Collections.singletonList(firstOption));
+    when(firstOption.getText()).thenReturn("foo bar");
+    when(firstOption.isEnabled()).thenReturn(true);
+
+    Select select = new Select(element);
+    select.selectByContainsVisibleText(parameterText);
+
+    verify(firstOption).click();
+  }
+
+  @Test
   void shouldNotAllowDisabledOptionsToBeSelected() {
     final WebElement firstOption = mockOption("first", false);
     when(firstOption.isEnabled()).thenReturn(false);
@@ -232,6 +251,24 @@ class SelectTest {
   }
 
   @Test
+  void shouldAllowOptionsToDeSelectedByContainsVisibleText() {
+    String parameterText = "b";
+    final WebElement firstOption = mockOption("first", true);
+    final WebElement secondOption = mockOption("second", false);
+
+    final WebElement element = mockSelectWebElement("multiple");
+    when(element.findElements(
+            By.xpath(".//option[contains(., " + Quotes.escape(parameterText) + ")]")))
+        .thenReturn(Arrays.asList(firstOption, secondOption));
+
+    Select select = new Select(element);
+    select.deSelectByContainsVisibleText(parameterText);
+
+    verify(firstOption).click();
+    verify(secondOption, never()).click();
+  }
+
+  @Test
   void shouldAllowOptionsToBeDeselectedByIndex() {
     final WebElement firstOption = mockOption("first", true, 2);
     final WebElement secondOption = mockOption("second", false, 1);
@@ -302,5 +339,8 @@ class SelectTest {
 
     assertThatExceptionOfType(NoSuchElementException.class)
         .isThrownBy(() -> select.selectByVisibleText("also not there"));
+
+    assertThatExceptionOfType(NoSuchElementException.class)
+        .isThrownBy(() -> select.selectByContainsVisibleText("also not there"));
   }
 }
