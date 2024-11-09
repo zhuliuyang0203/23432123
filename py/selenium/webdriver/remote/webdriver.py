@@ -1241,8 +1241,8 @@ class WebDriver(BaseWebDriver):
                 dialog_type = driver.fedcm.dialog_type
                 accounts = driver.fedcm.account_list
                 driver.fedcm.select_account(0)
-                driver.fedcm.click_continue()
-                driver.fedcm.cancel_dialog()
+                driver.fedcm.accept()
+                driver.fedcm.dismiss()
                 driver.fedcm.enable_delay()
                 driver.fedcm.disable_delay()
                 driver.fedcm.reset_cooldown()
@@ -1267,41 +1267,6 @@ class WebDriver(BaseWebDriver):
         """Returns the FedCM dialog object for interaction."""
         self._require_fedcm_support()
         return Dialog(self)
-
-    def enable_fedcm_delay(self):
-        """Enables the promise rejection delay for FedCM.
-
-        Raises:
-            WebDriverException if FedCM not supported
-        """
-        self._require_fedcm_support()
-        self.fedcm.enable_delay()
-
-    def disable_fedcm_delay(self):
-        """Disables the promise rejection delay for FedCM.
-
-        FedCM by default delays promise resolution in failure cases for
-        privacy reasons. This method allows turning it off to let tests
-        run faster where this is not relevant.
-
-        Raises:
-            WebDriverException if FedCM not supported
-        """
-        self._require_fedcm_support()
-        self.fedcm.disable_delay()
-
-    def reset_fedcm_cooldown(self):
-        """Resets the FedCM dialog cooldown.
-
-        If a user agent triggers a cooldown when the account chooser is
-        dismissed, this method resets that cooldown so that the dialog
-        can be triggered again immediately.
-
-        Raises:
-            WebDriverException if FedCM not supported
-        """
-        self._require_fedcm_support()
-        self.fedcm.reset_cooldown()
 
     def fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
         """Waits for and returns the FedCM dialog.

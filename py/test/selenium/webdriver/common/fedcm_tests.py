@@ -101,7 +101,7 @@ class TestFedCM:
         driver.fedcm.disable_delay()
 
     def test_fedcm_cooldown_reset(self, driver):
-        driver.reset_fedcm_cooldown()
+        driver.fedcm.reset_cooldown()
 
     def test_fedcm_no_dialog_type_present(self, driver):
         with pytest.raises(NoAlertPresentException):
@@ -132,7 +132,7 @@ class TestFedCM:
             driver.fedcm.accept()
 
     def test_verify_dialog_type_after_cooldown_reset(self, driver):
-        driver.reset_fedcm_cooldown()
+        driver.fedcm.reset_cooldown()
         driver.execute_script("triggerFedCm();")
         dialog = driver.fedcm_dialog()
         assert dialog.type == "AccountChooser"
