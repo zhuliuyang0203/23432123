@@ -21,6 +21,7 @@ using OpenQA.Selenium.Internal;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace OpenQA.Selenium
 {
@@ -35,7 +36,7 @@ namespace OpenQA.Selenium
 
         private readonly static JsonSerializerOptions s_jsonSerializerOptions = new()
         {
-            TypeInfoResolver = CommandJsonSerializerContext.Default,
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(CommandJsonSerializerContext.Default, new DefaultJsonTypeInfoResolver()),
             Converters = { new ResponseValueJsonConverter() }
         };
 

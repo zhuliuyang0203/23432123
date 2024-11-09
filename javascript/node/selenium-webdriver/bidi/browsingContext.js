@@ -156,8 +156,7 @@ class BrowsingContext {
       method: 'browsingContext.create',
       params: Object.fromEntries(parameters),
     }
-    const res = await this.bidi.send(params)
-    return res
+    return await this.bidi.send(params)
   }
 
   /**

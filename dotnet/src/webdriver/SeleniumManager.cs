@@ -40,8 +40,6 @@ namespace OpenQA.Selenium
     {
         private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
-        private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = SeleniumManagerSerializerContext.Default };
-
         private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
         {
             string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
@@ -187,7 +185,7 @@ namespace OpenQA.Selenium
 
             try
             {
-                jsonResponse = JsonSerializer.Deserialize<SeleniumManagerResponse>(output, _serializerOptions)!;
+                jsonResponse = JsonSerializer.Deserialize(output, SeleniumManagerSerializerContext.Default.SeleniumManagerResponse)!;
             }
             catch (Exception ex)
             {
@@ -210,11 +208,11 @@ namespace OpenQA.Selenium
         }
     }
 
-    internal record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
+    internal sealed record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
     {
-        public record LogEntryResponse(string Level, string Message);
+        public sealed record LogEntryResponse(string Level, string Message);
 
-        public record ResultResponse
+        public sealed record ResultResponse
         (
             [property: JsonPropertyName("driver_path")]
             string DriverPath,
@@ -224,5 +222,6 @@ namespace OpenQA.Selenium
     }
 
     [JsonSerializable(typeof(SeleniumManagerResponse))]
-    internal partial class SeleniumManagerSerializerContext : JsonSerializerContext;
+    [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
+    internal sealed partial class SeleniumManagerSerializerContext : JsonSerializerContext;
 }

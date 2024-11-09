@@ -29,11 +29,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import org.openqa.selenium.internal.Require;
 
 abstract class HttpMessage<M extends HttpMessage<M>> {
@@ -92,11 +90,8 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return an iterable view of the values
    */
   public Iterable<String> getHeaders(String name) {
-    return headers.entrySet().stream()
-        .filter(e -> Objects.nonNull(e.getKey()))
-        .filter(e -> e.getKey().equalsIgnoreCase(name.toLowerCase()))
-        .flatMap((e) -> e.getValue().stream())
-        .collect(Collectors.toList());
+    return Collections.unmodifiableCollection(
+        headers.getOrDefault(name.toLowerCase(), Collections.emptyList()));
   }
 
   /**
@@ -106,12 +101,8 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return the value
    */
   public String getHeader(String name) {
-    return headers.entrySet().stream()
-        .filter(e -> Objects.nonNull(e.getKey()))
-        .filter(e -> e.getKey().equalsIgnoreCase(name.toLowerCase()))
-        .flatMap((e) -> e.getValue().stream())
-        .findFirst()
-        .orElse(null);
+    List<String> values = headers.getOrDefault(name.toLowerCase(), Collections.emptyList());
+    return !values.isEmpty() ? values.get(0) : null;
   }
 
   /**
@@ -123,7 +114,7 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M setHeader(String name, String value) {
-    return removeHeader(name).addHeader(name, value);
+    return removeHeader(name.toLowerCase()).addHeader(name.toLowerCase(), value);
   }
 
   /**
@@ -135,7 +126,7 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M addHeader(String name, String value) {
-    headers.computeIfAbsent(name, (n) -> new ArrayList<>()).add(value);
+    headers.computeIfAbsent(name.toLowerCase(), (n) -> new ArrayList<>()).add(value);
     return self();
   }
 
@@ -146,7 +137,7 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M removeHeader(String name) {
-    headers.keySet().removeIf(header -> header.equalsIgnoreCase(name));
+    headers.remove(name.toLowerCase());
     return self();
   }
 

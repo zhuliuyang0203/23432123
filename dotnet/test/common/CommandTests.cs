@@ -1,3 +1,4 @@
+// <copyright file="CommandTests.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -14,29 +15,27 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+// </copyright>
 
-class FilterBy {
-  constructor(level) {
-    this.level_ = level
-  }
+using NUnit.Framework;
+using System.Collections.Generic;
 
-  static logLevel(level) {
-    if (level === undefined || (level !== undefined && !['debug', 'error', 'info', 'warning'].includes(level))) {
-      throw Error(
-        `Please pass valid log level. Valid log levels are 'debug', 'error', 'info' and 'warning'. Received: ${level}`,
-      )
+namespace OpenQA.Selenium
+{
+    [TestFixture]
+    public class CommandTests
+    {
+        [Test]
+        public void CommandSerializesAnonymousType()
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                ["arg"] = new { param1 = true, param2 = false },
+            };
+
+            var command = new Command(new SessionId("session"), "test command", parameters);
+
+            Assert.That(command.ParametersAsJsonString, Is.EqualTo("""{"arg":{"param1":true,"param2":false}}"""));
+        }
     }
-
-    return new FilterBy(level)
-  }
-
-  getLevel() {
-    return this.level_
-  }
-}
-
-// PUBLIC API
-
-module.exports = {
-  FilterBy,
 }
