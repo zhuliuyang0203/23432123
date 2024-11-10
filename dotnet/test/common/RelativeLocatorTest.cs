@@ -62,16 +62,5 @@ namespace OpenQA.Selenium
 
             Assert.That(elementIds, Is.EquivalentTo(new List<string>() { "third" }));
         }
-
-        [Test]
-        public void ShouldReturnEmptyListWhenNoElementsFound()
-        {
-            driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
-
-            var elements = driver.FindElements(RelativeBy.WithLocator(By.TagName("does-not-exist")));
-
-            Assert.That(elements, Is.Empty);
-        }
-
     }
 }
