@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text.Json;
 
 namespace OpenQA.Selenium.Internal
 {
@@ -146,15 +145,6 @@ namespace OpenQA.Selenium.Internal
             // CONSIDER: Instead of returning the raw internal member,
             // we might want to copy/clone it instead.
             return this.capabilities;
-        }
-
-        /// <summary>
-        /// Return a string of capabilities being used
-        /// </summary>
-        /// <returns>String of capabilities being used</returns>
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this.capabilities, new JsonSerializerOptions { WriteIndented = true });
         }
     }
 }

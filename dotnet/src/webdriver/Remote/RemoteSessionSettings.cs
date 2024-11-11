@@ -21,7 +21,6 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.Json;
 
 namespace OpenQA.Selenium
 {
@@ -250,15 +249,6 @@ namespace OpenQA.Selenium
             }
 
             return capabilitiesDictionary;
-        }
-
-        /// <summary>
-        /// Return a string representation of the remote session settings to be sent.
-        /// </summary>
-        /// <returns>String representation of the remote session settings to be sent.</returns>
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this.ToDictionary(), new JsonSerializerOptions { WriteIndented = true });
         }
 
         internal DriverOptions GetFirstMatchDriverOptions(int firstMatchIndex)

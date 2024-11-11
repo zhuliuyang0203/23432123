@@ -22,7 +22,6 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.Json;
 
 namespace OpenQA.Selenium
 {
@@ -388,15 +387,6 @@ namespace OpenQA.Selenium
         public void SetLoggingPreference(string logType, LogLevel logLevel)
         {
             this.loggingPreferences[logType] = logLevel;
-        }
-
-        /// <summary>
-        /// Returns a string representation of this <see cref="DriverOptions"/>.
-        /// </summary>
-        /// <returns>A string representation of this <see cref="DriverOptions"/>.</returns>
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this.ToDictionary(), new JsonSerializerOptions { WriteIndented = true });
         }
 
         /// <summary>
