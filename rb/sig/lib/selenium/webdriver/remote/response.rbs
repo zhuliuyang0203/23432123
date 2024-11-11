@@ -2,15 +2,15 @@ module Selenium
   module WebDriver
     module Remote
       class Response
-        @code: String
+        @code: Integer
 
         @payload: Hash[untyped, untyped]
 
-        attr_reader code: String
+        attr_reader code: Integer
 
         attr_reader payload: Hash[untyped, untyped]
 
-        def initialize: (String code, ?Hash[untyped, untyped]? payload) -> void
+        def initialize: (Integer code, ?Hash[untyped, untyped]? payload) -> void
 
         def error: () -> Error::WebDriverError?
 

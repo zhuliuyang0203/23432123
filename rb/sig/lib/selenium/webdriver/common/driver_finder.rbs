@@ -19,6 +19,8 @@ module Selenium
       private
 
       def paths: -> untyped
+
+      def to_args: -> Array[String]
     end
   end
 end
