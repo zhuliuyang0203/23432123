@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -296,22 +296,16 @@ namespace OpenQA.Selenium.Firefox
 
         private void ReadDefaultPreferences()
         {
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                Converters =
-                {
-                    new ResponseValueJsonConverter()
-                }
-            };
-
             using (Stream defaultPrefsStream = ResourceUtilities.GetResourceStream("webdriver_prefs.json", "webdriver_prefs.json"))
             {
                 using (StreamReader reader = new StreamReader(defaultPrefsStream))
                 {
                     string defaultPreferences = reader.ReadToEnd();
-                    Dictionary<string, object> deserializedPreferences = JsonSerializer.Deserialize<Dictionary<string, object>>(defaultPreferences, jsonSerializerOptions);
-                    Dictionary<string, object> immutableDefaultPreferences = deserializedPreferences["frozen"] as Dictionary<string, object>;
-                    Dictionary<string, object> editableDefaultPreferences = deserializedPreferences["mutable"] as Dictionary<string, object>;
+                    JsonObject deserializedPreferences = JsonNode.Parse(defaultPreferences) as JsonObject
+                        ?? throw new WebDriverException("webdriver_prefs.json was not a JSON object");
+
+                    JsonObject immutableDefaultPreferences = deserializedPreferences["frozen"] as JsonObject;
+                    JsonObject editableDefaultPreferences = deserializedPreferences["mutable"] as JsonObject;
                     this.profilePreferences = new Preferences(immutableDefaultPreferences, editableDefaultPreferences);
                 }
             }
