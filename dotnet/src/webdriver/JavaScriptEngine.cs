@@ -219,7 +219,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The JavaScript to pin</param>
         /// <returns>A task containing a <see cref="PinnedScript"/> object to use to execute the script.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task<PinnedScript> PinScript(string script)
         {
             if (script == null)
@@ -247,7 +247,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The <see cref="PinnedScript"/> object to unpin.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task UnpinScript(PinnedScript script)
         {
             if (script == null)

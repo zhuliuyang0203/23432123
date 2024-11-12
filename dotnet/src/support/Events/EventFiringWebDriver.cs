@@ -478,7 +478,7 @@ namespace OpenQA.Selenium.Support.Events
         /// <param name="script">A <see cref="PinnedScript"/> object containing the code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// <para>
         /// The ExecuteScript method executes JavaScript in the context of

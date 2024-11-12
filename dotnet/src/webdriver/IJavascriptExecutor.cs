@@ -99,7 +99,7 @@ namespace OpenQA.Selenium
         /// variable, as if the function were called via "Function.apply"
         /// </para>
         /// </remarks>
-        /// <exception cref="ArgumentNullException">If <paramref name="script" /> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="script" /> is <see langword="null"/>.</exception>
         object ExecuteScript(PinnedScript script, params object[] args);
 
         /// <summary>
