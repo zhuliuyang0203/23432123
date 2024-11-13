@@ -24,10 +24,14 @@ import static org.openqa.selenium.remote.http.Contents.utf8String;
 
 import java.net.URI;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.bidi.module.Network;
+import org.openqa.selenium.bidi.network.Header;
+import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpRequest;
@@ -179,7 +183,7 @@ class WebNetworkTest extends JupiterTestBase {
   void canAddRequestHandler() {
     Predicate<URI> filter = uri -> uri.getPath().contains("logEntry");
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     ((RemoteWebDriver) driver).network().addRequestHandler(filter, httpRequest -> httpRequest);
 
@@ -194,7 +198,7 @@ class WebNetworkTest extends JupiterTestBase {
   void canAddRequestHandlerToModifyMethod() {
     Predicate<URI> filter = uri -> uri.getPath().contains("logEntry");
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     ((RemoteWebDriver) driver)
         .network()
@@ -226,14 +230,14 @@ class WebNetworkTest extends JupiterTestBase {
                       return response.setContent(utf8String("Received response for network"));
                     });
 
-    server = new NettyAppServer(route);
-    server.start();
+    appServer = new NettyAppServer(route);
+    appServer.start();
 
     Predicate<URI> filter = uri -> uri.getPath().contains("network");
 
     CountDownLatch latch = new CountDownLatch(1);
 
-    page = server.whereIs("network.html");
+    page = appServer.whereIs("network.html");
 
     ((RemoteWebDriver) driver)
         .network()
@@ -275,12 +279,12 @@ class WebNetworkTest extends JupiterTestBase {
                       return response.setContent(req.getContent());
                     });
 
-    server = new NettyAppServer(route);
-    server.start();
+    appServer = new NettyAppServer(route);
+    appServer.start();
 
     Predicate<URI> filter = uri -> uri.getPath().contains("network");
 
-    page = server.whereIs("network.html");
+    page = appServer.whereIs("network.html");
 
     ((RemoteWebDriver) driver)
         .network()
@@ -299,7 +303,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddMultipleRequestHandlers() {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     ((RemoteWebDriver) driver)
         .network()
@@ -328,7 +332,7 @@ class WebNetworkTest extends JupiterTestBase {
         .network()
         .addRequestHandler(uri -> uri.getPath().contains("logEntry"), httpRequest -> httpRequest);
 
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     driver.get(page);
 
@@ -355,14 +359,14 @@ class WebNetworkTest extends JupiterTestBase {
                       return response.setContent(utf8String("Received response for network"));
                     });
 
-    server = new NettyAppServer(route);
-    server.start();
+    appServer = new NettyAppServer(route);
+    appServer.start();
 
     Predicate<URI> filter = uri -> uri.getPath().contains("network");
 
     CountDownLatch latch = new CountDownLatch(1);
 
-    page = server.whereIs("network.html");
+    page = appServer.whereIs("network.html");
 
     long id =
         ((RemoteWebDriver) driver)
@@ -399,7 +403,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.EDGE)
   void canRemoveRequestHandlerThatDoesNotExist() {
     ((RemoteWebDriver) driver).network().removeAuthenticationHandler(5);
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
 
     assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("Long entry added events");
@@ -409,7 +413,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canClearRequestHandlers() {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
 
     ((RemoteWebDriver) driver)
         .network()
