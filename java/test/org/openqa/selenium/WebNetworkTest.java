@@ -30,7 +30,6 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.module.Network;
 import org.openqa.selenium.bidi.network.Header;
-import org.openqa.selenium.environment.webserver.AppServer;
 import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.HttpMethod;
