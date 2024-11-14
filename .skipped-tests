@@ -31,6 +31,8 @@
 -//py:test-chrome-test/selenium/webdriver/chrome/chrome_launcher_tests.py
 -//py:test-chrome-test/selenium/webdriver/chrome/chrome_service_tests.py
 -//py:test-chrome-test/selenium/webdriver/chrome/proxy_tests.py
+-//py:test-edge-test/selenium/webdriver/edge/edge_launcher_tests.py
+-//py:test-edge-test/selenium/webdriver/edge/edge_service_tests.py
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome-bidi
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome-remote
