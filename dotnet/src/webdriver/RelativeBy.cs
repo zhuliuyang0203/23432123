@@ -108,8 +108,28 @@ namespace OpenQA.Selenium
             filterParameters["filters"] = this.filters;
             parameters["relative"] = filterParameters;
             object rawElements = js.ExecuteScript(wrappedAtom, parameters);
-            ReadOnlyCollection<IWebElement> elements = rawElements as ReadOnlyCollection<IWebElement>;
-            return elements;
+
+            if (rawElements is ReadOnlyCollection<IWebElement> elements)
+            {
+                return elements;
+            }
+
+            // De-serializer quirk - if the response is empty then the de-serializer will not know we're getting back elements
+            // We will have a ReadOnlyCollection<object>
+
+            if (rawElements is ReadOnlyCollection<object> elementsObj)
+            {
+                if (elementsObj.Count == 0)
+                {
+#if NET8_0_OR_GREATER
+                    return ReadOnlyCollection<IWebElement>.Empty;
+#else
+                    return new List<IWebElement>().AsReadOnly();
+#endif
+                }
+            }
+
+            throw new WebDriverException($"Could not de-serialize element list response{Environment.NewLine}{rawElements}");
         }
 
         /// <summary>
@@ -288,7 +308,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> filter = new Dictionary<string, object>();
             filter["kind"] = "near";
-            filter["args"] = new List<object>() { GetSerializableObject(locator), "distance", atMostDistanceInPixels };
+            filter["args"] = new List<object>() { GetSerializableObject(locator), atMostDistanceInPixels };
             this.filters.Add(filter);
 
             return new RelativeBy(this.root, this.filters);

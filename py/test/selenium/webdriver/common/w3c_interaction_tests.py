@@ -225,7 +225,6 @@ def test_pen_pointer_properties(driver, pages):
 @pytest.mark.xfail_firefox
 @pytest.mark.xfail_remote
 @pytest.mark.xfail_safari
-@pytest.mark.xfail_edge
 def test_touch_pointer_properties(driver, pages):
     pages.load("pointerActionsPage.html")
     pointerArea = driver.find_element(By.CSS_SELECTOR, "#pointerArea")

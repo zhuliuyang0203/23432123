@@ -501,7 +501,6 @@ py_test_suite(
     size = "large",
     srcs = glob([
         "test/selenium/webdriver/edge/**/*.py",
-        "test/selenium/webdriver/common/**/*.py",
     ]),
     args = [
         "--instafail",
@@ -596,9 +595,7 @@ py_test_suite(
     name = "test-safari",
     size = "large",
     srcs = glob([
-        "test/selenium/webdriver/common/**/*.py",
         "test/selenium/webdriver/safari/**/*.py",
-        "test/selenium/webdriver/support/**/*.py",
     ]),
     args = [
         "--instafail",
