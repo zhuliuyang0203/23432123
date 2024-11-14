@@ -38,7 +38,7 @@ class Network:
         self.conn = conn
         self.callbacks = {}
 
-    async def continue_response(self, request_id, status_code, headers=None, body=None):
+    def continue_response(self, request_id, status_code, headers=None, body=None):
         params = {
             'requestId': request_id,
             'status': status_code
@@ -47,9 +47,9 @@ class Network:
             params['headers'] = headers
         if body is not None:
             params['body'] = body
-        await self.conn.execute('network.continueResponse', params)
+        self.conn.execute('network.continueResponse', params)
 
-    async def continue_request(self, request_id, url=None, method=None, headers=None, postData=None):
+    def continue_request(self, request_id, url=None, method=None, headers=None, postData=None):
         params = {
             'requestId': request_id
         }
@@ -61,9 +61,9 @@ class Network:
             params['headers'] = headers
         if postData is not None:
             params['postData'] = postData
-        await self.conn.execute('network.continueRequest', params)
+        self.conn.execute('network.continueRequest', params)
 
-    async def add_intercept(self, phases=None, contexts=None, url_patterns=None):
+    def add_intercept(self, phases=None, contexts=None, url_patterns=None):
         if phases is None:
             phases = []
         params = {
@@ -71,13 +71,13 @@ class Network:
             'contexts': contexts,
             'urlPatterns': url_patterns
         }
-        await self.conn.execute('network.addIntercept', params)
+        self.conn.execute('network.addIntercept', params)
 
-    async def remove_intercept(self, intercept):
-        await self.conn.execute('network.removeIntercept', {'intercept': intercept})
+    def remove_intercept(self, intercept):
+        self.conn.execute('network.removeIntercept', {'intercept': intercept})
 
-    async def continue_with_auth(self, request_id, username, password):
-        await self.conn.execute(
+    def continue_with_auth(self, request_id, username, password):
+        self.conn.execute(
             'network.continueWithAuth',
             {
                 'request': request_id,
@@ -90,11 +90,11 @@ class Network:
             }
         )
 
-    async def on(self, event, callback):
+    def on(self, event, callback):
         event = self.EVENTS.get(event, event)
         self.callbacks[event] = callback
-        await session_subscribe(self.conn, event, self.handle_event)
+        session_subscribe(self.conn, event, self.handle_event)
 
-    async def handle_event(self, event, data):
+    def handle_event(self, event, data):
         if event in self.callbacks:
-            await self.callbacks[event](data)
+            self.callbacks[event](data)
