@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.Remote
     /// </example>
     public class RemoteWebDriver : WebDriver, IDevTools, IHasDownloads
     {
-        private readonly ILogger _logger = Log.GetLogger(typeof(RemoteWebDriver));
+        private static readonly ILogger _logger = QA.Selenium.Internal.Logging.Log.GetLogger(typeof(RemoteWebDriver));
 
         /// <summary>
         /// The name of the Selenium grid remote DevTools end point capability.
@@ -428,7 +428,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
         public DevToolsSession GetDevToolsSession()
         {
-            if (this.Capabilities.GetCapability(BrowserName) == "firefox")
+            if (this.Capabilities.GetCapability(CapabilityType.BrowserName) == "firefox")
             {
                 if (_logger.IsEnabled(LogEventLevel.Warn))
                 {
