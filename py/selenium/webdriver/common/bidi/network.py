@@ -37,6 +37,11 @@ class Network:
     def __init__(self, conn):
         self.conn = conn
         self.callbacks = {}
+        self.subscriptions = {}
+
+    def has_callbacks(self):
+        """Checks if there are any callbacks set."""
+        return len(self.callbacks) > 0
 
     def __add_intercept(self, phases=None, contexts=None, url_patterns=None):
         """Add an intercept to the network."""
@@ -49,9 +54,14 @@ class Network:
         }
         self.conn.execute('network.addIntercept', params)
 
-    def __remove_intercept(self, intercept):
+    def __remove_intercept(self, intercept=None, request_id=None):
         """Remove an intercept from the network."""
-        self.conn.execute('network.removeIntercept', {'intercept': intercept})
+        if request_id is not None:
+            self.conn.execute('network.removeIntercept', {'requestId': request_id})
+        elif intercept is not None:
+            self.conn.execute('network.removeIntercept', {'intercept': intercept})
+        else:
+            raise ValueError('Either requestId or intercept must be specified')
 
     def __continue_with_auth(self, request_id, username, password):
         """Continue with authentication."""
@@ -72,7 +82,8 @@ class Network:
         """Set a callback function to subscribe to a network event."""
         event = self.EVENTS.get(event, event)
         self.callbacks[event] = callback
-        session_subscribe(self.conn, event, self.__handle_event)
+        if self.subscriptions[event] is None:
+            session_subscribe(self.conn, event, self.__handle_event)
 
     def __handle_event(self, event, data):
         """Perform callback function on event."""
@@ -83,14 +94,27 @@ class Network:
         """Adds an authentication handler."""
         self.__add_intercept(phases=[self.PHASES['auth_required']])
         self.__on('auth_required', lambda data: self.__continue_with_auth(data['request']['request'], username, password))
+        self.subscriptions['auth_required'] = [username, password]
 
-    def remove_authentication_handler(self):
+    def remove_authentication_handler(self, username,):
         """Removes an authentication handler."""
-        self.__remove_intercept('auth_required')
+        self.__remove_intercept(intercept='auth_required')
+        del self.subscriptions['auth_required']
+        session_unsubscribe(self.conn, self.EVENTS['auth_required'])
 
     def add_request_handler(self, callback, url_pattern=''):
-        """Adds a request handler to perform a callback function on 
-        url_pattern match."""
+        """
+        Adds a request handler that executes a callback function when a request matches the given URL pattern.
+
+        Parameters:
+            callback (function): A function to be executed when url is matched by a URL pattern
+                The callback function receives a `Response` object as its argument.
+            url_pattern (str, optional): A substring to match against the response URL.
+                Default is an empty string, which matches all URLs.
+
+        Returns:
+            str: The request ID of the intercepted response.
+        """
         self.__add_intercept(phases=[self.PHASES['before_request']])
         def callback_on_url_match(data):
             if url_pattern in data['request']['url']:
@@ -103,14 +127,34 @@ class Network:
                 request = Request(request_id, url, method, headers, body, self)
                 callback(request)
         self.__on('before_request', callback_on_url_match)
+        self.callbacks[request_id] = callback
+        if 'before_request' not in self.subscriptions or not self.subscriptions.get('before_request'):
+            self.subscriptions['before_request'] = [request_id]
+        else:
+            self.subscriptions['before_request'].append(request_id)
+        return request_id
 
-    def remove_request_handler(self):
+    def remove_request_handler(self, request_id):
         """Removes a request handler."""
-        self.__remove_intercept('before_request')
+        self.__remove_intercept(request_id=request_id)
+        self.subscriptions['before_request'].remove(request_id)
+        del self.callbacks[request_id]
+        if len(self.subscriptions['before_request']) == 0:
+            session_unsubscribe(self.conn, self.EVENTS['before_request']) 
 
     def add_response_handler(self, callback, url_pattern=''):
-        """Adds a response handler to perform a callback function on 
-        url_pattern match."""
+        """
+        Adds a response handler that executes a callback function when a response matches the given URL pattern.
+
+        Parameters:
+            callback (function): A function to be executed when url is matched by a url_pattern
+                The callback function receives a `Response` object as its argument.
+            url_pattern (str, optional): A substring to match against the response URL.
+                Default is an empty string, which matches all URLs.
+
+        Returns:
+            str: The request ID of the intercepted response.
+        """
         self.__add_intercept(phases=[self.PHASES['response_started']])
         def callback_on_url_match(data):
             # create response object to pass to callback
@@ -121,12 +165,22 @@ class Network:
                 body = data['response'].get('body', None)
                 headers = data['response'].get('headers', {})
                 response = Response(request_id, url, status_code, headers, body, self)
-                callback(data)
+                callback(response)
         self.__on('response_started', callback_on_url_match)
+        self.callbacks[request_id] = callback
+        if 'response_started' not in self.subscriptions or not self.subscriptions.get('response_started'):
+            self.subscriptions['response_started'] = [request_id]
+        else:
+            self.subscriptions['response_started'].append(request_id)
+        return request_id
 
-    def remove_response_handler(self):
+    def remove_response_handler(self, response_id):
         """Removes a response handler."""
-        self.__remove_intercept('response_started')
+        self.__remove_intercept(request_id=response_id)
+        self.subscriptions['response_started'].remove(response_id)
+        del self.callbacks[response_id]
+        if len(self.subscriptions['response_started']) == 0:
+            session_unsubscribe(self.conn, self.EVENTS['response_started']) 
 
 class Request:
     def __init__(self, request_id, url, method, headers, body, network: Network):
@@ -143,13 +197,13 @@ class Request:
             'requestId': self.request_id
         }
         if self.url is not None:
-            params['url'] = url
+            params['url'] = self.url
         if self.method is not None:
-            params['method'] = method
+            params['method'] = self.method
         if self.headers is not None:
-            params['headers'] = headers
+            params['headers'] = self.headers
         if self.postData is not None:
-            params['postData'] = postData
+            params['postData'] = self.postData
         self.network.conn.execute('network.continueRequest', params)
 
 class Response:
@@ -168,7 +222,7 @@ class Response:
             'status': self.status_code
         }
         if self.headers is not None:
-            params['headers'] = headers
+            params['headers'] = self.headers
         if self.body is not None:
-            params['body'] = body
+            params['body'] = self.body
         self.network.conn.execute('network.continueResponse', params)
