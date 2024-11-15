@@ -10,43 +10,38 @@ from selenium.webdriver.common.bidi.network import Request
 def network(driver):
     yield Network(driver)
 
-@pytest.fixture
-def network_response(network):
-    yield Response(network)
-
-@pytest.fixture
-def network_request(network):
-    yield Request(network)
-
-def test_add_response_handler(response):
+def test_add_response_handler(network):
     passed = [False]
 
-    def callback(event):
-        if event['response']['status'] == 200:
+    def callback(response):
+        if response.status_code == 200:
             passed[0] = True
+        response.continue_response()
 
-    network_response.add_response_handler(callback)
+    network.add_response_handler(callback)
     pages.load("basicAuth")
     assert passed[0] == True, "Callback was NOT successful"
 
-def test_remove_response_handler(response):
+def test_remove_response_handler(network):
     passed = [False]
 
-    def callback(event):
-        if event['response']['status'] == 200:
+    def callback(response):
+        if response.status_code == 200:
             passed[0] = True
+        response.continue_response()
 
-    network_response.add_response_handler(callback)
-    network_response.remove_response_handler(callback)
+    network.add_response_handler(callback)
+    network.remove_response_handler(callback)
     pages.load("basicAuth")
     assert passed[0] == False, "Callback was successful"
 
 def test_add_request_handler(request):
     passed = [False]
 
-    def callback(event):
-        if event['request']['method'] == 'GET':
+    def callback(request):
+        if request.method == 'GET':
             passed[0] = True
+        request.continue_request()
 
     network_request.add_request_handler(callback)
     pages.load("basicAuth")
@@ -55,9 +50,10 @@ def test_add_request_handler(request):
 def test_remove_request_handler(request):
     passed = [False]
 
-    def callback(event):
-        if event['request']['method'] == 'GET':
+    def callback(request):
+        if request.method == 'GET':
             passed[0] = True
+        request.continue_request()
 
     network_request.add_request_handler(callback)
     network_request.remove_request_handler(callback)

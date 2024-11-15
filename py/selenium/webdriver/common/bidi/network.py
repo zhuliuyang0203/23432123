@@ -88,6 +88,46 @@ class Network:
         """Removes an authentication handler."""
         self.__remove_intercept('auth_required')
 
+    def add_request_handler(self, callback, url_pattern=''):
+        """Adds a request handler to perform a callback function on 
+        url_pattern match."""
+        self.__add_intercept(phases=[self.PHASES['before_request']])
+        def callback_on_url_match(data):
+            if url_pattern in data['request']['url']:
+                # create request object to pass to callback
+                request_id = data['request'].get('requestId')
+                url = data['request'].get('url')
+                method = data['request'].get('method')
+                headers = data['request'].get('headers', {})
+                body = data['request'].get('postData', None)
+                request = Request(request_id, url, method, headers, body, self)
+                callback(request)
+        self.__on('before_request', callback_on_url_match)
+
+    def remove_request_handler(self):
+        """Removes a request handler."""
+        self.network.remove_intercept('before_request')
+
+    def add_response_handler(self, callback, url_pattern=''):
+        """Adds a response handler to perform a callback function on 
+        url_pattern match."""
+        self.__add_intercept(phases=[self.PHASES['response_started']])
+        def callback_on_url_match(data):
+            # create response object to pass to callback
+            if url_pattern in data['response']['url']:
+                request_id = data['request'].get('requestId')
+                url = data['response'].get('url')
+                status_code = data['response'].get('status')
+                body = data['response'].get('body', None)
+                headers = data['response'].get('headers', {})
+                response = Response(request_id, url, status_code, headers, body, self)
+                callback(data)
+        self.__on('response_started', callback_on_url_match)
+
+    def remove_response_handler(self):
+        """Removes a response handler."""
+        self.remove_intercept('response_started')
+
 class Request:
     def __init__(self, request_id, url, method, headers, body, network: Network):
         self.request_id = request_id
@@ -97,7 +137,7 @@ class Request:
         self.body = body
         self.network = network
 
-    def __continue_request(self):
+    def continue_request(self):
         """Continue after sending a request."""
         params = {
             'requestId': self.request_id
@@ -112,19 +152,6 @@ class Request:
             params['postData'] = postData
         self.network.conn.execute('network.continueRequest', params)
 
-    def add_request_handler(self, callback, url_pattern=''):
-        """Adds a request handler to perform a callback function on 
-        url_pattern match."""
-        self.network.add_intercept(phases=[self.network.PHASES['before_request']])
-        def callback_on_url_match(data):
-            if url_pattern in data['request']['url']:
-                callback(data)
-        self.network.on('before_request', callback_on_url_match)
-
-    def remove_request_handler(self):
-        """Removes a request handler."""
-        self.network.remove_intercept('before_request')
-
 class Response:
     def __init__(self, request_id, url, status_code, headers, body, network: Network):
         self.request_id = request_id
@@ -134,7 +161,7 @@ class Response:
         self.body = body
         self.network = network
 
-    def __continue_response(self):
+    def continue_response(self):
         """Continue after receiving a response."""
         params = {
             'requestId': self.request_id,
@@ -145,17 +172,3 @@ class Response:
         if self.body is not None:
             params['body'] = body
         self.network.conn.execute('network.continueResponse', params)
-
-
-    def add_response_handler(self, callback, url_pattern=''):
-        """Adds a response handler to perform a callback function on 
-        url_pattern match."""
-        self.network.add_intercept(phases=[self.network.PHASES['response_started']])
-        def callback_on_url_match(data):
-            if url_pattern in data['response']['url']:
-                callback(data)
-        self.network.on('response_started', callback_on_url_match)
-
-    def remove_response_handler(self):
-        """Removes a response handler."""
-        self.network.remove_intercept('response_started')
