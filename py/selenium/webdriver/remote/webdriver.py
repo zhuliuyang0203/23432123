@@ -43,6 +43,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.options import ArgOptions
 from selenium.webdriver.common.options import BaseOptions
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
@@ -53,10 +54,12 @@ from selenium.webdriver.common.virtual_authenticator import (
 )
 from selenium.webdriver.support.relative_locator import RelativeBy
 
+from ..common.fedcm.dialog import Dialog
 from .bidi_connection import BidiConnection
 from .client_config import ClientConfig
 from .command import Command
 from .errorhandler import ErrorHandler
+from .fedcm import FedCM
 from .file_detector import FileDetector
 from .file_detector import LocalFileDetector
 from .locator_converter import LocatorConverter
@@ -236,6 +239,7 @@ class WebDriver(BaseWebDriver):
         self._authenticator_id = None
         self.start_client()
         self.start_session(capabilities)
+        self._fedcm = FedCM(self)
 
         self._websocket_connection = None
         self._script = None
@@ -1222,3 +1226,77 @@ class WebDriver(BaseWebDriver):
             raise WebDriverException("You must enable downloads in order to work with downloadable files.")
 
         self.execute(Command.DELETE_DOWNLOADABLE_FILES)
+
+    @property
+    def fedcm(self) -> FedCM:
+        """
+        :Returns:
+            - FedCM: an object providing access to all Federated Credential Management (FedCM) dialog commands.
+
+        :Usage:
+            ::
+
+                title = driver.fedcm.title
+                subtitle = driver.fedcm.subtitle
+                dialog_type = driver.fedcm.dialog_type
+                accounts = driver.fedcm.account_list
+                driver.fedcm.select_account(0)
+                driver.fedcm.accept()
+                driver.fedcm.dismiss()
+                driver.fedcm.enable_delay()
+                driver.fedcm.disable_delay()
+                driver.fedcm.reset_cooldown()
+        """
+        return self._fedcm
+
+    @property
+    def supports_fedcm(self) -> bool:
+        """Returns whether the browser supports FedCM capabilities."""
+        return self.capabilities.get(ArgOptions.FEDCM_CAPABILITY, False)
+
+    def _require_fedcm_support(self):
+        """Raises an exception if FedCM is not supported."""
+        if not self.supports_fedcm:
+            raise WebDriverException(
+                "This browser does not support Federated Credential Management. "
+                "Please ensure you're using a supported browser."
+            )
+
+    @property
+    def dialog(self):
+        """Returns the FedCM dialog object for interaction."""
+        self._require_fedcm_support()
+        return Dialog(self)
+
+    def fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
+        """Waits for and returns the FedCM dialog.
+
+        Args:
+            timeout: How long to wait for the dialog
+            poll_frequency: How frequently to poll
+            ignored_exceptions: Exceptions to ignore while waiting
+
+        Returns:
+            The FedCM dialog object if found
+
+        Raises:
+            TimeoutException if dialog doesn't appear
+            WebDriverException if FedCM not supported
+        """
+        from selenium.common.exceptions import NoAlertPresentException
+        from selenium.webdriver.support.wait import WebDriverWait
+
+        self._require_fedcm_support()
+
+        if ignored_exceptions is None:
+            ignored_exceptions = (NoAlertPresentException,)
+
+        def _check_fedcm():
+            try:
+                dialog = Dialog(self)
+                return dialog if dialog.type else None
+            except NoAlertPresentException:
+                return None
+
+        wait = WebDriverWait(self, timeout, poll_frequency=poll_frequency, ignored_exceptions=ignored_exceptions)
+        return wait.until(lambda _: _check_fedcm())
