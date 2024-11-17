@@ -22,13 +22,10 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
-
-#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -113,7 +110,7 @@ namespace OpenQA.Selenium.Firefox
             { GetFullPageScreenshotCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/moz/screenshot/full") }
         };
 
-        private DevToolsSession? devToolsSession;
+        private DevToolsSession devToolsSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class.
@@ -250,7 +247,6 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
-        [MemberNotNullWhen(true, nameof(devToolsSession))]
         public bool HasActiveDevToolsSession
         {
             get { return this.devToolsSession != null; }
@@ -264,7 +260,7 @@ namespace OpenQA.Selenium.Firefox
         public FirefoxCommandContext GetContext()
         {
             FirefoxCommandContext output;
-            string? response = this.Execute(GetContextCommand, null).Value.ToString();
+            string response = this.Execute(GetContextCommand, null).Value.ToString();
 
             bool success = Enum.TryParse<FirefoxCommandContext>(response, true, out output);
             if (!success)
@@ -389,7 +385,7 @@ namespace OpenQA.Selenium.Firefox
         public Screenshot GetFullPageScreenshot()
         {
             Response screenshotResponse = this.Execute(GetFullPageScreenshotCommand, null);
-            string base64 = screenshotResponse.Value.ToString()!;
+            string base64 = screenshotResponse.Value.ToString();
             return new Screenshot(base64);
         }
 
@@ -426,7 +422,7 @@ namespace OpenQA.Selenium.Firefox
                     throw new WebDriverException("Cannot find " + FirefoxDevToolsCapabilityName + " capability for driver");
                 }
 
-                string? debuggerAddress = this.Capabilities.GetCapability(FirefoxDevToolsCapabilityName).ToString();
+                string debuggerAddress = this.Capabilities.GetCapability(FirefoxDevToolsCapabilityName).ToString();
                 try
                 {
                     DevToolsSession session = new DevToolsSession(debuggerAddress, options);
