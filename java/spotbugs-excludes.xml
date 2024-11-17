@@ -55,6 +55,11 @@
   </Match>
 
   <Match>
+    <Class name="~org.openqa.selenium.firefox.AddHasExtensions.*"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.firefox.Executable"/>
     <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
   </Match>
