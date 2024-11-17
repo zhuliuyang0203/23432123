@@ -18,7 +18,8 @@
 // </copyright>
 
 using System;
-using System.Runtime.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -42,7 +43,7 @@ namespace OpenQA.Selenium
         /// a specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public MoveTargetOutOfBoundsException(string message)
+        public MoveTargetOutOfBoundsException(string? message)
             : base(message)
         {
         }
@@ -55,7 +56,7 @@ namespace OpenQA.Selenium
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         /// or <see langword="null"/> if no inner exception is specified.</param>
-        public MoveTargetOutOfBoundsException(string message, Exception innerException)
+        public MoveTargetOutOfBoundsException(string? message, Exception? innerException)
             : base(message, innerException)
         {
         }

@@ -46,6 +46,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.RetrySessionRequestException;
 import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.grid.data.CreateSessionRequest;
 import org.openqa.selenium.grid.data.CreateSessionResponse;
@@ -132,7 +133,16 @@ public class RemoteNode extends Node implements Closeable {
     HttpTracing.inject(tracer, tracer.getCurrentContext(), req);
     req.setContent(asJson(sessionRequest));
 
-    HttpResponse httpResponse = client.with(addSecret).execute(req);
+    HttpResponse httpResponse;
+    try {
+      httpResponse = client.with(addSecret).execute(req);
+    } catch (TimeoutException e) {
+      // When using a short session timeout the node might not be able to start the session in time.
+      // The client timeout might be higher so, it makes sense to retry. In case the client does
+      // timeout, the SessionRequest is marked as canceled and the session is either not added to
+      // the queue or disposed as soon as the node started it.
+      return Either.left(new RetrySessionRequestException("Timeout while starting the session", e));
+    }
 
     Optional<Map<String, Object>> maybeResponse =
         Optional.ofNullable(Values.get(httpResponse, Map.class));

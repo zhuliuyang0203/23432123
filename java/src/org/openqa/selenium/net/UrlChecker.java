@@ -20,6 +20,7 @@ package org.openqa.selenium.net;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
@@ -75,6 +76,7 @@ public class UrlChecker {
                       // Ok, try again.
                     } finally {
                       if (connection != null) {
+                        consume(connection);
                         connection.disconnect();
                       }
                     }
@@ -127,6 +129,7 @@ public class UrlChecker {
                     return null;
                   } finally {
                     if (connection != null) {
+                      consume(connection);
                       connection.disconnect();
                     }
                   }
@@ -151,6 +154,27 @@ public class UrlChecker {
           e);
     } catch (InterruptedException | ExecutionException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Read and closes the ErrorStream / InputStream of the HttpURLConnection to allow Java reusing
+   * the open socket.
+   *
+   * @param connection the connection to consume the input
+   */
+  private static void consume(HttpURLConnection connection) {
+    try {
+      InputStream data = connection.getErrorStream();
+      if (data == null) {
+        data = connection.getInputStream();
+      }
+      if (data != null) {
+        data.readAllBytes();
+        data.close();
+      }
+    } catch (IOException e) {
+      // swallow
     }
   }
 

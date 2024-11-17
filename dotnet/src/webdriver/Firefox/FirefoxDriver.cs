@@ -288,6 +288,9 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="addOnDirectoryToInstall">Full path of the directory of the add-on to install.</param>
         /// <param name="temporary">Whether the add-on is temporary; required for unsigned add-ons.</param>
+        /// <returns>The unique identifier of the installed add-on.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="addOnDirectoryToInstall"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException">If the directory at <paramref name="addOnDirectoryToInstall"/> does not exist.</exception>
         public string InstallAddOnFromDirectory(string addOnDirectoryToInstall, bool temporary = false)
         {
             if (string.IsNullOrEmpty(addOnDirectoryToInstall))
@@ -311,6 +314,12 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="addOnFileToInstall">Full path and file name of the add-on to install.</param>
         /// <param name="temporary">Whether the add-on is temporary; required for unsigned add-ons.</param>
+        /// <returns>The unique identifier of the installed add-on.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="addOnFileToInstall"/> is null or empty.</para>
+        /// or
+        /// <para>If the file at <paramref name="addOnFileToInstall"/> does not exist.</para>
+        /// </exception>
         public string InstallAddOnFromFile(string addOnFileToInstall, bool temporary = false)
         {
             if (string.IsNullOrEmpty(addOnFileToInstall))
@@ -334,6 +343,8 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="base64EncodedAddOn">The base64-encoded string representation of the add-on binary.</param>
         /// <param name="temporary">Whether the add-on is temporary; required for unsigned add-ons.</param>
+        /// <returns>The unique identifier of the installed add-on.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="base64EncodedAddOn"/> is null or empty.</exception>
         public string InstallAddOn(string base64EncodedAddOn, bool temporary = false)
         {
             if (string.IsNullOrEmpty(base64EncodedAddOn))
@@ -354,6 +365,7 @@ namespace OpenQA.Selenium.Firefox
         /// Uninstalls a Firefox add-on.
         /// </summary>
         /// <param name="addOnId">The ID of the add-on to uninstall.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="addOnId"/> is null or empty.</exception>
         public void UninstallAddOn(string addOnId)
         {
             if (string.IsNullOrEmpty(addOnId))

@@ -41,20 +41,20 @@ class TestIntegration:
 class TestUnit:
     def test_ctor(self):
         opts = Options()
-        assert opts._binary is None
-        assert not opts._preferences
+        assert opts.binary_location == ""
+        assert opts._preferences == {"remote.active-protocols": 3}
         assert opts._profile is None
         assert not opts._arguments
         assert isinstance(opts.log, Log)
 
     def test_binary(self):
         opts = Options()
-        assert opts.binary is None
+        assert opts.binary_location == ""
 
         other_binary = FirefoxBinary()
-        assert other_binary != opts.binary
+        assert other_binary != opts.binary_location
         opts.binary = other_binary
-        assert other_binary == opts.binary
+        assert other_binary._start_cmd == opts.binary_location
 
         path = "/path/to/binary"
         opts.binary = path
@@ -63,16 +63,16 @@ class TestUnit:
 
     def test_prefs(self):
         opts = Options()
-        assert len(opts.preferences) == 0
+        assert len(opts.preferences) == 1
         assert isinstance(opts.preferences, dict)
 
         opts.set_preference("spam", "ham")
-        assert len(opts.preferences) == 1
+        assert len(opts.preferences) == 2
         opts.set_preference("eggs", True)
-        assert len(opts.preferences) == 2
+        assert len(opts.preferences) == 3
         opts.set_preference("spam", "spam")
-        assert len(opts.preferences) == 2
-        assert opts.preferences == {"spam": "spam", "eggs": True}
+        assert len(opts.preferences) == 3
+        assert opts.preferences == {"eggs": True, "remote.active-protocols": 3, "spam": "spam"}
 
     def test_profile(self, tmpdir_factory):
         opts = Options()
@@ -99,7 +99,12 @@ class TestUnit:
     def test_to_capabilities(self):
         opts = Options()
         firefox_caps = DesiredCapabilities.FIREFOX.copy()
-        firefox_caps.update({"pageLoadStrategy": PageLoadStrategy.normal})
+        firefox_caps.update(
+            {
+                "pageLoadStrategy": PageLoadStrategy.normal,
+                "moz:firefoxOptions": {"prefs": {"remote.active-protocols": 3}},
+            }
+        )
         assert opts.to_capabilities() == firefox_caps
 
         profile = FirefoxProfile()

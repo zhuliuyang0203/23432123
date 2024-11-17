@@ -18,7 +18,8 @@
 // </copyright>
 
 using System;
-using System.Runtime.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -28,7 +29,10 @@ namespace OpenQA.Selenium
     [Serializable]
     public class UnhandledAlertException : WebDriverException
     {
-        private string alertText;
+        /// <summary>
+        /// Gets the text of the unhandled alert.
+        /// </summary>
+        public string AlertText { get; } = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnhandledAlertException"/> class.
@@ -57,7 +61,7 @@ namespace OpenQA.Selenium
         public UnhandledAlertException(string message, string alertText)
             : base(message)
         {
-            this.alertText = alertText;
+            this.AlertText = alertText;
         }
 
         /// <summary>
@@ -71,14 +75,6 @@ namespace OpenQA.Selenium
         public UnhandledAlertException(string message, Exception innerException)
             : base(message, innerException)
         {
-        }
-
-        /// <summary>
-        /// Gets the text of the unhandled alert.
-        /// </summary>
-        public string AlertText
-        {
-            get { return this.alertText; }
         }
     }
 }

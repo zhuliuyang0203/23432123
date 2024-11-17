@@ -18,12 +18,13 @@
 // </copyright>
 
 using System;
-using System.Runtime.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
     /// <summary>
-    /// The exception that is thrown when an element is not visible.
+    /// The exception that is thrown when an invalid selector is used.
     /// </summary>
     [Serializable]
     public class InvalidSelectorException : WebDriverException
@@ -46,7 +47,7 @@ namespace OpenQA.Selenium
         /// a specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public InvalidSelectorException(string message)
+        public InvalidSelectorException(string? message)
             : base(GetMessage(message))
         {
         }
@@ -59,7 +60,7 @@ namespace OpenQA.Selenium
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         /// or <see langword="null"/> if no inner exception is specified.</param>
-        public InvalidSelectorException(string message, Exception innerException)
+        public InvalidSelectorException(string? message, Exception? innerException)
             : base(GetMessage(message), innerException)
         {
         }
@@ -69,9 +70,9 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="message">The original message for exception</param>
         /// <returns>The final message for exception</returns>
-        protected static string GetMessage(string message)
+        protected static string GetMessage(string? message)
         {
-            return message + "; " + supportMsg + supportUrl;
+            return $"{message}; {supportMsg}{supportUrl}";
         }
     }
 }
