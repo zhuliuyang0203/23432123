@@ -242,6 +242,12 @@ def test_raises_exception_for_method_not_allowed(handler, code):
         handler.check_response({"status": code, "value": "foo"})
 
 
+@pytest.mark.parametrize("code", ErrorCode.DETACHED_SHADOW_ROOT)
+def test_raises_exception_for_detached_shadow_root(handler, code):
+    with pytest.raises(exceptions.DetachedShadowRootException):
+        handler.check_response({"status": code, "value": "foo"})
+
+
 @pytest.mark.parametrize("key", ["stackTrace", "stacktrace"])
 def test_relays_exception_stacktrace(handler, key):
     import json

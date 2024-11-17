@@ -15,15 +15,16 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v127;
+package org.openqa.selenium.testing;
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@AutoService(CdpInfo.class)
-public class v127CdpInfo extends CdpInfo {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface NeedsSecureServer {
 
-  public v127CdpInfo() {
-    super(127, v127Domains::new);
-  }
+  boolean value() default true;
 }

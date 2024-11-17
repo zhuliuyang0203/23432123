@@ -16,7 +16,7 @@ jobs:
   docs:
     name: Documentation
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
   lint:
     name: Lint
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
   mypy:
     name: Mypy
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
@@ -81,8 +81,32 @@ jobs:
     name: Remote Tests
     needs: build
     uses: ./.github/workflows/bazel.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - browser: firefox
     with:
-      name: Integration Tests (remote)
-      browser: firefox
-      cache-key: py-remote
+      name: Integration Tests (remote, ${{ matrix.browser }})
+      browser: ${{ matrix.browser }}
+      cache-key: py-remote-${{ matrix.browser }}
       run: bazel test --local_test_jobs 1 --flaky_test_attempts 3 //py:test-remote
+
+  browser-tests:
+    name: Browser Tests
+    needs: build
+    uses: ./.github/workflows/bazel.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - browser: safari
+            os: macos
+          - browser: chrome
+            os: macos
+    with:
+      name: Integration Tests (${{ matrix.browser }}, ${{ matrix.os }})
+      browser: ${{ matrix.browser }}
+      os: ${{ matrix.os }}
+      cache-key: py-browser-${{ matrix.browser }}
+      run: bazel test --flaky_test_attempts 3 //py:test-${{ matrix.browser }}

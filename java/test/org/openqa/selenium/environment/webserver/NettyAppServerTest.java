@@ -21,6 +21,6 @@ class NettyAppServerTest extends AppServerTestBase {
 
   @Override
   protected AppServer createAppServer() {
-    return new NettyAppServer();
+    return new NettyAppServer(false);
   }
 }

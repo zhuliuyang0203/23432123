@@ -50,9 +50,11 @@ module Selenium
           super(URLS[class_name] ? "#{msg}; #{SUPPORT_MSG} #{URLS[class_name]}" : msg)
         end
 
+        # steep:ignore:start
         def class_name
-          self.class.name&.split('::')&.last&.to_sym
+          self.class.name.split('::')&.last&.to_sym
         end
+        # steep:ignore:end
       end
 
       #

@@ -68,13 +68,13 @@ public class NettyAppServer implements AppServer {
                 LOG.log(
                     Level.WARNING,
                     String.format("NettyAppServer retry #%s. ", e.getAttemptCount()));
-                initValues();
+                initValues(secure != null);
               })
           .onRetriesExceeded(e -> LOG.log(Level.WARNING, "NettyAppServer start aborted."))
           .build();
 
-  public NettyAppServer() {
-    initValues();
+  public NettyAppServer(boolean secureServer) {
+    initValues(secureServer);
   }
 
   public NettyAppServer(HttpHandler handler) {
@@ -116,7 +116,7 @@ public class NettyAppServer implements AppServer {
     System.out.printf("Server started. Root URL: %s%n", server.whereIs("/"));
   }
 
-  private void initValues() {
+  private void initValues(boolean secureServer) {
     Config config = createDefaultConfig();
     BaseServerOptions options = new BaseServerOptions(config);
 
@@ -128,16 +128,18 @@ public class NettyAppServer implements AppServer {
 
     server = new NettyServer(options, handler);
 
-    Config secureConfig = new CompoundConfig(sslConfig, createDefaultConfig());
-    BaseServerOptions secureOptions = new BaseServerOptions(secureConfig);
+    if (secureServer) {
+      Config secureConfig = new CompoundConfig(sslConfig, createDefaultConfig());
+      BaseServerOptions secureOptions = new BaseServerOptions(secureConfig);
 
-    HttpHandler secureHandler =
-        new HandlersForTests(
-            secureOptions.getHostname().orElse("localhost"),
-            secureOptions.getPort(),
-            tempDir.toPath());
+      HttpHandler secureHandler =
+          new HandlersForTests(
+              secureOptions.getHostname().orElse("localhost"),
+              secureOptions.getPort(),
+              tempDir.toPath());
 
-    secure = new NettyServer(secureOptions, secureHandler);
+      secure = new NettyServer(secureOptions, secureHandler);
+    }
   }
 
   @Override

@@ -17,6 +17,7 @@
 import base64
 import os
 import socket
+from enum import Enum
 from typing import Optional
 from urllib import parse
 
@@ -24,6 +25,12 @@ import certifi
 
 from selenium.webdriver.common.proxy import Proxy
 from selenium.webdriver.common.proxy import ProxyType
+
+
+class AuthType(Enum):
+    BASIC = "Basic"
+    BEARER = "Bearer"
+    X_API_KEY = "X-API-Key"
 
 
 class ClientConfig:
@@ -38,8 +45,10 @@ class ClientConfig:
         ca_certs: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,
-        auth_type: Optional[str] = "Basic",
+        auth_type: Optional[AuthType] = AuthType.BASIC,
         token: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        extra_headers: Optional[dict] = None,
     ) -> None:
         self.remote_server_addr = remote_server_addr
         self.keep_alive = keep_alive
@@ -51,6 +60,8 @@ class ClientConfig:
         self.password = password
         self.auth_type = auth_type
         self.token = token
+        self.user_agent = user_agent
+        self.extra_headers = extra_headers
 
         self.timeout = (
             (
@@ -198,14 +209,17 @@ class ClientConfig:
         self._password = value
 
     @property
-    def auth_type(self) -> str:
+    def auth_type(self) -> AuthType:
         """Returns the type of authentication to the remote server."""
         return self._auth_type
 
     @auth_type.setter
-    def auth_type(self, value: str) -> None:
+    def auth_type(self, value: AuthType) -> None:
         """Sets the type of authentication to the remote server if it is not
-        using basic with username and password."""
+        using basic with username and password.
+
+        :Args: value - AuthType enum value. For others, please use `extra_headers` instead
+        """
         self._auth_type = value
 
     @property
@@ -218,6 +232,26 @@ class ClientConfig:
         """Sets the token used for authentication to the remote server if
         auth_type is not basic."""
         self._token = value
+
+    @property
+    def user_agent(self) -> str:
+        """Returns user agent to be added to the request headers."""
+        return self._user_agent
+
+    @user_agent.setter
+    def user_agent(self, value: str) -> None:
+        """Sets user agent to be added to the request headers."""
+        self._user_agent = value
+
+    @property
+    def extra_headers(self) -> dict:
+        """Returns extra headers to be added to the request."""
+        return self._extra_headers
+
+    @extra_headers.setter
+    def extra_headers(self, value: dict) -> None:
+        """Sets extra headers to be added to the request."""
+        self._extra_headers = value
 
     def get_proxy_url(self) -> Optional[str]:
         """Returns the proxy URL to use for the connection."""
@@ -246,13 +280,12 @@ class ClientConfig:
 
     def get_auth_header(self) -> Optional[dict]:
         """Returns the authorization to add to the request headers."""
-        auth_type = self.auth_type.lower()
-        if auth_type == "basic" and self.username and self.password:
+        if self.auth_type is AuthType.BASIC and self.username and self.password:
             credentials = f"{self.username}:{self.password}"
             encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
-            return {"Authorization": f"Basic {encoded_credentials}"}
-        if auth_type == "bearer" and self.token:
-            return {"Authorization": f"Bearer {self.token}"}
-        if auth_type == "oauth" and self.token:
-            return {"Authorization": f"OAuth {self.token}"}
+            return {"Authorization": f"{AuthType.BASIC.value} {encoded_credentials}"}
+        if self.auth_type is AuthType.BEARER and self.token:
+            return {"Authorization": f"{AuthType.BEARER.value} {self.token}"}
+        if self.auth_type is AuthType.X_API_KEY and self.token:
+            return {f"{AuthType.X_API_KEY.value}": f"{self.token}"}
         return None

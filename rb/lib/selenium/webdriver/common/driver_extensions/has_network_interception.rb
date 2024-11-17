@@ -59,9 +59,9 @@ module Selenium
         # @yieldparam [Proc] continue block which proceeds with the request and optionally yields response
         #
 
-        def intercept(&block)
+        def intercept(&)
           @interceptor ||= DevTools::NetworkInterceptor.new(devtools)
-          @interceptor.intercept(&block)
+          @interceptor.intercept(&)
         end
       end # HasNetworkInterception
     end # DriverExtensions

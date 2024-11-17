@@ -28,14 +28,20 @@ import static org.openqa.selenium.remote.http.HttpMethod.GET;
 
 import com.google.common.collect.ImmutableMap;
 import java.net.URL;
+import java.time.Duration;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.grid.config.CompoundConfig;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.config.MapConfig;
 import org.openqa.selenium.grid.server.BaseServerOptions;
 import org.openqa.selenium.grid.server.Server;
 import org.openqa.selenium.net.PortProber;
+import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
@@ -139,6 +145,43 @@ class NettyServerTest {
     Server<?> server = new NettyServer(options, req -> new HttpResponse()).start();
 
     assertEquals("anyRandomHost", server.getUrl().getHost());
+  }
+
+  @Test
+  void doesInterruptPending() throws Exception {
+    CountDownLatch interrupted = new CountDownLatch(1);
+    Config cfg = new MapConfig(ImmutableMap.of());
+    BaseServerOptions options = new BaseServerOptions(cfg);
+
+    Server<?> server =
+        new NettyServer(
+                options,
+                req -> {
+                  try {
+                    Thread.sleep(800);
+                  } catch (InterruptedException ex) {
+                    interrupted.countDown();
+                  }
+                  return new HttpResponse();
+                })
+            .start();
+    ClientConfig config =
+        ClientConfig.defaultConfig()
+            .readTimeout(Duration.ofMillis(400))
+            .baseUri(server.getUrl().toURI());
+
+    // provoke a client timeout
+    Assertions.assertThrows(
+        TimeoutException.class,
+        () -> {
+          try (HttpClient client = HttpClient.Factory.createDefault().createClient(config)) {
+            HttpRequest request = new HttpRequest(DELETE, "/session");
+            request.setHeader("Accept", "*/*");
+            client.execute(request);
+          }
+        });
+
+    assertTrue(interrupted.await(1000, TimeUnit.MILLISECONDS), "The handling was interrupted");
   }
 
   private void outputHeaders(HttpResponse res) {

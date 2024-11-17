@@ -18,31 +18,25 @@
 package org.openqa.selenium.bidi.browser;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.openqa.selenium.testing.Safely.safelyCall;
-import static org.openqa.selenium.testing.drivers.Browser.*;
 
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.module.Browser;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 
 class BrowserCommandsTest extends JupiterTestBase {
 
-  private AppServer server;
   private Browser browser;
 
   @BeforeEach
   public void setUp() {
-    server = new NettyAppServer();
-    server.start();
     browser = new Browser(driver);
   }
 
   @Test
+  @NeedsFreshDriver
   void canCreateAUserContext() {
     String userContext = browser.createUserContext();
 
@@ -52,6 +46,7 @@ class BrowserCommandsTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canGetUserContexts() {
     String userContext1 = browser.createUserContext();
     String userContext2 = browser.createUserContext();
@@ -64,6 +59,7 @@ class BrowserCommandsTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canRemoveUserContext() {
     String userContext1 = browser.createUserContext();
     String userContext2 = browser.createUserContext();
@@ -78,13 +74,5 @@ class BrowserCommandsTest extends JupiterTestBase {
     assertThat(userContext2).isNotIn(updatedUserContexts);
 
     browser.removeUserContext(userContext1);
-  }
-
-  @AfterEach
-  public void quitDriver() {
-    if (driver != null) {
-      driver.quit();
-    }
-    safelyCall(server::stop);
   }
 }

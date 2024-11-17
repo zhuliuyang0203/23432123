@@ -73,9 +73,14 @@ class StressTest {
                 new StringReader(
                     "[node]\n"
                         + "driver-implementation = "
-                        + browser.displayName()
+                        + String.format("\"%s\"", browser.displayName())
                         + "\n"
                         + "session-timeout = 11"
+                        + "\n"
+                        + "overwrite-max-sessions = true"
+                        + "\n"
+                        + "max-sessions = "
+                        + Runtime.getRuntime().availableProcessors() * 2
                         + "\n"
                         + "enable-managed-downloads = true")));
     tearDowns.add(deployment);

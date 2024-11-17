@@ -7,7 +7,7 @@ CDP_VERSIONS = [
     "v85",
     "v128",
     "v129",
-    "v127",
+    "v130",
 ]
 
 rb_library(

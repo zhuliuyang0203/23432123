@@ -30,9 +30,7 @@ module Selenium
         attr_reader :account_id, :email, :name, :given_name, :picture_url,
                     :idp_config_url, :login_state, :terms_of_service_url, :privacy_policy_url
 
-        # Initializes a new account with the provided attributes.
-        #
-        # @param [Hash]
+        # steep:ignore:start
         def initialize(**args)
           @account_id = args['accountId']
           @email = args['email']
@@ -44,6 +42,7 @@ module Selenium
           @terms_of_service_url = args['termsOfServiceUrl']
           @privacy_policy_url = args['privacyPolicyUrl']
         end
+        # steep:ignore:end
       end # Account
     end # FedCM
   end # WebDriver

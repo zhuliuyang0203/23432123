@@ -12,9 +12,9 @@ module Selenium
 
         def initialize: (BiDi bidi) -> void
 
-        def add_message_handler: (String type) { (untyped) -> untyped } -> Integer
+        def add_message_handler: (String type) ?{ (untyped) -> untyped } -> Integer
 
-        def remove_message_handler: (Integer id) -> bool
+        def remove_message_handler: (Integer id) -> bool?
 
         private
 

@@ -10,7 +10,7 @@ module Selenium
 
         def quit: () -> nil
 
-        def close: () -> nil
+        def close: () -> untyped
       end
     end
   end

@@ -24,8 +24,8 @@ public class InProcessTestEnvironment implements TestEnvironment {
 
   private final AppServer appServer;
 
-  public InProcessTestEnvironment() {
-    appServer = new NettyAppServer();
+  public InProcessTestEnvironment(boolean secureServer) {
+    appServer = new NettyAppServer(secureServer);
     appServer.start();
   }
 
@@ -40,6 +40,6 @@ public class InProcessTestEnvironment implements TestEnvironment {
   }
 
   public static void main(String[] args) {
-    new InProcessTestEnvironment();
+    new InProcessTestEnvironment(true);
   }
 }

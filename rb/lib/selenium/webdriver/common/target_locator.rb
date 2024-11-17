@@ -50,6 +50,7 @@ module Selenium
       # @param type either :tab or :window
       #
 
+      # steep:ignore:start
       def new_window(type = :window)
         raise ArgumentError, "Valid types are :tab and :window, received: #{type.inspect}" unless %i[window
                                                                                                      tab].include?(type)
@@ -70,6 +71,7 @@ module Selenium
           window(handle)
         end
       end
+      # steep:ignore:end
 
       #
       # switch to the given window handle

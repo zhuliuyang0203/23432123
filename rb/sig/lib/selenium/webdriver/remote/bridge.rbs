@@ -48,7 +48,7 @@ module Selenium
 
         extend WebDriver::Safari::Features
 
-        def fedcm_account_list: -> [FedCM::Account]
+        def fedcm_account_list: -> Array[Hash[untyped, untyped]]
 
         def fedcm_dialog_type: -> String
 
@@ -58,7 +58,7 @@ module Selenium
 
         def reset_fedcm_cooldown: -> nil
 
-        def select_fedcm_account: -> nil
+        def select_fedcm_account: (Integer index) -> nil
 
         def session_id: () -> untyped
 
@@ -250,7 +250,7 @@ module Selenium
 
         private
 
-        def execute: (untyped command, ?::Hash[untyped, untyped] opts, ?untyped? command_hash) -> WebDriver::Remote::Response
+        def execute: (untyped command, ?::Hash[untyped, untyped] opts, ?untyped? command_hash) -> String
 
         def escaper: () -> untyped
 
