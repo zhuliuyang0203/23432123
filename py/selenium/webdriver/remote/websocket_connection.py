@@ -94,7 +94,7 @@ class WebSocketConnection:
         if isinstance(command, dict):
             return command
         else:
-            return next(command)
+            return dict(command)
 
     def _deserialize_result(self, result, command):
         try:
