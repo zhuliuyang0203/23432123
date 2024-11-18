@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.Remote
     /// </example>
     public class RemoteWebDriver : WebDriver, IDevTools, IHasDownloads
     {
-        private static readonly ILogger _logger = QA.Selenium.Internal.Logging.Log.GetLogger(typeof(RemoteWebDriver));
+        private static readonly ILogger _logger = OpenQA.Selenium.Internal.Logging.Log.GetLogger(typeof(RemoteWebDriver));
 
         /// <summary>
         /// The name of the Selenium grid remote DevTools end point capability.
