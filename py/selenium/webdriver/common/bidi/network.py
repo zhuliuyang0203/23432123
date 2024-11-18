@@ -103,8 +103,8 @@ class Network:
         session_unsubscribe(self.conn, self.EVENTS['auth_required'])
 
     def add_request_handler(self, callback, url_pattern=''):
-        """
-        Adds a request handler that executes a callback function when a request matches the given URL pattern.
+        """Adds a request handler that executes a callback function when a
+        request matches the given URL pattern.
 
         Parameters:
             callback (function): A function to be executed when url is matched by a URL pattern
@@ -143,8 +143,8 @@ class Network:
             session_unsubscribe(self.conn, self.EVENTS['before_request']) 
 
     def add_response_handler(self, callback, url_pattern=''):
-        """
-        Adds a response handler that executes a callback function when a response matches the given URL pattern.
+        """Adds a response handler that executes a callback function when a
+        response matches the given URL pattern.
 
         Parameters:
             callback (function): A function to be executed when url is matched by a url_pattern
