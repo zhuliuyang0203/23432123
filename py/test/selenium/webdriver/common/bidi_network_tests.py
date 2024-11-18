@@ -8,7 +8,7 @@ def network(driver):
     yield Network(driver)
 
 @pytest.mark.xfail_safari
-def test_add_response_handler(network):
+def test_add_response_handler(network, pages):
     passed = [False]
 
     def callback(response):
@@ -21,7 +21,7 @@ def test_add_response_handler(network):
     assert passed[0], "Callback was NOT successful"
 
 @pytest.mark.xfail_safari
-def test_remove_response_handler(network):
+def test_remove_response_handler(network, pages):
     passed = [False]
 
     def callback(response):
@@ -35,7 +35,7 @@ def test_remove_response_handler(network):
     assert not passed[0], "Callback should NOT be successful"
 
 @pytest.mark.xfail_safari
-def test_add_request_handler(network):
+def test_add_request_handler(network, pages):
     passed = [False]
 
     def callback(request):
@@ -48,7 +48,7 @@ def test_add_request_handler(network):
     assert passed[0], "Callback was NOT successful"
 
 @pytest.mark.xfail_safari
-def test_remove_request_handler(network):
+def test_remove_request_handler(network, pages):
     passed = [False]
 
     def callback(request):
@@ -62,13 +62,13 @@ def test_remove_request_handler(network):
     assert not passed[0], "Callback should NOT be successful"
 
 @pytest.mark.xfail_safari
-def test_add_authentication_handler(driver, network):
+def test_add_authentication_handler(driver, network, pages):
     network.add_authentication_handler('test','test')
     pages.load("basicAuth")
     assert driver.find_element_by_tag_name('h1').text == 'authorized', "Authentication was NOT successful"
 
 @pytest.mark.xfail_safari
-def test_remove_authentication_handler(driver, network):
+def test_remove_authentication_handler(driver, network, pages):
     network.add_authentication_handler('test', 'test')
     network.remove_authentication_handler()
     pages.load("basicAuth")
