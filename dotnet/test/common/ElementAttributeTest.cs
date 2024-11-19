@@ -131,16 +131,15 @@ namespace OpenQA.Selenium
             Assert.That(() =>
             {
                 disabledTextElement1.SendKeys("foo");
-            }, Throws.InstanceOf<InvalidElementStateException>());
+            }, Throws.TypeOf<ElementNotInteractableException>());
 
             Assert.AreEqual(string.Empty, disabledTextElement1.Text);
 
             IWebElement disabledTextElement2 = driver.FindElement(By.Id("disabledTextElement2"));
 
-            Assert.That(() =>
-            {
-                disabledTextElement2.SendKeys("bar");
-            }, Throws.InstanceOf<InvalidElementStateException>());
+            Assert.That(
+                () => disabledTextElement2.SendKeys("bar"),
+                Throws.TypeOf<ElementNotInteractableException>());
 
             Assert.AreEqual(string.Empty, disabledTextElement2.Text);
         }

@@ -60,7 +60,9 @@ namespace OpenQA.Selenium
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
             try
             {
-                Assert.That(() => alert.SendKeys(null), Throws.ArgumentNullException);
+                Assert.That(
+                    () => alert.SendKeys(null),
+                    Throws.ArgumentNullException);
             }
             finally
             {
@@ -147,13 +149,12 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("alert")).Click();
 
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
+
             try
             {
-                alert.SendKeys("cheese");
-                Assert.Fail("Expected exception");
-            }
-            catch (ElementNotInteractableException)
-            {
+                Assert.That(
+                    () => alert.SendKeys("cheese"),
+                    Throws.InstanceOf<ElementNotInteractableException>());
             }
             finally
             {
@@ -198,8 +199,10 @@ namespace OpenQA.Selenium
 
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
             alert.Dismiss();
-            string text;
-            Assert.That(() => text = alert.Text, Throws.InstanceOf<NoAlertPresentException>());
+
+            Assert.That(
+                () => alert.Text,
+                Throws.InstanceOf<NoAlertPresentException>());
         }
 
         [Test]
@@ -249,7 +252,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = CreateAlertPage("cheese");
 
-            Assert.That(() => AlertToBePresent(), Throws.InstanceOf<NoAlertPresentException>());
+            Assert.That(
+                AlertToBePresent,
+                Throws.InstanceOf<NoAlertPresentException>());
         }
 
         [Test]
@@ -270,15 +275,9 @@ namespace OpenQA.Selenium
                 driver.Close();
                 WaitFor(WindowHandleCountToBe(1), "Window count was not 1");
 
-                try
-                {
-                    AlertToBePresent().Accept();
-                    Assert.Fail("Expected exception");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected
-                }
+                Assert.That(
+                    () => AlertToBePresent().Accept(),
+                    Throws.InstanceOf<NoSuchWindowException>());
 
             }
             finally
@@ -321,17 +320,22 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
                 .WithScripts(
-                    "function setInnerText(id, value) {",
-                    "  document.getElementById(id).innerHTML = '<p>' + value + '</p>';",
-                    "}",
-                    "function displayTwoPrompts() {",
-                    "  setInnerText('text1', prompt('First'));",
-                    "  setInnerText('text2', prompt('Second'));",
-                    "}")
+                    """
+                    function setInnerText(id, value) {
+                      document.getElementById(id).innerHTML = '<p>' + value + '</p>';
+                    }
+
+                    function displayTwoPrompts() {
+                      setInnerText('text1', prompt('First'));
+                      setInnerText('text2', prompt('Second'));
+                    }
+                    """)
                 .WithBody(
-                    "<a href='#' id='double-prompt' onclick='displayTwoPrompts();'>click me</a>",
-                    "<div id='text1'></div>",
-                    "<div id='text2'></div>"));
+                    """
+                    <a href='#' id='double-prompt' onclick='displayTwoPrompts();'>click me</a>
+                    <div id='text1'></div>
+                    <div id='text2'></div>
+                    """));
 
             driver.FindElement(By.Id("double-prompt")).Click();
 
@@ -355,7 +359,7 @@ namespace OpenQA.Selenium
         public void ShouldHandleAlertOnPageLoad()
         {
             string pageWithOnLoad = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
-                .WithOnLoad("javascript:alert(\"onload\")")
+                .WithOnLoad("""javascript:alert("onload")""")
                 .WithBody("<p>Page with onload event handler</p>"));
             driver.Url = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
                 .WithBody(string.Format("<a id='open-page-with-onload-alert' href='{0}'>open new page</a>", pageWithOnLoad)));
@@ -411,17 +415,12 @@ namespace OpenQA.Selenium
                 Assert.AreEqual(1, allWindows.Count);
                 onloadWindow = allWindows[0];
 
-                try
+                Assert.That(() =>
                 {
                     IWebElement el = driver.FindElement(By.Id("open-new-window"));
                     WaitFor<IAlert>(AlertToBePresent, TimeSpan.FromSeconds(5), "No alert found");
-                    Assert.Fail("Expected exception");
-                }
-                catch (WebDriverException)
-                {
-                    // An operation timed out exception is expected,
-                    // since we're using WaitFor<T>.
-                }
+                },
+                Throws.InstanceOf<WebDriverException>());
 
             }
             finally

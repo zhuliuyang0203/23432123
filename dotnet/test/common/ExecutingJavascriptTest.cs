@@ -391,14 +391,17 @@ namespace OpenQA.Selenium
             Assert.AreEqual(collection.Count, length);
         }
 
-
+        [Test]
         public void ShouldThrowAnExceptionIfAnArgumentIsNotValid()
         {
             if (!(driver is IJavaScriptExecutor))
                 return;
 
             driver.Url = javascriptPage;
-            Assert.That(() => ExecuteScript("return arguments[0];", driver), Throws.InstanceOf<ArgumentException>());
+
+            Assert.That(
+                () => ExecuteScript("return arguments[0];", driver),
+                Throws.TypeOf<ArgumentException>().With.Message.StartsWith("Argument is of an illegal type: "));
         }
 
         [Test]
@@ -490,10 +493,9 @@ namespace OpenQA.Selenium
 
             await jsEngine.UnpinScript(script);
 
-            Assert.That(() =>
-            {
-                _ = ((IJavaScriptExecutor)driver).ExecuteScript(script);
-            }, Throws.TypeOf<JavaScriptException>());
+            Assert.That(
+                () => ((IJavaScriptExecutor)driver).ExecuteScript(script),
+                Throws.TypeOf<JavaScriptException>());
         }
 
         [Test]
@@ -566,7 +568,9 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> args = new Dictionary<string, object>();
             args["key"] = new object[] { "a", new object[] { "zero", 1, true, 3.14159, false, el }, "c" };
-            Assert.That(() => executor.ExecuteScript("return undefined;", args), Throws.InstanceOf<StaleElementReferenceException>());
+            Assert.That(
+                () => executor.ExecuteScript("return undefined;", args),
+                Throws.TypeOf<StaleElementReferenceException>());
         }
 
         [Test]
@@ -611,7 +615,17 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
 
-            Assert.That(() => ExecuteScript("var obj1 = {}; var obj2 = {}; obj1['obj2'] = obj2; obj2['obj1'] = obj1; return obj1"), Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => ExecuteScript(
+                    """
+                    var obj1 = {};
+                    var obj2 = {};
+                    obj1['obj2'] = obj2;
+                    obj2['obj1'] = obj1;
+                    return obj1
+                    """
+                    ),
+                Throws.TypeOf<JavaScriptException>());
         }
 
         //------------------------------------------------------------------
@@ -622,10 +636,9 @@ namespace OpenQA.Selenium
         [Ignore("Reason for ignore: Failure indicates hang condition, which would break the test suite. Really needs a timeout set.")]
         public void ShouldThrowExceptionIfExecutingOnNoPage()
         {
-            Assert.That(() =>
-            {
-                ((IJavaScriptExecutor)driver).ExecuteScript("return 1;");
-            }, Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => ((IJavaScriptExecutor)driver).ExecuteScript("return 1;"),
+                Throws.InstanceOf<WebDriverException>());
         }
 
         [Test]

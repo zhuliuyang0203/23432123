@@ -935,7 +935,7 @@ namespace OpenQA.Selenium
             }
             else
             {
-                throw new ArgumentException("Argument is of an illegal type" + arg.ToString(), nameof(arg));
+                throw new ArgumentException("Argument is of an illegal type: " + arg.ToString(), nameof(arg));
             }
 
             return converted;

@@ -61,10 +61,9 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
 
-            Assert.That(() =>
-            {
-                driver.SwitchTo().Window("invalid name");
-            }, Throws.InstanceOf<NoSuchWindowException>());
+            Assert.That(
+                () => driver.SwitchTo().Window("invalid name"),
+                Throws.InstanceOf<NoSuchWindowException>());
 
             driver.SwitchTo().Window(current);
         }
@@ -88,10 +87,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                Assert.That(() =>
-                {
-                    _ = driver.CurrentWindowHandle;
-                }, Throws.InstanceOf<NoSuchWindowException>());
+                Assert.That(
+                    () => driver.CurrentWindowHandle,
+                    Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -118,15 +116,13 @@ namespace OpenQA.Selenium
 
             try
             {
-                Assert.That(() =>
-                {
-                    _ = driver.Title;
-                }, Throws.InstanceOf<NoSuchWindowException>());
+                Assert.That(
+                    () => driver.Title,
+                    Throws.InstanceOf<NoSuchWindowException>());
 
-                Assert.That(() =>
-                {
-                    driver.FindElement(By.TagName("body"));
-                }, Throws.InstanceOf<NoSuchWindowException>());
+                Assert.That(
+                    () => driver.FindElement(By.TagName("body")),
+                    Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -154,10 +150,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                Assert.That(() =>
-                {
-                    _ = body.Text;
-                }, Throws.InstanceOf<NoSuchWindowException>());
+                Assert.That(
+                    () => body.Text,
+                    Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -263,10 +258,10 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
 
-            Assert.That(() =>
-            {
-                driver.SwitchTo().Window("i will never exist");
-            }, Throws.InstanceOf<NoSuchWindowException>());
+            Assert.That(
+                () => driver.SwitchTo().Window("i will never exist"),
+                Throws.InstanceOf<NoSuchWindowException>(),
+                "Should not be able to change to a non-existant window");
 
             String newHandle = driver.CurrentWindowHandle;
 
