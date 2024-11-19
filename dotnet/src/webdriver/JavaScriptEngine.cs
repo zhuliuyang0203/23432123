@@ -219,14 +219,25 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The JavaScript to pin</param>
         /// <returns>A task containing a <see cref="PinnedScript"/> object to use to execute the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task<PinnedScript> PinScript(string script)
         {
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            string newScriptHandle = Guid.NewGuid().ToString("N");
+
             // We do an "Evaluate" first so as to immediately create the script on the loaded
             // page, then will add it to the initialization of future pages.
-            PinnedScript pinnedScript = new PinnedScript(script);
             await this.EnableDomains().ConfigureAwait(false);
-            await this.session.Value.Domains.JavaScript.Evaluate(pinnedScript.CreationScript).ConfigureAwait(false);
-            pinnedScript.ScriptId = await this.session.Value.Domains.JavaScript.AddScriptToEvaluateOnNewDocument(pinnedScript.CreationScript).ConfigureAwait(false);
+
+            string creationScript = PinnedScript.MakeCreationScript(newScriptHandle, script);
+            await this.session.Value.Domains.JavaScript.Evaluate(creationScript).ConfigureAwait(false);
+            string scriptId = await this.session.Value.Domains.JavaScript.AddScriptToEvaluateOnNewDocument(creationScript).ConfigureAwait(false);
+
+            PinnedScript pinnedScript = new PinnedScript(script, newScriptHandle, scriptId);
             this.pinnedScripts[pinnedScript.Handle] = pinnedScript;
             return pinnedScript;
         }
@@ -236,11 +247,17 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The <see cref="PinnedScript"/> object to unpin.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task UnpinScript(PinnedScript script)
         {
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
             if (this.pinnedScripts.ContainsKey(script.Handle))
             {
-                await this.session.Value.Domains.JavaScript.Evaluate(script.RemovalScript).ConfigureAwait(false);
+                await this.session.Value.Domains.JavaScript.Evaluate(script.MakeRemovalScript()).ConfigureAwait(false);
                 await this.session.Value.Domains.JavaScript.RemoveScriptToEvaluateOnNewDocument(script.ScriptId).ConfigureAwait(false);
                 this.pinnedScripts.Remove(script.Handle);
             }
