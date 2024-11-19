@@ -16,8 +16,8 @@
 # under the License.
 
 import base64
-import filetype
 
+import filetype
 import pytest
 
 from selenium.webdriver.common.by import By
