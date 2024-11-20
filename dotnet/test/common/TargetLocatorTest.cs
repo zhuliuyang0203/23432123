@@ -95,7 +95,7 @@ namespace OpenQA.Selenium
 
             // DefaultContent should not have the element in it.
             Assert.That(
-                () => Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1"),
+                () => driver.FindElement(By.Id("pageNumber")),
                 Throws.TypeOf<NoSuchElementException>());
 
             driver.SwitchTo().Frame("second");
@@ -105,7 +105,7 @@ namespace OpenQA.Selenium
 
             // DefaultContent should not have the element in it.
             Assert.That(
-                () => Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1"),
+                () => driver.FindElement(By.Id("pageNumber")),
                 Throws.TypeOf<NoSuchElementException>());
         }
 
@@ -121,7 +121,7 @@ namespace OpenQA.Selenium
 
             // DefaultContent should not have the element in it.
             Assert.That(
-                () => Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1"),
+                () => driver.FindElement(By.Id("pageNumber")),
                 Throws.TypeOf<NoSuchElementException>());
 
 
@@ -132,7 +132,7 @@ namespace OpenQA.Selenium
 
             // DefaultContent should not have the element in it.
             Assert.That(
-                () => Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1"),
+                () => driver.FindElement(By.Id("pageNumber")).Text,
                 Throws.TypeOf<NoSuchElementException>());
         }
 
