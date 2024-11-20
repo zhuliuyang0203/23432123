@@ -24,23 +24,20 @@ using System.Threading;
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
-    /// A <see cref="LoadableComponent{T}"/> which might not have finished loading when Load() returns. After a
-    /// call to Load(), the IsLoaded property should continue to return false until the component has fully
-    /// loaded. Use the HandleErrors() method to check for error conditions which caused the Load() to fail.
+    /// <para>A <see cref="LoadableComponent{T}"/> which might not have finished loading when Load() returns.</para>
+    /// <para>After a call to Load(), the IsLoaded property should continue to return false until the component has fully loaded.</para>
     /// <para>
-    /// <pre class="code">
-    /// new SlowHypotheticalComponent().Load();
-    /// </pre>
+    /// <code>
+    /// // Example usage:
+    /// new MySlowComponent().Load();
+    /// </code>
     /// </para>
     /// </summary>
+    /// <remarks>Override the HandleErrors() method to check for error conditions which caused <see cref="Load()"/> to fail.</remarks>
     /// <typeparam name="T">The type to be returned (normally the subclass' type)</typeparam>
     public abstract class SlowLoadableComponent<T> : LoadableComponent<T>
             where T : SlowLoadableComponent<T>
     {
-        private readonly IClock clock;
-        private readonly TimeSpan timeout;
-        private TimeSpan sleepInterval = TimeSpan.FromMilliseconds(200);
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SlowLoadableComponent{T}"/> class.
         /// </summary>
@@ -55,36 +52,27 @@ namespace OpenQA.Selenium.Support.UI
         /// </summary>
         /// <param name="timeout">The <see cref="TimeSpan"/> within which the component should be loaded.</param>
         /// <param name="clock">The <see cref="IClock"/> to use when measuring the timeout.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="clock"/> is <see langword="null"/>.</exception>
         protected SlowLoadableComponent(TimeSpan timeout, IClock clock)
         {
-            this.clock = clock;
-            this.timeout = timeout;
+            this.Clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            this.Timeout = timeout;
         }
 
         /// <summary>
         /// Gets or sets the time to sleep between each check of the load status of the component.
         /// </summary>
-        public TimeSpan SleepInterval
-        {
-            get { return this.sleepInterval; }
-            set { this.sleepInterval = value; }
-        }
+        public TimeSpan SleepInterval { get; set; } = TimeSpan.FromMilliseconds(200);
 
         /// <summary>
         /// Gets the timeout interval before which this component must be considered loaded.
         /// </summary>
-        protected TimeSpan Timeout
-        {
-            get { return this.timeout; }
-        }
+        protected TimeSpan Timeout { get; }
 
         /// <summary>
         /// Gets the clock object providing timing for monitoring the load status of this component.
         /// </summary>
-        protected IClock Clock
-        {
-            get { return this.clock; }
-        }
+        protected IClock Clock { get; }
 
         /// <summary>
         /// Ensures that the component is currently loaded.
@@ -102,9 +90,9 @@ namespace OpenQA.Selenium.Support.UI
                 this.TryLoad();
             }
 
-            DateTime end = this.clock.LaterBy(this.timeout);
+            DateTime end = this.Clock.LaterBy(this.Timeout);
 
-            while (this.clock.IsNowBefore(end))
+            while (this.Clock.IsNowBefore(end))
             {
                 if (this.IsLoaded)
                 {
@@ -123,7 +111,7 @@ namespace OpenQA.Selenium.Support.UI
             {
                 if (string.IsNullOrEmpty(UnableToLoadMessage))
                 {
-                    this.UnableToLoadMessage = string.Format(CultureInfo.InvariantCulture, "Timed out after {0} seconds.", this.timeout.TotalSeconds);
+                    this.UnableToLoadMessage = string.Format(CultureInfo.InvariantCulture, "Timed out after {0} seconds.", this.Timeout.TotalSeconds);
                 }
 
                 throw new WebDriverTimeoutException(this.UnableToLoadMessage);
@@ -147,7 +135,7 @@ namespace OpenQA.Selenium.Support.UI
         /// </summary>
         protected virtual void Wait()
         {
-            Thread.Sleep(this.sleepInterval);
+            Thread.Sleep(this.SleepInterval);
         }
     }
 }
