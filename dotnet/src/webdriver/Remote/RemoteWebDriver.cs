@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.Internal.Logging;
 using OpenQA.Selenium.DevTools;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,8 @@ namespace OpenQA.Selenium.Remote
     /// </example>
     public class RemoteWebDriver : WebDriver, IDevTools, IHasDownloads
     {
+        private static readonly ILogger _logger = OpenQA.Selenium.Internal.Logging.Log.GetLogger(typeof(RemoteWebDriver));
+
         /// <summary>
         /// The name of the Selenium grid remote DevTools end point capability.
         /// </summary>
@@ -425,6 +428,14 @@ namespace OpenQA.Selenium.Remote
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
         public DevToolsSession GetDevToolsSession()
         {
+            if (this.Capabilities.GetCapability(CapabilityType.BrowserName) == "firefox")
+            {
+                if (_logger.IsEnabled(LogEventLevel.Warn))
+                {
+                    _logger.Warn("CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.");
+                }
+            }
+
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = DevToolsSession.AutoDetectDevToolsProtocolVersion });
         }
 
