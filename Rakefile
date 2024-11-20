@@ -582,10 +582,11 @@ namespace :py do
   desc 'Update Python version'
   task :version, [:version] do |_task, arguments|
     old_version = python_version
-    nightly = ".dev#{Time.now.strftime('%Y%m%d%H%M')}"
+    nightly = ".#{Time.now.strftime('%Y%m%d%H%M')}"
     new_version = updated_version(old_version, arguments[:version], nightly)
 
     ['py/setup.py',
+     'py/pyproject.toml',
      'py/BUILD.bazel',
      'py/selenium/__init__.py',
      'py/selenium/webdriver/__init__.py',
@@ -1138,7 +1139,7 @@ def updated_version(current, desired = nil, nightly = nil)
     desired.split('.').tap { |v| v << 0 while v.size < 3 }.join('.')
   elsif current.split(/\.|-/).size > 3
     # if current version is already nightly, just need to bump it; this will be noop for some languages
-    pattern = /-?\.?(nightly|SNAPSHOT|dev)\d*$/
+    pattern = /-?\.?(nightly|SNAPSHOT|dev|\d{12})\d*$/
     current.gsub(pattern, nightly)
   elsif current.split(/\.|-/).size == 3
     # if current version is not nightly, need to bump the version and make nightly
