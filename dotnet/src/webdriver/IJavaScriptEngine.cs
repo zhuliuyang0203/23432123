@@ -87,6 +87,7 @@ namespace OpenQA.Selenium
         /// <param name="scriptName">The friendly name by which to refer to this initialization script.</param>
         /// <param name="script">The JavaScript to be loaded on every page.</param>
         /// <returns>A task containing an <see cref="InitializationScript"/> object representing the script to be loaded on each page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> is <see langword="null"/>.</exception>
         Task<InitializationScript> AddInitializationScript(string scriptName, string script);
 
         /// <summary>
@@ -94,6 +95,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="scriptName">The friendly name of the initialization script to be removed.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> is <see langword="null"/>.</exception>
         Task RemoveInitializationScript(string scriptName);
 
         /// <summary>
@@ -109,6 +111,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The JavaScript to pin</param>
         /// <returns>A task containing a <see cref="PinnedScript"/> object to use to execute the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         Task<PinnedScript> PinScript(string script);
 
         /// <summary>
@@ -116,6 +119,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The <see cref="PinnedScript"/> object to unpin.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         Task UnpinScript(PinnedScript script);
 
         /// <summary>
