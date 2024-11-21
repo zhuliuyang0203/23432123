@@ -51,6 +51,11 @@ version = None
 def import_devtools(ver):
     """Attempt to load the current latest available devtools into the module
     cache for use later."""
+
+    warnings.warn(
+        "import_devtools() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     global devtools
     global version
     version = ver
@@ -80,6 +85,11 @@ def get_connection_context(fn_name):
     If there is no current connection, raise a ``RuntimeError`` with a
     helpful message.
     """
+
+    warnings.warn(
+        "get_connection_context() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     try:
         return _connection_context.get()
     except LookupError:
@@ -92,6 +102,11 @@ def get_session_context(fn_name):
     If there is no current session, raise a ``RuntimeError`` with a
     helpful message.
     """
+
+    warnings.warn(
+        "get_session_context() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     try:
         return _session_context.get()
     except LookupError:
@@ -102,6 +117,11 @@ def get_session_context(fn_name):
 def connection_context(connection):
     """This context manager installs ``connection`` as the session context for
     the current Trio task."""
+
+    warnings.warn(
+        "connection_context() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     token = _connection_context.set(connection)
     try:
         yield
@@ -113,6 +133,11 @@ def connection_context(connection):
 def session_context(session):
     """This context manager installs ``session`` as the session context for the
     current Trio task."""
+
+    warnings.warn(
+        "session_context() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     token = _session_context.set(session)
     try:
         yield
@@ -127,6 +152,11 @@ def set_global_connection(connection):
     This is generally not recommended, except it may be necessary in
     certain use cases such as running inside Jupyter notebook.
     """
+
+    warnings.warn(
+        "set_global_connection() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     global _connection_context
     _connection_context = contextvars.ContextVar("_connection_context", default=connection)
 
@@ -138,6 +168,11 @@ def set_global_session(session):
     This is generally not recommended, except it may be necessary in
     certain use cases such as running inside Jupyter notebook.
     """
+
+    warnings.warn(
+        "set_global_session() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+        DeprecationWarning, 
+        stacklevel=2)
     global _session_context
     _session_context = contextvars.ContextVar("_session_context", default=session)
 
@@ -203,6 +238,10 @@ class CdpBase:
         :param cmd: any CDP command
         :returns: a CDP result
         """
+        warnings.warn(
+            "execute() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         cmd_id = next(self.id_iter)
         cmd_event = trio.Event()
         self.inflight_cmd[cmd_id] = cmd, cmd_event
@@ -230,6 +269,10 @@ class CdpBase:
     def listen(self, *event_types, buffer_size=10):
         """Return an async iterator that iterates over events matching the
         indicated types."""
+        warnings.warn(
+            "listen() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         sender, receiver = trio.open_memory_channel(buffer_size)
         for event_type in event_types:
             self.channels[event_type].add(sender)
@@ -243,6 +286,10 @@ class CdpBase:
         an async with block. The block will not exit until the indicated
         event is received.
         """
+        warnings.warn(
+            "wait_for() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         sender: trio.MemorySendChannel
         receiver: trio.MemoryReceiveChannel
         sender, receiver = trio.open_memory_channel(buffer_size)
@@ -258,6 +305,10 @@ class CdpBase:
 
         :param dict data: a JSON dictionary
         """
+        warnings.warn(
+            "handle_date() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         if "id" in data:
             self._handle_cmd_response(data)
         else:
@@ -269,6 +320,10 @@ class CdpBase:
 
         :param dict data: response as a JSON dictionary
         """
+        warnings.warn(
+            "handle_cmd_response() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         cmd_id = data["id"]
         try:
             cmd, event = self.inflight_cmd.pop(cmd_id)
@@ -295,6 +350,10 @@ class CdpBase:
 
         :param dict data: event as a JSON dictionary
         """
+        warnings.warn(
+            "_handle_event() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         global devtools
         event = devtools.util.parse_json_event(data)
         logger.debug("Received event: %s", event)
@@ -339,6 +398,10 @@ class CdpSession(CdpBase):
         This keeps track of concurrent callers and only disables DOM
         events when all callers have exited.
         """
+        warnings.warn(
+            "dom_enable() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         global devtools
         async with self._dom_enable_lock:
             self._dom_enable_count += 1
@@ -360,6 +423,10 @@ class CdpSession(CdpBase):
         This keeps track of concurrent callers and only disables page
         events when all callers have exited.
         """
+        warnings.warn(
+            "page_enable() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         global devtools
         async with self._page_enable_lock:
             self._page_enable_count += 1
@@ -403,6 +470,10 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
         ``CdpConnectionClosed`` after the CDP connection is closed. It
         is safe to call this multiple times.
         """
+        warnings.warn(
+            "aclose() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         await self.ws.aclose()
 
     @asynccontextmanager
@@ -414,6 +485,10 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
         dom.get_document()`` and it will execute on the current session
         automatically.
         """
+        warnings.warn(
+            "open_session() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         session = await self.connect_session(target_id)
         with session_context(session):
             yield session
@@ -421,6 +496,10 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
     async def connect_session(self, target_id) -> "CdpSession":
         """Returns a new :class:`CdpSession` connected to the specified
         target."""
+        warnings.warn(
+            "connect_session() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         global devtools
         session_id = await self.execute(devtools.target.attach_to_target(target_id, True))
         session = CdpSession(self.ws, session_id, target_id)
@@ -430,6 +509,10 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
     async def _reader_task(self):
         """Runs in the background and handles incoming messages: dispatching
         responses to commands and events to listeners."""
+        warnings.warn(
+            "render_task() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
         global devtools
         while True:
             try:
@@ -479,7 +562,11 @@ async def open_cdp(url) -> typing.AsyncIterator[CdpConnection]:
     you want to use multiple connections concurrently, it is recommended
     to open each on in a separate task.
     """
-
+    
+    warnings.warn(
+            "open_cdp() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
     async with trio.open_nursery() as nursery:
         conn = await connect_cdp(nursery, url)
         try:
@@ -503,6 +590,10 @@ async def connect_cdp(nursery, url) -> CdpConnection:
     current task. This argument is for unusual use cases, such as
     running inside of a notebook.
     """
+    warnings.warn(
+            "connect_cdp() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
+            DeprecationWarning, 
+            stacklevel=2)
     ws = await connect_websocket_url(nursery, url, max_message_size=MAX_WS_MESSAGE_SIZE)
     cdp_conn = CdpConnection(ws)
     nursery.start_soon(cdp_conn._reader_task)
