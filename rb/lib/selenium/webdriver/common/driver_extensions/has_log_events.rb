@@ -60,7 +60,7 @@ module Selenium
           if browser == :firefox
             WebDriver.logger.deprecate(
               'Driver#on_log_event on Firefox',
-              'the new BiDi implementation',
+              'the script.add_console_message_handler or the script.add_javascript_error_handler methods',
               id: :on_log_event
             )
           end

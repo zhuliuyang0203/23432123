@@ -63,7 +63,7 @@ module Selenium
           if browser == :firefox
             WebDriver.logger.deprecate(
               'Driver#intercept on Firefox',
-              'the new BiDi implementation',
+              'the new bidi.network.add_intercept method',
               id: :intercept
             )
           end
