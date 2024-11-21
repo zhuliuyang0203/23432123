@@ -428,7 +428,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
         public DevToolsSession GetDevToolsSession()
         {
-            if (this.Capabilities.GetCapability(CapabilityType.BrowserName) == "firefox")
+            if (this.Capabilities.GetCapability(CapabilityType.BrowserName) is "firefox")
             {
                 if (_logger.IsEnabled(LogEventLevel.Warn))
                 {

@@ -393,6 +393,7 @@ namespace OpenQA.Selenium.Firefox
         /// Creates a session to communicate with a browser using the Chromium Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
+        [Obsolete("CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.")]
         public DevToolsSession GetDevToolsSession()
         {
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = FirefoxDevToolsProtocolVersion });
