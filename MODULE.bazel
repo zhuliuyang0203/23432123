@@ -207,7 +207,7 @@ maven.install(
         "org.assertj:assertj-core:3.26.3",
         "org.bouncycastle:bcpkix-jdk18on:1.78.1",
         "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5",
-        "org.hsqldb:hsqldb:2.7.3",
+        "org.hsqldb:hsqldb:2.7.4",
         "org.jspecify:jspecify:1.0.0",
         "org.junit.jupiter:junit-jupiter-api:5.11.3",
         "org.junit.jupiter:junit-jupiter-engine:5.11.3",

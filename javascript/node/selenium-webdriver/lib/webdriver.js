@@ -1230,6 +1230,12 @@ class WebDriver {
 
     const caps = await this.getCapabilities()
 
+    if (caps['map_'].get('browserName') === 'firefox') {
+      console.warn(
+        'CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.',
+      )
+    }
+
     if (process.env.SELENIUM_REMOTE_URL) {
       const host = new URL(process.env.SELENIUM_REMOTE_URL).host
       const sessionId = await this.getSession().then((session) => session.getId())

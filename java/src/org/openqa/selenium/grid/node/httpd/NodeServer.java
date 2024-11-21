@@ -30,6 +30,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.net.MediaType;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -172,7 +175,18 @@ public class NodeServer extends TemplateGridServerCommand {
     Route httpHandler = Route.combine(node, get("/readyz").to(() -> readinessCheck));
 
     return new Handlers(
-        httpHandler, new ProxyNodeWebsockets(clientFactory, node, nodeOptions.getGridSubPath()));
+        httpHandler, new ProxyNodeWebsockets(clientFactory, node, nodeOptions.getGridSubPath())) {
+      @Override
+      public void close() {
+        if (node instanceof Closeable) {
+          try {
+            ((Closeable) node).close();
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        }
+      }
+    };
   }
 
   @Override
@@ -224,6 +238,15 @@ public class NodeServer extends TemplateGridServerCommand {
         executor.shutdown();
 
         return this;
+      }
+
+      @Override
+      public void stop() {
+        try {
+          handler.close();
+        } finally {
+          super.stop();
+        }
       }
     };
   }

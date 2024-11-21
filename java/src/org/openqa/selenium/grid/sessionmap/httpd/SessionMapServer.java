@@ -28,6 +28,9 @@ import static org.openqa.selenium.remote.http.Route.get;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
@@ -105,7 +108,18 @@ public class SessionMapServer extends TemplateGridServerCommand {
                                                 "message",
                                                 "Session map is ready."))))),
             get("/readyz").to(() -> req -> new HttpResponse().setStatus(HTTP_NO_CONTENT))),
-        null);
+        null) {
+      @Override
+      public void close() {
+        if (sessions instanceof Closeable) {
+          try {
+            ((Closeable) sessions).close();
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        }
+      }
+    };
   }
 
   @Override

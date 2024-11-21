@@ -31,6 +31,9 @@ import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.MediaType;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
@@ -118,7 +121,18 @@ public class DistributorServer extends TemplateGridServerCommand {
                                                 "message",
                                                 "Distributor is ready"))))),
             get("/readyz").to(() -> readinessCheck)),
-        null);
+        null) {
+      @Override
+      public void close() {
+        if (distributor instanceof Closeable) {
+          try {
+            ((Closeable) distributor).close();
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        }
+      }
+    };
   }
 
   @Override

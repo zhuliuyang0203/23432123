@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.concurrent.ExecutorServices;
 import org.openqa.selenium.concurrent.GuardedRunnable;
 import org.openqa.selenium.grid.sessionmap.SessionMap;
 import org.openqa.selenium.grid.web.ReverseProxyHandler;
@@ -59,7 +60,7 @@ import org.openqa.selenium.remote.tracing.Span;
 import org.openqa.selenium.remote.tracing.Status;
 import org.openqa.selenium.remote.tracing.Tracer;
 
-class HandleSession implements HttpHandler {
+class HandleSession implements HttpHandler, Closeable {
 
   private static final Logger LOG = Logger.getLogger(HandleSession.class.getName());
 
@@ -99,6 +100,7 @@ class HandleSession implements HttpHandler {
   private final HttpClient.Factory httpClientFactory;
   private final SessionMap sessions;
   private final ConcurrentMap<URI, CacheEntry> httpClients;
+  private final ScheduledExecutorService cleanUpHttpClientsCacheService;
 
   HandleSession(Tracer tracer, HttpClient.Factory httpClientFactory, SessionMap sessions) {
     this.tracer = Require.nonNull("Tracer", tracer);
@@ -134,7 +136,7 @@ class HandleSession implements HttpHandler {
           }
         };
 
-    ScheduledExecutorService cleanUpHttpClientsCacheService =
+    this.cleanUpHttpClientsCacheService =
         Executors.newSingleThreadScheduledExecutor(
             r -> {
               Thread thread = new Thread(r);
@@ -242,5 +244,18 @@ class HandleSession implements HttpHandler {
             throw t;
           }
         });
+  }
+
+  @Override
+  public void close() {
+    ExecutorServices.shutdownGracefully(
+        "HandleSession - Clean up http clients cache", cleanUpHttpClientsCacheService);
+    httpClients
+        .values()
+        .removeIf(
+            (entry) -> {
+              entry.httpClient.close();
+              return true;
+            });
   }
 }

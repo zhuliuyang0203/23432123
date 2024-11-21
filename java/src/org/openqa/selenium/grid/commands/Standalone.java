@@ -63,7 +63,6 @@ import org.openqa.selenium.grid.server.NetworkOptions;
 import org.openqa.selenium.grid.server.Server;
 import org.openqa.selenium.grid.sessionmap.SessionMap;
 import org.openqa.selenium.grid.sessionmap.local.LocalSessionMap;
-import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 import org.openqa.selenium.grid.sessionqueue.config.NewSessionQueueOptions;
 import org.openqa.selenium.grid.sessionqueue.local.LocalNewSessionQueue;
 import org.openqa.selenium.grid.web.CombinedHandler;
@@ -145,7 +144,7 @@ public class Standalone extends TemplateGridServerCommand {
 
     DistributorOptions distributorOptions = new DistributorOptions(config);
     NewSessionQueueOptions newSessionRequestOptions = new NewSessionQueueOptions(config);
-    NewSessionQueue queue =
+    LocalNewSessionQueue queue =
         new LocalNewSessionQueue(
             tracer,
             distributorOptions.getSlotMatcher(),
@@ -155,7 +154,7 @@ public class Standalone extends TemplateGridServerCommand {
             newSessionRequestOptions.getBatchSize());
     combinedHandler.addHandler(queue);
 
-    Distributor distributor =
+    LocalDistributor distributor =
         new LocalDistributor(
             tracer,
             bus,
@@ -171,9 +170,8 @@ public class Standalone extends TemplateGridServerCommand {
             distributorOptions.getSlotMatcher());
     combinedHandler.addHandler(distributor);
 
-    Routable router =
-        new Router(tracer, clientFactory, sessions, queue, distributor)
-            .with(networkOptions.getSpecComplianceChecks());
+    Router router = new Router(tracer, clientFactory, sessions, queue, distributor);
+    Routable routerWithSpecChecks = router.with(networkOptions.getSpecComplianceChecks());
 
     HttpHandler readinessCheck =
         req -> {
@@ -192,8 +190,8 @@ public class Standalone extends TemplateGridServerCommand {
 
     Routable appendRoute =
         Stream.of(
-                baseRoute(subPath, combine(router)),
-                hubRoute(subPath, combine(router)),
+                baseRoute(subPath, combine(routerWithSpecChecks)),
+                hubRoute(subPath, combine(routerWithSpecChecks)),
                 graphqlRoute(subPath, () -> graphqlHandler))
             .reduce(Route::combine)
             .get();
@@ -218,7 +216,14 @@ public class Standalone extends TemplateGridServerCommand {
     httpHandler = combine(httpHandler, Route.get("/readyz").to(() -> readinessCheck));
     Node node = createNode(config, bus, distributor, combinedHandler);
 
-    return new Handlers(httpHandler, new ProxyNodeWebsockets(clientFactory, node, subPath));
+    return new Handlers(httpHandler, new ProxyNodeWebsockets(clientFactory, node, subPath)) {
+      @Override
+      public void close() {
+        router.close();
+        distributor.close();
+        queue.close();
+      }
+    };
   }
 
   @Override

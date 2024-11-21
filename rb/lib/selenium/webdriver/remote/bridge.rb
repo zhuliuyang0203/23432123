@@ -686,7 +686,7 @@ module Selenium
         end
 
         def escaper
-          @escaper ||= defined?(URI::Parser) ? URI::DEFAULT_PARSER : URI
+          @escaper ||= defined?(URI::RFC2396_PARSER) ? URI::RFC2396_PARSER : URI::DEFAULT_PARSER
         end
 
         def commands(command)

@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.node.local;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static org.openqa.selenium.concurrent.ExecutorServices.shutdownGracefully;
 import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
@@ -37,6 +38,7 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -114,7 +116,7 @@ import org.openqa.selenium.remote.tracing.Tracer;
 @ManagedService(
     objectName = "org.seleniumhq.grid:type=Node,name=LocalNode",
     description = "Node running the webdriver sessions.")
-public class LocalNode extends Node {
+public class LocalNode extends Node implements Closeable {
 
   private static final Json JSON = new Json();
   private static final Logger LOG = Logger.getLogger(LocalNode.class.getName());
@@ -139,6 +141,7 @@ public class LocalNode extends Node {
   private final Cache<SessionId, UUID> sessionToDownloadsDir;
   private final AtomicInteger pendingSessions = new AtomicInteger();
   private final AtomicInteger sessionCount = new AtomicInteger();
+  private final Runnable shutdown;
 
   protected LocalNode(
       Tracer tracer,
@@ -301,6 +304,23 @@ public class LocalNode extends Node {
         heartbeatPeriod.getSeconds(),
         TimeUnit.SECONDS);
 
+    shutdown =
+        () -> {
+          if (heartbeatNodeService.isShutdown()) return;
+
+          shutdownGracefully(
+              "Local Node - Session Cleanup " + externalUri, sessionCleanupNodeService);
+          shutdownGracefully(
+              "UploadTempFile Cleanup Node " + externalUri, uploadTempFileCleanupNodeService);
+          shutdownGracefully(
+              "DownloadTempFile Cleanup Node " + externalUri, downloadTempFileCleanupNodeService);
+          shutdownGracefully("HeartBeat Node " + externalUri, heartbeatNodeService);
+
+          // ensure we do not leak running browsers
+          currentSessions.invalidateAll();
+          currentSessions.cleanUp();
+        };
+
     Runtime.getRuntime()
         .addShutdownHook(
             new Thread(
@@ -309,6 +329,11 @@ public class LocalNode extends Node {
                   drain();
                 }));
     new JMXHelper().register(this);
+  }
+
+  @Override
+  public void close() {
+    shutdown.run();
   }
 
   private void stopTimedOutSession(RemovalNotification<SessionId, SessionSlot> notification) {
