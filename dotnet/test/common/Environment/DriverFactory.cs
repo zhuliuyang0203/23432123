@@ -77,7 +77,7 @@ namespace OpenQA.Selenium.Environment
                 var chromeOptions = (ChromeOptions)options;
                 chromeOptions.AddArguments("--no-sandbox", "--disable-dev-shm-usage");
 
-                service = CreateService<ChromeDriverService>();
+                service = ChromeDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((ChromeOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -95,7 +95,7 @@ namespace OpenQA.Selenium.Environment
                 var edgeOptions = (EdgeOptions)options;
                 edgeOptions.AddArguments("--no-sandbox", "--disable-dev-shm-usage");
 
-                service = CreateService<EdgeDriverService>();
+                service = EdgeDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((EdgeOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -109,7 +109,7 @@ namespace OpenQA.Selenium.Environment
             {
                 browser = Browser.IE;
                 options = GetDriverOptions<InternetExplorerOptions>(driverType, driverOptions);
-                service = CreateService<InternetExplorerDriverService>();
+                service = InternetExplorerDriverService.CreateDefaultService();
                 if (enableLogging)
                 {
                     ((InternetExplorerDriverService)service).LoggingLevel = InternetExplorerDriverLogLevel.Trace;
@@ -119,7 +119,7 @@ namespace OpenQA.Selenium.Environment
             {
                 browser = Browser.Firefox;
                 options = GetDriverOptions<FirefoxOptions>(driverType, driverOptions);
-                service = CreateService<FirefoxDriverService>();
+                service = FirefoxDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((FirefoxOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -133,7 +133,7 @@ namespace OpenQA.Selenium.Environment
             {
                 browser = Browser.Safari;
                 options = GetDriverOptions<SafariOptions>(driverType, driverOptions);
-                service = CreateService<SafariDriverService>();
+                service = SafariDriverService.CreateDefaultService();
             }
 
             if (!String.IsNullOrEmpty(this.driverPath) && service != null)
@@ -155,7 +155,7 @@ namespace OpenQA.Selenium.Environment
                 }
             }
 
-            driver = (IWebDriver)Activator.CreateInstance(driverType, service, true);
+            driver = (IWebDriver)Activator.CreateInstance(driverType, service);
             return driver;
         }
 
@@ -191,42 +191,6 @@ namespace OpenQA.Selenium.Environment
             }
 
             return options;
-        }
-
-        private T MergeOptions<T>(object baseOptions, DriverOptions overriddenOptions) where T : DriverOptions, new()
-        {
-            // If the driver type has a static DefaultOptions property,
-            // get the value of that property, which should be a valid
-            // options of the generic type (T). Otherwise, create a new
-            // instance of the browser-specific options class.
-            T mergedOptions = new T();
-            if (baseOptions != null && baseOptions is T)
-            {
-                mergedOptions = (T)baseOptions;
-            }
-
-            if (overriddenOptions != null)
-            {
-                mergedOptions.PageLoadStrategy = overriddenOptions.PageLoadStrategy;
-                mergedOptions.UnhandledPromptBehavior = overriddenOptions.UnhandledPromptBehavior;
-                mergedOptions.Proxy = overriddenOptions.Proxy;
-            }
-
-            return mergedOptions;
-        }
-
-        private T CreateService<T>() where T : DriverService
-        {
-            T service = default(T);
-            Type serviceType = typeof(T);
-
-            MethodInfo createDefaultServiceMethod = serviceType.GetMethod("CreateDefaultService", BindingFlags.Public | BindingFlags.Static, null, new Type[] { }, null);
-            if (createDefaultServiceMethod != null && createDefaultServiceMethod.ReturnType == serviceType)
-            {
-                service = (T)createDefaultServiceMethod.Invoke(null, new object[] { });
-            }
-
-            return service;
         }
     }
 }
