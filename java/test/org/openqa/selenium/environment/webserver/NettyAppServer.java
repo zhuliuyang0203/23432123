@@ -149,7 +149,16 @@ public class NettyAppServer implements AppServer {
             () -> {
               server.start();
               if (secure != null) {
-                secure.start();
+                try {
+                  secure.start();
+                } catch (Exception e) {
+                  try {
+                    server.stop();
+                  } catch (Exception ex) {
+                    e.addSuppressed(ex);
+                    throw e;
+                  }
+                }
               }
             });
   }

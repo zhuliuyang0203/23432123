@@ -300,9 +300,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
           // return true to avoid handleNewSessionRequest to call 'complete' an other time
           return true;
         } else if (data.isCanceled()) {
-          complete(
-              request.getRequestId(),
-              Either.left(new SessionNotCreatedException("Client has gone away")));
+          failDueToCanceled(request.getRequestId());
           // return true to avoid handleNewSessionRequest to call 'complete' an other time
           return true;
         }
@@ -370,7 +368,18 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
               .limit(batchSize)
               .collect(Collectors.toList());
 
-      availableRequests.forEach(req -> this.remove(req.getRequestId()));
+      availableRequests.removeIf(
+          (req) -> {
+            Data data = this.requests.get(req.getRequestId());
+
+            if (data.isCanceled()) {
+              failDueToCanceled(req.getRequestId());
+              return true;
+            }
+
+            this.remove(req.getRequestId());
+            return false;
+          });
 
       return availableRequests;
     } finally {
@@ -456,6 +465,11 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
 
   private void failDueToTimeout(RequestId reqId) {
     complete(reqId, Either.left(new SessionNotCreatedException("Timed out creating session")));
+  }
+
+  private void failDueToCanceled(RequestId reqId) {
+    // this error should never reach the client, as this is a client initiated state
+    complete(reqId, Either.left(new SessionNotCreatedException("Client has gone away")));
   }
 
   private class Data {

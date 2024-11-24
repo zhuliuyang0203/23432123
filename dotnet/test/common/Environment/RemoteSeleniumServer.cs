@@ -91,14 +91,15 @@ namespace OpenQA.Selenium.Environment
         {
             if (autoStart && webserverProcess != null && !webserverProcess.HasExited)
             {
-                using var httpClient = new HttpClient();
-
-                try
+                using (var httpClient = new HttpClient())
                 {
-                    using var response = await httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
-                }
-                catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
-                {
+                    try
+                    {
+                        using var response = await httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
+                    {
+                    }
                 }
 
                 webserverProcess.WaitForExit(10000);

@@ -127,28 +127,19 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement disabledTextElement1 = driver.FindElement(By.Id("disabledTextElement1"));
-            try
+
+            Assert.That(() =>
             {
                 disabledTextElement1.SendKeys("foo");
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidElementStateException)
-            {
-                //Expected
-            }
+            }, Throws.TypeOf<ElementNotInteractableException>());
 
             Assert.AreEqual(string.Empty, disabledTextElement1.Text);
 
             IWebElement disabledTextElement2 = driver.FindElement(By.Id("disabledTextElement2"));
-            try
-            {
-                disabledTextElement2.SendKeys("bar");
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidElementStateException)
-            {
-                //Expected
-            }
+
+            Assert.That(
+                () => disabledTextElement2.SendKeys("bar"),
+                Throws.TypeOf<ElementNotInteractableException>());
 
             Assert.AreEqual(string.Empty, disabledTextElement2.Text);
         }
