@@ -1,3 +1,10 @@
+0.4.27
+======
+* Use endpoint for stable versions first to manage Firefox (#14536) (#14613)
+* Selenium Manager honors full browser version (#13419) (#14619)
+* Selenium Manager honors full browser version (#13419)
+* Minor change related to variable name
+
 0.4.26
 ======
 * Selenium Manager checks invalid browser version (#14511)

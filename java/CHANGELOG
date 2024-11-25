@@ -1,3 +1,33 @@
+v4.27.0
+======
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings
+* Throw Error When Using Unsupported Linux ARM (#14616)
+* Enhance error message for NoSuchElementException and return unmodifiable set for pinned scripts (#14707)
+* Fix SpotBugs bugs in the Selenium manager (#14608)
+* Allow to cancel a pending http request
+* Case insensitive header names in http requests (#14095)
+* Consume the input of the connection
+* Deleted the deprecated FormEncodedData (#14688)
+* Add method to select options containing the provided text (#14426)
+* Remove toml parser warning (#14711)
+* Simplify reading http headers
+* Mark WebElement.getAttribute deprecated (#14666)
+* Search windows by name without recursion (#14782)
+* [bidi] Add network request handler APIs (#14424)
+* [bidi] Fix the mode "closed" for a node
+* [grid] TomlConfig: migrate TOML library to tomlj/tomlj (#14470)
+* [grid] Avoid starting a session which will be disposed after start
+* [grid] Cancel pending request on client timeout
+* [grid] Check session ownership once
+* [grid] Detect a client timeout while session creation #14743
+* [grid] Prevent NPE in handling request with unsupported http method
+* [grid] Retry creating a session in a distributed grid
+* [grid] Shutdown the server backend on stop
+* [grid] Speed up the server shutdown
+* [grid] Stop a stale session more graceful
+* [grid] Stop polling events on close
+
 v4.26.0
 ======
 * Add CDP for Chrome 130 and remove 127

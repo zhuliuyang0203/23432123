@@ -1,3 +1,13 @@
+Selenium 4.27.0
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings (#14787)
+* Cleaned up Py doc sphinx warnings/errors and added README (#14191)
+* Added Deprecation of WebElement.get_attribute() per #13334 (#14675)
+* Fix TypeError when init Safari webdriver (#14699)
+* Set user_agent and extra_headers via ClientConfig (#14718)
+* Updated Handling for DetachedShadowRoot Exception (#14677)
+* Support FedCM commands (#14710)
+
 Selenium 4.26.1
 * DeprecationWarning raised in default webdriver init (#14690)
 * Remote connection use timeout from ClientConfig (#14692)

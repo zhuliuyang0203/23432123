@@ -1,3 +1,26 @@
+v4.27.0
+======
+* Copyright dotnet (#13522)
+* Add CDP for Chrome 131 and remove 128
+* Add CDP deprecation warning for Firefox (#14759)
+* Add ChromiumNetworkConditions to command serialization (#14716)
+* Add Dictionary<string, string> as well-known types for json serialization
+* Add more well-known dictionary types for capability json serialization
+* Add reflection-based JSON serialization fallback to `Command`s (#14732)
+* Allow `RemoteSessionSettings` to use any value for metadata (#14726)
+* Deprecate WebElement.GetAttribute() (#14676)
+* Enable NRT on exceptional types (#14672)
+* Fix API docs static generation (#14651)
+* Fix `RelativeBy.Near` and empty list return (#14737)
+* Gracefully handle clashing device names in Actions (#14713)
+* Make FirefoxProfile AOT-safe (#14742)
+* Make Selenium Manager's AOT safety explicit (#14733)
+* Modernize exception handling in tests via assert that throws (#14776)
+* Propagate async throughout test setup and teardown (#14775)
+* Remove JSON serialization from `.ToString()` methods (#14736)
+* Solidify nullability of `PinnedScript` (#14708)
+* Update dependency System.Text.Json to 8.0.5
+
 v4.26.1
 ======
 * [bidi] Reveal browsing context module in bidi instance (#14684)

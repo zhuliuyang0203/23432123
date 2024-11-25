@@ -1,3 +1,12 @@
+## 4.27.0
+
+- Add CDP for Chrome 131 and remove 128
+- Add Firefox CDP deprecation warnings
+- Update supported versions for Chrome DevTools
+- [bidi] Allow passing in uri for authentication handlers (#14386)
+- [bidi] Enable locate node tests for Chrome and Edge
+- [bidi] Ensure start nodes are serialized
+
 ## 4.26.0
 
 - Add CDP for Chrome 130 and remove 127
