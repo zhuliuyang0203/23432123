@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -28,12 +30,11 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public abstract class InputDevice
     {
-        private string deviceName;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InputDevice"/> class.
         /// </summary>
         /// <param name="deviceName">The unique name of the input device represented by this class.</param>
+        /// <exception cref="ArgumentException">If <paramref name="deviceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         protected InputDevice(string deviceName)
         {
             if (string.IsNullOrEmpty(deviceName))
@@ -41,16 +42,13 @@ namespace OpenQA.Selenium.Interactions
                 throw new ArgumentException("Device name must not be null or empty", nameof(deviceName));
             }
 
-            this.deviceName = deviceName;
+            this.DeviceName = deviceName;
         }
 
         /// <summary>
         /// Gets the unique name of this input device.
         /// </summary>
-        public string DeviceName
-        {
-            get { return this.deviceName; }
-        }
+        public string DeviceName { get; }
 
         /// <summary>
         /// Gets the kind of device for this input device.
@@ -67,10 +65,7 @@ namespace OpenQA.Selenium.Interactions
         /// Creates a pause action for synchronization with other action sequences.
         /// </summary>
         /// <returns>The <see cref="Interaction"/> representing the action.</returns>
-        public Interaction CreatePause()
-        {
-            return this.CreatePause(TimeSpan.Zero);
-        }
+        public Interaction CreatePause() => this.CreatePause(TimeSpan.Zero);
 
         /// <summary>
         /// Creates a pause action for synchronization with other action sequences.
@@ -88,10 +83,7 @@ namespace OpenQA.Selenium.Interactions
         /// Returns a hash code for the current <see cref="InputDevice"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="InputDevice"/>.</returns>
-        public override int GetHashCode()
-        {
-            return this.deviceName.GetHashCode();
-        }
+        public override int GetHashCode() => this.DeviceName.GetHashCode();
 
         /// <summary>
         /// Returns a string that represents the current <see cref="InputDevice"/>.
@@ -99,7 +91,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A string that represents the current <see cref="InputDevice"/>.</returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0} input device [name: {1}]", this.DeviceKind, this.deviceName);
+            return string.Format(CultureInfo.InvariantCulture, "{0} input device [name: {1}]", this.DeviceKind, this.DeviceName);
         }
     }
 }
