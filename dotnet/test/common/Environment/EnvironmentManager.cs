@@ -34,6 +34,7 @@ namespace OpenQA.Selenium.Environment
         private Type driverType;
         private Browser browser;
         private DriverService driverService;
+        private object driverServiceLock = new object();
         private IWebDriver driver;
         private UrlBuilder urlBuilder;
         private TestWebServer webServer;
@@ -270,12 +271,16 @@ namespace OpenQA.Selenium.Environment
 
         public DriverService GetCurrentDriverService()
         {
-            if (driverService != null)
+            if (driverService is null)
             {
-                return driverService;
+                lock (driverServiceLock)
+                {
+                    if (driverService is null)
+                    {
+                        driverService = driverFactory.CreateDriverService(driverType);
+                    }
+                }
             }
-
-            driverService = driverFactory.CreateDriverService(driverType);
 
             return driverService;
         }

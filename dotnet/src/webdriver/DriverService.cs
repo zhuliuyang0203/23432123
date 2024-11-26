@@ -41,6 +41,7 @@ namespace OpenQA.Selenium
         private bool hideCommandPromptWindow;
         private bool isDisposed;
         private Process driverServiceProcess;
+        private object driverServiceProcessLock = new object();
         private TimeSpan initializationTimeout = TimeSpan.FromSeconds(20);
 
         /// <summary>
@@ -258,38 +259,42 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Start()
         {
-            if (this.driverServiceProcess != null)
+            if (this.driverServiceProcess is null)
             {
-                return;
-            }
+                lock (this.driverServiceProcessLock)
+                {
+                    if (driverServiceProcess is null)
+                    {
+                        this.driverServiceProcess = new Process();
 
-            this.driverServiceProcess = new Process();
+                        if (this.driverServicePath != null)
+                        {
+                            this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.driverServicePath, this.driverServiceExecutableName);
+                        }
+                        else
+                        {
+                            this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+                        }
 
-            if (this.driverServicePath != null)
-            {
-                this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.driverServicePath, this.driverServiceExecutableName);
-            }
-            else
-            {
-                this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
-            }
+                        this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
+                        this.driverServiceProcess.StartInfo.UseShellExecute = false;
+                        this.driverServiceProcess.StartInfo.CreateNoWindow = this.hideCommandPromptWindow;
 
-            this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
-            this.driverServiceProcess.StartInfo.UseShellExecute = false;
-            this.driverServiceProcess.StartInfo.CreateNoWindow = this.hideCommandPromptWindow;
+                        DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
+                        this.OnDriverProcessStarting(eventArgs);
 
-            DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
-            this.OnDriverProcessStarting(eventArgs);
+                        this.driverServiceProcess.Start();
+                        bool serviceAvailable = this.WaitForServiceInitialization();
+                        DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(this.driverServiceProcess);
+                        this.OnDriverProcessStarted(processStartedEventArgs);
 
-            this.driverServiceProcess.Start();
-            bool serviceAvailable = this.WaitForServiceInitialization();
-            DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(this.driverServiceProcess);
-            this.OnDriverProcessStarted(processStartedEventArgs);
-
-            if (!serviceAvailable)
-            {
-                string msg = "Cannot start the driver service on " + this.ServiceUrl;
-                throw new WebDriverException(msg);
+                        if (!serviceAvailable)
+                        {
+                            string msg = "Cannot start the driver service on " + this.ServiceUrl;
+                            throw new WebDriverException(msg);
+                        }
+                    }
+                }
             }
         }
 
