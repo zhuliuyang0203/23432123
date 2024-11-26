@@ -146,7 +146,7 @@ namespace OpenQA.Selenium.Environment
 
             this.OnDriverLaunching(service, options);
 
-            driver = (IWebDriver)Activator.CreateInstance(driverType, service);
+            driver = (IWebDriver)Activator.CreateInstance(driverType, service, options);
             return driver;
         }
 
