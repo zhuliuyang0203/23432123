@@ -47,6 +47,7 @@ namespace OpenQA.Selenium
         public async Task RunAfterAnyTestsAsync()
         {
             EnvironmentManager.Instance.CloseCurrentDriver();
+            EnvironmentManager.Instance.CloseCurrentDriverService();
             await EnvironmentManager.Instance.WebServer.StopAsync();
             if (EnvironmentManager.Instance.Browser == Browser.Remote)
             {

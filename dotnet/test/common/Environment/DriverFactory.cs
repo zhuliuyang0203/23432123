@@ -55,17 +55,51 @@ namespace OpenQA.Selenium.Environment
 
         public event EventHandler<DriverStartingEventArgs> DriverStarting;
 
-        public IWebDriver CreateDriver(Type driverType)
+        public DriverService CreateDriverService(Type driverType)
         {
-            return CreateDriverWithOptions(driverType, null);
+            DriverService service = null;
+
+            if (typeof(ChromeDriver).IsAssignableFrom(driverType))
+            {
+                service = ChromeDriverService.CreateDefaultService();
+            }
+            else if (typeof(EdgeDriver).IsAssignableFrom(driverType))
+            {
+                service = EdgeDriverService.CreateDefaultService();
+            }
+            else if (typeof(InternetExplorerDriver).IsAssignableFrom(driverType))
+            {
+                service = InternetExplorerDriverService.CreateDefaultService();
+            }
+            else if (typeof(FirefoxDriver).IsAssignableFrom(driverType))
+            {
+                service = FirefoxDriverService.CreateDefaultService();
+            }
+            else if (typeof(SafariDriver).IsAssignableFrom(driverType))
+            {
+                service = SafariDriverService.CreateDefaultService();
+            }
+
+            if (!String.IsNullOrEmpty(this.driverPath) && service != null)
+            {
+                service.DriverServicePath = Path.GetDirectoryName(this.driverPath);
+                service.DriverServiceExecutableName = Path.GetFileName(this.driverPath);
+            }
+
+            return service;
         }
 
-        public IWebDriver CreateDriverWithOptions(Type driverType, DriverOptions driverOptions)
+        public IWebDriver CreateDriver(DriverService service, Type driverType)
+        {
+            return CreateDriverWithOptions(service, driverType, null);
+        }
+
+        public IWebDriver CreateDriverWithOptions(DriverService service, Type driverType, DriverOptions driverOptions)
         {
             Console.WriteLine($"Creating new driver of {driverType} type...");
 
             Browser browser = Browser.All;
-            DriverService service = null;
+            
             DriverOptions options = null;
 
             List<Type> constructorArgTypeList = new List<Type>();
@@ -78,7 +112,6 @@ namespace OpenQA.Selenium.Environment
                 var chromeOptions = (ChromeOptions)options;
                 chromeOptions.AddArguments("--no-sandbox", "--disable-dev-shm-usage");
 
-                service = ChromeDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((ChromeOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -92,7 +125,6 @@ namespace OpenQA.Selenium.Environment
                 var edgeOptions = (EdgeOptions)options;
                 edgeOptions.AddArguments("--no-sandbox", "--disable-dev-shm-usage");
 
-                service = EdgeDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((EdgeOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -102,13 +134,11 @@ namespace OpenQA.Selenium.Environment
             {
                 browser = Browser.IE;
                 options = GetDriverOptions<InternetExplorerOptions>(driverType, driverOptions);
-                service = InternetExplorerDriverService.CreateDefaultService();
             }
             else if (typeof(FirefoxDriver).IsAssignableFrom(driverType))
             {
                 browser = Browser.Firefox;
                 options = GetDriverOptions<FirefoxOptions>(driverType, driverOptions);
-                service = FirefoxDriverService.CreateDefaultService();
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((FirefoxOptions)options).BinaryLocation = this.browserBinaryLocation;
@@ -118,18 +148,12 @@ namespace OpenQA.Selenium.Environment
             {
                 browser = Browser.Safari;
                 options = GetDriverOptions<SafariOptions>(driverType, driverOptions);
-                service = SafariDriverService.CreateDefaultService();
-            }
-
-            if (!String.IsNullOrEmpty(this.driverPath) && service != null)
-            {
-                service.DriverServicePath = Path.GetDirectoryName(this.driverPath);
-                service.DriverServiceExecutableName = Path.GetFileName(this.driverPath);
             }
 
             this.OnDriverLaunching(service, options);
 
             driver = (IWebDriver)Activator.CreateInstance(driverType, service, options);
+
             return driver;
         }
 

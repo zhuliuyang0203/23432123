@@ -33,6 +33,7 @@ namespace OpenQA.Selenium.Environment
         private static EnvironmentManager instance;
         private Type driverType;
         private Browser browser;
+        private DriverService driverService;
         private IWebDriver driver;
         private UrlBuilder urlBuilder;
         private TestWebServer webServer;
@@ -205,7 +206,9 @@ namespace OpenQA.Selenium.Environment
             {
                 webServer.StopAsync().Wait();
             }
+
             CloseCurrentDriver();
+            CloseCurrentDriverService();
         }
 
         public event EventHandler<DriverStartingEventArgs> DriverStarting;
@@ -265,6 +268,18 @@ namespace OpenQA.Selenium.Environment
             }
         }
 
+        public DriverService GetCurrentDriverService()
+        {
+            if (driverService != null)
+            {
+                return driverService;
+            }
+
+            driverService = driverFactory.CreateDriverService(driverType);
+
+            return driverService;
+        }
+
         public IWebDriver GetCurrentDriver()
         {
             if (driver != null)
@@ -277,14 +292,19 @@ namespace OpenQA.Selenium.Environment
             }
         }
 
+        public DriverService CreateDriverServiceInstance()
+        {
+            return driverFactory.CreateDriverService(driverType);
+        }
+
         public IWebDriver CreateDriverInstance()
         {
-            return driverFactory.CreateDriver(driverType);
+            return driverFactory.CreateDriver(GetCurrentDriverService(), driverType);
         }
 
         public IWebDriver CreateDriverInstance(DriverOptions options)
         {
-            return driverFactory.CreateDriverWithOptions(driverType, options);
+            return driverFactory.CreateDriverWithOptions(GetCurrentDriverService(), driverType, options);
         }
 
         public IWebDriver CreateFreshDriver()
@@ -292,6 +312,13 @@ namespace OpenQA.Selenium.Environment
             CloseCurrentDriver();
             driver = CreateDriverInstance();
             return driver;
+        }
+
+        public void CloseCurrentDriverService()
+        {
+            driverService?.Dispose();
+
+            driverService = null;
         }
 
         public void CloseCurrentDriver()
