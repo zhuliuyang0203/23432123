@@ -80,14 +80,9 @@ namespace OpenQA.Selenium.Internal.Logging
         /// <param name="logEvent">The log event to handle.</param>
         public void Handle(LogEvent logEvent)
         {
-            if (_streamWriter is not { } writer)
-            {
-                throw new ObjectDisposedException(nameof(FileLogHandler));
-            }
-
             lock (_lockObj)
             {
-                writer.WriteLine($"{logEvent.Timestamp:yyyy-MM-dd HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
+                _streamWriter.WriteLine($"{logEvent.Timestamp:yyyy-MM-dd HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
             }
         }
 
