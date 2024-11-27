@@ -58,7 +58,10 @@ namespace OpenQA.Selenium.Internal.Logging
             }
         }
 
-        public ILogContext CreateContext() => CreateContext(_level);
+        public ILogContext CreateContext()
+        {
+            return CreateContext(_level);
+        }
 
         public ILogContext CreateContext(LogEventLevel minimumLevel)
         {
@@ -76,7 +79,10 @@ namespace OpenQA.Selenium.Internal.Logging
             return context;
         }
 
-        public ILogger GetLogger<T>() => GetLogger(typeof(T));
+        public ILogger GetLogger<T>()
+        {
+            return GetLogger(typeof(T));
+        }
 
         public ILogger GetLogger(Type type)
         {
