@@ -19,8 +19,13 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
+    // When we target .NET 9+, we can use the built-in Base64Url type
+    // https://github.com/SeleniumHQ/selenium/issues/14813
+
     /// <summary>
     /// Encodes and Decodes strings as Base64Url encoding.
     /// </summary>
