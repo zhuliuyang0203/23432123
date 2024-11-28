@@ -348,19 +348,11 @@ namespace OpenQA.Selenium
                     focused = true;
                     break;
                 }
-                try
-                {
-                    System.Threading.Thread.Sleep(200);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+
+                System.Threading.Thread.Sleep(200);
             }
-            if (!focused)
-            {
-                Assert.Fail("Clicking on element didn't focus it in time - can't proceed so failing");
-            }
+
+            Assert.That(focused, Is.True, "Clicking on element didn't focus it in time - can't proceed so failing");
 
             element.SendKeys("a");
             AssertEventNotFired("blur");

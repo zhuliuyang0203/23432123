@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -31,7 +35,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns>This method always returns <see langword="false"/> in this implementation.</returns>
-        public bool IsFile(string keySequence)
+        public bool IsFile([NotNullWhen(true)] string? keySequence)
         {
             return false;
         }

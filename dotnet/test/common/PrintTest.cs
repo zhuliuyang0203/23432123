@@ -89,5 +89,38 @@ namespace OpenQA.Selenium
         {
             Assert.That(() => new PrintOptions { PageMargins = null }, Throws.InstanceOf<ArgumentNullException>());
         }
+
+        [Test]
+        public void PageNumberCannotHaveInvalidValues()
+        {
+            Assert.That(() => new PrintOptions().AddPageToPrint(-1), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions().AddPageRangeToPrint(null), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => new PrintOptions().AddPageRangeToPrint(""), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => new PrintOptions().AddPageRangeToPrint("1-2-3"), Throws.TypeOf<ArgumentException>());
+            Assert.That(() =>
+            {
+                var options = new PrintOptions();
+                options.AddPageToPrint(1);
+                options.AddPageToPrint(1);
+            }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void PageSizeCannotHaveNegativeValues()
+        {
+            Assert.That(() => new PrintOptions.PageSize { Height = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.PageSize { HeightInInches = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.PageSize { Width = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.PageSize { WidthInInches = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [Test]
+        public void MarginsCannotHaveNegativeValues()
+        {
+            Assert.That(() => new PrintOptions.Margins { Top = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.Margins { Bottom = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.Margins { Left = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new PrintOptions.Margins { Right = -1 }, Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
     }
 }

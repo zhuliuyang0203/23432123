@@ -17,7 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.ObjectModel;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -31,6 +34,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">The locating mechanism to use.</param>
         /// <returns>The first matching <see cref="IWebElement"/> on the current context.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by" /> is <see langword="null"/>.</exception>
         /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         IWebElement FindElement(By by);
 

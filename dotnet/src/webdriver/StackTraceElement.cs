@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -44,32 +46,43 @@ namespace OpenQA.Selenium
         /// Initializes a new instance of the <see cref="StackTraceElement"/> class using the given property values.
         /// </summary>
         /// <param name="elementAttributes">A <see cref="Dictionary{K, V}"/> containing the names and values for the properties of this <see cref="StackTraceElement"/>.</param>
-        public StackTraceElement(Dictionary<string, object> elementAttributes)
+        public StackTraceElement(Dictionary<string, object?>? elementAttributes)
         {
             if (elementAttributes != null)
             {
-                if (elementAttributes.ContainsKey("className") && elementAttributes["className"] != null)
+                if (elementAttributes.TryGetValue("className", out object? classNameObj))
                 {
-                    this.className = elementAttributes["className"].ToString();
+                    string? className = classNameObj?.ToString();
+                    if (className is not null)
+                    {
+                        this.className = className;
+                    }
                 }
 
-                if (elementAttributes.ContainsKey("methodName") && elementAttributes["methodName"] != null)
+                if (elementAttributes.TryGetValue("methodName", out object? methodNameObj))
                 {
-                    this.methodName = elementAttributes["methodName"].ToString();
+                    string? methodName = methodNameObj?.ToString();
+                    if (methodName is not null)
+                    {
+                        this.methodName = methodName;
+                    }
                 }
 
-                if (elementAttributes.ContainsKey("lineNumber"))
+                if (elementAttributes.TryGetValue("lineNumber", out object? lineNumberObj))
                 {
-                    int line = 0;
-                    if (int.TryParse(elementAttributes["lineNumber"].ToString(), out line))
+                    if (int.TryParse(lineNumberObj?.ToString(), out int line))
                     {
                         this.lineNumber = line;
                     }
                 }
 
-                if (elementAttributes.ContainsKey("fileName") && elementAttributes["fileName"] != null)
+                if (elementAttributes.TryGetValue("fileName", out object? fileNameObj))
                 {
-                    this.fileName = elementAttributes["fileName"].ToString();
+                    string? fileName = fileNameObj?.ToString();
+                    if (fileName is not null)
+                    {
+                        this.fileName = fileName;
+                    }
                 }
             }
         }

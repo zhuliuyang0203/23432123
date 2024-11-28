@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -39,7 +41,7 @@ namespace OpenQA.Selenium.DevTools
         /// Initializes a new instance of the <see cref="CommandResponseException"/> class with the specified message.
         /// </summary>
         /// <param name="message">The message of the exception.</param>
-        public CommandResponseException(string message)
+        public CommandResponseException(string? message)
             : base(message)
         {
         }
@@ -49,7 +51,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="message">The message of the exception.</param>
         /// <param name="innerException">The inner exception for this exception.</param>
-        public CommandResponseException(string message, Exception innerException)
+        public CommandResponseException(string? message, Exception? innerException)
             : base(message, innerException)
         {
         }

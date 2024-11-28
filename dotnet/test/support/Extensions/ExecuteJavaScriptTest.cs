@@ -57,7 +57,9 @@ namespace OpenQA.Selenium.Support.Extensions
 
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(expected);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<IEnumerable>(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<IEnumerable>(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
 
         [Test]
@@ -67,7 +69,9 @@ namespace OpenQA.Selenium.Support.Extensions
 
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(expected);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<IEnumerable<object>>(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<IEnumerable<object>>(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
 
         [Test]
@@ -77,7 +81,9 @@ namespace OpenQA.Selenium.Support.Extensions
 
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(expected);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<IEnumerable<int>>(JavaScript, JavaScriptParameters), Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<IEnumerable<int>>(JavaScript, JavaScriptParameters),
+                Throws.TypeOf<WebDriverException>());
         }
 
         [Test]
@@ -87,7 +93,9 @@ namespace OpenQA.Selenium.Support.Extensions
 
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(expected);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<ReadOnlyCollection<object>>(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<ReadOnlyCollection<object>>(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
 
         [Test]
@@ -97,7 +105,9 @@ namespace OpenQA.Selenium.Support.Extensions
 
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(expected);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<SubClassOfReadOnlyCollectionOfObject>(JavaScript, JavaScriptParameters), Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<SubClassOfReadOnlyCollectionOfObject>(JavaScript, JavaScriptParameters),
+                Throws.TypeOf<WebDriverException>());
         }
 
         [Test]
@@ -105,7 +115,9 @@ namespace OpenQA.Selenium.Support.Extensions
         {
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(null);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<string>(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<string>(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
 
         [Test]
@@ -113,7 +125,9 @@ namespace OpenQA.Selenium.Support.Extensions
         {
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(null);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<int?>(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<int?>(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
 
         [Test]
@@ -121,7 +135,9 @@ namespace OpenQA.Selenium.Support.Extensions
         {
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(null);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript<int>(JavaScript, JavaScriptParameters), Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript<int>(JavaScript, JavaScriptParameters),
+                Throws.TypeOf<WebDriverException>());
         }
 
         [Test]
@@ -129,7 +145,9 @@ namespace OpenQA.Selenium.Support.Extensions
         {
             driver.Setup(_ => _.ExecuteScript(It.IsAny<string>(), It.IsAny<object[]>())).Returns(null);
 
-            Assert.That(() => driver.Object.ExecuteJavaScript(JavaScript, JavaScriptParameters), Throws.Nothing);
+            Assert.That(
+                () => driver.Object.ExecuteJavaScript(JavaScript, JavaScriptParameters),
+                Throws.Nothing);
         }
     }
 }

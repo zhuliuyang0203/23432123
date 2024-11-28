@@ -71,7 +71,8 @@ namespace OpenQA.Selenium.VirtualAuth
         [TearDown]
         public void Teardown()
         {
-            if (webDriver.AuthenticatorId != null)
+            if (webDriver.AuthenticatorId is not null &&
+                webDriver.SessionId is not null)
             {
                 webDriver.RemoveVirtualAuthenticator(webDriver.AuthenticatorId);
             }
@@ -186,6 +187,8 @@ namespace OpenQA.Selenium.VirtualAuth
         {
             VirtualAuthenticatorOptions options = new VirtualAuthenticatorOptions();
             string authenticatorId = webDriver.AddVirtualAuthenticator(options);
+            Assert.That(webDriver.AuthenticatorId, Is.EqualTo(authenticatorId));
+
             webDriver.RemoveVirtualAuthenticator(authenticatorId);
 
             Assert.IsNull(webDriver.AuthenticatorId);

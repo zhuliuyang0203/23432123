@@ -18,13 +18,18 @@
 package org.openqa.selenium;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.openqa.selenium.testing.drivers.Browser.CHROME;
+import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 
 public class NoSuchShadowRootTest extends JupiterTestBase {
 
   @Test
+  @Ignore(value = CHROME, reason = "https://issues.chromium.org/issues/375892677")
+  @Ignore(value = EDGE, reason = "https://issues.chromium.org/issues/375892677")
   public void getNoSuchShadowRoot() {
     driver.get(pages.shadowRootPage);
     WebElement nonExistentShadowRootElement = driver.findElement(By.id("noShadowRoot"));

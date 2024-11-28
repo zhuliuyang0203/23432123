@@ -293,9 +293,14 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
         if (!requests.containsKey(request.getRequestId())) {
           return false;
         }
-        if (isTimedOut(Instant.now(), requests.get(request.getRequestId()))) {
+        Data data = requests.get(request.getRequestId());
+        if (isTimedOut(Instant.now(), data)) {
           // as we try to re-add a session request that has already expired, force session timeout
           failDueToTimeout(request.getRequestId());
+          // return true to avoid handleNewSessionRequest to call 'complete' an other time
+          return true;
+        } else if (data.isCanceled()) {
+          failDueToCanceled(request.getRequestId());
           // return true to avoid handleNewSessionRequest to call 'complete' an other time
           return true;
         }
@@ -363,7 +368,18 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
               .limit(batchSize)
               .collect(Collectors.toList());
 
-      availableRequests.forEach(req -> this.remove(req.getRequestId()));
+      availableRequests.removeIf(
+          (req) -> {
+            Data data = this.requests.get(req.getRequestId());
+
+            if (data.isCanceled()) {
+              failDueToCanceled(req.getRequestId());
+              return true;
+            }
+
+            this.remove(req.getRequestId());
+            return false;
+          });
 
       return availableRequests;
     } finally {
@@ -451,6 +467,11 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     complete(reqId, Either.left(new SessionNotCreatedException("Timed out creating session")));
   }
 
+  private void failDueToCanceled(RequestId reqId) {
+    // this error should never reach the client, as this is a client initiated state
+    complete(reqId, Either.left(new SessionNotCreatedException("Client has gone away")));
+  }
+
   private class Data {
 
     public final Instant endTime;
@@ -470,6 +491,10 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
 
     public synchronized void cancel() {
       canceled = true;
+    }
+
+    public synchronized boolean isCanceled() {
+      return canceled;
     }
 
     public synchronized boolean setResult(

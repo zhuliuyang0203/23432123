@@ -39,7 +39,7 @@ namespace OpenQA.Selenium.DevTools
         {
             { 130, typeof(V130.V130Domains) },
             { 129, typeof(V129.V129Domains) },
-            { 128, typeof(V128.V128Domains) },
+            { 131, typeof(V131.V131Domains) },
             { 85, typeof(V85.V85Domains) }
         };
 

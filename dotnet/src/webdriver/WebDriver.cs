@@ -45,7 +45,6 @@ namespace OpenQA.Selenium
         private NetworkManager network;
         private WebElementFactory elementFactory;
         private SessionId sessionId;
-        private String authenticatorId;
         private List<string> registeredCommands = new List<string>();
 
         /// <summary>
@@ -280,9 +279,15 @@ namespace OpenQA.Selenium
         /// <param name="script">A <see cref="PinnedScript"/> object containing the JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script" /> is <see langword="null"/>.</exception>
         public object ExecuteScript(PinnedScript script, params object[] args)
         {
-            return this.ExecuteScript(script.ExecutionScript, args);
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            return this.ExecuteScript(script.MakeExecutionScript(), args);
         }
 
         /// <summary>
@@ -290,6 +295,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">By mechanism to find the object</param>
         /// <returns>IWebElement object so that you can interact with that object</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by" /> is <see langword="null"/>.</exception>
         /// <example>
         /// <code>
         /// IWebDriver driver = new InternetExplorerDriver();
@@ -373,8 +379,14 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="printOptions">A <see cref="PrintOptions"/> object describing the options of the printed document.</param>
         /// <returns>The <see cref="PrintDocument"/> object containing the PDF-formatted print representation of the page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="printOptions"/> is <see langword="null"/>.</exception>
         public PrintDocument Print(PrintOptions printOptions)
         {
+            if (printOptions is null)
+            {
+                throw new ArgumentNullException(nameof(printOptions));
+            }
+
             Response commandResponse = this.Execute(DriverCommand.Print, printOptions.ToDictionary());
             string base64 = commandResponse.Value.ToString();
             return new PrintDocument(base64);
@@ -928,7 +940,7 @@ namespace OpenQA.Selenium
             }
             else
             {
-                throw new ArgumentException("Argument is of an illegal type" + arg.ToString(), nameof(arg));
+                throw new ArgumentException("Argument is of an illegal type: " + arg.ToString(), nameof(arg));
             }
 
             return converted;
@@ -967,9 +979,9 @@ namespace OpenQA.Selenium
                 {
                     returnValue = this.elementFactory.CreateElement(resultAsDictionary);
                 }
-                else if (ShadowRoot.ContainsShadowRootReference(resultAsDictionary))
+                else if (ShadowRoot.TryCreate(this, resultAsDictionary, out ShadowRoot shadowRoot))
                 {
-                    returnValue = ShadowRoot.FromDictionary(this, resultAsDictionary);
+                    returnValue = shadowRoot;
                 }
                 else
                 {
@@ -1033,8 +1045,8 @@ namespace OpenQA.Selenium
         {
             Response commandResponse = this.Execute(DriverCommand.AddVirtualAuthenticator, options.ToDictionary());
             string id = commandResponse.Value.ToString();
-            this.authenticatorId = id;
-            return this.authenticatorId;
+            this.AuthenticatorId = id;
+            return this.AuthenticatorId;
         }
 
         /// <summary>
@@ -1044,15 +1056,15 @@ namespace OpenQA.Selenium
         public void RemoveVirtualAuthenticator(string authenticatorId)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
             this.Execute(DriverCommand.RemoveVirtualAuthenticator, parameters);
-            this.authenticatorId = null;
+            this.AuthenticatorId = null;
         }
 
         /// <summary>
         /// Gets the virtual authenticator ID for this WebDriver instance.
         /// </summary>
-        public string AuthenticatorId { get; }
+        public string AuthenticatorId { get; private set; }
 
         /// <summary>
         /// Add a credential to the Virtual Authenticator/
@@ -1061,7 +1073,7 @@ namespace OpenQA.Selenium
         public void AddCredential(Credential credential)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>(credential.ToDictionary());
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.AddCredential, parameters);
         }
@@ -1073,7 +1085,7 @@ namespace OpenQA.Selenium
         public List<Credential> GetCredentials()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
 
             object[] commandResponse = (object[])this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters).Value;
 
@@ -1104,7 +1116,7 @@ namespace OpenQA.Selenium
         public void RemoveCredential(string credentialId)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
             parameters.Add("credentialId", credentialId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveCredential, parameters);
@@ -1116,7 +1128,7 @@ namespace OpenQA.Selenium
         public void RemoveAllCredentials()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveAllCredentials, parameters);
         }
@@ -1128,7 +1140,7 @@ namespace OpenQA.Selenium
         public void SetUserVerified(bool verified)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", this.AuthenticatorId);
             parameters.Add("isUserVerified", verified);
 
             this.Execute(driverCommandToExecute: DriverCommand.SetUserVerified, parameters);

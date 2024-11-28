@@ -62,11 +62,11 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.27.0.dev202410311942"
+SE_VERSION = "4.28.0.202411261607"
 
 BROWSER_VERSIONS = [
     "v85",
-    "v128",
+    "v131",
     "v129",
     "v130",
 ]
@@ -74,6 +74,7 @@ BROWSER_VERSIONS = [
 TEST_DEPS = [
     requirement("attrs"),
     requirement("debugpy"),
+    requirement("filetype"),
     requirement("idna"),
     requirement("iniconfig"),
     requirement("importlib_metadata"),
