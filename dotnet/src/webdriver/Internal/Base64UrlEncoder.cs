@@ -25,9 +25,9 @@ namespace OpenQA.Selenium.Internal
 {
     /*
      * Based on: https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/blob/6.19.0/src/Microsoft.IdentityModel.Tokens/Base64UrlEncoder.cs
-     * 
+     *
      * Now it is a part of .NET 9+ as System.Buffers.Text.Base64Url
-     * https://github.com/SeleniumHQ/selenium/issues/14813  
+     * https://github.com/SeleniumHQ/selenium/issues/14813
      */
 
     /// <summary>
