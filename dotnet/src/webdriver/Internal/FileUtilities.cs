@@ -23,6 +23,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
@@ -40,7 +42,7 @@ namespace OpenQA.Selenium.Internal
         /// <returns><see langword="true"/> if the copy is completed; otherwise <see langword="false"/>.</returns>
         public static bool CopyDirectory(string sourceDirectory, string destinationDirectory)
         {
-            bool copyComplete = false;
+            bool copyComplete;
             DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(sourceDirectory);
             DirectoryInfo destinationDirectoryInfo = new DirectoryInfo(destinationDirectory);
 
@@ -132,7 +134,7 @@ namespace OpenQA.Selenium.Internal
 
             // If it's not in the same directory as the executing assembly,
             // try looking in the system path.
-            string systemPath = Environment.GetEnvironmentVariable("PATH");
+            string? systemPath = Environment.GetEnvironmentVariable("PATH");
             if (!string.IsNullOrEmpty(systemPath))
             {
                 string expandedPath = Environment.ExpandEnvironmentVariables(systemPath);
@@ -165,7 +167,7 @@ namespace OpenQA.Selenium.Internal
         public static string GetCurrentDirectory()
         {
             Assembly executingAssembly = typeof(FileUtilities).Assembly;
-            string location = null;
+            string? location = null;
 
             // Make sure not to call Path.GetDirectoryName if assembly location is null or empty
             if (!string.IsNullOrEmpty(executingAssembly.Location))
@@ -184,13 +186,13 @@ namespace OpenQA.Selenium.Internal
                 location = Directory.GetCurrentDirectory();
             }
 
-            string currentDirectory = location;
+            string currentDirectory = location!;
 
             // If we're shadow copying, get the directory from the codebase instead
             if (AppDomain.CurrentDomain.ShadowCopyFiles)
             {
                 Uri uri = new Uri(executingAssembly.CodeBase);
-                currentDirectory = Path.GetDirectoryName(uri.LocalPath);
+                currentDirectory = Path.GetDirectoryName(uri.LocalPath)!;
             }
 
             return currentDirectory;

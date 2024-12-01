@@ -19,6 +19,8 @@
 
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>

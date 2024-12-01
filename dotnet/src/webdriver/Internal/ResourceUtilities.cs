@@ -22,6 +22,8 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
@@ -29,8 +31,8 @@ namespace OpenQA.Selenium.Internal
     /// </summary>
     internal static class ResourceUtilities
     {
-        private static string productVersion;
-        private static string platformFamily;
+        private static string? productVersion;
+        private static string? platformFamily;
 
         /// <summary>
         /// Gets a string representing the informational version of the Selenium product.
@@ -60,18 +62,7 @@ namespace OpenQA.Selenium.Internal
         /// <summary>
         /// Gets a string representing the platform family on which the Selenium assembly is executing.
         /// </summary>
-        public static string PlatformFamily
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(platformFamily))
-                {
-                    platformFamily = GetPlatformString();
-                }
-
-                return platformFamily;
-            }
-        }
+        public static string PlatformFamily => platformFamily ??= GetPlatformString();
 
         /// <summary>
         /// Gets a <see cref="Stream"/> that contains the resource to use.
@@ -94,7 +85,7 @@ namespace OpenQA.Selenium.Internal
         /// </remarks>
         public static Stream GetResourceStream(string fileName, string resourceId)
         {
-            Stream resourceStream = null;
+            Stream? resourceStream;
             string resourceFilePath = Path.Combine(FileUtilities.GetCurrentDirectory(), Path.GetFileName(fileName));
             if (File.Exists(resourceFilePath))
             {
@@ -125,20 +116,22 @@ namespace OpenQA.Selenium.Internal
 
         private static string GetPlatformString()
         {
-            string platformName = "unknown";
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                platformName = "windows";
+                return "windows";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                platformName = "linux";
+                return "linux";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                platformName = "mac";
+                return "mac";
             }
-            return platformName;
+            else
+            {
+                return "unknown";
+            }
         }
     }
 }

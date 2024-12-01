@@ -22,13 +22,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
     /// Class to Create the capabilities of the browser you require for <see cref="IWebDriver"/>.
     /// If you wish to use default values use the static methods
     /// </summary>
-    internal class ReturnedCapabilities : ICapabilities, IHasCapabilitiesDictionary
+    internal sealed class ReturnedCapabilities : ICapabilities, IHasCapabilitiesDictionary
     {
         private readonly Dictionary<string, object> capabilities = new Dictionary<string, object>();
 
@@ -43,32 +45,26 @@ namespace OpenQA.Selenium.Internal
         /// Initializes a new instance of the <see cref="ReturnedCapabilities"/> class
         /// </summary>
         /// <param name="rawMap">Dictionary of items for the remote driver</param>
-        public ReturnedCapabilities(Dictionary<string, object> rawMap)
+        public ReturnedCapabilities(Dictionary<string, object>? rawMap)
         {
             if (rawMap != null)
             {
-                foreach (string key in rawMap.Keys)
+                foreach (KeyValuePair<string, object> rawItem in rawMap)
                 {
-                    this.capabilities[key] = rawMap[key];
+                    this.capabilities[rawItem.Key] = rawItem.Value;
                 }
             }
         }
 
         /// <summary>
-        /// Gets the browser name
+        /// Gets the browser name, or <see cref="string.Empty"/> if not specified.
         /// </summary>
         public string BrowserName
         {
             get
             {
-                string name = string.Empty;
-                object capabilityValue = this.GetCapability(CapabilityType.BrowserName);
-                if (capabilityValue != null)
-                {
-                    name = capabilityValue.ToString();
-                }
-
-                return name;
+                object? capabilityValue = this.GetCapability(CapabilityType.BrowserName);
+                return capabilityValue?.ToString() ?? string.Empty;
             }
         }
 
@@ -84,30 +80,24 @@ namespace OpenQA.Selenium.Internal
         {
             get
             {
-                if (!this.capabilities.ContainsKey(capabilityName))
+                if (!this.capabilities.TryGetValue(capabilityName, out object? capabilityValue))
                 {
                     throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "The capability {0} is not present in this set of capabilities", capabilityName));
                 }
 
-                return this.capabilities[capabilityName];
+                return capabilityValue;
             }
         }
 
         /// <summary>
         /// Gets the underlying Dictionary for a given set of capabilities.
         /// </summary>
-        IDictionary<string, object> IHasCapabilitiesDictionary.CapabilitiesDictionary
-        {
-            get { return this.CapabilitiesDictionary; }
-        }
+        IDictionary<string, object> IHasCapabilitiesDictionary.CapabilitiesDictionary => this.CapabilitiesDictionary;
 
         /// <summary>
         /// Gets the internal capabilities dictionary.
         /// </summary>
-        internal IDictionary<string, object> CapabilitiesDictionary
-        {
-            get { return new ReadOnlyDictionary<string, object>(this.capabilities); }
-        }
+        internal IDictionary<string, object> CapabilitiesDictionary => new ReadOnlyDictionary<string, object>(this.capabilities);
 
         /// <summary>
         /// Gets a value indicating whether the browser has a given capability.
@@ -125,15 +115,14 @@ namespace OpenQA.Selenium.Internal
         /// <param name="capability">The capability to get.</param>
         /// <returns>An object associated with the capability, or <see langword="null"/>
         /// if the capability is not set on the browser.</returns>
-        public object GetCapability(string capability)
+        public object? GetCapability(string capability)
         {
-            object capabilityValue = null;
-            if (this.capabilities.ContainsKey(capability))
+            if (this.capabilities.TryGetValue(capability, out object? capabilityValue))
             {
-                capabilityValue = this.capabilities[capability];
+                return capabilityValue;
             }
 
-            return capabilityValue;
+            return null;
         }
 
         /// <summary>
