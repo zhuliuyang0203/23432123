@@ -65,7 +65,10 @@ namespace OpenQA.Selenium.Interactions
         /// Creates a pause action for synchronization with other action sequences.
         /// </summary>
         /// <returns>The <see cref="Interaction"/> representing the action.</returns>
-        public Interaction CreatePause() => this.CreatePause(TimeSpan.Zero);
+        public Interaction CreatePause()
+        {
+            return this.CreatePause(TimeSpan.Zero);
+        }
 
         /// <summary>
         /// Creates a pause action for synchronization with other action sequences.
@@ -83,7 +86,10 @@ namespace OpenQA.Selenium.Interactions
         /// Returns a hash code for the current <see cref="InputDevice"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="InputDevice"/>.</returns>
-        public override int GetHashCode() => this.DeviceName.GetHashCode();
+        public override int GetHashCode()
+        {
+            return this.DeviceName.GetHashCode();
+        }
 
         /// <summary>
         /// Returns a string that represents the current <see cref="InputDevice"/>.
