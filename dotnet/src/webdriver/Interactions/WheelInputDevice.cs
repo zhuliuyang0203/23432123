@@ -17,9 +17,9 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
-using OpenQA.Selenium.Internal;
 
 #nullable enable
 
@@ -203,17 +203,23 @@ namespace OpenQA.Selenium.Interactions
 
             private Dictionary<string, object> ConvertElement()
             {
-                if (this.target is IWebDriverObjectReference element)
+                IWebDriverObjectReference? elementReference = this.target as IWebDriverObjectReference;
+                if (elementReference == null)
                 {
-                    return element.ToDictionary();
+                    IWrapsElement? elementWrapper = this.target as IWrapsElement;
+                    if (elementWrapper != null)
+                    {
+                        elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;
+                    }
                 }
 
-                if (this.target is IWrapsElement { WrappedElement: IWebDriverObjectReference wrappedElement })
+                if (elementReference == null)
                 {
-                    return wrappedElement.ToDictionary();
+                    throw new ArgumentException("Target element cannot be converted to IWebElementReference");
                 }
 
-                throw new ArgumentException("Target element cannot be converted to IWebElementReference");
+                Dictionary<string, object> elementDictionary = elementReference.ToDictionary();
+                return elementDictionary;
             }
         }
     }
