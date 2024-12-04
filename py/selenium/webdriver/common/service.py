@@ -18,14 +18,18 @@ import errno
 import logging
 import os
 import subprocess
-import typing
 from abc import ABC
 from abc import abstractmethod
 from io import IOBase
 from platform import system
 from subprocess import PIPE
 from time import sleep
+from typing import IO
+from typing import Any
+from typing import List
+from typing import Mapping
 from typing import Optional
+from typing import Union
 from typing import cast
 from urllib import request
 from urllib.error import URLError
@@ -53,16 +57,16 @@ class Service(ABC):
         executable_path: str = None,
         port: int = 0,
         log_output: SubprocessStdAlias = None,
-        env: typing.Optional[typing.Mapping[typing.Any, typing.Any]] = None,
+        env: Optional[Mapping[Any, Any]] = None,
         driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         if isinstance(log_output, str):
             self.log_output = cast(IOBase, open(log_output, "a+", encoding="utf-8"))
         elif log_output == subprocess.STDOUT:
-            self.log_output = cast(typing.Optional[typing.Union[int, IOBase]], None)
+            self.log_output = cast(Optional[Union[int, IOBase]], None)
         elif log_output is None or log_output == subprocess.DEVNULL:
-            self.log_output = cast(typing.Optional[typing.Union[int, IOBase]], subprocess.DEVNULL)
+            self.log_output = cast(Optional[Union[int, IOBase]], subprocess.DEVNULL)
         else:
             self.log_output = log_output
 
@@ -80,7 +84,7 @@ class Service(ABC):
         return f"http://{utils.join_host_port('localhost', self.port)}"
 
     @abstractmethod
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         """A List of program arguments (excluding the executable)."""
         raise NotImplementedError("This method needs to be implemented in a sub class")
 
@@ -215,8 +219,8 @@ class Service(ABC):
                 cmd,
                 env=self.env,
                 close_fds=close_file_descriptors,
-                stdout=cast(typing.Optional[typing.Union[int, typing.IO[typing.Any]]], self.log_output),
-                stderr=cast(typing.Optional[typing.Union[int, typing.IO[typing.Any]]], self.log_output),
+                stdout=cast(Optional[Union[int, IO[Any]]], self.log_output),
+                stderr=cast(Optional[Union[int, IO[Any]]], self.log_output),
                 stdin=PIPE,
                 creationflags=self.creation_flags,
                 startupinfo=start_info,
