@@ -41,10 +41,10 @@ public class ClientWindowInfo {
     return new ClientWindowInfo(
         (String) map.get("clientWindow"),
         (String) map.get("state"),
-        (Integer) map.get("width"),
-        (Integer) map.get("height"),
-        (Integer) map.get("x"),
-        (Integer) map.get("y"));
+        ((Number) map.get("width")).intValue(),
+        ((Number) map.get("height")).intValue(),
+        ((Number) map.get("x")).intValue(),
+        ((Number) map.get("y")).intValue());
   }
 
   public String getClientWindow() {
