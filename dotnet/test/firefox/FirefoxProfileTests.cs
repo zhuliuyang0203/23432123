@@ -54,7 +54,7 @@ namespace OpenQA.Selenium.Firefox
                     break;
                 }
             }
-            Assert.IsTrue(seenCheese);
+            Assert.That(seenCheese, Is.True);
         }
 
         //[Test]
@@ -72,7 +72,7 @@ namespace OpenQA.Selenium.Firefox
                     break;
                 }
             }
-            Assert.IsTrue(seenCheese, "Did not see integer value being set correctly");
+            Assert.That(seenCheese, Is.True, "Did not see integer value being set correctly");
         }
 
         //[Test]
@@ -90,7 +90,7 @@ namespace OpenQA.Selenium.Firefox
                 }
             }
 
-            Assert.IsTrue(seenCheese, "Did not see boolean value being set correctly");
+            Assert.That(seenCheese, Is.True, "Did not see boolean value being set correctly");
         }
 
         private List<string> ReadGeneratedProperties()

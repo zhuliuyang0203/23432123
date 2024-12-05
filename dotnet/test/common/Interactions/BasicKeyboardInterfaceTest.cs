@@ -58,7 +58,7 @@ namespace OpenQA.Selenium.Interactions
 
             KeyInputDevice device = actionProvider.GetActiveKeyboard();
 
-            Assert.AreEqual("test keyboard", device.DeviceName);
+            Assert.That(device.DeviceName, Is.EqualTo("test keyboard"));
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace OpenQA.Selenium.Interactions
 
             sendLowercase.Perform();
 
-            Assert.AreEqual("abc def", keyReporter.GetAttribute("value"));
+            Assert.That(keyReporter.GetAttribute("value"), Is.EqualTo("abc def"));
 
         }
 
@@ -154,7 +154,7 @@ namespace OpenQA.Selenium.Interactions
 
             AssertThatFormEventsFiredAreExactly("focus keydown keydown keypress keyup keydown keypress keyup keyup");
 
-            Assert.AreEqual("AB", keysEventInput.GetAttribute("value"));
+            Assert.That(keysEventInput.GetAttribute("value"), Is.EqualTo("AB"));
         }
 
         [Test]
@@ -333,12 +333,12 @@ namespace OpenQA.Selenium.Interactions
 
             AssertThatFormEventsFiredAreExactly("focus keydown keydown keypress keyup keydown keypress keyup keyup");
 
-            Assert.AreEqual("AB", keysEventInput.GetAttribute("value"));
+            Assert.That(keysEventInput.GetAttribute("value"), Is.EqualTo("AB"));
         }
 
         private void AssertThatFormEventsFiredAreExactly(string message, string expected)
         {
-            Assert.AreEqual(expected, driver.FindElement(By.Id("result")).Text.Trim(), message);
+            Assert.That(driver.FindElement(By.Id("result")).Text.Trim(), Is.EqualTo(expected), message);
         }
 
         private void AssertThatFormEventsFiredAreExactly(string expected)
@@ -348,7 +348,7 @@ namespace OpenQA.Selenium.Interactions
 
         private void AssertThatBodyEventsFiredAreExactly(string expected)
         {
-            Assert.AreEqual(expected, driver.FindElement(By.Id("body_result")).Text.Trim());
+            Assert.That(driver.FindElement(By.Id("body_result")).Text.Trim(), Is.EqualTo(expected));
         }
 
         private Func<bool> BackgroundColorToChangeFrom(IWebElement element, Color currentColor)

@@ -45,7 +45,7 @@ namespace OpenQA.Selenium.Support.UI
 
             ok.Load();
 
-            Assert.True(ok.WasLoadCalled());
+            Assert.That(ok.WasLoadCalled(), Is.True);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace OpenQA.Selenium.Support.UI
             }
             catch (LoadableComponentException e)
             {
-                Assert.AreEqual("Expected failure", e.Message);
+                Assert.That(e.Message, Is.EqualTo("Expected failure"));
             }
         }
 
@@ -75,8 +75,8 @@ namespace OpenQA.Selenium.Support.UI
             }
             catch (Exception e)
             {
-                Assert.AreEqual("HandleLoadError called", e.Message);
-                Assert.AreEqual("Excpected failure in ExecuteLoad", e.InnerException.Message);
+                Assert.That(e.Message, Is.EqualTo("HandleLoadError called"));
+                Assert.That(e.InnerException.Message, Is.EqualTo("Excpected failure in ExecuteLoad"));
             }
 
         }

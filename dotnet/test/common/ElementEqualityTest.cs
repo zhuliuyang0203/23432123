@@ -34,7 +34,7 @@ namespace OpenQA.Selenium
             IWebElement body = driver.FindElement(By.TagName("body"));
             IWebElement xbody = driver.FindElement(By.XPath("//body"));
 
-            Assert.AreEqual(body, xbody);
+            Assert.That(xbody, Is.EqualTo(body));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> ps = driver.FindElements(By.TagName("p"));
 
-            Assert.AreNotEqual(ps[0], ps[1]);
+            Assert.That(ps[1], Is.Not.EqualTo(ps[0]));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace OpenQA.Selenium
             IWebElement body = driver.FindElement(By.TagName("body"));
             IWebElement xbody = driver.FindElement(By.XPath("//body"));
 
-            Assert.AreEqual(body.GetHashCode(), xbody.GetHashCode());
+            Assert.That(xbody.GetHashCode(), Is.EqualTo(body.GetHashCode()));
         }
 
         public void SameElementLookedUpDifferentWaysUsingFindElementsShouldHaveSameHashCode()
@@ -63,7 +63,7 @@ namespace OpenQA.Selenium
             ReadOnlyCollection<IWebElement> body = driver.FindElements(By.TagName("body"));
             ReadOnlyCollection<IWebElement> xbody = driver.FindElements(By.XPath("//body"));
 
-            Assert.AreEqual(body[0].GetHashCode(), xbody[0].GetHashCode());
+            Assert.That(xbody[0].GetHashCode(), Is.EqualTo(body[0].GetHashCode()));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace OpenQA.Selenium
 
             IWebElement element = (IWebElement)((IJavaScriptExecutor)driver).ExecuteScript("return document.getElementById('oneline');");
 
-            Assert.AreEqual(first, element);
+            Assert.That(element, Is.EqualTo(first));
         }
     }
 }

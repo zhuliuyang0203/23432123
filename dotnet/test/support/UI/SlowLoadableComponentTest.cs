@@ -45,7 +45,7 @@ namespace OpenQA.Selenium.Support.UI
             int numberOfTimesThroughLoop = 1;
             SlowLoading slowLoading = new SlowLoading(TimeSpan.FromSeconds(1), new SystemClock(), numberOfTimesThroughLoop).Load();
 
-            Assert.AreEqual(numberOfTimesThroughLoop, slowLoading.GetLoopCount());
+            Assert.That(slowLoading.GetLoopCount(), Is.EqualTo(numberOfTimesThroughLoop));
         }
 
         [Test]

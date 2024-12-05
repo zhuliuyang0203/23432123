@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.Firefox
             textarea.SendKeys(expectedText);
 
             string seenText = textarea.GetAttribute("value");
-            Assert.AreEqual(expectedText, seenText);
+            Assert.That(seenText, Is.EqualTo(expectedText));
         }
 
         //[Test]
@@ -75,8 +75,8 @@ namespace OpenQA.Selenium.Firefox
             driver.Url = xhtmlTestPage;
             secondDriver.Url = formsPage;
 
-            Assert.AreEqual("XHTML Test Page", driver.Title);
-            Assert.AreEqual("We Leave From Here", secondDriver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
+            Assert.That(secondDriver.Title, Is.EqualTo("We Leave From Here"));
 
             // We only need to quit the second driver if the test passes
             secondDriver.Quit();
@@ -109,7 +109,7 @@ namespace OpenQA.Selenium.Firefox
             string profileLocation = profile.ProfileDirectory;
 
             firefox.Quit();
-            Assert.IsFalse(Directory.Exists(profileLocation));
+            Assert.That(profileLocation, Does.Not.Exist);
         }
 
         //[Test]
@@ -133,7 +133,7 @@ namespace OpenQA.Selenium.Firefox
             IWebElement keyReporter = driver.FindElement(By.Id("keyReporter"));
             keyReporter.SendKeys("ABC DEF");
 
-            Assert.AreEqual("ABC DEF", keyReporter.GetAttribute("value"));
+            Assert.That(keyReporter.GetAttribute("value"), Is.EqualTo("ABC DEF"));
         }
 
         //[Test]
@@ -157,7 +157,7 @@ namespace OpenQA.Selenium.Firefox
             List<string> allWindowHandles = new List<string>(driver.WindowHandles);
 
             // There should be two windows. We should also see each of the window titles at least once.
-            Assert.AreEqual(2, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.Exactly(2).Items);
 
             allWindowHandles.Remove(originalWinHandle);
             string newWinHandle = (string)allWindowHandles[0];
@@ -169,7 +169,7 @@ namespace OpenQA.Selenium.Firefox
 
             IWebElement keyReporter = driver.FindElement(By.Id("keyReporter"));
             keyReporter.SendKeys("ABC DEF");
-            Assert.AreEqual("ABC DEF", keyReporter.GetAttribute("value"));
+            Assert.That(keyReporter.GetAttribute("value"), Is.EqualTo("ABC DEF"));
 
             // Key events in original window.
             driver.SwitchTo().Window(originalWinHandle);
@@ -178,7 +178,7 @@ namespace OpenQA.Selenium.Firefox
 
             IWebElement keyReporter2 = driver.FindElement(By.Id("keyReporter"));
             keyReporter2.SendKeys("QWERTY");
-            Assert.AreEqual("QWERTY", keyReporter2.GetAttribute("value"));
+            Assert.That(keyReporter2.GetAttribute("value"), Is.EqualTo("QWERTY"));
         }
 
         //[Test]
@@ -199,7 +199,7 @@ namespace OpenQA.Selenium.Firefox
             SleepBecauseWindowsTakeTimeToOpen();
             List<string> allWindowHandles = new List<string>(driver.WindowHandles);
             // There should be two windows. We should also see each of the window titles at least once.
-            Assert.AreEqual(2, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.Exactly(2).Items);
 
             allWindowHandles.Remove(originalWinHandle);
             string newWinHandle = (string)allWindowHandles[0];
@@ -217,7 +217,7 @@ namespace OpenQA.Selenium.Firefox
             driver.Url = javascriptPage;
             IWebElement keyReporter = driver.FindElement(By.Id("keyReporter"));
             keyReporter.SendKeys("ABC DEF");
-            Assert.AreEqual("ABC DEF", keyReporter.GetAttribute("value"));
+            Assert.That(keyReporter.GetAttribute("value"), Is.EqualTo("ABC DEF"));
         }
 
         //[Test]
@@ -234,7 +234,7 @@ namespace OpenQA.Selenium.Firefox
                 secondDriver = new FirefoxDriver(options);
                 secondDriver.Url = url;
                 string gotTitle = secondDriver.Title;
-                Assert.AreNotEqual("Hello IWebDriver", gotTitle);
+                Assert.That(gotTitle, Is.EqualTo("Hello IWebDriver"));
             }
             catch (Exception)
             {
@@ -263,7 +263,7 @@ namespace OpenQA.Selenium.Firefox
 
             try
             {
-                Assert.AreEqual(javascriptPage, driver2.Url);
+                Assert.That(driver2.Url, Is.EqualTo(javascriptPage));
             }
             finally
             {

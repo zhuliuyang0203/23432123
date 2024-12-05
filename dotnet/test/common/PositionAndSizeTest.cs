@@ -43,40 +43,40 @@ namespace OpenQA.Selenium
         public void ShouldGetCoordinatesOfAnElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/simple_page.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAnEmptyElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_empty_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfATransparentElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_transparent_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAHiddenElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_hidden_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAnInvisibleElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_invisible_element.html");
-            Assert.AreEqual(new Point(0, 0), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(0, 0), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(0, 0)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(0, 0)));
         }
 
         [Test]
@@ -99,8 +99,8 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_frame.html");
             driver.SwitchTo().Frame("ifr");
             IWebElement box = driver.FindElement(By.Id("box"));
-            Assert.AreEqual(new Point(10, 10), box.Location);
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(box.Location, Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_frame.html");
             driver.SwitchTo().Frame("ifr");
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
             // Assert.AreEqual(new Point(25, 25), GetLocationInViewPort(By.Id("box")));
@@ -120,7 +120,7 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_nested_frame.html");
             driver.SwitchTo().Frame("ifr");
             driver.SwitchTo().Frame("ifr");
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
             // Assert.AreEqual(new Point(40, 40), GetLocationInViewPort(By.Id("box")));
@@ -156,15 +156,15 @@ namespace OpenQA.Selenium
 
             IWebElement r2 = driver.FindElement(By.Id("r2"));
             string left = r2.GetCssValue("left");
-            Assert.AreEqual(10.9, Math.Round(Convert.ToDecimal(left.Replace("px", "")), 1));
+            Assert.That(Math.Round(Convert.ToDecimal(left.Replace("px", "")), 1), Is.EqualTo(10.9));
             string top = r2.GetCssValue("top");
-            Assert.AreEqual(10.1, Math.Round(Convert.ToDecimal(top.Replace("px", "")), 1));
-            Assert.AreEqual(new Point(11, 10), r2.Location);
+            Assert.That(Math.Round(Convert.ToDecimal(top.Replace("px", "")), 1), Is.EqualTo(10.1));
+            Assert.That(r2.Location, Is.EqualTo(new Point(11, 10)));
             string width = r2.GetCssValue("width");
-            Assert.AreEqual(48.7, Math.Round(Convert.ToDecimal(width.Replace("px", "")), 1));
+            Assert.That(Math.Round(Convert.ToDecimal(width.Replace("px", "")), 1), Is.EqualTo(48.7));
             string height = r2.GetCssValue("height");
-            Assert.AreEqual(49.3, Math.Round(Convert.ToDecimal(height.Replace("px", "")), 1));
-            Assert.AreEqual(new Size(49, 49), r2.Size);
+            Assert.That(Math.Round(Convert.ToDecimal(height.Replace("px", "")), 1), Is.EqualTo(49.3));
+            Assert.That(r2.Size, Is.EqualTo(new Size(49, 49)));
         }
 
         //------------------------------------------------------------------

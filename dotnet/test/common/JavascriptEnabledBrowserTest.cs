@@ -32,9 +32,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
 
-            Assert.AreEqual("Testing Javascript", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Javascript"));
             driver.FindElement(By.LinkText("Change the page title!")).Click();
-            Assert.AreEqual("Changed", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Changed"));
         }
 
         [Test]
@@ -42,13 +42,13 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
             String currentText = driver.FindElement(By.XPath("//div[@id='dynamo']")).Text;
-            Assert.AreEqual("What's for dinner?", currentText);
+            Assert.That(currentText, Is.EqualTo("What's for dinner?"));
 
             IWebElement element = driver.FindElement(By.LinkText("Update a div"));
             element.Click();
 
             String newText = driver.FindElement(By.XPath("//div[@id='dynamo']")).Text;
-            Assert.AreEqual("Fish and chips!", newText);
+            Assert.That(newText, Is.EqualTo("Fish and chips!"));
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Id("changeme")).Click();
             WaitFor(() => { return driver.Title == "Page3"; }, "Browser title was not 'Page3'");
-            Assert.AreEqual("Page3", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Page3"));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("changeme")).Click();
 
             WaitFor(() => { return driver.Title == "Page3"; }, "Browser title was not 'Page3'");
-            Assert.AreEqual("3", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("3"));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("change")).SendKeys("foo");
             String result = driver.FindElement(By.Id("result")).Text;
 
-            Assert.AreEqual("change", result);
+            Assert.That(result, Is.EqualTo("change"));
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace OpenQA.Selenium
             element.Click();
 
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace OpenQA.Selenium
             element.Click();
 
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -113,11 +113,11 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
             IWebElement element = driver.FindElement(By.Id("clickField"));
-            Assert.AreEqual("Hello", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("Hello"));
 
             element.Click();
 
-            Assert.AreEqual("Clicked", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("Clicked"));
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("switchFocus")).Click();
 
             IWebElement element = driver.SwitchTo().ActiveElement();
-            Assert.AreEqual("theworks", element.GetAttribute("id"));
+            Assert.That(element.GetAttribute("id"), Is.EqualTo("theworks"));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace OpenQA.Selenium
 
             IWebElement element = driver.SwitchTo().ActiveElement();
 
-            Assert.AreEqual("body", element.GetAttribute("name"));
+            Assert.That(element.GetAttribute("name"), Is.EqualTo("body"));
         }
 
         [Test]

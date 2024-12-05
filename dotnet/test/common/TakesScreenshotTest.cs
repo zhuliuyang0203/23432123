@@ -141,7 +141,7 @@ namespace OpenQA.Selenium
 
             Color pixelColor = GetPixelColor(screenImage, 1, 1);
             string pixelColorString = FormatColorToHex(pixelColor.ToArgb());
-            Assert.AreEqual("#0f12f7", pixelColorString);
+            Assert.That(pixelColorString, Is.EqualTo("#0f12f7"));
         }
 
         [Test]

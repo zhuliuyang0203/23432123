@@ -35,7 +35,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = errorsPage;
             object result = ((IJavaScriptExecutor)driver).ExecuteScript("return window.ERRORS.join('\\n');");
-            Assert.AreEqual("", result, "Should have no errors");
+            Assert.That(result, Is.Empty, "Should have no errors");
         }
 
     }

@@ -39,17 +39,17 @@ namespace OpenQA.Selenium
             IWebElement svg = driver.FindElement(By.CssSelector("svg"));
 
             ReadOnlyCollection<IWebElement> groupElements = svg.FindElements(By.CssSelector("g"));
-            Assert.AreEqual(5, groupElements.Count);
+            Assert.That(groupElements, Has.Count.EqualTo(5));
 
             groupElements[1].Click();
             IWebElement resultElement = driver.FindElement(By.Id("result"));
             WaitFor(() => { return resultElement.Text == "slice_red"; }, "Element text was not 'slice_red'");
-            Assert.AreEqual("slice_red", resultElement.Text);
+            Assert.That(resultElement.Text, Is.EqualTo("slice_red"));
 
             groupElements[2].Click();
             resultElement = driver.FindElement(By.Id("result"));
             WaitFor(() => { return resultElement.Text == "slice_green"; }, "Element text was not 'slice_green'");
-            Assert.AreEqual("slice_green", resultElement.Text);
+            Assert.That(resultElement.Text, Is.EqualTo("slice_green"));
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace OpenQA.Selenium
             appleElement.Click();
             IWebElement resultElement = driver.FindElement(By.Id("result"));
             WaitFor(() => { return resultElement.Text == "text_apple"; }, "Element text was not 'text_apple'");
-            Assert.AreEqual("text_apple", resultElement.Text);
+            Assert.That(resultElement.Text, Is.EqualTo("text_apple"));
         }
 
         private IWebElement FindAppleElement(IEnumerable<IWebElement> textElements)

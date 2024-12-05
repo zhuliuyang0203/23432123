@@ -34,7 +34,7 @@ namespace OpenQA.Selenium.Remote
             chrome.Url = xhtmlTestPage;
             try
             {
-                Assert.AreEqual("XHTML Test Page", chrome.Title);
+                Assert.That(chrome.Title, Is.EqualTo("XHTML Test Page"));
             }
             finally
             {
@@ -49,7 +49,7 @@ namespace OpenQA.Selenium.Remote
             firefox.Url = xhtmlTestPage;
             try
             {
-                Assert.AreEqual("XHTML Test Page", firefox.Title);
+                Assert.That(firefox.Title, Is.EqualTo("XHTML Test Page"));
             }
             finally
             {
@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.Remote
             edge.Url = xhtmlTestPage;
             try
             {
-                Assert.AreEqual("XHTML Test Page", edge.Title);
+                Assert.That(edge.Title, Is.EqualTo("XHTML Test Page"));
             }
             finally
             {

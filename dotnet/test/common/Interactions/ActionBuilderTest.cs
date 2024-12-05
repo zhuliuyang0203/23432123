@@ -52,9 +52,9 @@ namespace OpenQA.Selenium.Interactions
 
             var dictionary = sequence[0].ToDictionary();
             Console.WriteLine(dictionary);
-            Assert.AreEqual("pointer", dictionary["type"]);
-            Assert.NotNull(dictionary["id"]);
-            Assert.NotNull(dictionary["parameters"]);
+            Assert.That(dictionary, Does.ContainKey("type").WithValue("pointer"));
+            Assert.That(dictionary["id"], Is.Not.Null);
+            Assert.That(dictionary["parameters"], Is.Not.Null);
             var parameters = new Dictionary<string, object> { { "pointerType", "pen" } };
             CollectionAssert.AreEquivalent(parameters, (IEnumerable)dictionary["parameters"]);
 

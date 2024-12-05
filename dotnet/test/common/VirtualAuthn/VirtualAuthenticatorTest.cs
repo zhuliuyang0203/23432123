@@ -170,12 +170,12 @@ namespace OpenQA.Selenium.VirtualAuth
             object response = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
 
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
 
             object assertionResponse = GetAssertionFor(ExtractRawIdFrom(response));
 
             // Attempt to use the credential to get an assertion.
-            Assert.AreEqual("OK", ((Dictionary<string, object>)assertionResponse)["status"]);
+            Assert.That((Dictionary<string, object>)assertionResponse, Does.ContainKey("status").WithValue("OK"));
         }
 
         [Test]
@@ -191,7 +191,7 @@ namespace OpenQA.Selenium.VirtualAuth
 
             webDriver.RemoveVirtualAuthenticator(authenticatorId);
 
-            Assert.IsNull(webDriver.AuthenticatorId);
+            Assert.That(webDriver.AuthenticatorId, Is.Null);
         }
 
         [Test]
@@ -211,7 +211,7 @@ namespace OpenQA.Selenium.VirtualAuth
             webDriver.RemoveVirtualAuthenticator(authenticatorId1);
             webDriver.RemoveVirtualAuthenticator(authenticatorId2);
 
-            Assert.IsNull(webDriver.AuthenticatorId);
+            Assert.That(webDriver.AuthenticatorId, Is.Null);
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace OpenQA.Selenium.VirtualAuth
 
             // Attempt to use the credential to generate an assertion.
             object response = GetAssertionFor(id);
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
         }
 
         [Test]
@@ -268,7 +268,7 @@ namespace OpenQA.Selenium.VirtualAuth
 
             // Attempt to use the credential to generate an assertion.
             object response = GetAssertionFor(id);
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
         }
 
         [Test]
@@ -292,14 +292,14 @@ namespace OpenQA.Selenium.VirtualAuth
             // empty allowCredentials array.
             object response = jsDriver.ExecuteAsyncScript(
               "getCredential([]).then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That(((Dictionary<string, object>)response)["status"], Is.EqualTo("OK"));
 
             Dictionary<string, object> attestation = (Dictionary<string, object>)((Dictionary<string, object>)response)["attestation"];
 
             ReadOnlyCollection<object> returnedUserHandle = (ReadOnlyCollection<object>)attestation["userHandle"];
 
-            Assert.AreEqual(1, returnedUserHandle.Count);
-            Assert.AreEqual(0, returnedUserHandle.IndexOf(1L));
+            Assert.That(returnedUserHandle, Has.One.Items);
+            Assert.That(returnedUserHandle.IndexOf(1L), Is.Zero);
         }
 
         [Test]
@@ -341,21 +341,21 @@ namespace OpenQA.Selenium.VirtualAuth
             object response1 = jsDriver.ExecuteAsyncScript(
               "registerCredential({authenticatorSelection: {requireResidentKey: true}})"
               + " .then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response1)["status"]);
+            Assert.That((Dictionary<string, object>)response1, Does.ContainKey("status").WithValue("OK"));
 
             // Register a non resident credential.
             object response2 = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response2)["status"]);
+            Assert.That((Dictionary<string, object>)response2, Does.ContainKey("status").WithValue("OK"));
 
             byte[] credential1Id = ConvertListIntoArrayOfBytes(ExtractRawIdFrom(response1));
             byte[] credential2Id = ConvertListIntoArrayOfBytes(ExtractRawIdFrom(response2));
 
-            Assert.AreNotEqual(credential1Id, credential2Id);
+            Assert.That(credential2Id, Is.Not.EqualTo(credential1Id));
 
             // Retrieve the two credentials.
             List<Credential> credentials = webDriver.GetCredentials();
-            Assert.AreEqual(2, credentials.Count);
+            Assert.That(credentials, Has.Exactly(2).Items);
 
             Credential credential1 = null;
             Credential credential2 = null;
@@ -375,11 +375,11 @@ namespace OpenQA.Selenium.VirtualAuth
                 }
             }
 
-            Assert.True(credential1.IsResidentCredential);
-            Assert.NotNull(credential1.PrivateKey);
+            Assert.That(credential1.IsResidentCredential, Is.True);
+            Assert.That(credential1.PrivateKey, Is.Not.Null);
 
-            Assert.False(credential2.IsResidentCredential);
-            Assert.NotNull(credential2.PrivateKey);
+            Assert.That(credential2.IsResidentCredential, Is.False);
+            Assert.That(credential2.PrivateKey, Is.Not.Null);
         }
 
         [Test]
@@ -395,7 +395,7 @@ namespace OpenQA.Selenium.VirtualAuth
             object response = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
 
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
 
             // Remove a credential by its ID as an array of bytes.
             List<long> rawId = ExtractRawIdFrom(response);
@@ -406,7 +406,7 @@ namespace OpenQA.Selenium.VirtualAuth
             object assertionResponse = GetAssertionFor(rawId);
             string error = (string)((Dictionary<string, object>)assertionResponse)["status"];
 
-            Assert.True(error.StartsWith("NotAllowedError"));
+            Assert.That(error, Does.StartWith("NotAllowedError"));
         }
 
         [Test]
@@ -422,7 +422,7 @@ namespace OpenQA.Selenium.VirtualAuth
             object response = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
 
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
 
             // Remove a credential by its base64url ID.
             String credentialId = ExtractIdFrom(response);
@@ -432,7 +432,7 @@ namespace OpenQA.Selenium.VirtualAuth
             object assertionResponse = GetAssertionFor(credentialId);
             string error = (string)((Dictionary<string, object>)assertionResponse)["status"];
 
-            Assert.True(error.StartsWith("NotAllowedError"));
+            Assert.That(error, Does.StartWith("NotAllowedError"));
         }
 
         [Test]
@@ -447,12 +447,12 @@ namespace OpenQA.Selenium.VirtualAuth
             // Register two credentials.
             object response1 = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response1)["status"]);
+            Assert.That((Dictionary<string, object>)response1, Does.ContainKey("status").WithValue("OK"));
             List<long> rawId1 = ExtractRawIdFrom(response1);
 
             object response2 = jsDriver.ExecuteAsyncScript(
               "registerCredential().then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response2)["status"]);
+            Assert.That((Dictionary<string, object>)response2, Does.ContainKey("status").WithValue("OK"));
             List<long> rawId2 = ExtractRawIdFrom(response1);
 
             // Remove all credentials.
@@ -471,7 +471,7 @@ namespace OpenQA.Selenium.VirtualAuth
 
             string error = (string)((Dictionary<string, object>)response)["status"];
 
-            Assert.True(error.StartsWith("NotAllowedError"));
+            Assert.That(error, Does.StartWith("NotAllowedError"));
         }
 
         [Test]
@@ -487,7 +487,7 @@ namespace OpenQA.Selenium.VirtualAuth
             Object response = jsDriver.ExecuteAsyncScript(
               "registerCredential({authenticatorSelection: {userVerification: 'required'}})"
               + "  .then(arguments[arguments.length - 1]);");
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
             List<long> rawId = ExtractRawIdFrom(response);
 
             // Getting an assertion requiring user verification should succeed.
@@ -497,7 +497,7 @@ namespace OpenQA.Selenium.VirtualAuth
               + "  \"id\": Int8Array.from(arguments[0]),"
               + "}], {userVerification: 'required'}).then(arguments[arguments.length - 1]);",
               rawId);
-            Assert.AreEqual("OK", ((Dictionary<string, object>)response)["status"]);
+            Assert.That((Dictionary<string, object>)response, Does.ContainKey("status").WithValue("OK"));
 
             // Disable user verification.
             webDriver.SetUserVerified(false);
@@ -512,7 +512,7 @@ namespace OpenQA.Selenium.VirtualAuth
 
             string error = (string)((Dictionary<string, object>)response)["status"];
 
-            Assert.True(error.StartsWith("NotAllowedError"));
+            Assert.That(error, Does.StartWith("NotAllowedError"));
         }
 
         [Test]

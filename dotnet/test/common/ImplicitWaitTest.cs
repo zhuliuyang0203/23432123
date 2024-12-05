@@ -86,7 +86,7 @@ namespace OpenQA.Selenium
 
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.ClassName("redbox"));
-            Assert.AreEqual(0, elements.Count);
+            Assert.That(elements, Is.Empty);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace OpenQA.Selenium
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(0);
             add.Click();
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.ClassName("redbox"));
-            Assert.AreEqual(0, elements.Count);
+            Assert.That(elements, Is.Empty);
         }
 
         [Test]

@@ -48,10 +48,10 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             navigation.Back();
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             navigation.Forward();
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -71,12 +71,12 @@ namespace OpenQA.Selenium
             navigation = driver.Navigate();
 
             navigation.GoToUrl(macbethPage);
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             // We go to two pages to ensure that the browser wasn't
             // already at the desired page through a previous test.
             navigation.GoToUrl(simpleTestPage);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -88,12 +88,12 @@ namespace OpenQA.Selenium
             navigation = driver.Navigate();
 
             navigation.GoToUrl(macBeth);
-            Assert.AreEqual(driver.Title, macbethTitle);
+            Assert.That(macbethTitle, Is.EqualTo(driver.Title));
 
             // We go to two pages to ensure that the browser wasn't
             // already at the desired page through a previous test.
             navigation.GoToUrl(simpleTest);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -103,11 +103,11 @@ namespace OpenQA.Selenium
             IWebElement changedDiv = driver.FindElement(By.Id("dynamo"));
             driver.FindElement(By.Id("updatediv")).Click();
 
-            Assert.AreEqual("Fish and chips!", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("Fish and chips!"));
             driver.Navigate().Refresh();
 
             changedDiv = driver.FindElement(By.Id("dynamo"));
-            Assert.AreEqual("What's for dinner?", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("What's for dinner?"));
         }
 
         [Test]
@@ -129,10 +129,10 @@ namespace OpenQA.Selenium
             await navigation.GoToUrlAsync(simpleTestPage);
 
             await navigation.BackAsync();
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             await navigation.ForwardAsync();
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -148,10 +148,10 @@ namespace OpenQA.Selenium
             var navigation = driver.Navigate();
 
             await navigation.GoToUrlAsync(macbethPage);
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             await navigation.GoToUrlAsync(simpleTestPage);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -160,9 +160,9 @@ namespace OpenQA.Selenium
             var navigation = driver.Navigate();
 
             navigation.GoToUrlAsync(new Uri(macbethPage));
-            Assert.AreEqual(driver.Title, macbethTitle);
+            Assert.That(macbethTitle, Is.EqualTo(driver.Title));
             navigation.GoToUrl(new Uri(simpleTestPage));
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -172,11 +172,11 @@ namespace OpenQA.Selenium
             IWebElement changedDiv = driver.FindElement(By.Id("dynamo"));
             driver.FindElement(By.Id("updatediv")).Click();
 
-            Assert.AreEqual("Fish and chips!", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("Fish and chips!"));
             await driver.Navigate().RefreshAsync();
 
             changedDiv = driver.FindElement(By.Id("dynamo"));
-            Assert.AreEqual("What's for dinner?", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("What's for dinner?"));
         }
     }
 }

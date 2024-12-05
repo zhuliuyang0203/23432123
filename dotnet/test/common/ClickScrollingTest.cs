@@ -69,7 +69,8 @@ namespace OpenQA.Selenium
             IWebElement link = driver.FindElement(By.Id("line8"));
             // This used to throw a MoveTargetOutOfBoundsException - we don't expect it to
             link.Click();
-            Assert.AreEqual("line8", driver.FindElement(By.Id("clicked")).Text);
+
+            Assert.That(driver.FindElement(By.Id("clicked")).Text, Is.EqualTo("line8"));
         }
 
         [Test]
@@ -109,7 +110,7 @@ namespace OpenQA.Selenium
             IWebElement item = list.FindElement(By.Id("desired"));
             item.Click();
             long yOffset = (long)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].scrollTop;", list);
-            Assert.AreEqual(0, yOffset, "Should not have scrolled");
+            Assert.That(yOffset, Is.Zero, "Should not have scrolled");
         }
 
 
@@ -122,7 +123,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("button2")).Click();
             double scrollTop = GetScrollTop();
             driver.FindElement(By.Id("button1")).Click();
-            Assert.AreEqual(scrollTop, GetScrollTop());
+            Assert.That(GetScrollTop(), Is.EqualTo(scrollTop));
         }
 
         [Test]
@@ -139,7 +140,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("scroll5.html");
             driver.FindElement(By.Id("inner")).Click();
-            Assert.AreEqual("clicked", driver.FindElement(By.Id("clicked")).Text);
+            Assert.That(driver.FindElement(By.Id("clicked")).Text, Is.EqualTo("clicked"));
         }
 
         [Test]
@@ -238,7 +239,7 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("scroll3.html");
             double scrollTop = GetScrollTop();
             Size ignoredSize = driver.FindElement(By.Id("button1")).Size;
-            Assert.AreEqual(scrollTop, GetScrollTop());
+            Assert.That(GetScrollTop(), Is.EqualTo(scrollTop));
         }
 
         [Test]
@@ -266,7 +267,7 @@ namespace OpenQA.Selenium
             IWebElement label = driver.FindElement(By.Id("wrapper"));
             label.Click();
             IWebElement checkbox = driver.FindElement(By.Id("check"));
-            Assert.IsFalse(checkbox.Selected, "Checkbox should not be selected after click");
+            Assert.That(checkbox.Selected, Is.False, "Checkbox should not be selected after click");
         }
 
         private double GetScrollTop()

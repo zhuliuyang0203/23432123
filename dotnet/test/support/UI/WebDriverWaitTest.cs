@@ -47,7 +47,7 @@ namespace OpenQA.Selenium.Support.UI
             var condition = GetCondition(() => null, () => SOME_STRING);
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
-            Assert.AreEqual(SOME_STRING, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(SOME_STRING));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace OpenQA.Selenium.Support.UI
             var condition = GetCondition(() => null, () => new object());
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
-            Assert.IsNotNull(wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.Not.Null);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace OpenQA.Selenium.Support.UI
             var condition = GetCondition(() => false, () => true);
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
-            Assert.True(wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.True);
         }
 
         [Test]
@@ -79,8 +79,8 @@ namespace OpenQA.Selenium.Support.UI
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
 
-            Assert.Throws(typeof(ArgumentException), () => wait.Until(nullableBooleanCondition));
-            Assert.Throws(typeof(ArgumentException), () => wait.Until(intCondition));
+            Assert.That(() => wait.Until(nullableBooleanCondition), Throws.ArgumentException);
+            Assert.That(() => wait.Until(intCondition), Throws.ArgumentException);
         }
 
         [Test]
@@ -89,7 +89,9 @@ namespace OpenQA.Selenium.Support.UI
             var mockDriver = new Mock<IWebDriver>();
             var wait = new WebDriverWait(GetClock(), mockDriver.Object, ONE_SECONDS, ZERO_SECONDS);
 
-            Assert.Throws(typeof(WebDriverTimeoutException), () => wait.Until(driver => false));
+            Assert.That(
+                () => wait.Until(driver => false),
+                Throws.TypeOf<WebDriverTimeoutException>());
         }
 
         [Test]
@@ -101,7 +103,7 @@ namespace OpenQA.Selenium.Support.UI
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
 
-            Assert.AreEqual(element.Object, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(element.Object));
         }
 
         [Test]
@@ -114,7 +116,7 @@ namespace OpenQA.Selenium.Support.UI
 
             var wait = new WebDriverWait(new TickingClock(), mockDriver.Object, FIVE_SECONDS, ZERO_SECONDS);
 
-            Assert.AreEqual(SOME_STRING, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(SOME_STRING));
 
             mockDriver.Verify(_ => _.CurrentWindowHandle, Times.Once);
         }
@@ -134,7 +136,7 @@ namespace OpenQA.Selenium.Support.UI
             }
             catch (WebDriverTimeoutException e)
             {
-                Assert.IsInstanceOf(typeof(NoSuchElementException), e.InnerException);
+                Assert.That(e.InnerException, Is.InstanceOf<NoSuchElementException>());
             }
         }
 

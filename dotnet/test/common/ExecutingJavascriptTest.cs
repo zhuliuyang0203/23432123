@@ -143,7 +143,7 @@ namespace OpenQA.Selenium
             expected.Add("abc", "123");
             expected.Add("tired", false);
 
-            Assert.AreEqual(expected.Count, map.Count, "Expected:<" + expected.Count + ">, but was:<" + map.Count + ">");
+            Assert.That(map, Has.Count.EqualTo(expected.Count), "Expected:<" + expected.Count + ">, but was:<" + map.Count + ">");
             foreach (string expectedKey in expected.Keys)
             {
                 Assert.That(map, Does.ContainKey(expectedKey));
@@ -200,8 +200,8 @@ namespace OpenQA.Selenium
 
             Assert.That(result, Is.InstanceOf<Dictionary<string, object>>());
             Dictionary<string, object> map = (Dictionary<string, object>)result;
-            Assert.AreEqual("http:", map["protocol"]);
-            Assert.AreEqual(javascriptPage, map["href"]);
+            Assert.That(map["protocol"], Is.EqualTo("http:"));
+            Assert.That(map["href"], Is.EqualTo(javascriptPage));
         }
 
         [Test]
@@ -258,8 +258,8 @@ namespace OpenQA.Selenium
                         + "functionA();";
             Exception ex = Assert.Catch(() => ExecuteScript(js));
             Assert.That(ex, Is.InstanceOf<WebDriverException>());
-            Assert.That(ex.Message.Contains("errormessage"), "Exception message does not contain 'errormessage'");
-            Assert.That(ex.StackTrace.Contains("functionB"), "Exception message does not contain 'functionB'");
+            Assert.That(ex.Message, Does.Contain("errormessage"), "Exception message does not contain 'errormessage'");
+            Assert.That(ex.StackTrace, Does.Contain("functionB"), "Exception message does not contain 'functionB'");
         }
 
         [Test]
@@ -272,7 +272,7 @@ namespace OpenQA.Selenium
             ExecuteScript("displayMessage('I like cheese');");
             string text = driver.FindElement(By.Id("result")).Text;
 
-            Assert.AreEqual("I like cheese", text.Trim());
+            Assert.That(text.Trim(), Is.EqualTo("I like cheese"));
         }
 
         [Test]
@@ -284,7 +284,7 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             string text = (string)ExecuteScript("return arguments[0] == 'Hello!' ? 'Hello!' : 'Goodbye!';", "Hello!");
-            Assert.AreEqual("Hello!", text);
+            Assert.That(text, Is.EqualTo("Hello!"));
         }
 
         [Test]
@@ -317,19 +317,19 @@ namespace OpenQA.Selenium
 
             string function = string.Format(functionTemplate, 3);
             long result = (long)ExecuteScript(function, 3);
-            Assert.AreEqual(3, result);
+            Assert.That(result, Is.EqualTo(3));
 
             function = string.Format(functionTemplate, -3);
             result = (long)ExecuteScript(function, -3);
-            Assert.AreEqual(-3, result);
+            Assert.That(result, Is.EqualTo(-3));
 
             function = string.Format(functionTemplate, 2147483647);
             result = (long)ExecuteScript(function, 2147483647);
-            Assert.AreEqual(2147483647, result);
+            Assert.That(result, Is.EqualTo(2147483647));
 
             function = string.Format(functionTemplate, -2147483647);
             result = (long)ExecuteScript(function, -2147483647);
-            Assert.AreEqual(-2147483647, result);
+            Assert.That(result, Is.EqualTo(-2147483647));
         }
 
         [Test]
@@ -343,7 +343,7 @@ namespace OpenQA.Selenium
             IWebElement button = driver.FindElement(By.Id("plainButton"));
             string value = (string)ExecuteScript("arguments[0]['flibble'] = arguments[0].getAttribute('id'); return arguments[0]['flibble'];", button);
 
-            Assert.AreEqual("plainButton", value);
+            Assert.That(value, Is.EqualTo("plainButton"));
         }
 
         [Test]
@@ -357,7 +357,7 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
             object[] array = new object[] { "zero", 1, true, 3.14159 };
             long length = (long)ExecuteScript("return arguments[0].length", array);
-            Assert.AreEqual(array.Length, length);
+            Assert.That(length, Is.EqualTo(array.Length));
         }
 
         [Test]
@@ -371,7 +371,7 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
             object[] array = new object[] { "zero", 1, true, 3.14159, false };
             long length = (long)ExecuteScript("return arguments[1].length", "string", array);
-            Assert.AreEqual(array.Length, length);
+            Assert.That(length, Is.EqualTo(array.Length));
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace OpenQA.Selenium
             collection.Add("Brie");
             collection.Add(7);
             long length = (long)ExecuteScript("return arguments[0].length", collection);
-            Assert.AreEqual(collection.Count, length);
+            Assert.That(length, Is.EqualTo(collection.Count));
         }
 
         [Test]
@@ -415,7 +415,7 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
             string result = (string)ExecuteScript("return arguments[0] + arguments[1];", "one", "two");
 
-            Assert.AreEqual("onetwo", result);
+            Assert.That(result, Is.EqualTo("onetwo"));
         }
 
         [Test]
@@ -426,7 +426,7 @@ namespace OpenQA.Selenium
             driver.SwitchTo().Frame("editFrame");
             IWebElement body = (IWebElement)((IJavaScriptExecutor)driver).ExecuteScript("return document.body");
 
-            Assert.AreEqual("", body.Text);
+            Assert.That(body.Text, Is.Empty);
         }
 
         // This is a duplicate test of ShouldBeAbleToExecuteScriptAndReturnElementsList.
@@ -449,13 +449,13 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             string value = (string)ExecuteScript("return '';");
-            Assert.AreEqual("", value);
+            Assert.That(value, Is.Empty);
 
             value = (string)ExecuteScript("return undefined;");
             Assert.That(value, Is.Null);
 
             value = (string)ExecuteScript("return ' '");
-            Assert.AreEqual(" ", value);
+            Assert.That(value, Is.EqualTo(" "));
         }
 
         [Test]
@@ -508,7 +508,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> resultsList = (ReadOnlyCollection<IWebElement>)resultObject;
 
-            Assert.That(resultsList.Count, Is.GreaterThan(0));
+            Assert.That(resultsList, Is.Not.Empty);
         }
 
         [Test]
@@ -520,7 +520,7 @@ namespace OpenQA.Selenium
             ExecuteScript("document.alerts.push('hello world');");
             string text = (string)ExecuteScript("return document.alerts.shift()");
 
-            Assert.AreEqual("hello world", text);
+            Assert.That(text, Is.EqualTo("hello world"));
         }
 
         [Test]
@@ -533,7 +533,7 @@ namespace OpenQA.Selenium
 
             string name = (string)((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0][0].tagName", args);
 
-            Assert.AreEqual("form", name.ToLower());
+            Assert.That(name, Is.EqualTo("form").IgnoreCase);
         }
 
         [Test]
@@ -548,7 +548,7 @@ namespace OpenQA.Selenium
 
             object res = ((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0]['foo'][1]", args);
 
-            Assert.AreEqual(2, (long)res);
+            Assert.That((long)res, Is.EqualTo(2));
         }
 
         [Test]
@@ -713,7 +713,7 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
             string text = (string)ExecuteScript("return arguments[0] + arguments[1] + arguments[2] + arguments[3];", "Hello,", " ", "world", "!");
 
-            Assert.AreEqual("Hello, world!", text);
+            Assert.That(text, Is.EqualTo("Hello, world!"));
         }
 
         [Test]
@@ -728,16 +728,16 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             string text = (string)ExecuteScript(function, true, true);
-            Assert.AreEqual("TrueTrue", text);
+            Assert.That(text, Is.EqualTo("TrueTrue"));
 
             text = (string)ExecuteScript(function, false, true);
-            Assert.AreEqual("FalseTrue", text);
+            Assert.That(text, Is.EqualTo("FalseTrue"));
 
             text = (string)ExecuteScript(function, true, false);
-            Assert.AreEqual("TrueFalse", text);
+            Assert.That(text, Is.EqualTo("TrueFalse"));
 
             text = (string)ExecuteScript(function, false, false);
-            Assert.AreEqual("FalseFalse", text);
+            Assert.That(text, Is.EqualTo("FalseFalse"));
         }
 
         [Test]
@@ -751,16 +751,16 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             long result = (long)ExecuteScript(function, 30, 12);
-            Assert.AreEqual(42, result);
+            Assert.That(result, Is.EqualTo(42));
 
             result = (long)ExecuteScript(function, -30, -12);
-            Assert.AreEqual(-42, result);
+            Assert.That(result, Is.EqualTo(-42));
 
             result = (long)ExecuteScript(function, 2147483646, 1);
-            Assert.AreEqual(2147483647, result);
+            Assert.That(result, Is.EqualTo(2147483647));
 
             result = (long)ExecuteScript(function, -2147483646, -1);
-            Assert.AreEqual(-2147483647, result);
+            Assert.That(result, Is.EqualTo(-2147483647));
 
         }
 
@@ -775,22 +775,22 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             double result = (double)ExecuteScript(function, (double)4.2);
-            Assert.AreEqual(4.2, result);
+            Assert.That(result, Is.EqualTo(4.2));
 
             result = (double)ExecuteScript(function, (double)-4.2);
-            Assert.AreEqual(-4.2, result);
+            Assert.That(result, Is.EqualTo(-4.2));
 
             result = (double)ExecuteScript(function, (float)4.2);
-            Assert.AreEqual(4.2, result);
+            Assert.That(result, Is.EqualTo(4.2));
 
             result = (double)ExecuteScript(function, (float)-4.2);
-            Assert.AreEqual(-4.2, result);
+            Assert.That(result, Is.EqualTo(-4.2));
 
             result = (long)ExecuteScript(function, (double)4.0);
-            Assert.AreEqual(4, result);
+            Assert.That(result, Is.EqualTo(4));
 
             result = (long)ExecuteScript(function, (double)-4.0);
-            Assert.AreEqual(-4, result);
+            Assert.That(result, Is.EqualTo(-4));
         }
 
         [Test]
@@ -804,16 +804,16 @@ namespace OpenQA.Selenium
             driver.Url = javascriptPage;
 
             double result = (double)ExecuteScript(function, 30.1, 12.1);
-            Assert.AreEqual(42.2, result);
+            Assert.That(result, Is.EqualTo(42.2));
 
             result = (double)ExecuteScript(function, -30.1, -12.1);
-            Assert.AreEqual(-42.2, result);
+            Assert.That(result, Is.EqualTo(-42.2));
 
             result = (double)ExecuteScript(function, 2147483646.1, 1.0);
-            Assert.AreEqual(2147483647.1, result);
+            Assert.That(result, Is.EqualTo(2147483647.1));
 
             result = (double)ExecuteScript(function, -2147483646.1, -1.0);
-            Assert.AreEqual(-2147483647.1, result);
+            Assert.That(result, Is.EqualTo(-2147483647.1));
 
         }
 
@@ -828,7 +828,7 @@ namespace OpenQA.Selenium
             IWebElement dynamo = driver.FindElement(By.Id("dynamo"));
             string value = (string)ExecuteScript("arguments[0]['flibble'] = arguments[0].getAttribute('id'); return arguments[0]['flibble'] + arguments[1].innerHTML;", button, dynamo);
 
-            Assert.AreEqual("plainButtonWhat's for dinner?", value);
+            Assert.That(value, Is.EqualTo("plainButtonWhat's for dinner?"));
         }
 
         [Test]
@@ -847,7 +847,7 @@ namespace OpenQA.Selenium
                 "Hello, World!",
                 true);
 
-            Assert.AreEqual("What's for dinner?424.2Hello, World!true", result);
+            Assert.That(result, Is.EqualTo("What's for dinner?424.2Hello, World!true"));
 
         }
 
@@ -864,7 +864,7 @@ namespace OpenQA.Selenium
             ExecuteScript(function, "2014-05-20T20:00:00+08:00");
             IWebElement element = driver.FindElement(By.Id("result"));
             string text = element.Text;
-            Assert.AreEqual("2014-05-20T20:00:00+08:00", text);
+            Assert.That(text, Is.EqualTo("2014-05-20T20:00:00+08:00"));
         }
 
         private object ExecuteScript(String script, params Object[] args)

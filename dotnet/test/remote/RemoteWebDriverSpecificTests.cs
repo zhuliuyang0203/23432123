@@ -75,7 +75,7 @@ namespace OpenQA.Selenium.Remote
             driver.SwitchTo().Frame("upload_target");
 
             IWebElement body = driver.FindElement(By.XPath("//body"));
-            Assert.IsTrue(LoremIpsumText == body.Text, "Page source is: " + driver.PageSource);
+            Assert.That(body.Text, Is.EqualTo(LoremIpsumText), "Page source is: " + driver.PageSource);
             driver.SwitchTo().DefaultContent();
             uploadElement = driver.FindElement(By.Id("upload"));
             Console.WriteLine(uploadElement.Text);
