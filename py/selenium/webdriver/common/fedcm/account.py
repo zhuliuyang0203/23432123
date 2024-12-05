@@ -52,15 +52,5 @@ class Account:
     privacy_policy_url = _AccountDescriptor("privacyPolicyUrl")
     login_state = _AccountDescriptor("loginState")
 
-    account_id = _AccountDescriptor("accountId")
-    email = _AccountDescriptor("email")
-    name = _AccountDescriptor("name")
-    given_name = _AccountDescriptor("givenName")
-    picture_url = _AccountDescriptor("pictureUrl")
-    idp_config_url = _AccountDescriptor("idpConfigUrl")
-    terms_of_service_url = _AccountDescriptor("termsOfServiceUrl")
-    privacy_policy_url = _AccountDescriptor("privacyPolicyUrl")
-    login_state = _AccountDescriptor("loginState")
-
     def __init__(self, account_data):
         self._account_data = account_data
