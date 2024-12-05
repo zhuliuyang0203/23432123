@@ -236,21 +236,21 @@ namespace OpenQA.Selenium
 
             IWebElement typer = driver.FindElement(By.Name("typer"));
             typer.SendKeys("bob");
-            Assert.AreEqual("bob", typer.GetAttribute("value"));
+            Assert.That(typer.GetAttribute("value"), Is.EqualTo("bob"));
 
             driver.FindElement(By.Id("red")).Click();
             driver.FindElement(By.Name("submit")).Click();
 
-            Assert.AreEqual(1, GetNumberOfDivElements(), "There should only be 1 DIV at this point, which is used for the butter message");
+            Assert.That(GetNumberOfDivElements(), Is.EqualTo(1), "There should only be 1 DIV at this point, which is used for the butter message");
 
             driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
             string text = (string)executor.ExecuteAsyncScript(
                 "var callback = arguments[arguments.length - 1];"
                 + "window.registerListener(arguments[arguments.length - 1]);");
-            Assert.AreEqual("bob", text);
-            Assert.AreEqual("", typer.GetAttribute("value"));
+            Assert.That(text, Is.EqualTo("bob"));
+            Assert.That(typer.GetAttribute("value"), Is.Empty);
 
-            Assert.AreEqual(2, GetNumberOfDivElements(), "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)");
+            Assert.That(GetNumberOfDivElements(), Is.EqualTo(2), "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)");
         }
 
         [Test]
@@ -258,7 +258,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = ajaxyPage;
             long result = (long)executor.ExecuteAsyncScript("arguments[arguments.length - 1](arguments[0] + arguments[1]);", 1, 2);
-            Assert.AreEqual(3, result);
+            Assert.That(result, Is.EqualTo(3));
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace OpenQA.Selenium
             driver.Url = ajaxyPage;
             driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(3);
             string response = (string)executor.ExecuteAsyncScript(script, sleepingPage + "?time=2");
-            Assert.AreEqual("<html><head><title>Done</title></head><body>Slept for 2s</body></html>", response.Trim());
+            Assert.That(response.Trim(), Is.EqualTo("<html><head><title>Done</title></head><body>Slept for 2s</body></html>"));
         }
 
         [Test]
