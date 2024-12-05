@@ -1,5 +1,5 @@
 {
-  "checksum": "94895b25f9b1d0a76ec78d588887353422bc623faf9ef986467b199d2a966765",
+  "checksum": "0e8299f5a76cfec7030579fd20069b2debeacc1752e14c4a3b169492b2f18ed4",
   "crates": {
     "addr2line 0.21.0": {
       "name": "addr2line",
@@ -14224,6 +14224,10 @@
               "target": "which"
             },
             {
+              "id": "xz2 0.1.7",
+              "target": "xz2"
+            },
+            {
               "id": "zip 2.2.0",
               "target": "zip"
             }
@@ -22758,6 +22762,7 @@
     "toml 0.8.19",
     "walkdir 2.5.0",
     "which 6.0.3",
+    "xz2 0.1.7",
     "zip 2.2.0"
   ],
   "direct_dev_deps": [

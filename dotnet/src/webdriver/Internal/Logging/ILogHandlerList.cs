@@ -19,6 +19,8 @@
 
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>

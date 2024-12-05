@@ -44,6 +44,9 @@ exclude = ["test*"]
 namespaces = false
 # include-package-data is `true` by default in pyproject.toml
 
+[[tool.setuptools-rust.bins]]
+target = "selenium.webdriver.common.selenium-manager"
+
 [project.urls]
 Repository = "https://github.com/SeleniumHQ/selenium/"
 BugTracker = "https://github.com/SeleniumHQ/selenium/issues"

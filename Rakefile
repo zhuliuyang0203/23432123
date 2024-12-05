@@ -585,8 +585,7 @@ namespace :py do
     nightly = ".#{Time.now.strftime('%Y%m%d%H%M')}"
     new_version = updated_version(old_version, arguments[:version], nightly)
 
-    ['py/setup.py',
-     'py/pyproject.toml',
+    ['py/pyproject.toml',
      'py/BUILD.bazel',
      'py/selenium/__init__.py',
      'py/selenium/webdriver/__init__.py',
@@ -1048,7 +1047,6 @@ namespace :all do
                                            'py/selenium/webdriver/__init__.py',
                                            'py/selenium/__init__.py',
                                            'py/BUILD.bazel',
-                                           'py/setup.py',
                                            'rb/lib/selenium/webdriver/version.rb',
                                            'rb/Gemfile.lock'])
 
@@ -1110,7 +1108,6 @@ namespace :all do
              'py/selenium/webdriver/__init__.py',
              'py/BUILD.bazel',
              'py/CHANGES',
-             'py/setup.py',
              'rb/lib/selenium/webdriver/version.rb',
              'rb/CHANGES',
              'rb/Gemfile.lock',

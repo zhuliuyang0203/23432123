@@ -199,6 +199,26 @@ namespace OpenQA.Selenium.VirtualAuth
         [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Virtual Authenticator")]
         [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Virtual Authenticator")]
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Virtual Authenticator")]
+        public void ShouldSupportMultipleVirtualAuthenticatorsAtOnce()
+        {
+            VirtualAuthenticatorOptions options = new VirtualAuthenticatorOptions();
+
+            string authenticatorId1 = webDriver.AddVirtualAuthenticator(options);
+            Assert.That(webDriver.AuthenticatorId, Is.EqualTo(authenticatorId1));
+
+            string authenticatorId2 = webDriver.AddVirtualAuthenticator(options);
+
+            webDriver.RemoveVirtualAuthenticator(authenticatorId1);
+            webDriver.RemoveVirtualAuthenticator(authenticatorId2);
+
+            Assert.IsNull(webDriver.AuthenticatorId);
+        }
+
+        [Test]
+        [NeedsFreshDriver(IsCreatedAfterTest = true)]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Virtual Authenticator")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Virtual Authenticator")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Virtual Authenticator")]
         public void ShouldAddNonResidentCredential()
         {
             CreateRKDisabledCTAP2Authenticator();
@@ -302,7 +322,9 @@ namespace OpenQA.Selenium.VirtualAuth
             byte[] userHandle = { 1 };
             Credential credential = Credential.CreateResidentCredential(
               credentialId, "localhost", base64EncodedEC256PK, userHandle, /*signCount=*/0);
-            Assert.Throws<WebDriverArgumentException>(() => webDriver.AddCredential(credential));
+            Assert.That(
+                () => webDriver.AddCredential(credential),
+                Throws.TypeOf<WebDriverArgumentException>().With.Message.Contains("The Authenticator does not support Resident Credentials."));
         }
 
         [Test]
@@ -491,6 +513,38 @@ namespace OpenQA.Selenium.VirtualAuth
             string error = (string)((Dictionary<string, object>)response)["status"];
 
             Assert.True(error.StartsWith("NotAllowedError"));
+        }
+
+        [Test]
+        [NeedsFreshDriver(IsCreatedAfterTest = true)]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Virtual Authenticator")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Virtual Authenticator")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Virtual Authenticator")]
+        public void ShouldThrowOnInvalidArguments()
+        {
+            Assert.That(
+                () => webDriver.AddVirtualAuthenticator(null),
+                Throws.ArgumentNullException);
+
+            Assert.That(
+                () => webDriver.RemoveVirtualAuthenticator(null),
+                Throws.ArgumentNullException);
+
+            Assert.That(
+                () => webDriver.AddCredential(null),
+                Throws.ArgumentNullException);
+
+            Assert.That(
+               () => webDriver.RemoveCredential((byte[])null),
+               Throws.ArgumentNullException);
+
+            Assert.That(
+                () => webDriver.RemoveCredential((string)null),
+                Throws.ArgumentNullException);
+
+            Assert.That(
+               () => webDriver.RemoveVirtualAuthenticator("non-existant"),
+               Throws.TypeOf<WebDriverArgumentException>());
         }
     }
 }

@@ -1036,44 +1036,68 @@ namespace OpenQA.Selenium
             return returnValue;
         }
 
+#nullable enable
+
         /// <summary>
         /// Creates a Virtual Authenticator.
         /// </summary>
-        /// <param name="options"> VirtualAuthenticator Options (https://w3c.github.io/webauthn/#sctn-automation-virtual-authenticators)</param>
+        /// <param name="options"><see href="https://w3c.github.io/webauthn/#sctn-automation-virtual-authenticators">Virtual Authenticator Options</see>.</param>
         /// <returns> Authenticator id as string </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public string AddVirtualAuthenticator(VirtualAuthenticatorOptions options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             Response commandResponse = this.Execute(DriverCommand.AddVirtualAuthenticator, options.ToDictionary());
-            string id = commandResponse.Value.ToString();
+            string id = (string)commandResponse.Value!;
             this.AuthenticatorId = id;
-            return this.AuthenticatorId;
+            return id;
         }
 
         /// <summary>
         /// Removes the Virtual Authenticator
         /// </summary>
-        /// <param name="authenticatorId"> Id as string that uniquely identifies a Virtual Authenticator</param>
+        /// <param name="authenticatorId">Id as string that uniquely identifies a Virtual Authenticator.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="authenticatorId"/> is <see langword="null"/>.</exception>
         public void RemoveVirtualAuthenticator(string authenticatorId)
         {
+            if (authenticatorId is null)
+            {
+                throw new ArgumentNullException(nameof(authenticatorId));
+            }
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
+
             this.Execute(DriverCommand.RemoveVirtualAuthenticator, parameters);
             this.AuthenticatorId = null;
         }
 
         /// <summary>
-        /// Gets the virtual authenticator ID for this WebDriver instance.
+        /// Gets the cached virtual authenticator ID, or <see langword="null"/> if no authenticator ID is set.
         /// </summary>
-        public string AuthenticatorId { get; private set; }
+        public string? AuthenticatorId { get; private set; }
 
         /// <summary>
         /// Add a credential to the Virtual Authenticator/
         /// </summary>
         /// <param name="credential"> The credential to be stored in the Virtual Authenticator</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credential"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void AddCredential(Credential credential)
         {
+            if (credential is null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>(credential.ToDictionary());
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.AddCredential, parameters);
         }
@@ -1082,18 +1106,25 @@ namespace OpenQA.Selenium
         /// Retrieves all the credentials stored in the Virtual Authenticator
         /// </summary>
         /// <returns> List of credentials </returns>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public List<Credential> GetCredentials()
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
-            object[] commandResponse = (object[])this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters).Value;
+            Response getCredentialsResponse = this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters);
 
-            List<Credential> credentials = new List<Credential>();
-
-            foreach (object dictionary in commandResponse)
+            if (getCredentialsResponse.Value is not object?[] credentialsList)
             {
-                Credential credential = Credential.FromDictionary((Dictionary<string, object>)dictionary);
+                throw new WebDriverException($"Get credentials call succeeded, but the response was not a list of credentials: {getCredentialsResponse.Value}");
+            }
+
+            List<Credential> credentials = new List<Credential>(credentialsList.Length);
+            foreach (object? dictionary in credentialsList)
+            {
+                Credential credential = Credential.FromDictionary((Dictionary<string, object>)dictionary!);
                 credentials.Add(credential);
             }
 
@@ -1104,6 +1135,8 @@ namespace OpenQA.Selenium
         /// Removes the credential identified by the credentialId from the Virtual Authenticator.
         /// </summary>
         /// <param name="credentialId"> The id as byte array that uniquely identifies a credential </param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credentialId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveCredential(byte[] credentialId)
         {
             RemoveCredential(Base64UrlEncoder.Encode(credentialId));
@@ -1113,10 +1146,19 @@ namespace OpenQA.Selenium
         /// Removes the credential identified by the credentialId from the Virtual Authenticator.
         /// </summary>
         /// <param name="credentialId"> The id as string that uniquely identifies a credential </param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credentialId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveCredential(string credentialId)
         {
+            if (credentialId is null)
+            {
+                throw new ArgumentNullException(nameof(credentialId));
+            }
+
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
             parameters.Add("credentialId", credentialId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveCredential, parameters);
@@ -1125,10 +1167,13 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Removes all the credentials stored in the Virtual Authenticator.
         /// </summary>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveAllCredentials()
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveAllCredentials, parameters);
         }
@@ -1139,8 +1184,10 @@ namespace OpenQA.Selenium
         /// <param name="verified">The boolean value representing value to be set </param>
         public void SetUserVerified(bool verified)
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.AuthenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
             parameters.Add("isUserVerified", verified);
 
             this.Execute(driverCommandToExecute: DriverCommand.SetUserVerified, parameters);

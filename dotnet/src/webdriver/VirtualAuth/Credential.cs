@@ -18,31 +18,30 @@
 // </copyright>
 
 using OpenQA.Selenium.Internal;
+using System;
 using System.Collections.Generic;
+
+#nullable enable
 
 namespace OpenQA.Selenium.VirtualAuth
 {
     /// <summary>
     /// A credential stored in a virtual authenticator.
-    /// Refer https://w3c.github.io/webauthn/#credential-parameters
+    /// Refer <see href="https://w3c.github.io/webauthn/#credential-parameters"/>
     /// </summary>
-    public class Credential
+    public sealed class Credential
     {
         private readonly byte[] id;
-        private readonly bool isResidentCredential;
-        private readonly string rpId;
-        private readonly string privateKey;
-        private readonly byte[] userHandle;
-        private readonly int signCount;
+        private readonly byte[]? userHandle;
 
-        private Credential(byte[] id, bool isResidentCredential, string rpId, string privateKey, byte[] userHandle, int signCount)
+        private Credential(byte[] id, bool isResidentCredential, string rpId, string privateKey, byte[]? userHandle, int signCount)
         {
-            this.id = id;
-            this.isResidentCredential = isResidentCredential;
-            this.rpId = rpId;
-            this.privateKey = privateKey;
+            this.id = id ?? throw new ArgumentNullException(nameof(id));
+            this.IsResidentCredential = isResidentCredential;
+            this.RpId = rpId ?? throw new ArgumentNullException(nameof(rpId));
+            this.PrivateKey = privateKey ?? throw new ArgumentNullException(nameof(privateKey));
             this.userHandle = userHandle;
-            this.signCount = signCount;
+            this.SignCount = signCount;
         }
 
         /// <summary>
@@ -53,6 +52,7 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <param name="privateKey">The private Key for the credentials.</param>
         /// <param name="signCount">The signature counter for the credentials.</param>
         /// <returns>The created instance of the Credential class.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/>, <paramref name="rpId"/>, or <paramref name="privateKey"/> are <see langword="null"/>.</exception>
         public static Credential CreateNonResidentCredential(byte[] id, string rpId, string privateKey, int signCount)
         {
             return new Credential(id, false, rpId, privateKey, null, signCount);
@@ -67,6 +67,7 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <param name="userHandle">The user handle associated to the credential.</param>
         /// <param name="signCount">The signature counter for the credentials.</param>
         /// <returns>The created instance of the Credential class.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/>, <paramref name="rpId"/>, or <paramref name="privateKey"/> are <see langword="null"/>.</exception>
         public static Credential CreateResidentCredential(byte[] id, string rpId, string privateKey, byte[] userHandle, int signCount)
         {
             return new Credential(id, true, rpId, privateKey, userHandle, signCount);
@@ -75,50 +76,32 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <summary>
         /// Gets the byte array of the ID of the credential.
         /// </summary>
-        public byte[] Id
-        {
-            get { return (byte[])id.Clone(); }
-        }
+        public byte[] Id => (byte[])id.Clone();
 
         /// <summary>
         /// Gets a value indicating whether this Credential is a resident credential.
         /// </summary>
-        public bool IsResidentCredential
-        {
-            get { return this.isResidentCredential; }
-        }
+        public bool IsResidentCredential { get; }
 
         /// <summary>
         /// Gets the ID of the relying party of this credential.
         /// </summary>
-        public string RpId
-        {
-            get { return this.rpId; }
-        }
+        public string RpId { get; }
 
         /// <summary>
         /// Gets the private key of the credential.
         /// </summary>
-        public string PrivateKey
-        {
-            get { return this.privateKey; }
-        }
+        public string PrivateKey { get; }
 
         /// <summary>
         /// Gets the user handle of the credential.
         /// </summary>
-        public byte[] UserHandle
-        {
-            get { return userHandle == null ? null : (byte[])userHandle.Clone(); }
-        }
+        public byte[]? UserHandle => (byte[]?)userHandle?.Clone();
 
         /// <summary>
         /// Gets the signature counter associated to the public key credential source.
         /// </summary>
-        public int SignCount
-        {
-            get { return this.signCount; }
-        }
+        public int SignCount { get; }
 
         /// <summary>
         /// Creates a Credential instance from a dictionary of values.
@@ -127,13 +110,14 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <returns>The created instance of the Credential.</returns>
         public static Credential FromDictionary(Dictionary<string, object> dictionary)
         {
-            return new Credential(
-                Base64UrlEncoder.DecodeBytes((string)dictionary["credentialId"]),
-                (bool)dictionary["isResidentCredential"],
-                dictionary.ContainsKey("rpId") ? (string)dictionary["rpId"] : null,
-                (string)dictionary["privateKey"],
-                dictionary.ContainsKey("userHandle") ? Base64UrlEncoder.DecodeBytes((string)dictionary["userHandle"]) : null,
-                (int)((long)dictionary["signCount"]));
+            byte[] id = Base64UrlEncoder.DecodeBytes((string)dictionary["credentialId"]);
+            bool isResidentCredential = (bool)dictionary["isResidentCredential"];
+            string? rpId = dictionary.TryGetValue("rpId", out object? r) ? (string)r : null;
+            string privateKey = (string)dictionary["privateKey"];
+            byte[]? userHandle = dictionary.TryGetValue("userHandle", out object? u) ? Base64UrlEncoder.DecodeBytes((string)u) : null;
+            int signCount = (int)(long)dictionary["signCount"];
+
+            return new Credential(id, isResidentCredential, rpId, privateKey, userHandle, signCount);
         }
 
         /// <summary>
@@ -145,11 +129,11 @@ namespace OpenQA.Selenium.VirtualAuth
             Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
             toReturn["credentialId"] = Base64UrlEncoder.Encode(this.id);
-            toReturn["isResidentCredential"] = this.isResidentCredential;
-            toReturn["rpId"] = this.rpId;
-            toReturn["privateKey"] = this.privateKey;
-            toReturn["signCount"] = this.signCount;
-            if (this.userHandle != null)
+            toReturn["isResidentCredential"] = this.IsResidentCredential;
+            toReturn["rpId"] = this.RpId;
+            toReturn["privateKey"] = this.PrivateKey;
+            toReturn["signCount"] = this.SignCount;
+            if (this.userHandle is not null)
             {
                 toReturn["userHandle"] = Base64UrlEncoder.Encode(this.userHandle);
             }

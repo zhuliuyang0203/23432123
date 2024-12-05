@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
@@ -33,9 +35,10 @@ namespace OpenQA.Selenium.Internal.Logging
         /// <param name="timestamp">The timestamp of the log event.</param>
         /// <param name="level">The level of the log event.</param>
         /// <param name="message">The message of the log event.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="issuedBy"/> is <see langword="null"/>.</exception>
         public LogEvent(Type issuedBy, DateTimeOffset timestamp, LogEventLevel level, string message)
         {
-            IssuedBy = issuedBy;
+            IssuedBy = issuedBy ?? throw new ArgumentNullException(nameof(issuedBy));
             Timestamp = timestamp;
             Level = level;
             Message = message;

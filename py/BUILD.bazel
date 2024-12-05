@@ -231,7 +231,6 @@ pkg_files(
         "CHANGES",
         "README.rst",
         "pyproject.toml",
-        "setup.py",
         ":license",
         ":selenium-pkg",
         ":selenium-pkginfo",

@@ -36,7 +36,7 @@ import os
 from pathlib import Path
 import re
 from textwrap import dedent, indent as tw_indent
-import typing
+from typing import Optional , cast, List, Union, Iterator
 
 import inflection  # type: ignore
 
@@ -206,11 +206,11 @@ class CdpItems:
 class CdpProperty:
     ''' A property belonging to a non-primitive CDP type. '''
     name: str
-    description: typing.Optional[str]
-    type: typing.Optional[str]
-    ref: typing.Optional[str]
-    enum: typing.List[str]
-    items: typing.Optional[CdpItems]
+    description: Optional[str]
+    type: Optional[str]
+    ref: Optional[str]
+    enum: List[str]
+    items: Optional[CdpItems]
     optional: bool
     experimental: bool
     deprecated: bool
@@ -236,7 +236,7 @@ class CdpProperty:
                 ann = py_ref
             else:
                 ann = CdpPrimitiveType.get_annotation(
-                    typing.cast(str, self.type))
+                    cast(str, self.type))
         if self.optional:
             ann = f'typing.Optional[{ann}]'
         return ann
@@ -316,11 +316,11 @@ class CdpProperty:
 class CdpType:
     ''' A top-level CDP type. '''
     id: str
-    description: typing.Optional[str]
+    description: Optional[str]
     type: str
-    items: typing.Optional[CdpItems]
-    enum: typing.List[str]
-    properties: typing.List[CdpProperty]
+    items: Optional[CdpItems]
+    enum: List[str]
+    properties: List[CdpProperty]
 
     @classmethod
     def from_json(cls, type_):
@@ -500,7 +500,7 @@ class CdpParameter(CdpProperty):
                 py_type = f"{ref_to_python(self.ref)}"
             else:
                 py_type = CdpPrimitiveType.get_annotation(
-                    typing.cast(str, self.type))
+                    cast(str, self.type))
         if self.optional:
             py_type = f'typing.Optional[{py_type}]'
         code = f"{self.py_name}: {py_type}"
@@ -585,8 +585,8 @@ class CdpCommand:
     description: str
     experimental: bool
     deprecated: bool
-    parameters: typing.List[CdpParameter]
-    returns: typing.List[CdpReturn]
+    parameters: List[CdpParameter]
+    returns: List[CdpReturn]
     domain: str
 
     @property
@@ -605,8 +605,8 @@ class CdpCommand:
             command.get('description'),
             command.get('experimental', False),
             command.get('deprecated', False),
-            [typing.cast(CdpParameter, CdpParameter.from_json(p)) for p in parameters],
-            [typing.cast(CdpReturn, CdpReturn.from_json(r)) for r in returns],
+            [cast(CdpParameter, CdpParameter.from_json(p)) for p in parameters],
+            [cast(CdpReturn, CdpReturn.from_json(r)) for r in returns],
             domain,
         )
 
@@ -712,10 +712,10 @@ class CdpCommand:
 class CdpEvent:
     ''' A CDP event object. '''
     name: str
-    description: typing.Optional[str]
+    description: Optional[str]
     deprecated: bool
     experimental: bool
-    parameters: typing.List[CdpParameter]
+    parameters: List[CdpParameter]
     domain: str
 
     @property
@@ -731,7 +731,7 @@ class CdpEvent:
             json.get('description'),
             json.get('deprecated', False),
             json.get('experimental', False),
-            [typing.cast(CdpParameter, CdpParameter.from_json(p))
+            [cast(CdpParameter, CdpParameter.from_json(p))
                 for p in json.get('parameters', [])],
             domain
         )
@@ -786,12 +786,12 @@ class CdpEvent:
 class CdpDomain:
     ''' A CDP domain contains metadata, types, commands, and events. '''
     domain: str
-    description: typing.Optional[str]
+    description: Optional[str]
     experimental: bool
-    dependencies: typing.List[str]
-    types: typing.List[CdpType]
-    commands: typing.List[CdpCommand]
-    events: typing.List[CdpEvent]
+    dependencies: List[str]
+    types: List[CdpType]
+    commands: List[CdpCommand]
+    events: List[CdpEvent]
 
     @property
     def module(self):
@@ -826,8 +826,8 @@ class CdpDomain:
             code += import_code
             code += '\n\n'
         code += '\n'
-        item_iter_t = typing.Union[CdpEvent, CdpCommand, CdpType]
-        item_iter: typing.Iterator[item_iter_t] = itertools.chain(
+        item_iter_t = Union[CdpEvent, CdpCommand, CdpType]
+        item_iter: Iterator[item_iter_t] = itertools.chain(
             iter(self.types),
             iter(self.commands),
             iter(self.events),

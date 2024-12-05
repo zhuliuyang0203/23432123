@@ -19,13 +19,15 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
     /// The implementation of the <see cref="ILogger"/> interface through which log messages are emitted.
     /// </summary>
     /// <inheritdoc cref="ILogger"/>
-    internal class Logger : ILogger
+    internal sealed class Logger : ILogger
     {
         public Logger(Type issuer, LogEventLevel level)
         {

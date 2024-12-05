@@ -19,13 +19,15 @@
 
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
     /// Represents a list of log handlers.
     /// </summary>
     /// <inheritdoc cref="ILogHandlerList"/>
-    internal class LogHandlerList : List<ILogHandler>, ILogHandlerList
+    internal sealed class LogHandlerList : List<ILogHandler>, ILogHandlerList
     {
         private readonly ILogContext _logContext;
 

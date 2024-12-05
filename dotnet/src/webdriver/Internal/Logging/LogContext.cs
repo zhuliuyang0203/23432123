@@ -22,6 +22,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
@@ -30,15 +32,15 @@ namespace OpenQA.Selenium.Internal.Logging
     /// <inheritdoc cref="ILogContext"/>
     internal class LogContext : ILogContext
     {
-        private ConcurrentDictionary<Type, ILogger> _loggers;
+        private ConcurrentDictionary<Type, ILogger>? _loggers;
 
         private LogEventLevel _level;
 
-        private readonly ILogContext _parentLogContext;
+        private readonly ILogContext? _parentLogContext;
 
         private readonly Lazy<LogHandlerList> _lazyLogHandlerList;
 
-        public LogContext(LogEventLevel level, ILogContext parentLogContext, ConcurrentDictionary<Type, ILogger> loggers, IEnumerable<ILogHandler> handlers)
+        public LogContext(LogEventLevel level, ILogContext? parentLogContext, ConcurrentDictionary<Type, ILogger>? loggers, IEnumerable<ILogHandler>? handlers)
         {
             _level = level;
 
@@ -63,7 +65,7 @@ namespace OpenQA.Selenium.Internal.Logging
 
         public ILogContext CreateContext(LogEventLevel minimumLevel)
         {
-            ConcurrentDictionary<Type, ILogger> loggers = null;
+            ConcurrentDictionary<Type, ILogger>? loggers = null;
 
             if (_loggers != null)
             {
@@ -89,12 +91,9 @@ namespace OpenQA.Selenium.Internal.Logging
                 throw new ArgumentNullException(nameof(type));
             }
 
-            if (_loggers is null)
-            {
-                _loggers = new ConcurrentDictionary<Type, ILogger>();
-            }
+            _loggers ??= new ConcurrentDictionary<Type, ILogger>();
 
-            return _loggers.GetOrAdd(type, _ => new Logger(type, _level));
+            return _loggers.GetOrAdd(type, type => new Logger(type, _level));
         }
 
         public bool IsEnabled(ILogger logger, LogEventLevel level)

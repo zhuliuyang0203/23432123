@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
@@ -29,7 +31,7 @@ namespace OpenQA.Selenium.Internal
     /// </summary>
     internal class ResponseValueJsonConverter : JsonConverter<object>
     {
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             return ProcessReadToken(ref reader, options);
         }
@@ -67,19 +69,19 @@ namespace OpenQA.Selenium.Internal
             }
         }
 
-        private static object ProcessReadToken(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        private static object? ProcessReadToken(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             // Recursively processes a token. This is required for elements that next other elements.
-            object processedObject;
+            object? processedObject;
 
             switch (reader.TokenType)
             {
                 case JsonTokenType.StartObject:
                     {
-                        Dictionary<string, object> dictionaryValue = [];
+                        Dictionary<string, object?> dictionaryValue = [];
                         while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
                         {
-                            string elementKey = reader.GetString();
+                            string elementKey = reader.GetString()!;
                             reader.Read();
                             dictionaryValue.Add(elementKey, ProcessReadToken(ref reader, options));
                         }
@@ -90,7 +92,7 @@ namespace OpenQA.Selenium.Internal
 
                 case JsonTokenType.StartArray:
                     {
-                        List<object> arrayValue = [];
+                        List<object?> arrayValue = [];
                         while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                         {
                             arrayValue.Add(ProcessReadToken(ref reader, options));
