@@ -51,6 +51,7 @@ import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpClient;
+import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpResponse;
 
 @Tag("UnitTests")
@@ -233,5 +234,23 @@ class RemoteWebDriverInitializationTest {
     public void quit() {
       quitCalled = true;
     }
+  }
+
+  @Test
+  void additionalCommandsCanBeModified() throws MalformedURLException {
+    HttpClient client = mock(HttpClient.class);
+    HttpClient.Factory factory = mock(HttpClient.Factory.class);
+
+    when(factory.createClient(any(ClientConfig.class))).thenReturn(client);
+
+    URL url = new URL("http://localhost:4444/");
+    HttpCommandExecutor executor =
+        new HttpCommandExecutor(emptyMap(), ClientConfig.defaultConfig().baseUrl(url), factory);
+
+    String commandName = "customCommand";
+    CommandInfo commandInfo = new CommandInfo("/session/:sessionId/custom", HttpMethod.GET);
+    executor.addAdditionalCommand(commandName, commandInfo);
+
+    assertThat(executor.getAdditionalCommands()).containsEntry(commandName, commandInfo);
   }
 }

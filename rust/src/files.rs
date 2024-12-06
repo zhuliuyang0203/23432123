@@ -35,6 +35,7 @@ use std::io::{BufReader, Cursor, Read};
 use std::path::{Path, PathBuf};
 use tar::Archive;
 use walkdir::{DirEntry, WalkDir};
+use xz2::read::XzDecoder;
 use zip::ZipArchive;
 
 pub const PARSE_ERROR: &str = "Wrong browser/driver version";
@@ -49,6 +50,7 @@ const DMG: &str = "dmg";
 const EXE: &str = "exe";
 const DEB: &str = "deb";
 const MSI: &str = "msi";
+const XZ: &str = "xz";
 const SEVEN_ZIP_HEADER: &[u8; 6] = b"7z\xBC\xAF\x27\x1C";
 const UNCOMPRESS_MACOS_ERR_MSG: &str = "{} files are only supported in macOS";
 
@@ -123,7 +125,17 @@ pub fn uncompress(
     } else if extension.eq_ignore_ascii_case(GZ) {
         untargz(compressed_file, target, log)?
     } else if extension.eq_ignore_ascii_case(BZ2) {
-        uncompress_bz2(compressed_file, target, log)?
+        uncompress_tar(
+            &mut BzDecoder::new(File::open(compressed_file)?),
+            target,
+            log,
+        )?
+    } else if extension.eq_ignore_ascii_case(XZ) {
+        uncompress_tar(
+            &mut XzDecoder::new(File::open(compressed_file)?),
+            target,
+            log,
+        )?
     } else if extension.eq_ignore_ascii_case(PKG) {
         uncompress_pkg(compressed_file, target, log)?
     } else if extension.eq_ignore_ascii_case(DMG) {
@@ -317,15 +329,13 @@ pub fn untargz(compressed_file: &str, target: &Path, log: &Logger) -> Result<(),
     Ok(())
 }
 
-pub fn uncompress_bz2(compressed_file: &str, target: &Path, log: &Logger) -> Result<(), Error> {
+pub fn uncompress_tar(decoder: &mut dyn Read, target: &Path, log: &Logger) -> Result<(), Error> {
     log.trace(format!(
-        "Uncompress {} to {}",
-        compressed_file,
+        "Uncompress compressed tarball to {}",
         target.display()
     ));
-    let mut bz_decoder = BzDecoder::new(File::open(compressed_file)?);
     let mut buffer: Vec<u8> = Vec::new();
-    bz_decoder.read_to_end(&mut buffer)?;
+    decoder.read_to_end(&mut buffer)?;
     let mut archive = Archive::new(Cursor::new(buffer));
     if !target.exists() {
         for entry in archive.entries()? {

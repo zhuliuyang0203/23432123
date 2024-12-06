@@ -237,43 +237,47 @@ pub trait SeleniumManager {
             )));
         }
 
-        // Browser version is checked in the local metadata
-        match get_browser_version_from_metadata(
-            &metadata.browsers,
-            self.get_browser_name(),
-            &major_browser_version,
-        ) {
-            Some(version) => {
-                self.get_logger().trace(format!(
-                    "Browser with valid TTL. Getting {} version from metadata",
-                    self.get_browser_name()
-                ));
-                browser_version = version;
-                self.set_browser_version(browser_version.clone());
-            }
-            _ => {
-                // If not in metadata, discover version using online metadata
-                if self.is_browser_version_stable() || self.is_browser_version_empty() {
-                    browser_version =
-                        self.request_latest_browser_version_from_online(original_browser_version)?;
-                } else {
-                    browser_version =
-                        self.request_fixed_browser_version_from_online(original_browser_version)?;
-                }
-                self.set_browser_version(browser_version.clone());
-
-                let browser_ttl = self.get_ttl();
-                if browser_ttl > 0
-                    && !self.is_browser_version_empty()
-                    && !self.is_browser_version_stable()
-                {
-                    metadata.browsers.push(create_browser_metadata(
-                        self.get_browser_name(),
-                        &major_browser_version,
-                        &browser_version,
-                        browser_ttl,
+        if self.is_version_specific(original_browser_version) {
+            browser_version = original_browser_version.to_string();
+        } else {
+            // Browser version is checked in the local metadata
+            match get_browser_version_from_metadata(
+                &metadata.browsers,
+                self.get_browser_name(),
+                &major_browser_version,
+            ) {
+                Some(version) => {
+                    self.get_logger().trace(format!(
+                        "Browser with valid TTL. Getting {} version from metadata",
+                        self.get_browser_name()
                     ));
-                    write_metadata(&metadata, self.get_logger(), cache_path);
+                    browser_version = version;
+                    self.set_browser_version(browser_version.clone());
+                }
+                _ => {
+                    // If not in metadata, discover version using online metadata
+                    if self.is_browser_version_stable() || self.is_browser_version_empty() {
+                        browser_version = self
+                            .request_latest_browser_version_from_online(original_browser_version)?;
+                    } else {
+                        browser_version = self
+                            .request_fixed_browser_version_from_online(original_browser_version)?;
+                    }
+                    self.set_browser_version(browser_version.clone());
+
+                    let browser_ttl = self.get_ttl();
+                    if browser_ttl > 0
+                        && !self.is_browser_version_empty()
+                        && !self.is_browser_version_stable()
+                    {
+                        metadata.browsers.push(create_browser_metadata(
+                            self.get_browser_name(),
+                            &major_browser_version,
+                            &browser_version,
+                            browser_ttl,
+                        ));
+                        write_metadata(&metadata, self.get_logger(), cache_path);
+                    }
                 }
             }
         }
@@ -715,6 +719,14 @@ pub trait SeleniumManager {
         self.is_stable(self.get_browser_version())
     }
 
+    fn is_version_specific(&self, version: &str) -> bool {
+        version.contains(".")
+    }
+
+    fn is_browser_version_specific(&self) -> bool {
+        self.is_version_specific(self.get_browser_version())
+    }
+
     fn setup(&mut self) -> Result<PathBuf, Error> {
         let mut driver_in_path = None;
         let mut driver_in_path_version = None;
@@ -750,7 +762,10 @@ pub trait SeleniumManager {
         // Download browser if necessary
         match self.download_browser_if_necessary(&original_browser_version) {
             Ok(_) => {}
-            Err(err) => self.check_error_with_driver_in_path(&use_driver_in_path, err)?,
+            Err(err) => {
+                self.set_fallback_driver_from_cache(false);
+                self.check_error_with_driver_in_path(&use_driver_in_path, err)?
+            }
         }
 
         // With the discovered browser version, discover the proper driver version using online endpoints

@@ -1,19 +1,20 @@
-// <copyright file="SeleniumManager.cs" company="WebDriver Committers">
+// <copyright file="SeleniumManager.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Internal.Logging;
@@ -24,7 +25,10 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using static OpenQA.Selenium.SeleniumManagerResponse;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -36,25 +40,23 @@ namespace OpenQA.Selenium
     {
         private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
-        private static readonly string BinaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
-
-        static SeleniumManager()
+        private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
         {
-
-            if (BinaryFullPath == null)
+            string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
+            if (binaryFullPath == null)
             {
                 var currentDirectory = AppContext.BaseDirectory;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager");
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    BinaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager");
+                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager");
                 }
                 else
                 {
@@ -63,11 +65,13 @@ namespace OpenQA.Selenium
                 }
             }
 
-            if (!File.Exists(BinaryFullPath))
+            if (!File.Exists(binaryFullPath))
             {
-                throw new WebDriverException($"Unable to locate or obtain Selenium Manager binary at {BinaryFullPath}");
+                throw new WebDriverException($"Unable to locate or obtain Selenium Manager binary at {binaryFullPath}");
             }
-        }
+
+            return binaryFullPath;
+        });
 
         /// <summary>
         /// Determines the location of the browser and driver binaries.
@@ -86,10 +90,12 @@ namespace OpenQA.Selenium
                 argsBuilder.Append(" --debug");
             }
 
-            var output = RunCommand(BinaryFullPath, argsBuilder.ToString());
-            Dictionary<string, string> binaryPaths = new Dictionary<string, string>();
-            binaryPaths.Add("browser_path", (string)output["browser_path"]);
-            binaryPaths.Add("driver_path", (string)output["driver_path"]);
+            var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
+            Dictionary<string, string> binaryPaths = new()
+            {
+                { "browser_path", smCommandResult.BrowserPath },
+                { "driver_path", smCommandResult.DriverPath }
+            };
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
@@ -108,10 +114,10 @@ namespace OpenQA.Selenium
         /// <returns>
         /// the standard output of the execution.
         /// </returns>
-        private static JsonNode RunCommand(string fileName, string arguments)
+        private static ResultResponse RunCommand(string fileName, string arguments)
         {
             Process process = new Process();
-            process.StartInfo.FileName = BinaryFullPath;
+            process.StartInfo.FileName = _lazyBinaryFullPath.Value;
             process.StartInfo.Arguments = arguments;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
@@ -174,47 +180,48 @@ namespace OpenQA.Selenium
             }
 
             string output = outputBuilder.ToString().Trim();
-            JsonNode resultJsonNode;
+
+            SeleniumManagerResponse jsonResponse;
+
             try
             {
-                var deserializedOutput = JsonSerializer.Deserialize<Dictionary<string, JsonNode>>(output);
-                resultJsonNode = deserializedOutput["result"];
+                jsonResponse = JsonSerializer.Deserialize(output, SeleniumManagerSerializerContext.Default.SeleniumManagerResponse)!;
             }
             catch (Exception ex)
             {
                 throw new WebDriverException($"Error deserializing Selenium Manager's response: {output}", ex);
             }
 
-            if (resultJsonNode["logs"] is not null)
+            if (jsonResponse.Logs is not null)
             {
-                var logs = resultJsonNode["logs"];
-                foreach (var entry in logs.AsArray())
+                // Treat SM's logs always as Trace to avoid SM writing at Info level
+                if (_logger.IsEnabled(LogEventLevel.Trace))
                 {
-                    switch (entry.GetPropertyName())
+                    foreach (var entry in jsonResponse.Logs)
                     {
-                        case "WARN":
-                            if (_logger.IsEnabled(LogEventLevel.Warn))
-                            {
-                                _logger.Warn(entry.GetValue<string>());
-                            }
-                            break;
-                        case "DEBUG":
-                            if (_logger.IsEnabled(LogEventLevel.Debug))
-                            {
-                                _logger.Debug(entry.GetValue<string>());
-                            }
-                            break;
-                        case "INFO":
-                            if (_logger.IsEnabled(LogEventLevel.Info))
-                            {
-                                _logger.Info(entry.GetValue<string>());
-                            }
-                            break;
+                        _logger.Trace($"{entry.Level} {entry.Message}");
                     }
                 }
             }
 
-            return resultJsonNode;
+            return jsonResponse.Result;
         }
     }
+
+    internal sealed record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
+    {
+        public sealed record LogEntryResponse(string Level, string Message);
+
+        public sealed record ResultResponse
+        (
+            [property: JsonPropertyName("driver_path")]
+            string DriverPath,
+            [property: JsonPropertyName("browser_path")]
+            string BrowserPath
+        );
+    }
+
+    [JsonSerializable(typeof(SeleniumManagerResponse))]
+    [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
+    internal sealed partial class SeleniumManagerSerializerContext : JsonSerializerContext;
 }

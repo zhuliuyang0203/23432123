@@ -15,10 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from io import IOBase
 from typing import List
 from typing import Mapping
 from typing import Optional
-from io import IOBase
 
 
 from selenium.types import SubprocessStdAlias
@@ -46,6 +46,7 @@ class ChromiumService(service.Service):
         **kwargs,
     ) -> None:
         self._service_args = service_args or []
+        driver_path_env_key = driver_path_env_key or "SE_CHROMEDRIVER"
 
         if isinstance(log_output, str):
             self.service_args.append(f"--log-path={log_output}")
@@ -60,6 +61,7 @@ class ChromiumService(service.Service):
             port=port,
             env=env,
             log_output=self.log_output,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 
@@ -75,3 +77,4 @@ class ChromiumService(service.Service):
 
     def command_line_args(self) -> List[str]:
         return [f"--port={self.port}"] + self._service_args
+

@@ -1,3 +1,22 @@
+// <copyright file="FrameSwitchingTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -156,28 +175,16 @@ namespace OpenQA.Selenium
             driver.SwitchTo().Frame(frameElement);
             Assert.AreEqual("2", driver.FindElement(By.Id("pageNumber")).Text);
 
-            try
-            {
-                driver.SwitchTo().Frame("third");
-                Assert.Fail();
-            }
-            catch (NoSuchFrameException)
-            {
-                // Do nothing
-            }
+            Assert.That(
+                () => driver.SwitchTo().Frame("third"),
+                Throws.TypeOf<NoSuchFrameException>());
 
             driver.SwitchTo().DefaultContent();
             driver.SwitchTo().Frame("third");
 
-            try
-            {
-                driver.SwitchTo().Frame("second");
-                Assert.Fail();
-            }
-            catch (NoSuchFrameException)
-            {
-                // Do nothing
-            }
+            Assert.That(
+                () => driver.SwitchTo().Frame("second"),
+                Throws.TypeOf<NoSuchFrameException>());
 
             driver.SwitchTo().DefaultContent();
             driver.SwitchTo().Frame("second");
@@ -197,7 +204,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("fourth");
-            Assert.That(() => driver.SwitchTo().Frame("second"), Throws.InstanceOf<NoSuchFrameException>());
+            Assert.That(
+                () => driver.SwitchTo().Frame("second"),
+                Throws.TypeOf<NoSuchFrameException>());
 
         }
 
@@ -205,14 +214,20 @@ namespace OpenQA.Selenium
         public void ShouldThrowAnExceptionWhenAFrameCannotBeFound()
         {
             driver.Url = xhtmlTestPage;
-            Assert.That(() => driver.SwitchTo().Frame("Nothing here"), Throws.InstanceOf<NoSuchFrameException>());
+
+            Assert.That(
+                () => driver.SwitchTo().Frame("Nothing here"),
+                Throws.TypeOf<NoSuchFrameException>());
         }
 
         [Test]
         public void ShouldThrowAnExceptionWhenAFrameCannotBeFoundByIndex()
         {
             driver.Url = xhtmlTestPage;
-            Assert.That(() => driver.SwitchTo().Frame(27), Throws.InstanceOf<NoSuchFrameException>());
+
+            Assert.That(
+                () => driver.SwitchTo().Frame(27),
+                Throws.TypeOf<NoSuchFrameException>());
         }
 
         [Test]
@@ -451,7 +466,9 @@ namespace OpenQA.Selenium
             IWebElement killIframe = driver.FindElement(By.Id("killIframe"));
             killIframe.Click();
 
-            Assert.That(() => driver.FindElement(By.Id("killIframe")), Throws.InstanceOf<NoSuchWindowException>());
+            Assert.That(
+                () => driver.FindElement(By.Id("killIframe")),
+                Throws.TypeOf<NoSuchWindowException>());
         }
 
         [Test]
@@ -596,9 +613,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
 
         private bool FrameExistsAndSwitchedTo(int index)
@@ -610,9 +626,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
 
         private bool FrameExistsAndSwitchedTo(IWebElement frameElement)
@@ -624,9 +639,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
     }
 }

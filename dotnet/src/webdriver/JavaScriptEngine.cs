@@ -1,19 +1,20 @@
-// <copyright file="JavaScriptEngine.cs" company="WebDriver Committers">
+// <copyright file="JavaScriptEngine.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.DevTools;
@@ -218,14 +219,25 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The JavaScript to pin</param>
         /// <returns>A task containing a <see cref="PinnedScript"/> object to use to execute the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task<PinnedScript> PinScript(string script)
         {
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            string newScriptHandle = Guid.NewGuid().ToString("N");
+
             // We do an "Evaluate" first so as to immediately create the script on the loaded
             // page, then will add it to the initialization of future pages.
-            PinnedScript pinnedScript = new PinnedScript(script);
             await this.EnableDomains().ConfigureAwait(false);
-            await this.session.Value.Domains.JavaScript.Evaluate(pinnedScript.CreationScript).ConfigureAwait(false);
-            pinnedScript.ScriptId = await this.session.Value.Domains.JavaScript.AddScriptToEvaluateOnNewDocument(pinnedScript.CreationScript).ConfigureAwait(false);
+
+            string creationScript = PinnedScript.MakeCreationScript(newScriptHandle, script);
+            await this.session.Value.Domains.JavaScript.Evaluate(creationScript).ConfigureAwait(false);
+            string scriptId = await this.session.Value.Domains.JavaScript.AddScriptToEvaluateOnNewDocument(creationScript).ConfigureAwait(false);
+
+            PinnedScript pinnedScript = new PinnedScript(script, newScriptHandle, scriptId);
             this.pinnedScripts[pinnedScript.Handle] = pinnedScript;
             return pinnedScript;
         }
@@ -235,11 +247,17 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The <see cref="PinnedScript"/> object to unpin.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         public async Task UnpinScript(PinnedScript script)
         {
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
             if (this.pinnedScripts.ContainsKey(script.Handle))
             {
-                await this.session.Value.Domains.JavaScript.Evaluate(script.RemovalScript).ConfigureAwait(false);
+                await this.session.Value.Domains.JavaScript.Evaluate(script.MakeRemovalScript()).ConfigureAwait(false);
                 await this.session.Value.Domains.JavaScript.RemoveScriptToEvaluateOnNewDocument(script.ScriptId).ConfigureAwait(false);
                 this.pinnedScripts.Remove(script.Handle);
             }

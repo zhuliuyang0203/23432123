@@ -23,11 +23,12 @@ Gem::Specification.new do |s|
     'changelog_uri' => 'https://github.com/SeleniumHQ/selenium/blob/trunk/rb/CHANGES',
     'github_repo' => 'ssh://github.com/SeleniumHQ/selenium',
     'source_code_uri' => 'https://github.com/SeleniumHQ/selenium/tree/trunk/rb',
-    'rubygems_mfa_required' => 'true'
+    'rubygems_mfa_required' => 'true',
+    'funding_uri' => 'https://github.com/sponsors/SeleniumHQ'
   }
 
   s.required_rubygems_version = Gem::Requirement.new('> 1.3.1') if s.respond_to? :required_rubygems_version=
-  s.required_ruby_version = Gem::Requirement.new('>= 3.0')
+  s.required_ruby_version = Gem::Requirement.new('>= 3.1')
 
   s.files = [
     'LICENSE',

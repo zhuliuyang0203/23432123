@@ -41,15 +41,18 @@ class Service(service.Service):
         service_args: Optional[List[str]] = None,
         log_output: SubprocessStdAlias = None,
         env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self._service_args = service_args or []
+        driver_path_env_key = driver_path_env_key or "SE_GECKODRIVER"
 
         super().__init__(
             executable_path=executable_path,
             port=port,
             log_output=log_output,
             env=env,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 

@@ -1,19 +1,20 @@
-// <copyright file="RelativeBy.cs" company="WebDriver Committers">
+// <copyright file="RelativeBy.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Internal;
@@ -107,8 +108,28 @@ namespace OpenQA.Selenium
             filterParameters["filters"] = this.filters;
             parameters["relative"] = filterParameters;
             object rawElements = js.ExecuteScript(wrappedAtom, parameters);
-            ReadOnlyCollection<IWebElement> elements = rawElements as ReadOnlyCollection<IWebElement>;
-            return elements;
+
+            if (rawElements is ReadOnlyCollection<IWebElement> elements)
+            {
+                return elements;
+            }
+
+            // De-serializer quirk - if the response is empty then the de-serializer will not know we're getting back elements
+            // We will have a ReadOnlyCollection<object>
+
+            if (rawElements is ReadOnlyCollection<object> elementsObj)
+            {
+                if (elementsObj.Count == 0)
+                {
+#if NET8_0_OR_GREATER
+                    return ReadOnlyCollection<IWebElement>.Empty;
+#else
+                    return new List<IWebElement>().AsReadOnly();
+#endif
+                }
+            }
+
+            throw new WebDriverException($"Could not de-serialize element list response{Environment.NewLine}{rawElements}");
         }
 
         /// <summary>
@@ -287,7 +308,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> filter = new Dictionary<string, object>();
             filter["kind"] = "near";
-            filter["args"] = new List<object>() { GetSerializableObject(locator), "distance", atMostDistanceInPixels };
+            filter["args"] = new List<object>() { GetSerializableObject(locator), atMostDistanceInPixels };
             this.filters.Add(filter);
 
             return new RelativeBy(this.root, this.filters);

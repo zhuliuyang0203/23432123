@@ -145,7 +145,7 @@ class LocalValue {
   /**
    * Creates a new LocalValue object from the passed object.
    *
-   * @param {Object} map - The object.
+   * @param {Object} object - The object.
    * @returns {LocalValue} - The created LocalValue object.
    */
   static createObjectValue(object) {
@@ -431,7 +431,7 @@ class ChannelValue {
       }
     }
 
-    if (resultOwnership != undefined) {
+    if (resultOwnership !== undefined) {
       if (['root', 'none'].includes(resultOwnership)) {
         this.resultOwnership = resultOwnership
       } else {

@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 from typing import List
 from typing import Mapping
 from typing import Optional
@@ -28,8 +29,6 @@ class Service(service.ChromiumService):
 
     :param executable_path: install path of the msedgedriver executable, defaults to `msedgedriver`.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
-    :param verbose: (Deprecated) Whether to make the webdriver more verbose (passes the --verbose option to the binary).
-        Defaults to False.
     :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
@@ -42,9 +41,11 @@ class Service(service.ChromiumService):
         log_output: SubprocessStdAlias = None,
         service_args: Optional[List[str]] = None,
         env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self._service_args = service_args or []
+        driver_path_env_key = driver_path_env_key or "SE_EDGEDRIVER"
 
         super().__init__(
             executable_path=executable_path,
@@ -52,6 +53,7 @@ class Service(service.ChromiumService):
             service_args=self.service_args,
             log_output=log_output,
             env=env,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 

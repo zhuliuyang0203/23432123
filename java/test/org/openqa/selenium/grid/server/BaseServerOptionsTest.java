@@ -52,12 +52,7 @@ class BaseServerOptionsTest {
     BaseServerOptions options =
         new BaseServerOptions(new MapConfig(Map.of("server", Map.of("external-url", "not a URL"))));
 
-    Exception exception =
-        assertThrows(
-            RuntimeException.class,
-            () -> {
-              options.getExternalUri();
-            });
+    Exception exception = assertThrows(RuntimeException.class, options::getExternalUri);
 
     assertThat(exception.getMessage())
         .as("External URI must be parseable as URI.")

@@ -1,7 +1,27 @@
+// <copyright file="ExecutingJavascriptTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
 {
@@ -371,14 +391,17 @@ namespace OpenQA.Selenium
             Assert.AreEqual(collection.Count, length);
         }
 
-
+        [Test]
         public void ShouldThrowAnExceptionIfAnArgumentIsNotValid()
         {
             if (!(driver is IJavaScriptExecutor))
                 return;
 
             driver.Url = javascriptPage;
-            Assert.That(() => ExecuteScript("return arguments[0];", driver), Throws.InstanceOf<ArgumentException>());
+
+            Assert.That(
+                () => ExecuteScript("return arguments[0];", driver),
+                Throws.ArgumentException.With.Message.StartsWith("Argument is of an illegal type: "));
         }
 
         [Test]
@@ -447,6 +470,32 @@ namespace OpenQA.Selenium
                 Assert.That(jquery.Length, Is.GreaterThan(50000));
                 ExecuteScript(jquery, null);
             }
+        }
+
+        [Test]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
+        public async Task ShouldBeAbleToPinJavascriptCodeAndExecuteRepeatedly()
+        {
+            IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
+
+            driver.Url = xhtmlTestPage;
+
+            PinnedScript script = await jsEngine.PinScript("return document.title;");
+            for (int i = 0; i < 5; i++)
+            {
+                object result = ((IJavaScriptExecutor)driver).ExecuteScript(script);
+
+                Assert.That(result, Is.InstanceOf<string>());
+                Assert.That(result, Is.EqualTo("XHTML Test Page"));
+            }
+
+            await jsEngine.UnpinScript(script);
+
+            Assert.That(
+                () => ((IJavaScriptExecutor)driver).ExecuteScript(script),
+                Throws.TypeOf<JavaScriptException>());
         }
 
         [Test]
@@ -519,7 +568,9 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> args = new Dictionary<string, object>();
             args["key"] = new object[] { "a", new object[] { "zero", 1, true, 3.14159, false, el }, "c" };
-            Assert.That(() => executor.ExecuteScript("return undefined;", args), Throws.InstanceOf<StaleElementReferenceException>());
+            Assert.That(
+                () => executor.ExecuteScript("return undefined;", args),
+                Throws.TypeOf<StaleElementReferenceException>());
         }
 
         [Test]
@@ -564,7 +615,17 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
 
-            Assert.That(() => ExecuteScript("var obj1 = {}; var obj2 = {}; obj1['obj2'] = obj2; obj2['obj1'] = obj1; return obj1"), Throws.InstanceOf<WebDriverException>());
+            Assert.That(
+                () => ExecuteScript(
+                    """
+                    var obj1 = {};
+                    var obj2 = {};
+                    obj1['obj2'] = obj2;
+                    obj2['obj1'] = obj1;
+                    return obj1
+                    """
+                    ),
+                Throws.TypeOf<JavaScriptException>());
         }
 
         //------------------------------------------------------------------
@@ -575,26 +636,68 @@ namespace OpenQA.Selenium
         [Ignore("Reason for ignore: Failure indicates hang condition, which would break the test suite. Really needs a timeout set.")]
         public void ShouldThrowExceptionIfExecutingOnNoPage()
         {
-            bool exceptionCaught = false;
-            try
-            {
-                ((IJavaScriptExecutor)driver).ExecuteScript("return 1;");
-            }
-            catch (WebDriverException)
-            {
-                exceptionCaught = true;
-            }
-
-            if (!exceptionCaught)
-            {
-                Assert.Fail("Expected an exception to be caught");
-            }
+            Assert.That(
+                () => ((IJavaScriptExecutor)driver).ExecuteScript("return 1;"),
+                Throws.InstanceOf<WebDriverException>());
         }
 
         [Test]
         public void ExecutingLargeJavaScript()
         {
-            string script = "// stolen from injectableSelenium.js in WebDriver\nvar browserbot = {\n\n    triggerEvent: function(element, eventType, canBubble, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown) {\n        canBubble = (typeof(canBubble) == undefined) ? true: canBubble;\n        if (element.fireEvent && element.ownerDocument && element.ownerDocument.createEventObject) {\n            // IE\n            var evt = this.createEventObject(element, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown);\n            element.fireEvent('on' + eventType,evt);\n        } else {\n            var evt = document.createEvent('HTMLEvents');\n\n            try {\n                evt.shiftKey = shiftKeyDown;\n       evt.metaKey = metaKeyDown;\n                evt.altKey = altKeyDown;\n             evt.ctrlKey = controlKeyDown;\n            } catch(e) {\n      // Nothing sane to do\n                }\n\n            evt.initEvent(eventType, canBubble, true);\n            return element.dispatchEvent(evt);\n  }\n    },\n\n    getVisibleText: function() {\n        var selection = getSelection();\n        var range = document.createRange();\n        range.selectNodeContents(document.documentElement);\n        selection.addRange(range);\nvar string = selection.toString();\n        selection.removeAllRanges();\n\n    return string;\n    },\n\n    getOuterHTML: function(element) {\n        if(element.outerHTML) {\n            return element.outerHTML;\n        } else if(typeof(XMLSerializer) != undefined) {\n            return new XMLSerializer().serializeToString(element);\n        } else {\n            throw \"can't get outerHTML in this browser\";\n        }\n    }\n\n\n};return browserbot.getOuterHTML.apply(browserbot, arguments);";
+            string script = """
+                // stolen from injectableSelenium.js in WebDriver
+                var browserbot = {
+
+                    triggerEvent: function(element, eventType, canBubble, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown) {
+                        canBubble = (typeof(canBubble) == undefined) ? true : canBubble;
+
+                        if (element.fireEvent && element.ownerDocument && element.ownerDocument.createEventObject) {
+                            // IE
+                            var evt = this.createEventObject(element, controlKeyDown, altKeyDown, shiftKeyDown, metaKeyDown);
+                            element.fireEvent('on' + eventType,evt);
+                        } else {
+                            var evt = document.createEvent('HTMLEvents');
+
+                            try {
+                                evt.shiftKey = shiftKeyDown;
+                                evt.metaKey = metaKeyDown;
+                                evt.altKey = altKeyDown;
+                                evt.ctrlKey = controlKeyDown;
+                            } catch(e) {
+                                // Nothing sane to do
+                            }
+
+                            evt.initEvent(eventType, canBubble, true);
+                            return element.dispatchEvent(evt);
+                        }
+                    },
+
+                    getVisibleText: function() {
+                        var selection = getSelection();
+                        var range = document.createRange();
+                        range.selectNodeContents(document.documentElement);
+                        selection.addRange(range);
+
+                        var string = selection.toString();
+                        selection.removeAllRanges();
+
+                        return string;
+                    },
+
+                    getOuterHTML: function(element) {
+                        if(element.outerHTML) {
+                            return element.outerHTML;
+                        } else if(typeof(XMLSerializer) != undefined) {
+                            return new XMLSerializer().serializeToString(element);
+                        } else {
+                            throw "can't get outerHTML in this browser";
+                        }
+                    }
+                };
+
+                return browserbot.getOuterHTML.apply(browserbot, arguments);
+                """;
+
             driver.Url = javascriptPage;
             IWebElement element = driver.FindElement(By.TagName("body"));
             object x = ExecuteScript(script, element);

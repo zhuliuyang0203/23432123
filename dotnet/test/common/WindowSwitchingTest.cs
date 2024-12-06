@@ -1,3 +1,22 @@
+// <copyright file="WindowSwitchingTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -41,14 +60,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
-            try
-            {
-                driver.SwitchTo().Window("invalid name");
-            }
-            catch (NoSuchWindowException)
-            {
-                // This is expected.
-            }
+
+            Assert.That(
+                () => driver.SwitchTo().Window("invalid name"),
+                Throws.TypeOf<NoSuchWindowException>());
 
             driver.SwitchTo().Window(current);
         }
@@ -72,12 +87,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                string currentHandle = driver.CurrentWindowHandle;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(
+                    () => driver.CurrentWindowHandle,
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -104,25 +116,13 @@ namespace OpenQA.Selenium
 
             try
             {
-                try
-                {
-                    string title = driver.Title;
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                Assert.That(
+                    () => driver.Title,
+                    Throws.TypeOf<NoSuchWindowException>());
 
-                try
-                {
-                    driver.FindElement(By.TagName("body"));
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                Assert.That(
+                    () => driver.FindElement(By.TagName("body")),
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -150,12 +150,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                string bodyText = body.Text;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(
+                    () => body.Text,
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -261,15 +258,10 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
 
-            try
-            {
-                driver.SwitchTo().Window("i will never exist");
-                Assert.Fail("Should not be ablt to change to a non-existant window");
-            }
-            catch (NoSuchWindowException)
-            {
-                // expected
-            }
+            Assert.That(
+                () => driver.SwitchTo().Window("i will never exist"),
+                Throws.TypeOf<NoSuchWindowException>(),
+                "Should not be able to change to a non-existant window");
 
             String newHandle = driver.CurrentWindowHandle;
 
@@ -469,9 +461,8 @@ namespace OpenQA.Selenium
                 }
                 catch (NoSuchWindowException)
                 {
+                    return false;
                 }
-
-                return false;
             };
         }
 
@@ -479,16 +470,14 @@ namespace OpenQA.Selenium
         {
             return () =>
             {
-                IAlert alert = null;
                 try
                 {
-                    alert = driver.SwitchTo().Alert();
+                    return driver.SwitchTo().Alert();
                 }
                 catch (NoAlertPresentException)
                 {
+                    return null;
                 }
-
-                return alert;
             };
         }
     }

@@ -1,6 +1,27 @@
+// <copyright file="BrowsingContextScriptModule.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System.Collections.Generic;
+
+#nullable enable
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -25,9 +46,9 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return await scriptModule.GetRealmsAsync(options).ConfigureAwait(false);
     }
 
-    public Task<RemoteValue> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResult.Success> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
-        var contextTarget = new ContextTarget(context);
+        var contextTarget = new Target.Context(context);
 
         if (targetOptions is not null)
         {
@@ -37,16 +58,16 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return scriptModule.EvaluateAsync(expression, awaitPromise, contextTarget, options);
     }
 
-    public async Task<TResult?> EvaluateAsync<TResult>(string expression, bool awaitPromise, EvaluateOptions? options = null)
+    public async Task<TResult?> EvaluateAsync<TResult>(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
-        var remoteValue = await EvaluateAsync(expression, awaitPromise, options).ConfigureAwait(false);
+        var result = await EvaluateAsync(expression, awaitPromise, options, targetOptions).ConfigureAwait(false);
 
-        return remoteValue.ConvertTo<TResult>();
+        return result.Result.ConvertTo<TResult>();
     }
 
-    public Task<RemoteValue> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResult.Success> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
-        var contextTarget = new ContextTarget(context);
+        var contextTarget = new Target.Context(context);
 
         if (targetOptions is not null)
         {
@@ -54,5 +75,12 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         }
 
         return scriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, contextTarget, options);
+    }
+
+    public async Task<TResult?> CallFunctionAsync<TResult>(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
+    {
+        var result = await CallFunctionAsync(functionDeclaration, awaitPromise, options, targetOptions).ConfigureAwait(false);
+
+        return result.Result.ConvertTo<TResult>();
     }
 }

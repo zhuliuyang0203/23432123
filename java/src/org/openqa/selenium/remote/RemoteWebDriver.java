@@ -1148,12 +1148,16 @@ public class RemoteWebDriver
         // simulate search by name
         String original = getWindowHandle();
         for (String handle : getWindowHandles()) {
-          switchTo().window(handle);
-          if (windowHandleOrName.equals(executeScript("return window.name"))) {
-            return RemoteWebDriver.this; // found by name
+          try {
+            execute(DriverCommand.SWITCH_TO_WINDOW(handle));
+            if (windowHandleOrName.equals(executeScript("return window.name"))) {
+              return RemoteWebDriver.this; // found by name
+            }
+          } catch (NoSuchWindowException nswe) {
+            // swallow
           }
         }
-        switchTo().window(original);
+        execute(DriverCommand.SWITCH_TO_WINDOW(original));
         throw nsw;
       }
     }
@@ -1243,7 +1247,7 @@ public class RemoteWebDriver
           Stream.concat(
                   credential.toMap().entrySet().stream(),
                   Stream.of(Map.entry("authenticatorId", id)))
-              .collect(Collectors.toUnmodifiableMap((e) -> e.getKey(), (e) -> e.getValue())));
+              .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override

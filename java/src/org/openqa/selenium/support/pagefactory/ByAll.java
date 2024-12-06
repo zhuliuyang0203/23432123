@@ -54,7 +54,7 @@ public class ByAll extends By implements Serializable {
         return elements.get(0);
       }
     }
-    throw new NoSuchElementException("Cannot locate an element using " + toString());
+    throw new NoSuchElementException("Cannot locate an element using " + this);
   }
 
   @Override

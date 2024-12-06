@@ -1,27 +1,26 @@
-// <copyright file="RemoteSessionSettings.cs" company="WebDriver Committers">
+// <copyright file="RemoteSessionSettings.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Remote;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.Json;
 
 namespace OpenQA.Selenium
 {
@@ -70,18 +69,12 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets a value indicating the options that must be matched by the remote end to create a session.
         /// </summary>
-        internal DriverOptions MustMatchDriverOptions
-        {
-            get { return this.mustMatchDriverOptions; }
-        }
+        internal DriverOptions MustMatchDriverOptions => this.mustMatchDriverOptions;
 
         /// <summary>
         /// Gets a value indicating the number of options that may be matched by the remote end to create a session.
         /// </summary>
-        internal int FirstMatchOptionsCount
-        {
-            get { return this.firstMatchOptions.Count; }
-        }
+        internal int FirstMatchOptionsCount => this.firstMatchOptions.Count;
 
         /// <summary>
         /// Gets the capability value with the specified name.
@@ -91,6 +84,7 @@ namespace OpenQA.Selenium
         /// <exception cref="ArgumentException">
         /// The specified capability name is not in the set of capabilities.
         /// </exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="capabilityName"/> is null.</exception>
         public object this[string capabilityName]
         {
             get
@@ -120,18 +114,10 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="settingName">The name of the setting to set.</param>
         /// <param name="settingValue">The value of the setting.</param>
-        /// <remarks>
-        /// The value to be set must be serializable to JSON for transmission
-        /// across the wire to the remote end. To be JSON-serializable, the value
-        /// must be a string, a numeric value, a boolean value, an object that
-        /// implmeents <see cref="IEnumerable"/> that contains JSON-serializable
-        /// objects, or a <see cref="Dictionary{TKey, TValue}"/> where the keys
-        /// are strings and the values are JSON-serializable.
-        /// </remarks>
         /// <exception cref="ArgumentException">
-        /// Thrown if the setting name is null, the empty string, or one of the
-        /// reserved names of metadata settings; or if the setting value is not
-        /// JSON serializable.
+        /// <para>If the setting name is null or empty.</para>
+        /// <para>-or-</para>
+        /// <para>If one of the reserved names of metadata settings.</para>
         /// </exception>
         public void AddMetadataSetting(string settingName, object settingValue)
         {
@@ -145,11 +131,6 @@ namespace OpenQA.Selenium
                 throw new ArgumentException(string.Format("'{0}' is a reserved name for a metadata setting, and cannot be used as a name.", settingName), nameof(settingName));
             }
 
-            if (!this.IsJsonSerializable(settingValue))
-            {
-                throw new ArgumentException("Metadata setting value must be JSON serializable.", nameof(settingValue));
-            }
-
             this.remoteMetadataSettings[settingName] = settingValue;
         }
 
@@ -160,9 +141,9 @@ namespace OpenQA.Selenium
         /// <param name="options">The <see cref="DriverOptions"/> to add to the list of "first matched" options.</param>
         public void AddFirstMatchDriverOption(DriverOptions options)
         {
-            if (mustMatchDriverOptions != null)
+            if (this.mustMatchDriverOptions != null)
             {
-                DriverOptionsMergeResult mergeResult = mustMatchDriverOptions.GetMergeResult(options);
+                DriverOptionsMergeResult mergeResult = this.mustMatchDriverOptions.GetMergeResult(options);
                 if (mergeResult.IsMergeConflict)
                 {
                     string msg = string.Format(CultureInfo.InvariantCulture, "You cannot request the same capability in both must-match and first-match capabilities. You are attempting to add a first-match driver options object that defines a capability, '{0}', that is already defined in the must-match driver options.", mergeResult.MergeConflictOptionName);
@@ -270,15 +251,6 @@ namespace OpenQA.Selenium
             return capabilitiesDictionary;
         }
 
-        /// <summary>
-        /// Return a string representation of the remote session settings to be sent.
-        /// </summary>
-        /// <returns>String representation of the remote session settings to be sent.</returns>
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this.ToDictionary(), new JsonSerializerOptions { WriteIndented = true });
-        }
-
         internal DriverOptions GetFirstMatchDriverOptions(int firstMatchIndex)
         {
             if (firstMatchIndex < 0 || firstMatchIndex >= this.firstMatchOptions.Count)
@@ -296,58 +268,13 @@ namespace OpenQA.Selenium
 
         private List<object> GetFirstMatchOptionsAsSerializableList()
         {
-            List<object> optionsMatches = new List<object>();
+            List<object> optionsMatches = new List<object>(this.firstMatchOptions.Count);
             foreach (DriverOptions options in this.firstMatchOptions)
             {
                 optionsMatches.Add(options.ToDictionary());
             }
 
             return optionsMatches;
-        }
-
-        private bool IsJsonSerializable(object arg)
-        {
-            IEnumerable argAsEnumerable = arg as IEnumerable;
-            IDictionary argAsDictionary = arg as IDictionary;
-
-            if (arg is string || arg is float || arg is double || arg is int || arg is long || arg is bool || arg == null)
-            {
-                return true;
-            }
-            else if (argAsDictionary != null)
-            {
-                foreach (object key in argAsDictionary.Keys)
-                {
-                    if (!(key is string))
-                    {
-                        return false;
-                    }
-                }
-
-                foreach (object value in argAsDictionary.Values)
-                {
-                    if (!IsJsonSerializable(value))
-                    {
-                        return false;
-                    }
-                }
-            }
-            else if (argAsEnumerable != null)
-            {
-                foreach (object item in argAsEnumerable)
-                {
-                    if (!IsJsonSerializable(item))
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

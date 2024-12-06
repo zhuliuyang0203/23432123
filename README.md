@@ -1,6 +1,7 @@
 # Selenium
 
 [![CI](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml/badge.svg?branch=trunk&event=schedule)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml)
+[![Releases downloads](https://img.shields.io/github/downloads/SeleniumHQ/selenium/total.svg)](https://github.com/SeleniumHQ/selenium/releases)
 
 <a href="https://selenium.dev"><img src="common/images/selenium_logo_mark_green.svg" width="180" alt="Selenium Logo"/></a>
 
@@ -314,6 +315,18 @@ bazel test //javascript/node/selenium-webdriver:tests --test_env=SELENIUM_BROWSE
 Run unit tests with:
 ```shell
 bazel test //py:unit
+```
+
+To run common tests with a specific browser:
+
+```sh
+bazel test //py:common-<browsername>
+```
+
+To run common tests with a specific browser (include BiDi tests):
+
+```sh
+bazel test //py:common-<browsername>-bidi
 ```
 
 To run tests with a specific browser:

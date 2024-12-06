@@ -18,15 +18,12 @@
 package org.openqa.selenium.bidi;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.openqa.selenium.testing.Safely.safelyCall;
 import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
@@ -35,24 +32,17 @@ import org.openqa.selenium.bidi.browsingcontext.ReadinessState;
 import org.openqa.selenium.bidi.log.JavascriptLogEntry;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.module.LogInspector;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 import org.openqa.selenium.testing.NotYetImplemented;
 
 class BiDiTest extends JupiterTestBase {
 
   String page;
-  private AppServer server;
-
-  @BeforeEach
-  public void setUp() {
-    server = new NettyAppServer();
-    server.start();
-  }
 
   @Test
   @NotYetImplemented(EDGE)
+  @NeedsFreshDriver
   void canNavigateAndListenToErrors()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (org.openqa.selenium.bidi.module.LogInspector logInspector = new LogInspector(driver)) {
@@ -61,7 +51,7 @@ class BiDiTest extends JupiterTestBase {
 
       BrowsingContext browsingContext = new BrowsingContext(driver, driver.getWindowHandle());
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       NavigationResult info = browsingContext.navigate(page, ReadinessState.COMPLETE);
 
       // If navigation was successful, we expect both the url and navigation id to be set
@@ -77,13 +67,5 @@ class BiDiTest extends JupiterTestBase {
       assertThat(logEntry.getType()).isEqualTo("javascript");
       assertThat(logEntry.getLevel()).isEqualTo(LogLevel.ERROR);
     }
-  }
-
-  @AfterEach
-  public void quitDriver() {
-    if (driver != null) {
-      driver.quit();
-    }
-    safelyCall(server::stop);
   }
 }

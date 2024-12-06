@@ -135,7 +135,17 @@ public class EventBusCommand extends TemplateGridCommand {
                             return httpResponse(false, "Status checking was interrupted");
                           }
                         }),
-            Route.get("/readyz").to(() -> req -> new HttpResponse().setStatus(HTTP_NO_CONTENT))));
+            Route.get("/readyz").to(() -> req -> new HttpResponse().setStatus(HTTP_NO_CONTENT)))) {
+
+      @Override
+      public void stop() {
+        try {
+          bus.close();
+        } finally {
+          super.stop();
+        }
+      }
+    };
   }
 
   @Override

@@ -25,6 +25,7 @@ module Selenium
       autoload :LogHandler, 'selenium/webdriver/bidi/log_handler'
       autoload :BrowsingContext, 'selenium/webdriver/bidi/browsing_context'
       autoload :Struct, 'selenium/webdriver/bidi/struct'
+      autoload :Network, 'selenium/webdriver/bidi/network'
 
       def initialize(url:)
         @ws = WebSocketConnection.new(url: url)
@@ -38,8 +39,8 @@ module Selenium
         @ws.callbacks
       end
 
-      def add_callback(event, &block)
-        @ws.add_callback(event, &block)
+      def add_callback(event, &)
+        @ws.add_callback(event, &)
       end
 
       def remove_callback(event, id)

@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.distributor.local;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static org.openqa.selenium.concurrent.ExecutorServices.shutdownGracefully;
 import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
@@ -26,6 +27,7 @@ import static org.openqa.selenium.remote.RemoteTags.CAPABILITIES;
 import static org.openqa.selenium.remote.RemoteTags.CAPABILITIES_EVENT;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID_EVENT;
+import static org.openqa.selenium.remote.http.HttpMethod.DELETE;
 import static org.openqa.selenium.remote.tracing.AttributeKey.SESSION_URI;
 import static org.openqa.selenium.remote.tracing.Tags.EXCEPTION;
 
@@ -34,6 +36,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
+import java.io.Closeable;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.time.Duration;
@@ -45,7 +48,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -78,6 +80,7 @@ import org.openqa.selenium.grid.data.NodeRemovedEvent;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.NodeStatusEvent;
 import org.openqa.selenium.grid.data.RequestId;
+import org.openqa.selenium.grid.data.Session;
 import org.openqa.selenium.grid.data.SessionRequest;
 import org.openqa.selenium.grid.data.SessionRequestCapability;
 import org.openqa.selenium.grid.data.Slot;
@@ -108,6 +111,7 @@ import org.openqa.selenium.internal.Either;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.HttpClient;
+import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.tracing.AttributeKey;
 import org.openqa.selenium.remote.tracing.AttributeMap;
 import org.openqa.selenium.remote.tracing.Span;
@@ -118,7 +122,7 @@ import org.openqa.selenium.status.HasReadyState;
 @ManagedService(
     objectName = "org.seleniumhq.grid:type=Distributor,name=LocalDistributor",
     description = "Grid 4 node distributor")
-public class LocalDistributor extends Distributor implements AutoCloseable {
+public class LocalDistributor extends Distributor implements Closeable {
 
   private static final Logger LOG = Logger.getLogger(LocalDistributor.class.getName());
 
@@ -165,7 +169,7 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
             return thread;
           });
 
-  private final Executor sessionCreatorExecutor;
+  private final ExecutorService sessionCreatorExecutor;
 
   private final NewSessionQueue sessionQueue;
 
@@ -752,9 +756,10 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
   @Override
   public void close() {
     LOG.info("Shutting down Distributor executor service");
-    purgeDeadNodesService.shutdown();
-    nodeHealthCheckService.shutdown();
-    newSessionService.shutdown();
+    shutdownGracefully("Local Distributor - Purge Dead Nodes", purgeDeadNodesService);
+    shutdownGracefully("Local Distributor - Node Health Check", nodeHealthCheckService);
+    shutdownGracefully("Local Distributor - New Session Queue", newSessionService);
+    shutdownGracefully("Local Distributor - Session Creation", sessionCreatorExecutor);
   }
 
   private class NewSessionRunnable implements Runnable {
@@ -851,21 +856,34 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
           }
         }
 
-        // 'complete' will return 'true' if the session has not timed out during the creation
-        // process: it's still a valid session as it can be used by the client
         boolean isSessionValid = sessionQueue.complete(reqId, response);
-        // If the session request has timed out, tell the Node to remove the session, so that does
-        // not stall
+        // terminate invalid sessions to avoid stale sessions
         if (!isSessionValid && response.isRight()) {
           LOG.log(
               Level.INFO,
-              "Session for request {0} has been created but it has timed out, stopping it to avoid"
-                  + " stalled browser",
+              "Session for request {0} has been created but it has timed out or the connection"
+                  + " dropped, stopping it to avoid stalled browser",
               reqId.toString());
-          URI nodeURI = response.right().getSession().getUri();
-          Node node = getNodeFromURI(nodeURI);
+          Session session = response.right().getSession();
+          Node node = getNodeFromURI(session.getUri());
           if (node != null) {
-            node.stop(response.right().getSession().getId());
+            boolean deleted;
+            try {
+              // Attempt to stop the session
+              deleted =
+                  node.execute(new HttpRequest(DELETE, "/session/" + session.getId())).getStatus()
+                      == 200;
+            } catch (Exception e) {
+              LOG.log(
+                  Level.WARNING,
+                  String.format("Exception while trying to delete session %s", session.getId()),
+                  e);
+              deleted = false;
+            }
+            if (!deleted) {
+              // Kill the session
+              node.stop(session.getId());
+            }
           }
         }
       }

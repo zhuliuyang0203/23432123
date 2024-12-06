@@ -21,12 +21,13 @@ const { Source } = require('./scriptTypes')
 
 /**
  * Represents a base log entry.
- * Desribed in https://w3c.github.io/webdriver-bidi/#types-log-logentry.
+ * Described in https://w3c.github.io/webdriver-bidi/#types-log-logentry.
  */
 class BaseLogEntry {
   /**
    * Creates a new instance of BaseLogEntry.
    * @param {string} level - The log level.
+   * @param {source} source - Script Source
    * @param {string} text - The log source.
    * @param {string} text - The log text.
    * @param {number} timeStamp - The log timestamp.
@@ -86,6 +87,7 @@ class GenericLogEntry extends BaseLogEntry {
   /**
    * Creates an instance of GenericLogEntry.
    * @param {string} level - The log level.
+   * @param {source} source - Script Source
    * @param {string} text - The log text.
    * @param {Date} timeStamp - The log timestamp.
    * @param {string} type - The log type.

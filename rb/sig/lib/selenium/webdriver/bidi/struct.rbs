@@ -1,0 +1,11 @@
+module Selenium
+  module WebDriver
+    class BiDi
+      class Struct < ::Struct[untyped]
+        def self.new: (*untyped args) ?{ (self) [self: self] -> untyped } -> void
+
+        def self.camel_to_snake: (String camel_str) -> String
+      end
+    end
+  end
+end

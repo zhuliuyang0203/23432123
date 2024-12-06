@@ -35,10 +35,10 @@ module Selenium
           attr_reader :extra_commands
           attr_writer :element_class, :locator_converter
 
-          def add_command(name, verb, url, &block)
+          def add_command(name, verb, url, &)
             @extra_commands ||= {}
             @extra_commands[name] = [verb, url]
-            define_method(name, &block)
+            define_method(name, &)
           end
 
           def locator_converter
@@ -686,7 +686,7 @@ module Selenium
         end
 
         def escaper
-          @escaper ||= defined?(URI::Parser) ? URI::DEFAULT_PARSER : URI
+          @escaper ||= defined?(URI::RFC2396_PARSER) ? URI::RFC2396_PARSER : URI::DEFAULT_PARSER
         end
 
         def commands(command)
