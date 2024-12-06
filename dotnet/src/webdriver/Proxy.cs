@@ -113,7 +113,7 @@ namespace OpenQA.Selenium
                 }
                 else
                 {
-                    ProxyKind rawType = Enum.Parse<ProxyKind>(proxyType, ignoreCase: true);
+                    ProxyKind rawType = (ProxyKind)Enum.Parse(typeof(ProxyKind), proxyType, ignoreCase: true);
                     this.Kind = rawType;
                 }
             }
@@ -135,11 +135,14 @@ namespace OpenQA.Selenium
                 {
                     bypassAddresses.AddRange(addressesAsString.Split(';'));
                 }
-                else if (noProxy is object?[]  addressesAsArray)
+                else
                 {
-                    foreach (object? address in addressesAsArray)
+                    if (noProxy is object?[] addressesAsArray)
                     {
-                        bypassAddresses.Add(address?.ToString() ?? throw new ArgumentException("noProxy list contained null element", nameof(settings)));
+                        foreach (object? address in addressesAsArray)
+                        {
+                            bypassAddresses.Add(address?.ToString() ?? throw new ArgumentException("noProxy list contained null element", nameof(settings)));
+                        }
                     }
                 }
 
