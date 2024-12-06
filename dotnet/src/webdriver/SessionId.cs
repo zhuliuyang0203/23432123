@@ -55,7 +55,7 @@ namespace OpenQA.Selenium
         /// <returns>The hash code of the key</returns>
         public override int GetHashCode()
         {
-            return StringComparer.Ordinal.GetHashCode(this.sessionOpaqueKey);
+            return this.sessionOpaqueKey.GetHashCode();
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace OpenQA.Selenium
         /// <returns><see langword="true"/> if the values are equal; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object? obj)
         {
-            return obj is SessionId otherSession && this.sessionOpaqueKey.Equals(otherSession.sessionOpaqueKey, StringComparison.Ordinal);
+            return obj is SessionId otherSession && this.sessionOpaqueKey.Equals(otherSession.sessionOpaqueKey);
         }
     }
 }
