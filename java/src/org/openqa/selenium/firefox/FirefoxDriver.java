@@ -176,7 +176,7 @@ public class FirefoxDriver extends RemoteWebDriver
     Optional<URI> cdpUri;
 
     try {
-      cdpUri = client.flatMap(httpClient -> CdpEndpointFinder.getCdpEndPoint(httpClient));
+      cdpUri = client.flatMap(CdpEndpointFinder::getCdpEndPoint);
     } catch (Exception e) {
       try {
         client.ifPresent(HttpClient::close);

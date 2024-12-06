@@ -34,6 +34,6 @@ public class NoSuchShadowRootTest extends JupiterTestBase {
     driver.get(pages.shadowRootPage);
     WebElement nonExistentShadowRootElement = driver.findElement(By.id("noShadowRoot"));
     assertThatExceptionOfType(NoSuchShadowRootException.class)
-        .isThrownBy(() -> nonExistentShadowRootElement.getShadowRoot());
+        .isThrownBy(nonExistentShadowRootElement::getShadowRoot);
   }
 }
