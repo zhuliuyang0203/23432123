@@ -34,6 +34,7 @@ namespace OpenQA.Selenium
         /// Initializes a new instance of the <see cref="SessionId"/> class
         /// </summary>
         /// <param name="opaqueKey">Key for the session in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="opaqueKey"/> is <see langword="null"/>.</exception>
         public SessionId(string opaqueKey)
         {
             this.sessionOpaqueKey = opaqueKey ?? throw new ArgumentNullException(nameof(opaqueKey));
