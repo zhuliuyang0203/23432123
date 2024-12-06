@@ -93,7 +93,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.Id("test_id"));
-            Assert.That(elements.Count, Is.EqualTo(2));
+            Assert.That(elements, Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.LinkText("hello world"));
-            Assert.That(elements.Count, Is.EqualTo(12));
+            Assert.That(elements, Has.Count.EqualTo(12));
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.Name("form1"));
-            Assert.That(elements.Count, Is.EqualTo(4));
+            Assert.That(elements, Has.Count.EqualTo(4));
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.XPath("//a"));
-            Assert.That(elements.Count, Is.EqualTo(12));
+            Assert.That(elements, Has.Count.EqualTo(12));
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.ClassName("one"));
-            Assert.That(elements.Count, Is.EqualTo(3));
+            Assert.That(elements, Has.Count.EqualTo(3));
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.PartialLinkText("world"));
-            Assert.That(elements.Count, Is.EqualTo(12));
+            Assert.That(elements, Has.Count.EqualTo(12));
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = nestedPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.TagName("a"));
-            Assert.That(elements.Count, Is.EqualTo(12));
+            Assert.That(elements, Has.Count.EqualTo(12));
         }
         #endregion
     }

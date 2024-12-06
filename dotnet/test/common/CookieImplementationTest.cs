@@ -54,7 +54,7 @@ namespace OpenQA.Selenium
             ((IJavaScriptExecutor)driver).ExecuteScript("document.cookie = arguments[0] + '=set';", key);
 
             Cookie cookie = driver.Manage().Cookies.GetCookieNamed(key);
-            Assert.AreEqual("set", cookie.Value);
+            Assert.That(cookie.Value, Is.EqualTo("set"));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace OpenQA.Selenium
             driver.Manage().Cookies.AddCookie(cookie);
 
             AssertCookieHasValue(key, value);
-            Assert.That(driver.Manage().Cookies.AllCookies.Contains(cookie), "Cookie was not added successfully");
+            Assert.That(driver.Manage().Cookies.AllCookies, Does.Contain(cookie), "Cookie was not added successfully");
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace OpenQA.Selenium
 
             driver.Url = simpleTestPage;
             cookies = driver.Manage().Cookies.AllCookies;
-            Assert.AreEqual(count + 2, cookies.Count);
+            Assert.That(cookies, Has.Count.EqualTo(count + 2));
 
             Assert.That(cookies, Does.Contain(one));
             Assert.That(cookies, Does.Contain(two));
@@ -389,7 +389,7 @@ namespace OpenQA.Selenium
             Assert.That(driver.Manage().Cookies.GetCookieNamed("rodent"), Is.Null);
 
             ReadOnlyCollection<Cookie> cookies = driver.Manage().Cookies.AllCookies;
-            Assert.That(cookies, Has.Count.EqualTo(2));
+            Assert.That(cookies, Has.Exactly(2).Items);
             Assert.That(cookies, Does.Contain(cookie1));
             Assert.That(cookies, Does.Contain(cookie3));
 
@@ -450,7 +450,7 @@ namespace OpenQA.Selenium
 
             Assert.That(retrievedCookie, Is.Not.Null);
             //Cookie.equals only compares name, domain and path
-            Assert.AreEqual(cookie1, retrievedCookie);
+            Assert.That(retrievedCookie, Is.EqualTo(cookie1));
         }
 
         [Test]
@@ -472,7 +472,7 @@ namespace OpenQA.Selenium
 
             Cookie retrieved = options.Cookies.GetCookieNamed("fish");
             Assert.That(retrieved, Is.Not.Null);
-            Assert.AreEqual(addCookie.Expiry, retrieved.Expiry, "Cookies are not equal");
+            Assert.That(retrieved.Expiry, Is.EqualTo(addCookie.Expiry), "Cookies are not equal");
         }
 
         [Test]
@@ -713,7 +713,7 @@ namespace OpenQA.Selenium
             Cookie cookie = new Cookie("Homer", "Simpson", this.hostname, "/" + EnvironmentManager.Instance.UrlBuilder.Path, null);
             options.Cookies.AddCookie(cookie);
             ReadOnlyCollection<Cookie> cookies = options.Cookies.AllCookies;
-            Assert.That(cookies.Contains(cookie), "Valid cookie was not returned");
+            Assert.That(cookies, Does.Contain(cookie), "Valid cookie was not returned");
         }
 
         [Test]
@@ -727,7 +727,10 @@ namespace OpenQA.Selenium
             driver.Url = macbethPage;
             IOptions options = driver.Manage();
             Cookie cookie = new Cookie("Bart", "Simpson", EnvironmentManager.Instance.UrlBuilder.HostName + ".com", EnvironmentManager.Instance.UrlBuilder.Path, null);
-            Assert.That(() => options.Cookies.AddCookie(cookie), Throws.InstanceOf<WebDriverException>().Or.InstanceOf<InvalidOperationException>());
+            Assert.That(
+                () => options.Cookies.AddCookie(cookie),
+                Throws.InstanceOf<WebDriverException>().Or.InstanceOf<InvalidOperationException>());
+
             ReadOnlyCollection<Cookie> cookies = options.Cookies.AllCookies;
             Assert.That(cookies, Does.Not.Contain(cookie), "Invalid cookie was returned");
         }
@@ -771,7 +774,9 @@ namespace OpenQA.Selenium
 
             IOptions options = driver.Manage();
             Cookie cookie = new Cookie("question", "dunno");
-            Assert.That(() => options.Cookies.AddCookie(cookie), Throws.InstanceOf<InvalidCookieDomainException>().Or.InstanceOf<InvalidOperationException>());
+            Assert.That(
+                () => options.Cookies.AddCookie(cookie),
+                Throws.InstanceOf<InvalidCookieDomainException>().Or.InstanceOf<InvalidOperationException>());
         }
 
         [Test]
@@ -803,7 +808,7 @@ namespace OpenQA.Selenium
             Cookie cookie = new Cookie("Marge", "Simpson", "/");
             options.Cookies.AddCookie(cookie);
             ReadOnlyCollection<Cookie> cookies = options.Cookies.AllCookies;
-            Assert.That(cookies.Contains(cookie), "Valid cookie was not returned");
+            Assert.That(cookies, Does.Contain(cookie), "Valid cookie was not returned");
         }
 
         [Test]
@@ -824,7 +829,7 @@ namespace OpenQA.Selenium
             options.Cookies.DeleteCookie(cookieToDelete);
             ReadOnlyCollection<Cookie> cookies2 = options.Cookies.AllCookies;
             Assert.That(cookies2, Does.Not.Contain(cookieToDelete), "Cookie was not deleted successfully");
-            Assert.That(cookies2.Contains(cookieToKeep), "Valid cookie was not returned");
+            Assert.That(cookies2, Does.Contain(cookieToKeep), "Valid cookie was not returned");
         }
 
         //////////////////////////////////////////////
@@ -924,21 +929,21 @@ namespace OpenQA.Selenium
 
         private void AssertNoCookiesArePresent()
         {
-            Assert.That(driver.Manage().Cookies.AllCookies.Count, Is.EqualTo(0), "Cookies were not empty");
+            Assert.That(driver.Manage().Cookies.AllCookies, Is.Empty, "Cookies were not empty");
             string documentCookie = GetDocumentCookieOrNull();
             if (documentCookie != null)
             {
-                Assert.AreEqual(string.Empty, documentCookie, "Cookies were not empty");
+                Assert.That(documentCookie, Is.Empty, "Cookies were not empty");
             }
         }
 
         private void AssertSomeCookiesArePresent()
         {
-            Assert.That(driver.Manage().Cookies.AllCookies.Count, Is.Not.EqualTo(0), "Cookies were empty");
+            Assert.That(driver.Manage().Cookies.AllCookies, Is.Not.Empty, "Cookies were empty");
             String documentCookie = GetDocumentCookieOrNull();
             if (documentCookie != null)
             {
-                Assert.AreNotEqual(string.Empty, documentCookie, "Cookies were empty");
+                Assert.That(documentCookie, Is.Not.Empty, "Cookies were empty");
             }
         }
 
@@ -964,7 +969,7 @@ namespace OpenQA.Selenium
 
         private void AssertCookieHasValue(string key, string value)
         {
-            Assert.AreEqual(value, driver.Manage().Cookies.GetCookieNamed(key).Value, "Cookie had wrong value");
+            Assert.That(driver.Manage().Cookies.GetCookieNamed(key).Value, Is.EqualTo(value), "Cookie had wrong value");
             string documentCookie = GetDocumentCookieOrNull();
             if (documentCookie != null)
             {

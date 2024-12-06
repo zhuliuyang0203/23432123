@@ -70,7 +70,7 @@ namespace OpenQA.Selenium.Interactions
             showButton.Click();
 
             IWebElement resultElement = driver.FindElement(By.Id("result"));
-            Assert.AreEqual("cheddar", resultElement.Text, "Should have picked the third option only.");
+            Assert.That(resultElement.Text, Is.EqualTo("cheddar"), "Should have picked the third option only.");
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace OpenQA.Selenium.Interactions
             loginAction.Perform();
 
             IAlert alert = driver.SwitchTo().Alert();
-            Assert.AreEqual("You have successfully logged in.", alert.Text);
+            Assert.That(alert.Text, Is.EqualTo("You have successfully logged in."));
 
             alert.Accept();
         }
@@ -120,7 +120,7 @@ namespace OpenQA.Selenium.Interactions
             showButton.Click();
 
             IWebElement resultElement = driver.FindElement(By.Id("result"));
-            Assert.AreEqual("roquefort parmigiano cheddar", resultElement.Text, "Should have picked the last three options.");
+            Assert.That(resultElement.Text, Is.EqualTo("roquefort parmigiano cheddar"), "Should have picked the last three options.");
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace OpenQA.Selenium.Interactions
             showButton.Click();
 
             IWebElement resultElement = driver.FindElement(By.Id("result"));
-            Assert.AreEqual("roquefort cheddar", resultElement.Text, "Should have picked the first and third options.");
+            Assert.That(resultElement.Text, Is.EqualTo("roquefort cheddar"), "Should have picked the first and third options.");
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace OpenQA.Selenium.Interactions
 
             IWebElement reportingElement = driver.FindElement(By.Id("infodiv"));
 
-            Assert.AreEqual("no info", reportingElement.Text);
+            Assert.That(reportingElement.Text, Is.EqualTo("no info"));
 
             ReadOnlyCollection<IWebElement> listItems = driver.FindElements(By.TagName("li"));
 
@@ -177,11 +177,11 @@ namespace OpenQA.Selenium.Interactions
 
             selectThreeItems.Perform();
 
-            Assert.AreEqual("#item2 #item4 #item6", reportingElement.Text);
+            Assert.That(reportingElement.Text, Is.EqualTo("#item2 #item4 #item6"));
 
             // Now click on another element, make sure that's the only one selected.
             new Actions(driver).Click(listItems[6]).Build().Perform();
-            Assert.AreEqual("#item7", reportingElement.Text);
+            Assert.That(reportingElement.Text, Is.EqualTo("#item7"));
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace OpenQA.Selenium.Interactions
                 .SendKeys(element, "abc def")
                 .Perform();
 
-            Assert.AreEqual("abc def", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("abc def"));
 
             //TODO: Figure out why calling sendKey(Key.CONTROL + "a") and then
             //sendKeys("x") does not work on Linux.
@@ -303,7 +303,7 @@ namespace OpenQA.Selenium.Interactions
             // Release keys before next step.
             new Actions(driver).SendKeys(Keys.Null).Perform();
 
-            Assert.AreEqual(string.Empty, element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.Empty);
 
             new Actions(driver).KeyDown(controlModifier)
                 .SendKeys("v")
@@ -312,7 +312,7 @@ namespace OpenQA.Selenium.Interactions
 
             new Actions(driver).SendKeys(Keys.Null).Perform();
 
-            Assert.AreEqual("abc defabc def", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("abc defabc def"));
         }
 
         [Test]
@@ -331,8 +331,8 @@ namespace OpenQA.Selenium.Interactions
                 .KeyUp(Keys.Shift)
                 .Perform();
             WaitFor(() => { return driver.WindowHandles.Count > 1; }, "Did not receive new window");
-            Assert.AreEqual(2, driver.WindowHandles.Count, "Should have opened a new window.");
-            Assert.AreEqual(originalTitle, driver.Title, "Should not have navigated away.");
+            Assert.That(driver.WindowHandles, Has.Exactly(2).Items, "Should have opened a new window.");
+            Assert.That(driver.Title, Is.EqualTo(originalTitle), "Should not have navigated away.");
 
             string originalHandle = driver.CurrentWindowHandle;
             foreach (string newHandle in driver.WindowHandles)
@@ -358,7 +358,7 @@ namespace OpenQA.Selenium.Interactions
             new Actions(driver).MoveToElement(toClick).KeyDown(Keys.Shift).Click().KeyUp(Keys.Shift).Perform();
 
             IWebElement shiftInfo = WaitFor(() => { return driver.FindElement(By.Id("shiftKey")); }, "Could not find element with id 'shiftKey'");
-            Assert.AreEqual("true", shiftInfo.Text);
+            Assert.That(shiftInfo.Text, Is.EqualTo("true"));
         }
 
         [Test]
@@ -373,7 +373,7 @@ namespace OpenQA.Selenium.Interactions
             IWebElement element = driver.FindElement(By.Id("menu1"));
 
             IWebElement target = driver.FindElement(By.Id("item1"));
-            Assert.AreEqual(string.Empty, target.Text);
+            Assert.That(target.Text, Is.Empty);
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.background = 'green'", element);
             new Actions(driver).MoveToElement(element).Build().Perform();
 
@@ -413,7 +413,7 @@ namespace OpenQA.Selenium.Interactions
         {
             DateTime start = DateTime.Now;
             new Actions(driver).Pause(TimeSpan.FromMilliseconds(1200)).Build().Perform();
-            Assert.IsTrue(DateTime.Now - start > TimeSpan.FromMilliseconds(1200));
+            Assert.That(DateTime.Now - start > TimeSpan.FromMilliseconds(1200), Is.True);
         }
 
         [Test]

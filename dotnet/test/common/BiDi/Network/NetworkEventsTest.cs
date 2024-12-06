@@ -99,7 +99,7 @@ class NetworkEventsTest : BiDiTestFixture
 
         var req = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
-        Assert.That(req.Request.Cookies.Count, Is.EqualTo(1));
+        Assert.That(req.Request.Cookies, Has.Count.EqualTo(1));
         Assert.That(req.Request.Cookies[0].Name, Is.EqualTo("foo"));
         Assert.That((req.Request.Cookies[0].Value as BytesValue.String).Value, Is.EqualTo("bar"));
     }

@@ -45,7 +45,7 @@ namespace OpenQA.Selenium.Support.UI
             int numberOfTimesThroughLoop = 1;
             SlowLoading slowLoading = new SlowLoading(TimeSpan.FromSeconds(1), new SystemClock(), numberOfTimesThroughLoop).Load();
 
-            Assert.AreEqual(numberOfTimesThroughLoop, slowLoading.GetLoopCount());
+            Assert.That(slowLoading.GetLoopCount(), Is.EqualTo(numberOfTimesThroughLoop));
         }
 
         [Test]
@@ -65,15 +65,10 @@ namespace OpenQA.Selenium.Support.UI
         public void TestShouldThrowAnErrorIfCallingLoadDoesNotCauseTheComponentToLoadBeforeTimeout()
         {
             FakeClock clock = new FakeClock();
-            try
-            {
-                new BasicSlowLoader(TimeSpan.FromSeconds(2), clock).Load();
-                Assert.Fail();
-            }
-            catch (WebDriverTimeoutException)
-            {
-                // We expect to time out
-            }
+
+            Assert.That(
+                () => new BasicSlowLoader(TimeSpan.FromSeconds(2), clock).Load(),
+                Throws.InstanceOf<WebDriverTimeoutException>());
         }
 
         [Test]
@@ -81,15 +76,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             HasError error = new HasError();
 
-            try
-            {
-                error.Load();
-                Assert.Fail();
-            }
-            catch (CustomException)
-            {
-                // This is expected
-            }
+            Assert.That(
+               () => error.Load(),
+               Throws.InstanceOf<CustomException>());
         }
 
 

@@ -37,7 +37,7 @@ namespace OpenQA.Selenium.Support.Events
             IWebElement element = firingDriver.FindElement(By.Name("checky"));
             Screenshot screenshot = ((ITakesScreenshot)element).GetScreenshot();
 
-            Assert.IsNotNull(screenshot);
+            Assert.That(screenshot, Is.Not.Null);
         }
     }
 }

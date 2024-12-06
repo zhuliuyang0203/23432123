@@ -204,14 +204,14 @@ namespace OpenQA.Selenium
 
         private static void AssertSelected(IWebElement element, bool isSelected)
         {
-            Assert.AreEqual(isSelected, element.Selected, string.Format("Expected element {0} to be {1} but was {2}", Describe(element), SelectedToString(isSelected), SelectedToString(!isSelected)));
+            Assert.That(element.Selected, Is.EqualTo(isSelected), string.Format("Expected element {0} to be {1} but was {2}", Describe(element), SelectedToString(isSelected), SelectedToString(!isSelected)));
         }
 
         private static void AssertCannotSelect(IWebElement element)
         {
             bool previous = element.Selected;
             element.Click();
-            Assert.AreEqual(previous, element.Selected);
+            Assert.That(element.Selected, Is.EqualTo(previous));
         }
 
         private static void AssertCanSelect(IWebElement element)
@@ -261,7 +261,7 @@ namespace OpenQA.Selenium
         {
             element.Click();
             bool isNowSelected = element.Selected;
-            Assert.AreNotEqual(isNowSelected, originalState, string.Format("Expected element {0} to have been toggled to {1} but was {2}", Describe(element), SelectedToString(!originalState), SelectedToString(originalState)));
+            Assert.That(originalState, Is.Not.EqualTo(isNowSelected), string.Format("Expected element {0} to have been toggled to {1} but was {2}", Describe(element), SelectedToString(!originalState), SelectedToString(originalState)));
             AssertSelected(element, !originalState);
         }
 

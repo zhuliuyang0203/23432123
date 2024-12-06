@@ -40,9 +40,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement element = driver.FindElement(By.Id("working"));
-            Assert.AreEqual(string.Empty, element.GetDomProperty("value"));
+
+            Assert.That(element.GetDomProperty("value"), Is.Empty);
             element.SendKeys("hello world");
-            Assert.AreEqual("hello world", element.GetDomProperty("value"));
+            Assert.That(element.GetDomProperty("value"), Is.EqualTo("hello world"));
         }
     }
 }

@@ -33,7 +33,7 @@ namespace OpenQA.Selenium
 
             IWebElement res = elem.FindElement(By.PartialLinkText("link with formatting tags"));
             Assert.That(res, Is.Not.Null);
-            Assert.AreEqual("link with formatting tags", res.Text);
+            Assert.That(res.Text, Is.EqualTo("link with formatting tags"));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace OpenQA.Selenium
 
             IWebElement res = elem.FindElement(By.PartialLinkText("link with leading space"));
             Assert.That(res, Is.Not.Null);
-            Assert.AreEqual("link with leading space", res.Text);
+            Assert.That(res.Text, Is.EqualTo("link with leading space"));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace OpenQA.Selenium
             IWebElement res =
                 elem.FindElement(By.PartialLinkText("link with trailing space"));
             Assert.That(res, Is.Not.Null);
-            Assert.AreEqual("link with trailing space", res.Text);
+            Assert.That(res.Text, Is.EqualTo("link with trailing space"));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> elements = elem.FindElements(By.PartialLinkText("link"));
             Assert.That(elements, Is.Not.Null);
-            Assert.AreEqual(6, elements.Count);
+            Assert.That(elements, Has.Count.EqualTo(6));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
             IWebElement link = null;
             link = driver.FindElement(By.LinkText("link with trailing space"));
-            Assert.AreEqual("linkWithTrailingSpace", link.GetAttribute("id"));
+            Assert.That(link.GetAttribute("id"), Is.EqualTo("linkWithTrailingSpace"));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace OpenQA.Selenium
 
             IWebElement link = null;
             link = elem.FindElement(By.LinkText("link with trailing space"));
-            Assert.AreEqual("linkWithTrailingSpace", link.GetAttribute("id"));
+            Assert.That(link.GetAttribute("id"), Is.EqualTo("linkWithTrailingSpace"));
         }
     }
 }

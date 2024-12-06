@@ -48,7 +48,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Prompt", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Prompt"));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Prompt", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Prompt"));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             string result = driver.FindElement(By.Id("text")).Text;
-            Assert.AreEqual("cheese", result);
+            Assert.That(result, Is.EqualTo("cheese"));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("cheese", value);
+            Assert.That(value, Is.EqualTo("cheese"));
         }
 
         [Test]
@@ -187,7 +187,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("Enter something", value);
+            Assert.That(value, Is.EqualTo("Enter something"));
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace OpenQA.Selenium
 
             IWebElement element = driver.FindElement(By.Id("text"));
             WaitFor(ElementTextToEqual(element, "This is a default value"), "Element text was not 'This is a default value'");
-            Assert.AreEqual("This is a default value", element.Text);
+            Assert.That(element.Text, Is.EqualTo("This is a default value"));
         }
 
         [Test]
@@ -311,7 +311,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
             IWebElement element = driver.FindElement(By.Id("text"));
             WaitFor(ElementTextToEqual(element, "null"), "Element text was not 'null'");
-            Assert.AreEqual("null", element.Text);
+            Assert.That(element.Text, Is.EqualTo("null"));
         }
 
         [Test]
@@ -349,10 +349,10 @@ namespace OpenQA.Selenium
 
             IWebElement element1 = driver.FindElement(By.Id("text1"));
             WaitFor(ElementTextToEqual(element1, "brie"), "Element text was not 'brie'");
-            Assert.AreEqual("brie", element1.Text);
+            Assert.That(element1.Text, Is.EqualTo("brie"));
             IWebElement element2 = driver.FindElement(By.Id("text2"));
             WaitFor(ElementTextToEqual(element2, "cheddar"), "Element text was not 'cheddar'");
-            Assert.AreEqual("cheddar", element2.Text);
+            Assert.That(element2.Text, Is.EqualTo("cheddar"));
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("onload", value);
+            Assert.That(value, Is.EqualTo("onload"));
             IWebElement element = driver.FindElement(By.TagName("p"));
             WaitFor(ElementTextToEqual(element, "Page with onload event handler"), "Element text was not 'Page with onload event handler'");
         }
@@ -387,7 +387,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("onload", value);
+            Assert.That(value, Is.EqualTo("onload"));
             WaitFor(ElementTextToEqual(driver.FindElement(By.TagName("p")), "Page with onload event handler"), "Could not find element with text 'Page with onload event handler'");
         }
 
@@ -412,7 +412,7 @@ namespace OpenQA.Selenium
                 driver.FindElement(By.Id("open-new-window")).Click();
                 List<String> allWindows = new List<string>(driver.WindowHandles);
                 allWindows.Remove(mainWindow);
-                Assert.AreEqual(1, allWindows.Count);
+                Assert.That(allWindows, Has.One.Items);
                 onloadWindow = allWindows[0];
 
                 Assert.That(() =>
@@ -472,8 +472,8 @@ namespace OpenQA.Selenium
             string text = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("Tasty cheese", text);
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(text, Is.EqualTo("Tasty cheese"));
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         private IAlert AlertToBePresent()
