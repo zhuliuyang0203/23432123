@@ -20,7 +20,6 @@ from typing import List
 from typing import Mapping
 from typing import Optional
 
-
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service
 
@@ -43,6 +42,7 @@ class ChromiumService(service.Service):
         service_args: Optional[List[str]] = None,
         log_output: SubprocessStdAlias = None,
         env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self._service_args = service_args or []
@@ -77,4 +77,3 @@ class ChromiumService(service.Service):
 
     def command_line_args(self) -> List[str]:
         return [f"--port={self.port}"] + self._service_args
-
