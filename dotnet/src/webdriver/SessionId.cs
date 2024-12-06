@@ -44,7 +44,7 @@ namespace OpenQA.Selenium
         /// Get the value of the key
         /// </summary>
         /// <returns>The key in use</returns>
-        public override string? ToString()
+        public override string ToString()
         {
             return this.sessionOpaqueKey;
         }
