@@ -242,12 +242,12 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
 
             IWebElement element = driver.FindElement(By.Name("readonly"));
-            string readOnlyAttribute = element.GetAttribute("readonly");
+            string readOnlyAttribute = element.GetDomAttribute("readonly");
 
             Assert.That(readOnlyAttribute, Is.Not.Null);
 
             IWebElement textInput = driver.FindElement(By.Name("x"));
-            string notReadOnly = textInput.GetAttribute("readonly");
+            string notReadOnly = textInput.GetDomAttribute("readonly");
 
             Assert.That(notReadOnly, Is.Null);
         }
