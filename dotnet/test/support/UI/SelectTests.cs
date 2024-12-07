@@ -50,7 +50,7 @@ namespace OpenQA.Selenium.Support.UI
         public void CanCreateNewInstanceOfSelectWithNormalSelectElement()
         {
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
 
             Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.False);
         }
@@ -59,7 +59,7 @@ namespace OpenQA.Selenium.Support.UI
         public void CanCreateNewInstanceOfSelectWithMultipleSelectElement()
         {
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
 
             Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.True);
         }
@@ -69,7 +69,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IList<IWebElement> options = new List<IWebElement>();
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options));
 
             Assert.That(new SelectElement(webElement.Object).Options, Is.EqualTo(options));
@@ -85,7 +85,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(selected.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             notSelected.SetupGet<bool>(_ => _.Selected).Returns(false);
             selected.SetupGet<bool>(_ => _.Selected).Returns(true);
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
@@ -107,7 +107,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(notSelected.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             notSelected.SetupGet<bool>(_ => _.Selected).Returns(false);
             selected.SetupGet<bool>(_ => _.Selected).Returns(true);
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
@@ -128,7 +128,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
@@ -148,7 +148,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
@@ -168,7 +168,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
             option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
@@ -192,7 +192,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
@@ -219,7 +219,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
@@ -246,7 +246,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("1");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
             option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
@@ -275,7 +275,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
@@ -294,7 +294,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
@@ -313,7 +313,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option1.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
@@ -336,7 +336,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
             option2.SetupGet<bool>(_ => _.Selected).Returns(true);
@@ -356,7 +356,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
             option2.SetupGet<bool>(_ => _.Selected).Returns(true);
@@ -381,7 +381,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(option2.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("1");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
@@ -409,7 +409,7 @@ namespace OpenQA.Selenium.Support.UI
             options.Add(notSelected.Object);
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
-            webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
+            webElement.Setup(_ => _.GetDomAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             notSelected.SetupGet<bool>(_ => _.Selected).Returns(false);
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
