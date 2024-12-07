@@ -258,7 +258,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             IWebElement element = driver.FindElement(By.Id("hiddenline"));
-            string textContent = element.GetAttribute("textContent");
+            string textContent = element.GetDomProperty("textContent");
 
             Assert.That(textContent, Is.EqualTo("A hidden line of text"));
         }
