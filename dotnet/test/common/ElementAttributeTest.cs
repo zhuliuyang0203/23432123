@@ -70,7 +70,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             IWebElement body = driver.FindElement(By.XPath("//body"));
-            Assert.That(body.GetAttribute("style"), Is.Empty);
+            Assert.That(body.GetDomAttribute("style"), Is.Empty);
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace OpenQA.Selenium
         public void CanReturnATextApproximationOfTheStyleAttribute()
         {
             driver.Url = javascriptPage;
-            string style = driver.FindElement(By.Id("red-item")).GetAttribute("style");
+            string style = driver.FindElement(By.Id("red-item")).GetDomAttribute("style");
 
             Assert.That(style.ToLower(), Does.Contain("background-color"));
         }

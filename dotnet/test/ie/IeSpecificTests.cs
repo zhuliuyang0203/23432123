@@ -209,7 +209,7 @@ namespace OpenQA.Selenium.IE
             System.Threading.Thread.Sleep(2000);
             string startWindow = driver.CurrentWindowHandle;
             driver.SwitchTo().Window("cookiedestwindow");
-            string bodyStyle = driver.FindElement(By.TagName("body")).GetAttribute("style");
+            string bodyStyle = driver.FindElement(By.TagName("body")).GetDomAttribute("style");
             driver.Close();
             driver.SwitchTo().Window(startWindow);
             Assert.That(bodyStyle, Does.Contain("BACKGROUND-COLOR: #80ffff").Or.Contain("background-color: rgb(128, 255, 255)"));
