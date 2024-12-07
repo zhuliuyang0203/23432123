@@ -232,7 +232,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
 
-            string html = driver.FindElement(By.Id("wrappingtext")).GetAttribute("innerHTML");
+            string html = driver.FindElement(By.Id("wrappingtext")).GetDomProperty("innerHTML");
             Assert.That(html, Does.Contain("<tbody>"));
         }
 
