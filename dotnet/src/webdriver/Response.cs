@@ -56,13 +56,6 @@ namespace OpenQA.Selenium
             }
         }
 
-        internal Response(SessionId sessionId, WebDriverResult status, object value)
-        {
-            this.SessionId = sessionId?.ToString();
-            this.Status = status;
-            this.Value = value;
-        }
-
         private Response(Dictionary<string, object> rawResponse)
         {
             if (rawResponse.ContainsKey("sessionId"))
