@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace OpenQA.Selenium.DevTools
@@ -105,7 +104,6 @@ namespace OpenQA.Selenium.DevTools
             return domains;
         }
 
-        [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
         private static Type MatchDomainsVersion(int desiredVersion, int versionRange)
         {
             // Return fast on an exact match
