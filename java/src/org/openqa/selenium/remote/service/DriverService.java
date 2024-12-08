@@ -242,8 +242,10 @@ public class DriverService implements Closeable {
             processFinished.cancel(true);
             break;
           case PROCESS_DIED:
+            int exitValue = process.exitValue();
             process = null;
-            throw new WebDriverException("Driver server process died prematurely.");
+            throw new WebDriverException(
+                "Driver server process died prematurely, exit value: " + exitValue);
           case PROCESS_IS_ACTIVE:
             process.shutdown();
             throw new WebDriverException("Timed out waiting for driver server to bind the port.");
