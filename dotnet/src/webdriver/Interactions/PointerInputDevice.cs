@@ -237,11 +237,6 @@ namespace OpenQA.Selenium.Interactions
         /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         public Interaction CreatePointerMove(IWebElement target, int xOffset, int yOffset, TimeSpan duration, PointerEventProperties properties)
         {
-            if (target is null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
-
             return new PointerMoveInteraction(this, target, CoordinateOrigin.Element, xOffset, yOffset, duration, properties);
         }
 
@@ -590,7 +585,7 @@ namespace OpenQA.Selenium.Interactions
                 string originDescription = this.origin.ToString();
                 if (this.origin == CoordinateOrigin.Element)
                 {
-                    originDescription = this.target!.ToString()!;
+                    originDescription = this.target?.ToString() ?? "<null>";
                 }
 
                 return string.Format(CultureInfo.InvariantCulture, "Pointer move [origin: {0}, x offset: {1}, y offset: {2}, duration: {3}ms]", originDescription, this.x, this.y, this.duration.TotalMilliseconds);
