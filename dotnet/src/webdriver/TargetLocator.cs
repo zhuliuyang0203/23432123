@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -61,8 +59,6 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="frameName">name of the frame</param>
         /// <returns>A WebDriver instance that is currently in use</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="frameName"/> is null.</exception>
-        /// <exception cref="NoSuchFrameException">If a non-existent iFrame is queried for.</exception>
         public IWebDriver Frame(string frameName)
         {
             if (frameName == null)
@@ -89,8 +85,6 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="frameElement">a previously found FRAME or IFRAME element.</param>
         /// <returns>A WebDriver instance that is currently in use.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="frameElement"/> is null.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="frameElement"/> is an invalid object reference.</exception>
         public IWebDriver Frame(IWebElement frameElement)
         {
             if (frameElement == null)
@@ -98,10 +92,10 @@ namespace OpenQA.Selenium
                 throw new ArgumentNullException(nameof(frameElement), "Frame element cannot be null");
             }
 
-            IWebDriverObjectReference? elementReference = frameElement as IWebDriverObjectReference;
+            IWebDriverObjectReference elementReference = frameElement as IWebDriverObjectReference;
             if (elementReference == null)
             {
-                IWrapsElement? elementWrapper = frameElement as IWrapsElement;
+                IWrapsElement elementWrapper = frameElement as IWrapsElement;
                 if (elementWrapper != null)
                 {
                     elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;
@@ -137,15 +131,8 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="windowHandleOrName">Window handle or name of the window that you wish to move to</param>
         /// <returns>A WebDriver instance that is currently in use</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="windowHandleOrName"/> is <see langword="null"/>.</exception>
-        /// <exception cref="NoSuchWindowException">If no window matching the provided handle or name exists.</exception>
         public IWebDriver Window(string windowHandleOrName)
         {
-            if (windowHandleOrName == null)
-            {
-                throw new ArgumentNullException(nameof(windowHandleOrName));
-            }
-
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("handle", windowHandleOrName);
             try
@@ -156,7 +143,7 @@ namespace OpenQA.Selenium
             catch (NoSuchWindowException)
             {
                 // simulate search by name
-                string? original = null;
+                string original = null;
                 try
                 {
                     original = this.driver.CurrentWindowHandle;
@@ -197,8 +184,8 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", typeHint.ToString().ToLowerInvariant());
             Response response = this.driver.InternalExecute(DriverCommand.NewWindow, parameters);
-            Dictionary<string, object> result = (Dictionary<string, object>)response.Value;
-            string newWindowHandle = result["handle"].ToString()!;
+            Dictionary<string, object> result = response.Value as Dictionary<string, object>;
+            string newWindowHandle = result["handle"].ToString();
             this.Window(newWindowHandle);
             return this.driver;
         }
@@ -209,7 +196,7 @@ namespace OpenQA.Selenium
         /// <returns>Element of the default</returns>
         public IWebDriver DefaultContent()
         {
-            Dictionary<string, object?> parameters = new Dictionary<string, object?>();
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", null);
             this.driver.InternalExecute(DriverCommand.SwitchToFrame, parameters);
             return this.driver;
@@ -229,7 +216,6 @@ namespace OpenQA.Selenium
         /// Switches to the currently active modal dialog for this particular driver instance.
         /// </summary>
         /// <returns>A handle to the dialog.</returns>
-        /// <exception cref="NoAlertPresentException">No alert is present.</exception>
         public IAlert Alert()
         {
             // N.B. We only execute the GetAlertText command to be able to throw
