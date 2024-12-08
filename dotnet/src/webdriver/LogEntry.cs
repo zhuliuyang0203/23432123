@@ -53,7 +53,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public string Message { get; private set; } = string.Empty;
 
-        private static DateTime UnixEpoch => new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime UnixEpoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// Returns a string that represents the current <see cref="LogEntry"/>.
