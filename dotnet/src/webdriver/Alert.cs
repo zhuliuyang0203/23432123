@@ -48,7 +48,7 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAlertText, null);
-                return (string?)commandResponse.Value;
+                return commandResponse.Value?.ToString();
             }
         }
 
