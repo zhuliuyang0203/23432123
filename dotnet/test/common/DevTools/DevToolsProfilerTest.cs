@@ -131,12 +131,12 @@ namespace OpenQA.Selenium.DevTools
         {
             Assert.That(profiler, Is.Not.Null);
             Assert.That(profiler.Nodes, Is.Not.Null);
-            Assert.That(profiler.StartTime, Is.Not.Null);
-            Assert.That(profiler.EndTime, Is.Not.Null);
+            Assert.That(profiler.StartTime, Is.Not.Zero);
+            Assert.That(profiler.EndTime, Is.Not.Zero);
             Assert.That(profiler.TimeDeltas, Is.Not.Null);
             foreach (var delta in profiler.TimeDeltas)
             {
-                Assert.That(delta, Is.Not.Null);
+                Assert.That(delta, Is.Not.Zero);
             }
 
             foreach (var node in profiler.Nodes)
