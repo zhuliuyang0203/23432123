@@ -66,10 +66,10 @@ namespace OpenQA.Selenium
         {
             if (name is null)
             {
-                throw new ArgumentNullException("{nameof(name)}");
+                throw new ArgumentNullException(nameof(name));
             }
 
-            var rawCookie = driver.InternalExecute($"{DriverCommand.GetCookie}/{name}", null).Value;
+            var rawCookie = driver.InternalExecute(DriverCommand.GetCookie, new() { { "name", name } }).Value;
 
             return Cookie.FromDictionary(rawCookie as Dictionary<string, object>);
         }
