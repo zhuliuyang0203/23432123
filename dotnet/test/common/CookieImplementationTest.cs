@@ -553,8 +553,7 @@ namespace OpenQA.Selenium
             IOptions options = driver.Manage();
             options.Cookies.AddCookie(cookie);
 
-            cookie = options.Cookies.GetCookieNamed("expired");
-            Assert.That(cookie, Is.Null, "Cookie expired before it was set, so nothing should be returned: " + cookie);
+            Assert.That(() => options.Cookies.GetCookieNamed("expired"), Throws.InstanceOf<NoSuchCookieException>());
         }
 
         [Test]
@@ -579,9 +578,8 @@ namespace OpenQA.Selenium
         public void DeleteNotExistedCookie()
         {
             String key = GenerateUniqueKey();
-            AssertCookieIsNotPresentWithName(key);
 
-            driver.Manage().Cookies.DeleteCookieNamed(key);
+            Assert.That(() => driver.Manage().Cookies.DeleteCookieNamed(key), Throws.Nothing);
         }
 
         [Test]
