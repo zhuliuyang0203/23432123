@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -47,7 +45,7 @@ namespace OpenQA.Selenium
             // StartMonitoring().
             this.session = new Lazy<DevToolsSession>(() =>
             {
-                IDevTools? devToolsDriver = driver as IDevTools;
+                IDevTools devToolsDriver = driver as IDevTools;
                 if (devToolsDriver == null)
                 {
                     throw new WebDriverException("Driver must implement IDevTools to use these features");
@@ -60,12 +58,12 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a browser sends a network request.
         /// </summary>
-        public event EventHandler<NetworkRequestSentEventArgs>? NetworkRequestSent;
+        public event EventHandler<NetworkRequestSentEventArgs> NetworkRequestSent;
 
         /// <summary>
         /// Occurs when a browser receives a network response.
         /// </summary>
-        public event EventHandler<NetworkResponseReceivedEventArgs>? NetworkResponseReceived;
+        public event EventHandler<NetworkResponseReceivedEventArgs> NetworkResponseReceived;
 
         /// <summary>
         /// Asynchronously starts monitoring for network traffic.
@@ -98,7 +96,6 @@ namespace OpenQA.Selenium
         /// and optionally modify the request or provide a response.
         /// </summary>
         /// <param name="handler">The <see cref="NetworkRequestHandler"/> to add.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="handler"/> is null.</exception>
         public void AddRequestHandler(NetworkRequestHandler handler)
         {
             if (handler == null)
@@ -203,7 +200,7 @@ namespace OpenQA.Selenium
             {
                 if (authenticationHandler.UriMatcher.Invoke(uri))
                 {
-                    PasswordCredentials credentials = (PasswordCredentials)authenticationHandler.Credentials;
+                    PasswordCredentials credentials = authenticationHandler.Credentials as PasswordCredentials;
                     await this.session.Value.Domains.Network.ContinueWithAuth(e.RequestId, credentials.UserName, credentials.Password).ConfigureAwait(false);
                     successfullyAuthenticated = true;
                     break;
