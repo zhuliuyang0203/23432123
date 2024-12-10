@@ -46,7 +46,7 @@ namespace OpenQA.Selenium.Interactions
 
             WheelInputDevice device = actionProvider.GetActiveWheel();
 
-            Assert.AreEqual("test wheel", device.DeviceName);
+            Assert.That(device.DeviceName, Is.EqualTo("test wheel"));
         }
 
         [Test]
@@ -56,11 +56,11 @@ namespace OpenQA.Selenium.Interactions
             driver.Url = scrollFrameOutOfViewport;
             IWebElement iframe = driver.FindElement(By.TagName("iframe"));
 
-            Assert.IsFalse(IsInViewport(iframe));
+            Assert.That(IsInViewport(iframe), Is.False);
 
             new Actions(driver).ScrollToElement(iframe).Build().Perform();
 
-            Assert.IsTrue(IsInViewport(iframe));
+            Assert.That(IsInViewport(iframe), Is.True);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace OpenQA.Selenium.Interactions
 
             driver.SwitchTo().Frame(iframe);
             IWebElement checkbox = driver.FindElement(By.Name("scroll_checkbox"));
-            Assert.IsTrue(IsInViewport(checkbox));
+            Assert.That(IsInViewport(checkbox), Is.True);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace OpenQA.Selenium.Interactions
             IWebElement iframe = driver.FindElement(By.TagName("iframe"));
             driver.SwitchTo().Frame(iframe);
             IWebElement checkbox = driver.FindElement(By.Name("scroll_checkbox"));
-            Assert.IsTrue(IsInViewport(checkbox));
+            Assert.That(IsInViewport(checkbox), Is.True);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace OpenQA.Selenium.Interactions
 
             new Actions(driver).ScrollByAmount(0, deltaY).Build().Perform();
 
-            Assert.IsTrue(IsInViewport(footer));
+            Assert.That(IsInViewport(footer), Is.True);
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace OpenQA.Selenium.Interactions
             IWebElement iframe = driver.FindElement(By.TagName("iframe"));
             driver.SwitchTo().Frame(iframe);
             IWebElement checkbox = driver.FindElement(By.Name("scroll_checkbox"));
-            Assert.IsTrue(IsInViewport(checkbox));
+            Assert.That(IsInViewport(checkbox), Is.True);
         }
 
         [Test]

@@ -138,7 +138,7 @@ class ChromiumDriver(RemoteWebDriver):
             For example to getResponseBody:
             {'base64Encoded': False, 'body': 'response body string'}
         """
-        return self.execute("executeCdpCommand", {"cmd": cmd, "params": cmd_args})["value"]
+        return super().execute_cdp_cmd(cmd, cmd_args)
 
     def get_sinks(self) -> list:
         """:Returns: A list of sinks available for Cast."""

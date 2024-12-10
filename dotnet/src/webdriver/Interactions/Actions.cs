@@ -138,7 +138,7 @@ namespace OpenQA.Selenium.Interactions
 
                 if (id == name)
                 {
-                    return sequence.inputDevice;
+                    return sequence.InputDevice;
                 }
             }
 

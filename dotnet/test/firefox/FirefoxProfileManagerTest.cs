@@ -36,28 +36,28 @@ namespace OpenQA.Selenium.Firefox
         public void ShouldGetNamedProfile()
         {
             FirefoxProfile profile = manager.GetProfile("default");
-            Assert.IsNotNull(profile);
+            Assert.That(profile, Is.Not.Null);
         }
 
         //[Test]
         public void ShouldReturnNullForInvalidProfileName()
         {
             FirefoxProfile profile = manager.GetProfile("ThisIsMyBogusProfileName");
-            Assert.IsNull(profile);
+            Assert.That(profile, Is.Null);
         }
 
         //[Test]
         public void ShouldReturnNullForNullProfileName()
         {
             FirefoxProfile profile = manager.GetProfile(null);
-            Assert.IsNull(profile);
+            Assert.That(profile, Is.Null);
         }
 
         //[Test]
         public void ShouldReturnNullForEmptyProfileName()
         {
             FirefoxProfile profile = manager.GetProfile(string.Empty);
-            Assert.IsNull(profile);
+            Assert.That(profile, Is.Null);
         }
     }
 }

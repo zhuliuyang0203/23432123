@@ -84,7 +84,7 @@ namespace OpenQA.Selenium
             driver.Url = framesetPage;
             driver.SwitchTo().Frame(1);
 
-            Assert.AreEqual("2", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace OpenQA.Selenium
             driver.Url = iframePage;
             driver.SwitchTo().Frame(0);
 
-            Assert.AreEqual("name", driver.FindElement(By.Name("id-name1")).GetAttribute("value"));
+            Assert.That(driver.FindElement(By.Name("id-name1")).GetAttribute("value"), Is.EqualTo("name"));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("fourth");
-            Assert.AreEqual("child1", driver.FindElement(By.TagName("frame")).GetAttribute("name"));
+            Assert.That(driver.FindElement(By.TagName("frame")).GetAttribute("name"), Is.EqualTo("child1"));
 
         }
 
@@ -110,7 +110,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = iframePage;
             driver.SwitchTo().Frame("iframe1-name");
-            Assert.AreEqual("name", driver.FindElement(By.Name("id-name1")).GetAttribute("value"));
+            Assert.That(driver.FindElement(By.Name("id-name1")).GetAttribute("value"), Is.EqualTo("name"));
 
         }
 
@@ -119,7 +119,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("fifth");
-            Assert.AreEqual("Open new window", driver.FindElement(By.Name("windowOne")).Text);
+            Assert.That(driver.FindElement(By.Name("windowOne")).Text, Is.EqualTo("Open new window"));
 
         }
 
@@ -128,7 +128,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = iframePage;
             driver.SwitchTo().Frame("iframe1");
-            Assert.AreEqual("name", driver.FindElement(By.Name("id-name1")).GetAttribute("value"));
+            Assert.That(driver.FindElement(By.Name("id-name1")).GetAttribute("value"), Is.EqualTo("name"));
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace OpenQA.Selenium
             driver.Url = framesetPage;
             IWebElement frame = driver.FindElement(By.TagName("frame"));
             driver.SwitchTo().Frame(frame);
-            Assert.AreEqual("1", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("1"));
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace OpenQA.Selenium
             driver.Url = iframePage;
             IWebElement frame = driver.FindElement(By.TagName("iframe"));
             driver.SwitchTo().Frame(frame);
-            Assert.AreEqual("name", driver.FindElement(By.Name("id-name1")).GetAttribute("value"));
+            Assert.That(driver.FindElement(By.Name("id-name1")).GetAttribute("value"), Is.EqualTo("name"));
 
         }
 
@@ -173,7 +173,7 @@ namespace OpenQA.Selenium
 
             IWebElement frameElement = WaitFor(() => driver.FindElement(By.Name("second")), "did not find frame");
             driver.SwitchTo().Frame(frameElement);
-            Assert.AreEqual("2", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
 
             Assert.That(
                 () => driver.SwitchTo().Frame("third"),
@@ -188,7 +188,7 @@ namespace OpenQA.Selenium
 
             driver.SwitchTo().DefaultContent();
             driver.SwitchTo().Frame("second");
-            Assert.AreEqual("2", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("fourth").SwitchTo().Frame("child2");
-            Assert.AreEqual("11", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("11"));
         }
 
         [Test]
@@ -235,7 +235,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("fourth").SwitchTo().ParentFrame().SwitchTo().Frame("first");
-            Assert.AreEqual("1", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("1"));
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace OpenQA.Selenium
             driver.Url = framesetPage;
 
             driver.SwitchTo().Frame("fourth").SwitchTo().Frame("child1").SwitchTo().ParentFrame().SwitchTo().Frame("child2");
-            Assert.AreEqual("11", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("11"));
         }
 
         [Test]
@@ -252,7 +252,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = xhtmlTestPage;
             driver.SwitchTo().ParentFrame();
-            Assert.AreEqual("XHTML Test Page", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.LinkText("top")).Click();
 
             WaitFor(() => { return driver.Title == "XHTML Test Page"; }, "Browser title was not 'XHTML Test Page'");
-            Assert.AreEqual("XHTML Test Page", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("submitButton")).Click();
 
             string hello = GetTextOfGreetingElement();
-            Assert.AreEqual(hello, "Success!");
+            Assert.That(hello, Is.EqualTo("Success!"));
         }
 
         [Test]
@@ -327,11 +327,11 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("submitButton")).Click();
 
             // driver should still be focused on frame "third" ...
-            Assert.AreEqual("Success!", GetTextOfGreetingElement());
+            Assert.That(GetTextOfGreetingElement(), Is.EqualTo("Success!"));
 
             // Make sure it was really frame "third" which was replaced ...
             driver.SwitchTo().DefaultContent().SwitchTo().Frame("third");
-            Assert.AreEqual("Success!", GetTextOfGreetingElement());
+            Assert.That(GetTextOfGreetingElement(), Is.EqualTo("Success!"));
         }
 
         [Test]
@@ -354,11 +354,11 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("submitButton")).Click();
 
             // driver should still be focused on frame "iframe1" inside frame "sixth" ...
-            Assert.AreEqual("Success!", GetTextOfGreetingElement());
+            Assert.That(GetTextOfGreetingElement(), Is.EqualTo("Success!"));
 
             // Make sure it was really frame "iframe1" inside frame "sixth" which was replaced ...
             driver.SwitchTo().DefaultContent().SwitchTo().Frame("sixth").SwitchTo().Frame("iframe1");
-            Assert.AreEqual("Success!", driver.FindElement(By.Id("greeting")).Text);
+            Assert.That(driver.FindElement(By.Id("greeting")).Text, Is.EqualTo("Success!"));
         }
 
         [Test]
@@ -377,21 +377,21 @@ namespace OpenQA.Selenium
         public void GetCurrentUrlShouldReturnTopLevelBrowsingContextUrl()
         {
             driver.Url = framesetPage;
-            Assert.AreEqual(framesetPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(framesetPage));
 
             driver.SwitchTo().Frame("second");
-            Assert.AreEqual(framesetPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(framesetPage));
         }
 
         [Test]
         public void GetCurrentUrlShouldReturnTopLevelBrowsingContextUrlForIframes()
         {
             driver.Url = iframePage;
-            Assert.AreEqual(iframePage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(iframePage));
 
 
             driver.SwitchTo().Frame("iframe1");
-            Assert.AreEqual(iframePage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(iframePage));
         }
 
         [Test]
@@ -476,7 +476,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = framesetPage;
             driver.SwitchTo().Frame("third");
-            Assert.AreEqual("Unique title", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Unique title"));
         }
 
         [Test]
@@ -518,7 +518,7 @@ namespace OpenQA.Selenium
                     {
                         url = url.Substring(0, url.Length - 1);
                     }
-                    Assert.AreEqual(baseUrl + "bug4876_iframe.html", url);
+                    Assert.That(url, Is.EqualTo(baseUrl + "bug4876_iframe.html"));
                 }
             }
         }
@@ -557,13 +557,13 @@ namespace OpenQA.Selenium
             driver.Url = framesetPage;
 
             driver.SwitchTo().Frame("second");
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "2");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
 
             driver.SwitchTo().DefaultContent().SwitchTo().Frame("third");
             driver.FindElement(By.Id("changeme")).Click();
 
             driver.SwitchTo().DefaultContent().SwitchTo().Frame("second");
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "2");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
         }
 
         [Test]

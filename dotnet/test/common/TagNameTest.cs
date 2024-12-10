@@ -29,7 +29,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement selectBox = driver.FindElement(By.Id("cheese"));
-            Assert.AreEqual(selectBox.TagName.ToLower(), "input");
+            Assert.That(selectBox.TagName, Is.EqualTo("input").IgnoreCase);
         }
     }
 }

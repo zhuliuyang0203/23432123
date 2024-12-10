@@ -38,9 +38,9 @@ namespace OpenQA.Selenium
             driver.Url = svgTestPage;
             IWebElement rect = driver.FindElement(By.Id("rect"));
 
-            Assert.AreEqual("blue", rect.GetAttribute("fill"));
+            Assert.That(rect.GetAttribute("fill"), Is.EqualTo("blue"));
             rect.Click();
-            Assert.AreEqual("green", rect.GetAttribute("fill"));
+            Assert.That(rect.GetAttribute("fill"), Is.EqualTo("green"));
         }
 
         [Test]
@@ -54,9 +54,9 @@ namespace OpenQA.Selenium
             driver.Url = svgTestPage;
             IWebElement rect = driver.FindElement(By.Id("rect"));
 
-            Assert.AreEqual("blue", rect.GetAttribute("fill"));
+            Assert.That(rect.GetAttribute("fill"), Is.EqualTo("blue"));
             ((IJavaScriptExecutor)driver).ExecuteScript("document.getElementById('rect').setAttribute('fill', 'yellow');");
-            Assert.AreEqual("yellow", rect.GetAttribute("fill"));
+            Assert.That(rect.GetAttribute("fill"), Is.EqualTo("yellow"));
         }
     }
 }

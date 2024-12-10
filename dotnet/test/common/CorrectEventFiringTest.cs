@@ -158,7 +158,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("mousedown")).Click();
 
             String result = driver.FindElement(By.Id("result")).Text;
-            Assert.AreEqual(result, "mouse down");
+            Assert.That(result, Is.EqualTo("mouse down"));
         }
 
         [Test]
@@ -168,7 +168,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("mouseclick")).Click();
 
             String result = driver.FindElement(By.Id("result")).Text;
-            Assert.AreEqual("mouse click", result);
+            Assert.That(result, Is.EqualTo("mouse click"));
         }
 
         [Test]
@@ -178,7 +178,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("mouseup")).Click();
 
             String result = driver.FindElement(By.Id("result")).Text;
-            Assert.AreEqual(result, "mouse up");
+            Assert.That(result, Is.EqualTo("mouse up"));
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("child")).Click();
 
             String result = driver.FindElement(By.Id("result")).Text;
-            Assert.AreEqual(result, "mouse down");
+            Assert.That(result, Is.EqualTo("mouse down"));
         }
 
         [Test]
@@ -205,9 +205,9 @@ namespace OpenQA.Selenium
             IWebElement bar = allOptions[1];
 
             foo.Click();
-            Assert.AreEqual(driver.FindElement(By.Id("result")).Text, initialTextValue);
+            Assert.That(driver.FindElement(By.Id("result")).Text, Is.EqualTo(initialTextValue));
             bar.Click();
-            Assert.AreEqual(driver.FindElement(By.Id("result")).Text, "bar");
+            Assert.That(driver.FindElement(By.Id("result")).Text, Is.EqualTo("bar"));
         }
 
         [Test]
@@ -221,9 +221,9 @@ namespace OpenQA.Selenium
             IWebElement bar = allOptions[1];
 
             foo.Click();
-            Assert.AreEqual(driver.FindElement(By.Id("result")).Text, "foo");
+            Assert.That(driver.FindElement(By.Id("result")).Text, Is.EqualTo("foo"));
             bar.Click();
-            Assert.AreEqual(driver.FindElement(By.Id("result")).Text, "bar");
+            Assert.That(driver.FindElement(By.Id("result")).Text, Is.EqualTo("bar"));
         }
 
         [Test]
@@ -234,7 +234,7 @@ namespace OpenQA.Selenium
             IWebElement checkbox = driver.FindElement(By.Id("checkbox"));
 
             checkbox.Click();
-            Assert.AreEqual(driver.FindElement(By.Id("result")).Text, "checkbox thing");
+            Assert.That(driver.FindElement(By.Id("result")).Text, Is.EqualTo("checkbox thing"));
         }
 
         [Test]
@@ -245,7 +245,7 @@ namespace OpenQA.Selenium
             IWebElement clicker = driver.FindElement(By.Id("clickField"));
             clicker.Click();
 
-            Assert.AreEqual(clicker.GetAttribute("value"), "Clicked");
+            Assert.That(clicker.GetAttribute("value"), Is.EqualTo("Clicked"));
         }
 
         [Test]
@@ -269,7 +269,7 @@ namespace OpenQA.Selenium
             element.Clear();
 
             IWebElement result = driver.FindElement(By.Id("result"));
-            Assert.AreEqual("Cleared", result.Text.Trim());
+            Assert.That(result.Text.Trim(), Is.EqualTo("Cleared"));
         }
 
         [Test]
@@ -416,7 +416,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             IWebElement uploadElement = driver.FindElement(By.Id("upload"));
             IWebElement result = driver.FindElement(By.Id("fileResults"));
-            Assert.AreEqual(string.Empty, result.Text);
+            Assert.That(result.Text, Is.Empty);
 
             string filePath = System.IO.Path.Combine(EnvironmentManager.Instance.CurrentDirectory, "test.txt");
             System.IO.FileInfo inputFile = new System.IO.FileInfo(filePath);
@@ -429,7 +429,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("id-name1")).Click();
 
             inputFile.Delete();
-            Assert.AreEqual("changed", result.Text);
+            Assert.That(result.Text, Is.EqualTo("changed"));
         }
 
         [Test]
@@ -445,8 +445,8 @@ namespace OpenQA.Selenium
             string clientY = driver.FindElement(By.Id("clientY")).Text;
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0);
 
-            Assert.AreNotEqual("0", clientX);
-            Assert.AreNotEqual("0", clientY);
+            Assert.That(clientX, Is.Not.EqualTo("0"));
+            Assert.That(clientY, Is.Not.EqualTo("0"));
         }
 
         [Test]
@@ -487,7 +487,7 @@ namespace OpenQA.Selenium
 
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("click_tests/disappearing_element.html");
             driver.FindElement(By.Id("over")).Click();
-            Assert.That(driver.FindElement(By.Id("log")).Text.StartsWith(expectedLogBuilder.ToString()));
+            Assert.That(driver.FindElement(By.Id("log")).Text, Does.StartWith(expectedLogBuilder.ToString()));
         }
 
         private void AssertEventNotFired(string eventName)

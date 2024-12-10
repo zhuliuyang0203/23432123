@@ -361,6 +361,26 @@ class WebDriver(BaseWebDriver):
             return list(self._unwrap_value(item) for item in value)
         return value
 
+    def execute_cdp_cmd(self, cmd: str, cmd_args: dict):
+        """Execute Chrome Devtools Protocol command and get returned result The
+        command and command args should follow chrome devtools protocol
+        domains/commands, refer to link
+        https://chromedevtools.github.io/devtools-protocol/
+
+        :Args:
+         - cmd: A str, command name
+         - cmd_args: A dict, command args. empty dict {} if there is no command args
+        :Usage:
+            ::
+
+                driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': requestId})
+        :Returns:
+            A dict, empty dict {} if there is no result to return.
+            For example to getResponseBody:
+            {'base64Encoded': False, 'body': 'response body string'}
+        """
+        return self.execute("executeCdpCommand", {"cmd": cmd, "params": cmd_args})["value"]
+
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """Sends a command to be executed by a command.CommandExecutor.
 
