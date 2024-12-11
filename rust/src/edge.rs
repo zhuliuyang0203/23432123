@@ -555,42 +555,42 @@ impl SeleniumManager for EdgeManager {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EdgeProduct {
-    #[serde(rename = "Product", alias = "product")]
+    #[serde(rename = "Product")]
     pub product: String,
-    #[serde(rename = "Releases", alias = "releases")]
+    #[serde(rename = "Releases")]
     pub releases: Vec<Release>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Release {
-    #[serde(rename = "ReleaseId", alias = "releaseId")]
+    #[serde(rename = "ReleaseId")]
     pub release_id: u32,
-    #[serde(rename = "Platform", alias = "platform")]
+    #[serde(rename = "Platform")]
     pub platform: String,
-    #[serde(rename = "Architecture", alias = "architecture")]
+    #[serde(rename = "Architecture")]
     pub architecture: String,
-    #[serde(rename = "CVEs", alias = "cves")]
+    #[serde(rename = "CVEs")]
     pub cves: Vec<String>,
-    #[serde(rename = "ProductVersion", alias = "productVersion")]
+    #[serde(rename = "ProductVersion")]
     pub product_version: String,
-    #[serde(rename = "Artifacts", alias = "artifacts")]
+    #[serde(rename = "Artifacts")]
     pub artifacts: Vec<Artifact>,
-    #[serde(rename = "PublishedTime", alias = "publishedTime")]
+    #[serde(rename = "PublishedTime")]
     pub published_time: String,
-    #[serde(rename = "ExpectedExpiryDate", alias = "expectedExpiryDate")]
+    #[serde(rename = "ExpectedExpiryDate")]
     pub expected_expiry_date: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Artifact {
-    #[serde(rename = "ArtifactName", alias = "artifactName")]
+    #[serde(rename = "ArtifactName")]
     pub artifact_name: String,
-    #[serde(rename = "Location", alias = "location")]
+    #[serde(rename = "Location")]
     pub location: String,
-    #[serde(rename = "Hash", alias = "hash")]
+    #[serde(rename = "Hash")]
     pub hash: String,
-    #[serde(rename = "HashAlgorithm", alias = "hashAlgorithm")]
+    #[serde(rename = "HashAlgorithm")]
     pub hash_algorithm: String,
-    #[serde(rename = "SizeInBytes", alias = "sizeInBytes")]
+    #[serde(rename = "SizeInBytes")]
     pub size_in_bytes: u32,
 }
