@@ -34,8 +34,8 @@ rules_closure_toolchains()
 
 http_archive(
     name = "rules_rust",
-    integrity = "sha256-Zx3bP+Xrz53TTQUeynNS+68z+lO/Ye7Qt1pMNIKeVIA=",
-    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.52.2/rules_rust-v0.52.2.tar.gz"],
+    integrity = "sha256-eEXiHXSGUH6qD1bdI5KXZ/B04m0wIUeoyM7pmujzbbQ=",
+    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.55.5/rules_rust-0.55.5.tar.gz"],
 )
 
 load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
