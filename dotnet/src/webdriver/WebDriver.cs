@@ -679,7 +679,9 @@ namespace OpenQA.Selenium
 
             ReturnedCapabilities returnedCapabilities = new ReturnedCapabilities(rawCapabilities);
             this.capabilities = returnedCapabilities;
-            this.sessionId = response.SessionId is null ? null : new SessionId(response.SessionId);
+
+            string sessionId = response.SessionId ?? throw new WebDriverException("StartSession did not return a sessionId");
+            this.sessionId = new SessionId(sessionId);
         }
 
         /// <summary>
