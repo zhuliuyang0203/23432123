@@ -30,9 +30,11 @@ build --tool_java_runtime_version=remotejdk_17
 build --javacopt="--release 11"
 
 # Require java dependencies to be used and first-order
-
 build --experimental_strict_java_deps=strict
 build --explicit_java_test_deps
+
+# Avoid ErrorProne getting annoyed about "impossible null checks"
+build --javacopt="-Xep:ImpossibleNullComparison:OFF"
 
 # Allow spaces in runfile paths
 build --nobuild_runfile_links
