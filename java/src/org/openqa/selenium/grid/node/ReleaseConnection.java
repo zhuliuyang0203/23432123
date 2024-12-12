@@ -17,28 +17,27 @@
 
 package org.openqa.selenium.grid.node;
 
-import static org.openqa.selenium.remote.http.Contents.asJson;
-
 import java.io.UncheckedIOException;
-import java.util.Map;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.HttpHandler;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 
-class TryAcquireConnection implements HttpHandler {
+class ReleaseConnection implements HttpHandler {
 
   private final Node node;
   private final SessionId id;
 
-  TryAcquireConnection(Node node, SessionId id) {
+  ReleaseConnection(Node node, SessionId id) {
     this.node = Require.nonNull("Node", node);
     this.id = Require.nonNull("Session id", id);
   }
 
   @Override
   public HttpResponse execute(HttpRequest req) throws UncheckedIOException {
-    return new HttpResponse().setContent(asJson(Map.of("value", node.tryAcquireConnection(id))));
+    node.releaseConnection(id);
+
+    return new HttpResponse().setStatus(200);
   }
 }

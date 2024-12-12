@@ -623,7 +623,31 @@ public class LocalNode extends Node implements Closeable {
 
     AtomicLong counter = slot.getConnectionCounter();
 
-    return connectionLimitPerSession > counter.getAndIncrement();
+    if (connectionLimitPerSession > counter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    counter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    SessionSlot slot = currentSessions.getIfPresent(id);
+
+    if (slot == null) {
+      return;
+    }
+
+    if (connectionLimitPerSession == -1) {
+      // no limit
+      return;
+    }
+
+    AtomicLong counter = slot.getConnectionCounter();
+
+    counter.decrementAndGet();
   }
 
   @Override

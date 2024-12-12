@@ -365,7 +365,24 @@ public class OneShotNode extends Node {
 
   @Override
   public boolean tryAcquireConnection(SessionId id) {
-    return sessionId.equals(id) && connectionLimitPerSession > connectionCounter.getAndIncrement();
+    if (!sessionId.equals(id)) {
+      return false;
+    }
+
+    if (connectionLimitPerSession > connectionCounter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    connectionCounter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    if (sessionId.equals(id)) {
+      connectionCounter.getAndDecrement();
+    }
   }
 
   @Override
