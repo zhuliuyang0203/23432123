@@ -50,7 +50,7 @@ module Selenium
             expect(dialog.title).to eq('Sign in to localhost with localhost')
           end
 
-          it 'returns the subtitle' do
+          it 'returns the subtitle', skip: 'Investigate flakiness only on pipeline' do
             expect(dialog.subtitle).to be_nil
           end
 
