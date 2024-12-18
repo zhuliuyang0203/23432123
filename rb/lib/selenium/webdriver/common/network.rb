@@ -25,6 +25,7 @@ module Selenium
       extend Forwardable
 
       attr_reader :callbacks, :network
+      alias bidi network
 
       def_delegators :network, :continue_with_auth, :continue_with_request, :continue_with_response
 

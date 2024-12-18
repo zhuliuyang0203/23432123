@@ -17,6 +17,8 @@ module Selenium
 
       def add_response_handler: -> String
 
+      alias bidi network
+
       def clear_handlers: -> Hash[nil, nil]
 
       def fetch_id: -> String
