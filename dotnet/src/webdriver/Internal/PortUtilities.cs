@@ -37,9 +37,11 @@ namespace OpenQA.Selenium.Internal
             // an IPEndPoint using IPAddress.Any and port 0. The socket will
             // select a free port.
             int listeningPort = 0;
-            Socket portSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            // Use a dual-stack socket (IPv6 family will support both IPv4 and IPv6)
+            Socket portSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
             try
             {
+                portSocket.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
                 IPEndPoint socketEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 portSocket.Bind(socketEndPoint);
                 socketEndPoint = (IPEndPoint)portSocket.LocalEndPoint;
