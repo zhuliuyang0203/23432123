@@ -21,6 +21,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Set;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.grid.config.Config;
@@ -67,7 +68,7 @@ public class DefaultSlotSelector implements SlotSelector {
   @VisibleForTesting
   long getNumberOfSupportedBrowsers(NodeStatus nodeStatus) {
     return nodeStatus.getSlots().stream()
-        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase())
+        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase(Locale.ENGLISH))
         .distinct()
         .count();
   }

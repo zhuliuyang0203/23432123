@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,7 +73,7 @@ public class FirefoxBinary {
      * @return the Channel enum value matching the parameter
      */
     public static Channel fromString(String name) {
-      final String lcName = name.toLowerCase();
+      final String lcName = name.toLowerCase(Locale.ENGLISH);
       return stream(Channel.values())
           .filter(ch -> ch.name.equals(lcName))
           .findFirst()

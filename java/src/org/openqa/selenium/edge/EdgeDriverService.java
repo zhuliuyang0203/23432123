@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
@@ -294,7 +295,7 @@ public class EdgeDriverService extends DriverService {
       }
 
       if (logLevel != null) {
-        args.add(String.format("--log-level=%s", logLevel.toString().toUpperCase()));
+        args.add(String.format("--log-level=%s", logLevel.toString().toUpperCase(Locale.ENGLISH)));
       }
       if (Boolean.TRUE.equals(silent)) {
         args.add("--silent");

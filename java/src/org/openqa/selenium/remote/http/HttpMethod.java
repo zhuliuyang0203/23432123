@@ -17,6 +17,8 @@
 
 package org.openqa.selenium.remote.http;
 
+import java.util.Locale;
+
 public enum HttpMethod {
   DELETE,
   GET,
@@ -34,7 +36,7 @@ public enum HttpMethod {
     }
 
     try {
-      return HttpMethod.valueOf(method.toUpperCase());
+      return HttpMethod.valueOf(method.toUpperCase(Locale.ENGLISH));
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("No enum constant for method: " + method);
     }
