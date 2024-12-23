@@ -111,7 +111,7 @@ class Network:
         self.callbacks[event] = callback
         if len(self.subscriptions[event]) == 0:
             # session_subscribe(self.conn, event, self.__handle_event)
-            self.conn.add_callback(event, self.__handle_event)
+            return self.conn.add_callback(event, self.__handle_event)
 
     def __handle_event(self, event, data):
         """Perform callback function on event."""
@@ -156,8 +156,9 @@ class Network:
                 body = data['request'].get('body', None)
                 request = Request(request_id, url, method, headers, body, self)
                 callback(request)
-        self.__on('before_request', callback_on_url_match)
-        self.callbacks[request_id] = callback
+        callback_id = self.__on('before_request', callback_on_url_match)
+        request_id = callback_id
+        self.callbacks[callback_id] = callback
         if 'before_request' not in self.subscriptions or not self.subscriptions.get('before_request'):
             self.subscriptions['before_request'] = [request_id]
         else:
@@ -198,8 +199,9 @@ class Network:
                 headers = data['response'].get('headers', {})
                 response = Response(request_id, url, status_code, headers, body, self)
                 callback(response)
-        self.__on('response_started', callback_on_url_match)
-        self.callbacks[request_id] = callback
+        callback_id = self.__on('response_started', callback_on_url_match)
+        request_id = callback_id
+        self.callbacks[callback_id] = callback
         if 'response_started' not in self.subscriptions or not self.subscriptions.get('response_started'):
             self.subscriptions['response_started'] = [request_id]
         else:
