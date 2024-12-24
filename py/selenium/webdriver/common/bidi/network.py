@@ -144,12 +144,10 @@ class Network:
             str: The request ID of the intercepted response.
         """
         self.__add_intercept(phases=[self.PHASES['before_request']])
-        request_id = None
         def callback_on_url_match(data):
-            nonlocal request_id
             if url_pattern in data['request']['url']:
                 # create request object to pass to callback
-                request_id = data['request'].get('requestId', None)
+                request_id = data['request'].get('requestId', uuid.uuid4())
                 url = data['request'].get('url')
                 method = data['request'].get('method')
                 headers = data['request'].get('headers', {})
@@ -186,12 +184,10 @@ class Network:
             str: The request ID of the intercepted response.
         """
         self.__add_intercept(phases=[self.PHASES['response_started']])
-        request_id = None
         def callback_on_url_match(data):
             # create response object to pass to callback
-            nonlocal request_id
             if url_pattern in data['response']['url']:
-                request_id = data['request'].get('requestId', None)
+                request_id = data['request'].get('requestId', uuid.uuid4())
                 url = data['response'].get('url')
                 status_code = data['response'].get('status')
                 body = data['response'].get('body', None)
