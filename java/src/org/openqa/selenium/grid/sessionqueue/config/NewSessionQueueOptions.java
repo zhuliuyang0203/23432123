@@ -35,7 +35,7 @@ import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 public class NewSessionQueueOptions {
 
   static final String SESSION_QUEUE_SECTION = "sessionqueue";
-  static final int MAXIMUM_RESPONSE_DELAY = 8;
+  static final int DEFAULT_MAXIMUM_RESPONSE_DELAY = 8;
   static final int DEFAULT_REQUEST_TIMEOUT = 300;
   static final int DEFAULT_REQUEST_TIMEOUT_PERIOD = 10;
   static final int DEFAULT_RETRY_INTERVAL = 15;
@@ -94,7 +94,7 @@ public class NewSessionQueueOptions {
     int timeout =
         config
             .getInt(SESSION_QUEUE_SECTION, "maximum-response-delay")
-            .orElse(MAXIMUM_RESPONSE_DELAY);
+            .orElse(DEFAULT_MAXIMUM_RESPONSE_DELAY);
 
     return Duration.ofSeconds(timeout);
   }
