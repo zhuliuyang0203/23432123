@@ -64,7 +64,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs if the given <see href="https://www.w3.org/TR/webdriver2/#dfn-session-id">session id</see> is not in the list of <see href="https://www.w3.org/TR/webdriver2/#dfn-active-sessions">active sessions</see>, meaning the session either does not exist or that it's not active.
         /// </summary>
-        NoSuchDriver = IndexOutOfBounds,
+        NoSuchDriver = 6,
 
         /// <summary>
         /// An element could not be located on the page using the given search parameters.
