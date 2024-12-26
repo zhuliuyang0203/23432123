@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>
