@@ -224,10 +224,12 @@ namespace OpenQA.Selenium
             resultMap[UnsupportedOperation] = WebDriverResult.UnsupportedOperation;
 
             // TODO: Remove these strings; it is no longer valid in the specification.
+#pragma warning disable CS0618 // Type or member is obsolete
             resultMap[ElementNotSelectable] = WebDriverResult.ElementNotSelectable;
             resultMap[ElementNotVisible] = WebDriverResult.ElementNotDisplayed;
             resultMap[InvalidCoordinates] = WebDriverResult.InvalidElementCoordinates;
             resultMap[InvalidElementCoordinates] = WebDriverResult.InvalidElementCoordinates;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>

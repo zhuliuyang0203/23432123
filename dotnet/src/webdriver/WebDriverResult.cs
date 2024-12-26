@@ -34,26 +34,31 @@ namespace OpenQA.Selenium
         /// <summary>
         /// The index specified for the action was out of the acceptable range.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         IndexOutOfBounds = 1,
 
         /// <summary>
         /// No collection was specified.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoCollection = 2,
 
         /// <summary>
         /// No string was specified.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoString = 3,
 
         /// <summary>
         /// No string length was specified.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoStringLength = 4,
 
         /// <summary>
         /// No string wrapper was specified.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoStringWrapper = 5,
 
         /// <summary>
@@ -84,6 +89,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// The specified element is not displayed.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         ElementNotDisplayed = 11,
 
         /// <summary>
@@ -105,11 +111,13 @@ namespace OpenQA.Selenium
         /// <summary>
         /// An error occurred, but it was expected.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         ExpectedError = 14,
 
         /// <summary>
         /// The specified element is not selected.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         ElementNotSelectable = 15,
 
         /// <summary>
@@ -125,16 +133,19 @@ namespace OpenQA.Selenium
         /// <summary>
         /// No result is available from the JavaScript execution.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoScriptResult = 18,
 
         /// <summary>
         /// The result from the JavaScript execution is not recognized.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         XPathLookupError = 19,
 
         /// <summary>
         /// No collection matching the criteria exists.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoSuchCollection = 20,
 
         /// <summary>
@@ -145,6 +156,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// A null pointer was received.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NullPointer = 22,
 
         /// <summary>
@@ -180,6 +192,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// The coordinates of the element are invalid.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         InvalidElementCoordinates = 29,
 
         /// <summary>
@@ -200,6 +213,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// The XPath selector was invalid.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         InvalidXPathSelector = 51,
 
         /// <summary>
