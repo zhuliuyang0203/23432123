@@ -166,7 +166,7 @@ namespace OpenQA.Selenium
         NoSuchWindow = 23,
 
         /// <summary>
-        /// An illegal attempt was made to set a cookie under a different domain than the current page..
+        /// An illegal attempt was made to set a cookie under a different domain than the current page.
         /// </summary>
         InvalidCookieDomain = 24,
 
