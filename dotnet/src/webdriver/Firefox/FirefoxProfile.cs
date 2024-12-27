@@ -114,8 +114,14 @@ namespace OpenQA.Selenium.Firefox
         /// Adds a Firefox Extension to this profile
         /// </summary>
         /// <param name="extensionToInstall">The path to the new extension</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="extensionToInstall"/> is <see langword="null"/>.</exception>
         public void AddExtension(string extensionToInstall)
         {
+            if (extensionToInstall is null)
+            {
+                throw new ArgumentNullException(nameof(extensionToInstall));
+            }
+
             this.extensions.Add(Path.GetFileNameWithoutExtension(extensionToInstall), new FirefoxExtension(extensionToInstall));
         }
 
