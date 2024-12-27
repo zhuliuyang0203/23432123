@@ -28,6 +28,29 @@ import org.openqa.selenium.remote.CapabilityType;
 class DefaultSlotMatcherTest {
 
   private final DefaultSlotMatcher slotMatcher = new DefaultSlotMatcher();
+  private final SemanticVersionComparator comparator = new SemanticVersionComparator();
+
+  @Test
+  void testBrowserVersionMatch() {
+    assertThat(comparator.compare("", "")).isEqualTo(0);
+    assertThat(comparator.compare("", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("131.0.6778.85", "131")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0.6778")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0.6778.95")).isEqualTo(-1);
+    assertThat(comparator.compare("130.0", "130.0")).isEqualTo(0);
+    assertThat(comparator.compare("130.0", "130")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130.0.1")).isEqualTo(0);
+    assertThat(comparator.compare("133.0a1", "133")).isEqualTo(0);
+    assertThat(comparator.compare("133", "133.0a1")).isEqualTo(1);
+    assertThat(comparator.compare("dev", "Dev")).isEqualTo(0);
+    assertThat(comparator.compare("Beta", "beta")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130.0.2")).isEqualTo(-1);
+    assertThat(comparator.compare("130.1", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("131.0", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("130.0", "131")).isEqualTo(-1);
+  }
 
   @Test
   void fullMatch() {

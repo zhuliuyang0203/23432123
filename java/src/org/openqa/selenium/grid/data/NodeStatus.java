@@ -204,6 +204,14 @@ public class NodeStatus {
         .orElse(0);
   }
 
+  public String getBrowserVersion() {
+    return slots.stream()
+        .map(slot -> slot.getStereotype().getBrowserVersion())
+        .filter(Objects::nonNull)
+        .max(new SemanticVersionComparator())
+        .orElse("");
+  }
+
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof NodeStatus)) {

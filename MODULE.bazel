@@ -24,7 +24,7 @@ bazel_dep(name = "rules_nodejs", version = "6.3.0")
 bazel_dep(name = "rules_oci", version = "1.7.6")
 bazel_dep(name = "rules_pkg", version = "0.10.1")
 bazel_dep(name = "rules_python", version = "0.33.0")
-bazel_dep(name = "rules_proto", version = "6.0.0")
+bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "rules_ruby", version = "0.13.0")
 
 linter = use_extension("@apple_rules_lint//lint:extensions.bzl", "linter")
@@ -169,7 +169,7 @@ maven.install(
     name = "maven",
     artifacts = [
         "com.beust:jcommander:1.82",
-        "com.github.javaparser:javaparser-core:3.26.2",
+        "com.github.javaparser:javaparser-core:3.26.3",
         "com.github.spotbugs:spotbugs:4.8.6",
         "com.github.stephenc.jcip:jcip-annotations:1.0-1",
         "com.google.code.gson:gson:2.11.0",
@@ -181,7 +181,7 @@ maven.install(
         "com.graphql-java:graphql-java:22.3",
         "dev.failsafe:failsafe:3.3.2",
         "io.grpc:grpc-context:1.68.1",
-        "io.lettuce:lettuce-core:6.5.0.RELEASE",
+        "io.lettuce:lettuce-core:6.5.1.RELEASE",
         "io.netty:netty-buffer",
         "io.netty:netty-codec-http",
         "io.netty:netty-codec-http2",
@@ -200,10 +200,10 @@ maven.install(
         "io.opentelemetry:opentelemetry-sdk-trace",
         "io.opentelemetry.semconv:opentelemetry-semconv:1.28.0-alpha",
         "it.ozimov:embedded-redis:0.7.3",
-        "net.bytebuddy:byte-buddy:1.15.10",
+        "net.bytebuddy:byte-buddy:1.15.11",
         "org.htmlunit:htmlunit-core-js:4.6.0",
         "org.apache.commons:commons-exec:1.4.0",
-        "org.apache.logging.log4j:log4j-core:2.24.1",
+        "org.apache.logging.log4j:log4j-core:2.24.3",
         "org.assertj:assertj-core:3.26.3",
         "org.bouncycastle:bcpkix-jdk18on:1.79",
         "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5",
