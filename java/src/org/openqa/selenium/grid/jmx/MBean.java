@@ -248,9 +248,9 @@ public class MBean implements DynamicMBean {
     // if attributeNames is empty, return an empty result list
     if (attributes == null || attributes.length == 0) return resultList;
 
-    for (int i = 0; i < attributes.length; i++) {
-      Object value = getAttribute(attributes[i]);
-      resultList.add(new Attribute(attributes[i], value));
+    for (String attribute : attributes) {
+      Object value = getAttribute(attribute);
+      resultList.add(new Attribute(attribute, value));
     }
 
     return resultList;
