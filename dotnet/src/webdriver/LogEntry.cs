@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -28,9 +30,6 @@ namespace OpenQA.Selenium
     /// </summary>
     public class LogEntry
     {
-        private LogLevel level = LogLevel.All;
-        private DateTime timestamp = DateTime.MinValue;
-        private string message = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
@@ -42,26 +41,19 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the timestamp value of the log entry.
         /// </summary>
-        public DateTime Timestamp
-        {
-            get { return this.timestamp; }
-        }
+        public DateTime Timestamp { get; private set; } = DateTime.MinValue;
 
         /// <summary>
         /// Gets the logging level of the log entry.
         /// </summary>
-        public LogLevel Level
-        {
-            get { return this.level; }
-        }
+        public LogLevel Level { get; private set; } = LogLevel.All;
 
         /// <summary>
         /// Gets the message of the log entry.
         /// </summary>
-        public string Message
-        {
-            get { return this.message; }
-        }
+        public string Message { get; private set; } = string.Empty;
+
+        private static readonly DateTime UnixEpoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// Returns a string that represents the current <see cref="LogEntry"/>.
@@ -69,7 +61,7 @@ namespace OpenQA.Selenium
         /// <returns>A string that represents the current <see cref="LogEntry"/>.</returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "[{0:yyyy-MM-ddTHH:mm:ssZ}] [{1}] {2}", this.timestamp, this.level, this.message);
+            return string.Format(CultureInfo.InvariantCulture, "[{0:yyyy-MM-ddTHH:mm:ssZ}] [{1}] {2}", this.Timestamp, this.Level, this.Message);
         }
 
         /// <summary>
@@ -78,32 +70,31 @@ namespace OpenQA.Selenium
         /// <param name="entryDictionary">The <see cref="Dictionary{TKey, TValue}"/> from
         /// which to create the <see cref="LogEntry"/>.</param>
         /// <returns>A <see cref="LogEntry"/> with the values in the dictionary.</returns>
-        internal static LogEntry FromDictionary(Dictionary<string, object> entryDictionary)
+        internal static LogEntry FromDictionary(Dictionary<string, object?> entryDictionary)
         {
             LogEntry entry = new LogEntry();
-            if (entryDictionary.ContainsKey("message"))
+            if (entryDictionary.TryGetValue("message", out object? message))
             {
-                entry.message = entryDictionary["message"].ToString();
+                entry.Message = message?.ToString() ?? string.Empty;
             }
 
-            if (entryDictionary.ContainsKey("timestamp"))
+            if (entryDictionary.TryGetValue("timestamp", out object? timestamp))
             {
-                DateTime zeroDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                double timestampValue = Convert.ToDouble(entryDictionary["timestamp"], CultureInfo.InvariantCulture);
-                entry.timestamp = zeroDate.AddMilliseconds(timestampValue);
+                double timestampValue = Convert.ToDouble(timestamp, CultureInfo.InvariantCulture);
+                entry.Timestamp = UnixEpoch.AddMilliseconds(timestampValue);
             }
 
-            if (entryDictionary.ContainsKey("level"))
+            if (entryDictionary.TryGetValue("level", out object? level))
             {
-                string levelValue = entryDictionary["level"].ToString();
-                try
+                if (Enum.TryParse(level?.ToString(), ignoreCase: true, out LogLevel result))
                 {
-                    entry.level = (LogLevel)Enum.Parse(typeof(LogLevel), levelValue, true);
+                    entry.Level = result;
                 }
-                catch (ArgumentException)
+                else
                 {
                     // If the requested log level string is not a valid log level,
                     // ignore it and use LogLevel.All.
+                    entry.Level = LogLevel.All;
                 }
             }
 

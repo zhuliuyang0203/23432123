@@ -1,4 +1,3 @@
-// <copyright file="RemoteReference.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -15,20 +14,16 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// </copyright>
 
-#nullable enable
+package org.openqa.selenium.devtools.v131;
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+import com.google.auto.service.AutoService;
+import org.openqa.selenium.devtools.CdpInfo;
 
-public abstract record RemoteReference : LocalValue;
+@AutoService(CdpInfo.class)
+public class v131CdpInfo extends CdpInfo {
 
-public record SharedReference(string SharedId) : RemoteReference
-{
-    public Handle? Handle { get; set; }
-}
-
-public record RemoteObjectReference(Handle Handle) : RemoteReference
-{
-    public string? SharedId { get; set; }
+  public v131CdpInfo() {
+    super(131, v131Domains::new);
+  }
 }

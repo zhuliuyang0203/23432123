@@ -1,4 +1,4 @@
-// <copyright file="V128Target.cs" company="Selenium Committers">
+// <copyright file="V131Target.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,26 +17,26 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V128.Target;
+using OpenQA.Selenium.DevTools.V131.Target;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V128
+namespace OpenQA.Selenium.DevTools.V131
 {
     /// <summary>
-    /// Class providing functionality for manipulating targets for version 128 of the DevTools Protocol
+    /// Class providing functionality for manipulating targets for version 131 of the DevTools Protocol
     /// </summary>
-    public class V128Target : DevTools.Target
+    public class V131Target : DevTools.Target
     {
         private TargetAdapter adapter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V128Target"/> class.
+        /// Initializes a new instance of the <see cref="V131Target"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Target domain.</param>
-        public V128Target(TargetAdapter adapter)
+        public V131Target(TargetAdapter adapter)
         {
             this.adapter = adapter;
             adapter.DetachedFromTarget += OnDetachedFromTarget;

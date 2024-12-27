@@ -21,6 +21,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Support.UI
 {
@@ -28,16 +29,16 @@ namespace OpenQA.Selenium.Support.UI
     public class SelectBrowserTests : DriverTestFixture
     {
         [OneTimeSetUp]
-        public void RunBeforeAnyTest()
+        public async Task RunBeforeAnyTestAsync()
         {
-            EnvironmentManager.Instance.WebServer.Start();
+            await EnvironmentManager.Instance.WebServer.StartAsync();
         }
 
         [OneTimeTearDown]
-        public void RunAfterAnyTests()
+        public async Task RunAfterAnyTestsAsync()
         {
             EnvironmentManager.Instance.CloseCurrentDriver();
-            EnvironmentManager.Instance.WebServer.Stop();
+            await EnvironmentManager.Instance.WebServer.StopAsync();
         }
 
         [SetUp]
@@ -50,7 +51,9 @@ namespace OpenQA.Selenium.Support.UI
         public void ShouldThrowAnExceptionIfTheElementIsNotASelectElement()
         {
             IWebElement element = driver.FindElement(By.Name("checky"));
-            Assert.Throws<UnexpectedTagNameException>(() => { SelectElement elementWrapper = new SelectElement(element); });
+            Assert.That(
+                () => new SelectElement(element),
+                Throws.TypeOf<UnexpectedTagNameException>());
         }
 
         [Test]
@@ -58,7 +61,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("multi"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.IsTrue(elementWrapper.IsMultiple);
+            Assert.That(elementWrapper.IsMultiple, Is.True);
         }
 
         [Test]
@@ -66,7 +69,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.IsTrue(elementWrapper.IsMultiple);
+            Assert.That(elementWrapper.IsMultiple, Is.True);
         }
 
         [Test]
@@ -74,7 +77,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("multi_true"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.IsTrue(elementWrapper.IsMultiple);
+            Assert.That(elementWrapper.IsMultiple, Is.True);
         }
 
         [Test]
@@ -82,7 +85,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("selectomatic"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.IsFalse(elementWrapper.IsMultiple);
+            Assert.That(elementWrapper.IsMultiple, Is.False);
         }
 
         [Test]
@@ -90,7 +93,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("multi_false"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.IsTrue(elementWrapper.IsMultiple);
+            Assert.That(elementWrapper.IsMultiple, Is.True);
         }
 
         [Test]
@@ -100,19 +103,19 @@ namespace OpenQA.Selenium.Support.UI
             SelectElement elementWrapper = new SelectElement(element);
             IList<IWebElement> returnedOptions = elementWrapper.Options;
 
-            Assert.AreEqual(4, returnedOptions.Count);
+            Assert.That(returnedOptions, Has.Exactly(4).Items);
 
             string one = returnedOptions[0].Text;
-            Assert.AreEqual("One", one);
+            Assert.That(one, Is.EqualTo("One"));
 
             string two = returnedOptions[1].Text;
-            Assert.AreEqual("Two", two);
+            Assert.That(two, Is.EqualTo("Two"));
 
             string three = returnedOptions[2].Text;
-            Assert.AreEqual("Four", three);
+            Assert.That(three, Is.EqualTo("Four"));
 
             string four = returnedOptions[3].Text;
-            Assert.AreEqual("Still learning how to count, apparently", four);
+            Assert.That(four, Is.EqualTo("Still learning how to count, apparently"));
 
         }
 
@@ -124,10 +127,10 @@ namespace OpenQA.Selenium.Support.UI
 
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(1, returnedOptions.Count);
+            Assert.That(returnedOptions, Has.One.Items);
 
             string one = returnedOptions[0].Text;
-            Assert.AreEqual("One", one);
+            Assert.That(one, Is.EqualTo("One"));
         }
 
         [Test]
@@ -138,13 +141,13 @@ namespace OpenQA.Selenium.Support.UI
 
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(2, returnedOptions.Count);
+            Assert.That(returnedOptions, Has.Exactly(2).Items);
 
             string one = returnedOptions[0].Text;
-            Assert.AreEqual("Eggs", one);
+            Assert.That(one, Is.EqualTo("Eggs"));
 
             string two = returnedOptions[1].Text;
-            Assert.AreEqual("Sausages", two);
+            Assert.That(two, Is.EqualTo("Sausages"));
         }
 
         [Test]
@@ -155,7 +158,7 @@ namespace OpenQA.Selenium.Support.UI
 
             IWebElement firstSelected = elementWrapper.AllSelectedOptions[0];
 
-            Assert.AreEqual("Eggs", firstSelected.Text);
+            Assert.That(firstSelected.Text, Is.EqualTo("Eggs"));
         }
 
         // [Test]
@@ -168,7 +171,7 @@ namespace OpenQA.Selenium.Support.UI
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
 
-            Assert.AreEqual(0, elementWrapper.AllSelectedOptions.Count);
+            Assert.That(elementWrapper.AllSelectedOptions.Count, Is.Zero);
         }
 
         [Test]
@@ -178,7 +181,7 @@ namespace OpenQA.Selenium.Support.UI
             SelectElement elementWrapper = new SelectElement(element);
             elementWrapper.SelectByText("select_2");
             IWebElement firstSelected = elementWrapper.AllSelectedOptions[0];
-            Assert.AreEqual("select_2", firstSelected.Text);
+            Assert.That(firstSelected.Text, Is.EqualTo("select_2"));
         }
 
         [Test]
@@ -188,7 +191,7 @@ namespace OpenQA.Selenium.Support.UI
             SelectElement elementWrapper = new SelectElement(element);
             elementWrapper.SelectByText("4", true);
             IWebElement firstSelected = elementWrapper.AllSelectedOptions[0];
-            Assert.AreEqual("select_4", firstSelected.Text);
+            Assert.That(firstSelected.Text, Is.EqualTo("select_4"));
         }
 
         [Test]
@@ -196,7 +199,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.SelectByText("4"));
+            Assert.That(
+                () => elementWrapper.SelectByText("4"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -205,7 +210,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("invisi_select"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.SelectByText("Apples"));
+            Assert.That(
+                () => elementWrapper.SelectByText("Apples"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -213,7 +220,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.SelectByText("not there"));
+            Assert.That(
+                () => elementWrapper.SelectByText("not there"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -221,7 +230,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("single_disabled"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.SelectByText("Disabled"));
+            Assert.That(
+                () => elementWrapper.SelectByText("Disabled"),
+                Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -231,7 +242,7 @@ namespace OpenQA.Selenium.Support.UI
             SelectElement elementWrapper = new SelectElement(element);
             elementWrapper.SelectByIndex(1);
             IWebElement firstSelected = elementWrapper.AllSelectedOptions[0];
-            Assert.AreEqual("select_2", firstSelected.Text);
+            Assert.That(firstSelected.Text, Is.EqualTo("select_2"));
         }
 
         [Test]
@@ -239,7 +250,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.SelectByIndex(10));
+            Assert.That(
+                () => elementWrapper.SelectByIndex(10),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -247,7 +260,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("single_disabled"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.SelectByIndex(1));
+            Assert.That(
+                () => elementWrapper.SelectByIndex(1),
+                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -257,7 +272,7 @@ namespace OpenQA.Selenium.Support.UI
             SelectElement elementWrapper = new SelectElement(element);
             elementWrapper.SelectByValue("select_2");
             IWebElement firstSelected = elementWrapper.AllSelectedOptions[0];
-            Assert.AreEqual("select_2", firstSelected.Text);
+            Assert.That(firstSelected.Text, Is.EqualTo("select_2"));
         }
 
         [Test]
@@ -265,7 +280,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.SelectByValue("not there"));
+            Assert.That(
+                () => elementWrapper.SelectByValue("not there"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -273,7 +290,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("single_disabled"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.SelectByValue("disabled"));
+            Assert.That(
+                () => elementWrapper.SelectByValue("disabled"),
+                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -284,7 +303,7 @@ namespace OpenQA.Selenium.Support.UI
             elementWrapper.DeselectAll();
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(0, returnedOptions.Count);
+            Assert.That(returnedOptions, Is.Empty);
         }
 
         [Test]
@@ -292,7 +311,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("selectomatic"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.DeselectAll());
+            Assert.That(
+                () => elementWrapper.DeselectAll(),
+                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -303,7 +324,7 @@ namespace OpenQA.Selenium.Support.UI
             elementWrapper.DeselectByText("Eggs");
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(1, returnedOptions.Count);
+            Assert.That(returnedOptions.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -312,7 +333,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("invisi_select"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.DeselectByText("Apples"));
+            Assert.That(
+                () => elementWrapper.DeselectByText("Apples"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -323,7 +346,7 @@ namespace OpenQA.Selenium.Support.UI
             elementWrapper.DeselectByIndex(0);
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(1, returnedOptions.Count);
+            Assert.That(returnedOptions.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -334,7 +357,7 @@ namespace OpenQA.Selenium.Support.UI
             elementWrapper.DeselectByValue("eggs");
             IList<IWebElement> returnedOptions = elementWrapper.AllSelectedOptions;
 
-            Assert.AreEqual(1, returnedOptions.Count);
+            Assert.That(returnedOptions.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -342,7 +365,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.DeselectByValue("not there"));
+            Assert.That(
+                () => elementWrapper.DeselectByValue("not there"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -350,7 +375,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.DeselectByText("not there"));
+            Assert.That(
+                () => elementWrapper.DeselectByText("not there"),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -358,7 +385,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("select_empty_multiple"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<NoSuchElementException>(() => elementWrapper.DeselectByIndex(10));
+            Assert.That(
+                () => elementWrapper.DeselectByIndex(10),
+                Throws.TypeOf<NoSuchElementException>());
         }
 
         [Test]
@@ -366,7 +395,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("selectomatic"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.DeselectByText("Four"));
+            Assert.That(
+                () => elementWrapper.DeselectByText("Four"),
+                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -374,7 +405,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("selectomatic"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.DeselectByValue("two"));
+            Assert.That(
+                () => elementWrapper.DeselectByValue("two"),
+                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -382,7 +415,9 @@ namespace OpenQA.Selenium.Support.UI
         {
             IWebElement element = driver.FindElement(By.Name("selectomatic"));
             SelectElement elementWrapper = new SelectElement(element);
-            Assert.Throws<InvalidOperationException>(() => elementWrapper.DeselectByIndex(0));
+            Assert.That(
+                () => elementWrapper.DeselectByIndex(0),
+                Throws.InvalidOperationException);
         }
     }
 }

@@ -18,6 +18,9 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Internal.Logging
 {
@@ -65,16 +68,11 @@ namespace OpenQA.Selenium.Internal.Logging
         /// <summary>
         /// Gets or sets the current log context.
         /// </summary>
+        [AllowNull]
         internal static ILogContext CurrentContext
         {
-            get
-            {
-                return _logContextManager.CurrentContext;
-            }
-            set
-            {
-                _logContextManager.CurrentContext = value;
-            }
+            get => _logContextManager.CurrentContext;
+            set => _logContextManager.CurrentContext = value;
         }
 
         /// <summary>

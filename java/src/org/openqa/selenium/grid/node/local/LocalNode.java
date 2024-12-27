@@ -623,7 +623,31 @@ public class LocalNode extends Node implements Closeable {
 
     AtomicLong counter = slot.getConnectionCounter();
 
-    return connectionLimitPerSession > counter.getAndIncrement();
+    if (connectionLimitPerSession > counter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    counter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    SessionSlot slot = currentSessions.getIfPresent(id);
+
+    if (slot == null) {
+      return;
+    }
+
+    if (connectionLimitPerSession == -1) {
+      // no limit
+      return;
+    }
+
+    AtomicLong counter = slot.getConnectionCounter();
+
+    counter.decrementAndGet();
   }
 
   @Override
@@ -875,11 +899,11 @@ public class LocalNode extends Node implements Closeable {
     boolean bidiSupported = isSupportingBiDi && (webSocketUrl instanceof String);
     if (bidiSupported && bidiEnabled) {
       String biDiUrl = (String) other.getCapabilities().getCapability("webSocketUrl");
-      URI uri = null;
+      URI uri;
       try {
         uri = new URI(biDiUrl);
       } catch (URISyntaxException e) {
-        throw new IllegalArgumentException("Unable to create URI from " + uri);
+        throw new IllegalArgumentException("Unable to create URI from " + biDiUrl);
       }
       String bidiPath = String.format("/session/%s/se/bidi", other.getId());
       toUse =

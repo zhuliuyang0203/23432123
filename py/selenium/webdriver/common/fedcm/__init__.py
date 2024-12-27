@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Licensed to the Software Freedom Conservancy (SFC) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -16,20 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-module Selenium
-  module WebDriver
-    class BiDi
-      class BrowsingContextInfo
-        attr_accessor :id, :url, :children, :parent_browsing_context
-
-        def initialize(id:, url:, children:, parent_context:)
-          @id = id
-          @url = url
-          @children = children
-          @parent_browsing_context = parent_context
-        end
-      end # BrowsingContextInfo
-    end # BiDi
-  end # WebDriver
-end # Selenium

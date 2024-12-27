@@ -35,7 +35,7 @@ class WellKnownWebIdentityHandler implements HttpHandler {
     HttpResponse response = new HttpResponse();
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Cache-Control", "no-store");
-    String targetLocation = UrlPath.relativeToContext(req, "/fedcm/fedcm.json");
+    String targetLocation = UrlPath.relativeToContext(req, "https://idp.com");
 
     response.setContent(Contents.string(String.format(RESPONSE_STRING, targetLocation), UTF_8));
 

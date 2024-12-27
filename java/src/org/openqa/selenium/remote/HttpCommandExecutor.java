@@ -25,6 +25,8 @@ import static org.openqa.selenium.remote.HttpSessionId.getSessionId;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -109,9 +111,32 @@ public class HttpCommandExecutor implements CommandExecutor, NeedsLocalLogs {
       ClientConfig config,
       HttpClient.Factory httpClientFactory) {
     remoteServer = Require.nonNull("HTTP client configuration", config).baseUrl();
-    this.additionalCommands = Require.nonNull("Additional commands", additionalCommands);
+    this.additionalCommands =
+        new HashMap<>(Require.nonNull("Additional commands", additionalCommands));
     this.httpClientFactory = Require.nonNull("HTTP client factory", httpClientFactory);
     this.client = this.httpClientFactory.createClient(config);
+  }
+
+  /**
+   * Returns an immutable view of the additional commands.
+   *
+   * @return an unmodifiable map of additional commands.
+   */
+  public Map<String, CommandInfo> getAdditionalCommands() {
+    return Collections.unmodifiableMap(additionalCommands);
+  }
+
+  /**
+   * Adds or updates additional commands. This method is protected to allow subclasses to define
+   * their commands.
+   *
+   * @param commandName the name of the command to add or update.
+   * @param info the CommandInfo for the command.
+   */
+  protected void addAdditionalCommand(String commandName, CommandInfo info) {
+    Require.nonNull("Command name", commandName);
+    Require.nonNull("Command info", info);
+    this.additionalCommands.put(commandName, info);
   }
 
   /**

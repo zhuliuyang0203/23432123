@@ -37,7 +37,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithMultipleEqualsMultiple"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithEmptyStringMultiple"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithMultipleWithoutValue"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithRandomMultipleValue"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
     }
 }

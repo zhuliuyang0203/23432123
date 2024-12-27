@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>

@@ -18,12 +18,13 @@
 // </copyright>
 
 using System;
-using System.Runtime.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
     /// <summary>
-    /// The exception that is thrown when an element is not visible.
+    /// The exception that is thrown when an element is not interactable.
     /// </summary>
     [Serializable]
     public class ElementNotInteractableException : InvalidElementStateException
@@ -41,7 +42,7 @@ namespace OpenQA.Selenium
         /// a specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public ElementNotInteractableException(string message)
+        public ElementNotInteractableException(string? message)
             : base(message)
         {
         }
@@ -54,7 +55,7 @@ namespace OpenQA.Selenium
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         /// or <see langword="null"/> if no inner exception is specified.</param>
-        public ElementNotInteractableException(string message, Exception innerException)
+        public ElementNotInteractableException(string? message, Exception? innerException)
             : base(message, innerException)
         {
         }

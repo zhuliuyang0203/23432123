@@ -123,7 +123,10 @@ public class SeleniumManager {
     String output;
     int code;
     try {
-      ExternalProcess.Builder processBuilder = ExternalProcess.builder();
+      ExternalProcess.Builder processBuilder =
+          ExternalProcess.builder()
+              // keep all output of the process to avoid JSON syntax errors while parsing
+              .bufferSize(-1);
 
       Properties properties = System.getProperties();
       for (String name : properties.stringPropertyNames()) {

@@ -20,6 +20,8 @@
 using System;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -32,6 +34,13 @@ namespace OpenQA.Selenium
         /// Initializes a new instance of the <see cref="Screenshot"/> class.
         /// </summary>
         /// <param name="base64EncodedScreenshot">The image of the page as a Base64-encoded string.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="base64EncodedScreenshot"/> is <see langword="null"/>.</exception>
+        /// <exception cref="FormatException">
+        /// <para>The length of <paramref name="base64EncodedScreenshot"/>, ignoring white-space characters, is not zero or a multiple of 4.</para>
+        /// <para>-or-</para>
+        /// <para>The format of <paramref name="base64EncodedScreenshot"/> is invalid. <paramref name="base64EncodedScreenshot"/> contains a non-base-64 character,
+        /// more than two padding characters, or a non-white space-character among the padding characters.</para>
+        /// </exception>
         public Screenshot(string base64EncodedScreenshot) : base(base64EncodedScreenshot)
         {
         }

@@ -15,15 +15,29 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v128;
+package org.openqa.selenium.grid.node;
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
+import java.io.UncheckedIOException;
+import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.remote.SessionId;
+import org.openqa.selenium.remote.http.HttpHandler;
+import org.openqa.selenium.remote.http.HttpRequest;
+import org.openqa.selenium.remote.http.HttpResponse;
 
-@AutoService(CdpInfo.class)
-public class v128CdpInfo extends CdpInfo {
+class ReleaseConnection implements HttpHandler {
 
-  public v128CdpInfo() {
-    super(128, v128Domains::new);
+  private final Node node;
+  private final SessionId id;
+
+  ReleaseConnection(Node node, SessionId id) {
+    this.node = Require.nonNull("Node", node);
+    this.id = Require.nonNull("Session id", id);
+  }
+
+  @Override
+  public HttpResponse execute(HttpRequest req) throws UncheckedIOException {
+    node.releaseConnection(id);
+
+    return new HttpResponse().setStatus(200);
   }
 }

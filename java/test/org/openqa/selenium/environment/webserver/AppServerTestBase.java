@@ -17,7 +17,6 @@
 
 package org.openqa.selenium.environment.webserver;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.openqa.selenium.remote.http.Contents.string;
@@ -135,7 +134,7 @@ public abstract class AppServerTestBase {
     String FILE_CONTENTS = "Uploaded file";
     File testFile = File.createTempFile("webdriver", "tmp");
     testFile.deleteOnExit();
-    Files.write(testFile.toPath(), FILE_CONTENTS.getBytes(UTF_8));
+    Files.writeString(testFile.toPath(), FILE_CONTENTS);
 
     driver.get(server.whereIs("upload.html"));
     driver.findElement(By.id("upload")).sendKeys(testFile.getAbsolutePath());

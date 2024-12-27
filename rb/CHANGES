@@ -1,3 +1,14 @@
+4.27.0 (2024-11-21)
+=========================
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings (#14763)
+* Add Bidi network commands for authentication and interception (#14523)
+* Handle graceful webdriver shutdown (#14430)
+* Reduce RBS errors to 0 (#14661)
+* Resolve `uri` gem deprecation warning (#14770)
+* Update minimum Ruby to 3.1 (#14685)
+* Implement navigation commands with BiDi (#14094)
+
 4.26.0 (2024-10-28)
 =========================
 * Add CDP for Chrome 130 and remove 127

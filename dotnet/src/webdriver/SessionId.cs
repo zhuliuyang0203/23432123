@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
+
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -24,15 +28,16 @@ namespace OpenQA.Selenium
     /// </summary>
     public class SessionId
     {
-        private string sessionOpaqueKey;
+        private readonly string sessionOpaqueKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionId"/> class
         /// </summary>
         /// <param name="opaqueKey">Key for the session in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="opaqueKey"/> is <see langword="null"/>.</exception>
         public SessionId(string opaqueKey)
         {
-            this.sessionOpaqueKey = opaqueKey;
+            this.sessionOpaqueKey = opaqueKey ?? throw new ArgumentNullException(nameof(opaqueKey));
         }
 
         /// <summary>
@@ -54,20 +59,13 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// Compares two Sessions
+        /// Indicates whether the current session ID value is the same as <paramref name="obj"/>.
         /// </summary>
-        /// <param name="obj">Session to compare</param>
-        /// <returns>True if they are equal or False if they are not</returns>
-        public override bool Equals(object obj)
+        /// <param name="obj">The session to compare to.</param>
+        /// <returns><see langword="true"/> if the values are equal; otherwise, <see langword="false"/>.</returns>
+        public override bool Equals(object? obj)
         {
-            bool objectsAreEqual = false;
-            SessionId other = obj as SessionId;
-            if (other != null)
-            {
-                objectsAreEqual = this.sessionOpaqueKey.Equals(other.sessionOpaqueKey);
-            }
-
-            return objectsAreEqual;
+            return obj is SessionId otherSession && this.sessionOpaqueKey.Equals(otherSession.sessionOpaqueKey);
         }
     }
 }

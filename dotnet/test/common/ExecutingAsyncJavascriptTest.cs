@@ -118,7 +118,7 @@ namespace OpenQA.Selenium
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.InstanceOf<ReadOnlyCollection<object>>());
             ReadOnlyCollection<object> resultList = result as ReadOnlyCollection<object>;
-            Assert.That(resultList.Count, Is.EqualTo(5));
+            Assert.That(resultList, Has.Count.EqualTo(5));
             Assert.That(resultList[0], Is.Null);
             Assert.That((long)resultList[1], Is.EqualTo(123));
             Assert.That(resultList[2].ToString(), Is.EqualTo("abc"));
@@ -221,10 +221,12 @@ namespace OpenQA.Selenium
             string js = "function functionB() { throw Error('errormessage'); };"
                         + "function functionA() { functionB(); };"
                         + "functionA();";
-            Exception ex = Assert.Catch(() => executor.ExecuteAsyncScript(js));
-            Assert.That(ex, Is.InstanceOf<WebDriverException>());
-            Assert.That(ex.Message.Contains("errormessage"));
-            Assert.That(ex.StackTrace.Contains("functionB"));
+
+            Assert.That(
+                () => executor.ExecuteAsyncScript(js),
+                Throws.InstanceOf<WebDriverException>()
+                .With.Message.Contains("errormessage")
+                .And.Property(nameof(WebDriverException.StackTrace)).Contains("functionB"));
         }
 
         [Test]
@@ -236,21 +238,21 @@ namespace OpenQA.Selenium
 
             IWebElement typer = driver.FindElement(By.Name("typer"));
             typer.SendKeys("bob");
-            Assert.AreEqual("bob", typer.GetAttribute("value"));
+            Assert.That(typer.GetAttribute("value"), Is.EqualTo("bob"));
 
             driver.FindElement(By.Id("red")).Click();
             driver.FindElement(By.Name("submit")).Click();
 
-            Assert.AreEqual(1, GetNumberOfDivElements(), "There should only be 1 DIV at this point, which is used for the butter message");
+            Assert.That(GetNumberOfDivElements(), Is.EqualTo(1), "There should only be 1 DIV at this point, which is used for the butter message");
 
             driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
             string text = (string)executor.ExecuteAsyncScript(
                 "var callback = arguments[arguments.length - 1];"
                 + "window.registerListener(arguments[arguments.length - 1]);");
-            Assert.AreEqual("bob", text);
-            Assert.AreEqual("", typer.GetAttribute("value"));
+            Assert.That(text, Is.EqualTo("bob"));
+            Assert.That(typer.GetAttribute("value"), Is.Empty);
 
-            Assert.AreEqual(2, GetNumberOfDivElements(), "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)");
+            Assert.That(GetNumberOfDivElements(), Is.EqualTo(2), "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)");
         }
 
         [Test]
@@ -258,7 +260,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = ajaxyPage;
             long result = (long)executor.ExecuteAsyncScript("arguments[arguments.length - 1](arguments[0] + arguments[1]);", 1, 2);
-            Assert.AreEqual(3, result);
+            Assert.That(result, Is.EqualTo(3));
         }
 
         [Test]
@@ -290,7 +292,7 @@ namespace OpenQA.Selenium
             driver.Url = ajaxyPage;
             driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(3);
             string response = (string)executor.ExecuteAsyncScript(script, sleepingPage + "?time=2");
-            Assert.AreEqual("<html><head><title>Done</title></head><body>Slept for 2s</body></html>", response.Trim());
+            Assert.That(response.Trim(), Is.EqualTo("<html><head><title>Done</title></head><body>Slept for 2s</body></html>"));
         }
 
         [Test]

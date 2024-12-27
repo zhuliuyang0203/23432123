@@ -14,8 +14,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
 import warnings
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
 
@@ -37,10 +39,10 @@ class Service(service.Service):
         self,
         executable_path: str = DEFAULT_EXECUTABLE_PATH,
         port: int = 0,
-        log_path: typing.Optional[str] = None,
-        log_output: typing.Optional[str] = None,
-        service_args: typing.Optional[typing.List[str]] = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        log_path: Optional[str] = None,
+        log_output: Optional[str] = None,
+        service_args: Optional[List[str]] = None,
+        env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []
@@ -56,5 +58,5 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         return ["-p", f"{self.port}"] + self.service_args

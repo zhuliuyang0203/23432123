@@ -57,7 +57,7 @@ namespace OpenQA.Selenium
                 driver.Url = simpleTestPage;
                 string text = driver.FindElement(By.CssSelector("p")).Text;
                 await network.StopMonitoring();
-                Assert.AreEqual("I intercepted you", text);
+                Assert.That(text, Is.EqualTo("I intercepted you"));
             }
         }
 
@@ -78,7 +78,7 @@ namespace OpenQA.Selenium
                 driver.Url = authenticationPage;
                 string text = driver.FindElement(By.CssSelector("h1")).Text;
                 await network.StopMonitoring();
-                Assert.AreEqual("authorized", text);
+                Assert.That(text, Is.EqualTo("authorized"));
             }
         }
     }

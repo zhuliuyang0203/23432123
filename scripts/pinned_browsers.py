@@ -175,10 +175,24 @@ js_library(
     return content
 
 
+def convert_keys_to_lowercase(obj):
+    if isinstance(obj, dict):
+        return {k.lower(): convert_keys_to_lowercase(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_keys_to_lowercase(i) for i in obj]
+    else:
+        return obj
+
+
+def case_insensitive_json_loads(json_str):
+    data = json.loads(json_str)
+    return convert_keys_to_lowercase(data)
+
+
 def edge():
     content = ""
     r = http.request("GET", "https://edgeupdates.microsoft.com/api/products")
-    all_data = json.loads(r.data)
+    all_data = case_insensitive_json_loads(r.data)
 
     linux = None
     linux_hash = None
@@ -187,20 +201,20 @@ def edge():
     version = None
 
     for data in all_data:
-        if not "Stable" == data.get("Product"):
+        if not "Stable" == data.get("product"):
             continue
-        for release in data["Releases"]:
-            if "MacOS" == release.get("Platform"):
-                for artifact in release["Artifacts"]:
-                    if "pkg" == artifact["ArtifactName"]:
-                        mac = artifact["Location"]
-                        mac_hash = artifact["Hash"]
-                        mac_version = release["ProductVersion"]
-            elif "Linux" == release.get("Platform"):
-                for artifact in release["Artifacts"]:
-                    if "deb" == artifact["ArtifactName"]:
-                        linux = artifact["Location"]
-                        linux_hash = artifact["Hash"]
+        for release in data["releases"]:
+            if "MacOS" == release.get("platform"):
+                for artifact in release["artifacts"]:
+                    if "pkg" == artifact["artifactname"]:
+                        mac = artifact["location"]
+                        mac_hash = artifact["hash"]
+                        mac_version = release["productversion"]
+            elif "Linux" == release.get("platform"):
+                for artifact in release["artifacts"]:
+                    if "deb" == artifact["artifactname"]:
+                        linux = artifact["location"]
+                        linux_hash = artifact["hash"]
 
     if mac and mac_hash:
         content += """

@@ -49,7 +49,7 @@ namespace OpenQA.Selenium
 
             input.SendKeys(shalom);
 
-            Assert.AreEqual(shalom, input.GetAttribute("value"));
+            Assert.That(input.GetAttribute("value"), Is.EqualTo(shalom));
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace OpenQA.Selenium
 
             input.SendKeys(tmunot);
 
-            Assert.AreEqual(tmunot, input.GetAttribute("value"));
+            Assert.That(input.GetAttribute("value"), Is.EqualTo(tmunot));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace OpenQA.Selenium
             IWebElement el = driver.FindElement(By.Name("i18n"));
             el.SendKeys(input);
 
-            Assert.AreEqual(input, el.GetAttribute("value"));
+            Assert.That(el.GetAttribute("value"), Is.EqualTo(input));
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace OpenQA.Selenium
 
             string text = driver.FindElement(By.TagName("body")).Text;
 
-            Assert.AreEqual(shalom, text);
+            Assert.That(text, Is.EqualTo(shalom));
         }
     }
 }

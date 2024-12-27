@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import org.junit.jupiter.api.Tag;
@@ -161,6 +162,55 @@ class DecoratedWebDriverTest {
   void findElement() {
     final WebElement found = mock(WebElement.class);
     verifyDecoratingFunction($ -> $.findElement(By.id("test")), found, WebElement::click);
+  }
+
+  @Test
+  void doesNotCreateTooManyClasses() {
+    final WebElement found0 = mock(WebElement.class);
+    final WebElement found1 = mock(WebElement.class);
+    final WebElement found2 = mock(WebElement.class);
+    Function<WebDriver, WebElement> f = $ -> $.findElement(By.id("test"));
+    Function<WebDriver, List<WebElement>> f2 = $ -> $.findElements(By.id("test"));
+    Fixture fixture = new Fixture();
+    when(f.apply(fixture.original)).thenReturn(found0);
+    when(f2.apply(fixture.original)).thenReturn(List.of(found0, found1, found2));
+
+    WebElement proxy0 = f.apply(fixture.decorated);
+    WebElement proxy1 = f.apply(fixture.decorated);
+    WebElement proxy2 = f.apply(fixture.decorated);
+
+    assertThat(proxy0.getClass()).isSameAs(proxy1.getClass());
+    assertThat(proxy1.getClass()).isSameAs(proxy2.getClass());
+
+    List<WebElement> proxies = f2.apply(fixture.decorated);
+
+    assertThat(proxy0.getClass()).isSameAs(proxies.get(0).getClass());
+    assertThat(proxy0.getClass()).isSameAs(proxies.get(1).getClass());
+    assertThat(proxy0.getClass()).isSameAs(proxies.get(2).getClass());
+  }
+
+  @Test
+  void doesHitTheCorrectInstance() {
+    String uuid0 = UUID.randomUUID().toString();
+    String uuid1 = UUID.randomUUID().toString();
+    String uuid2 = UUID.randomUUID().toString();
+    final WebElement found0 = mock(WebElement.class);
+    final WebElement found1 = mock(WebElement.class);
+    final WebElement found2 = mock(WebElement.class);
+    when(found0.getTagName()).thenReturn(uuid0);
+    when(found1.getTagName()).thenReturn(uuid1);
+    when(found2.getTagName()).thenReturn(uuid2);
+
+    Fixture fixture = new Fixture();
+    Function<WebDriver, List<WebElement>> f = $ -> $.findElements(By.id("test"));
+
+    when(f.apply(fixture.original)).thenReturn(List.of(found0, found1, found2));
+
+    List<WebElement> proxies = f.apply(fixture.decorated);
+
+    assertThat(proxies.get(0).getTagName()).isEqualTo(uuid0);
+    assertThat(proxies.get(1).getTagName()).isEqualTo(uuid1);
+    assertThat(proxies.get(2).getTagName()).isEqualTo(uuid2);
   }
 
   @Test

@@ -41,7 +41,7 @@ class BrowserTest : BiDiTestFixture
         var userContexts = await bidi.Browser.GetUserContextsAsync();
 
         Assert.That(userContexts, Is.Not.Null);
-        Assert.That(userContexts.Count, Is.GreaterThanOrEqualTo(2));
+        Assert.That(userContexts, Has.Count.GreaterThanOrEqualTo(2));
         Assert.That(userContexts, Does.Contain(userContext1));
         Assert.That(userContexts, Does.Contain(userContext2));
     }

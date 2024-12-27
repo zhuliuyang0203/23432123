@@ -17,6 +17,7 @@
 
 package org.openqa.selenium.remote;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -48,7 +49,7 @@ class TracedCommandExecutorTest {
   public void createMocksAndTracedCommandExecutor() {
     MockitoAnnotations.initMocks(this);
     when(tracer.getCurrentContext()).thenReturn(traceContext);
-    when(traceContext.createSpan("command")).thenReturn(span);
+    when(traceContext.createSpan(anyString())).thenReturn(span);
     tracedCommandExecutor = new TracedCommandExecutor(commandExecutor, tracer);
   }
 
@@ -107,6 +108,20 @@ class TracedCommandExecutorTest {
 
     verify(span, times(1)).setAttribute("command", "createSession");
     verify(span, times(1)).close();
+    verifyNoMoreInteractions(span);
+  }
+
+  @Test
+  void canCreateSpanWithCommandNameAsSpanName() throws IOException {
+    SessionId sessionId = new SessionId(UUID.randomUUID());
+    Command command = new Command(sessionId, "findElement");
+
+    tracedCommandExecutor.execute(command);
+
+    verify(traceContext).createSpan("findElement");
+    verify(span).setAttribute("sessionId", sessionId.toString());
+    verify(span).setAttribute("command", "findElement");
+    verify(span).close();
     verifyNoMoreInteractions(span);
   }
 }

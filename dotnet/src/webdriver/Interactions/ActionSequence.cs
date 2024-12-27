@@ -72,6 +72,7 @@ namespace OpenQA.Selenium.Interactions
         /// Gets the input device for this Action sequence.
         /// </summary>
         [Obsolete("This property has been renamed to InputDevice and will be removed in a future version")]
+        [CLSCompliant(false)]
         public InputDevice inputDevice => InputDevice;
 
         /// <summary>

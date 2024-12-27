@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -94,7 +95,7 @@ class JdkHttpMessages {
     req.forEachHeader(
         (name, value) -> {
           // This prevents the IllegalArgumentException that states 'restricted header name: ...'
-          if (IGNORE_HEADERS.contains(name.toLowerCase())) {
+          if (IGNORE_HEADERS.contains(name.toLowerCase(Locale.ENGLISH))) {
             return;
           }
           builder.header(name, value);

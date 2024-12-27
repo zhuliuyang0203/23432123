@@ -10,7 +10,7 @@ on:
 jobs:
   format:
     name: Format
-    if: github.repository_owner == 'seleniumhq'
+    if: github.repository_owner == 'seleniumhq' && startsWith(github.head_ref, 'renovate/') != true
     uses: ./.github/workflows/bazel.yml
     with:
       name: Check format script run
@@ -20,7 +20,7 @@ jobs:
 
   test:
     name: Test
-    if: github.repository_owner == 'seleniumhq'
+    if: github.repository_owner == 'seleniumhq' && startsWith(github.head_ref, 'renovate/') != true
     uses: ./.github/workflows/bazel.yml
     with:
       name: All RBE tests

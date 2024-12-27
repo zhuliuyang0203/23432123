@@ -27,7 +27,9 @@ def test_log_output_as_filename() -> None:
     log_file = "geckodriver.log"
     service = Service(log_output=log_file)
     try:
-        driver = Firefox(service=service)
+        with pytest.warns(None) as record:
+            driver = Firefox(service=service)
+        assert len(record) == 0
         with open(log_file) as fp:
             assert "geckodriver\tINFO\tListening" in fp.readline()
     finally:

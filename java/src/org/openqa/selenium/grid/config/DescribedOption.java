@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -194,7 +195,7 @@ public class DescribedOption implements Comparable<DescribedOption> {
   }
 
   public String getType(Type type) {
-    String className = deriveClass(type).getSimpleName().toLowerCase();
+    String className = deriveClass(type).getSimpleName().toLowerCase(Locale.ENGLISH);
 
     return isCollection(type) ? "list of " + className + "s" : className;
   }

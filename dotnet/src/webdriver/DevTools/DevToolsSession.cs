@@ -542,6 +542,11 @@ namespace OpenQA.Selenium.DevTools
                 }
                 catch (Exception ex)
                 {
+                    if (logger.IsEnabled(LogEventLevel.Error))
+                    {
+                        logger.Error($"Unexpected error occured while processing message: {ex}");
+                    }
+
                     LogError("Unexpected error occured while processing message: {0}", ex);
                 }
             }
@@ -578,6 +583,11 @@ namespace OpenQA.Selenium.DevTools
                 }
                 else
                 {
+                    if (logger.IsEnabled(LogEventLevel.Error))
+                    {
+                        logger.Error($"Recieved Unknown Response {commandId}: {message}");
+                    }
+
                     LogError("Recieved Unknown Response {0}: {1}", commandId, message);
                 }
 

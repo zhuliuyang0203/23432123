@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
+
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -27,7 +31,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the text of the alert.
         /// </summary>
-        string Text { get; }
+        string? Text { get; }
 
         /// <summary>
         /// Dismisses the alert.
@@ -43,6 +47,7 @@ namespace OpenQA.Selenium
         /// Sends keys to the alert.
         /// </summary>
         /// <param name="keysToSend">The keystrokes to send.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="keysToSend"/> is <see langword="null"/>.</exception>
         void SendKeys(string keysToSend);
     }
 }

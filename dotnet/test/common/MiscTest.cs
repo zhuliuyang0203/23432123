@@ -40,13 +40,13 @@ namespace OpenQA.Selenium
         public void ShouldReportTheCurrentUrlCorrectly()
         {
             driver.Url = macbethPage;
-            Assert.AreEqual(macbethPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(macbethPage));
 
             driver.Url = simpleTestPage;
-            Assert.AreEqual(simpleTestPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(simpleTestPage));
 
             driver.Url = javascriptPage;
-            Assert.AreEqual(javascriptPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(javascriptPage));
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleXmlDocument;
             string source = driver.PageSource.ToLower();
             source = System.Text.RegularExpressions.Regex.Replace(source, "\\s", string.Empty);
-            Assert.AreEqual("<xml><foo><bar>baz</bar></foo></xml>", source);
+            Assert.That(source, Is.EqualTo("<xml><foo><bar>baz</bar></foo></xml>"));
         }
 
         // Test is ignored for all browsers, but is kept here in the source code for
@@ -108,14 +108,14 @@ namespace OpenQA.Selenium
 
             foreach (string val in values)
             {
-                Assert.AreEqual(val, GetGlobalVar(driver, val));
+                Assert.That(GetGlobalVar(driver, val), Is.EqualTo(val));
             }
 
             driver.FindElement(By.Id("toclick")).Click();
 
             foreach (string val in values)
             {
-                Assert.AreEqual(val, GetGlobalVar(driver, val));
+                Assert.That(GetGlobalVar(driver, val), Is.EqualTo(val));
             }
         }
 

@@ -37,7 +37,11 @@ closure_js_library(
         "//javascript/atoms:domcore",
         "//javascript/atoms:html5",
         "//javascript/webdriver:key",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
+        "@io_bazel_rules_closure//closure/library/math:coordinate",
+        "@io_bazel_rules_closure//closure/library/style",
     ],
 )
 
@@ -51,7 +55,8 @@ closure_js_library(
     visibility = ["//visibility:private"],
     deps = [
         "//javascript/atoms:domcore",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
     ],
 )
 
@@ -295,6 +300,5 @@ closure_js_library(
         "//javascript/webdriver:__pkg__",
     ],
     deps = [
-        "@io_bazel_rules_closure//closure/library",
     ],
 )

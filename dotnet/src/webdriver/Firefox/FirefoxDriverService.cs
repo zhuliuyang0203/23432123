@@ -263,7 +263,7 @@ namespace OpenQA.Selenium.Firefox
             // straightforward as you might hope.
             // See: http://mono.wikia.com/wiki/Detecting_the_execution_platform
             // and https://msdn.microsoft.com/en-us/library/3a8hyw88(v=vs.110).aspx
-            const int PlatformMonoUnixValue = 128;
+            const PlatformID PlatformIDMonoUnix = (PlatformID)128;
 
             switch (Environment.OSVersion.Platform)
             {
@@ -276,17 +276,13 @@ namespace OpenQA.Selenium.Firefox
 
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:
+                case PlatformIDMonoUnix:
                     break;
 
                 // Don't handle the Xbox case. Let default handle it.
                 // case PlatformID.Xbox:
                 //     break;
                 default:
-                    if ((int)Environment.OSVersion.Platform == PlatformMonoUnixValue)
-                    {
-                        break;
-                    }
-
                     throw new WebDriverException("Unsupported platform: " + Environment.OSVersion.Platform);
             }
 

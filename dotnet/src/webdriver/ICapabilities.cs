@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -49,6 +51,6 @@ namespace OpenQA.Selenium
         /// <param name="capability">The capability to get.</param>
         /// <returns>An object associated with the capability, or <see langword="null"/>
         /// if the capability is not set on the browser.</returns>
-        object GetCapability(string capability);
+        object? GetCapability(string capability);
     }
 }

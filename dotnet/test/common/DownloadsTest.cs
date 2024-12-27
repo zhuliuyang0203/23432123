@@ -76,7 +76,7 @@ namespace OpenQA.Selenium
             ((RemoteWebDriver)driver).DownloadFile(fileName, targetDirectory);
 
             string fileContent = File.ReadAllText(Path.Combine(targetDirectory, fileName));
-            Assert.AreEqual("Hello, World!", fileContent.Trim());
+            Assert.That(fileContent.Trim(), Is.EqualTo("Hello, World!"));
 
             Directory.Delete(targetDirectory, recursive: true);
         }
@@ -90,7 +90,7 @@ namespace OpenQA.Selenium
             ((RemoteWebDriver)driver).DeleteDownloadableFiles();
 
             IReadOnlyList<string> names = ((RemoteWebDriver)driver).GetDownloadableFiles();
-            Assert.IsEmpty(names, "The names list should be empty.");
+            Assert.That(names, Is.Empty, "The names list should be empty.");
         }
 
         private void DownloadWithBrowser()

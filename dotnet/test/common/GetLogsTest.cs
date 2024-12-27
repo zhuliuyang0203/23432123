@@ -89,7 +89,7 @@ namespace OpenQA.Selenium
             {
                 CreateWebDriverWithLogging(logType, LogLevel.Off);
                 ReadOnlyCollection<LogEntry> entries = localDriver.Manage().Logs.GetLog(logType);
-                Assert.AreEqual(0, entries.Count, string.Format("There should be no log entries for log type {0} when logging is turned off.", logType));
+                Assert.That(entries, Is.Empty, string.Format("There should be no log entries for log type {0} when logging is turned off.", logType));
                 QuitDriver();
             }
         }

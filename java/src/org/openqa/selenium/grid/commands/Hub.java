@@ -144,6 +144,7 @@ public class Hub extends TemplateGridServerCommand {
             distributorOptions.getSlotMatcher(),
             newSessionRequestOptions.getSessionRequestTimeoutPeriod(),
             newSessionRequestOptions.getSessionRequestTimeout(),
+            newSessionRequestOptions.getMaximumResponseDelay(),
             secret,
             newSessionRequestOptions.getBatchSize());
     handler.addHandler(queue);

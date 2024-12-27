@@ -41,7 +41,9 @@ namespace OpenQA.Selenium.Support.UI
         public void ThrowUnexpectedTagNameExceptionWhenNotSelectTag()
         {
             webElement.SetupGet<string>(_ => _.TagName).Returns("form");
-            Assert.Throws<UnexpectedTagNameException>(() => new SelectElement(webElement.Object));
+            Assert.That(
+                () => new SelectElement(webElement.Object),
+                Throws.TypeOf<UnexpectedTagNameException>());
         }
 
         [Test]
@@ -50,7 +52,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
 
-            Assert.IsFalse(new SelectElement(webElement.Object).IsMultiple);
+            Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.False);
         }
 
         [Test]
@@ -59,7 +61,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
 
-            Assert.IsTrue(new SelectElement(webElement.Object).IsMultiple);
+            Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.True);
         }
 
         [Test]
@@ -70,7 +72,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options));
 
-            Assert.AreEqual(options, new SelectElement(webElement.Object).Options);
+            Assert.That(new SelectElement(webElement.Object).Options, Is.EqualTo(options));
         }
 
         [Test]
@@ -89,7 +91,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             IWebElement option = new SelectElement(webElement.Object).SelectedOption;
-            Assert.AreEqual(selected.Object, option);
+            Assert.That(option, Is.EqualTo(selected.Object));
             notSelected.Verify(_ => _.Selected, Times.Once);
             selected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify();
@@ -111,8 +113,8 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             IList<IWebElement> returnedOption = new SelectElement(webElement.Object).AllSelectedOptions;
-            Assert.That(returnedOption.Count == 1);
-            Assert.AreEqual(selected.Object, returnedOption[0]);
+            Assert.That(returnedOption, Has.Count.EqualTo(1));
+            Assert.That(returnedOption[0], Is.EqualTo(selected.Object));
             notSelected.Verify(_ => _.Selected, Times.Once);
             selected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify();
@@ -412,7 +414,10 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             SelectElement element = new SelectElement(webElement.Object);
-            Assert.Throws<NoSuchElementException>(() => { IWebElement selectedOption = element.SelectedOption; });
+            Assert.That(
+                () => element.SelectedOption,
+                Throws.TypeOf<NoSuchElementException>());
+
             notSelected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify(_ => _.FindElements(It.IsAny<By>()), Times.Once);
         }
@@ -422,7 +427,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("foo");
 
-            Assert.AreEqual("\"foo\"", result);
+            Assert.That(result, Is.EqualTo("\"foo\""));
         }
 
         [Test]
@@ -430,7 +435,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f'oo");
 
-            Assert.AreEqual("\"f'oo\"", result);
+            Assert.That(result, Is.EqualTo("\"f'oo\""));
         }
 
         [Test]
@@ -438,7 +443,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f\"oo");
 
-            Assert.AreEqual("'f\"oo'", result);
+            Assert.That(result, Is.EqualTo("'f\"oo'"));
         }
 
         [Test]
@@ -446,7 +451,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f\"o'o");
 
-            Assert.AreEqual("concat(\"f\", '\"', \"o'o\")", result);
+            Assert.That(result, Is.EqualTo("concat(\"f\", '\"', \"o'o\")"));
         }
 
         /**
@@ -458,7 +463,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("Bar \"Rock'n'Roll\"");
 
-            Assert.AreEqual("concat(\"Bar \", '\"', \"Rock'n'Roll\", '\"')", result);
+            Assert.That(result, Is.EqualTo("concat(\"Bar \", '\"', \"Rock'n'Roll\", '\"')"));
         }
 
         private string EscapeQuotes(string toEscape)

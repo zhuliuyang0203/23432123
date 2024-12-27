@@ -47,6 +47,8 @@ namespace OpenQA.Selenium
         }
 
         [Test]
+        [IgnoreBrowser(Browser.Chrome, "https://issues.chromium.org/issues/375892677")]
+        [IgnoreBrowser(Browser.Edge, "https://issues.chromium.org/issues/375892677")]
         public void ShouldThrowGettingShadowRootWithElementNotHavingShadowRoot()
         {
             driver.Url = shadowRootPage;

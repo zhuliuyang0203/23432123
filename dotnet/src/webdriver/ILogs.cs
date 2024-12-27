@@ -17,7 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.ObjectModel;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -37,6 +40,7 @@ namespace OpenQA.Selenium
         /// <param name="logKind">The log for which to retrieve the log entries.
         /// Log types can be found in the <see cref="LogType"/> class.</param>
         /// <returns>The list of <see cref="LogEntry"/> objects for the specified log.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="logKind"/> is <see langword="null"/>.</exception>
         ReadOnlyCollection<LogEntry> GetLog(string logKind);
     }
 }

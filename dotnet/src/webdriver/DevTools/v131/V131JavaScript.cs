@@ -1,4 +1,4 @@
-// <copyright file="V128JavaScript.cs" company="Selenium Committers">
+// <copyright file="V131JavaScript.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,28 +17,28 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V128.Page;
-using OpenQA.Selenium.DevTools.V128.Runtime;
+using OpenQA.Selenium.DevTools.V131.Page;
+using OpenQA.Selenium.DevTools.V131.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V128
+namespace OpenQA.Selenium.DevTools.V131
 {
     /// <summary>
-    /// Class containing the JavaScript implementation for version 128 of the DevTools Protocol.
+    /// Class containing the JavaScript implementation for version 131 of the DevTools Protocol.
     /// </summary>
-    public class V128JavaScript : JavaScript
+    public class V131JavaScript : JavaScript
     {
         private RuntimeAdapter runtime;
         private PageAdapter page;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V128JavaScript"/> class.
+        /// Initializes a new instance of the <see cref="V131JavaScript"/> class.
         /// </summary>
         /// <param name="runtime">The DevTools Protocol adapter for the Runtime domain.</param>
         /// <param name="page">The DevTools Protocol adapter for the Page domain.</param>
-        public V128JavaScript(RuntimeAdapter runtime, PageAdapter page)
+        public V131JavaScript(RuntimeAdapter runtime, PageAdapter page)
         {
             this.runtime = runtime;
             this.page = page;

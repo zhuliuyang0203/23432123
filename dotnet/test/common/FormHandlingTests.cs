@@ -32,7 +32,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Id("submitButton")).Click();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Id("imageButton")).Click();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Name("login")).Submit();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Id("checky")).Submit();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.XPath("//form/p")).Submit();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Id("submit")).Submit();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace OpenQA.Selenium
             driver.Url = formsPage;
             driver.FindElement(By.Name("submit")).Submit();
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace OpenQA.Selenium
             IWebElement textarea = driver.FindElement(By.Id("keyUpArea"));
             string cheesey = "Brie and cheddar";
             textarea.SendKeys(cheesey);
-            Assert.AreEqual(textarea.GetAttribute("value"), cheesey);
+            Assert.That(textarea.GetAttribute("value"), Is.EqualTo(cheesey));
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace OpenQA.Selenium
             IWebElement textarea = driver.FindElement(By.Id("keyUpArea"));
             string cheesey = "BrIe And CheDdar";
             textarea.SendKeys(cheesey);
-            Assert.AreEqual(textarea.GetAttribute("value"), cheesey);
+            Assert.That(textarea.GetAttribute("value"), Is.EqualTo(cheesey));
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace OpenQA.Selenium
             input.SendKeys("\n");
 
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
             Assert.That(driver.Url, Does.EndWith("?x=name"));
         }
 
@@ -147,7 +147,7 @@ namespace OpenQA.Selenium
             input.SendKeys(Keys.Enter);
 
             WaitFor(TitleToBe("We Arrive Here"), "Browser title is not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
             Assert.That(driver.Url, Does.EndWith("?x=name"));
         }
 
@@ -157,14 +157,14 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             IWebElement element = driver.FindElement(By.XPath("//form[@name='someForm']/input[@id='username']"));
             String originalValue = element.GetAttribute("value");
-            Assert.AreEqual(originalValue, "change");
+            Assert.That(originalValue, Is.EqualTo("change"));
 
             element.Clear();
             element.SendKeys("some text");
 
             element = driver.FindElement(By.XPath("//form[@name='someForm']/input[@id='username']"));
             String newFormValue = element.GetAttribute("value");
-            Assert.AreEqual(newFormValue, "some text");
+            Assert.That(newFormValue, Is.EqualTo("some text"));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace OpenQA.Selenium
             string testFileName = string.Format("test-{0}.txt", Guid.NewGuid().ToString("D"));
             driver.Url = formsPage;
             IWebElement uploadElement = driver.FindElement(By.Id("upload"));
-            Assert.That(uploadElement.GetAttribute("value"), Is.Null.Or.EqualTo(string.Empty));
+            Assert.That(uploadElement.GetAttribute("value"), Is.Null.Or.Empty);
 
             string filePath = System.IO.Path.Combine(EnvironmentManager.Instance.CurrentDirectory, testFileName);
             System.IO.FileInfo inputFile = new System.IO.FileInfo(filePath);
@@ -201,7 +201,7 @@ namespace OpenQA.Selenium
 
             driver.Url = xhtmlFormPage;
             IWebElement uploadElement = driver.FindElement(By.Id("file"));
-            Assert.AreEqual(string.Empty, uploadElement.GetAttribute("value"));
+            Assert.That(uploadElement.GetAttribute("value"), Is.Empty);
 
             string testFileName = string.Format("test-{0}.txt", Guid.NewGuid().ToString("D"));
             string filePath = System.IO.Path.Combine(EnvironmentManager.Instance.CurrentDirectory, testFileName);
@@ -214,7 +214,7 @@ namespace OpenQA.Selenium
 
             string uploadElementValue = uploadElement.GetAttribute("value");
             System.IO.FileInfo outputFile = new System.IO.FileInfo(uploadElementValue.Replace('\\', System.IO.Path.DirectorySeparatorChar));
-            Assert.AreEqual(inputFile.Name, outputFile.Name);
+            Assert.That(outputFile.Name, Is.EqualTo(inputFile.Name));
             inputFile.Delete();
         }
 
@@ -253,11 +253,11 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("working"));
             element.SendKeys("Some");
             String value = element.GetAttribute("value");
-            Assert.AreEqual(value, "Some");
+            Assert.That(value, Is.EqualTo("Some"));
 
             element.SendKeys(" text");
             value = element.GetAttribute("value");
-            Assert.AreEqual(value, "Some text");
+            Assert.That(value, Is.EqualTo("Some text"));
         }
 
         [Test]
@@ -268,7 +268,7 @@ namespace OpenQA.Selenium
             element.SendKeys(". Some text");
             string value = element.GetAttribute("value");
 
-            Assert.AreEqual("Example text. Some text", value);
+            Assert.That(value, Is.EqualTo("Example text. Some text"));
         }
 
         [Test]
@@ -280,7 +280,7 @@ namespace OpenQA.Selenium
             element.SendKeys(". Some text");
             String value = element.GetAttribute("value");
 
-            Assert.AreEqual(value, "Example text. Some text");
+            Assert.That(value, Is.EqualTo("Example text. Some text"));
         }
 
         [Test]
@@ -288,10 +288,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement emptyTextBox = driver.FindElement(By.Id("working"));
-            Assert.AreEqual(emptyTextBox.GetAttribute("value"), "");
+            Assert.That(emptyTextBox.GetAttribute("value"), Is.Empty);
 
             IWebElement emptyTextArea = driver.FindElement(By.Id("emptyTextArea"));
-            Assert.AreEqual(emptyTextBox.GetAttribute("value"), "");
+            Assert.That(emptyTextBox.GetAttribute("value"), Is.Empty);
         }
 
         [Test]
@@ -316,7 +316,7 @@ namespace OpenQA.Selenium
             string text = alert.Text;
             alert.Dismiss();
 
-            Assert.AreEqual("Tasty cheese", text);
+            Assert.That(text, Is.EqualTo("Tasty cheese"));
         }
 
         [Test]
@@ -391,12 +391,12 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("working"));
             element.SendKeys("Some text");
             String value = element.GetAttribute("value");
-            Assert.That(value.Length, Is.GreaterThan(0));
+            Assert.That(value, Is.Not.Empty);
 
             element.Clear();
             value = element.GetAttribute("value");
 
-            Assert.That(value.Length, Is.EqualTo(0));
+            Assert.That(value, Is.Empty);
         }
 
         [Test]
@@ -406,12 +406,12 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("withText"));
             element.SendKeys("Some text");
             String value = element.GetAttribute("value");
-            Assert.That(value.Length, Is.GreaterThan(0));
+            Assert.That(value, Is.Not.Empty);
 
             element.Clear();
             value = element.GetAttribute("value");
 
-            Assert.That(value.Length, Is.EqualTo(0));
+            Assert.That(value, Is.Empty);
         }
 
         private void CheckSubmitButton(string buttonId)
@@ -424,7 +424,7 @@ namespace OpenQA.Selenium
 
             WaitFor(TitleToBe("Submitted Successfully!"), "Browser title is not 'Submitted Successfully!'");
 
-            Assert.That(driver.Url.Contains("name=" + name), "URL does not contain 'name=" + name + "'. Actual URL:" + driver.Url);
+            Assert.That(driver.Url, Does.Contain("name=" + name), "URL does not contain 'name=" + name + "'. Actual URL:" + driver.Url);
         }
 
         private Func<bool> TitleToBe(string desiredTitle)
