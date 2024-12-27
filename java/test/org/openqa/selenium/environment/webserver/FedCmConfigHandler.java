@@ -17,27 +17,29 @@
 
 package org.openqa.selenium.environment.webserver;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.UncheckedIOException;
+import java.util.Map;
 import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpHandler;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
-import org.openqa.selenium.remote.http.UrlPath;
 
-class WellKnownWebIdentityHandler implements HttpHandler {
-
-  private static final String RESPONSE_STRING = "{\"provider_urls\": [\"%s\"]}";
+class FedCmConfigHandler implements HttpHandler {
 
   @Override
   public HttpResponse execute(HttpRequest req) throws UncheckedIOException {
     HttpResponse response = new HttpResponse();
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Cache-Control", "no-store");
-    String targetLocation = UrlPath.relativeToContext(req, "https://idp.com");
 
-    response.setContent(Contents.string(String.format(RESPONSE_STRING, targetLocation), UTF_8));
+    response.setContent(
+        Contents.asJson(
+            Map.of(
+                "accounts_endpoint", "accounts.json",
+                "client_metadata_endpoint", "client_metadata.json",
+                "id_assertion_endpoint", "id_assertion.json",
+                "signin_url", "signin",
+                "login_url", "login")));
 
     return response;
   }

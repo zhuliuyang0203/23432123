@@ -269,6 +269,11 @@ class ClickTest extends JupiterTestBase {
   @SwitchToTopAfterTest
   @Test
   @NotYetImplemented(SAFARI)
+  @Ignore(
+      value = FIREFOX,
+      reason =
+          "Clicking on element doesn't work if element is in iframe outside of viewport in Beta",
+      issue = "https://bugzilla.mozilla.org/show_bug.cgi?id=1937115")
   public void testShouldBeAbleToClickOnAnElementInFrameGreaterThanTwoViewports() {
     String url = appServer.whereIs("click_too_big_in_frame.html");
     driver.get(url);

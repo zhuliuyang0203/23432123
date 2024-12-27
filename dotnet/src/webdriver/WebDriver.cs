@@ -622,7 +622,7 @@ namespace OpenQA.Selenium
             {
                 commandResponse = new Response
                 {
-                    Status = WebDriverResult.UnhandledError,
+                    Status = WebDriverResult.UnknownError,
                     Value = e
                 };
             }
@@ -782,9 +782,6 @@ namespace OpenQA.Selenium
                         case WebDriverResult.ElementNotSelectable:
                             throw new InvalidElementStateException(errorMessage);
 
-                        case WebDriverResult.UnhandledError:
-                            throw new WebDriverException(errorMessage);
-
                         case WebDriverResult.NoSuchDocument:
                             throw new NoSuchElementException(errorMessage);
 
@@ -853,6 +850,15 @@ namespace OpenQA.Selenium
 
                         case WebDriverResult.InsecureCertificate:
                             throw new InsecureCertificateException(errorMessage);
+
+                        case WebDriverResult.UnknownError:
+                            throw new UnknownErrorException(errorMessage);
+
+                        case WebDriverResult.UnknownMethod:
+                            throw new UnknownMethodException(errorMessage);
+
+                        case WebDriverResult.UnsupportedOperation:
+                            throw new UnsupportedOperationException(errorMessage);
 
                         default:
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));

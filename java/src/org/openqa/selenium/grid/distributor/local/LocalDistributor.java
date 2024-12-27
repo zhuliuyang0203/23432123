@@ -77,6 +77,7 @@ import org.openqa.selenium.grid.data.NodeDrainComplete;
 import org.openqa.selenium.grid.data.NodeHeartBeatEvent;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeRemovedEvent;
+import org.openqa.selenium.grid.data.NodeRestartedEvent;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.NodeStatusEvent;
 import org.openqa.selenium.grid.data.RequestId;
@@ -205,6 +206,7 @@ public class LocalDistributor extends Distributor implements Closeable {
 
     bus.addListener(NodeStatusEvent.listener(this::register));
     bus.addListener(NodeStatusEvent.listener(model::refresh));
+    bus.addListener(NodeRestartedEvent.listener(this::handleNodeRestarted));
     bus.addListener(NodeRemovedEvent.listener(nodeStatus -> remove(nodeStatus.getNodeId())));
     bus.addListener(
         NodeHeartBeatEvent.listener(
@@ -322,6 +324,25 @@ public class LocalDistributor extends Distributor implements Closeable {
               capabilities);
 
       add(remoteNode);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  private void handleNodeRestarted(NodeStatus status) {
+    Require.nonNull("Node", status);
+    Lock writeLock = lock.writeLock();
+    writeLock.lock();
+    try {
+      if (!nodes.containsKey(status.getNodeId())) {
+        return;
+      }
+      if (!getNodeFromURI(status.getExternalUri()).isDraining()) {
+        LOG.info(
+            String.format(
+                "Node %s has restarted. Setting availability to DOWN.", status.getNodeId()));
+        model.setAvailability(status.getNodeId(), DOWN);
+      }
     } finally {
       writeLock.unlock();
     }

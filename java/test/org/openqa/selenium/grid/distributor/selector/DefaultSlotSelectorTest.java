@@ -88,6 +88,43 @@ class DefaultSlotSelectorTest {
   }
 
   @Test
+  void nodesAreOrderedNodesByBrowserVersion() {
+    Capabilities caps = new ImmutableCapabilities("browserName", "chrome");
+
+    NodeStatus node1 =
+        createNodeWithStereotypes(
+            Arrays.asList(
+                ImmutableMap.of("browserName", "chrome", "browserVersion", "131.0"),
+                ImmutableMap.of("browserName", "chrome", "browserVersion", "132.0")));
+    NodeStatus node2 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "131.0")));
+    NodeStatus node3 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "")));
+    NodeStatus node4 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "131.1")));
+    NodeStatus node5 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "beta")));
+    Set<NodeStatus> nodes = ImmutableSet.of(node1, node2, node3, node4, node5);
+
+    Set<SlotId> slots = selector.selectSlot(caps, nodes, new DefaultSlotMatcher());
+
+    ImmutableSet<NodeId> nodeIds =
+        slots.stream().map(SlotId::getOwningNodeId).distinct().collect(toImmutableSet());
+
+    assertThat(nodeIds)
+        .containsSequence(
+            node3.getNodeId(),
+            node1.getNodeId(),
+            node4.getNodeId(),
+            node2.getNodeId(),
+            node5.getNodeId());
+  }
+
+  @Test
   void nodesAreOrderedNodesByNumberOfSupportedBrowsers() {
     Set<NodeStatus> nodes = new HashSet<>();
 
@@ -250,6 +287,20 @@ class DefaultSlotSelectorTest {
               nodeBuilder.add(caps, new TestSessionFactory((id, c) -> new Handler(c)));
             });
 
+    Node myNode = nodeBuilder.build();
+    return myNode.getStatus();
+  }
+
+  private NodeStatus createNodeWithStereotypes(List<ImmutableMap> stereotypes) {
+    URI uri = createUri();
+    LocalNode.Builder nodeBuilder =
+        LocalNode.builder(tracer, bus, uri, uri, new Secret("cornish yarg"));
+    nodeBuilder.maximumConcurrentSessions(stereotypes.size());
+    stereotypes.forEach(
+        stereotype -> {
+          Capabilities caps = new ImmutableCapabilities(stereotype);
+          nodeBuilder.add(caps, new TestSessionFactory((id, c) -> new Handler(c)));
+        });
     Node myNode = nodeBuilder.build();
     return myNode.getStatus();
   }
