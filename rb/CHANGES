@@ -1,3 +1,35 @@
+4.27.0 (2024-11-21)
+=========================
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings (#14763)
+* Add Bidi network commands for authentication and interception (#14523)
+* Handle graceful webdriver shutdown (#14430)
+* Reduce RBS errors to 0 (#14661)
+* Resolve `uri` gem deprecation warning (#14770)
+* Update minimum Ruby to 3.1 (#14685)
+* Implement navigation commands with BiDi (#14094)
+
+4.26.0 (2024-10-28)
+=========================
+* Add CDP for Chrome 130 and remove 127
+* Add missing RBS methods (#14621)
+* Update Ruby BiDi script structs to match spec
+* Add RBS type support for BiDi related classes (#14611)
+
+4.25.0 (2024-09-19)
+=========================
+* Add CDP for Chrome 129 and remove 126
+* Fix add_cause method not being able to process an array of hashes (#14433)
+* replace `fedcm` links with new ones (#14478)
+* Allow driver path to be set using ENV variables (#14287)
+
+4.24.0 (2024-08-23)
+=========================
+* Deprecate WebStorage JS methods (#14276)
+* BUGFIX: Add stamp to nightly build (#14320)
+* Add timeout and tests for curb, also added the gem curb that was not part of selenium (#14285)
+* Add CDP for Chrome 128 and remove 125
+
 4.23.0 (2024-07-18)
 =========================
 * Add FedCM support to the ruby selenium client (#13796)

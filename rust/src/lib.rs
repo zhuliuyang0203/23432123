@@ -21,14 +21,14 @@ use crate::config::{str_to_os, ManagerConfig};
 use crate::downloads::download_to_tmp_folder;
 use crate::edge::{EdgeManager, EDGEDRIVER_NAME, EDGE_NAMES, WEBVIEW2_NAME};
 use crate::files::{
-    capitalize, collect_files_from_cache, create_parent_path_if_not_exists,
-    create_path_if_not_exists, default_cache_folder, find_latest_from_cache, get_binary_extension,
-    path_to_string,
+    capitalize, collect_files_from_cache, create_path_if_not_exists, default_cache_folder,
+    find_latest_from_cache, get_binary_extension, path_to_string,
 };
 use crate::files::{parse_version, uncompress, BrowserPath};
 use crate::firefox::{FirefoxManager, FIREFOX_NAME, GECKODRIVER_NAME};
 use crate::grid::GRID_NAME;
 use crate::iexplorer::{IExplorerManager, IEDRIVER_NAME, IE_NAMES};
+use crate::lock::Lock;
 use crate::logger::Logger;
 use crate::metadata::{
     create_browser_metadata, create_stats_metadata, get_browser_version_from_metadata,
@@ -59,6 +59,7 @@ pub mod files;
 pub mod firefox;
 pub mod grid;
 pub mod iexplorer;
+pub mod lock;
 pub mod logger;
 pub mod metadata;
 pub mod mirror;
@@ -184,6 +185,22 @@ pub trait SeleniumManager {
     // ----------------------------------------------------------
 
     fn download_driver(&mut self) -> Result<(), Error> {
+        let driver_path_in_cache = self.get_driver_path_in_cache()?;
+        let driver_name_with_extension = self.get_driver_name_with_extension();
+
+        let mut lock = Lock::acquire(
+            &self.get_logger(),
+            &driver_path_in_cache,
+            Some(driver_name_with_extension.clone()),
+        )?;
+        if !lock.exists() && driver_path_in_cache.exists() {
+            self.get_logger().debug(format!(
+                "Driver already in cache: {}",
+                driver_path_in_cache.display()
+            ));
+            return Ok(());
+        }
+
         let driver_url = self.get_driver_url()?;
         self.get_logger().debug(format!(
             "Downloading {} {} from {}",
@@ -196,20 +213,20 @@ pub trait SeleniumManager {
 
         if self.is_grid() {
             let driver_path_in_cache = self.get_driver_path_in_cache()?;
-            create_parent_path_if_not_exists(&driver_path_in_cache)?;
-            Ok(fs::rename(driver_zip_file, driver_path_in_cache)?)
+            fs::rename(driver_zip_file, driver_path_in_cache)?;
         } else {
-            let driver_path_in_cache = self.get_driver_path_in_cache()?;
-            let driver_name_with_extension = self.get_driver_name_with_extension();
-            Ok(uncompress(
+            uncompress(
                 &driver_zip_file,
                 &driver_path_in_cache,
                 self.get_logger(),
                 self.get_os(),
                 Some(driver_name_with_extension),
                 None,
-            )?)
+            )?;
         }
+
+        lock.release();
+        Ok(())
     }
 
     fn download_browser(
@@ -237,43 +254,47 @@ pub trait SeleniumManager {
             )));
         }
 
-        // Browser version is checked in the local metadata
-        match get_browser_version_from_metadata(
-            &metadata.browsers,
-            self.get_browser_name(),
-            &major_browser_version,
-        ) {
-            Some(version) => {
-                self.get_logger().trace(format!(
-                    "Browser with valid TTL. Getting {} version from metadata",
-                    self.get_browser_name()
-                ));
-                browser_version = version;
-                self.set_browser_version(browser_version.clone());
-            }
-            _ => {
-                // If not in metadata, discover version using online metadata
-                if self.is_browser_version_stable() || self.is_browser_version_empty() {
-                    browser_version =
-                        self.request_latest_browser_version_from_online(original_browser_version)?;
-                } else {
-                    browser_version =
-                        self.request_fixed_browser_version_from_online(original_browser_version)?;
-                }
-                self.set_browser_version(browser_version.clone());
-
-                let browser_ttl = self.get_ttl();
-                if browser_ttl > 0
-                    && !self.is_browser_version_empty()
-                    && !self.is_browser_version_stable()
-                {
-                    metadata.browsers.push(create_browser_metadata(
-                        self.get_browser_name(),
-                        &major_browser_version,
-                        &browser_version,
-                        browser_ttl,
+        if self.is_version_specific(original_browser_version) {
+            browser_version = original_browser_version.to_string();
+        } else {
+            // Browser version is checked in the local metadata
+            match get_browser_version_from_metadata(
+                &metadata.browsers,
+                self.get_browser_name(),
+                &major_browser_version,
+            ) {
+                Some(version) => {
+                    self.get_logger().trace(format!(
+                        "Browser with valid TTL. Getting {} version from metadata",
+                        self.get_browser_name()
                     ));
-                    write_metadata(&metadata, self.get_logger(), cache_path);
+                    browser_version = version;
+                    self.set_browser_version(browser_version.clone());
+                }
+                _ => {
+                    // If not in metadata, discover version using online metadata
+                    if self.is_browser_version_stable() || self.is_browser_version_empty() {
+                        browser_version = self
+                            .request_latest_browser_version_from_online(original_browser_version)?;
+                    } else {
+                        browser_version = self
+                            .request_fixed_browser_version_from_online(original_browser_version)?;
+                    }
+                    self.set_browser_version(browser_version.clone());
+
+                    let browser_ttl = self.get_ttl();
+                    if browser_ttl > 0
+                        && !self.is_browser_version_empty()
+                        && !self.is_browser_version_stable()
+                    {
+                        metadata.browsers.push(create_browser_metadata(
+                            self.get_browser_name(),
+                            &major_browser_version,
+                            &browser_version,
+                            browser_ttl,
+                        ));
+                        write_metadata(&metadata, self.get_logger(), cache_path);
+                    }
                 }
             }
         }
@@ -300,6 +321,17 @@ pub trait SeleniumManager {
                 )));
             }
 
+            let browser_path_in_cache = self.get_browser_path_in_cache()?;
+            let mut lock = Lock::acquire(&self.get_logger(), &browser_path_in_cache, None)?;
+            if !lock.exists() && browser_binary_path.exists() {
+                self.get_logger().debug(format!(
+                    "Browser already in cache: {}",
+                    browser_binary_path.display()
+                ));
+                self.set_browser_path(path_to_string(&browser_binary_path));
+                return Ok(Some(browser_binary_path.clone()));
+            }
+
             let browser_url = self.get_browser_url_for_download(original_browser_version)?;
             self.get_logger().debug(format!(
                 "Downloading {} {} from {}",
@@ -314,12 +346,13 @@ pub trait SeleniumManager {
                 self.get_browser_label_for_download(original_browser_version)?;
             uncompress(
                 &driver_zip_file,
-                &self.get_browser_path_in_cache()?,
-                self.get_logger(),
+                &browser_path_in_cache,
+                &self.get_logger(),
                 self.get_os(),
                 None,
                 browser_label_for_download,
             )?;
+            lock.release();
         }
         if browser_binary_path.exists() {
             self.set_browser_path(path_to_string(&browser_binary_path));
@@ -386,7 +419,16 @@ pub trait SeleniumManager {
             // Check browser in PATH
             let browser_in_path = self.find_browser_in_path();
             if let Some(path) = &browser_in_path {
-                self.set_browser_path(path_to_string(path));
+                if self.is_skip_browser_in_path() {
+                    self.get_logger().debug(format!(
+                        "Skipping {} in path: {}",
+                        self.get_browser_name(),
+                        path.display()
+                    ));
+                    return None;
+                } else {
+                    self.set_browser_path(path_to_string(path));
+                }
             }
             browser_in_path
         }
@@ -706,6 +748,14 @@ pub trait SeleniumManager {
         self.is_stable(self.get_browser_version())
     }
 
+    fn is_version_specific(&self, version: &str) -> bool {
+        version.contains(".")
+    }
+
+    fn is_browser_version_specific(&self) -> bool {
+        self.is_version_specific(self.get_browser_version())
+    }
+
     fn setup(&mut self) -> Result<PathBuf, Error> {
         let mut driver_in_path = None;
         let mut driver_in_path_version = None;
@@ -741,7 +791,10 @@ pub trait SeleniumManager {
         // Download browser if necessary
         match self.download_browser_if_necessary(&original_browser_version) {
             Ok(_) => {}
-            Err(err) => self.check_error_with_driver_in_path(&use_driver_in_path, err)?,
+            Err(err) => {
+                self.set_fallback_driver_from_cache(false);
+                self.check_error_with_driver_in_path(&use_driver_in_path, err)?
+            }
         }
 
         // With the discovered browser version, discover the proper driver version using online endpoints
@@ -756,32 +809,41 @@ pub trait SeleniumManager {
 
         // Use driver in PATH when the user has not specified any browser version
         if use_driver_in_path {
-            let version = driver_in_path_version.unwrap();
             let path = driver_in_path.unwrap();
-            let major_version = self.get_major_version(&version)?;
 
-            // Display warning if the discovered driver version is not the same as the driver in PATH
-            if !self.get_driver_version().is_empty()
-                && (self.is_firefox() && !version.eq(self.get_driver_version()))
-                || (!self.is_firefox() && !major_version.eq(&self.get_major_browser_version()))
-            {
-                self.get_logger().warn(format!(
-                    "The {} version ({}) detected in PATH at {} might not be compatible with \
+            if self.is_skip_driver_in_path() {
+                self.get_logger().debug(format!(
+                    "Skipping {} in path: {}",
+                    self.get_driver_name(),
+                    path
+                ));
+            } else {
+                let version = driver_in_path_version.unwrap();
+                let major_version = self.get_major_version(&version)?;
+
+                // Display warning if the discovered driver version is not the same as the driver in PATH
+                if !self.get_driver_version().is_empty()
+                    && (self.is_firefox() && !version.eq(self.get_driver_version()))
+                    || (!self.is_firefox() && !major_version.eq(&self.get_major_browser_version()))
+                {
+                    self.get_logger().warn(format!(
+                        "The {} version ({}) detected in PATH at {} might not be compatible with \
                     the detected {} version ({}); currently, {} {} is recommended for {} {}.*, \
                     so it is advised to delete the driver in PATH and retry",
-                    self.get_driver_name(),
-                    &version,
-                    path,
-                    self.get_browser_name(),
-                    self.get_browser_version(),
-                    self.get_driver_name(),
-                    self.get_driver_version(),
-                    self.get_browser_name(),
-                    self.get_major_browser_version()
-                ));
+                        self.get_driver_name(),
+                        &version,
+                        path,
+                        self.get_browser_name(),
+                        self.get_browser_version(),
+                        self.get_driver_name(),
+                        self.get_driver_version(),
+                        self.get_browser_name(),
+                        self.get_major_browser_version()
+                    ));
+                }
+                self.set_driver_version(version.to_string());
+                return Ok(PathBuf::from(path));
             }
-            self.set_driver_version(version.to_string());
-            return Ok(PathBuf::from(path));
         }
 
         // If driver was not in the PATH, try to find it in the cache
@@ -1065,6 +1127,12 @@ pub trait SeleniumManager {
             if let Some(path) = self.detect_browser_path() {
                 browser_path = path_to_string(&path);
             }
+        } else if !Path::new(&browser_path).exists() {
+            self.set_fallback_driver_from_cache(false);
+            return Err(anyhow!(format_one_arg(
+                "Browser path does not exist: {}",
+                &browser_path,
+            )));
         }
         let escaped_browser_path = self.get_escaped_path(browser_path.to_string());
 
@@ -1270,6 +1338,26 @@ pub trait SeleniumManager {
         }
     }
 
+    fn get_driver_mirror_versions_url_or_default<'a>(&'a self, default_url: &'a str) -> String {
+        let driver_mirror_url = self.get_driver_mirror_url();
+        if !driver_mirror_url.is_empty() {
+            let driver_versions_path = default_url.rfind('/').map(|i| &default_url[i + 1..]);
+            if let Some(path) = driver_versions_path {
+                let driver_mirror_versions_url = if driver_mirror_url.ends_with('/') {
+                    format!("{}{}", driver_mirror_url, path)
+                } else {
+                    format!("{}/{}", driver_mirror_url, path)
+                };
+                self.get_logger().debug(format!(
+                    "Using mirror URL to discover driver versions: {}",
+                    driver_mirror_versions_url
+                ));
+                return driver_mirror_versions_url;
+            }
+        }
+        default_url.to_string()
+    }
+
     fn get_driver_mirror_url_or_default<'a>(&'a self, default_url: &'a str) -> String {
         self.get_url_or_default(self.get_driver_mirror_url(), default_url)
     }
@@ -1413,6 +1501,26 @@ pub trait SeleniumManager {
         }
     }
 
+    fn is_skip_driver_in_path(&self) -> bool {
+        self.get_config().skip_driver_in_path
+    }
+
+    fn set_skip_driver_in_path(&mut self, skip_driver_in_path: bool) {
+        if skip_driver_in_path {
+            self.get_config_mut().skip_driver_in_path = true;
+        }
+    }
+
+    fn is_skip_browser_in_path(&self) -> bool {
+        self.get_config().skip_browser_in_path
+    }
+
+    fn set_skip_browser_in_path(&mut self, skip_browser_in_path: bool) {
+        if skip_browser_in_path {
+            self.get_config_mut().skip_browser_in_path = true;
+        }
+    }
+
     fn get_cache_path(&self) -> Result<Option<PathBuf>, Error> {
         let path = Path::new(&self.get_config().cache_path);
         match create_path_if_not_exists(path) {
@@ -1465,6 +1573,14 @@ pub trait SeleniumManager {
         if avoid_stats {
             self.get_config_mut().avoid_stats = true;
         }
+    }
+
+    fn is_fallback_driver_from_cache(&self) -> bool {
+        self.get_config().fallback_driver_from_cache
+    }
+
+    fn set_fallback_driver_from_cache(&mut self, fallback_driver_from_cache: bool) {
+        self.get_config_mut().fallback_driver_from_cache = fallback_driver_from_cache;
     }
 }
 

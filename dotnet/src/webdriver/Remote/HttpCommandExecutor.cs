@@ -1,19 +1,20 @@
-// <copyright file="HttpCommandExecutor.cs" company="WebDriver Committers">
+// <copyright file="HttpCommandExecutor.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Internal;
@@ -21,6 +22,7 @@ using OpenQA.Selenium.Internal.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -324,7 +326,7 @@ namespace OpenQA.Selenium.Remote
                 }
                 else
                 {
-                    response.Status = WebDriverResult.UnhandledError;
+                    response.Status = WebDriverResult.UnknownError;
                     response.Value = body;
                 }
             }
@@ -417,7 +419,11 @@ namespace OpenQA.Selenium.Remote
                 var responseTask = base.SendAsync(request, cancellationToken);
 
                 StringBuilder requestLogMessageBuilder = new();
-                requestLogMessageBuilder.AppendFormat(">> {0}", request);
+                requestLogMessageBuilder.AppendFormat(">> {0} RequestUri: {1}, Content: {2}, Headers: {3}",
+                    request.Method,
+                    request.RequestUri?.ToString() ?? "null",
+                    request.Content?.ToString() ?? "null",
+                    request.Headers?.Count());
 
                 if (request.Content != null)
                 {
@@ -430,7 +436,7 @@ namespace OpenQA.Selenium.Remote
                 var response = await responseTask.ConfigureAwait(false);
 
                 StringBuilder responseLogMessageBuilder = new();
-                responseLogMessageBuilder.AppendFormat("<< {0}", response);
+                responseLogMessageBuilder.AppendFormat("<< StatusCode: {0}, ReasonPhrase: {1}, Content: {2}, Headers: {3}", (int)response.StatusCode, response.ReasonPhrase, response.Content, response.Headers?.Count());
 
                 if (!response.IsSuccessStatusCode && response.Content != null)
                 {

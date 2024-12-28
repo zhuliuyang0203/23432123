@@ -65,7 +65,7 @@ module Selenium
       # Get the cookie with the given name
       #
       # @param [String] name the name of the cookie
-      # @return [Hash, nil] the cookie, or nil if it wasn't found.
+      # @return [Hash] the cookie, or throws a NoSuchCookieError if it wasn't found.
       #
 
       def cookie_named(name)

@@ -31,6 +31,9 @@ import static org.openqa.selenium.remote.http.Route.get;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Collections;
@@ -182,7 +185,19 @@ public class RouterServer extends TemplateGridServerCommand {
     // access to it.
     Routable routeWithLiveness = Route.combine(route, get("/readyz").to(() -> readinessCheck));
 
-    return new Handlers(routeWithLiveness, new ProxyWebsocketsIntoGrid(clientFactory, sessions));
+    return new Handlers(routeWithLiveness, new ProxyWebsocketsIntoGrid(clientFactory, sessions)) {
+      @Override
+      public void close() {
+        router.close();
+        if (sessions instanceof Closeable) {
+          try {
+            ((Closeable) sessions).close();
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        }
+      }
+    };
   }
 
   @Override

@@ -1,3 +1,22 @@
+// <copyright file="WindowSwitchingTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -17,23 +36,23 @@ namespace OpenQA.Selenium
             String current = driver.CurrentWindowHandle;
 
             driver.FindElement(By.LinkText("Open new window")).Click();
-            Assert.AreEqual("XHTML Test Page", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
 
             WaitFor(WindowCountToBe(2), "Window count was not 2");
             WaitFor(WindowWithName("result"), "Could not find window with name 'result'");
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
 
             driver.Url = iframesPage;
             string handle = driver.CurrentWindowHandle;
             driver.FindElement(By.Id("iframe_page_heading"));
             driver.SwitchTo().Frame("iframe1");
-            Assert.AreEqual(driver.CurrentWindowHandle, handle);
+            Assert.That(handle, Is.EqualTo(driver.CurrentWindowHandle));
             driver.SwitchTo().DefaultContent();
             driver.Close();
 
             driver.SwitchTo().Window(current);
-            //Assert.AreEqual("XHTML Test Page", driver.Title);
+            //Assert.That(driver.Title, Is.EqualTo("TML Test Page"));
         }
 
         [Test]
@@ -41,14 +60,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
-            try
-            {
-                driver.SwitchTo().Window("invalid name");
-            }
-            catch (NoSuchWindowException)
-            {
-                // This is expected.
-            }
+
+            Assert.That(
+                () => driver.SwitchTo().Window("invalid name"),
+                Throws.TypeOf<NoSuchWindowException>());
 
             driver.SwitchTo().Window(current);
         }
@@ -64,7 +79,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.LinkText("Open new window")).Click();
 
             WaitFor(WindowCountToBe(2), "Window count was not 2");
-            Assert.AreEqual(2, driver.WindowHandles.Count);
+            Assert.That(driver.WindowHandles, Has.Exactly(2).Items);
 
             WaitFor(WindowWithName("result"), "Could not find window with name 'result'");
             driver.SwitchTo().Window("result");
@@ -72,12 +87,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                string currentHandle = driver.CurrentWindowHandle;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(
+                    () => driver.CurrentWindowHandle,
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -96,7 +108,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.LinkText("Open new window")).Click();
 
             WaitFor(WindowCountToBe(2), "Window count was not 2");
-            Assert.AreEqual(2, driver.WindowHandles.Count);
+            Assert.That(driver.WindowHandles, Has.Exactly(2).Items);
 
             WaitFor(WindowWithName("result"), "Could not find window with name 'result'");
             driver.SwitchTo().Window("result");
@@ -104,25 +116,13 @@ namespace OpenQA.Selenium
 
             try
             {
-                try
-                {
-                    string title = driver.Title;
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                Assert.That(
+                    () => driver.Title,
+                    Throws.TypeOf<NoSuchWindowException>());
 
-                try
-                {
-                    driver.FindElement(By.TagName("body"));
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                Assert.That(
+                    () => driver.FindElement(By.TagName("body")),
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -141,7 +141,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.LinkText("Open new window")).Click();
 
             WaitFor(WindowCountToBe(2), "Window count was not 2");
-            Assert.AreEqual(2, driver.WindowHandles.Count);
+            Assert.That(driver.WindowHandles, Has.Exactly(2).Items);
 
             WaitFor(WindowWithName("result"), "Could not find window with name 'result'");
             driver.SwitchTo().Window("result");
@@ -150,12 +150,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                string bodyText = body.Text;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(
+                    () => body.Text,
+                    Throws.TypeOf<NoSuchWindowException>());
             }
             finally
             {
@@ -185,7 +182,7 @@ namespace OpenQA.Selenium
                 seenHandles.Add(handle);
             }
 
-            Assert.AreEqual(3, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.Exactly(3).Items);
         }
 
         [Test]
@@ -261,19 +258,14 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
 
-            try
-            {
-                driver.SwitchTo().Window("i will never exist");
-                Assert.Fail("Should not be ablt to change to a non-existant window");
-            }
-            catch (NoSuchWindowException)
-            {
-                // expected
-            }
+            Assert.That(
+                () => driver.SwitchTo().Window("i will never exist"),
+                Throws.TypeOf<NoSuchWindowException>(),
+                "Should not be able to change to a non-existant window");
 
             String newHandle = driver.CurrentWindowHandle;
 
-            Assert.AreEqual(current, newHandle);
+            Assert.That(newHandle, Is.EqualTo(current));
         }
 
         [Test]
@@ -289,7 +281,7 @@ namespace OpenQA.Selenium
             ReadOnlyCollection<string> allWindowHandles = driver.WindowHandles;
 
             // There should be two windows. We should also see each of the window titles at least once.
-            Assert.AreEqual(2, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.Exactly(2).Items);
             string handle1 = allWindowHandles[1];
             driver.SwitchTo().Window(handle1);
             driver.Close();
@@ -297,7 +289,7 @@ namespace OpenQA.Selenium
             WaitFor(WindowCountToBe(1), "Window count was not 1");
 
             allWindowHandles = driver.WindowHandles;
-            Assert.AreEqual(1, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.One.Items);
         }
 
         [Test]
@@ -317,7 +309,7 @@ namespace OpenQA.Selenium
             ReadOnlyCollection<string> allWindowHandles = driver.WindowHandles;
 
             // There should be two windows. We should also see each of the window titles at least once.
-            Assert.AreEqual(2, allWindowHandles.Count);
+            Assert.That(allWindowHandles, Has.Exactly(2).Items);
 
             foreach (string handle in allWindowHandles)
             {
@@ -331,9 +323,9 @@ namespace OpenQA.Selenium
             driver.SwitchTo().Window(mainHandle);
 
             string newHandle = driver.CurrentWindowHandle;
-            Assert.AreEqual(mainHandle, newHandle);
+            Assert.That(newHandle, Is.EqualTo(mainHandle));
 
-            Assert.AreEqual(1, driver.WindowHandles.Count);
+            Assert.That(driver.WindowHandles, Has.One.Items);
         }
 
         [Test]
@@ -389,8 +381,8 @@ namespace OpenQA.Selenium
             ReadOnlyCollection<string> handles = driver.WindowHandles;
 
             // At least the two handles we want should be there.
-            Assert.Contains(handle1, handles, "Should have contained current handle");
-            Assert.Contains(handle2, handles, "Should have contained result handle");
+            Assert.That(handles, Does.Contain(handle1), "Should have contained current handle");
+            Assert.That(handles, Does.Contain(handle2), "Should have contained result handle");
 
             // Some (semi-)clean up..
             driver.SwitchTo().Window(handle2);
@@ -469,9 +461,8 @@ namespace OpenQA.Selenium
                 }
                 catch (NoSuchWindowException)
                 {
+                    return false;
                 }
-
-                return false;
             };
         }
 
@@ -479,16 +470,14 @@ namespace OpenQA.Selenium
         {
             return () =>
             {
-                IAlert alert = null;
                 try
                 {
-                    alert = driver.SwitchTo().Alert();
+                    return driver.SwitchTo().Alert();
                 }
                 catch (NoAlertPresentException)
                 {
+                    return null;
                 }
-
-                return alert;
             };
         }
     }

@@ -1,3 +1,39 @@
+## 4.27.0
+
+- Add CDP for Chrome 131 and remove 128
+- Add Firefox CDP deprecation warnings
+- Update supported versions for Chrome DevTools
+- [bidi] Allow passing in uri for authentication handlers (#14386)
+- [bidi] Enable locate node tests for Chrome and Edge
+- [bidi] Ensure start nodes are serialized
+
+## 4.26.0
+
+- Add CDP for Chrome 130 and remove 127
+- Fix sendKeys command fail on FileDetector.handleFile error (#14663)
+- Update dependencies to latest versions to resolve security alerts
+- Close BiDi websocket connection (#14507)
+
+## 4.25.0
+
+- Add CDP for Chrome 129 and remove 126
+
+## 4.24.1
+
+- Close CDP websocket connection on driver.quit (#14501)
+
+## 4.24.0
+
+- [js] expose selenium version for node.js (#14325)
+- [bidi] Add authentication handlers
+- [bidi] Add high-level script command (#14293)
+- Handle optional dependency for @bazel/runfiles
+- remove console msg and safe exit if runfiles never found
+- fix rbe build(use global node process)
+- Fix error handling for missing runfiles
+- [ci] Use a tag to figure out what we might want to release (#14378)
+- Add CDP for Chrome 128 and remove 125
+
 ## 4.23.0
 
 - Expose pnpm as a tool we can use

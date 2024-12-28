@@ -122,15 +122,15 @@ module Selenium
         end
       end
 
-      def net_http_start(address, &block)
+      def net_http_start(address, &)
         http_proxy = ENV.fetch('http_proxy', nil) || ENV.fetch('HTTP_PROXY', nil)
         if http_proxy
           http_proxy = "http://#{http_proxy}" unless http_proxy.start_with?('http://')
           uri = URI.parse(http_proxy)
 
-          Net::HTTP.start(address, nil, uri.host, uri.port, &block)
+          Net::HTTP.start(address, nil, uri.host, uri.port, &)
         else
-          Net::HTTP.start(address, use_ssl: true, &block)
+          Net::HTTP.start(address, use_ssl: true, &)
         end
       end
 

@@ -242,7 +242,7 @@ class EdgeOptionsTest {
   private File createTempFile(Path tmpDir, String content) {
     try {
       Path file = Files.createTempFile(tmpDir, "tmp", "ext");
-      Files.write(file, content.getBytes(Charset.defaultCharset()));
+      Files.writeString(file, content, Charset.defaultCharset());
       return file.toFile();
     } catch (IOException e) {
       throw new UncheckedIOException(e);

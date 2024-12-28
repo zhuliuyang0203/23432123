@@ -79,7 +79,7 @@ module Selenium
           end
         end
 
-        def on_log(filter_by = nil, &block)
+        def on_log(filter_by = nil, &)
           unless filter_by.nil?
             check_valid_filter(filter_by)
 
@@ -89,14 +89,14 @@ module Selenium
             return
           end
 
-          on(:entry_added, &block)
+          on(:entry_added, &)
         end
 
         private
 
-        def on(event, &block)
+        def on(event, &)
           event = EVENTS[event] if event.is_a?(Symbol)
-          @bidi.add_callback("log.#{event}", &block)
+          @bidi.add_callback("log.#{event}", &)
         end
 
         def check_valid_filter(filter_by)

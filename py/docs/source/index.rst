@@ -35,7 +35,7 @@ If you have `pip <https://pip.pypa.io/>`_ on your system, you can simply install
 
 Alternately, you can download the source distribution from `PyPI <https://pypi.org/project/selenium/#files>`, unarchive it, and run::
 
-    python setup.py install
+    python -m pip install .
 
 Note: You may want to consider using `virtualenv <http://www.virtualenv.org/>`_ to create isolated Python environments.
 

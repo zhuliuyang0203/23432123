@@ -97,6 +97,7 @@ public class DistributorNodeAvailabilityTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -147,6 +148,7 @@ public class DistributorNodeAvailabilityTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(sessions);
@@ -219,6 +221,7 @@ public class DistributorNodeAvailabilityTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -281,6 +284,7 @@ public class DistributorNodeAvailabilityTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -338,6 +342,7 @@ public class DistributorNodeAvailabilityTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     LocalNode node =

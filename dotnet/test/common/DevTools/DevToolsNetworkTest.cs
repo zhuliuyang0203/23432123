@@ -1,3 +1,22 @@
+// <copyright file="DevToolsNetworkTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -6,10 +25,9 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.DevTools
 {
-    using CurrentCdpVersion = V127;
+    using CurrentCdpVersion = V131;
 
     [TestFixture]
-    [IgnoreBrowser(Selenium.Browser.Edge, "While CDP 127 is released for Edge")]
     public class DevToolsNetworkTest : DevToolsTestFixture
     {
         [Test]
@@ -204,7 +222,6 @@ namespace OpenQA.Selenium.DevTools
         }
 
         [Test]
-        [IgnorePlatform("Windows", "Not working properly")]
         [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Chrome DevTools Protocol")]
         [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Chrome DevTools Protocol")]
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
@@ -233,7 +250,8 @@ namespace OpenQA.Selenium.DevTools
             var searchResponse = await domains.Network.SearchInResponseBody(new CurrentCdpVersion.Network.SearchInResponseBodyCommandSettings()
             {
                 RequestId = requestIds[0],
-                Query = "/",
+                Query = ".*",
+                IsRegex = true
             });
 
             Assert.That(searchResponse.Result.Length > 0);
@@ -387,9 +405,10 @@ namespace OpenQA.Selenium.DevTools
                 if (string.Compare(e.Request.Method, "post", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     requestIds[0] = e.RequestId;
+                    requestSync.Set();
                 }
-                requestSync.Set();
             };
+
             domains.Network.RequestWillBeSent += requestWillBeSentHandler;
 
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("postForm.html");

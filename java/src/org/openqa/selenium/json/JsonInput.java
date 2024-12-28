@@ -39,8 +39,7 @@ import org.openqa.selenium.internal.Require;
 public class JsonInput implements Closeable {
 
   private final Reader source;
-  // FIXME: This flag is never set
-  private final boolean readPerformed = false;
+  private boolean readPerformed = false;
   private JsonTypeCoercer coercer;
   private PropertySetting setter;
   private final Input input;
@@ -49,6 +48,7 @@ public class JsonInput implements Closeable {
   private final Deque<Container> stack = new ArrayDeque<>();
 
   JsonInput(Reader source, JsonTypeCoercer coercer, PropertySetting setter) {
+
     this.source = Require.nonNull("Source", source);
     this.coercer = Require.nonNull("Coercer", coercer);
     this.input = new Input(source);
@@ -402,6 +402,10 @@ public class JsonInput implements Closeable {
     }
   }
 
+  private void markReadPerformed() {
+    readPerformed = true;
+  }
+
   /**
    * Read the next element from the JSON input stream as the specified type.
    *
@@ -413,6 +417,7 @@ public class JsonInput implements Closeable {
    * @throws UncheckedIOException if an I/O exception is encountered
    */
   public <T> T read(Type type) {
+    markReadPerformed();
     skipWhitespace(input);
 
     // Guard against reading an empty stream

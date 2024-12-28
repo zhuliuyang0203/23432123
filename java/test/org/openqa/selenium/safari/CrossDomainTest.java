@@ -41,7 +41,7 @@ class CrossDomainTest extends JupiterTestBase {
 
   @BeforeAll
   public static void startSecondServer() {
-    otherServer = new NettyAppServer();
+    otherServer = new NettyAppServer(false);
     otherServer.start();
 
     otherPages = new Pages(otherServer);

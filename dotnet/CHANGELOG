@@ -1,10 +1,69 @@
+v4.27.0
+======
+* Copyright dotnet (#13522)
+* Add CDP for Chrome 131 and remove 128
+* Add CDP deprecation warning for Firefox (#14759)
+* Add ChromiumNetworkConditions to command serialization (#14716)
+* Add Dictionary<string, string> as well-known types for json serialization
+* Add more well-known dictionary types for capability json serialization
+* Add reflection-based JSON serialization fallback to `Command`s (#14732)
+* Allow `RemoteSessionSettings` to use any value for metadata (#14726)
+* Deprecate WebElement.GetAttribute() (#14676)
+* Enable NRT on exceptional types (#14672)
+* Fix API docs static generation (#14651)
+* Fix `RelativeBy.Near` and empty list return (#14737)
+* Gracefully handle clashing device names in Actions (#14713)
+* Make FirefoxProfile AOT-safe (#14742)
+* Make Selenium Manager's AOT safety explicit (#14733)
+* Modernize exception handling in tests via assert that throws (#14776)
+* Propagate async throughout test setup and teardown (#14775)
+* Remove JSON serialization from `.ToString()` methods (#14736)
+* Solidify nullability of `PinnedScript` (#14708)
+* Update dependency System.Text.Json to 8.0.5
+
+v4.26.1
+======
+* [bidi] Reveal browsing context module in bidi instance (#14684)
+* Fix adding cookies when ReturnedCookie class is used (#14697)
+
+v4.26.0
+======
+* [bidi] Fix web socket communication for .net framework
+* Don't include http headers in internal logs (#14546)
+* Don't write trace log message when waiting until driver service is initialized (#14557)
+* Support GetLog command by Remote Web Driver (#14549)
+* Add more internal logs around CDP DevTools communication (#14558)
+* Interactions with Selenium Manager are AOT compatible (#14481)
+* Allow setting of PageDimensions and PageMargins in PrintOptions directly (#14593)
+* Fix devtools check in `NetworkManager` to determine CDP is supported (#14638)
+* Lazy-load Selenium manager binary location (#14639)
+* [bidi] Second round of BiDi implementation (#14566)
+* Add CDP for Chrome 130 and remove 127
+
+v4.25.0
+======
+* Add CDP for Chrome 129 and remove 126
+* BiDi implementation (#14318)
+* Add BiDi OriginalOpener in browsing context info
+* [bidi] Forward subscription options in browser context for log module
+* [bidi] Enable implicit ways to specify page ranges for printing
+* Workaround using pre-processor directive (#14499)
+* [bidi] Simplify browsing context type enumeration
+* [bidi] Expose BiDi associated reference in browsing context
+* [bidi] Rename entry point AsBidirectional to AsBiDirectional
+
+v4.24.0
+======
+* Migration from `Newtonsoft.Json` to `System.Text.Json` package (#14292)
+* Add CDP for Chrome 128 and remove 125
+
 v4.23.0
 ======
 * Log http requests/responses via internal DiagnosticsHttpHandler (#13978)
 * Kick off sending of request and log it in parallel
 * Return back protected synchronous Execute method in WebDriver
 * Fixed calling quit after not successful new session (#14242)
-* Add CDP for Chrome 127 and remove 124
+* Add CDP for Chrome 12 and remove 124
 
 
 v4.22.0

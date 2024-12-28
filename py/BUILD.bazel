@@ -62,18 +62,19 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.24.0.dev202407312116"
+SE_VERSION = "4.28.0.202411261607"
 
 BROWSER_VERSIONS = [
     "v85",
-    "v125",
-    "v126",
-    "v127",
+    "v131",
+    "v129",
+    "v130",
 ]
 
 TEST_DEPS = [
     requirement("attrs"),
     requirement("debugpy"),
+    requirement("filetype"),
     requirement("idna"),
     requirement("iniconfig"),
     requirement("importlib_metadata"),
@@ -228,10 +229,8 @@ pkg_files(
     name = "selenium-sdist-pkg",
     srcs = [
         "CHANGES",
-        "MANIFEST.in",
         "README.rst",
         "pyproject.toml",
-        "setup.py",
         ":license",
         ":selenium-pkg",
         ":selenium-pkginfo",
@@ -302,6 +301,9 @@ py_wheel(
         "py/",
     ],
     summary = "Official Python bindings for Selenium WebDriver",
+    tags = [
+        "release-artifact",
+    ],
     version = SE_VERSION,
     visibility = ["//visibility:public"],
     deps = [
@@ -332,8 +334,7 @@ py_library(
         "test/selenium/webdriver/support/conftest.py",
     ],
     data = [
-        "pytest.ini",
-        "setup.cfg",
+        "pyproject.toml",
         "test/selenium/webdriver/common/test_file.txt",
         "test/selenium/webdriver/common/test_file2.txt",
         ":webextensions-selenium-example-unsigned-zip",
@@ -594,9 +595,7 @@ py_test_suite(
     name = "test-safari",
     size = "large",
     srcs = glob([
-        "test/selenium/webdriver/common/**/*.py",
         "test/selenium/webdriver/safari/**/*.py",
-        "test/selenium/webdriver/support/**/*.py",
     ]),
     args = [
         "--instafail",

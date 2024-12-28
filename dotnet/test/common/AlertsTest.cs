@@ -1,3 +1,22 @@
+// <copyright file="AlertsTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -29,7 +48,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -41,7 +60,9 @@ namespace OpenQA.Selenium
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
             try
             {
-                Assert.That(() => alert.SendKeys(null), Throws.ArgumentNullException);
+                Assert.That(
+                    () => alert.SendKeys(null),
+                    Throws.ArgumentNullException);
             }
             finally
             {
@@ -60,7 +81,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -74,7 +95,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -88,7 +109,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Prompt", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Prompt"));
         }
 
         [Test]
@@ -102,7 +123,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Prompt", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Prompt"));
         }
 
         [Test]
@@ -117,7 +138,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             string result = driver.FindElement(By.Id("text")).Text;
-            Assert.AreEqual("cheese", result);
+            Assert.That(result, Is.EqualTo("cheese"));
         }
 
         [Test]
@@ -128,13 +149,12 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("alert")).Click();
 
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
+
             try
             {
-                alert.SendKeys("cheese");
-                Assert.Fail("Expected exception");
-            }
-            catch (ElementNotInteractableException)
-            {
+                Assert.That(
+                    () => alert.SendKeys("cheese"),
+                    Throws.TypeOf<ElementNotInteractableException>());
             }
             finally
             {
@@ -153,7 +173,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("cheese", value);
+            Assert.That(value, Is.EqualTo("cheese"));
         }
 
         [Test]
@@ -167,7 +187,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("Enter something", value);
+            Assert.That(value, Is.EqualTo("Enter something"));
         }
 
         [Test]
@@ -179,8 +199,10 @@ namespace OpenQA.Selenium
 
             IAlert alert = WaitFor<IAlert>(AlertToBePresent, "No alert found");
             alert.Dismiss();
-            string text;
-            Assert.That(() => text = alert.Text, Throws.InstanceOf<NoAlertPresentException>());
+
+            Assert.That(
+                () => alert.Text,
+                Throws.TypeOf<NoAlertPresentException>());
         }
 
         [Test]
@@ -200,7 +222,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -222,7 +244,7 @@ namespace OpenQA.Selenium
             alert.Accept();
 
             // If we can perform any action, we're good to go
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         [Test]
@@ -230,7 +252,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = CreateAlertPage("cheese");
 
-            Assert.That(() => AlertToBePresent(), Throws.InstanceOf<NoAlertPresentException>());
+            Assert.That(
+                () => AlertToBePresent(),
+                Throws.TypeOf<NoAlertPresentException>());
         }
 
         [Test]
@@ -251,15 +275,9 @@ namespace OpenQA.Selenium
                 driver.Close();
                 WaitFor(WindowHandleCountToBe(1), "Window count was not 1");
 
-                try
-                {
-                    AlertToBePresent().Accept();
-                    Assert.Fail("Expected exception");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected
-                }
+                Assert.That(
+                    () => AlertToBePresent().Accept(),
+                    Throws.TypeOf<NoSuchWindowException>());
 
             }
             finally
@@ -280,7 +298,7 @@ namespace OpenQA.Selenium
 
             IWebElement element = driver.FindElement(By.Id("text"));
             WaitFor(ElementTextToEqual(element, "This is a default value"), "Element text was not 'This is a default value'");
-            Assert.AreEqual("This is a default value", element.Text);
+            Assert.That(element.Text, Is.EqualTo("This is a default value"));
         }
 
         [Test]
@@ -293,7 +311,7 @@ namespace OpenQA.Selenium
             alert.Dismiss();
             IWebElement element = driver.FindElement(By.Id("text"));
             WaitFor(ElementTextToEqual(element, "null"), "Element text was not 'null'");
-            Assert.AreEqual("null", element.Text);
+            Assert.That(element.Text, Is.EqualTo("null"));
         }
 
         [Test]
@@ -302,17 +320,22 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
                 .WithScripts(
-                    "function setInnerText(id, value) {",
-                    "  document.getElementById(id).innerHTML = '<p>' + value + '</p>';",
-                    "}",
-                    "function displayTwoPrompts() {",
-                    "  setInnerText('text1', prompt('First'));",
-                    "  setInnerText('text2', prompt('Second'));",
-                    "}")
+                    """
+                    function setInnerText(id, value) {
+                      document.getElementById(id).innerHTML = '<p>' + value + '</p>';
+                    }
+
+                    function displayTwoPrompts() {
+                      setInnerText('text1', prompt('First'));
+                      setInnerText('text2', prompt('Second'));
+                    }
+                    """)
                 .WithBody(
-                    "<a href='#' id='double-prompt' onclick='displayTwoPrompts();'>click me</a>",
-                    "<div id='text1'></div>",
-                    "<div id='text2'></div>"));
+                    """
+                    <a href='#' id='double-prompt' onclick='displayTwoPrompts();'>click me</a>
+                    <div id='text1'></div>
+                    <div id='text2'></div>
+                    """));
 
             driver.FindElement(By.Id("double-prompt")).Click();
 
@@ -326,17 +349,17 @@ namespace OpenQA.Selenium
 
             IWebElement element1 = driver.FindElement(By.Id("text1"));
             WaitFor(ElementTextToEqual(element1, "brie"), "Element text was not 'brie'");
-            Assert.AreEqual("brie", element1.Text);
+            Assert.That(element1.Text, Is.EqualTo("brie"));
             IWebElement element2 = driver.FindElement(By.Id("text2"));
             WaitFor(ElementTextToEqual(element2, "cheddar"), "Element text was not 'cheddar'");
-            Assert.AreEqual("cheddar", element2.Text);
+            Assert.That(element2.Text, Is.EqualTo("cheddar"));
         }
 
         [Test]
         public void ShouldHandleAlertOnPageLoad()
         {
             string pageWithOnLoad = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
-                .WithOnLoad("javascript:alert(\"onload\")")
+                .WithOnLoad("""javascript:alert("onload")""")
                 .WithBody("<p>Page with onload event handler</p>"));
             driver.Url = EnvironmentManager.Instance.UrlBuilder.CreateInlinePage(new InlinePage()
                 .WithBody(string.Format("<a id='open-page-with-onload-alert' href='{0}'>open new page</a>", pageWithOnLoad)));
@@ -347,7 +370,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("onload", value);
+            Assert.That(value, Is.EqualTo("onload"));
             IWebElement element = driver.FindElement(By.TagName("p"));
             WaitFor(ElementTextToEqual(element, "Page with onload event handler"), "Element text was not 'Page with onload event handler'");
         }
@@ -364,7 +387,7 @@ namespace OpenQA.Selenium
             string value = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("onload", value);
+            Assert.That(value, Is.EqualTo("onload"));
             WaitFor(ElementTextToEqual(driver.FindElement(By.TagName("p")), "Page with onload event handler"), "Could not find element with text 'Page with onload event handler'");
         }
 
@@ -389,20 +412,15 @@ namespace OpenQA.Selenium
                 driver.FindElement(By.Id("open-new-window")).Click();
                 List<String> allWindows = new List<string>(driver.WindowHandles);
                 allWindows.Remove(mainWindow);
-                Assert.AreEqual(1, allWindows.Count);
+                Assert.That(allWindows, Has.One.Items);
                 onloadWindow = allWindows[0];
 
-                try
+                Assert.That(() =>
                 {
                     IWebElement el = driver.FindElement(By.Id("open-new-window"));
                     WaitFor<IAlert>(AlertToBePresent, TimeSpan.FromSeconds(5), "No alert found");
-                    Assert.Fail("Expected exception");
-                }
-                catch (WebDriverException)
-                {
-                    // An operation timed out exception is expected,
-                    // since we're using WaitFor<T>.
-                }
+                },
+                Throws.TypeOf<WebDriverException>());
 
             }
             finally
@@ -423,15 +441,10 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Id("alert")).Click();
             WaitFor<IAlert>(AlertToBePresent, "No alert found");
-            try
-            {
-                string title = driver.Title;
-                Assert.Fail("Expected UnhandledAlertException");
-            }
-            catch (UnhandledAlertException e)
-            {
-                Assert.AreEqual("cheese", e.AlertText);
-            }
+
+            Assert.That(
+                () => driver.Title,
+                Throws.TypeOf<UnhandledAlertException>().With.Property(nameof(UnhandledAlertException.AlertText)).EqualTo("cheese"));
         }
 
         [Test]
@@ -459,8 +472,8 @@ namespace OpenQA.Selenium
             string text = alert.Text;
             alert.Accept();
 
-            Assert.AreEqual("Tasty cheese", text);
-            Assert.AreEqual("Testing Alerts", driver.Title);
+            Assert.That(text, Is.EqualTo("Tasty cheese"));
+            Assert.That(driver.Title, Is.EqualTo("Testing Alerts"));
         }
 
         private IAlert AlertToBePresent()
@@ -503,16 +516,14 @@ namespace OpenQA.Selenium
         {
             return () =>
             {
-                IWebElement foundElement = null;
                 try
                 {
-                    foundElement = driver.FindElement(By.Id("open-page-with-onunload-alert"));
+                    return driver.FindElement(By.Id("open-page-with-onunload-alert"));
                 }
                 catch (NoSuchElementException)
                 {
+                    return null;
                 }
-
-                return foundElement;
             };
         }
 
@@ -535,9 +546,8 @@ namespace OpenQA.Selenium
                 }
                 catch (NoSuchWindowException)
                 {
+                    return false;
                 }
-
-                return false;
             };
         }
 

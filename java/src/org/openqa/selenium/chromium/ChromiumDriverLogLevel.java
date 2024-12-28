@@ -17,6 +17,7 @@
 
 package org.openqa.selenium.chromium;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -46,7 +47,7 @@ public enum ChromiumDriverLogLevel {
 
   @Override
   public String toString() {
-    return super.toString().toLowerCase();
+    return super.toString().toLowerCase(Locale.ENGLISH);
   }
 
   public static ChromiumDriverLogLevel fromString(String text) {

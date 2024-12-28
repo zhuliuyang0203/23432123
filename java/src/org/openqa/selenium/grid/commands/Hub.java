@@ -42,7 +42,6 @@ import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.grid.TemplateGridServerCommand;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.config.Role;
-import org.openqa.selenium.grid.distributor.Distributor;
 import org.openqa.selenium.grid.distributor.config.DistributorOptions;
 import org.openqa.selenium.grid.distributor.local.LocalDistributor;
 import org.openqa.selenium.grid.graphql.GraphqlHandler;
@@ -57,9 +56,7 @@ import org.openqa.selenium.grid.server.BaseServerOptions;
 import org.openqa.selenium.grid.server.EventBusOptions;
 import org.openqa.selenium.grid.server.NetworkOptions;
 import org.openqa.selenium.grid.server.Server;
-import org.openqa.selenium.grid.sessionmap.SessionMap;
 import org.openqa.selenium.grid.sessionmap.local.LocalSessionMap;
-import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 import org.openqa.selenium.grid.sessionqueue.config.NewSessionQueueOptions;
 import org.openqa.selenium.grid.sessionqueue.local.LocalNewSessionQueue;
 import org.openqa.selenium.grid.web.CombinedHandler;
@@ -120,7 +117,7 @@ public class Hub extends TemplateGridServerCommand {
 
     CombinedHandler handler = new CombinedHandler();
 
-    SessionMap sessions = new LocalSessionMap(tracer, bus);
+    LocalSessionMap sessions = new LocalSessionMap(tracer, bus);
     handler.addHandler(sessions);
 
     BaseServerOptions serverOptions = new BaseServerOptions(config);
@@ -141,17 +138,18 @@ public class Hub extends TemplateGridServerCommand {
 
     DistributorOptions distributorOptions = new DistributorOptions(config);
     NewSessionQueueOptions newSessionRequestOptions = new NewSessionQueueOptions(config);
-    NewSessionQueue queue =
+    LocalNewSessionQueue queue =
         new LocalNewSessionQueue(
             tracer,
             distributorOptions.getSlotMatcher(),
             newSessionRequestOptions.getSessionRequestTimeoutPeriod(),
             newSessionRequestOptions.getSessionRequestTimeout(),
+            newSessionRequestOptions.getMaximumResponseDelay(),
             secret,
             newSessionRequestOptions.getBatchSize());
     handler.addHandler(queue);
 
-    Distributor distributor =
+    LocalDistributor distributor =
         new LocalDistributor(
             tracer,
             bus,
@@ -212,7 +210,15 @@ public class Hub extends TemplateGridServerCommand {
     // these checks
     httpHandler = combine(httpHandler, Route.get("/readyz").to(() -> readinessCheck));
 
-    return new Handlers(httpHandler, new ProxyWebsocketsIntoGrid(clientFactory, sessions));
+    return new Handlers(httpHandler, new ProxyWebsocketsIntoGrid(clientFactory, sessions)) {
+      @Override
+      public void close() {
+        router.close();
+        distributor.close();
+        queue.close();
+        bus.close();
+      }
+    };
   }
 
   @Override

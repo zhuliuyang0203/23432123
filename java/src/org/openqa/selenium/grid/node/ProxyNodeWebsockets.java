@@ -94,6 +94,13 @@ public class ProxyNodeWebsockets
       return Optional.empty();
     }
 
+    // ensure one session does not open to many connections, this might have a negative impact on
+    // the grid health
+    if (!node.tryAcquireConnection(id)) {
+      LOG.warning("Too many websocket connections initiated by " + id);
+      return Optional.empty();
+    }
+
     Session session = node.getSession(id);
     Capabilities caps = session.getCapabilities();
     LOG.fine("Scanning for endpoint: " + caps);
@@ -230,7 +237,7 @@ public class ProxyNodeWebsockets
       WebSocket upstream =
           client.openSocket(
               new HttpRequest(GET, uri.toString()),
-              new ForwardingListener(downstream, sessionConsumer, sessionId));
+              new ForwardingListener(node, downstream, sessionConsumer, sessionId));
 
       return (msg) -> {
         try {
@@ -253,12 +260,17 @@ public class ProxyNodeWebsockets
   }
 
   private static class ForwardingListener implements WebSocket.Listener {
+    private final Node node;
     private final Consumer<Message> downstream;
     private final Consumer<SessionId> sessionConsumer;
     private final SessionId sessionId;
 
     public ForwardingListener(
-        Consumer<Message> downstream, Consumer<SessionId> sessionConsumer, SessionId sessionId) {
+        Node node,
+        Consumer<Message> downstream,
+        Consumer<SessionId> sessionConsumer,
+        SessionId sessionId) {
+      this.node = node;
       this.downstream = Objects.requireNonNull(downstream);
       this.sessionConsumer = Objects.requireNonNull(sessionConsumer);
       this.sessionId = Objects.requireNonNull(sessionId);
@@ -273,7 +285,7 @@ public class ProxyNodeWebsockets
     @Override
     public void onClose(int code, String reason) {
       downstream.accept(new CloseMessage(code, reason));
-      sessionConsumer.accept(sessionId);
+      node.releaseConnection(sessionId);
     }
 
     @Override

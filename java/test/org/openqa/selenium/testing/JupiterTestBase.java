@@ -22,6 +22,8 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Optional;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +38,8 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class JupiterTestBase {
+
+  private static final Logger LOG = Logger.getLogger(JupiterTestBase.class.getName());
 
   @RegisterExtension protected static SeleniumExtension seleniumExtension = new SeleniumExtension();
 
@@ -54,8 +58,26 @@ public abstract class JupiterTestBase {
 
   @BeforeEach
   public void prepareEnvironment() {
-    environment = GlobalTestEnvironment.getOrCreate(InProcessTestEnvironment::new);
+    boolean needsSecureServer =
+        Optional.ofNullable(this.getClass().getAnnotation(NeedsSecureServer.class))
+            .map(NeedsSecureServer::value)
+            .orElse(false);
+
+    environment =
+        GlobalTestEnvironment.getOrCreate(() -> new InProcessTestEnvironment(needsSecureServer));
     appServer = environment.getAppServer();
+
+    if (needsSecureServer) {
+      try {
+        appServer.whereIsSecure("/");
+      } catch (IllegalStateException ex) {
+        // this should not happen with bazel, a new JVM is used for each class
+        // the annotation is on class level, so we should never see this
+        LOG.info("appServer is restarted with secureServer=true");
+        environment.stop();
+        environment = new InProcessTestEnvironment(true);
+      }
+    }
 
     pages = new Pages(appServer);
 

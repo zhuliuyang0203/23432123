@@ -1,3 +1,74 @@
+v4.27.0
+======
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings
+* Throw Error When Using Unsupported Linux ARM (#14616)
+* Enhance error message for NoSuchElementException and return unmodifiable set for pinned scripts (#14707)
+* Fix SpotBugs bugs in the Selenium manager (#14608)
+* Allow to cancel a pending http request
+* Case insensitive header names in http requests (#14095)
+* Consume the input of the connection
+* Deleted the deprecated FormEncodedData (#14688)
+* Add method to select options containing the provided text (#14426)
+* Remove toml parser warning (#14711)
+* Simplify reading http headers
+* Mark WebElement.getAttribute deprecated (#14666)
+* Search windows by name without recursion (#14782)
+* [bidi] Add network request handler APIs (#14424)
+* [bidi] Fix the mode "closed" for a node
+* [grid] TomlConfig: migrate TOML library to tomlj/tomlj (#14470)
+* [grid] Avoid starting a session which will be disposed after start
+* [grid] Cancel pending request on client timeout
+* [grid] Check session ownership once
+* [grid] Detect a client timeout while session creation #14743
+* [grid] Prevent NPE in handling request with unsupported http method
+* [grid] Retry creating a session in a distributed grid
+* [grid] Shutdown the server backend on stop
+* [grid] Speed up the server shutdown
+* [grid] Stop a stale session more graceful
+* [grid] Stop polling events on close
+
+v4.26.0
+======
+* Add CDP for Chrome 130 and remove 127
+* Add PAC proxy url to arguments for Selenium Manager (#14506)
+* Prevent closing the stdin, stdout, stderr streams (#14569)
+* Increasing of properties scope for better Appium compatibility (#14183)
+* Fix decoding of line endings (#14539)
+* Fix SpotBugs findings in `ChromiumDriver` and `PortProber` (#14589)
+* Fix `v*Network.java` conditions (#14585)
+* [grid] Enable the httpclient to perform async requests (#14409)
+* [grid] Limit the number of websocket connections per session (#14410)
+* [grid] Improvement for Node handling (#14628)
+* [grid] Add node sessionTimeout to Grid status (#14582)
+* [grid] Capability se:vncEnabled value based on list of vnc-env-var (#14584)
+* [grid] UI Sessions list view sort Duration in ascending by default (#14599)
+* [grid] UI Liveview disconnect noVNC websocket when closing dialog (#14598)
+* [grid] UI Overview is able to sort Nodes capabilities (#14571)
+
+v4.25.0
+======
+* Add CDP for Chrome 129 and remove 126
+* replace `fedcm` links with new ones (#14478)
+* toml: warn about upcoming change enforcing string to have quotes (#14491)
+* Escape cookie values when required for tests (#14486)
+
+v4.24.0
+======
+* Add "se" prefixed capabilities to session response (#14323)
+* Ensure all prefixed caps in request are added in response
+* [bidi] return the id of the listener added
+* [grid] shutdown the websocket on unexpected failures
+* Add JSpecify annotations to WebElement and SearchContext (#14291)
+* Add JSpecify annotations for WebDriver and 3 other interfaces (#14371)
+* Implement getAttributes() method of MBean, and update Number-based MBean attributes to return Number objects instead of Strings (#14153)
+* [grid] shutdown the client related to a websocket
+* [grid] release the upstream websocket
+* [grid] close the httpclient after connecting the websocket failed
+* [bidi] Add execute script high-level API (#14330)
+* [ci] Use a tag to figure out what we might want to release (#14378)
+* Add CDP for Chrome 128 and remove 125
+
 v4.23.1
 ======
 * [bidi] Add dom mutation handler support (#14304)

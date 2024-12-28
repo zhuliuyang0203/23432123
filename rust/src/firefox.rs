@@ -223,9 +223,11 @@ impl SeleniumManager for FirefoxManager {
             _ => {
                 self.assert_online_or_err(OFFLINE_REQUEST_ERR_MSG)?;
 
+                let driver_version_url =
+                    self.get_driver_mirror_versions_url_or_default(DRIVER_VERSIONS_URL);
                 let driver_version = match parse_json_from_url::<GeckodriverReleases>(
                     self.get_http_client(),
-                    DRIVER_VERSIONS_URL,
+                    &driver_version_url,
                 ) {
                     Ok(driver_releases) => {
                         let major_browser_version_int =
@@ -476,9 +478,10 @@ impl SeleniumManager for FirefoxManager {
             }
 
             let mut firefox_versions =
-                self.request_versions_from_online(FIREFOX_HISTORY_MAJOR_ENDPOINT)?;
+                self.request_versions_from_online(FIREFOX_HISTORY_ENDPOINT)?;
             if firefox_versions.is_empty() {
-                firefox_versions = self.request_versions_from_online(FIREFOX_HISTORY_ENDPOINT)?;
+                firefox_versions =
+                    self.request_versions_from_online(FIREFOX_HISTORY_MAJOR_ENDPOINT)?;
                 if firefox_versions.is_empty() {
                     firefox_versions =
                         self.request_versions_from_online(FIREFOX_HISTORY_DEV_ENDPOINT)?;

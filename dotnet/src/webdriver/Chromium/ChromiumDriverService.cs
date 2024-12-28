@@ -1,19 +1,20 @@
-// <copyright file="ChromiumDriverService.cs" company="WebDriver Committers">
+// <copyright file="ChromiumDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
@@ -207,7 +208,7 @@ namespace OpenQA.Selenium.Chromium
             // straightforward as you might hope.
             // See: http://mono.wikia.com/wiki/Detecting_the_execution_platform
             // and https://msdn.microsoft.com/en-us/library/3a8hyw88(v=vs.110).aspx
-            const int PlatformMonoUnixValue = 128;
+            const PlatformID PlatformIDMonoUnix = (PlatformID)128;
 
             switch (Environment.OSVersion.Platform)
             {
@@ -220,17 +221,14 @@ namespace OpenQA.Selenium.Chromium
 
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:
+                case PlatformIDMonoUnix:
                     break;
 
                 // Don't handle the Xbox case. Let default handle it.
                 // case PlatformID.Xbox:
                 //     break;
-                default:
-                    if ((int)Environment.OSVersion.Platform == PlatformMonoUnixValue)
-                    {
-                        break;
-                    }
 
+                default:
                     throw new WebDriverException("Unsupported platform: " + Environment.OSVersion.Platform);
             }
 

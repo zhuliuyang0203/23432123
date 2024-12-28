@@ -21,8 +21,8 @@ module Selenium
   module WebDriver
     class BiDi
       class LogHandler
-        ConsoleLogEntry = BiDi::Struct.new(:level, :text, :timestamp, :method, :args, :type)
-        JavaScriptLogEntry = BiDi::Struct.new(:level, :text, :timestamp, :stack_trace, :type)
+        ConsoleLogEntry = BiDi::Struct.new(:level, :text, :timestamp, :stack_trace, :type, :source, :method, :args)
+        JavaScriptLogEntry = BiDi::Struct.new(:level, :text, :timestamp, :stack_trace, :type, :source)
 
         def initialize(bidi)
           @bidi = bidi
@@ -30,6 +30,7 @@ module Selenium
         end
 
         # @return [int] id of the handler
+        # steep:ignore:start
         def add_message_handler(type)
           subscribe_log_entry unless @log_entry_subscribed
           @bidi.add_callback('log.entryAdded') do |params|
@@ -39,6 +40,7 @@ module Selenium
             end
           end
         end
+        # steep:ignore:end
 
         # @param [int] id of the handler previously added
         def remove_message_handler(id)

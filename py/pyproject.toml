@@ -1,3 +1,147 @@
 [build-system]
 requires = ["setuptools", "setuptools-rust"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "selenium"
+version = "4.28.0.202411261607"
+license = { text = "Apache 2.0" }
+description = "Official Python bindings for Selenium WebDriver."
+readme = "README.rst"
+requires-python = "~=3.8"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS :: MacOS X",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    ]
+dependencies = [
+    "urllib3[socks]>=1.26,<3",
+    "trio~=0.17",
+    "trio-websocket~=0.9",
+    "certifi>=2021.10.8",
+    "typing_extensions~=4.9",
+    "websocket-client~=1.8",
+    ]
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+include = ["selenium*"]
+exclude = ["test*"]
+namespaces = false
+# include-package-data is `true` by default in pyproject.toml
+
+[[tool.setuptools-rust.bins]]
+target = "selenium.webdriver.common.selenium-manager"
+
+[project.urls]
+Repository = "https://github.com/SeleniumHQ/selenium/"
+BugTracker = "https://github.com/SeleniumHQ/selenium/issues"
+Changelog = "https://github.com/SeleniumHQ/selenium/blob/trunk/py/CHANGES"
+Documentation = "https://www.selenium.dev/documentation/overview/"
+SourceCode = "https://github.com/SeleniumHQ/selenium/tree/trunk/py"
+
+[tool.setuptools.package-data]
+selenium_package = [
+    "*.py",
+    "*.rst",
+    "*.json",
+    "*.xpi",
+    "*.js",
+    "py.typed",
+    "prune*",
+    "selenium.egg-info*",
+    "selenium-manager",
+    "selenium-manager.exe",
+    "CHANGES",
+    "LICENSE"
+]
+
+[tool.pytest.ini_options]
+console_output_style = "progress"
+faulthandler_timeout = 60
+log_cli = true
+trio_mode = true
+markers = [
+    "xfail_chrome: Tests expected to fail in Chrome",
+    "xfail_edge: Tests expected to fail in Edge",
+    "xfail_firefox: Tests expected to fail in Firefox",
+    "xfail_ie: Tests expected to fail in IE",
+    "xfail_remote: Tests expected to fail with Remote webdriver",
+    "xfail_safari: Tests expected to fail in Safari",
+    "xfail_webkitgtk: Tests expected to fail in webkitgtk",
+    "no_driver_after_test: If there are no drivers after the test it will create a new one."
+]
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["test"]
+
+# mypy global options
+[tool.mypy]
+# The aim in future here is we would be able to turn (most) of these flags on, however the typing technical
+# debt is quite colossal right now.  For now we should maybe get everything working with the config here
+# then look at going after partially or completely untyped defs as a phase-2.
+files = "selenium"
+# warn about per-module sections in the config file that do not match any files processed.
+warn_unused_configs = true
+# disallows subclassing of typing.Any.
+disallow_subclassing_any = false
+# disallow usage of generic types that do not specify explicit type parameters.
+disallow_any_generics = false
+# disallow calling functions without type annotations from functions that have type annotations.
+disallow_untyped_calls = false
+# disallow defining functions without type annotations or with incomplete annotations.
+disallow_untyped_defs = false
+# disallow defining functions with incomplete type annotations.
+disallow_incomplete_defs = false
+# type-checks the interior of functions without type annotations.
+check_untyped_defs = false
+# reports an error whenever a function with type annotations is decorated with a decorator without annotations.
+disallow_untyped_decorators = false
+# changes the treatment of arguments with a default value of None by not implicitly making their type `typing.Optional`.
+no_implicit_optional = false
+# warns about casting an expression to it's inferred type.
+warn_redundant_casts = true
+# warns about unneeded `# type: ignore` comments.
+warn_unused_ignores = true
+# warns when returning a value with typing.Any from a function with a non typing.Any return type.
+warn_return_any = false
+# Shows a warning when encountering any code inferred to be unreachable after performing type analysis.
+warn_unreachable = false
+
+# mypy module specific options
+[[tool.mypy.trio_websocket]]
+# suppress error messages about imports that cannot be resolved.
+ignore_missing_imports = true
+
+[[tool.mypy._winreg]]
+# suppress error messages about imports that cannot be resolved.
+ignore_missing_imports = true
+
+[tool.isort]
+# isort is a common python tool for keeping imports nicely formatted.
+# Automatically keep imports alphabetically sorted, on single lines in
+# PEP recommended sections (https://peps.python.org/pep-0008/#imports)
+# files or individual lines can be ignored via `# isort:skip|# isort:skip_file`.
+profile = "black"
+py_version=38
+force_single_line = true
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+
+[tool.docformatter]
+recursive = true

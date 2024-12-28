@@ -83,10 +83,12 @@ module Selenium
 
         it 'errors when not set', {except: {browser: :firefox, reason: 'grid always sets true and firefox returns it'},
                                    exclude: {browser: :safari, reason: 'grid hangs'}} do
-          expect {
-            driver.downloadable_files
-          }.to raise_exception(Error::WebDriverError,
-                               'You must enable downloads in order to work with downloadable files.')
+          reset_driver!(enable_downloads: false) do |driver|
+            expect {
+              driver.downloadable_files
+            }.to raise_exception(Error::WebDriverError,
+                                 'You must enable downloads in order to work with downloadable files.')
+          end
         end
 
         private

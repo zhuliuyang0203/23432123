@@ -21,10 +21,12 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Set;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.data.NodeStatus;
+import org.openqa.selenium.grid.data.SemanticVersionComparator;
 import org.openqa.selenium.grid.data.Slot;
 import org.openqa.selenium.grid.data.SlotId;
 import org.openqa.selenium.grid.data.SlotMatcher;
@@ -53,6 +55,11 @@ public class DefaultSlotSelector implements SlotSelector {
                 .thenComparingDouble(NodeStatus::getLoad)
                 // Then last session created (oldest first), so natural ordering again
                 .thenComparingLong(NodeStatus::getLastSessionCreated)
+                // Then sort by stereotype browserVersion (descending order). SemVer comparison with
+                // considering empty value at first.
+                .thenComparing(
+                    Comparator.comparing(
+                        NodeStatus::getBrowserVersion, new SemanticVersionComparator().reversed()))
                 // And use the node id as a tie-breaker.
                 .thenComparing(NodeStatus::getNodeId))
         .flatMap(
@@ -67,7 +74,7 @@ public class DefaultSlotSelector implements SlotSelector {
   @VisibleForTesting
   long getNumberOfSupportedBrowsers(NodeStatus nodeStatus) {
     return nodeStatus.getSlots().stream()
-        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase())
+        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase(Locale.ENGLISH))
         .distinct()
         .count();
   }

@@ -97,9 +97,9 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v125:v125.publish
-  //java/src/org/openqa/selenium/devtools/v126:v126.publish
-  //java/src/org/openqa/selenium/devtools/v127:v127.publish
+  //java/src/org/openqa/selenium/devtools/v131:v131.publish
+  //java/src/org/openqa/selenium/devtools/v129:v129.publish
+  //java/src/org/openqa/selenium/devtools/v130:v130.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
@@ -331,7 +331,7 @@ task ios_driver: [
 # ./go java:package['--config=release']
 desc 'Create stamped zipped assets for Java for uploading to GitHub'
 task :'java-release-zip' do
-  Rake::Task['java:package'].invoke('--stamp')
+  Rake::Task['java:package'].invoke('--config=remote_release')
 end
 
 task 'release-java': %i[java-release-zip publish-maven]
@@ -450,7 +450,7 @@ namespace :node do
     nightly = args.delete('nightly')
     Rake::Task['node:version'].invoke('nightly') if nightly
 
-    Bazel.execute('run', ['--stamp'], '//javascript/node/selenium-webdriver:selenium-webdriver.publish')
+    Bazel.execute('run', ['--config=release'], '//javascript/node/selenium-webdriver:selenium-webdriver.publish')
   end
 
   desc 'Release Node npm package'
@@ -483,7 +483,6 @@ namespace :node do
     new_version = updated_version(old_version, arguments[:version], nightly)
 
     ['javascript/node/selenium-webdriver/package.json',
-     'package-lock.json',
      'javascript/node/selenium-webdriver/BUILD.bazel'].each do |file|
       text = File.read(file).gsub(old_version, new_version)
       File.open(file, 'w') { |f| f.puts text }
@@ -513,7 +512,7 @@ namespace :py do
     Rake::Task['py:version'].invoke('nightly') if nightly
 
     command = nightly ? '//py:selenium-release-nightly' : '//py:selenium-release'
-    Bazel.execute('run', ['--stamp'], command)
+    Bazel.execute('run', ['--config=release'], command)
   end
 
   desc 'generate and copy files required for local development'
@@ -583,10 +582,10 @@ namespace :py do
   desc 'Update Python version'
   task :version, [:version] do |_task, arguments|
     old_version = python_version
-    nightly = ".dev#{Time.now.strftime('%Y%m%d%H%M')}"
+    nightly = ".#{Time.now.strftime('%Y%m%d%H%M')}"
     new_version = updated_version(old_version, arguments[:version], nightly)
 
-    ['py/setup.py',
+    ['py/pyproject.toml',
      'py/BUILD.bazel',
      'py/selenium/__init__.py',
      'py/selenium/webdriver/__init__.py',
@@ -680,10 +679,10 @@ namespace :rb do
 
     if nightly
       Bazel.execute('run', [], '//rb:selenium-webdriver-bump-nightly-version')
-      Bazel.execute('run', ['--stamp'], '//rb:selenium-webdriver-release-nightly')
+      Bazel.execute('run', ['--config=release'], '//rb:selenium-webdriver-release-nightly')
     else
-      Bazel.execute('run', ['--stamp'], '//rb:selenium-webdriver-release')
-      Bazel.execute('run', ['--stamp'], '//rb:selenium-devtools-release')
+      Bazel.execute('run', ['--config=release'], '//rb:selenium-webdriver-release')
+      Bazel.execute('run', ['--config=release'], '//rb:selenium-devtools-release')
     end
   end
 
@@ -753,7 +752,7 @@ namespace :dotnet do
     args = arguments.to_a.compact
     nightly = args.delete('nightly')
     Rake::Task['dotnet:version'].invoke('nightly') if nightly
-    Rake::Task['dotnet:package'].invoke('--stamp')
+    Rake::Task['dotnet:package'].invoke('--config=release')
 
     api_key = ENV.fetch('NUGET_API_KEY', nil)
     push_destination = 'https://api.nuget.org/v3/index.json'
@@ -792,7 +791,7 @@ namespace :dotnet do
       sh 'docfx dotnet/docs/docfx.json'
     rescue StandardError
       case $CHILD_STATUS.exitstatus
-      when 127
+      when 130
         raise 'Ensure the dotnet/tools directory is added to your PATH environment variable (e.g., `~/.dotnet/tools`)'
       when 255
         puts '.NET documentation build failed, likely because of DevTools namespacing. This is ok; continuing'
@@ -839,7 +838,7 @@ namespace :java do
 
   desc 'Package Java bindings and grid into releasable packages and stage for release'
   task :package do |_task, arguments|
-    args = arguments.to_a.compact.empty? ? ['--stamp'] : arguments.to_a.compact
+    args = arguments.to_a.compact.empty? ? ['--config=release'] : arguments.to_a.compact
     Bazel.execute('build', args, '//java/src/org/openqa/selenium:client-zip')
     Bazel.execute('build', args, '//java/src/org/openqa/selenium/grid:server-zip')
     Bazel.execute('build', args, '//java/src/org/openqa/selenium/grid:executable-grid')
@@ -872,9 +871,10 @@ namespace :java do
     ENV['GPG_SIGN'] = (!nightly).to_s
 
     Rake::Task['java:version'].invoke if nightly
-    Rake::Task['java:package'].invoke('--stamp')
-    Rake::Task['java:build'].invoke('--stamp')
-    JAVA_RELEASE_TARGETS.each { |target| Bazel.execute('run', ['--stamp'], target) }
+    Rake::Task['java:package'].invoke('--config=release')
+    Rake::Task['java:build'].invoke('--config=release')
+    # Because we want to `run` things, we can't use the `release` config
+    JAVA_RELEASE_TARGETS.each { |target| Bazel.execute('run', ['--config=release'], target) }
   end
 
   desc 'Install jars to local m2 directory'
@@ -1047,10 +1047,8 @@ namespace :all do
                                            'py/selenium/webdriver/__init__.py',
                                            'py/selenium/__init__.py',
                                            'py/BUILD.bazel',
-                                           'py/setup.py',
                                            'rb/lib/selenium/webdriver/version.rb',
-                                           'rb/Gemfile.lock',
-                                           'package-lock.json'])
+                                           'rb/Gemfile.lock'])
 
     print 'Do you want to push the committed changes? (Y/n): '
     response = $stdin.gets.chomp.downcase
@@ -1105,13 +1103,11 @@ namespace :all do
              'java/version.bzl',
              'javascript/node/selenium-webdriver/CHANGES.md',
              'javascript/node/selenium-webdriver/package.json',
-             'package-lock.json',
              'py/docs/source/conf.py',
              'py/selenium/__init__.py',
              'py/selenium/webdriver/__init__.py',
              'py/BUILD.bazel',
              'py/CHANGES',
-             'py/setup.py',
              'rb/lib/selenium/webdriver/version.rb',
              'rb/CHANGES',
              'rb/Gemfile.lock',
@@ -1140,7 +1136,7 @@ def updated_version(current, desired = nil, nightly = nil)
     desired.split('.').tap { |v| v << 0 while v.size < 3 }.join('.')
   elsif current.split(/\.|-/).size > 3
     # if current version is already nightly, just need to bump it; this will be noop for some languages
-    pattern = /-?\.?(nightly|SNAPSHOT|dev)\d*$/
+    pattern = /-?\.?(nightly|SNAPSHOT|dev|\d{12})\d*$/
     current.gsub(pattern, nightly)
   elsif current.split(/\.|-/).size == 3
     # if current version is not nightly, need to bump the version and make nightly

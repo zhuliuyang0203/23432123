@@ -7,7 +7,7 @@ module Selenium
 
       ERROR_URL: String
 
-      URLS: Hash[Symbol, String]
+      URLS: Hash[Symbol?, String]
 
       class WebDriverError < StandardError
         def initialize: (?String | Array[String] msg) -> void

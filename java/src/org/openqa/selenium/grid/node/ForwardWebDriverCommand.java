@@ -17,7 +17,13 @@
 
 package org.openqa.selenium.grid.node;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static org.openqa.selenium.remote.HttpSessionId.getSessionId;
+import static org.openqa.selenium.remote.http.Contents.asJson;
+
+import java.util.Map;
 import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.HttpHandler;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
@@ -30,8 +36,28 @@ class ForwardWebDriverCommand implements HttpHandler {
     this.node = Require.nonNull("Node", node);
   }
 
+  public boolean matches(HttpRequest req) {
+    return getSessionId(req.getUri())
+        .map(id -> node.isSessionOwner(new SessionId(id)))
+        .orElse(false);
+  }
+
   @Override
   public HttpResponse execute(HttpRequest req) {
-    return node.executeWebDriverCommand(req);
+    if (matches(req)) {
+      return node.executeWebDriverCommand(req);
+    }
+    return new HttpResponse()
+        .setStatus(HTTP_NOT_FOUND)
+        .setContent(
+            asJson(
+                Map.of(
+                    "value",
+                    Map.of(
+                        "error", "invalid session id",
+                        "message",
+                            "Cannot find session with id: "
+                                + getSessionId(req.getUri()).orElse(null),
+                        "stacktrace", ""))));
   }
 }

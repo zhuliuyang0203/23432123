@@ -6,6 +6,8 @@ module Selenium
 
         @profile: untyped
 
+        @options: Hash[untyped, untyped]
+
         attr_accessor debugger_address: untyped
 
         KEY: String
@@ -28,7 +30,7 @@ module Selenium
 
         def log_level=: (untyped level) -> untyped
 
-        def enable_android: (?package: ::String, ?serial_number: untyped?, ?activity: untyped?, ?intent_arguments: untyped?) -> untyped
+        def enable_android: (?package: String, ?serial_number: untyped?, ?activity: untyped?, ?intent_arguments: untyped?) -> untyped
 
         private
 

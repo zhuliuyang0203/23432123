@@ -20,7 +20,6 @@ package org.openqa.selenium.bidi.log;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
-import static org.openqa.selenium.testing.Safely.safelyCall;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,36 +28,27 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.bidi.module.LogInspector;
 import org.openqa.selenium.bidi.script.Source;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 
 class LogInspectorTest extends JupiterTestBase {
 
   String page;
-  private AppServer server;
-
-  @BeforeEach
-  public void setUp() {
-    server = new NettyAppServer();
-    server.start();
-  }
 
   @Test
+  @NeedsFreshDriver
   void canListenToConsoleLog() throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<ConsoleLogEntry> future = new CompletableFuture<>();
       logInspector.onConsoleEntry(future::complete);
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("consoleLog")).click();
 
@@ -76,12 +66,13 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canFilterConsoleLogs() throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<ConsoleLogEntry> future = new CompletableFuture<>();
       logInspector.onConsoleEntry(future::complete, FilterBy.logLevel(LogLevel.INFO));
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("consoleLog")).click();
 
@@ -111,13 +102,14 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptLog()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<JavascriptLogEntry> future = new CompletableFuture<>();
       logInspector.onJavaScriptLog(future::complete);
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("jsException")).click();
 
@@ -134,12 +126,13 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canFilterJavascriptLogs() throws ExecutionException, InterruptedException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<JavascriptLogEntry> future = new CompletableFuture<>();
       logInspector.onJavaScriptLog(future::complete, FilterBy.logLevel(LogLevel.ERROR));
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("jsException")).click();
 
@@ -165,13 +158,14 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptErrorLog()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<JavascriptLogEntry> future = new CompletableFuture<>();
       logInspector.onJavaScriptException(future::complete);
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("jsException")).click();
 
@@ -184,13 +178,14 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canRetrieveStacktraceForALog()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<JavascriptLogEntry> future = new CompletableFuture<>();
       logInspector.onJavaScriptException(future::complete);
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("logWithStacktrace")).click();
 
@@ -202,12 +197,13 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canFilterLogs() throws ExecutionException, InterruptedException {
     try (LogInspector logInspector = new LogInspector(driver)) {
       CompletableFuture<LogEntry> future = new CompletableFuture<>();
       logInspector.onLog(future::complete, FilterBy.logLevel(LogLevel.INFO));
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("consoleLog")).click();
 
@@ -231,9 +227,10 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToConsoleLogForABrowsingContext()
       throws ExecutionException, InterruptedException, TimeoutException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String browsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
     try (LogInspector logInspector = new LogInspector(browsingContextId, driver)) {
@@ -255,9 +252,10 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptLogForABrowsingContext()
       throws ExecutionException, InterruptedException, TimeoutException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String browsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
     try (LogInspector logInspector = new LogInspector(browsingContextId, driver)) {
@@ -277,9 +275,10 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptErrorLogForABrowsingContext()
       throws ExecutionException, InterruptedException, TimeoutException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String browsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
     try (LogInspector logInspector = new LogInspector(browsingContextId, driver)) {
@@ -299,9 +298,10 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToConsoleLogForMultipleBrowsingContexts()
       throws ExecutionException, InterruptedException, TimeoutException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String firstBrowsingContextId = driver.getWindowHandle();
     String secondBrowsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
@@ -337,8 +337,9 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptLogForMultipleBrowsingContexts() throws InterruptedException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String firstBrowsingContextId = driver.getWindowHandle();
     String secondBrowsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
@@ -374,8 +375,9 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToJavascriptErrorLogForMultipleBrowsingContexts() throws InterruptedException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String firstBrowsingContextId = driver.getWindowHandle();
     String secondBrowsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
@@ -411,8 +413,9 @@ class LogInspectorTest extends JupiterTestBase {
 
   @Disabled("Until browsers support subscribing to multiple contexts.")
   @Test
+  @NeedsFreshDriver
   void canListenToAnyTypeOfLogForMultipleBrowsingContexts() throws InterruptedException {
-    page = server.whereIs("/bidi/logEntryAdded.html");
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
     String firstBrowsingContextId = driver.getWindowHandle();
     String secondBrowsingContextId = driver.switchTo().newWindow(WindowType.TAB).getWindowHandle();
 
@@ -440,6 +443,7 @@ class LogInspectorTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   void canListenToLogsWithMultipleConsumers()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (LogInspector logInspector = new LogInspector(driver)) {
@@ -449,7 +453,7 @@ class LogInspectorTest extends JupiterTestBase {
       CompletableFuture<JavascriptLogEntry> completableFuture2 = new CompletableFuture<>();
       logInspector.onJavaScriptLog(completableFuture2::complete);
 
-      page = server.whereIs("/bidi/logEntryAdded.html");
+      page = appServer.whereIs("/bidi/logEntryAdded.html");
       driver.get(page);
       driver.findElement(By.id("jsException")).click();
 
@@ -465,13 +469,5 @@ class LogInspectorTest extends JupiterTestBase {
       assertThat(logEntry.getType()).isEqualTo("javascript");
       assertThat(logEntry.getLevel()).isEqualTo(LogLevel.ERROR);
     }
-  }
-
-  @AfterEach
-  public void quitDriver() {
-    if (driver != null) {
-      driver.quit();
-    }
-    safelyCall(server::stop);
   }
 }

@@ -20,6 +20,7 @@ package org.openqa.selenium;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -93,7 +94,8 @@ public class Proxy {
   public Proxy(Map<String, ?> raw) {
     Map<String, Consumer<Object>> setters = new HashMap<>();
     setters.put(
-        PROXY_TYPE, value -> setProxyType(ProxyType.valueOf(((String) value).toUpperCase())));
+        PROXY_TYPE,
+        value -> setProxyType(ProxyType.valueOf(((String) value).toUpperCase(Locale.ENGLISH))));
     setters.put(FTP_PROXY, value -> setFtpProxy((String) value));
     setters.put(HTTP_PROXY, value -> setHttpProxy((String) value));
     setters.put(
@@ -448,7 +450,7 @@ public class Proxy {
       case DIRECT:
       case MANUAL:
       case SYSTEM:
-        builder.append(getProxyType().toString().toLowerCase());
+        builder.append(getProxyType().toString().toLowerCase(Locale.ENGLISH));
         break;
 
       case PAC:

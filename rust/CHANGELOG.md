@@ -1,3 +1,27 @@
+0.4.27
+======
+* Use endpoint for stable versions first to manage Firefox (#14536) (#14613)
+* Selenium Manager honors full browser version (#13419) (#14619)
+* Selenium Manager honors full browser version (#13419)
+* Minor change related to variable name
+
+0.4.26
+======
+* Selenium Manager checks invalid browser version (#14511)
+
+0.4.25
+======
+
+* Reuse driver mirror URL (when available) to discover Firefox versions (#13941) (#14493)
+* Selenium Manager errors when browser-path is wrong (#13352) (#14381)
+
+0.4.24
+======
+
+* Use Firefox history major releases endpoint for version discovery
+* Use the Debug format specifier to display error messages (#14388)
+* Include arguments for skipping drivers and browsers in path (#14444)
+
 0.4.23
 ======
 

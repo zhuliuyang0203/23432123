@@ -1,7 +1,7 @@
 module Selenium
   module WebDriver
     class Options
-      @options: Hash[String | Symbol, String | Numeric | bool?]
+      @options: Hash[untyped, untyped]
 
       W3C_OPTIONS: Array[Symbol]
 

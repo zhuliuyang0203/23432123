@@ -1,19 +1,20 @@
-// <copyright file="IJavaScriptEngineManager.cs" company="WebDriver Committers">
+// <copyright file="IJavaScriptEngine.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
@@ -38,7 +39,7 @@ namespace OpenQA.Selenium
         event EventHandler<JavaScriptExceptionThrownEventArgs> JavaScriptExceptionThrown;
 
         /// <summary>
-        /// Occurs when methods on the JavaScript console are called. 
+        /// Occurs when methods on the JavaScript console are called.
         /// </summary>
         event EventHandler<JavaScriptConsoleApiCalledEventArgs> JavaScriptConsoleApiCalled;
 
@@ -86,6 +87,7 @@ namespace OpenQA.Selenium
         /// <param name="scriptName">The friendly name by which to refer to this initialization script.</param>
         /// <param name="script">The JavaScript to be loaded on every page.</param>
         /// <returns>A task containing an <see cref="InitializationScript"/> object representing the script to be loaded on each page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> is <see langword="null"/>.</exception>
         Task<InitializationScript> AddInitializationScript(string scriptName, string script);
 
         /// <summary>
@@ -93,6 +95,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="scriptName">The friendly name of the initialization script to be removed.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> is <see langword="null"/>.</exception>
         Task RemoveInitializationScript(string scriptName);
 
         /// <summary>
@@ -108,6 +111,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The JavaScript to pin</param>
         /// <returns>A task containing a <see cref="PinnedScript"/> object to use to execute the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         Task<PinnedScript> PinScript(string script);
 
         /// <summary>
@@ -115,6 +119,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="script">The <see cref="PinnedScript"/> object to unpin.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script"/> is <see langword="null"/>.</exception>
         Task UnpinScript(PinnedScript script);
 
         /// <summary>

@@ -20,6 +20,7 @@ java_library(
         "Ignore.java",
         "IgnoreList.java",
         "NeedsFreshDriver.java",
+        "NeedsSecureServer.java",
         "NoDriverAfterTest.java",
         "NoDriverBeforeTest.java",
         "NotWorkingInRemoteBazelBuilds.java",

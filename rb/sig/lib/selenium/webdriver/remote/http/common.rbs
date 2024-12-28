@@ -9,21 +9,31 @@ module Selenium
 
           DEFAULT_HEADERS: Hash[String, untyped]
 
-          attr_writer server_url: untyped
+          @common_headers: Hash[String, untyped]
+
+          attr_accessor self.extra_headers: Hash[String, untyped]
+
+          attr_writer self.user_agent: String
+
+          def self.user_agent: -> String
+
+          attr_writer server_url: String
 
           def quit_errors: () -> Array[untyped]
 
-          def close: () -> untyped
+          def close: () -> nil
 
           def call: (untyped verb, untyped url, untyped command_hash) -> untyped
 
           private
 
-          def server_url: () -> untyped
+          def common_headers: -> Hash[String, untyped]
+
+          def server_url: () -> String
 
           def request: (*untyped) -> untyped
 
-          def create_response: (untyped code, untyped body, untyped content_type) -> untyped
+          def create_response: (Integer code, Hash[String, untyped] body, String content_type) -> Remote::Response
         end
       end
     end

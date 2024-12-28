@@ -40,7 +40,11 @@ closure_js_library(
         ":dom",
         ":errors",
         ":events",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
+        "@io_bazel_rules_closure//closure/library/math:coordinate",
+        "@io_bazel_rules_closure//closure/library/math:vec2",
+        "@io_bazel_rules_closure//closure/library/style",
     ],
 )
 
@@ -59,7 +63,8 @@ closure_js_library(
         "JSC_USE_OF_GOOG_PROVIDE",
     ],
     deps = [
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/color:names",
     ],
 )
 
@@ -86,7 +91,15 @@ closure_js_library(
         ":events",
         ":locators",
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:selection",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
+        "@io_bazel_rules_closure//closure/library/math:coordinate",
+        "@io_bazel_rules_closure//closure/library/structs:map",
+        "@io_bazel_rules_closure//closure/library/structs:set",
+        "@io_bazel_rules_closure//closure/library/useragent",
+        "@io_bazel_rules_closure//closure/library/useragent:product",
     ],
 )
 
@@ -102,7 +115,10 @@ closure_js_library(
     deps = [
         ":errors",
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:nodetype",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
     ],
 )
 
@@ -123,7 +139,16 @@ closure_js_library(
         ":domcore",
         ":json",
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:nodetype",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
+        "@io_bazel_rules_closure//closure/library/math",
+        "@io_bazel_rules_closure//closure/library/math:coordinate",
+        "@io_bazel_rules_closure//closure/library/math:rect",
+        "@io_bazel_rules_closure//closure/library/string",
+        "@io_bazel_rules_closure//closure/library/style",
+        "@io_bazel_rules_closure//closure/library/useragent",
     ],
 )
 
@@ -158,7 +183,12 @@ closure_js_library(
         ":errors",
         ":json",
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/events:browserevent",
+        "@io_bazel_rules_closure//closure/library/style",
+        "@io_bazel_rules_closure//closure/library/useragent",
+        "@io_bazel_rules_closure//closure/library/useragent:product",
     ],
 )
 
@@ -179,7 +209,8 @@ closure_js_library(
         ":dom",
         ":errors",
         ":locators",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:tagname",
     ],
 )
 
@@ -219,7 +250,10 @@ closure_js_library(
         ":bot",
         ":errors",
         ":json",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom:nodetype",
+        "@io_bazel_rules_closure//closure/library/object",
+        "@io_bazel_rules_closure//closure/library/useragent",
     ],
 )
 
@@ -231,7 +265,8 @@ closure_js_library(
     ],
     deps = [
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/json",
+        "@io_bazel_rules_closure//closure/library/useragent",
     ],
 )
 
@@ -256,7 +291,13 @@ closure_js_library(
         ":json",
         ":useragent",
         "//third_party/js/wgxpath",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/array",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/dom:nodetype",
+        "@io_bazel_rules_closure//closure/library/math:rect",
+        "@io_bazel_rules_closure//closure/library/string",
+        "@io_bazel_rules_closure//closure/library/useragent",
+        "@io_bazel_rules_closure//closure/library/useragent:product",
     ],
 )
 
@@ -268,7 +309,12 @@ closure_js_library(
         "JSC_UNKNOWN_EXPR_TYPE",
         "JSC_USE_OF_GOOG_PROVIDE",
     ],
-    deps = ["@io_bazel_rules_closure//closure/library"],
+    deps = [
+        "@io_bazel_rules_closure//closure/library/string",
+        "@io_bazel_rules_closure//closure/library/useragent",
+        "@io_bazel_rules_closure//closure/library/useragent:product",
+        "@io_bazel_rules_closure//closure/library/useragent:product_isversion",
+    ],
 )
 
 closure_js_library(
@@ -302,7 +348,9 @@ closure_js_library(
         ":bot",
         ":errors",
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/dom:nodetype",
+        "@io_bazel_rules_closure//closure/library/string",
+        "@io_bazel_rules_closure//closure/library/useragent",
     ],
 )
 
@@ -315,7 +363,6 @@ closure_js_library(
     ],
     deps = [
         ":useragent",
-        "@io_bazel_rules_closure//closure/library",
     ],
 )
 

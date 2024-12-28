@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openqa.selenium.concurrent.ExecutorServices;
 import org.openqa.selenium.events.Event;
 import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.events.EventListener;
@@ -61,6 +62,7 @@ class UnboundZmqEventBus implements EventBus {
   private static final Logger LOG = Logger.getLogger(EventBus.class.getName());
   private static final Json JSON = new Json();
   private final AtomicBoolean pollingStarted = new AtomicBoolean(false);
+  private final PollingRunnable socketPolling;
   private final ExecutorService socketPollingExecutor;
   private final ExecutorService socketPublishingExecutor;
   private final ExecutorService listenerNotificationExecutor;
@@ -147,7 +149,8 @@ class UnboundZmqEventBus implements EventBus {
 
     LOG.info("Sockets created");
 
-    socketPollingExecutor.submit(new PollingRunnable(secret));
+    socketPolling = new PollingRunnable(secret);
+    socketPollingExecutor.submit(socketPolling);
 
     // Give ourselves up to a second to connect, using The World's Worst heuristic. If we don't
     // manage to connect, it's not the end of the world, as the socket we're connecting to may not
@@ -211,9 +214,11 @@ class UnboundZmqEventBus implements EventBus {
 
   @Override
   public void close() {
-    socketPollingExecutor.shutdownNow();
-    socketPublishingExecutor.shutdownNow();
-    listenerNotificationExecutor.shutdownNow();
+    socketPolling.shutdown = true;
+    ExecutorServices.shutdownGracefully("Event Bus Poller", socketPollingExecutor);
+    ExecutorServices.shutdownGracefully("Event Bus Publisher", socketPublishingExecutor);
+    ExecutorServices.shutdownGracefully(
+        "Event Bus Listener Notifier", listenerNotificationExecutor);
     poller.close();
 
     if (sub != null) {
@@ -226,6 +231,7 @@ class UnboundZmqEventBus implements EventBus {
 
   private class PollingRunnable implements Runnable {
     private final Secret secret;
+    private volatile boolean shutdown;
 
     public PollingRunnable(Secret secret) {
       this.secret = secret;
@@ -233,7 +239,7 @@ class UnboundZmqEventBus implements EventBus {
 
     @Override
     public void run() {
-      while (!Thread.currentThread().isInterrupted()) {
+      while (!Thread.currentThread().isInterrupted() && !shutdown) {
         try {
           int count = poller.poll(150);
 

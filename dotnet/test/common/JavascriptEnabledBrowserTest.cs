@@ -1,3 +1,22 @@
+// <copyright file="JavascriptEnabledBrowserTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using System;
@@ -13,9 +32,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
 
-            Assert.AreEqual("Testing Javascript", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Testing Javascript"));
             driver.FindElement(By.LinkText("Change the page title!")).Click();
-            Assert.AreEqual("Changed", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Changed"));
         }
 
         [Test]
@@ -23,28 +42,30 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
             String currentText = driver.FindElement(By.XPath("//div[@id='dynamo']")).Text;
-            Assert.AreEqual("What's for dinner?", currentText);
+            Assert.That(currentText, Is.EqualTo("What's for dinner?"));
 
             IWebElement element = driver.FindElement(By.LinkText("Update a div"));
             element.Click();
 
             String newText = driver.FindElement(By.XPath("//div[@id='dynamo']")).Text;
-            Assert.AreEqual("Fish and chips!", newText);
+            Assert.That(newText, Is.EqualTo("Fish and chips!"));
         }
 
         [Test]
         [IgnoreBrowser(Browser.Chrome, "Not working properly in Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Not working properly in Edge")]
         public void ShouldWaitForLoadsToCompleteAfterJavascriptCausesANewPageToLoad()
         {
             driver.Url = formsPage;
 
             driver.FindElement(By.Id("changeme")).Click();
             WaitFor(() => { return driver.Title == "Page3"; }, "Browser title was not 'Page3'");
-            Assert.AreEqual("Page3", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("Page3"));
         }
 
         [Test]
         [IgnoreBrowser(Browser.Chrome, "Not working properly in Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Not working properly in Edge")]
         public void ShouldBeAbleToFindElementAfterJavascriptCausesANewPageToLoad()
         {
             driver.Url = formsPage;
@@ -52,7 +73,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("changeme")).Click();
 
             WaitFor(() => { return driver.Title == "Page3"; }, "Browser title was not 'Page3'");
-            Assert.AreEqual("3", driver.FindElement(By.Id("pageNumber")).Text);
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("3"));
         }
 
         [Test]
@@ -62,7 +83,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("change")).SendKeys("foo");
             String result = driver.FindElement(By.Id("result")).Text;
 
-            Assert.AreEqual("change", result);
+            Assert.That(result, Is.EqualTo("change"));
         }
 
         [Test]
@@ -73,7 +94,7 @@ namespace OpenQA.Selenium
             element.Click();
 
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -84,7 +105,7 @@ namespace OpenQA.Selenium
             element.Click();
 
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -92,11 +113,11 @@ namespace OpenQA.Selenium
         {
             driver.Url = javascriptPage;
             IWebElement element = driver.FindElement(By.Id("clickField"));
-            Assert.AreEqual("Hello", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("Hello"));
 
             element.Click();
 
-            Assert.AreEqual("Clicked", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("Clicked"));
         }
 
         [Test]
@@ -107,7 +128,7 @@ namespace OpenQA.Selenium
             driver.FindElement(By.Id("switchFocus")).Click();
 
             IWebElement element = driver.SwitchTo().ActiveElement();
-            Assert.AreEqual("theworks", element.GetAttribute("id"));
+            Assert.That(element.GetAttribute("id"), Is.EqualTo("theworks"));
         }
 
         [Test]
@@ -117,7 +138,7 @@ namespace OpenQA.Selenium
 
             IWebElement element = driver.SwitchTo().ActiveElement();
 
-            Assert.AreEqual("body", element.GetAttribute("name"));
+            Assert.That(element.GetAttribute("name"), Is.EqualTo("body"));
         }
 
         [Test]

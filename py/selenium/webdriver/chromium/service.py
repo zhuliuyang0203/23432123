@@ -14,7 +14,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
+from io import IOBase
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service
@@ -35,16 +38,20 @@ class ChromiumService(service.Service):
         self,
         executable_path: str = None,
         port: int = 0,
-        service_args: typing.Optional[typing.List[str]] = None,
+        service_args: Optional[List[str]] = None,
         log_output: SubprocessStdAlias = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []
+        driver_path_env_key = driver_path_env_key or "SE_CHROMEDRIVER"
 
         if isinstance(log_output, str):
             self.service_args.append(f"--log-path={log_output}")
-            self.log_output = None
+            self.log_output: Optional[IOBase] = None
+        elif isinstance(log_output, IOBase):
+            self.log_output = log_output
         else:
             self.log_output = log_output
 
@@ -53,8 +60,9 @@ class ChromiumService(service.Service):
             port=port,
             env=env,
             log_output=self.log_output,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         return [f"--port={self.port}"] + self.service_args

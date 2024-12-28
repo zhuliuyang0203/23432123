@@ -137,10 +137,7 @@ class RelayOptionsTest {
     Config config = new TomlConfig(new StringReader(String.join("\n", rawConfig)));
     RelayOptions relayOptions = new RelayOptions(config);
     assertThatExceptionOfType(ConfigException.class)
-        .isThrownBy(
-            () -> {
-              relayOptions.getServiceProtocolVersion();
-            })
+        .isThrownBy(relayOptions::getServiceProtocolVersion)
         .withMessageContaining("Unsupported protocol version provided: HTTP/0.9");
   }
 

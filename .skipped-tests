@@ -5,7 +5,6 @@
 -//java/test/org/openqa/selenium/edge:EdgeDriverFunctionalTest
 -//java/test/org/openqa/selenium/edge:EdgeDriverFunctionalTest-edge
 -//java/test/org/openqa/selenium/edge:EdgeDriverFunctionalTest-remote
--//java/test/org/openqa/selenium/federatedcredentialmanagement:FederatedCredentialManagementTest
 -//java/test/org/openqa/selenium/firefox:FirefoxDriverBuilderTest
 -//java/test/org/openqa/selenium/grid/gridui:OverallGridTest
 -//java/test/org/openqa/selenium/grid/router:RemoteWebDriverDownloadTest
@@ -31,6 +30,8 @@
 -//py:test-chrome-test/selenium/webdriver/chrome/chrome_launcher_tests.py
 -//py:test-chrome-test/selenium/webdriver/chrome/chrome_service_tests.py
 -//py:test-chrome-test/selenium/webdriver/chrome/proxy_tests.py
+-//py:test-edge-test/selenium/webdriver/edge/edge_launcher_tests.py
+-//py:test-edge-test/selenium/webdriver/edge/edge_service_tests.py
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome-bidi
 -//rb/spec/integration/selenium/webdriver/chrome:service-chrome-remote
