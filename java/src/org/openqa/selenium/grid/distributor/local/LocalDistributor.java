@@ -586,6 +586,11 @@ public class LocalDistributor extends Distributor implements Closeable {
           new SessionNotCreatedException("Unable to create new session");
       for (Capabilities caps : request.getDesiredCapabilities()) {
         if (isNotSupported(caps)) {
+          // e.g. the last node drained, we have to wait for a new to register
+          lastFailure =
+              new SessionNotCreatedException(
+                  "Unable to find a node supporting the desired capabilities");
+          retry = true;
           continue;
         }
 
