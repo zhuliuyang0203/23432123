@@ -17,7 +17,7 @@
 
 package org.openqa.selenium.grid.node.httpd;
 
-import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
 import static org.openqa.selenium.grid.config.StandardGridRoles.EVENT_BUS_ROLE;
 import static org.openqa.selenium.grid.config.StandardGridRoles.HTTPD_ROLE;
@@ -131,13 +131,16 @@ public class NodeServer extends TemplateGridServerCommand {
     HttpHandler readinessCheck =
         req -> {
           if (node.getStatus().hasCapacity()) {
-            return new HttpResponse().setStatus(HTTP_NO_CONTENT);
+            return new HttpResponse()
+                .setStatus(HTTP_OK)
+                .setHeader("Content-Type", MediaType.PLAIN_TEXT_UTF_8.toString())
+                .setContent(Contents.utf8String("Node has capacity available"));
           }
 
           return new HttpResponse()
               .setStatus(HTTP_UNAVAILABLE)
               .setHeader("Content-Type", MediaType.PLAIN_TEXT_UTF_8.toString())
-              .setContent(Contents.utf8String("No capacity available"));
+              .setContent(Contents.utf8String("Node has no capacity available"));
         };
 
     bus.addListener(
