@@ -355,6 +355,7 @@ public class LocalDistributor extends Distributor implements Closeable {
     // An exception occurs if Node heartbeat has started but the server is not ready.
     // Unhandled exception blocks the event-bus thread from processing any event henceforth.
     NodeStatus initialNodeStatus;
+    Runnable healthCheck;
     try {
       initialNodeStatus = node.getStatus();
       if (initialNodeStatus.getAvailability() != UP) {
@@ -363,8 +364,17 @@ public class LocalDistributor extends Distributor implements Closeable {
         // We do not need to add this Node for now.
         return this;
       }
-      model.add(initialNodeStatus);
-      nodes.put(node.getId(), node);
+      // Extract the health check
+      healthCheck = asRunnableHealthCheck(node);
+      Lock writeLock = lock.writeLock();
+      writeLock.lock();
+      try {
+        nodes.put(node.getId(), node);
+        model.add(initialNodeStatus);
+        allChecks.put(node.getId(), healthCheck);
+      } finally {
+        writeLock.unlock();
+      }
     } catch (Exception e) {
       LOG.log(
           Debug.getDebugLogLevel(),
@@ -372,10 +382,6 @@ public class LocalDistributor extends Distributor implements Closeable {
           e);
       return this;
     }
-
-    // Extract the health check
-    Runnable healthCheck = asRunnableHealthCheck(node);
-    allChecks.put(node.getId(), healthCheck);
 
     updateNodeStatus(initialNodeStatus, healthCheck);
 
@@ -415,7 +421,15 @@ public class LocalDistributor extends Distributor implements Closeable {
 
   private Runnable runNodeHealthChecks() {
     return () -> {
-      ImmutableMap<NodeId, Runnable> nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      ImmutableMap<NodeId, Runnable> nodeHealthChecks;
+      Lock readLock = this.lock.readLock();
+      readLock.lock();
+      try {
+        nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      } finally {
+        readLock.unlock();
+      }
+
       for (Runnable nodeHealthCheck : nodeHealthChecks.values()) {
         GuardedRunnable.guard(nodeHealthCheck).run();
       }

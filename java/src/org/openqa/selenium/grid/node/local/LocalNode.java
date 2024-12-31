@@ -377,8 +377,10 @@ public class LocalNode extends Node implements Closeable {
   @VisibleForTesting
   @ManagedAttribute(name = "CurrentSessions")
   public int getCurrentSessionCount() {
+    // we need the exact size, see javadoc of Cache.size
+    long n = currentSessions.asMap().values().stream().count();
     // It seems wildly unlikely we'll overflow an int
-    return Math.toIntExact(currentSessions.size());
+    return Math.toIntExact(n);
   }
 
   @VisibleForTesting
@@ -1005,6 +1007,9 @@ public class LocalNode extends Node implements Closeable {
   public void drain() {
     bus.fire(new NodeDrainStarted(getId()));
     draining = true;
+    // Ensure the pendingSessions counter will not be decremented by timed out sessions not included
+    // in the currentSessionCount and the NodeDrainComplete will be raised to early.
+    currentSessions.cleanUp();
     int currentSessionCount = getCurrentSessionCount();
     if (currentSessionCount == 0) {
       LOG.info("Firing node drain complete message");
