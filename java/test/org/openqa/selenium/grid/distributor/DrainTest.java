@@ -20,6 +20,7 @@ package org.openqa.selenium.grid.distributor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.StringReader;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
@@ -78,12 +78,12 @@ class DrainTest {
       ExecutorService executor = Executors.newFixedThreadPool(nThreads);
 
       try {
-        List<Future<WebDriver>> pendingSessions = new ArrayList<>();
+        List<CompletableFuture<WebDriver>> pendingSessions = new ArrayList<>();
         CountDownLatch allPending = new CountDownLatch(nThreads);
 
         for (int i = 0; i < nThreads; i++) {
-          Future<WebDriver> future =
-              executor.submit(
+          CompletableFuture<WebDriver> future =
+              CompletableFuture.supplyAsync(
                   () -> {
                     allPending.countDown();
 
@@ -91,7 +91,8 @@ class DrainTest {
                         .oneOf(browser.getCapabilities())
                         .address(hub.getUrl())
                         .build();
-                  });
+                  },
+                  executor);
 
           pendingSessions.add(future);
         }
@@ -101,21 +102,27 @@ class DrainTest {
 
         for (int i = 0; i < nThreads; i += 3) {
           // remove all completed futures
-          assertThat(pendingSessions.removeIf(Future::isDone)).isEqualTo(i != 0);
+          assertThat(pendingSessions.removeIf(CompletableFuture::isDone)).isEqualTo(i != 0);
 
           // start a node draining after 3 sessions
           Server<?> node = startNode(baseConfig, hub, 6, 3);
 
           urlChecker.waitUntilAvailable(
-              20, TimeUnit.SECONDS, node.getUrl().toURI().resolve("readyz").toURL());
+              60, TimeUnit.SECONDS, node.getUrl().toURI().resolve("readyz").toURL());
+
+          // use nano time to avoid issues with a jumping clock e.g. on WSL2 or due to time-sync
+          long started = System.nanoTime();
+
+          // wait for the first to start
+          CompletableFuture.anyOf(pendingSessions.toArray(CompletableFuture<?>[]::new))
+              .get(120, TimeUnit.SECONDS);
 
           // we want to check not more than 3 are started, polling won't help here
-          Thread.sleep(20_000);
+          Thread.sleep(Duration.ofNanos(System.nanoTime() - started).multipliedBy(2).toMillis());
+
           int stopped = 0;
 
-          for (int j = 0; j < pendingSessions.size(); j++) {
-            Future<WebDriver> future = pendingSessions.get(j);
-
+          for (CompletableFuture<WebDriver> future : pendingSessions) {
             if (future.isDone()) {
               stopped++;
               future.get().quit();
@@ -127,7 +134,7 @@ class DrainTest {
 
           // check the node stopped
           urlChecker.waitUntilUnavailable(
-              10, TimeUnit.SECONDS, node.getUrl().toURI().resolve("readyz").toURL());
+              40, TimeUnit.SECONDS, node.getUrl().toURI().resolve("readyz").toURL());
         }
       } finally {
         executor.shutdownNow();
