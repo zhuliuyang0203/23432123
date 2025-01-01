@@ -32,6 +32,7 @@ class Service(service.Service):
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     :param enable_logging: (Optional) Enable logging of the service. Logs can be located at `~/Library/Logs/com.apple.WebDriver/`
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
