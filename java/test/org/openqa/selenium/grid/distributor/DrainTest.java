@@ -32,6 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.grid.commands.Hub;
@@ -52,6 +53,7 @@ class DrainTest {
 
   private final Browser browser = Objects.requireNonNull(Browser.detect());
 
+  @Disabled("the Node is terminated calling System.exit, this should be reworked in the future")
   @Test
   void nodeDoesNotTakeTooManySessions() throws Exception {
     String[] rawConfig =
