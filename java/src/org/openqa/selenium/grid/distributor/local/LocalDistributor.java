@@ -77,6 +77,7 @@ import org.openqa.selenium.grid.data.NodeDrainComplete;
 import org.openqa.selenium.grid.data.NodeHeartBeatEvent;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeRemovedEvent;
+import org.openqa.selenium.grid.data.NodeRestartedEvent;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.NodeStatusEvent;
 import org.openqa.selenium.grid.data.RequestId;
@@ -205,6 +206,7 @@ public class LocalDistributor extends Distributor implements Closeable {
 
     bus.addListener(NodeStatusEvent.listener(this::register));
     bus.addListener(NodeStatusEvent.listener(model::refresh));
+    bus.addListener(NodeRestartedEvent.listener(this::handleNodeRestarted));
     bus.addListener(NodeRemovedEvent.listener(nodeStatus -> remove(nodeStatus.getNodeId())));
     bus.addListener(
         NodeHeartBeatEvent.listener(
@@ -327,6 +329,25 @@ public class LocalDistributor extends Distributor implements Closeable {
     }
   }
 
+  private void handleNodeRestarted(NodeStatus status) {
+    Require.nonNull("Node", status);
+    Lock writeLock = lock.writeLock();
+    writeLock.lock();
+    try {
+      if (!nodes.containsKey(status.getNodeId())) {
+        return;
+      }
+      if (!getNodeFromURI(status.getExternalUri()).isDraining()) {
+        LOG.info(
+            String.format(
+                "Node %s has restarted. Setting availability to DOWN.", status.getNodeId()));
+        model.setAvailability(status.getNodeId(), DOWN);
+      }
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
   @Override
   public LocalDistributor add(Node node) {
     Require.nonNull("Node", node);
@@ -334,6 +355,7 @@ public class LocalDistributor extends Distributor implements Closeable {
     // An exception occurs if Node heartbeat has started but the server is not ready.
     // Unhandled exception blocks the event-bus thread from processing any event henceforth.
     NodeStatus initialNodeStatus;
+    Runnable healthCheck;
     try {
       initialNodeStatus = node.getStatus();
       if (initialNodeStatus.getAvailability() != UP) {
@@ -342,8 +364,17 @@ public class LocalDistributor extends Distributor implements Closeable {
         // We do not need to add this Node for now.
         return this;
       }
-      model.add(initialNodeStatus);
-      nodes.put(node.getId(), node);
+      // Extract the health check
+      healthCheck = asRunnableHealthCheck(node);
+      Lock writeLock = lock.writeLock();
+      writeLock.lock();
+      try {
+        nodes.put(node.getId(), node);
+        model.add(initialNodeStatus);
+        allChecks.put(node.getId(), healthCheck);
+      } finally {
+        writeLock.unlock();
+      }
     } catch (Exception e) {
       LOG.log(
           Debug.getDebugLogLevel(),
@@ -351,10 +382,6 @@ public class LocalDistributor extends Distributor implements Closeable {
           e);
       return this;
     }
-
-    // Extract the health check
-    Runnable healthCheck = asRunnableHealthCheck(node);
-    allChecks.put(node.getId(), healthCheck);
 
     updateNodeStatus(initialNodeStatus, healthCheck);
 
@@ -394,7 +421,15 @@ public class LocalDistributor extends Distributor implements Closeable {
 
   private Runnable runNodeHealthChecks() {
     return () -> {
-      ImmutableMap<NodeId, Runnable> nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      ImmutableMap<NodeId, Runnable> nodeHealthChecks;
+      Lock readLock = this.lock.readLock();
+      readLock.lock();
+      try {
+        nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      } finally {
+        readLock.unlock();
+      }
+
       for (Runnable nodeHealthCheck : nodeHealthChecks.values()) {
         GuardedRunnable.guard(nodeHealthCheck).run();
       }

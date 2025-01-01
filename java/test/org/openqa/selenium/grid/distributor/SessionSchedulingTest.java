@@ -66,6 +66,7 @@ public class SessionSchedulingTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -121,6 +122,7 @@ public class SessionSchedulingTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Node leastRecent = createNode(caps, 5, 0);
@@ -192,6 +194,7 @@ public class SessionSchedulingTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -247,6 +250,7 @@ public class SessionSchedulingTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 

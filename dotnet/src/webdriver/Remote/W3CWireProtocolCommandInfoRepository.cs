@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>
@@ -40,18 +42,12 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Gets the level of the W3C WebDriver specification that this repository supports.
         /// </summary>
-        public override int SpecificationLevel
-        {
-            get { return 1; }
-        }
+        public override int SpecificationLevel => 1;
 
         /// <summary>
         /// Gets the <see cref="Type"/> that is valid for this <see cref="CommandInfoRepository"/>
         /// </summary>
-        protected override Type RepositoryCommandInfoType
-        {
-            get { return typeof(HttpCommandInfo); }
-        }
+        protected override Type RepositoryCommandInfoType => typeof(HttpCommandInfo);
 
         /// <summary>
         /// Initializes the dictionary of commands for the CommandInfoRepository

@@ -50,6 +50,7 @@ class Service(ABC):
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
     :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
@@ -245,4 +246,6 @@ class Service(ABC):
             raise
 
     def env_path(self) -> Optional[str]:
-        return os.getenv(self.DRIVER_PATH_ENV_KEY, None)
+        if self.DRIVER_PATH_ENV_KEY:
+            return os.getenv(self.DRIVER_PATH_ENV_KEY, None)
+        return None

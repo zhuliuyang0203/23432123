@@ -326,7 +326,7 @@ namespace OpenQA.Selenium.Remote
                 }
                 else
                 {
-                    response.Status = WebDriverResult.UnhandledError;
+                    response.Status = WebDriverResult.UnknownError;
                     response.Value = body;
                 }
             }

@@ -98,6 +98,9 @@ public class LoggingOptions {
       return;
     }
 
+    // Keep current loggers if they are being manually set
+    if (LogManager.getLogManager().getProperty("handlers") != null) return;
+
     // Remove all handlers from existing loggers
     LogManager logManager = LogManager.getLogManager();
     Enumeration<String> names = logManager.getLoggerNames();

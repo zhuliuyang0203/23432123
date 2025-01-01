@@ -612,20 +612,7 @@ namespace OpenQA.Selenium
         {
             Command commandToExecute = new Command(SessionId, driverCommandToExecute, parameters);
 
-            Response commandResponse;
-
-            try
-            {
-                commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                commandResponse = new Response
-                {
-                    Status = WebDriverResult.UnhandledError,
-                    Value = e
-                };
-            }
+            Response commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
 
             if (commandResponse.Status != WebDriverResult.Success)
             {
@@ -782,9 +769,6 @@ namespace OpenQA.Selenium
                         case WebDriverResult.ElementNotSelectable:
                             throw new InvalidElementStateException(errorMessage);
 
-                        case WebDriverResult.UnhandledError:
-                            throw new WebDriverException(errorMessage);
-
                         case WebDriverResult.NoSuchDocument:
                             throw new NoSuchElementException(errorMessage);
 
@@ -853,6 +837,15 @@ namespace OpenQA.Selenium
 
                         case WebDriverResult.InsecureCertificate:
                             throw new InsecureCertificateException(errorMessage);
+
+                        case WebDriverResult.UnknownError:
+                            throw new UnknownErrorException(errorMessage);
+
+                        case WebDriverResult.UnknownMethod:
+                            throw new UnknownMethodException(errorMessage);
+
+                        case WebDriverResult.UnsupportedOperation:
+                            throw new UnsupportedOperationException(errorMessage);
 
                         default:
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));

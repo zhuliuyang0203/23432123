@@ -20,14 +20,20 @@ package org.openqa.selenium.support.decorators;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.openqa.selenium.Alert;
@@ -183,6 +189,65 @@ import org.openqa.selenium.virtualauthenticator.VirtualAuthenticator;
 @Beta
 public class WebDriverDecorator<T extends WebDriver> {
 
+  protected static class Definition {
+    private final Class<?> decoratedClass;
+    private final Class<?> originalClass;
+
+    public Definition(Decorated<?> decorated) {
+      this.decoratedClass = decorated.getClass();
+      this.originalClass = decorated.getOriginal().getClass();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+      Definition definition = (Definition) o;
+      // intentionally an identity check, to ensure we get no false positive lookup due to an
+      // unknown implementation of decoratedClass.equals or originalClass.equals
+      return (decoratedClass == definition.decoratedClass)
+          && (originalClass == definition.originalClass);
+    }
+
+    @Override
+    public int hashCode() {
+      return Arrays.hashCode(
+          new int[] {
+            System.identityHashCode(decoratedClass), System.identityHashCode(originalClass)
+          });
+    }
+  }
+
+  public interface HasTarget<Z> {
+    Decorated<Z> getTarget();
+
+    void setTarget(Decorated<Z> target);
+  }
+
+  protected static class ProxyFactory<T> {
+    private final Class<? extends T> clazz;
+
+    private ProxyFactory(Class<? extends T> clazz) {
+      this.clazz = clazz;
+    }
+
+    public T newInstance(Decorated<T> target) {
+      T instance;
+      try {
+        instance = (T) clazz.newInstance();
+      } catch (ReflectiveOperationException e) {
+        throw new AssertionError("Unable to create new proxy", e);
+      }
+
+      // ensure we can later find the target to call
+      //noinspection unchecked
+      ((HasTarget<T>) instance).setTarget(target);
+
+      return instance;
+    }
+  }
+
+  private final ConcurrentMap<Definition, ProxyFactory<?>> cache;
+
   private final Class<T> targetWebDriverClass;
 
   private Decorated<T> decorated;
@@ -194,6 +259,7 @@ public class WebDriverDecorator<T extends WebDriver> {
 
   public WebDriverDecorator(Class<T> targetClass) {
     this.targetWebDriverClass = targetClass;
+    this.cache = new ConcurrentHashMap<>();
   }
 
   public final T decorate(T original) {
@@ -295,18 +361,36 @@ public class WebDriverDecorator<T extends WebDriver> {
     return toDecorate;
   }
 
-  protected final <Z> Z createProxy(final Decorated<Z> decorated, Class<Z> clazz) {
-    Set<Class<?>> decoratedInterfaces = extractInterfaces(decorated);
-    Set<Class<?>> originalInterfaces = extractInterfaces(decorated.getOriginal());
-    Map<Class<?>, InvocationHandler> derivedInterfaces =
-        deriveAdditionalInterfaces(decorated.getOriginal());
+  protected final <Z> Z createProxy(final Decorated<Z> decorated, Class<? extends Z> clazz) {
+    @SuppressWarnings("unchecked")
+    ProxyFactory<Z> factory =
+        (ProxyFactory<Z>)
+            cache.computeIfAbsent(
+                new Definition(decorated), (key) -> createProxyFactory(key, decorated, clazz));
+
+    return factory.newInstance(decorated);
+  }
+
+  protected final <Z> ProxyFactory<? extends Z> createProxyFactory(
+      Definition definition, final Decorated<Z> sample, Class<? extends Z> clazz) {
+    Set<Class<?>> decoratedInterfaces = extractInterfaces(definition.decoratedClass);
+    Set<Class<?>> originalInterfaces = extractInterfaces(definition.originalClass);
+    // all samples with the same definition should have the same derivedInterfaces
+    Map<Class<?>, Function<Z, InvocationHandler>> derivedInterfaces =
+        deriveAdditionalInterfaces(sample.getOriginal());
 
     final InvocationHandler handler =
         (proxy, method, args) -> {
+          // Lookup the instance to call, to reuse the clazz and handler.
+          @SuppressWarnings("unchecked")
+          Decorated<Z> instance = ((HasTarget<Z>) proxy).getTarget();
+          if (instance == null) {
+            throw new AssertionError("Failed to get instance to call");
+          }
           try {
             if (method.getDeclaringClass().equals(Object.class)
                 || decoratedInterfaces.contains(method.getDeclaringClass())) {
-              return method.invoke(decorated, args);
+              return method.invoke(instance, args);
             }
             // Check if the class in which the method resides, implements any one of the
             // interfaces that we extracted from the decorated class.
@@ -317,9 +401,9 @@ public class WebDriverDecorator<T extends WebDriver> {
                             eachInterface.isAssignableFrom(method.getDeclaringClass()));
 
             if (isCompatible) {
-              decorated.beforeCall(method, args);
-              Object result = decorated.call(method, args);
-              decorated.afterCall(method, result, args);
+              instance.beforeCall(method, args);
+              Object result = instance.call(method, args);
+              instance.afterCall(method, result, args);
               return result;
             }
 
@@ -333,12 +417,15 @@ public class WebDriverDecorator<T extends WebDriver> {
                             eachInterface.isAssignableFrom(method.getDeclaringClass()));
 
             if (isCompatible) {
-              return derivedInterfaces.get(method.getDeclaringClass()).invoke(proxy, method, args);
+              return derivedInterfaces
+                  .get(method.getDeclaringClass())
+                  .apply(instance.getOriginal())
+                  .invoke(proxy, method, args);
             }
 
-            return method.invoke(decorated.getOriginal(), args);
+            return method.invoke(instance.getOriginal(), args);
           } catch (InvocationTargetException e) {
-            return decorated.onError(method, e, args);
+            return instance.onError(method, e, args);
           }
         };
 
@@ -346,6 +433,8 @@ public class WebDriverDecorator<T extends WebDriver> {
     allInterfaces.addAll(decoratedInterfaces);
     allInterfaces.addAll(originalInterfaces);
     allInterfaces.addAll(derivedInterfaces.keySet());
+    // ensure a decorated driver can get decorated again
+    allInterfaces.remove(HasTarget.class);
     Class<?>[] allInterfacesArray = allInterfaces.toArray(new Class<?>[0]);
 
     Class<? extends Z> proxy =
@@ -354,20 +443,15 @@ public class WebDriverDecorator<T extends WebDriver> {
             .implement(allInterfacesArray)
             .method(ElementMatchers.any())
             .intercept(InvocationHandlerAdapter.of(handler))
+            .defineField("target", Decorated.class, Visibility.PRIVATE)
+            .implement(HasTarget.class)
+            .intercept(FieldAccessor.ofField("target"))
             .make()
             .load(clazz.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
             .getLoaded()
             .asSubclass(clazz);
 
-    try {
-      return proxy.newInstance();
-    } catch (ReflectiveOperationException e) {
-      throw new IllegalStateException("Unable to create new proxy", e);
-    }
-  }
-
-  static Set<Class<?>> extractInterfaces(final Object object) {
-    return extractInterfaces(object.getClass());
+    return new ProxyFactory<Z>(proxy);
   }
 
   private static Set<Class<?>> extractInterfaces(final Class<?> clazz) {
@@ -393,43 +477,46 @@ public class WebDriverDecorator<T extends WebDriver> {
     extractInterfaces(collector, clazz.getSuperclass());
   }
 
-  private Map<Class<?>, InvocationHandler> deriveAdditionalInterfaces(Object object) {
-    Map<Class<?>, InvocationHandler> handlers = new HashMap<>();
+  private <Z> Map<Class<?>, Function<Z, InvocationHandler>> deriveAdditionalInterfaces(Z sample) {
+    Map<Class<?>, Function<Z, InvocationHandler>> handlers = new HashMap<>();
 
-    if (object instanceof WebDriver && !(object instanceof WrapsDriver)) {
+    if (sample instanceof WebDriver && !(sample instanceof WrapsDriver)) {
       handlers.put(
           WrapsDriver.class,
-          (proxy, method, args) -> {
-            if ("getWrappedDriver".equals(method.getName())) {
-              return object;
-            }
-            throw new UnsupportedOperationException(method.getName());
-          });
+          (instance) ->
+              (proxy, method, args) -> {
+                if ("getWrappedDriver".equals(method.getName())) {
+                  return instance;
+                }
+                throw new UnsupportedOperationException(method.getName());
+              });
     }
 
-    if (object instanceof WebElement && !(object instanceof WrapsElement)) {
+    if (sample instanceof WebElement && !(sample instanceof WrapsElement)) {
       handlers.put(
           WrapsElement.class,
-          (proxy, method, args) -> {
-            if ("getWrappedElement".equals(method.getName())) {
-              return object;
-            }
-            throw new UnsupportedOperationException(method.getName());
-          });
+          (instance) ->
+              (proxy, method, args) -> {
+                if ("getWrappedElement".equals(method.getName())) {
+                  return instance;
+                }
+                throw new UnsupportedOperationException(method.getName());
+              });
     }
 
     try {
-      Method toJson = object.getClass().getDeclaredMethod("toJson");
+      Method toJson = sample.getClass().getDeclaredMethod("toJson");
       toJson.setAccessible(true);
 
       handlers.put(
           JsonSerializer.class,
-          ((proxy, method, args) -> {
-            if ("toJson".equals(method.getName())) {
-              return toJson.invoke(object);
-            }
-            throw new UnsupportedOperationException(method.getName());
-          }));
+          (instance) ->
+              ((proxy, method, args) -> {
+                if ("toJson".equals(method.getName())) {
+                  return toJson.invoke(instance);
+                }
+                throw new UnsupportedOperationException(method.getName());
+              }));
     } catch (NoSuchMethodException e) {
       // Fine. Just fall through
     }

@@ -400,7 +400,12 @@ public class GridModel {
     }
   }
 
-  public void reserve(NodeStatus status, Slot slot) {
+  /**
+   * A helper to reserve a slot of a node. The writeLock must be acquired outside to ensure the view
+   * of the NodeStatus is the current state, otherwise concurrent calls to amend will work with an
+   * outdated view of slots.
+   */
+  private void reserve(NodeStatus status, Slot slot) {
     Instant now = Instant.now();
 
     Slot reserved =
@@ -490,6 +495,11 @@ public class GridModel {
     }
   }
 
+  /**
+   * A helper to replace the availability and a slot of a node. The writeLock must be acquired
+   * outside to ensure the view of the NodeStatus is the current state, otherwise concurrent calls
+   * to amend will work with an outdated view of slots.
+   */
   private void amend(Availability availability, NodeStatus status, Slot slot) {
     Set<Slot> newSlots = new HashSet<>(status.getSlots());
     newSlots.removeIf(s -> s.getId().equals(slot.getId()));
@@ -497,23 +507,17 @@ public class GridModel {
 
     NodeStatus node = getNode(status.getNodeId());
 
-    Lock writeLock = lock.writeLock();
-    writeLock.lock();
-    try {
-      nodes.remove(node);
-      nodes.add(
-          new NodeStatus(
-              status.getNodeId(),
-              status.getExternalUri(),
-              status.getMaxSessionCount(),
-              newSlots,
-              availability,
-              status.getHeartbeatPeriod(),
-              status.getSessionTimeout(),
-              status.getVersion(),
-              status.getOsInfo()));
-    } finally {
-      writeLock.unlock();
-    }
+    nodes.remove(node);
+    nodes.add(
+        new NodeStatus(
+            status.getNodeId(),
+            status.getExternalUri(),
+            status.getMaxSessionCount(),
+            newSlots,
+            availability,
+            status.getHeartbeatPeriod(),
+            status.getSessionTimeout(),
+            status.getVersion(),
+            status.getOsInfo()));
   }
 }

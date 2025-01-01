@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  format:
+  pin:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'seleniumhq'
     steps:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
       - name: java - repin dependencies
         if: contains(join(github.event.commits.*.message), '[java]')
-        run: REPIN=1 bazel run @maven//:pin
+        run: RULES_JVM_EXTERNAL_REPIN=1 bazel run @maven//:pin
       - name: rust - repin dependencies
         if: contains(join(github.event.commits.*.message), '[rust]')
         run: CARGO_BAZEL_REPIN=true bazel sync --only=crates
@@ -40,7 +40,7 @@ jobs:
           fi
 
   check-format:
-    needs: format
+    needs: pin
     name: Check format
     if: github.repository_owner == 'seleniumhq'
     uses: ./.github/workflows/bazel.yml
@@ -52,6 +52,7 @@ jobs:
 
   test:
     name: Test
+    needs: pin
     if: github.repository_owner == 'seleniumhq'
     uses: ./.github/workflows/bazel.yml
     with:
@@ -59,3 +60,9 @@ jobs:
       caching: false
       ruby-version: jruby-9.4.8.0
       run: ./scripts/github-actions/ci-build.sh
+
+  ci-gh:
+    name: CI - GitHub
+    needs: pin
+    if: github.repository_owner == 'seleniumhq'
+    uses: ./.github/workflows/ci.yml
