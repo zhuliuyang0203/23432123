@@ -34,8 +34,27 @@ module Selenium
         def remove_cookie(name)
           cookies.delete_if { |cookie| cookie['name'] == name }
         end
+
+        def set_cookie_header(**args)
+          cookies.push(
+            'name' => args[:name],
+            'value' => {
+              'type' => 'string',
+              'value' => 'input'
+            },
+            'domain' => args[:domain],
+            'httpOnly' => args[:http_only],
+            'expiry' => args[:expiry],
+            'maxAge' => args[:max_age],
+            'path' => args[:path],
+            'sameSite' => args[:same_site],
+            'secure' => args[:secure]
+          )
+        end
       end
-    end # BiDi
+    end
+
+    # BiDi
   end # WebDriver
 end # Selenium
 

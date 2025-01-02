@@ -166,6 +166,29 @@ module Selenium
         end
       end
 
+      it 'adds a response handler with attributes' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler do |response|
+            response.reason = 'OK'
+            response.add_header('foo', 'bar')
+            response.set_cookie_header(name: 'foo',
+                                       domain: 'localhost',
+                                       http_only: true,
+                                       expiry: '1_000_000',
+                                       max_age: 1_000,
+                                       path: '/',
+                                       same_site: 'none',
+                                       secure: false)
+            response.add_credentials('foo', 'bar')
+            response.continue
+          end
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
       it 'removes a response handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)

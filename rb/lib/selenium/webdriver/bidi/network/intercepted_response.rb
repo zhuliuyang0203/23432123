@@ -17,11 +17,18 @@
 # specific language governing permissions and limitations
 # under the License.
 
+require_relative 'cookies'
+require_relative 'headers'
+
 module Selenium
   module WebDriver
     class BiDi
       class InterceptedResponse < InterceptedItem
-        attr_accessor :cookies, :headers, :credentials, :reason
+        include Cookies
+        include Headers
+
+        attr_accessor :cookies, :headers, :reason
+        attr_reader :credentials
 
         def initialize(network, request)
           super
@@ -34,8 +41,18 @@ module Selenium
         def continue
           network.continue_response(id:, cookies:, headers:, credentials:, reason:)
         end
+
+        def add_credentials(username, password)
+          @credentials = {
+            'type' => 'password',
+            'username' => username,
+            'password' => password
+          }
+        end
       end
-    end # BiDi
+    end
+
+    # BiDi
   end # WebDriver
 end # Selenium
 
