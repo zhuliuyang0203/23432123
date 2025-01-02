@@ -179,5 +179,5 @@ suite(
       })
     })
   },
-  { browsers: [Browser.CHROME] },
+  { browsers: [Browser.CHROME, Browser.EDGE] },
 )
