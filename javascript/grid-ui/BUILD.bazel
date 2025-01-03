@@ -79,7 +79,6 @@ esbuild(
         "os",
         "path",
         "util",
-        "@novnc/novnc/core/rfb",
     ],
     format = "iife",
     minify = True,
