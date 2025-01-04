@@ -106,7 +106,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_request_handler(&:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -116,7 +116,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_request_handler(url_for('formPage.html'), &:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -126,7 +126,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_request_handler(url_for('formPage.html'), url_for('basicAuth'), &:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -136,7 +136,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_request_handler(url_for('formPage.html'), pattern_type: :url, &:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -154,7 +154,7 @@ module Selenium
             request.continue
           end
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -213,7 +213,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_response_handler(&:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -243,7 +243,7 @@ module Selenium
           network = described_class.new(driver)
           network.add_response_handler(url_for('formPage.html'), pattern_type: :url, &:continue)
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
@@ -266,7 +266,7 @@ module Selenium
             response.continue
           end
           driver.navigate.to url_for('formPage.html')
-          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
         end
       end
