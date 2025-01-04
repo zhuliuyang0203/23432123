@@ -16,6 +16,8 @@
 # under the License.
 """The Keys implementation."""
 
+import sys
+
 
 class Keys:
     """Set of special keys codes."""
@@ -88,3 +90,7 @@ class Keys:
     META = "\ue03d"
     COMMAND = "\ue03d"
     ZENKAKU_HANKAKU = "\ue040"
+
+    def ctrl_or_command(self):
+        """Returns the control (if Linux/Windows) or command (if Mac) key value."""
+        return self.COMMAND if sys.platform == "darwin" else self.CONTROL
