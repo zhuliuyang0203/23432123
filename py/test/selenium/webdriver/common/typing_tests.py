@@ -352,6 +352,6 @@ def test_should_type_ctrl_or_command_based_on_os(driver, pages):
     element = driver.find_element(by=By.ID, value="keyReporter")
     element.send_keys(1234)
     assert element.get_attribute("value") == "1234"
-    element.send_keys(Keys.CONTROL_OR_COMMAND + "a")
+    element.send_keys(Keys.COMMAND_OR_CONTROL + "a")
     element.send_keys(Keys.BACKSPACE)
     assert element.get_attribute("value") == ""
