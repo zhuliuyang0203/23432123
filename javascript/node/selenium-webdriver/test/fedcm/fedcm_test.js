@@ -20,7 +20,7 @@
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
 const { Pages, suite } = require('../../lib/test')
-const { By } = require('../../index')
+const { By } = require('selenium-webdriver/index')
 
 suite(
   function (env) {
