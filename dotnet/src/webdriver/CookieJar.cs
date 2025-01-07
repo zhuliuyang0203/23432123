@@ -117,9 +117,9 @@ namespace OpenQA.Selenium
         /// <returns>A Cookie from the name; or <see langword="null"/> if not found.</returns>
         public Cookie? GetCookieNamed(string name)
         {
-            if (name is null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentException("Cookie name cannot be empty", nameof(name));
             }
 
             try
