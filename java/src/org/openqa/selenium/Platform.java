@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 public enum Platform {
 
   /** Never returned, but can be used to request a browser running on any version of Windows. */
-  WINDOWS("") {
+  WINDOWS("windows") {
     @Override
     public Platform family() {
       return null;
@@ -299,6 +299,18 @@ public enum Platform {
     @Override
     public String toString() {
       return "macOS 14.0";
+    }
+  },
+
+  SEQUOIA("sequoia", "os x 15.0", "macos 15.0") {
+    @Override
+    public Platform family() {
+      return MAC;
+    }
+
+    @Override
+    public String toString() {
+      return "macOS 15.0";
     }
   },
 

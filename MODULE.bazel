@@ -21,7 +21,7 @@ bazel_dep(name = "rules_dotnet", version = "0.17.5")
 bazel_dep(name = "rules_java", version = "7.12.4")
 bazel_dep(name = "rules_jvm_external", version = "6.6")
 bazel_dep(name = "rules_nodejs", version = "6.3.2")
-bazel_dep(name = "rules_oci", version = "1.7.6")
+bazel_dep(name = "rules_oci", version = "1.8.0")
 bazel_dep(name = "rules_pkg", version = "0.10.1")
 bazel_dep(name = "rules_python", version = "0.33.0")
 bazel_dep(name = "rules_proto", version = "6.0.2")
@@ -173,15 +173,15 @@ maven.install(
         "com.github.spotbugs:spotbugs:4.8.6",
         "com.github.stephenc.jcip:jcip-annotations:1.0-1",
         "com.google.code.gson:gson:2.11.0",
-        "com.google.guava:guava:33.3.1-jre",
+        "com.google.guava:guava:33.4.0-jre",
         "com.google.auto:auto-common:1.2.2",
         "com.google.auto.service:auto-service:1.1.1",
         "com.google.auto.service:auto-service-annotations:1.1.1",
         "com.google.googlejavaformat:google-java-format:1.25.2:1.25.0",
         "com.graphql-java:graphql-java:22.3",
         "dev.failsafe:failsafe:3.3.2",
-        "io.grpc:grpc-context:1.68.1",
-        "io.lettuce:lettuce-core:6.5.1.RELEASE",
+        "io.grpc:grpc-context:1.69.0",
+        "io.lettuce:lettuce-core:6.5.2.RELEASE",
         "io.netty:netty-buffer",
         "io.netty:netty-codec-http",
         "io.netty:netty-codec-http2",
@@ -201,10 +201,10 @@ maven.install(
         "io.opentelemetry.semconv:opentelemetry-semconv:1.28.0-alpha",
         "it.ozimov:embedded-redis:0.7.3",
         "net.bytebuddy:byte-buddy:1.15.11",
-        "org.htmlunit:htmlunit-core-js:4.6.0",
+        "org.htmlunit:htmlunit-core-js:4.7.0",
         "org.apache.commons:commons-exec:1.4.0",
         "org.apache.logging.log4j:log4j-core:2.24.3",
-        "org.assertj:assertj-core:3.26.3",
+        "org.assertj:assertj-core:3.27.2",
         "org.bouncycastle:bcpkix-jdk18on:1.79",
         "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5",
         "org.hsqldb:hsqldb:2.7.4",

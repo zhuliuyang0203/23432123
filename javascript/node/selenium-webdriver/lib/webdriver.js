@@ -45,6 +45,7 @@ const { PinnedScript } = require('./pinnedScript')
 const JSZip = require('jszip')
 const Script = require('./script')
 const Network = require('./network')
+const Dialog = require('./fedcm/dialog')
 
 // Capability names that are defined in the W3C spec.
 const W3C_CAPABILITY_NAMES = new Set([
@@ -1104,6 +1105,18 @@ class WebDriver {
   /** @override */
   takeScreenshot() {
     return this.execute(new command.Command(command.Name.SCREENSHOT))
+  }
+
+  setDelayEnabled(enabled) {
+    return this.execute(new command.Command(command.Name.SET_DELAY_ENABLED).setParameter('enabled', enabled))
+  }
+
+  resetCooldown() {
+    return this.execute(new command.Command(command.Name.RESET_COOLDOWN))
+  }
+
+  getFederalCredentialManagementDialog() {
+    return new Dialog(this)
   }
 
   /** @override */
