@@ -159,7 +159,9 @@ public class DockerOptions {
 
     loadImages(docker, kinds.keySet().toArray(new String[0]));
     Image videoImage = getVideoImage(docker);
-    loadImages(docker, videoImage.getName());
+    if (videoImage != null) {
+      loadImages(docker, videoImage.getName());
+    }
 
     // Hard coding the config section value "node" to avoid an extra dependency
     int maxContainerCount =
@@ -224,6 +226,9 @@ public class DockerOptions {
 
   private Image getVideoImage(Docker docker) {
     String videoImage = config.get(DOCKER_SECTION, "video-image").orElse(DEFAULT_VIDEO_IMAGE);
+    if (videoImage.equalsIgnoreCase("false")) {
+      return null;
+    }
     return docker.getImage(videoImage);
   }
 
