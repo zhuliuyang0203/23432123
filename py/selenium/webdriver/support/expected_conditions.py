@@ -27,7 +27,9 @@ from selenium.common.exceptions import (
     WebDriverException,
 )
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.by import ByType
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
+from selenium.webdriver.support.relative_locator import RelativeBy
 
 """
  * Canned "Expected Conditions" which are generally useful within webdriver
@@ -38,6 +40,7 @@ D = TypeVar("D")
 T = TypeVar("T")
 
 WebDriverOrWebElement = Union[WebDriver, WebElement]
+LocatorType = Union[Tuple[ByType, str], Tuple[RelativeBy, None]]
 
 
 def title_is(title: str) -> Callable[[WebDriver], bool]:
@@ -79,7 +82,7 @@ def title_contains(title: str) -> Callable[[WebDriver], bool]:
     return _predicate
 
 
-def presence_of_element_located(locator: Tuple[str, str]) -> Callable[[WebDriverOrWebElement], WebElement]:
+def presence_of_element_located(locator: LocatorType) -> Callable[[WebDriverOrWebElement], WebElement]:
     """An expectation for checking that an element is present on the DOM of a
     page. This does not necessarily mean that the element is visible.
 
@@ -189,7 +192,7 @@ def url_changes(url: str) -> Callable[[WebDriver], bool]:
 
 
 def visibility_of_element_located(
-    locator: Tuple[str, str],
+    locator: LocatorType,
 ) -> Callable[[WebDriverOrWebElement], Union[Literal[False], WebElement]]:
     """An expectation for checking that an element is present on the DOM of a
     page and visible. Visibility means that the element is not only displayed
@@ -272,7 +275,7 @@ def _element_if_visible(element: WebElement, visibility: bool = True) -> Union[L
     return element if element.is_displayed() == visibility else False
 
 
-def presence_of_all_elements_located(locator: Tuple[str, str]) -> Callable[[WebDriverOrWebElement], List[WebElement]]:
+def presence_of_all_elements_located(locator: LocatorType) -> Callable[[WebDriverOrWebElement], List[WebElement]]:
     """An expectation for checking that there is at least one element present
     on a web page.
 
@@ -299,7 +302,7 @@ def presence_of_all_elements_located(locator: Tuple[str, str]) -> Callable[[WebD
     return _predicate
 
 
-def visibility_of_any_elements_located(locator: Tuple[str, str]) -> Callable[[WebDriverOrWebElement], List[WebElement]]:
+def visibility_of_any_elements_located(locator: LocatorType) -> Callable[[WebDriverOrWebElement], List[WebElement]]:
     """An expectation for checking that there is at least one element visible
     on a web page.
 
@@ -327,7 +330,7 @@ def visibility_of_any_elements_located(locator: Tuple[str, str]) -> Callable[[We
 
 
 def visibility_of_all_elements_located(
-    locator: Tuple[str, str],
+    locator: LocatorType,
 ) -> Callable[[WebDriverOrWebElement], Union[List[WebElement], Literal[False]]]:
     """An expectation for checking that all elements are present on the DOM of
     a page and visible. Visibility means that the elements are not only
@@ -363,7 +366,7 @@ def visibility_of_all_elements_located(
     return _predicate
 
 
-def text_to_be_present_in_element(locator: Tuple[str, str], text_: str) -> Callable[[WebDriverOrWebElement], bool]:
+def text_to_be_present_in_element(locator: LocatorType, text_: str) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation for checking if the given text is present in the
     specified element.
 
@@ -399,7 +402,7 @@ def text_to_be_present_in_element(locator: Tuple[str, str], text_: str) -> Calla
 
 
 def text_to_be_present_in_element_value(
-    locator: Tuple[str, str], text_: str
+    locator: LocatorType, text_: str
 ) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation for checking if the given text is present in the
     element's value.
@@ -436,7 +439,7 @@ def text_to_be_present_in_element_value(
 
 
 def text_to_be_present_in_element_attribute(
-    locator: Tuple[str, str], attribute_: str, text_: str
+    locator: LocatorType, attribute_: str, text_: str
 ) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation for checking if the given text is present in the
     element's attribute.
@@ -477,7 +480,7 @@ def text_to_be_present_in_element_attribute(
 
 
 def frame_to_be_available_and_switch_to_it(
-    locator: Union[Tuple[str, str], str, WebElement],
+    locator: Union[LocatorType, str, WebElement],
 ) -> Callable[[WebDriver], bool]:
     """An expectation for checking whether the given frame is available to
     switch to.
@@ -517,7 +520,7 @@ def frame_to_be_available_and_switch_to_it(
 
 
 def invisibility_of_element_located(
-    locator: Union[WebElement, Tuple[str, str]],
+    locator: Union[WebElement, LocatorType],
 ) -> Callable[[WebDriverOrWebElement], Union[WebElement, bool]]:
     """An Expectation for checking that an element is either invisible or not
     present on the DOM.
@@ -565,7 +568,7 @@ def invisibility_of_element_located(
 
 
 def invisibility_of_element(
-    element: Union[WebElement, Tuple[str, str]],
+    element: Union[WebElement, LocatorType],
 ) -> Callable[[WebDriverOrWebElement], Union[WebElement, bool]]:
     """An Expectation for checking that an element is either invisible or not
     present on the DOM.
@@ -592,7 +595,7 @@ def invisibility_of_element(
 
 
 def element_to_be_clickable(
-    mark: Union[WebElement, Tuple[str, str]],
+    mark: Union[WebElement, LocatorType],
 ) -> Callable[[WebDriverOrWebElement], Union[Literal[False], WebElement]]:
     """An Expectation for checking an element is visible and enabled such that
     you can click it.
@@ -687,7 +690,7 @@ def element_to_be_selected(element: WebElement) -> Callable[[Any], bool]:
     return _predicate
 
 
-def element_located_to_be_selected(locator: Tuple[str, str]) -> Callable[[WebDriverOrWebElement], bool]:
+def element_located_to_be_selected(locator: LocatorType) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation for the element to be located is selected.
 
     Parameters:
@@ -743,7 +746,7 @@ def element_selection_state_to_be(element: WebElement, is_selected: bool) -> Cal
 
 
 def element_located_selection_state_to_be(
-    locator: Tuple[str, str], is_selected: bool
+    locator: LocatorType, is_selected: bool
 ) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation to locate an element and check if the selection state
     specified is in that state.
@@ -858,7 +861,7 @@ def alert_is_present() -> Callable[[WebDriver], Union[Alert, Literal[False]]]:
     return _predicate
 
 
-def element_attribute_to_include(locator: Tuple[str, str], attribute_: str) -> Callable[[WebDriverOrWebElement], bool]:
+def element_attribute_to_include(locator: LocatorType, attribute_: str) -> Callable[[WebDriverOrWebElement], bool]:
     """An expectation for checking if the given attribute is included in the
     specified element.
 

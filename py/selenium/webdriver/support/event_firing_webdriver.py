@@ -15,14 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple, Union
 
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import ByType
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from .abstract_event_listener import AbstractEventListener
+from .relative_locator import RelativeBy
 
 
 def _wrap_elements(result, ef_driver):
@@ -187,10 +189,10 @@ class EventFiringWebElement:
     def send_keys(self, *value) -> None:
         self._dispatch("change_value_of", (self._webelement, self._driver), "send_keys", value)
 
-    def find_element(self, by=By.ID, value=None) -> WebElement:
+    def find_element(self, by: Union[ByType, RelativeBy] = By.ID, value: Optional[str] = None) -> WebElement:
         return self._dispatch("find", (by, value, self._driver), "find_element", (by, value))
 
-    def find_elements(self, by=By.ID, value=None) -> List[WebElement]:
+    def find_elements(self, by: Union[ByType, RelativeBy] = By.ID, value: Optional[str] = None) -> List[WebElement]:
         return self._dispatch("find", (by, value, self._driver), "find_elements", (by, value))
 
     def _dispatch(self, l_call, l_args, d_call, d_args):
