@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.DevTools.Json;
 
 internal static class DevToolsJsonOptions
 {
-    public static JsonSerializerOptions DevToolsSerializerOptions { get; } = new JsonSerializerOptions()
+    public static JsonSerializerOptions Default { get; } = new JsonSerializerOptions()
     {
         Converters =
         {
