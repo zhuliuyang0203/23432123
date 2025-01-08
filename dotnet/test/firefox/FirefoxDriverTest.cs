@@ -360,18 +360,6 @@ namespace OpenQA.Selenium.Firefox
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
-        [Test]
-        public void AAA()
-        {
-            driver.Manage().Network.StartMonitoring().GetAwaiter().GetResult(); // this enables serialization
-            driver.Navigate().GoToUrl("https://tus.io/demo");
-
-            Thread.Sleep(10_000);
-            driver.FindElement(By.Id("P0-0")).SendKeys("C:\\Users\\Owner\\Downloads\\Firefox Installer.exe");
-
-            Thread.Sleep(60_000);
-        }
-        
         private string GetPath(string name)
         {
             string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
