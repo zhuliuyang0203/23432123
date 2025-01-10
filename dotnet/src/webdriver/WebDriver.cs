@@ -847,6 +847,9 @@ namespace OpenQA.Selenium
                         case WebDriverResult.UnsupportedOperation:
                             throw new UnsupportedOperationException(errorMessage);
 
+                        case WebDriverResult.NoSuchCookie:
+                            throw new NoSuchCookieException(errorMessage);
+
                         default:
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));
                     }
