@@ -163,7 +163,6 @@ namespace OpenQA.Selenium.DevToolsGenerator
                 throw new InvalidOperationException("Protocol mismatch -- The WebKit and V8 protocol versions should match.");
             }
 
-
             var result = browserProtocol.DeepClone().AsObject();
             foreach (var domain in jsProtocol["domains"].AsArray())
             {
