@@ -18,7 +18,7 @@ following path – /usr/bin/safaridriver. To enable automation on safari,
 you need to run command `safaridriver --enable`.
 
 | Browser           | Component                        |
-|:------------------|:---------------------------------|
+| :---------------- | :------------------------------- |
 | Chrome            | [chromedriver(.exe)][chrome]     |
 | Internet Explorer | [IEDriverServer.exe][release]    |
 | Edge              | [MicrosoftWebDriver.msi][edge]   |
@@ -32,9 +32,9 @@ The sample below and others are included in the `example` directory. You may
 also find the tests for selenium-webdriver informative.
 
 ```javascript
-const { Builder, Browser, By, Key, until } = require('selenium-webdriver');
+const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 
-(async function example() {
+;(async function example() {
   let driver = await new Builder().forBrowser(Browser.FIREFOX).build()
   try {
     await driver.get('https://www.google.com/ncr')
@@ -140,7 +140,7 @@ v23.6.0,
 respectively. Then a Selenium release would have the following support levels:
 
 |  Version   |    Support    |
-|:----------:|:-------------:|
+| :--------: | :-----------: |
 | <= 16.20.2 | _unsupported_ |
 |  16.20.2   |   supported   |
 |   18.8.0   |   supported   |
@@ -166,7 +166,7 @@ If Node releases a new [LTS] each October and a new major version every 6
 months, the support window for selenium-webdriver will be roughly:
 
 | Release |     Status      | END-OF-LIFE |
-|:-------:|:---------------:|:-----------:|
+| :-----: | :-------------: | :---------: |
 |  v18.x  | Maintenance LTS | 2025-04-30  |
 |  v19.x  |   End-of-Life   | 2023-06-01  |
 |  v20.x  | Maintenance LTS | 2026-04-30  |
@@ -175,7 +175,7 @@ months, the support window for selenium-webdriver will be roughly:
 |  V23.x  |     Current     | 2025-06-01  |
 
 ## Issues
- 
+
 Please report any issues using the [Selenium issue tracker][issues]. When using
 the issue tracker
 
