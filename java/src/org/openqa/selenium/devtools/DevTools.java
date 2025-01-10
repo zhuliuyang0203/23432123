@@ -42,7 +42,7 @@ public class DevTools implements Closeable {
   private static final Logger LOG = Logger.getLogger(DevTools.class.getName());
 
   private final Domains protocol;
-  private final Duration timeout = Duration.ofSeconds(10);
+  private final Duration timeout = Duration.ofSeconds(30);
   private final Connection connection;
   private SessionID cdpSession = null;
 
