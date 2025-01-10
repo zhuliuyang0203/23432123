@@ -61,7 +61,7 @@ namespace {{rootNamespace}}.{{domain.Name}}
                 if (m_eventMap.ContainsKey(e.EventName))
                 {
                     var eventData = m_eventMap[e.EventName];
-                    var eventArgs = e.EventData.Deserialize(eventData.EventArgsType);
+                    var eventArgs = e.EventData.Deserialize(eventData.EventArgsType, global::OpenQA.Selenium.DevTools.Json.DevToolsJsonOptions.Default);
                     eventData.EventInvoker(eventArgs);
                 }
             }
