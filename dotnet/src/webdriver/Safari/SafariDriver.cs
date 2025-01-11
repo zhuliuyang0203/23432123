@@ -84,7 +84,7 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         /// <param name="options">The <see cref="SafariOptions"/> to use for this <see cref="SafariDriver"/> instance.</param>
         public SafariDriver(SafariOptions options)
-            : this(SafariDriverService.CreateDefaultService(), options)
+            : this(SafariDriverService.CreateDefaultService(), disposeService: true, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -252,9 +252,23 @@ namespace OpenQA.Selenium.Safari
             {
                 if (this.SessionId is not null)
                 {
-                    this.Execute(DriverCommand.Quit, null);
-
-                    this.SessionId = null;
+                    try
+                    {
+                        this.Execute(DriverCommand.Quit, null);
+                    }
+                    catch (NotImplementedException)
+                    {
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+                    catch (WebDriverException)
+                    {
+                    }
+                    finally
+                    {
+                        this.SessionId = null;
+                    }
                 }
 
                 if (this.disposeDriverService)

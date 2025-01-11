@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Safari;
 using System.Diagnostics;
 
 namespace OpenQA.Selenium
@@ -93,6 +94,49 @@ namespace OpenQA.Selenium
             }
 
             Assert.That(Process.GetProcessesByName("geckodriver"), Is.Empty);
+        }
+
+        [Test]
+        public void SafariImplicitly()
+        {
+            using (var driver = new SafariDriver())
+            {
+                driver.Close();
+                driver.Quit();
+                driver.Dispose();
+            }
+
+            Assert.That(Process.GetProcessesByName("safaridriver"), Is.Empty);
+        }
+
+        [Test]
+        public void SafariNormal()
+        {
+            using (var service = SafariDriverService.CreateDefaultService())
+            {
+                using var driver = new SafariDriver(service);
+            }
+
+            Assert.That(Process.GetProcessesByName("safaridriver"), Is.Empty);
+        }
+
+        [Test]
+        public void SafariShared()
+        {
+            using (var service = SafariDriverService.CreateDefaultService())
+            {
+                using (var driver1 = new SafariDriver(service))
+                {
+                    driver1.Url = "https://google.com";
+                }
+
+                using (var driver2 = new SafariDriver(service))
+                {
+                    driver2.Url = "https://google.com";
+                }
+            }
+
+            Assert.That(Process.GetProcessesByName("safaridriver"), Is.Empty);
         }
     }
 }
