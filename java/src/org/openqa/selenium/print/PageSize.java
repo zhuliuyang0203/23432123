@@ -25,11 +25,11 @@ public class PageSize {
   private final double width;
 
     // Predefined constants
-    public static final PageSize A4 = new PageSize(27.94, 21.59);
-    public static final PageSize LEGAL = new PageSize(35.56, 21.59);
-    public static final PageSize TABLOID = new PageSize(43.18, 27.94);
-    public static final PageSize LETTER = new PageSize(27.94, 21.59);
-
+    public static final PageSize A4 = new PageSize(27.94, 21.59); // A4 size in cm
+    public static final PageSize LEGAL = new PageSize(35.56, 21.59); // Legal size in cm
+    public static final PageSize TABLOID = new PageSize(43.18, 27.94); // Tabloid size in cm
+    public static final PageSize LETTER = new PageSize(27.94, 21.59); // Letter size in cm
+    
     public PageSize(double height, double width) {
         this.height = height;
         this.width = width;
