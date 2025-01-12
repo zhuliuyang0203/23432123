@@ -7,32 +7,20 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
     {
 
         [JsonProperty(PropertyName = "deprecated")]
-        public bool Deprecated
-        {
-            get;
-            set;
-        }
+        public bool Deprecated { get; set; }
 
         public string Description
         {
-            get => InitialDescription != null ? InitialDescription.Replace("<", "&lt;").Replace(">", "&gt;") : null;
+            get => InitialDescription?.Replace("<", "&lt;").Replace(">", "&gt;");
             set => InitialDescription = value;
         }
 
         [JsonProperty(PropertyName = "experimental")]
         [JsonConverter(typeof(BooleanJsonConverter))]
-        public bool Experimental
-        {
-            get;
-            set;
-        }
+        public bool Experimental { get; set; }
 
         [JsonProperty(PropertyName = "name")]
-        public virtual string Name
-        {
-            get;
-            set;
-        }
+        public virtual string Name { get; set; }
 
         public override string ToString()
         {
@@ -40,10 +28,6 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         }
 
         [JsonProperty(PropertyName = "description")]
-        protected string InitialDescription
-        {
-            get;
-            set;
-        }
+        protected string InitialDescription { get; set; }
     }
 }

@@ -18,6 +18,7 @@
 // </copyright>
 
 using System;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,6 +85,6 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        Task<JsonNode> SendCommand(string commandName, JsonNode @params, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived);
+        Task<JsonElement?> SendCommand(string commandName, JsonNode @params, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived);
     }
 }

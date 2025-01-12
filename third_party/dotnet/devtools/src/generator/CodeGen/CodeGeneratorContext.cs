@@ -8,16 +8,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     /// </summary>
     public sealed class CodeGeneratorContext
     {
-        public DomainDefinition Domain
-        {
-            get;
-            set;
-        }
+        public DomainDefinition Domain { get; set; }
 
-        public Dictionary<string, TypeInfo> KnownTypes
-        {
-            get;
-            set;
-        }
+        public Dictionary<string, TypeInfo> KnownTypes { get; set; }
     }
 }

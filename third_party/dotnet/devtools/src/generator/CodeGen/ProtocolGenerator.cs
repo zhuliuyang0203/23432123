@@ -20,7 +20,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
         public override IDictionary<string, string> GenerateCode(ProtocolDefinition protocolDefinition, CodeGeneratorContext context)
         {
-            if (String.IsNullOrWhiteSpace(Settings.TemplatesPath))
+            if (string.IsNullOrWhiteSpace(Settings.TemplatesPath))
             {
                 Settings.TemplatesPath = Path.GetDirectoryName(Settings.TemplatesPath);
             }
@@ -55,9 +55,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             //Get eventinfos as an array
             ICollection<EventInfo> events = new List<EventInfo>();
 
-            foreach(var domain in domains)
+            foreach (var domain in domains)
             {
-                foreach(var @event in domain.Events)
+                foreach (var @event in domain.Events)
                 {
                     events.Add(new EventInfo
                     {
@@ -71,7 +71,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             var types = GetTypesInDomain(domains);
 
             //Create an object that contains information that include templates can use.
-            var includeData = new {
+            var includeData = new
+            {
                 chromeVersion = protocolDefinition.BrowserVersion,
                 runtimeVersion = Settings.RuntimeVersion,
                 rootNamespace = Settings.RootNamespace,
@@ -140,22 +141,27 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                             };
                             break;
                         case "string":
-                            if (type.Enum != null && type.Enum.Count() > 0)
+                            if (type.Enum != null && type.Enum.Count > 0)
+                            {
                                 typeInfo = new TypeInfo
                                 {
                                     ByRef = true,
                                     IsPrimitive = false,
                                     TypeName = type.Id.Dehumanize(),
                                 };
+                            }
                             else
+                            {
                                 typeInfo = new TypeInfo
                                 {
                                     IsPrimitive = true,
                                     TypeName = "string"
                                 };
+                            }
+
                             break;
                         case "array":
-                            if ((type.Items == null || String.IsNullOrWhiteSpace(type.Items.Type)) &&
+                            if ((type.Items == null || string.IsNullOrWhiteSpace(type.Items.Type)) &&
                                 type.Items.TypeReference != "StringIndex" && type.Items.TypeReference != "FilterEntry")
                             {
                                 throw new NotImplementedException("Did not expect a top-level domain array type to specify a TypeReference");
@@ -171,8 +177,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                                     itemType = "double";
                                     break;
                                 case null:
-                                    if (String.IsNullOrWhiteSpace(type.Items.TypeReference))
+                                    if (string.IsNullOrWhiteSpace(type.Items.TypeReference))
+                                    {
                                         throw new NotImplementedException($"Did not expect a top-level domain array type to have a null type and a null or whitespace type reference.");
+                                    }
 
                                     switch (type.Items.TypeReference)
                                     {
