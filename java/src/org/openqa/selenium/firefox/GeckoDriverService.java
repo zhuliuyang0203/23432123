@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
@@ -221,11 +220,6 @@ public class GeckoDriverService extends FirefoxDriverService {
     protected List<String> createArgs() {
       List<String> args = new ArrayList<>();
       args.add(String.format("--port=%d", getPort()));
-      if(Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("ar")) {
-        throw new NumberFormatException(String.format("Couldn't format the port numbers because the System Language is arabic: \"--port=%d\","
-        + " please make sure to add the required arguments \"-Duser.language=en -Duser.region=US\" to your JVM,"
-        + " for more info please visit :\n  https://www.selenium.dev/documentation/webdriver/browsers/", getPort()));
-      }
 
       int wsPort = PortProber.findFreePort();
       args.add(String.format("--websocket-port=%d", wsPort));
