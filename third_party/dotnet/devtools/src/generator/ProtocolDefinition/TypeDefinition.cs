@@ -1,6 +1,6 @@
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
     using OpenQA.Selenium.DevToolsGenerator.Converters;
     using System;
     using System.Collections.Generic;
@@ -14,31 +14,31 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
             Properties = new Collection<TypeDefinition>();
         }
 
-        [JsonProperty(PropertyName = "id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty(PropertyName = "type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty(PropertyName = "enum")]
+        [JsonPropertyName("enum")]
         public ICollection<string> Enum { get; set; }
 
-        [JsonProperty(PropertyName = "properties")]
+        [JsonPropertyName("properties")]
         public ICollection<TypeDefinition> Properties { get; set; }
 
-        [JsonProperty(PropertyName = "items")]
+        [JsonPropertyName("items")]
         public TypeDefinition Items { get; set; }
 
-        [JsonProperty(PropertyName = "minItems")]
+        [JsonPropertyName("minItems")]
         public int MinItems { get; set; }
 
-        [JsonProperty(PropertyName = "maxItems")]
+        [JsonPropertyName("maxItems")]
         public int MaxItems { get; set; }
 
-        [JsonProperty(PropertyName = "$ref")]
+        [JsonPropertyName("$ref")]
         public string TypeReference { get; set; }
 
-        [JsonProperty(PropertyName = "optional")]
+        [JsonPropertyName("optional")]
         [JsonConverter(typeof(BooleanJsonConverter))]
         public bool Optional { get; set; }
 

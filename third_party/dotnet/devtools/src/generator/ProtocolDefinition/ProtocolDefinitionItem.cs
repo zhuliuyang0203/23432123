@@ -1,12 +1,12 @@
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
     using OpenQA.Selenium.DevToolsGenerator.Converters;
 
     public abstract class ProtocolDefinitionItem : IDefinition
     {
 
-        [JsonProperty(PropertyName = "deprecated")]
+        [JsonPropertyName("deprecated")]
         public bool Deprecated { get; set; }
 
         public string Description
@@ -15,11 +15,11 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
             set => InitialDescription = value;
         }
 
-        [JsonProperty(PropertyName = "experimental")]
+        [JsonPropertyName("experimental")]
         [JsonConverter(typeof(BooleanJsonConverter))]
         public bool Experimental { get; set; }
 
-        [JsonProperty(PropertyName = "name")]
+        [JsonPropertyName("name")]
         public virtual string Name { get; set; }
 
         public override string ToString()
@@ -27,7 +27,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
             return Name;
         }
 
-        [JsonProperty(PropertyName = "description")]
+        [JsonPropertyName("description")]
         protected string InitialDescription { get; set; }
     }
 }

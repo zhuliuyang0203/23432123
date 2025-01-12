@@ -1,6 +1,6 @@
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
@@ -11,13 +11,16 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
             Domains = new Collection<DomainDefinition>();
         }
 
-        [JsonProperty(PropertyName = "browserVersion", Required = Required.Always)]
+        [JsonPropertyName("browserVersion")]
+        [JsonRequired]
         public ProtocolVersionDefinition BrowserVersion { get; set; }
 
-        [JsonProperty(PropertyName = "version", Required = Required.Always)]
+        [JsonPropertyName("version")]
+        [JsonRequired]
         public Version Version { get; set; }
 
-        [JsonProperty(PropertyName = "domains", Required = Required.Always)]
+        [JsonPropertyName("domains")]
+        [JsonRequired]
         public ICollection<DomainDefinition> Domains { get; set; }
     }
 }

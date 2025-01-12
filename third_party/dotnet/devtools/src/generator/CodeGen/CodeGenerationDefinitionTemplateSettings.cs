@@ -1,6 +1,6 @@
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// Represents settings around Definition templates.
@@ -47,22 +47,22 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             };
         }
 
-        [JsonProperty("domainTemplate")]
+        [JsonPropertyName("domainTemplate")]
         public CodeGenerationTemplateSettings DomainTemplate { get; set; }
 
-        [JsonProperty("commandTemplate")]
+        [JsonPropertyName("commandTemplate")]
         public CodeGenerationTemplateSettings CommandTemplate { get; set; }
 
-        [JsonProperty("eventTemplate")]
+        [JsonPropertyName("eventTemplate")]
         public CodeGenerationTemplateSettings EventTemplate { get; set; }
 
-        [JsonProperty("typeObjectTemplate")]
+        [JsonPropertyName("typeObjectTemplate")]
         public CodeGenerationTemplateSettings TypeObjectTemplate { get; set; }
 
-        [JsonProperty("typeHashTemplate")]
+        [JsonPropertyName("typeHashTemplate")]
         public CodeGenerationTemplateSettings TypeHashTemplate { get; set; }
 
-        [JsonProperty("typeEnumTemplate")]
+        [JsonPropertyName("typeEnumTemplate")]
         public CodeGenerationTemplateSettings TypeEnumTemplate { get; set; }
     }
 }

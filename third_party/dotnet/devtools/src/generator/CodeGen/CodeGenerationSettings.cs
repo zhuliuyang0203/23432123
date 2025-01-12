@@ -1,6 +1,6 @@
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
     using System.Collections.Generic;
 
     /// <summary>
@@ -26,43 +26,43 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         /// <summary>
         /// Collection of templates that will be parsed and output in the target folder.
         /// </summary>
-        [JsonProperty("include")]
+        [JsonPropertyName("include")]
         public ICollection<CodeGenerationTemplateSettings> Include { get; set; }
 
         /// <summary>
         /// Indicates whether or not domains marked as depreciated will be generated. (Default: true)
         /// </summary>
-        [JsonProperty("includeDeprecatedDomains")]
+        [JsonPropertyName("includeDeprecatedDomains")]
         public bool IncludeDeprecatedDomains { get; set; }
 
         /// <summary>
         /// Indicates whether or not domains marked as depreciated will be generated. (Default: true)
         /// </summary>
-        [JsonProperty("includeExperimentalDomains")]
+        [JsonPropertyName("includeExperimentalDomains")]
         public bool IncludeExperimentalDomains { get; set; }
 
         /// <summary>
         /// Gets or sets the root namespace of generated classes.
         /// </summary>
-        [JsonProperty("rootNamespace")]
+        [JsonPropertyName("rootNamespace")]
         public string RootNamespace { get; set; }
 
         /// <summary>
         /// Gets the version number of the runtime.
         /// </summary>
-        [JsonProperty("runtimeVersion")]
+        [JsonPropertyName("runtimeVersion")]
         public string RuntimeVersion { get; set; }
 
-        [JsonProperty("definitionTemplates")]
+        [JsonPropertyName("definitionTemplates")]
         public CodeGenerationDefinitionTemplateSettings DefinitionTemplates { get; set; }
 
-        [JsonProperty("templatesPath")]
+        [JsonPropertyName("templatesPath")]
         public string TemplatesPath { get; set; }
 
         /// <summary>
         /// The using statements that will be included on each generated file.
         /// </summary>
-        [JsonProperty("usingStatements")]
+        [JsonPropertyName("usingStatements")]
         public ICollection<string> UsingStatements { get; set; }
     }
 }
