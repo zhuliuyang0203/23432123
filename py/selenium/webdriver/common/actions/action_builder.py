@@ -89,11 +89,11 @@ class ActionBuilder:
         ----------
         name : str
             The name of the key input device.
-        
+
         Returns:
         --------
         KeyInput : The newly created key input device.
-        
+
         Example:
         --------
         >>> action_builder = ActionBuilder(driver)
@@ -115,7 +115,7 @@ class ActionBuilder:
                 - "pen"
         name : str
             The name of the pointer input device.
-        
+
         Returns:
         --------
         PointerInput : The newly created pointer input device.
@@ -136,7 +136,7 @@ class ActionBuilder:
         ----------
         name : str
             The name of the wheel input device.
-        
+
         Returns:
         --------
         WheelInput : The newly created wheel input device.
