@@ -50,12 +50,12 @@ class ActionBuilder:
 
     def get_device_with(self, name: str) -> Optional[Union["WheelInput", "PointerInput", "KeyInput"]]:
         """Get the device with the given name.
-        
+
         Parameters:
         ----------
         name : str
             The name of the device to get.
-        
+
         Returns:
         --------
         Optional[Union[WheelInput, PointerInput, KeyInput]] : The device with the given name.
@@ -84,7 +84,7 @@ class ActionBuilder:
 
     def add_key_input(self, name: str) -> KeyInput:
         """Add a new key input device to the action builder.
-        
+
         Parameters:
         ----------
         name : str
@@ -152,7 +152,7 @@ class ActionBuilder:
 
     def perform(self) -> None:
         """Performs all stored actions.
-        
+
         Example:
         --------
         >>> action_builder = ActionBuilder(driver)
@@ -170,7 +170,7 @@ class ActionBuilder:
 
     def clear_actions(self) -> None:
         """Clears actions that are already stored on the remote end.
-        
+
         Example:
         --------
         >>> action_builder = ActionBuilder(driver)
