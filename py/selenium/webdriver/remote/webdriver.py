@@ -218,7 +218,6 @@ class WebDriver(BaseWebDriver):
             - Custom class to use for web elements. Defaults to WebElement.
         client_config : object or None
             - Custom client configuration to use. Defaults to None.
-
         """
 
         if isinstance(options, list):
@@ -433,7 +432,8 @@ class WebDriver(BaseWebDriver):
         return {"success": 0, "value": None, "sessionId": self.session_id}
 
     def get(self, url: str) -> None:
-        """Navigate the browser to the specified URL in the current window or tab.
+        """Navigate the browser to the specified URL in the current window or
+        tab.
 
         The method does not return until the page is fully loaded (i.e. the
         onload event has fired).
@@ -465,7 +465,7 @@ class WebDriver(BaseWebDriver):
     def pin_script(self, script: str, script_key=None) -> ScriptKey:
         """Store common javascript scripts to be executed later by a unique
         hashable ID.
-        
+
         Example:
         --------
         >>> script = "return document.getElementById('foo').value"
@@ -476,7 +476,7 @@ class WebDriver(BaseWebDriver):
 
     def unpin(self, script_key: ScriptKey) -> None:
         """Remove a pinned script from storage.
-        
+
         Example:
         --------
         >>> driver.unpin(script_key)
@@ -488,7 +488,7 @@ class WebDriver(BaseWebDriver):
 
     def get_pinned_scripts(self) -> List[str]:
         """Return a list of all pinned scripts.
-        
+
         Example:
         --------
         >>> pinned_scripts = driver.get_pinned_scripts()
@@ -648,7 +648,7 @@ class WebDriver(BaseWebDriver):
 
     @property
     def switch_to(self) -> SwitchTo:
-        """ Return an object containing all options to switch focus into.
+        """Return an object containing all options to switch focus into.
 
         Returns:
         --------
@@ -924,7 +924,7 @@ class WebDriver(BaseWebDriver):
     @property
     def capabilities(self) -> dict:
         """Returns the drivers current capabilities being used.
-        
+
         Example:
         --------
         >>> print(driver.capabilities)
@@ -1279,7 +1279,7 @@ class WebDriver(BaseWebDriver):
     # Virtual Authenticator Methods
     def add_virtual_authenticator(self, options: VirtualAuthenticatorOptions) -> None:
         """Adds a virtual authenticator with the given options.
-        
+
         Example:
         --------
         >>> from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions
@@ -1291,7 +1291,7 @@ class WebDriver(BaseWebDriver):
     @property
     def virtual_authenticator_id(self) -> str:
         """Returns the id of the virtual authenticator.
-        
+
         Example:
         --------
         >>> print(driver.virtual_authenticator_id)
@@ -1315,7 +1315,7 @@ class WebDriver(BaseWebDriver):
     @required_virtual_authenticator
     def add_credential(self, credential: Credential) -> None:
         """Injects a credential into the authenticator.
-        
+
         Example:
         --------
         >>> from selenium.webdriver.common.credential import Credential
@@ -1327,7 +1327,7 @@ class WebDriver(BaseWebDriver):
     @required_virtual_authenticator
     def get_credentials(self) -> List[Credential]:
         """Returns the list of credentials owned by the authenticator.
-        
+
         Example:
         --------
         >>> credentials = driver.get_credentials()
@@ -1338,7 +1338,7 @@ class WebDriver(BaseWebDriver):
     @required_virtual_authenticator
     def remove_credential(self, credential_id: Union[str, bytearray]) -> None:
         """Removes a credential from the authenticator.
-        
+
         Example:
         --------
         >>> credential_id = "user@example.com"
@@ -1355,7 +1355,7 @@ class WebDriver(BaseWebDriver):
     @required_virtual_authenticator
     def remove_all_credentials(self) -> None:
         """Removes all credentials from the authenticator.
-        
+
         Example:
         --------
         >>> driver.remove_all_credentials()
@@ -1380,7 +1380,7 @@ class WebDriver(BaseWebDriver):
     def get_downloadable_files(self) -> dict:
         """Retrieves the downloadable files as a map of file names and their
         corresponding URLs.
-        
+
         Example:
         --------
         >>> files = driver.get_downloadable_files()
@@ -1423,7 +1423,7 @@ class WebDriver(BaseWebDriver):
 
     def delete_downloadable_files(self) -> None:
         """Deletes all downloadable files.
-        
+
         Example:
         --------
         >>> driver.delete_downloadable_files()
@@ -1435,9 +1435,9 @@ class WebDriver(BaseWebDriver):
 
     @property
     def fedcm(self) -> FedCM:
-        """
-        Returns the Federated Credential Management (FedCM) dialog object for interaction.
-        
+        """Returns the Federated Credential Management (FedCM) dialog object
+        for interaction.
+
         Returns:
         -------
         FedCM: an object providing access to all Federated Credential Management (FedCM) dialog commands.
@@ -1460,7 +1460,7 @@ class WebDriver(BaseWebDriver):
     @property
     def supports_fedcm(self) -> bool:
         """Returns whether the browser supports FedCM capabilities.
-        
+
         Example:
         --------
         >>> print(driver.supports_fedcm)
@@ -1478,7 +1478,7 @@ class WebDriver(BaseWebDriver):
     @property
     def dialog(self):
         """Returns the FedCM dialog object for interaction.
-        
+
         Example:
         --------
         >>> dialog = driver.dialog
@@ -1493,7 +1493,7 @@ class WebDriver(BaseWebDriver):
         ----------
         timeout : int
             - How long to wait for the dialog
-        poll_frequency : floatHow 
+        poll_frequency : floatHow
             - Frequently to poll
         ignored_exceptions : Any
             - Exceptions to ignore while waiting
