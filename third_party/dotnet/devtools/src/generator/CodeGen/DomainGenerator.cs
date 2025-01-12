@@ -45,8 +45,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                     .ForEach(x => result.Add(x.Key, x.Value));
             }
 
-            if (String.IsNullOrWhiteSpace(Settings.DefinitionTemplates.DomainTemplate.TemplatePath))
+            if (string.IsNullOrWhiteSpace(Settings.DefinitionTemplates.DomainTemplate.TemplatePath))
+            {
                 return result;
+            }
 
             var domainGenerator = TemplatesManager.GetGeneratorForTemplate(Settings.DefinitionTemplates.DomainTemplate);
 

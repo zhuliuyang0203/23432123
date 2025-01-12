@@ -1,4 +1,4 @@
-﻿namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
+namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -16,38 +16,18 @@
         }
 
         [JsonProperty(PropertyName = "domain")]
-        public override string Name
-        {
-            get;
-            set;
-        }
+        public override string Name { get; set; }
 
         [JsonProperty(PropertyName = "types")]
-        public ICollection<TypeDefinition> Types
-        {
-            get;
-            set;
-        }
+        public ICollection<TypeDefinition> Types { get; set; }
 
         [JsonProperty(PropertyName = "commands")]
-        public ICollection<CommandDefinition> Commands
-        {
-            get;
-            set;
-        }
+        public ICollection<CommandDefinition> Commands { get; set; }
 
         [JsonProperty(PropertyName = "events")]
-        public ICollection<EventDefinition> Events
-        {
-            get;
-            set;
-        }
+        public ICollection<EventDefinition> Events { get; set; }
 
         [JsonProperty(PropertyName = "dependencies")]
-        public ICollection<string> Dependencies
-        {
-            get;
-            set;
-        }
+        public ICollection<string> Dependencies { get; set; }
     }
 }

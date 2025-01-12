@@ -1,4 +1,4 @@
-﻿namespace OpenQA.Selenium.DevToolsGenerator.Converters
+namespace OpenQA.Selenium.DevToolsGenerator.Converters
 {
     using Newtonsoft.Json;
     using System;
@@ -54,7 +54,7 @@
         /// <summary>
         /// Specifies that this converter will not participate in writing results.
         /// </summary>
-        public override bool CanWrite { get { return false; } }
+        public override bool CanWrite => false;
 
         /// <summary>
         /// Writes the JSON representation of the object.
@@ -62,6 +62,7 @@
         /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter"/> to write to.</param><param name="value">The value.</param><param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            throw new NotSupportedException();
         }
     }
 }

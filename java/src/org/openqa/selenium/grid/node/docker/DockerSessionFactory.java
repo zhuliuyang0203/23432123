@@ -286,7 +286,15 @@ public class DockerSessionFactory implements SessionFactory {
   }
 
   private Container createBrowserContainer(int port, Capabilities sessionCapabilities) {
-    Map<String, String> browserContainerEnvVars = getBrowserContainerEnvVars(sessionCapabilities);
+    Map<String, String> browserContainerEnvVars = new HashMap<>();
+    // Enable env var to trigger video recording if session capabilities request and external video
+    // container is disabled
+    if (videoImage == null && recordVideoForSession(sessionCapabilities)) {
+      browserContainerEnvVars.put("SE_RECORD_VIDEO", "true");
+      browserContainerEnvVars.put("SE_VIDEO_FILE_NAME", "auto");
+      browserContainerEnvVars.put("SE_VIDEO_RECORD_STANDALONE", "true");
+    }
+    browserContainerEnvVars.putAll(getBrowserContainerEnvVars(sessionCapabilities));
     long browserContainerShmMemorySize = 2147483648L; // 2GB
     ContainerConfig containerConfig =
         image(browserImage)
@@ -295,6 +303,10 @@ public class DockerSessionFactory implements SessionFactory {
             .network(networkName)
             .devices(devices)
             .applyHostConfig(hostConfig, hostConfigKeys);
+    Optional<DockerAssetsPath> path = ofNullable(this.assetsPath);
+    if (path.isPresent() && videoImage == null && recordVideoForSession(sessionCapabilities)) {
+      containerConfig.bind(Collections.singletonMap(this.assetsPath.getHostPath(), "/videos"));
+    }
     if (!runningInDocker) {
       containerConfig = containerConfig.map(Port.tcp(4444), Port.tcp(port));
     }
@@ -335,7 +347,7 @@ public class DockerSessionFactory implements SessionFactory {
 
   private Container startVideoContainer(
       Capabilities sessionCapabilities, String browserContainerIp, String hostPath) {
-    if (!recordVideoForSession(sessionCapabilities)) {
+    if (videoImage == null || !recordVideoForSession(sessionCapabilities)) {
       return null;
     }
     int videoPort = 9000;

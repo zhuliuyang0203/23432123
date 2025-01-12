@@ -19,26 +19,17 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         /// <summary>
         /// Gets the service provider associated with the generator.
         /// </summary>
-        public IServiceProvider ServiceProvider
-        {
-            get { return m_serviceProvider; }
-        }
+        public IServiceProvider ServiceProvider => m_serviceProvider;
 
         /// <summary>
         /// Gets the code generation settings associated with the generator.
         /// </summary>
-        public CodeGenerationSettings Settings
-        {
-            get { return m_settings.Value; }
-        }
+        public CodeGenerationSettings Settings => m_settings.Value;
 
         /// <summary>
         /// Gets a template manager associated with the generator.
         /// </summary>
-        public TemplatesManager TemplatesManager
-        {
-            get { return m_templatesManager.Value; }
-        }
+        public TemplatesManager TemplatesManager => m_templatesManager.Value;
 
         protected CodeGeneratorBase(IServiceProvider serviceProvider)
         {

@@ -16,7 +16,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 OutputPath = "{{domainName}}\\{{className}}Adapter.cs",
             };
 
-            CommandTemplate = new CodeGenerationTemplateSettings {
+            CommandTemplate = new CodeGenerationTemplateSettings
+            {
                 TemplatePath = "command.hbs",
                 OutputPath = "{{domainName}}\\{{className}}Command.cs",
             };
@@ -47,46 +48,21 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         }
 
         [JsonProperty("domainTemplate")]
-        public CodeGenerationTemplateSettings DomainTemplate
-        {
-            get;
-            set;
-        }
+        public CodeGenerationTemplateSettings DomainTemplate { get; set; }
 
         [JsonProperty("commandTemplate")]
-        public CodeGenerationTemplateSettings CommandTemplate
-        {
-            get;
-            set;
-        }
+        public CodeGenerationTemplateSettings CommandTemplate { get; set; }
 
         [JsonProperty("eventTemplate")]
-        public CodeGenerationTemplateSettings EventTemplate
-        {
-            get;
-            set;
-        }
+        public CodeGenerationTemplateSettings EventTemplate { get; set; }
 
         [JsonProperty("typeObjectTemplate")]
-        public CodeGenerationTemplateSettings TypeObjectTemplate
-        {
-            get;
-            set;
-        }
+        public CodeGenerationTemplateSettings TypeObjectTemplate { get; set; }
 
         [JsonProperty("typeHashTemplate")]
-        public CodeGenerationTemplateSettings TypeHashTemplate
-        {
-            get;
-            set;
-        }
+        public CodeGenerationTemplateSettings TypeHashTemplate { get; set; }
 
         [JsonProperty("typeEnumTemplate")]
-        public CodeGenerationTemplateSettings TypeEnumTemplate
-        {
-            get;
-            set;
-        }
-
+        public CodeGenerationTemplateSettings TypeEnumTemplate { get; set; }
     }
 }
