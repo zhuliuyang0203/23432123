@@ -104,7 +104,7 @@ namespace OpenQA.Selenium.Remote
             this.TryAddCommand(DriverCommand.ExecuteScript, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/execute/sync"));
             this.TryAddCommand(DriverCommand.ExecuteAsyncScript, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/execute/async"));
             this.TryAddCommand(DriverCommand.GetAllCookies, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/cookie"));
-            this.TryAddCommand(DriverCommand.GetCookie, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/cookie/{name}"));
+            this.TryAddCommand(DriverCommand.GetCookie, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/cookie/{name}"));
             this.TryAddCommand(DriverCommand.AddCookie, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/cookie"));
             this.TryAddCommand(DriverCommand.DeleteCookie, new HttpCommandInfo(HttpCommandInfo.DeleteCommand, "/session/{sessionId}/cookie/{name}"));
             this.TryAddCommand(DriverCommand.DeleteAllCookies, new HttpCommandInfo(HttpCommandInfo.DeleteCommand, "/session/{sessionId}/cookie"));

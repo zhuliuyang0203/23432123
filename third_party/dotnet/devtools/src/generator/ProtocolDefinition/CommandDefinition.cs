@@ -1,4 +1,4 @@
-﻿namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
+namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -15,32 +15,16 @@
         }
 
         [JsonProperty(PropertyName = "handlers")]
-        public ICollection<string> Handlers
-        {
-            get;
-            set;
-        }
+        public ICollection<string> Handlers { get; set; }
 
         [JsonProperty(PropertyName = "parameters")]
-        public ICollection<TypeDefinition> Parameters
-        {
-            get;
-            set;
-        }
+        public ICollection<TypeDefinition> Parameters { get; set; }
 
         [JsonProperty(PropertyName = "returns")]
-        public ICollection<TypeDefinition> Returns
-        {
-            get;
-            set;
-        }
+        public ICollection<TypeDefinition> Returns { get; set; }
 
         [JsonProperty(PropertyName = "redirect")]
-        public string Redirect
-        {
-            get;
-            set;
-        }
+        public string Redirect { get; set; }
 
         [JsonIgnore]
         public bool NoParameters => Parameters == null || Parameters.Count == 0;

@@ -47,7 +47,7 @@ namespace OpenQA.Selenium
         /// <param name="name">The name of the cookie to retrieve.</param>
         /// <returns>The <see cref="Cookie"/> containing the name. Returns <see langword="null"/>
         /// if no cookie with the specified name is found.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         Cookie? GetCookieNamed(string name);
 
         /// <summary>

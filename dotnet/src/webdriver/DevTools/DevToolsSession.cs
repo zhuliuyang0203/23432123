@@ -168,7 +168,7 @@ namespace OpenQA.Selenium.DevTools
                 throw new InvalidOperationException($"Type {command.GetType()} does not correspond to a known command response type.");
             }
 
-            return result.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
+            return result.Value.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace OpenQA.Selenium.DevTools
                 throw new InvalidOperationException($"Type {typeof(TCommand)} does not correspond to a known command response type.");
             }
 
-            return result.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
+            return result.Value.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace OpenQA.Selenium.DevTools
                 return default(TCommandResponse);
             }
 
-            return result.Deserialize<TCommandResponse>();
+            return result.Value.Deserialize<TCommandResponse>();
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
         //[DebuggerStepThrough]
-        public async Task<JsonNode> SendCommand(string commandName, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<JsonElement?> SendCommand(string commandName, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
         {
             if (this.attachedTargetId == null)
             {
@@ -265,7 +265,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
         //[DebuggerStepThrough]
-        public async Task<JsonNode> SendCommand(string commandName, string sessionId, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<JsonElement?> SendCommand(string commandName, string sessionId, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
         {
             if (millisecondsTimeout.HasValue == false)
             {
@@ -298,8 +298,8 @@ namespace OpenQA.Selenium.DevTools
                 {
                     if (modified.IsError)
                     {
-                        var errorMessage = modified.Result["message"].GetValue<string>();
-                        var errorData = modified.Result["data"]?.GetValue<string>();
+                        var errorMessage = modified.Result.GetProperty("message").GetString();
+                        var errorData = modified.Result.TryGetProperty("data", out var data) ? data.GetString() : null;
 
                         var exceptionMessage = $"{commandName}: {errorMessage}";
                         if (!string.IsNullOrWhiteSpace(errorData))
@@ -310,7 +310,7 @@ namespace OpenQA.Selenium.DevTools
                         LogTrace("Recieved Error Response {0}: {1} {2}", modified.CommandId, message, errorData);
                         throw new CommandResponseException(exceptionMessage)
                         {
-                            Code = modified.Result["code"]?.GetValue<long>() ?? -1
+                            Code = modified.Result.TryGetProperty("code", out var code) ? code.GetInt64() : -1
                         };
                     }
 
@@ -559,23 +559,27 @@ namespace OpenQA.Selenium.DevTools
                 logger.Trace($"CDP RCV << {message}");
             }
 
-            var messageObject = JsonObject.Parse(message).AsObject();
-
-            if (messageObject.TryGetPropertyValue("id", out var idProperty))
+            JsonElement messageObject;
+            using (var doc = JsonDocument.Parse(message))
             {
-                long commandId = (long)idProperty;
+                messageObject = doc.RootElement.Clone();
+            }
+
+            if (messageObject.TryGetProperty("id", out var idProperty))
+            {
+                long commandId = idProperty.GetInt64();
 
                 DevToolsCommandData commandInfo;
                 if (this.pendingCommands.TryGetValue(commandId, out commandInfo))
                 {
-                    if (messageObject.TryGetPropertyValue("error", out var errorProperty))
+                    if (messageObject.TryGetProperty("error", out var errorProperty))
                     {
                         commandInfo.IsError = true;
                         commandInfo.Result = errorProperty;
                     }
                     else
                     {
-                        commandInfo.Result = messageObject["result"];
+                        commandInfo.Result = messageObject.GetProperty("result");
                         LogTrace("Recieved Response {0}: {1}", commandId, commandInfo.Result.ToString());
                     }
 
@@ -594,11 +598,11 @@ namespace OpenQA.Selenium.DevTools
                 return;
             }
 
-            if (messageObject.TryGetPropertyValue("method", out var methodProperty))
+            if (messageObject.TryGetProperty("method", out var methodProperty))
             {
-                var method = (string)methodProperty;
+                var method = methodProperty.GetString();
                 var methodParts = method.Split(new char[] { '.' }, 2);
-                var eventData = messageObject["params"];
+                var eventData = messageObject.GetProperty("params");
 
                 LogTrace("Recieved Event {0}: {1}", method, eventData.ToString());
 

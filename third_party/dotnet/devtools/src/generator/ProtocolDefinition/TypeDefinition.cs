@@ -15,76 +15,44 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         }
 
         [JsonProperty(PropertyName = "id")]
-        public string Id
-        {
-            get;
-            set;
-        }
+        public string Id { get; set; }
 
         [JsonProperty(PropertyName = "type")]
-        public string Type
-        {
-            get;
-            set;
-        }
+        public string Type { get; set; }
 
         [JsonProperty(PropertyName = "enum")]
-        public ICollection<string> Enum
-        {
-            get;
-            set;
-        }
+        public ICollection<string> Enum { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
-        public ICollection<TypeDefinition> Properties
-        {
-            get;
-            set;
-        }
+        public ICollection<TypeDefinition> Properties { get; set; }
 
         [JsonProperty(PropertyName = "items")]
-        public TypeDefinition Items
-        {
-            get;
-            set;
-        }
+        public TypeDefinition Items { get; set; }
 
         [JsonProperty(PropertyName = "minItems")]
-        public int MinItems
-        {
-            get;
-            set;
-        }
+        public int MinItems { get; set; }
 
         [JsonProperty(PropertyName = "maxItems")]
-        public int MaxItems
-        {
-            get;
-            set;
-        }
+        public int MaxItems { get; set; }
 
         [JsonProperty(PropertyName = "$ref")]
-        public string TypeReference
-        {
-            get;
-            set;
-        }
+        public string TypeReference { get; set; }
 
         [JsonProperty(PropertyName = "optional")]
         [JsonConverter(typeof(BooleanJsonConverter))]
-        public bool Optional
-        {
-            get;
-            set;
-        }
+        public bool Optional { get; set; }
 
         public override string ToString()
         {
-            if (!String.IsNullOrWhiteSpace(Id))
+            if (!string.IsNullOrWhiteSpace(Id))
+            {
                 return Id;
+            }
 
-            if (!String.IsNullOrWhiteSpace(Name))
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
                 return Name;
+            }
 
             return $"Ref: {TypeReference}";
         }

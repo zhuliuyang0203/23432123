@@ -88,7 +88,7 @@ namespace OpenQA.Selenium.DevToolsGenerator
                 {
                     var targetFileHash = sha1.ComputeHash(File.ReadAllBytes(targetFilePath));
                     var codeFileHash = sha1.ComputeHash(Encoding.UTF8.GetBytes(codeFile.Value));
-                    if (String.Compare(Convert.ToBase64String(targetFileHash), Convert.ToBase64String(codeFileHash)) != 0)
+                    if (string.Compare(Convert.ToBase64String(targetFileHash), Convert.ToBase64String(codeFileHash)) != 0)
                     {
                         File.WriteAllText(targetFilePath, codeFile.Value);
                     }

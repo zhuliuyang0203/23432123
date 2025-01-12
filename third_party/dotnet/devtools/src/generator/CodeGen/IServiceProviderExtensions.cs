@@ -19,7 +19,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         public static IServiceCollection AddCodeGenerationServices(this IServiceCollection serviceCollection, CodeGenerationSettings settings)
         {
             if (settings == null)
+            {
                 throw new ArgumentNullException(nameof(settings));
+            }
 
             return serviceCollection
                 .AddSingleton(settings)

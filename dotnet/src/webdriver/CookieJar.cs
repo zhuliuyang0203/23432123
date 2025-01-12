@@ -36,27 +36,20 @@ namespace OpenQA.Selenium
             {
                 Response response = driver.InternalExecute(DriverCommand.GetAllCookies, new Dictionary<string, object>());
 
-                try
+                List<Cookie> toReturn = new List<Cookie>();
+                if (response.Value is object?[] cookies)
                 {
-                    List<Cookie> toReturn = new List<Cookie>();
-                    if (response.Value is object?[] cookies)
+                    foreach (object? rawCookie in cookies)
                     {
-                        foreach (object? rawCookie in cookies)
+                        if (rawCookie != null)
                         {
-                            if (rawCookie != null)
-                            {
-                                Cookie newCookie = Cookie.FromDictionary((Dictionary<string, object?>)rawCookie);
-                                toReturn.Add(newCookie);
-                            }
+                            Cookie newCookie = Cookie.FromDictionary((Dictionary<string, object?>)rawCookie);
+                            toReturn.Add(newCookie);
                         }
                     }
+                }
 
-                    return new ReadOnlyCollection<Cookie>(toReturn);
-                }
-                catch (Exception e)
-                {
-                    throw new WebDriverException("Unexpected problem getting cookies", e);
-                }
+                return new ReadOnlyCollection<Cookie>(toReturn);
             }
         }
 
@@ -124,22 +117,21 @@ namespace OpenQA.Selenium
         /// <returns>A Cookie from the name; or <see langword="null"/> if not found.</returns>
         public Cookie? GetCookieNamed(string name)
         {
-            if (name is null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentException("Cookie name cannot be empty", nameof(name));
             }
 
-
-            foreach (Cookie currentCookie in this.AllCookies)
+            try
             {
-                if (name.Equals(currentCookie.Name))
-                {
-                    return currentCookie;
-                }
+                var rawCookie = driver.InternalExecute(DriverCommand.GetCookie, new() { { "name", name } }).Value;
 
+                return Cookie.FromDictionary((Dictionary<string, object>)rawCookie);
             }
-
-            return null;
+            catch (NoSuchCookieException)
+            {
+                return null;
+            }
         }
     }
 }
