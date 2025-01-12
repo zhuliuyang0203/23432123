@@ -88,56 +88,6 @@ namespace OpenQA.Selenium.Safari
         }
 
         /// <summary>
-        /// Gets a value indicating whether the service is responding to HTTP requests.
-        /// </summary>
-        protected override bool IsInitialized
-        {
-            get
-            {
-                bool isInitialized = false;
-
-                Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri("/session/FakeSessionIdForPollingPurposes", UriKind.Relative));
-
-                // Since Firefox driver won't implement the /session end point (because
-                // the W3C spec working group stupidly decided that it isn't necessary),
-                // we'll attempt to poll for a different URL which has no side effects.
-                // We've chosen to poll on the "quit" URL, passing in a nonexistent
-                // session id.
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.ConnectionClose = true;
-                    httpClient.Timeout = TimeSpan.FromSeconds(5);
-
-                    using (var httpRequest = new HttpRequestMessage(HttpMethod.Delete, serviceHealthUri))
-                    {
-                        try
-                        {
-                            using (var httpResponse = Task.Run(async () => await httpClient.SendAsync(httpRequest)).GetAwaiter().GetResult())
-                            {
-                                isInitialized = (httpResponse.StatusCode == HttpStatusCode.OK
-                                        || httpResponse.StatusCode == HttpStatusCode.InternalServerError
-                                        || httpResponse.StatusCode == HttpStatusCode.NotFound)
-                                    && httpResponse.Content.Headers.ContentType.MediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
-                            }
-                        }
-
-                        // Checking the response from deleting a nonexistent session. Note that we are simply
-                        // checking that the HTTP status returned is a 200 status, and that the resposne has
-                        // the correct Content-Type header. A more sophisticated check would parse the JSON
-                        // response and validate its values. At the moment we do not do this more sophisticated
-                        // check.
-                        catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-                        {
-                            // Do nothing. The exception is expected, meaning driver service is not initialized.
-                        }
-                    }
-                }
-
-                return isInitialized;
-            }
-        }
-
-        /// <summary>
         /// Creates a default instance of the SafariDriverService.
         /// </summary>
         /// <returns>A SafariDriverService that implements default settings.</returns>
