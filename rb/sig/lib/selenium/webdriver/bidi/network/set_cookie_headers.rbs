@@ -2,9 +2,9 @@ module Selenium
   module WebDriver
     class BiDi
       class SetCookieHeaders
-        def initialize: (untyped set_cookie_headers) -> void
+        def initialize: (Hash[Symbol, untyped] set_cookie_headers) -> void
 
-        def serialize: () -> (Array[untyped] | untyped)
+        def serialize: () -> Array[Hash[Symbol, untyped]]
       end
     end
   end

@@ -2,11 +2,11 @@ module Selenium
   module WebDriver
     class BiDi
       class InterceptedAuth < InterceptedItem
-        def authenticate: (untyped username, untyped password) -> untyped
+        def authenticate: (String username, String password) -> Hash[nil, nil]
 
-        def skip: () -> untyped
+        def skip: () -> Hash[nil, nil]
 
-        def cancel: () -> untyped
+        def cancel: () -> Hash[nil, nil]
       end
     end
   end

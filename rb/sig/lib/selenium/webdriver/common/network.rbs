@@ -25,7 +25,7 @@ module Selenium
 
       private
 
-      def add_handler: (Symbol event_type, String phase, BiDi::InterceptedItem intercept_type, Array[String] filter, ?pattern_type: Symbol?) { (untyped) -> untyped } -> untyped
+      def add_handler: (Symbol event_type, String phase, BiDi::InterceptedRequest | BiDi::InterceptedAuth | BiDi::InterceptedResponse intercept_type, Array[String] filter, ?pattern_type: Symbol?) { (untyped) -> untyped } -> untyped
     end
   end
 end

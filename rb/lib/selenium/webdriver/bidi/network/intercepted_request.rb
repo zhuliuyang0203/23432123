@@ -29,7 +29,6 @@ module Selenium
 
         def initialize(network, request)
           super
-          # We now rely on the modules above to initialize @headers and @cookies as Hashes
           @method = nil
           @url = nil
           @body = nil

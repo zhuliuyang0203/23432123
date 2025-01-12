@@ -4,7 +4,7 @@ module Selenium
       class Headers
         def initialize: () -> void
 
-        def serialize: () -> untyped
+        def serialize: () -> Array[Hash[Symbol, String]]
       end
     end
   end
