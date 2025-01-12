@@ -155,7 +155,7 @@ class InternetExplorerDriverTest extends JupiterTestBase {
     int port = PortProber.findFreePort();
     InternetExplorerDriverService.Builder builder = new InternetExplorerDriverService.Builder();
     builder.usingPort(port);
-    
+
     assertThatExceptionOfType(NumberFormatException.class)
     .isThrownBy(builder::build)
     .withMessage("Couldn't format the port numbers because the System Language is arabic: \"" + String.format("--port=%d", port) +
