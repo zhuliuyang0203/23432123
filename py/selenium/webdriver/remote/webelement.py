@@ -86,7 +86,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         str : The tag name of the element.
-        
+
         Example:
         --------
         >>> element = driver.find_element(By.ID, 'foo')
@@ -100,7 +100,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         str : The text of the element.
-        
+
         Example:
         --------
         >>> element = driver.find_element(By.ID, 'foo')
@@ -184,7 +184,7 @@ class WebElement(BaseWebElement):
         ----------
         name : str
             - Name of the attribute to retrieve.
-        
+
         Returns:
         -------
         str : The value of the attribute.
@@ -347,7 +347,7 @@ class WebElement(BaseWebElement):
         --------
         dict: the top lefthand corner location on the screen, or zero
             coordinates if the element is not visible.
-        
+
         Example:
         --------
         >>> loc = element.location_once_scrolled_into_view
@@ -368,7 +368,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         dict: The width and height of the element.
-        
+
         Example:
         --------
         >>> size = element.size
@@ -388,7 +388,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         str : The value of the CSS property.
-        
+
         Example:
         --------
         >>> value = element.value_of_css_property('color')
@@ -402,7 +402,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         dict: The x and y coordinates of the element.
-        
+
         Example:
         --------
         >>> loc = element.location
@@ -418,7 +418,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         dict: The size and location of the element.
-        
+
         Example:
         --------
         >>> rect = element.rect
@@ -432,7 +432,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         str : The ARIA role of the element.
-        
+
         Example:
         --------
         >>> role = element.aria_role
@@ -446,7 +446,7 @@ class WebElement(BaseWebElement):
         Returns:
         --------
         str : The ARIA Level of the element.
-        
+
         Example:
         --------
         >>> name = element.accessible_name
@@ -494,7 +494,7 @@ class WebElement(BaseWebElement):
         Parameters:
         ----------
         filename : str
-            The full path you wish to save your screenshot to. This 
+            The full path you wish to save your screenshot to. This
             should end with a `.png` extension.
 
         Element:
