@@ -17,15 +17,13 @@
 
 package org.openqa.selenium.remote.http.jdk;
 
-import org.openqa.selenium.remote.http.HttpClient;
-import org.openqa.selenium.remote.internal.HttpClientTestBase;
-import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.junit.Test;
+import org.openqa.selenium.remote.http.HttpClient;
+import org.openqa.selenium.remote.internal.HttpClientTestBase;
 
 class JdkHttpClientTest extends HttpClientTestBase {
 
@@ -38,12 +36,12 @@ class JdkHttpClientTest extends HttpClientTestBase {
   void shouldStripCredentialsFromUrl() throws URISyntaxException {
     URI originalUri = new URI("http://admin:password@localhost:4444/wd/hub");
     ClientConfig config = ClientConfig.defaultConfig().baseUri(originalUri);
-    
+
     JdkHttpClient client = new JdkHttpClient(config);
-    
+
     // Get the modified URI from the client's config
     URI modifiedUri = client.getBaseUri();
-    
+
     assertThat(modifiedUri.getUserInfo()).isNull();
     assertThat(modifiedUri.getHost()).isEqualTo("localhost");
     assertThat(modifiedUri.getPort()).isEqualTo(4444);
@@ -54,24 +52,23 @@ class JdkHttpClientTest extends HttpClientTestBase {
   void shouldHandleUrlWithoutCredentials() throws URISyntaxException {
     URI originalUri = new URI("http://localhost:4444/wd/hub");
     ClientConfig config = ClientConfig.defaultConfig().baseUri(originalUri);
-    
+
     JdkHttpClient client = new JdkHttpClient(config);
-    
+
     URI modifiedUri = client.getBaseUri();
-    
+
     assertThat(modifiedUri).isEqualTo(originalUri);
   }
 
   @Test
   void shouldPreserveUrlComponentsExceptCredentials() throws URISyntaxException {
-    URI originalUri = new URI(
-        "https://admin:password@localhost:4444/wd/hub?debug=true#fragment");
+    URI originalUri = new URI("https://admin:password@localhost:4444/wd/hub?debug=true#fragment");
     ClientConfig config = ClientConfig.defaultConfig().baseUri(originalUri);
-    
+
     JdkHttpClient client = new JdkHttpClient(config);
-    
+
     URI modifiedUri = client.getBaseUri();
-    
+
     assertThat(modifiedUri.getScheme()).isEqualTo("https");
     assertThat(modifiedUri.getUserInfo()).isNull();
     assertThat(modifiedUri.getHost()).isEqualTo("localhost");

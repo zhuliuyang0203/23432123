@@ -84,7 +84,7 @@ public class JdkHttpClient implements HttpClient {
 
   JdkHttpClient(ClientConfig config) {
     Objects.requireNonNull(config, "Client config must be set");
-    
+
     this.config = config;
     this.messages = new JdkHttpMessages(config);
     this.readTimeout = config.readTimeout();
@@ -111,7 +111,7 @@ public class JdkHttpClient implements HttpClient {
     Credentials credentials = config.credentials();
     String info = config.baseUri().getUserInfo();
     URI baseUri = config.baseUri();
-    
+
     if (info != null && !info.trim().isEmpty()) {
       String[] parts = info.split(":", 2);
       String username = parts[0];
@@ -125,17 +125,20 @@ public class JdkHttpClient implements HttpClient {
             }
           };
       builder = builder.authenticator(authenticator);
-      
+
       // Remove credentials from URL
       try {
-        config = ClientConfig.defaultConfig().baseUri(new URI(
-            config.baseUri().getScheme(),
-            null,
-            config.baseUri().getHost(),
-            config.baseUri().getPort(),
-            config.baseUri().getPath(),
-            config.baseUri().getQuery(),
-            config.baseUri().getFragment()));
+        config =
+            ClientConfig.defaultConfig()
+                .baseUri(
+                    new URI(
+                        config.baseUri().getScheme(),
+                        null,
+                        config.baseUri().getHost(),
+                        config.baseUri().getPort(),
+                        config.baseUri().getPath(),
+                        config.baseUri().getQuery(),
+                        config.baseUri().getFragment()));
       } catch (URISyntaxException e) {
         LOG.log(Level.WARNING, "Could not strip credentials from URI", e);
       }
