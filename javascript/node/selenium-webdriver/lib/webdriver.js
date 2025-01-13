@@ -1957,24 +1957,23 @@ class Options {
    * WebDriver wire protocol.
    *
    * @param {string} name The name of the cookie to retrieve.
+   * @throws {InvalidArgumentError} - If the cookie name is empty or invalid.
    * @return {!Promise<?Options.Cookie>} A promise that will be resolved
    *     with the named cookie
    * @throws {error.NoSuchCookieError} if there is no such cookie.
    */
   async getCookie(name) {
+    // Validate the cookie name is non-empty and properly trimmed.
+    if (!name?.trim()) {
+      throw new error.InvalidArgumentError('Cookie name cannot be empty')
+    }
+
     try {
       const cookie = await this.driver_.execute(new command.Command(command.Name.GET_COOKIE).setParameter('name', name))
       return cookie
     } catch (err) {
       if (!(err instanceof error.UnknownCommandError) && !(err instanceof error.UnsupportedOperationError)) {
         throw err
-      }
-
-      const cookies = await this.getCookies()
-      for (let cookie of cookies) {
-        if (cookie && cookie['name'] === name) {
-          return cookie
-        }
       }
       return null
     }
