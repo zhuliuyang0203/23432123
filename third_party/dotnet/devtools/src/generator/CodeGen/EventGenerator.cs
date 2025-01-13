@@ -1,10 +1,10 @@
+using Humanizer;
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System;
+using System.Collections.Generic;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using Humanizer;
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Generates code for Event Definitions
     /// </summary>

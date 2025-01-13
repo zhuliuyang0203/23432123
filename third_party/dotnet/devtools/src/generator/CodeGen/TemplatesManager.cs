@@ -1,30 +1,29 @@
+using HandlebarsDotNet;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Humanizer;
+using System.Linq;
+using System.Text;
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using HandlebarsDotNet;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Humanizer;
-    using System.Linq;
-    using System.Text;
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-
     /// <summary>
     /// Represents a class that manages templates and their associated generators.
     /// </summary>
     public sealed class TemplatesManager
     {
-        private readonly IDictionary<string, Func<object, string>> m_templateGenerators = new Dictionary<string, Func<object, string>>(StringComparer.OrdinalIgnoreCase);
-        private readonly CodeGenerationSettings m_settings;
+        private readonly Dictionary<string, Func<object, string>> m_templateGenerators = new Dictionary<string, Func<object, string>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Gets the code generation settings associated with the protocol generator
         /// </summary>
-        public CodeGenerationSettings Settings => m_settings;
+        public CodeGenerationSettings Settings { get; }
 
         public TemplatesManager(CodeGenerationSettings settings)
         {
-            m_settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         /// <summary>
@@ -111,8 +110,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
             Handlebars.RegisterHelper("typemap", (writer, context, arguments) =>
             {
-                var typeDefinition = context as TypeDefinition;
-                if (typeDefinition == null)
+                if (context is not TypeDefinition typeDefinition)
                 {
                     throw new HandlebarsException("{{typemap}} helper expects to be in the context of a TypeDefinition.");
                 }
@@ -122,8 +120,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                     throw new HandlebarsException("{{typemap}} helper expects exactly one argument - the CodeGeneratorContext.");
                 }
 
-                var codeGenContext = arguments[0] as CodeGeneratorContext;
-                if (codeGenContext == null)
+                if (arguments[0] is not CodeGeneratorContext codeGenContext)
                 {
                     throw new InvalidOperationException("Expected context argument to be non-null.");
                 }

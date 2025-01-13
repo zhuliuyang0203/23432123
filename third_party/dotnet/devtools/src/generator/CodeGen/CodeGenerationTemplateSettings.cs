@@ -1,7 +1,7 @@
+using System.Text.Json.Serialization;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using System.Text.Json.Serialization;
-
     /// <summary>
     /// Defines settings around templates
     /// </summary>

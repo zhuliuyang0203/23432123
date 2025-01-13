@@ -1,7 +1,4 @@
 using CommandLine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenQA.Selenium.DevToolsGenerator
 {
@@ -35,7 +32,7 @@ namespace OpenQA.Selenium.DevToolsGenerator
             'o',
             "output-path",
             Default = "./OutputProtocol",
-            HelpText ="Indicates the folder that will contain the generated class library [Default: ./OutputProtocol]")]
+            HelpText = "Indicates the folder that will contain the generated class library [Default: ./OutputProtocol]")]
         public string OutputPath { get; set; }
 
         [Option(
