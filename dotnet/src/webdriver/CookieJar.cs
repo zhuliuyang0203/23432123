@@ -79,7 +79,7 @@ namespace OpenQA.Selenium
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Cookie name cannot be empty", nameof(name));
+                throw new ArgumentException("Cookie name cannot be null or empty", nameof(name));
             }
 
             Dictionary<string, object> parameters = new() { { "name", name } };
@@ -120,7 +120,7 @@ namespace OpenQA.Selenium
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Cookie name cannot be empty", nameof(name));
+                throw new ArgumentException("Cookie name cannot be null or empty", nameof(name));
             }
 
             try
