@@ -17,11 +17,12 @@
 
 package org.openqa.selenium.remote.http.jdk;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.internal.HttpClientTestBase;
 
@@ -39,7 +40,6 @@ class JdkHttpClientTest extends HttpClientTestBase {
 
     JdkHttpClient client = new JdkHttpClient(config);
 
-    // Get the modified URI from the client's config
     URI modifiedUri = client.getBaseUri();
 
     assertThat(modifiedUri.getUserInfo()).isNull();

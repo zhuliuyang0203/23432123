@@ -80,7 +80,7 @@ public class JdkHttpClient implements HttpClient {
   private final ExecutorService executorService;
   private final Duration readTimeout;
   private final Duration connectTimeout;
-  private final ClientConfig config;
+  private ClientConfig config;
 
   JdkHttpClient(ClientConfig config) {
     Objects.requireNonNull(config, "Client config must be set");
@@ -128,7 +128,7 @@ public class JdkHttpClient implements HttpClient {
 
       // Remove credentials from URL
       try {
-        config =
+        this.config =
             ClientConfig.defaultConfig()
                 .baseUri(
                     new URI(
