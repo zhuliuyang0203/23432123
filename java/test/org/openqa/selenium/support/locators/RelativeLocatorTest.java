@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.environment.webserver.Page;
 import org.openqa.selenium.testing.JupiterTestBase;
 
 class RelativeLocatorTest extends JupiterTestBase {
@@ -130,7 +131,7 @@ class RelativeLocatorTest extends JupiterTestBase {
 
     WebElement midpoint = driver.findElement(By.id("center"));
 
-    List<WebElement> elements = driver.findElements(with(tagName("td")).right(midpoint));
+    List<WebElement> elements = driver.findElements(with(tagName("td")).toRightOf(midpoint));
     List<String> ids =
         elements.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
 
@@ -169,11 +170,11 @@ class RelativeLocatorTest extends JupiterTestBase {
 
     WebElement right = driver.findElement(By.id("right"));
 
-    List<WebElement> elements = driver.findElements(with(tagName("td")).straightLeft(right));
+    List<WebElement> elements = driver.findElements(with(tagName("td")).straightLeftOf(right));
     List<String> ids =
         elements.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
 
-    assertThat(ids).containsExactly("left", "center");
+    assertThat(ids).containsExactly("center", "left");
   }
 
   @Test
@@ -182,7 +183,7 @@ class RelativeLocatorTest extends JupiterTestBase {
 
     WebElement left = driver.findElement(By.id("left"));
 
-    List<WebElement> elements = driver.findElements(with(tagName("td")).straightRight(left));
+    List<WebElement> elements = driver.findElements(with(tagName("td")).straightRightOf(left));
     List<String> ids =
         elements.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
 
@@ -259,7 +260,7 @@ class RelativeLocatorTest extends JupiterTestBase {
         driver.findElements(
             with(tagName("td"))
                 .straightBelow(By.id("topRight"))
-                .straightRight(By.id("bottomLeft")));
+                .straightRightOf(By.id("bottomLeft")));
 
     List<String> ids = seen.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
 
@@ -312,7 +313,27 @@ class RelativeLocatorTest extends JupiterTestBase {
 
   @Test
   void ensureNoRepeatedElements() {
-    driver.get(appServer.whereIs("relative_locators.html"));
+    String url =
+        appServer.create(
+            new Page()
+                .withTitle("Repeated Elements")
+                .withStyles(
+                    " .c {\n"
+                        + "    \tposition: absolute;\n"
+                        + "    \tborder: 1px solid black;\n"
+                        + "    \theight: 50px;\n"
+                        + "    \twidth: 50px;\n"
+                        + "    }")
+                .withBody(
+                    "<span style=\"position: relative;\">\n"
+                        + "    <div id= \"a\" class=\"c\" style=\"left:25;top:0;\">El-A</div>\n"
+                        + "    <div id= \"b\" class=\"c\" style=\"left:78;top:30;\">El-B</div>\n"
+                        + "    <div id= \"c\" class=\"c\" style=\"left:131;top:60;\">El-C</div>\n"
+                        + "    <div id= \"d\" class=\"c\" style=\"left:0;top:53;\">El-D</div>\n"
+                        + "    <div id= \"e\" class=\"c\" style=\"left:53;top:83;\">El-E</div>\n"
+                        + "    <div id= \"f\" class=\"c\" style=\"left:106;top:113;\">El-F</div>\n"
+                        + "  </span>"));
+    driver.get(url);
 
     WebElement base = driver.findElement(By.id("e"));
     List<WebElement> cells = driver.findElements(with(tagName("div")).above(base));
@@ -340,10 +361,10 @@ class RelativeLocatorTest extends JupiterTestBase {
   void nearLocatorShouldNotFindFarElements() {
     driver.get(appServer.whereIs("relative_locators.html"));
 
-    WebElement rect3 = driver.findElement(By.id("rect3"));
+    WebElement rect = driver.findElement(By.id("rect1"));
 
     assertThatExceptionOfType(NoSuchElementException.class)
-        .isThrownBy(() -> driver.findElement(with(By.id("rect4")).near(rect3)))
+        .isThrownBy(() -> driver.findElement(with(By.id("rect4")).near(rect)))
         .withMessageContaining("Cannot locate an element using");
   }
 }
