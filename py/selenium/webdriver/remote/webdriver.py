@@ -90,7 +90,7 @@ def _create_caps(caps):
     Moves the Firefox profile, if present, from the old location to the new Firefox
     options object.
 
-    Parameters:
+    Attributes:
     ----------
     caps : dict
         - A dictionary of capabilities requested by the caller.
@@ -201,7 +201,7 @@ class WebDriver(BaseWebDriver):
         """Create a new driver that will issue commands using the wire
         protocol.
 
-        Parameters:
+        Attributes:
         ----------
         command_executor : str or remote_connection.RemoteConnection
             - Either a string representing the URL of the remote server or a custom
@@ -272,7 +272,7 @@ class WebDriver(BaseWebDriver):
         """Overrides the current file detector (if necessary) in limited
         context. Ensures the original file detector is set afterwards.
 
-        Parameters:
+        Attributes:
         ----------
         file_detector_class : object
             - Class of the desired file detector. If the class is different
@@ -332,7 +332,7 @@ class WebDriver(BaseWebDriver):
     def start_session(self, capabilities: dict) -> None:
         """Creates a new session with the desired capabilities.
 
-        Parameters:
+        Attributes:
         ----------
         capabilities : dict
             - A capabilities dict to start the session with.
@@ -380,7 +380,7 @@ class WebDriver(BaseWebDriver):
         domains/commands, refer to link
         https://chromedevtools.github.io/devtools-protocol/
 
-        Parameters:
+        Attributes:
         ----------
         cmd : str,
             - Command name
@@ -403,12 +403,12 @@ class WebDriver(BaseWebDriver):
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """Sends a command to be executed by a command.CommandExecutor.
 
-        Parameters:
+        Attributes:
         ----------
         driver_command : str
             - The name of the command to execute as a string.
         params : dict
-            - A dictionary of named parameters to send with the command.
+            - A dictionary of named Attributes to send with the command.
 
         Returns:
         --------
@@ -438,7 +438,7 @@ class WebDriver(BaseWebDriver):
         The method does not return until the page is fully loaded (i.e. the
         onload event has fired).
 
-        Parameters:
+        Attributes:
         ----------
         url : str
             - The URL to be opened by the browser.
@@ -498,7 +498,7 @@ class WebDriver(BaseWebDriver):
     def execute_script(self, script, *args):
         """Synchronously Executes JavaScript in the current window/frame.
 
-        Parameters:
+        Attributes:
         ----------
         script : str
             - The javascript to execute.
@@ -527,7 +527,7 @@ class WebDriver(BaseWebDriver):
     def execute_async_script(self, script: str, *args):
         """Asynchronously Executes JavaScript in the current window/frame.
 
-        Parameters:
+        Attributes:
         ----------
         script : str
             - The javascript to execute.
@@ -634,7 +634,7 @@ class WebDriver(BaseWebDriver):
         """Takes PDF of the current page.
 
         The driver makes a best effort to return a PDF based on the
-        provided parameters.
+        provided Attributes.
 
         Example:
         --------
@@ -743,7 +743,7 @@ class WebDriver(BaseWebDriver):
     def add_cookie(self, cookie_dict) -> None:
         """Adds a cookie to your current session.
 
-        Parameters:
+        Attributes:
         ----------
         cookie_dict : dict
             - A dictionary object, with required keys - "name" and "value";
@@ -769,7 +769,7 @@ class WebDriver(BaseWebDriver):
         per session. To set the timeout for calls to execute_async_script, see
         set_script_timeout.
 
-        Parameters:
+        Attributes:
         ----------
         time_to_wait : float
             - Amount of time to wait (in seconds)
@@ -784,7 +784,7 @@ class WebDriver(BaseWebDriver):
         """Set the amount of time that the script should wait during an
         execute_async_script call before throwing an error.
 
-        Parameters:
+        Attributes:
         ---------
         time_to_wait : float
             - The amount of time to wait (in seconds)
@@ -799,7 +799,7 @@ class WebDriver(BaseWebDriver):
         """Set the amount of time to wait for a page load to complete before
         throwing an error.
 
-        Parameters:
+        Attributes:
          ---------
          time_to_wait : float
              - The amount of time to wait (in seconds)
@@ -850,7 +850,7 @@ class WebDriver(BaseWebDriver):
     def find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:
         """Find an element given a By strategy and locator.
 
-        Parameters:
+        Attributes:
         ----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
@@ -886,7 +886,7 @@ class WebDriver(BaseWebDriver):
     def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
         """Find elements given a By strategy and locator.
 
-        Parameters:
+        Attributes:
         ----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
@@ -936,7 +936,7 @@ class WebDriver(BaseWebDriver):
         Returns False if there is any IOError, else returns True. Use full
         paths in your filename.
 
-        Parameters:
+        Attributes:
         ----------
         filename : str
             - The full path you wish to save your screenshot to. This
@@ -967,7 +967,7 @@ class WebDriver(BaseWebDriver):
         Returns False if there is any IOError, else returns True. Use full
         paths in your filename.
 
-        Parameters:
+        Attributes:
         ----------
         filename : str
             - The full path you wish to save your screenshot to. This
@@ -1001,7 +1001,7 @@ class WebDriver(BaseWebDriver):
     def set_window_size(self, width, height, windowHandle: str = "current") -> None:
         """Sets the width and height of the current window. (window.resizeTo)
 
-        Parameters:
+        Attributes:
         ----------
         width : int
             - the width in pixels to set the window to
@@ -1034,7 +1034,7 @@ class WebDriver(BaseWebDriver):
     def set_window_position(self, x: float, y: float, windowHandle: str = "current") -> dict:
         """Sets the x,y position of the current window. (window.moveTo)
 
-        Parameters:
+        Attributes:
         ---------
         x : float
             - The x-coordinate in pixels to set the window position
@@ -1107,7 +1107,7 @@ class WebDriver(BaseWebDriver):
         - see LocalFileDetector
         - see UselessFileDetector
 
-        Parameters:
+        Attributes:
         ----------
         detector : Any
             - The detector to use. Must not be None.
@@ -1132,7 +1132,7 @@ class WebDriver(BaseWebDriver):
     def orientation(self, value) -> None:
         """Sets the current orientation of the device.
 
-        Parameters:
+        Attributes:
         ----------
         value : str
             - orientation to set it to.
@@ -1161,7 +1161,7 @@ class WebDriver(BaseWebDriver):
     def get_log(self, log_type):
         """Gets the log for a given log type.
 
-        Parameters:
+        Attributes:
         ----------
         log_type : str
             - Type of log that which will be returned
@@ -1367,7 +1367,7 @@ class WebDriver(BaseWebDriver):
         """Sets whether the authenticator will simulate success or fail on user
         verification.
 
-        Parameters:
+        Attributes:
         ----------
         verified: True if the authenticator will pass user verification, False otherwise.
 
@@ -1394,7 +1394,7 @@ class WebDriver(BaseWebDriver):
         """Downloads a file with the specified file name to the target
         directory.
 
-        Parameters:
+        Attributes:
         ----------
         file_name : str
             - The name of the file to download.
@@ -1489,7 +1489,7 @@ class WebDriver(BaseWebDriver):
     def fedcm_dialog(self, timeout=5, poll_frequency=0.5, ignored_exceptions=None):
         """Waits for and returns the FedCM dialog.
 
-        Parameters:
+        Attributes:
         ----------
         timeout : int
             - How long to wait for the dialog
