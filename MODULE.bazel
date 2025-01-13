@@ -111,11 +111,11 @@ use_repo(oci, "chrome_standalone", "firefox_standalone", "java_image_base")
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
-    python_version = "3.8",
+    python_version = "3.9",
 )
-python.toolchain(python_version = "3.9")
 python.toolchain(python_version = "3.10")
 python.toolchain(python_version = "3.11")
+python.toolchain(python_version = "3.12")
 use_repo(python, "pythons_hub")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
@@ -127,10 +127,10 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
         requirements_lock = "//py:requirements_lock.txt",
     )
     for version in [
-        "3.8",
         "3.9",
         "3.10",
         "3.11",
+        "3.12",
     ]
 ]
 
