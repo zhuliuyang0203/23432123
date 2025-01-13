@@ -289,7 +289,7 @@ class FirefoxDriverTest extends JupiterTestBase {
                 + "\", please make sure to add the required arguments \"-Duser.language=en"
                 + " -Duser.region=US\" to your JVM, for more info please visit :\n"
                 + "  https://www.selenium.dev/documentation/webdriver/browsers/");
-            
+
     Locale.setDefault(Locale.US);
   }
 
