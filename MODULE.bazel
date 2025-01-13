@@ -216,7 +216,7 @@ maven.install(
         "org.junit.platform:junit-platform-reporting",
         "org.junit.platform:junit-platform-commons",
         "org.junit.platform:junit-platform-engine",
-        "org.mockito:mockito-core:5.14.2",
+        "org.mockito:mockito-core:5.15.2",
         "org.redisson:redisson:3.41.0",
         "org.slf4j:slf4j-api:2.0.16",
         "org.slf4j:slf4j-jdk14:2.0.16",
