@@ -61,7 +61,7 @@ namespace OpenQA.Selenium
         /// Deletes the cookie with the specified name from the page.
         /// </summary>
         /// <param name="name">The name of the cookie to be deleted.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         void DeleteCookieNamed(string name);
 
         /// <summary>

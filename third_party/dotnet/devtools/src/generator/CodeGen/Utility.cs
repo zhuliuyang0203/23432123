@@ -1,11 +1,10 @@
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// Contains various utility methods.
     /// </summary>

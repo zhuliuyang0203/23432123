@@ -1,10 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System;
+using System.Collections.Generic;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Represents a base implementation of a code generator.
     /// </summary>
@@ -12,14 +12,13 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     public abstract class CodeGeneratorBase<T> : ICodeGenerator<T>
         where T : IDefinition
     {
-        private readonly IServiceProvider m_serviceProvider;
         private readonly Lazy<CodeGenerationSettings> m_settings;
         private readonly Lazy<TemplatesManager> m_templatesManager;
 
         /// <summary>
         /// Gets the service provider associated with the generator.
         /// </summary>
-        public IServiceProvider ServiceProvider => m_serviceProvider;
+        public IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Gets the code generation settings associated with the generator.
@@ -33,9 +32,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
         protected CodeGeneratorBase(IServiceProvider serviceProvider)
         {
-            m_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            m_settings = new Lazy<CodeGenerationSettings>(() => m_serviceProvider.GetRequiredService<CodeGenerationSettings>());
-            m_templatesManager = new Lazy<TemplatesManager>(() => m_serviceProvider.GetRequiredService<TemplatesManager>());
+            ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            m_settings = new Lazy<CodeGenerationSettings>(() => ServiceProvider.GetRequiredService<CodeGenerationSettings>());
+            m_templatesManager = new Lazy<TemplatesManager>(() => ServiceProvider.GetRequiredService<TemplatesManager>());
         }
 
         public abstract IDictionary<string, string> GenerateCode(T item, CodeGeneratorContext context);

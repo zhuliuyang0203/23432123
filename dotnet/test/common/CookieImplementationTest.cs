@@ -620,6 +620,28 @@ namespace OpenQA.Selenium
             AssertCookieIsPresentWithName(cookie2.Name);
         }
 
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
+        public void ShouldThrowWhenGetInvalidCookieByName(string cookieName)
+        {
+            var getCookieAction = () => driver.Manage().Cookies.GetCookieNamed(cookieName);
+
+            Assert.That(getCookieAction, Throws.ArgumentException);
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("   ")]
+        public void ShouldThrowWhenDeleteInvalidCookieByName(string cookieName)
+        {
+            var deleteCookieAction = () => driver.Manage().Cookies.DeleteCookieNamed(cookieName);
+
+            Assert.That(deleteCookieAction, Throws.ArgumentException);
+        }
+
         //------------------------------------------------------------------
         // Tests below here are not included in the Java test suite
         //------------------------------------------------------------------
