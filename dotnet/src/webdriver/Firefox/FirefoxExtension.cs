@@ -25,7 +25,7 @@ using System.IO.Compression;
 using System.Text.Json.Nodes;
 using System.Xml;
 
-
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -38,8 +38,8 @@ namespace OpenQA.Selenium.Firefox
         private const string RdfManifestFileName = "install.rdf";
         private const string JsonManifestFileName = "manifest.json";
 
-        private string extensionFileName;
-        private string extensionResourceId;
+        private readonly string extensionFileName;
+        private readonly string extensionResourceId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxExtension"/> class.
@@ -48,6 +48,7 @@ namespace OpenQA.Selenium.Firefox
         /// <remarks>WebDriver attempts to resolve the <paramref name="fileName"/> parameter
         /// by looking first for the specified file in the directory of the calling assembly,
         /// then using the full path to the file, if a full path is provided.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="fileName"/> is <see langword="null"/>.</exception>
         public FirefoxExtension(string fileName)
             : this(fileName, string.Empty)
         {
@@ -65,16 +66,18 @@ namespace OpenQA.Selenium.Firefox
         /// not found in the file system, WebDriver attempts to locate a resource in the
         /// executing assembly with the name specified by the <paramref name="resourceId"/>
         /// parameter.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="fileName"/> or <paramref name="resourceId"/> are <see langword="null"/>.</exception>
         internal FirefoxExtension(string fileName, string resourceId)
         {
-            this.extensionFileName = fileName;
-            this.extensionResourceId = resourceId;
+            this.extensionFileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            this.extensionResourceId = resourceId ?? throw new ArgumentNullException(nameof(resourceId));
         }
 
         /// <summary>
         /// Installs the extension into a profile directory.
         /// </summary>
         /// <param name="profileDirectory">The Firefox profile directory into which to install the extension.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="profileDirectory"/> is <see langword="null"/>.</exception>
         public void Install(string profileDirectory)
         {
             DirectoryInfo info = new DirectoryInfo(profileDirectory);
@@ -132,7 +135,7 @@ namespace OpenQA.Selenium.Firefox
 
         private static string ReadIdFromInstallRdf(string root)
         {
-            string id = null;
+            string id;
             string installRdf = Path.Combine(root, "install.rdf");
             try
             {
@@ -143,11 +146,11 @@ namespace OpenQA.Selenium.Firefox
                 rdfNamespaceManager.AddNamespace("em", EmNamespaceUri);
                 rdfNamespaceManager.AddNamespace("RDF", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 
-                XmlNode node = rdfXmlDocument.SelectSingleNode("//em:id", rdfNamespaceManager);
+                XmlNode? node = rdfXmlDocument.SelectSingleNode("//em:id", rdfNamespaceManager);
                 if (node == null)
                 {
-                    XmlNode descriptionNode = rdfXmlDocument.SelectSingleNode("//RDF:Description", rdfNamespaceManager);
-                    XmlAttribute attribute = descriptionNode.Attributes["id", EmNamespaceUri];
+                    XmlNode? descriptionNode = rdfXmlDocument.SelectSingleNode("//RDF:Description", rdfNamespaceManager);
+                    XmlAttribute? attribute = descriptionNode?.Attributes?["id", EmNamespaceUri];
                     if (attribute == null)
                     {
                         throw new WebDriverException("Cannot locate node containing extension id: " + installRdf);
@@ -175,26 +178,19 @@ namespace OpenQA.Selenium.Firefox
 
         private static string ReadIdFromManifestJson(string root)
         {
-            string id = null;
+            string id = string.Empty;
             string manifestJsonPath = Path.Combine(root, JsonManifestFileName);
+
             var manifestObject = JsonNode.Parse(File.ReadAllText(manifestJsonPath));
-            if (manifestObject["applications"] != null)
+            if (manifestObject!["applications"]?["gecko"]?["id"] is { } idNode)
             {
-                var applicationObject = manifestObject["applications"];
-                if (applicationObject["gecko"] != null)
-                {
-                    var geckoObject = applicationObject["gecko"];
-                    if (geckoObject["id"] != null)
-                    {
-                        id = geckoObject["id"].ToString().Trim();
-                    }
-                }
+                id = idNode.ToString().Trim();
             }
 
             if (string.IsNullOrEmpty(id))
             {
-                string addInName = manifestObject["name"].ToString().Replace(" ", "");
-                string addInVersion = manifestObject["version"].ToString();
+                string addInName = manifestObject["name"]!.ToString().Replace(" ", "");
+                string addInVersion = manifestObject["version"]!.ToString();
                 id = string.Format(CultureInfo.InvariantCulture, "{0}@{1}", addInName, addInVersion);
             }
 
