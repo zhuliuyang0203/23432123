@@ -150,7 +150,7 @@ module Selenium
             request.headers['foo'] = 'bar'
             request.headers['baz'] = 'qux'
             request.cookies['foo'] = 'bar'
-            request.body = ({test: 'example'})
+            request.body = ({ test: 'example' })
             request.continue
           end
           driver.navigate.to url_for('formPage.html')
@@ -271,6 +271,20 @@ module Selenium
           driver.navigate.to url_for('formPage.html')
           expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a response handler that provides a response' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler do |response|
+            response.status = 200
+            response.headers['foo'] = 'bar'
+            response.body = '<html><head><title>Hello World!</title></head><body/></html>'
+            response.provide_response
+          end
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.page_source).to include('Hello World!')
         end
       end
 

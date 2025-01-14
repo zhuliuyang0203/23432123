@@ -2,6 +2,7 @@ module Selenium
   module WebDriver
     class BiDi
       class InterceptedResponse < InterceptedItem
+        @body: untyped
         @reason: untyped
 
         @credentials: untyped
@@ -10,15 +11,22 @@ module Selenium
 
         @set_cookie_headers: untyped
 
+        attr_reader body: untyped
         attr_accessor reason: untyped
 
+        attr_accessor status: Integer?
+
         def initialize: (untyped network, untyped request) -> void
+
+        def body=: -> untyped
 
         def continue: () -> untyped
 
         def credentials: (?username: untyped?, ?password: untyped?) -> untyped
 
         def headers: () -> untyped
+
+        def provide_response: -> untyped
 
         def set_cookie_headers: (?untyped? set_cookie_headers) -> untyped
       end
