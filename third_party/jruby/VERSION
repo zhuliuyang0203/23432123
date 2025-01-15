@@ -1,1 +1,1 @@
-jruby 9.4.5.0 (3.1.4) 2023-11-02 1abae2700f OpenJDK 64-Bit Server VM 17.0.7+7 on 17.0.7+7 +jit [x86_64-darwin]
+jruby 9.4.9.0 (3.1.4) 2024-11-04 547c6b150e OpenJDK 64-Bit Server VM 17.0.13+11-LTS on 17.0.13+11-LTS +jit [arm64-darwin]

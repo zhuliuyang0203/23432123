@@ -1,7 +1,5 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
@@ -11,7 +9,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
     /// </summary>
     public class ProtocolVersionDefinition
     {
-        [JsonProperty(PropertyName = "Browser")]
+        [JsonPropertyName("Browser")]
         public string Browser { get; set; }
 
         [JsonIgnore]
@@ -20,13 +18,13 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         [JsonIgnore]
         public string BrowserMajorVersion => Regex.Match(Browser, ".*/(\\d+)\\..*").Groups[1].Value;
 
-        [JsonProperty(PropertyName = "Protocol-Version")]
+        [JsonPropertyName("Protocol-Version")]
         public string ProtocolVersion { get; set; }
 
-        [JsonProperty(PropertyName = "User-Agent")]
+        [JsonPropertyName("User-Agent")]
         public string UserAgent { get; set; }
 
-        [JsonProperty(PropertyName = "V8-Version")]
+        [JsonPropertyName("V8-Version")]
         public string V8Version { get; set; }
 
         [JsonIgnore]
@@ -46,7 +44,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
             }
         }
 
-        [JsonProperty(PropertyName = "WebKit-Version")]
+        [JsonPropertyName("WebKit-Version")]
         public string WebKitVersion { get; set; }
 
         [JsonIgnore]

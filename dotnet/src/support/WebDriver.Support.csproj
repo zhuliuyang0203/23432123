@@ -5,6 +5,8 @@
     <AssemblyName>WebDriver.Support</AssemblyName>
     <RootNamespace>OpenQA.Selenium.Support</RootNamespace>
     <BuildSystem>visual-studio</BuildSystem>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -54,6 +54,24 @@ suite(function (env) {
         })
     })
 
+    it('Get Cookie: throw error if name is null', async function () {
+      const cookie = createCookieSpec()
+      await driver.manage().addCookie(cookie)
+      await assert.rejects(async () => await driver.manage().getCookie(null), {
+        name: 'InvalidArgumentError',
+        message: `Cookie name cannot be empty`,
+      })
+    })
+
+    it('Delete cookie: throw error if name is null', async function () {
+      const cookie = createCookieSpec()
+      await driver.manage().addCookie(cookie)
+      await assert.rejects(async () => await driver.manage().deleteCookie(null), {
+        name: 'InvalidArgumentError',
+        message: `Cookie name cannot be empty`,
+      })
+    })
+
     it('can get all cookies', async function () {
       const cookie1 = createCookieSpec()
       const cookie2 = createCookieSpec()

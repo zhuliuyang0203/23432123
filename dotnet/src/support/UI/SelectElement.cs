@@ -39,14 +39,14 @@ namespace OpenQA.Selenium.Support.UI
         /// <exception cref="UnexpectedTagNameException">Thrown when the element wrapped is not a &lt;select&gt; element.</exception>
         public SelectElement(IWebElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element), "element cannot be null");
             }
 
             string tagName = element.TagName;
 
-            if (string.IsNullOrEmpty(tagName) || string.Compare(tagName, "select", StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.IsNullOrEmpty(tagName) || !string.Equals(tagName, "select", StringComparison.OrdinalIgnoreCase))
             {
                 throw new UnexpectedTagNameException("select", tagName);
             }
@@ -55,7 +55,7 @@ namespace OpenQA.Selenium.Support.UI
 
             // let check if it's a multiple
             string attribute = element.GetAttribute("multiple");
-            this.IsMultiple = attribute != null && attribute.ToLowerInvariant() != "false";
+            this.IsMultiple = attribute != null && !attribute.Equals("false", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -69,18 +69,12 @@ namespace OpenQA.Selenium.Support.UI
         /// <summary>
         /// Gets a value indicating whether the parent element supports multiple selections.
         /// </summary>
-        public bool IsMultiple { get; private set; }
+        public bool IsMultiple { get; }
 
         /// <summary>
         /// Gets the list of options for the select element.
         /// </summary>
-        public IList<IWebElement> Options
-        {
-            get
-            {
-                return this.element.FindElements(By.TagName("option"));
-            }
-        }
+        public IList<IWebElement> Options => this.element.FindElements(By.TagName("option"));
 
         /// <summary>
         /// Gets the selected item within the select element.
@@ -133,10 +127,11 @@ namespace OpenQA.Selenium.Support.UI
         /// &lt;option value="foo"&gt;Bar&lt;/option&gt;
         /// </para>
         /// </remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoSuchElementException">Thrown if there is no element with the given text present.</exception>
         public void SelectByText(string text, bool partialMatch = false)
         {
-            if (text == null)
+            if (text is null)
             {
                 throw new ArgumentNullException(nameof(text), "text must not be null");
             }
@@ -432,8 +427,7 @@ namespace OpenQA.Selenium.Support.UI
         private static string GetLongestSubstringWithoutSpace(string s)
         {
             string result = string.Empty;
-            string[] substrings = s.Split(' ');
-            foreach (string substring in substrings)
+            foreach (string substring in s.Split(' '))
             {
                 if (substring.Length > result.Length)
                 {

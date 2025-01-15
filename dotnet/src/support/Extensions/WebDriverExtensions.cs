@@ -37,25 +37,23 @@ namespace OpenQA.Selenium.Support.Extensions
         /// indicate that it cannot take screenshots.</exception>
         public static Screenshot TakeScreenshot(this IWebDriver driver)
         {
-            ITakesScreenshot screenshotDriver = GetDriverAs<ITakesScreenshot>(driver);
-            if (screenshotDriver == null)
+            ITakesScreenshot? screenshotDriver = GetDriverAs<ITakesScreenshot>(driver);
+            if (screenshotDriver is null)
             {
-                IHasCapabilities capabilitiesDriver = driver as IHasCapabilities;
-                if (capabilitiesDriver == null)
-                {
-                    throw new WebDriverException("Driver does not implement ITakesScreenshot or IHasCapabilities");
-                }
+                IHasCapabilities capabilitiesDriver = driver as IHasCapabilities
+                        ?? throw new WebDriverException("Driver does not implement ITakesScreenshot or IHasCapabilities");
 
-                if (!capabilitiesDriver.Capabilities.HasCapability(CapabilityType.TakesScreenshot) || !(bool)capabilitiesDriver.Capabilities.GetCapability(CapabilityType.TakesScreenshot))
+                if (capabilitiesDriver.Capabilities.GetCapability(CapabilityType.TakesScreenshot) is not true)
                 {
                     throw new WebDriverException("Driver capabilities do not support taking screenshots");
                 }
 
-                MethodInfo executeMethod = driver.GetType().GetMethod("Execute", BindingFlags.Instance | BindingFlags.NonPublic);
-                Response screenshotResponse = executeMethod.Invoke(driver, new object[] { DriverCommand.Screenshot, null }) as Response;
-                if (screenshotResponse == null)
+                MethodInfo executeMethod = driver.GetType().GetMethod("Execute", BindingFlags.Instance | BindingFlags.NonPublic)!;
+
+                object? responseObject = executeMethod.Invoke(driver, new object[] { DriverCommand.Screenshot, null });
+                if (responseObject is not Response screenshotResponse)
                 {
-                    throw new WebDriverException("Unexpected failure getting screenshot; response was not in the proper format.");
+                    throw new WebDriverException($"Unexpected failure getting screenshot; response was not in the proper format: {responseObject}");
                 }
 
                 string screenshotResult = screenshotResponse.Value.ToString();
@@ -73,7 +71,7 @@ namespace OpenQA.Selenium.Support.Extensions
         /// <param name="args">The arguments to the script.</param>
         /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
         /// does not implement <see cref="IJavaScriptExecutor"/></exception>
-        public static void ExecuteJavaScript(this IWebDriver driver, string script, params object[] args)
+        public static void ExecuteJavaScript(this IWebDriver driver, string script, params object?[] args)
         {
             ExecuteJavaScriptInternal(driver, script, args);
         }
@@ -89,58 +87,52 @@ namespace OpenQA.Selenium.Support.Extensions
         /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
         /// does not implement <see cref="IJavaScriptExecutor"/>, or if the actual return type
         /// of the JavaScript execution does not match the expected type.</exception>
-        public static T ExecuteJavaScript<T>(this IWebDriver driver, string script, params object[] args)
+        public static T? ExecuteJavaScript<T>(this IWebDriver driver, string script, params object?[] args)
         {
             var value = ExecuteJavaScriptInternal(driver, script, args);
-            var result = default(T);
-            Type type = typeof(T);
             if (value == null)
             {
-                if (type.IsValueType && (Nullable.GetUnderlyingType(type) == null))
+                if (default(T) != null)
                 {
-                    throw new WebDriverException("Script returned null, but desired type is a value type");
+                    throw new WebDriverException("Script returned null, but desired type is a non-nullable value type");
                 }
-            }
-            else if (type.IsInstanceOfType(value))
-            {
-                result = (T)value;
-            }
-            else
-            {
-                try
-                {
-                    result = (T)Convert.ChangeType(value, type);
-                }
-                catch (Exception exp)
-                {
-                    throw new WebDriverException("Script returned a value, but the result could not be cast to the desired type", exp);
-                }
+
+                return default;
             }
 
-            return result;
+            if (value is T t)
+            {
+                return t;
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch (Exception exp)
+            {
+                throw new WebDriverException("Script returned a value, but the result could not be cast to the desired type", exp);
+            }
         }
 
-        private static object ExecuteJavaScriptInternal(IWebDriver driver, string script, object[] args)
+        private static object ExecuteJavaScriptInternal(IWebDriver driver, string script, object?[] args)
         {
-            IJavaScriptExecutor executor = GetDriverAs<IJavaScriptExecutor>(driver);
-            if (executor == null)
-            {
-                throw new WebDriverException("Driver does not implement IJavaScriptExecutor");
-            }
+            IJavaScriptExecutor? executor = GetDriverAs<IJavaScriptExecutor>(driver)
+                ?? throw new WebDriverException("Driver does not implement IJavaScriptExecutor");
 
             return executor.ExecuteScript(script, args);
         }
 
-        private static T GetDriverAs<T>(IWebDriver driver) where T : class
+        private static T? GetDriverAs<T>(IWebDriver driver) where T : class
         {
-            T convertedDriver = driver as T;
+            T? convertedDriver = driver as T;
             if (convertedDriver == null)
             {
                 // If the driver doesn't directly implement the desired interface, but does
                 // implement IWrapsDriver, walk up the hierarchy of wrapped drivers until
                 // either we find a class that does implement the desired interface, or is
                 // no longer wrapping a driver.
-                IWrapsDriver driverWrapper = driver as IWrapsDriver;
+                IWrapsDriver? driverWrapper = driver as IWrapsDriver;
                 while (convertedDriver == null && driverWrapper != null)
                 {
                     convertedDriver = driverWrapper.WrappedDriver as T;

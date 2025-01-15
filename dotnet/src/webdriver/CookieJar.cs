@@ -74,16 +74,16 @@ namespace OpenQA.Selenium
         /// Delete the cookie by passing in the name of the cookie
         /// </summary>
         /// <param name="name">The name of the cookie that is in the browser</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void DeleteCookieNamed(string name)
         {
-            if (name is null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new ArgumentException("Cookie name cannot be null or empty", nameof(name));
             }
 
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("name", name);
+            Dictionary<string, object> parameters = new() { { "name", name } };
+
             driver.InternalExecute(DriverCommand.DeleteCookie, parameters);
         }
 
@@ -115,11 +115,12 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="name">name of the cookie that needs to be returned</param>
         /// <returns>A Cookie from the name; or <see langword="null"/> if not found.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public Cookie? GetCookieNamed(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Cookie name cannot be empty", nameof(name));
+                throw new ArgumentException("Cookie name cannot be null or empty", nameof(name));
             }
 
             try
