@@ -26,34 +26,26 @@ namespace OpenQA.Selenium.Support.Events
     /// </summary>
     public class WebDriverExceptionEventArgs : EventArgs
     {
-        private Exception thrownException;
-        private IWebDriver driver;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDriverExceptionEventArgs"/> class.
         /// </summary>
         /// <param name="driver">The WebDriver instance throwing the exception.</param>
         /// <param name="thrownException">The exception thrown by the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> or <paramref name="thrownException"/> are <see langword="null"/>.</exception>
         public WebDriverExceptionEventArgs(IWebDriver driver, Exception thrownException)
         {
-            this.driver = driver;
-            this.thrownException = thrownException;
+            this.Driver = driver ?? throw new ArgumentNullException(nameof(driver));
+            this.ThrownException = thrownException ?? throw new ArgumentNullException(nameof(thrownException));
         }
 
         /// <summary>
         /// Gets the exception thrown by the driver.
         /// </summary>
-        public Exception ThrownException
-        {
-            get { return this.thrownException; }
-        }
+        public Exception ThrownException { get; }
 
         /// <summary>
-        /// Gets the WebDriver instance .
+        /// Gets the WebDriver instance.
         /// </summary>
-        public IWebDriver Driver
-        {
-            get { return this.driver; }
-        }
+        public IWebDriver Driver { get; }
     }
 }

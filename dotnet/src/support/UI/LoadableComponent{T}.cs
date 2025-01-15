@@ -20,22 +20,19 @@
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
-    /// Represents any abstraction of something that can be loaded. This may be an entire web page, or
-    /// simply a component within that page (such as a login box or menu) or even a service.
-    /// </summary>
-    /// <typeparam name="T">The type to be returned (normally the subclass' type)</typeparam>
-    /// <example>
-    /// The expected usage is:
+    /// <para>Represents any abstraction of something that can be loaded.</para>
+    /// <para>This may be an entire web page, or simply a component within that page (such as a login box or menu) or even a service.</para>
     /// <para>
     /// <code>
-    /// new HypotheticalComponent().Load();
+    /// // Example usage:
+    /// new MyComponent().Load();
     /// </code>
     /// </para>
-    /// </example>
+    /// </summary>
+    /// <typeparam name="T">The type to be returned (normally the subclass' type)</typeparam>
     /// <remarks>
-    /// After the <see cref="LoadableComponent{T}.Load()"/> method is called, the component will be loaded and
-    /// ready for use. Overload the protected Load and IsLoaded members to both load a component and determine
-    /// if the component is already loaded.
+    /// <para>After the <see cref="Load()"/> method is called, the component will be loaded and ready for use.</para>
+    /// <para>Overload the protected Load and IsLoaded members to both load a component and determine if the component is already loaded.</para>
     /// </remarks>
     public abstract class LoadableComponent<T> : ILoadableComponent
         where T : LoadableComponent<T>
@@ -43,11 +40,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <summary>
         /// Gets or sets the message for the exception thrown when a component cannot be loaded
         /// </summary>
-        public virtual string UnableToLoadMessage
-        {
-            get;
-            set;
-        }
+        public virtual string? UnableToLoadMessage { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the component is fully loaded.
@@ -60,17 +53,14 @@ namespace OpenQA.Selenium.Support.UI
         {
             get
             {
-                bool isLoaded = false;
                 try
                 {
-                    isLoaded = this.EvaluateLoadedStatus();
+                    return this.EvaluateLoadedStatus();
                 }
                 catch (WebDriverException)
                 {
                     return false;
                 }
-
-                return isLoaded;
             }
         }
 
