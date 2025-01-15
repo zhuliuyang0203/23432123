@@ -1,24 +1,24 @@
+using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using Humanizer;
-    using Microsoft.Extensions.DependencyInjection;
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
     /// <summary>
     /// Represents an object that generates a protocol definition.
     /// </summary>
-    public sealed class ProtocolGenerator : CodeGeneratorBase<ProtocolDefinition>
+    public sealed class ProtocolGenerator : CodeGeneratorBase<ProtocolDefinition.ProtocolDefinition>
     {
         public ProtocolGenerator(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
         }
 
-        public override IDictionary<string, string> GenerateCode(ProtocolDefinition protocolDefinition, CodeGeneratorContext context)
+        public override IDictionary<string, string> GenerateCode(ProtocolDefinition.ProtocolDefinition protocolDefinition, CodeGeneratorContext context)
         {
             if (string.IsNullOrWhiteSpace(Settings.TemplatesPath))
             {
@@ -79,7 +79,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 domains = domains,
                 commands = commands,
                 events = events,
-                types = types.Select(kvp => kvp.Value).ToList()
+                types = types.Values.ToList()
             };
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -93,9 +93,11 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             }
 
             //Generate code for each domain, type, command, event from their respective templates.
-            GenerateCode(domains, types)
-                .ToList()
-                .ForEach(x => result.Add(x.Key, x.Value));
+
+            foreach (KeyValuePair<string, string> x in GenerateCode(domains, types))
+            {
+                result.Add(x.Key, x.Value);
+            }
 
             return result;
         }
@@ -246,7 +248,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             return knownTypes;
         }
 
-        private IDictionary<string, string> GenerateCode(ICollection<DomainDefinition> domains, Dictionary<string, TypeInfo> knownTypes)
+        private Dictionary<string, string> GenerateCode(ICollection<DomainDefinition> domains, Dictionary<string, TypeInfo> knownTypes)
         {
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -255,9 +257,11 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             //Generate types/events/commands for all domains.
             foreach (var domain in domains)
             {
-                domainGenerator.GenerateCode(domain, new CodeGeneratorContext { Domain = domain, KnownTypes = knownTypes })
-                    .ToList()
-                    .ForEach(x => result.Add(x.Key, x.Value));
+                var context = new CodeGeneratorContext { Domain = domain, KnownTypes = knownTypes };
+                foreach (KeyValuePair<string, string> x in domainGenerator.GenerateCode(domain, context))
+                {
+                    result.Add(x.Key, x.Value);
+                }
             }
 
             return result;

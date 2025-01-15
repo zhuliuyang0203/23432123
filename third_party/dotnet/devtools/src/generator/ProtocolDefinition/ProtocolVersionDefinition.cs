@@ -1,7 +1,5 @@
 using System.Text.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
