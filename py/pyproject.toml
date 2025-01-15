@@ -8,7 +8,7 @@ version = "4.28.0.202411261607"
 license = { text = "Apache 2.0" }
 description = "Official Python bindings for Selenium WebDriver."
 readme = "README.rst"
-requires-python = "~=3.8"
+requires-python = "~=3.9"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -19,7 +19,6 @@ classifiers = [
     "Topic :: Software Development :: Testing",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

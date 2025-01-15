@@ -1,8 +1,8 @@
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System.Collections.Generic;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Represents the current context of the code generator.
     /// </summary>

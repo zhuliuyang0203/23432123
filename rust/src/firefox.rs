@@ -572,7 +572,11 @@ impl SeleniumManager for FirefoxManager {
         } else {
             // Linux
             artifact_name = "firefox-";
-            artifact_extension = "tar.bz2";
+            if major_browser_version < 135 {
+                artifact_extension = "tar.bz2";
+            } else {
+                artifact_extension = "tar.xz";
+            }
             if X32.is(arch) {
                 platform_label = "linux-i686";
             } else if self.is_nightly(browser_version) {

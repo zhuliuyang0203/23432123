@@ -1,27 +1,19 @@
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using System.Text.Json.Serialization;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-
     public sealed class CommandDefinition : ProtocolDefinitionItem
     {
-        public CommandDefinition()
-        {
-            Handlers = new HashSet<string>();
-
-            Parameters = new Collection<TypeDefinition>();
-            Returns = new Collection<TypeDefinition>();
-        }
-
         [JsonPropertyName("handlers")]
-        public ICollection<string> Handlers { get; set; }
+        public ICollection<string> Handlers { get; set; } = new HashSet<string>();
 
         [JsonPropertyName("parameters")]
-        public ICollection<TypeDefinition> Parameters { get; set; }
+        public ICollection<TypeDefinition> Parameters { get; set; } = new Collection<TypeDefinition>();
 
         [JsonPropertyName("returns")]
-        public ICollection<TypeDefinition> Returns { get; set; }
+        public ICollection<TypeDefinition> Returns { get; set; } = new Collection<TypeDefinition>();
 
         [JsonPropertyName("redirect")]
         public string Redirect { get; set; }

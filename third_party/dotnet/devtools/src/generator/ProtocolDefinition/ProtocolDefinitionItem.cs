@@ -1,8 +1,8 @@
+using System.Text.Json.Serialization;
+using OpenQA.Selenium.DevToolsGenerator.Converters;
+
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using System.Text.Json.Serialization;
-    using OpenQA.Selenium.DevToolsGenerator.Converters;
-
     public abstract class ProtocolDefinitionItem : IDefinition
     {
 

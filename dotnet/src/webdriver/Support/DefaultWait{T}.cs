@@ -19,9 +19,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Support.UI
 {
@@ -32,14 +35,9 @@ namespace OpenQA.Selenium.Support.UI
     /// <typeparam name="T">The type of object on which the wait it to be applied.</typeparam>
     public class DefaultWait<T> : IWait<T>
     {
-        private T input;
-        private IClock clock;
-
-        private TimeSpan timeout = DefaultSleepTimeout;
-        private TimeSpan sleepInterval = DefaultSleepTimeout;
-        private string message = string.Empty;
-
-        private List<Type> ignoredExceptions = new List<Type>();
+        private readonly T input;
+        private readonly IClock clock;
+        private readonly List<Type> ignoredExceptions = new List<Type>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultWait&lt;T&gt;"/> class.
@@ -55,53 +53,29 @@ namespace OpenQA.Selenium.Support.UI
         /// </summary>
         /// <param name="input">The input value to pass to the evaluated conditions.</param>
         /// <param name="clock">The clock to use when measuring the timeout.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="clock"/> or <paramref name="input"/> are <see langword="null"/>.</exception>
         public DefaultWait(T input, IClock clock)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input), "input cannot be null");
-            }
-
-            if (clock == null)
-            {
-                throw new ArgumentNullException(nameof(clock), "clock cannot be null");
-            }
-
-            this.input = input;
-            this.clock = clock;
+            this.input = input ?? throw new ArgumentNullException(nameof(input), "input cannot be null"); ;
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock), "clock cannot be null"); ;
         }
 
         /// <summary>
         /// Gets or sets how long to wait for the evaluated condition to be true. The default timeout is 500 milliseconds.
         /// </summary>
-        public TimeSpan Timeout
-        {
-            get { return this.timeout; }
-            set { this.timeout = value; }
-        }
+        public TimeSpan Timeout { get; set; } = DefaultSleepTimeout;
 
         /// <summary>
         /// Gets or sets how often the condition should be evaluated. The default timeout is 500 milliseconds.
         /// </summary>
-        public TimeSpan PollingInterval
-        {
-            get { return this.sleepInterval; }
-            set { this.sleepInterval = value; }
-        }
+        public TimeSpan PollingInterval { get; set; } = DefaultSleepTimeout;
 
         /// <summary>
         /// Gets or sets the message to be displayed when time expires.
         /// </summary>
-        public string Message
-        {
-            get { return this.message; }
-            set { this.message = value; }
-        }
+        public string Message { get; set; } = string.Empty;
 
-        private static TimeSpan DefaultSleepTimeout
-        {
-            get { return TimeSpan.FromMilliseconds(500); }
-        }
+        private static TimeSpan DefaultSleepTimeout => TimeSpan.FromMilliseconds(500);
 
         /// <summary>
         /// Configures this instance to ignore specific types of exceptions while waiting for a condition.
@@ -140,7 +114,8 @@ namespace OpenQA.Selenium.Support.UI
         /// <typeparam name="TResult">The delegate's expected return type.</typeparam>
         /// <param name="condition">A delegate taking an object of type T as its parameter, and returning a TResult.</param>
         /// <returns>The delegate's return value.</returns>
-        public virtual TResult Until<TResult>(Func<T, TResult> condition)
+        [return: NotNull]
+        public virtual TResult Until<TResult>(Func<T, TResult?> condition)
         {
             return Until(condition, CancellationToken.None);
         }
@@ -160,7 +135,8 @@ namespace OpenQA.Selenium.Support.UI
         /// <param name="condition">A delegate taking an object of type T as its parameter, and returning a TResult.</param>
         /// <param name="token">A cancellation token that can be used to cancel the wait.</param>
         /// <returns>The delegate's return value.</returns>
-        public virtual TResult Until<TResult>(Func<T, TResult> condition, CancellationToken token)
+        [return: NotNull]
+        public virtual TResult Until<TResult>(Func<T, TResult?> condition, CancellationToken token)
         {
             if (condition == null)
             {
@@ -170,11 +146,11 @@ namespace OpenQA.Selenium.Support.UI
             var resultType = typeof(TResult);
             if ((resultType.IsValueType && resultType != typeof(bool)) || !typeof(object).IsAssignableFrom(resultType))
             {
-                throw new ArgumentException("Can only wait on an object or boolean response, tried to use type: " + resultType.ToString(), nameof(condition));
+                throw new ArgumentException($"Can only wait on an object or boolean response, tried to use type: {resultType}", nameof(condition));
             }
 
-            Exception lastException = null;
-            var endTime = this.clock.LaterBy(this.timeout);
+            Exception? lastException = null;
+            var endTime = this.clock.LaterBy(this.Timeout);
             while (true)
             {
                 token.ThrowIfCancellationRequested();
@@ -184,8 +160,7 @@ namespace OpenQA.Selenium.Support.UI
                     var result = condition(this.input);
                     if (resultType == typeof(bool))
                     {
-                        var boolResult = result as bool?;
-                        if (boolResult.HasValue && boolResult.Value)
+                        if (result is true)
                         {
                             return result;
                         }
@@ -212,16 +187,16 @@ namespace OpenQA.Selenium.Support.UI
                 // with a zero timeout can succeed.
                 if (!this.clock.IsNowBefore(endTime))
                 {
-                    string timeoutMessage = string.Format(CultureInfo.InvariantCulture, "Timed out after {0} seconds", this.timeout.TotalSeconds);
-                    if (!string.IsNullOrEmpty(this.message))
+                    string timeoutMessage = string.Format(CultureInfo.InvariantCulture, "Timed out after {0} seconds", this.Timeout.TotalSeconds);
+                    if (!string.IsNullOrEmpty(this.Message))
                     {
-                        timeoutMessage += ": " + this.message;
+                        timeoutMessage += ": " + this.Message;
                     }
 
                     this.ThrowTimeoutException(timeoutMessage, lastException);
                 }
 
-                Thread.Sleep(this.sleepInterval);
+                Thread.Sleep(this.PollingInterval);
             }
         }
 
@@ -232,7 +207,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <param name="lastException">The last exception thrown by the condition.</param>
         /// <remarks>This method may be overridden to throw an exception that is
         /// idiomatic for a particular test infrastructure.</remarks>
-        protected virtual void ThrowTimeoutException(string exceptionMessage, Exception lastException)
+        protected virtual void ThrowTimeoutException(string exceptionMessage, Exception? lastException)
         {
             throw new WebDriverTimeoutException(exceptionMessage, lastException);
         }

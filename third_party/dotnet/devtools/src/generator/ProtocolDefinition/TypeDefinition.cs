@@ -1,19 +1,12 @@
+using System.Text.Json.Serialization;
+using OpenQA.Selenium.DevToolsGenerator.Converters;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
 namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 {
-    using System.Text.Json.Serialization;
-    using OpenQA.Selenium.DevToolsGenerator.Converters;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-
     public sealed class TypeDefinition : ProtocolDefinitionItem
     {
-        public TypeDefinition()
-        {
-            Enum = new HashSet<string>();
-            Properties = new Collection<TypeDefinition>();
-        }
-
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
@@ -21,10 +14,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         public string Type { get; set; }
 
         [JsonPropertyName("enum")]
-        public ICollection<string> Enum { get; set; }
+        public ICollection<string> Enum { get; set; } = new HashSet<string>();
 
         [JsonPropertyName("properties")]
-        public ICollection<TypeDefinition> Properties { get; set; }
+        public ICollection<TypeDefinition> Properties { get; set; } = new Collection<TypeDefinition>();
 
         [JsonPropertyName("items")]
         public TypeDefinition Items { get; set; }
