@@ -86,7 +86,7 @@ public class DevTools implements Closeable {
   }
 
   public <X> X send(Command<X> command) {
-    return sendWithTimeout(command, this.timeout);
+    return send(command, this.timeout);
   }
 
   public <X> X send(Command<X> command, Duration timeout) {
