@@ -25,44 +25,38 @@ import org.junit.jupiter.api.Test;
 @Tag("UnitTests")
 class PageSizeTest {
 
-  // Defaults assertion
-  private static final double HEIGHT = 27.94;
-  private static final double WIDTH = 21.59;
-
-  @Test
-  void setsDefaultHeightWidth() {
+    @Test
+    void setsDefaultHeightWidth() {
     PageSize pageSize = new PageSize();
-
-    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    assertThat(pageSize.getHeight()).isEqualTo(29.7);
+    assertThat(pageSize.getWidth()).isEqualTo(21.0);
   }
 
-  @Test
+    @Test
     void verifiesPageSizeA4() {
-    PageSize pageSize = PageSize.A4;
-    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    PageSize pageSize = PageSize.setPageSize(PageSize.ISO_A4);
+    assertThat(pageSize.getHeight()).isEqualTo(29.7);
+    assertThat(pageSize.getWidth()).isEqualTo(21.0);
   }
 
-  @Test
+    @Test
     void verifiesPageSizeLegal() {
-    PageSize pageSize = PageSize.LEGAL;
-    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    PageSize pageSize = PageSize.setPageSize(PageSize.US_LEGAL);
+    assertThat(pageSize.getHeight()).isEqualTo(35.56);
+    assertThat(pageSize.getWidth()).isEqualTo(21.59);
   }
 
-  @Test
+    @Test
     void verifiesPageSizeLetter() {
-    PageSize pageSize = PageSize.LETTER;
-    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    PageSize pageSize = PageSize.setPageSize(PageSize.US_LETTER);
+    assertThat(pageSize.getHeight()).isEqualTo(27.94);
+    assertThat(pageSize.getWidth()).isEqualTo(21.59);
   }
 
     @Test
     void verifiesPageSizeTabloid() {
-    PageSize pageSize = PageSize.TABLOID;
-    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    PageSize pageSize = PageSize.setPageSize(PageSize.ANSI_TABLOID);
+    assertThat(pageSize.getHeight()).isEqualTo(43.18);
+    assertThat(pageSize.getWidth()).isEqualTo(27.94);
   }
-
 }
