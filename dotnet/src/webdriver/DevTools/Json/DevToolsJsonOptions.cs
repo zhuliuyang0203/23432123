@@ -1,4 +1,4 @@
-// <copyright file="RemoteReference.cs" company="Selenium Committers">
+// <copyright file="DevToolsJsonOptions.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,18 +17,19 @@
 // under the License.
 // </copyright>
 
+using System.Text.Json;
+
 #nullable enable
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+namespace OpenQA.Selenium.DevTools.Json;
 
-public abstract record RemoteReference : LocalValue;
-
-public record SharedReference(string SharedId) : RemoteReference
+internal static class DevToolsJsonOptions
 {
-    public Handle? Handle { get; set; }
-}
-
-public record RemoteObjectReference(Handle Handle) : RemoteReference
-{
-    public string? SharedId { get; set; }
+    public static JsonSerializerOptions Default { get; } = new JsonSerializerOptions()
+    {
+        Converters =
+        {
+            new StringConverter(),
+        }
+    };
 }

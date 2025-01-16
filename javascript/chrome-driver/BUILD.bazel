@@ -15,7 +15,11 @@ closure_js_library(
     deps = [
         "//javascript/atoms:dom",
         "//javascript/atoms:locators",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/dom",
+        "@io_bazel_rules_closure//closure/library/math:coordinate",
+        "@io_bazel_rules_closure//closure/library/math:rect",
+        "@io_bazel_rules_closure//closure/library/math:size",
+        "@io_bazel_rules_closure//closure/library/style",
     ],
 )
 
@@ -24,7 +28,9 @@ closure_fragment(
     browsers = ["chrome"],
     function = "goog.style.getPageOffset",
     module = "goog.style",
-    deps = ["@io_bazel_rules_closure//closure/library"],
+    deps = [
+        "@io_bazel_rules_closure//closure/library/style",
+    ],
 )
 
 closure_fragment(
@@ -135,7 +141,7 @@ closure_js_library(
     testonly = 1,
     srcs = glob(["**/*.js"]),
     visibility = ["//javascript:__pkg__"],
-    deps = ["@io_bazel_rules_closure//closure/library"],
+    deps = [],
 )
 
 filegroup(

@@ -246,7 +246,7 @@ public abstract record RemoteValue
         public IReadOnlyList<RemoteValue>? Value { get; set; }
     }
 
-    public record Node : RemoteValue
+    public record Node : RemoteValue, ISharedReference
     {
         [JsonInclude]
         public string? SharedId { get; internal set; }

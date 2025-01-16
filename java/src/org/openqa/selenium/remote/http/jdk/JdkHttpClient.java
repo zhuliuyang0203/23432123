@@ -37,6 +37,7 @@ import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -544,7 +545,7 @@ public class JdkHttpClient implements HttpClient {
       if (proxy == null) {
         return List.of();
       }
-      if (uri.getScheme().toLowerCase().startsWith("http")) {
+      if (uri.getScheme().toLowerCase(Locale.ENGLISH).startsWith("http")) {
         return List.of(proxy);
       }
       return List.of();

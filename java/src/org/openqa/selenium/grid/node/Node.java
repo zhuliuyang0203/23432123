@@ -101,6 +101,12 @@ import org.openqa.selenium.status.HasReadyState;
  * by {@code sessionId}. This returns a boolean.</td>
  * </tr>
  * <tr>
+ * <td>DELETE</td>
+ * <td>/se/grid/node/connection/{sessionId}</td>
+ * <td>Notifies the node about closure of a websocket connection for the {@link Session}
+ * identified by {@code sessionId}.</td>
+ * </tr>
+ * <tr>
  * <td>POST</td>
  * <td>/se/grid/node/connection/{sessionId}</td>
  * <td>Allows the node to be ask about whether or not new websocket connections are allowed for the {@link Session}
@@ -172,6 +178,9 @@ public abstract class Node implements HasReadyState, Routable {
                 .with(spanDecorator("node.download_file")),
             get("/se/grid/node/owner/{sessionId}")
                 .to(params -> new IsSessionOwner(this, sessionIdFrom(params)))
+                .with(spanDecorator("node.is_session_owner").andThen(requiresSecret)),
+            delete("/se/grid/node/connection/{sessionId}")
+                .to(params -> new ReleaseConnection(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.is_session_owner").andThen(requiresSecret)),
             post("/se/grid/node/connection/{sessionId}")
                 .to(params -> new TryAcquireConnection(this, sessionIdFrom(params)))
@@ -249,6 +258,8 @@ public abstract class Node implements HasReadyState, Routable {
   public abstract boolean isSessionOwner(SessionId id);
 
   public abstract boolean tryAcquireConnection(SessionId id);
+
+  public abstract void releaseConnection(SessionId id);
 
   public abstract boolean isSupporting(Capabilities capabilities);
 

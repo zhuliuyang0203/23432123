@@ -82,6 +82,12 @@ jobs:
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
+      - name: Pull latest changes from head ref for PRs
+        if: contains(github.head_ref, 'renovate/')
+        run: git pull origin ${{ github.head_ref }}
+      - name: Pull latest changes from ref for branch pushes
+        if: contains(github.ref, 'renovate/')
+        run: git pull origin ${{ github.ref }}
       - name: Free space
         if: inputs.os != 'windows'
         run: ./scripts/github-actions/free-disk-space.sh

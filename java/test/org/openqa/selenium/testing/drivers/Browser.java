@@ -21,6 +21,7 @@ import static org.openqa.selenium.remote.CapabilityType.BROWSER_NAME;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
@@ -172,7 +173,7 @@ public enum Browser {
     }
 
     try {
-      return Browser.valueOf(browserName.toUpperCase());
+      return Browser.valueOf(browserName.toUpperCase(Locale.ENGLISH));
     } catch (IllegalArgumentException e) {
       throw new RuntimeException(
           String.format("Cannot determine driver from name %s", browserName), e);

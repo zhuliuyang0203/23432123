@@ -17,6 +17,7 @@
 package org.openqa.selenium.manager;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 import org.openqa.selenium.internal.Require;
@@ -75,7 +76,7 @@ public class SeleniumManagerOutput {
       while (input.hasNext()) {
         switch (input.nextName()) {
           case "level":
-            switch (input.nextString().toLowerCase()) {
+            switch (input.nextString().toLowerCase(Locale.ENGLISH)) {
               case "error":
               case "warn":
                 level = Level.WARNING;

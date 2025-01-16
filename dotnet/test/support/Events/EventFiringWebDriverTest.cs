@@ -40,8 +40,14 @@ namespace OpenQA.Selenium.Support.Events
         public void Setup()
         {
             mockDriver = new Mock<IWebDriver>();
-            mockElement = new Mock<IWebElement>();
-            mockShadowRoot = new Mock<ISearchContext>();
+            mockElement = new Mock<IWebElement>()
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+            mockShadowRoot = new Mock<ISearchContext>()
+            {
+                DefaultValue = DefaultValue.Mock
+            };
             mockNavigation = new Mock<INavigation>();
             log = new StringBuilder();
         }

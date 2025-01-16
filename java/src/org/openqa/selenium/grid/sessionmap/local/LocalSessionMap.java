@@ -67,10 +67,11 @@ public class LocalSessionMap extends SessionMap {
 
     bus.addListener(
         NodeRestartedEvent.listener(
-            nodeStatus -> {
+            previousNodeStatus -> {
               List<SessionId> toRemove =
                   knownSessions.entrySet().stream()
-                      .filter((e) -> e.getValue().getUri().equals(nodeStatus.getExternalUri()))
+                      .filter(
+                          (e) -> e.getValue().getUri().equals(previousNodeStatus.getExternalUri()))
                       .map(Map.Entry::getKey)
                       .collect(Collectors.toList());
 

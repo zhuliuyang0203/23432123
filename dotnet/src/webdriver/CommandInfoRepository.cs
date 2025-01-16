@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -56,6 +58,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="commandName">The name of the command to check.</param>
         /// <returns><see langword="true"/> if the command name is defined</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
         public bool IsCommandNameDefined(string commandName)
         {
             return this.commandDictionary.ContainsKey(commandName);
@@ -66,7 +69,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object for which to find the command name.</param>
         /// <returns>The name of the command defined by the command info, or <see langword="null"/> if the command is not defined.</returns>
-        public string FindCommandName(CommandInfo commandInfo)
+        public string? FindCommandName(CommandInfo commandInfo)
         {
             foreach (KeyValuePair<string, CommandInfo> pair in this.commandDictionary)
             {
@@ -83,13 +86,13 @@ namespace OpenQA.Selenium
         /// Gets the <see cref="HttpCommandInfo"/> for a <see cref="DriverCommand"/>.
         /// </summary>
         /// <param name="commandName">The <see cref="DriverCommand"/> for which to get the information.</param>
-        /// <returns>The <see cref="HttpCommandInfo"/> for the specified command.</returns>
-        public T GetCommandInfo<T>(string commandName) where T : CommandInfo
+        /// <returns>The <see cref="HttpCommandInfo"/> for the specified command, or <see langword="null"/> if not found or value is not <typeparamref name="T"/>.</returns>
+        public T? GetCommandInfo<T>(string commandName) where T : CommandInfo
         {
-            T toReturn = default(T);
-            if (this.commandDictionary.ContainsKey(commandName))
+            T? toReturn = default;
+            if (this.commandDictionary.TryGetValue(commandName, out CommandInfo? info))
             {
-                toReturn = this.commandDictionary[commandName] as T;
+                toReturn = info as T;
             }
 
             return toReturn;
@@ -106,6 +109,12 @@ namespace OpenQA.Selenium
         /// This method will not overwrite existing commands for a specific name, and will return <see langword="false"/>
         /// in that case.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <para>If <paramref name="commandName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</para>
+        /// <para>-or-</para>
+        /// <para>If <paramref name="commandInfo"/> is <see langword="null"/>.</para>
+        /// </exception>
+        /// <exception cref="ArgumentException">If <typeparamref name="T"/> is not a valid command type for this repository.</exception>
         public bool TryAddCommand<T>(string commandName, T commandInfo) where T : CommandInfo
         {
             if (string.IsNullOrEmpty(commandName))

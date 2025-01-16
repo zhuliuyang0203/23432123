@@ -129,6 +129,7 @@ class LocalNewSessionQueueTest {
                   new DefaultSlotMatcher(),
                   Duration.ofSeconds(1),
                   Duration.ofSeconds(Debug.isDebugging() ? 9999 : 5),
+                  Duration.ofSeconds(1),
                   REGISTRATION_SECRET,
                   5);
           return new TestData(local, local);
@@ -142,6 +143,7 @@ class LocalNewSessionQueueTest {
                   new DefaultSlotMatcher(),
                   Duration.ofSeconds(1),
                   Duration.ofSeconds(Debug.isDebugging() ? 9999 : 5),
+                  Duration.ofSeconds(1),
                   REGISTRATION_SECRET,
                   5);
 

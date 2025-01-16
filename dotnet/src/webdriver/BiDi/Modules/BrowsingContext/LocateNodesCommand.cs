@@ -33,7 +33,7 @@ internal record LocateNodesCommandParameters(BrowsingContext Context, Locator Lo
 
     public Script.SerializationOptions? SerializationOptions { get; set; }
 
-    public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
+    public IEnumerable<Script.ISharedReference>? StartNodes { get; set; }
 }
 
 public record LocateNodesOptions : CommandOptions
@@ -42,7 +42,7 @@ public record LocateNodesOptions : CommandOptions
 
     public Script.SerializationOptions? SerializationOptions { get; set; }
 
-    public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
+    public IEnumerable<Script.ISharedReference>? StartNodes { get; set; }
 }
 
 public record LocateNodesResult : IReadOnlyList<Script.RemoteValue.Node>

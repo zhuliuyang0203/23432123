@@ -26,13 +26,11 @@ namespace OpenQA.Selenium.Support.Events
     /// </summary>
     public class WebDriverNavigationEventArgs : EventArgs
     {
-        private string url;
-        private IWebDriver driver;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDriverNavigationEventArgs"/> class.
         /// </summary>
         /// <param name="driver">The WebDriver instance used in navigation.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public WebDriverNavigationEventArgs(IWebDriver driver)
             : this(driver, null)
         {
@@ -42,27 +40,22 @@ namespace OpenQA.Selenium.Support.Events
         /// Initializes a new instance of the <see cref="WebDriverNavigationEventArgs"/> class.
         /// </summary>
         /// <param name="driver">The WebDriver instance used in navigation.</param>
-        /// <param name="url">The URL navigated to by the driver.</param>
-        public WebDriverNavigationEventArgs(IWebDriver driver, string url)
+        /// <param name="url">The URL navigated to by the driver, or <see langword="null"/> if none exists.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
+        public WebDriverNavigationEventArgs(IWebDriver driver, string? url)
         {
-            this.url = url;
-            this.driver = driver;
+            this.Url = url;
+            this.Driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
-        /// Gets the URL navigated to by the driver.
+        /// Gets the URL navigated to by the driver, or <see langword="null"/> if no URL could be determined.
         /// </summary>
-        public string Url
-        {
-            get { return this.url; }
-        }
+        public string? Url { get; }
 
         /// <summary>
         /// Gets the WebDriver instance used in navigation.
         /// </summary>
-        public IWebDriver Driver
-        {
-            get { return this.driver; }
-        }
+        public IWebDriver Driver { get; }
     }
 }

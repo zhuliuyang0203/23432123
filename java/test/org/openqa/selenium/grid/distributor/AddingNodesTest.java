@@ -109,6 +109,7 @@ class AddingNodesTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -449,6 +450,9 @@ class AddingNodesTest {
     public boolean tryAcquireConnection(SessionId id) {
       return false;
     }
+
+    @Override
+    public void releaseConnection(SessionId id) {}
 
     @Override
     public boolean isSupporting(Capabilities capabilities) {

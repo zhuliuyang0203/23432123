@@ -18,6 +18,7 @@
 package org.openqa.selenium.firefox;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -47,7 +48,7 @@ public enum FirefoxDriverLogLevel {
 
   @Override
   public String toString() {
-    return super.toString().toLowerCase();
+    return super.toString().toLowerCase(Locale.ENGLISH);
   }
 
   public static FirefoxDriverLogLevel fromString(String text) {

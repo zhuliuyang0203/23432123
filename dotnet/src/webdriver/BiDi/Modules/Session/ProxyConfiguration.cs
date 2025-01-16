@@ -24,14 +24,14 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "proxyType")]
-[JsonDerivedType(typeof(Autodetect), "autodetect")]
+[JsonDerivedType(typeof(AutoDetect), "autodetect")]
 [JsonDerivedType(typeof(Direct), "direct")]
 [JsonDerivedType(typeof(Manual), "manual")]
 [JsonDerivedType(typeof(Pac), "pac")]
 [JsonDerivedType(typeof(System), "system")]
 public abstract record ProxyConfiguration
 {
-    public record Autodetect : ProxyConfiguration;
+    public record AutoDetect : ProxyConfiguration;
 
     public record Direct : ProxyConfiguration;
 
@@ -48,7 +48,7 @@ public abstract record ProxyConfiguration
         public long? SocksVersion { get; set; }
     }
 
-    public record Pac(string ProxyAutoconfigUrl) : ProxyConfiguration;
+    public record Pac(string ProxyAutoConfigUrl) : ProxyConfiguration;
 
     public record System : ProxyConfiguration;
 }

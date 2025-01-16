@@ -52,6 +52,8 @@ public interface FederatedCredentialManagementDialog {
   /** Returns the subtitle of the dialog or null if none. */
   String getSubtitle();
 
+  void clickDialog();
+
   /**
    * Returns the accounts shown in the account chooser.
    *

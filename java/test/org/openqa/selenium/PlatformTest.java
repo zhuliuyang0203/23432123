@@ -24,8 +24,10 @@ import static org.openqa.selenium.Platform.CATALINA;
 import static org.openqa.selenium.Platform.IOS;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.MAC;
+import static org.openqa.selenium.Platform.SEQUOIA;
 import static org.openqa.selenium.Platform.UNIX;
 import static org.openqa.selenium.Platform.VISTA;
+import static org.openqa.selenium.Platform.WIN11;
 import static org.openqa.selenium.Platform.WIN8;
 import static org.openqa.selenium.Platform.WIN8_1;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -55,6 +57,11 @@ class PlatformTest {
   @Test
   void testWin81IsWindows() {
     assertThat(WIN8_1.is(WINDOWS)).isTrue();
+  }
+
+  @Test
+  void testWindows11IsWindows() {
+    assertThat(WIN11.is(WINDOWS)).isTrue();
   }
 
   @Test
@@ -166,13 +173,38 @@ class PlatformTest {
   }
 
   @Test
+  void testWindowsIsNotEmpty() {
+    assertThat(WINDOWS).isNotEqualTo(Platform.fromString(""));
+  }
+
+  @Test
   void canParseMacOsXCorrectly() {
     assertThat(Platform.fromString("Mac OS X")).isEqualTo(MAC);
   }
 
   @Test
+  void testAnyIsFromStringEmpty() {
+    assertThat(ANY).isEqualTo(Platform.fromString(""));
+  }
+
+  @Test
+  void testAnyIsFromStringAny() {
+    assertThat(ANY).isEqualTo(Platform.fromString("any"));
+  }
+
+  @Test
+  void testAnyIsNotFromStringWindows() {
+    assertThat(ANY).isNotEqualTo(Platform.fromString("windows"));
+  }
+
+  @Test
   void catalinaIsMac() {
     assertThat(CATALINA.is(MAC)).isTrue();
+  }
+
+  @Test
+  void sequoiaIsMac() {
+    assertThat(SEQUOIA.is(MAC)).isTrue();
   }
 
   @Test

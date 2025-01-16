@@ -19,7 +19,9 @@ package org.openqa.selenium.print;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class PageSize {
 
   private final double height;

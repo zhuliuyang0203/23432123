@@ -42,6 +42,7 @@ import com.google.common.net.MediaType;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.openqa.selenium.internal.Require;
@@ -134,7 +135,7 @@ public class ResourceHandler implements Routable {
     String extension = (index == -1 || uri.length() == index) ? "" : uri.substring(index + 1);
 
     MediaType type;
-    switch (extension.toLowerCase()) {
+    switch (extension.toLowerCase(Locale.ENGLISH)) {
       case "appcache":
         type = CACHE_MANIFEST_UTF_8;
         break;

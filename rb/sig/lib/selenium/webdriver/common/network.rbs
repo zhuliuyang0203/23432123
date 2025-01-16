@@ -3,15 +3,19 @@ module Selenium
     class Network
       @network: BiDi::Network
 
-      attr_reader auth_callbacks: Hash[String, String]
+      @callbacks: Hash[String, String]
+
+      attr_reader callbacks: Hash[String, String]
 
       def initialize: (Remote::Bridge bridge) -> void
 
       def add_authentication_handler: (String username, String password) -> String
 
-      def clear_authentication_handlers: -> Hash[nil, nil]
+      def add_request_handler: -> Integer
 
-      def remove_authentication_handler: (String id) -> nil
+      def clear_handlers: -> Hash[nil, nil]
+
+      def remove_handler: (Integer id) -> nil
     end
   end
 end

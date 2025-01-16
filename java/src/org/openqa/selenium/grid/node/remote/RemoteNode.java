@@ -197,6 +197,18 @@ public class RemoteNode extends Node implements Closeable {
   }
 
   @Override
+  public void releaseConnection(SessionId id) {
+    Require.nonNull("Session ID", id);
+
+    HttpRequest req = new HttpRequest(DELETE, "/se/grid/node/connection/" + id);
+    HttpTracing.inject(tracer, tracer.getCurrentContext(), req);
+
+    HttpResponse res = client.with(addSecret).execute(req);
+
+    Values.get(res, Void.class);
+  }
+
+  @Override
   public Session getSession(SessionId id) throws NoSuchSessionException {
     Require.nonNull("Session ID", id);
 

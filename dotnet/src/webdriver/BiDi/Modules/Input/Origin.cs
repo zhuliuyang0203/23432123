@@ -29,7 +29,7 @@ public abstract record Origin
 
     public record Pointer() : Origin;
 
-    public record Element([property: JsonPropertyName("element")] Script.SharedReference SharedReference) : Origin
+    public record Element([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : Origin
     {
         public string Type { get; } = "element";
     }

@@ -84,6 +84,7 @@ class DistributorTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -134,6 +135,7 @@ class DistributorTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -203,6 +205,7 @@ class DistributorTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(sessions);
@@ -243,6 +246,7 @@ class DistributorTest extends DistributorTestBase {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 

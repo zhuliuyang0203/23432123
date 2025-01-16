@@ -40,7 +40,7 @@ public class Select implements ISelect, WrapsElement {
   public Select(WebElement element) {
     String tagName = element.getTagName();
 
-    if (null == tagName || !"select".equals(tagName.toLowerCase())) {
+    if (!"select".equalsIgnoreCase(tagName)) {
       throw new UnexpectedTagNameException("select", tagName);
     }
 
