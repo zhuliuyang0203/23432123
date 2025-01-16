@@ -8,7 +8,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     /// <summary>
     /// Contains various utility methods.
     /// </summary>
-    public static class Utility
+    public static partial class Utility
     {
         /// <summary>
         /// Replaces tokens in the target path.
@@ -39,17 +39,21 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         /// <returns></returns>
         public static string GetTypeMappingForType(TypeDefinition typeDefinition, DomainDefinition domainDefinition, IDictionary<string, TypeInfo> knownTypes, bool isArray = false)
         {
+            if (typeDefinition is null)
+            {
+                throw new ArgumentNullException(nameof(typeDefinition));
+            }
+
             var type = typeDefinition.Type;
 
             if (string.IsNullOrWhiteSpace(type))
             {
-                type = typeDefinition.TypeReference;
+                type = typeDefinition.TypeReference ?? throw new ArgumentException("Type definition has neither Type or TypeReference", nameof(typeDefinition));
             }
 
-            string mappedType = null;
-            if (type.Contains(".") && knownTypes.ContainsKey(type))
+            string mappedType;
+            if (type.Contains(".") && knownTypes.TryGetValue(type, out TypeInfo? typeInfo))
             {
-                var typeInfo = knownTypes[type];
                 if (typeInfo.IsPrimitive)
                 {
                     var primitiveType = typeInfo.TypeName;
@@ -72,50 +76,48 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                     mappedType += "?";
                 }
             }
-
-            if (mappedType == null)
+            else if (knownTypes.TryGetValue($"{domainDefinition.Name}.{type}", out typeInfo))
             {
-                var fullyQualifiedTypeName = $"{domainDefinition.Name}.{type}";
-
-                if (knownTypes.ContainsKey(fullyQualifiedTypeName))
+                mappedType = typeInfo.TypeName;
+                if (typeInfo.ByRef && typeDefinition.Optional)
                 {
-                    var typeInfo = knownTypes[fullyQualifiedTypeName];
-
-                    mappedType = typeInfo.TypeName;
-                    if (typeInfo.ByRef && typeDefinition.Optional)
-                    {
-                        mappedType += "?";
-                    }
+                    mappedType += "?";
                 }
             }
-
-
-            if (mappedType == null)
+            else
             {
                 switch (type)
                 {
                     case "number":
                         mappedType = typeDefinition.Optional ? "double?" : "double";
                         break;
+
                     case "integer":
                         mappedType = typeDefinition.Optional ? "long?" : "long";
                         break;
+
                     case "boolean":
                         mappedType = typeDefinition.Optional ? "bool?" : "bool";
                         break;
+
                     case "string":
                         mappedType = "string";
                         break;
+
                     case "object":
                     case "any":
                         mappedType = "object";
                         break;
+
                     case "binary":
                         mappedType = "byte[]";
                         break;
+
                     case "array":
-                        mappedType = GetTypeMappingForType(typeDefinition.Items, domainDefinition, knownTypes, true);
+                        var items = typeDefinition.Items ?? throw new InvalidOperationException("Type definition was type array but has no Items");
+                        mappedType = GetTypeMappingForType(items, domainDefinition, knownTypes, true);
                         break;
+
                     default:
                         throw new InvalidOperationException($"Unmapped data type: {type}");
                 }
@@ -129,7 +131,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             return mappedType;
         }
 
-        public static string ReplaceLineEndings(string value, string replacement = null)
+        public static string? ReplaceLineEndings(string? value, string? replacement = null)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -138,7 +140,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
             replacement ??= string.Empty;
 
-            return Regex.Replace(value, @"\r\n?|\n|\u2028|\u2029", replacement, RegexOptions.Compiled);
+            return WhitespaceRegex().Replace(value, replacement);
         }
+
+        [GeneratedRegex(@"\r\n?|\n|\u2028|\u2029", RegexOptions.Compiled)]
+        private static partial Regex WhitespaceRegex();
     }
 }

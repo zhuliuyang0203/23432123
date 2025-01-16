@@ -47,12 +47,12 @@ namespace OpenQA.Selenium
         {
             driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
 
-            IWebElement lowest = driver.FindElement(By.Id("seventh"));
+            IWebElement lowest = driver.FindElement(By.Id("bottomLeft"));
 
             var elements = driver.FindElements(RelativeBy.WithLocator(By.XPath("//td[1]")).Above(lowest));
 
             var values = elements.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "fourth", "first" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "left", "topLeft" }));
         }
 
         [Test]
@@ -73,10 +73,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
 
-            ReadOnlyCollection<IWebElement> seen = driver.FindElements(RelativeBy.WithLocator(By.TagName("td")).Above(By.Id("center")).RightOf(By.Id("second")));
+            ReadOnlyCollection<IWebElement> seen = driver.FindElements(RelativeBy.WithLocator(By.TagName("td")).Above(By.Id("center")).RightOf(By.Id("top")));
 
             var elementIds = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(elementIds, Is.EquivalentTo(new List<string>() { "third" }));
+            Assert.That(elementIds, Is.EquivalentTo(new List<string>() { "topRight" }));
         }
 
 
@@ -85,10 +85,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
 
-            ReadOnlyCollection<IWebElement> seen = driver.FindElements(RelativeBy.WithLocator(By.XPath("//td[1]")).Below(By.Id("second")).Above(By.Id("seventh")));
+            ReadOnlyCollection<IWebElement> seen = driver.FindElements(RelativeBy.WithLocator(By.XPath("//td[1]")).Below(By.Id("top")).Above(By.Id("bottomLeft")));
 
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "fourth" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "left" }));
         }
 
         [Test]
@@ -97,10 +97,10 @@ namespace OpenQA.Selenium
             driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
 
             ReadOnlyCollection<IWebElement> seen = driver.FindElements(
-                RelativeBy.WithLocator(By.CssSelector("td")).Above(By.Id("center")).RightOf(By.Id("second")));
+                RelativeBy.WithLocator(By.CssSelector("td")).Above(By.Id("center")).RightOf(By.Id("top")));
 
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "third" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "topRight" }));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace OpenQA.Selenium
             // 5-8. Diagonally close (pythagoras sorting, with top row first
             //    because of DOM insertion order)
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "second", "eighth", "fourth", "sixth", "first", "third", "seventh", "ninth" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight" }));
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace OpenQA.Selenium
             // 5-8. Diagonally close (pythagoras sorting, with top row first
             //    because of DOM insertion order)
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "second", "eighth", "fourth", "sixth", "first", "third", "seventh", "ninth" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight"  }));
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace OpenQA.Selenium
             // 5-8. Diagonally close (pythagoras sorting, with top row first
             //    because of DOM insertion order)
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "second", "eighth", "fourth", "sixth", "first", "third", "seventh", "ninth" }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight"  }));
         }
 
         [Test]
@@ -218,11 +218,11 @@ namespace OpenQA.Selenium
         {
             driver.Url = (EnvironmentManager.Instance.UrlBuilder.WhereIs("relative_locators.html"));
 
-            var rect3 = driver.FindElement(By.Id("rect3"));
+            var rect = driver.FindElement(By.Id("rect1"));
 
             Assert.That(() =>
             {
-                var rect2 = driver.FindElement(RelativeBy.WithLocator(By.Id("rect4")).Near(rect3));
+                var rect2 = driver.FindElement(RelativeBy.WithLocator(By.Id("rect4")).Near(rect));
 
             }, Throws.TypeOf<NoSuchElementException>().With.Message.EqualTo("Unable to find element; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception"));
         }

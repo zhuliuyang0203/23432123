@@ -389,12 +389,12 @@ suite(function (env) {
       it('should combine filters', async function () {
         await driver.get(Pages.relativeLocators)
 
-        let elements = await driver.findElements(withTagName('td').above(By.id('center')).toRightOf(By.id('second')))
+        let elements = await driver.findElements(withTagName('td').above(By.id('center')).toRightOf(By.id('top')))
         let ids = []
         for (let i = 0; i < elements.length; i++) {
           ids.push(await elements[i].getAttribute('id'))
         }
-        assert.notDeepStrictEqual(ids.indexOf('third'), -1, `Elements are ${ids}`)
+        assert.notDeepStrictEqual(ids.indexOf('topRight'), -1, `Elements are ${ids}`)
       })
     })
 
@@ -408,8 +408,8 @@ suite(function (env) {
 
       it('should combine filters', async function () {
         await driver.get(Pages.relativeLocators)
-        let element = await driver.findElement(withTagName('td').above(By.id('center')).toRightOf(By.id('second')))
-        assert.deepStrictEqual(await element.getAttribute('id'), `third`)
+        let element = await driver.findElement(withTagName('td').above(By.id('center')).toRightOf(By.id('top')))
+        assert.deepStrictEqual(await element.getAttribute('id'), `topRight`)
       })
 
       it('should search by passing in a by object', async function () {

@@ -3,7 +3,7 @@ load("//dotnet:defs.bzl", "csharp_binary", "framework")
 csharp_binary(
     name = "generator",
     srcs = glob(["**/*.cs"]),
-    nullable = "annotations",
+    nullable = "enable",
     # Used as a tool in our build, so just target one framework
     target_frameworks = ["net8.0"],
     visibility = [
