@@ -556,7 +556,7 @@ class WebElement(BaseWebElement):
         ----------
         command : any
             The name of the command to _execute as a string.
-        
+
         params : dict
             A dictionary of named Parameters to send with the command.
 

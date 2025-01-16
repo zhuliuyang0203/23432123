@@ -1503,7 +1503,7 @@ class WebDriver(BaseWebDriver):
 
         poll_frequency : floatHow
             - Frequently to poll
-            
+
         ignored_exceptions : Any
             - Exceptions to ignore while waiting
 

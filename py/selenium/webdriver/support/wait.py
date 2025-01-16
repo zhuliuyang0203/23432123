@@ -155,7 +155,7 @@ class WebDriverWait(Generic[D]):
         ----------
         method: callable(WebDriver)
             - A callable object that takes a WebDriver instance as an argument.
-            
+
         message: str
             - Optional message for :exc:`TimeoutException`
 
