@@ -23,7 +23,7 @@ from typing import Optional
 
 class By:
     """Set of supported locator strategies.
-    
+
     ID:
     --
     Select the element by its ID.
@@ -32,7 +32,7 @@ class By:
 
     XPATH:
     ------
-    Select the element via XPATH. 
+    Select the element via XPATH.
         - absolute path
         - relative path
 
@@ -73,7 +73,6 @@ class By:
     Select the element by its CSS selector.
 
     >>> element = driver.find_element(By.CSS_SELECTOR, 'div.myElement')
-
     """
 
     ID = "id"
