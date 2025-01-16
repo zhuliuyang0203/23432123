@@ -14,14 +14,13 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import warnings
 from typing import Dict
 from typing import List
 from typing import NoReturn
 from typing import Optional
 from typing import Union
 from typing import overload
-
-import warnings
 
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
@@ -36,7 +35,7 @@ def with_tag_name(tag_name: str) -> "RelativeBy":
     ----------
     tag_name : str
         The DOM tag of element to start searching.
-    
+
     Returns:
     --------
     RelativeBy
@@ -52,8 +51,9 @@ def with_tag_name(tag_name: str) -> "RelativeBy":
     - This method is deprecated and may be removed in future versions.
     - Please use `locate_with` instead.
     """
-    warnings.warn("This method is deprecated and may be removed in future versions. "
-                  "Please use `locate_with` instead.")
+    warnings.warn(
+        "This method is deprecated and may be removed in future versions. " "Please use `locate_with` instead."
+    )
     if not tag_name:
         raise WebDriverException("tag_name can not be null")
     return RelativeBy({By.CSS_SELECTOR: tag_name})
@@ -266,10 +266,10 @@ class RelativeBy:
         ----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look near by the element or within a distance
-        
+
         distance : int
             Distance in pixel
-        
+
         Returns:
         --------
         RelativeBy
