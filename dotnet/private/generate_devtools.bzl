@@ -60,7 +60,7 @@ generate_devtools = rule(
             doc = "File name, without extension, of the built assembly.",
         ),
         "generator": attr.label(
-            default = Label("//third_party/dotnet/devtools/src/DevToolsGenerator:DevToolsGenerator"),
+            default = Label("//third_party/dotnet/devtools/src/generator:generator"),
             executable = True,
             cfg = "exec",
         ),
