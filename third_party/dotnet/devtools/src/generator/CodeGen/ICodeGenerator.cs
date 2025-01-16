@@ -8,7 +8,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface ICodeGenerator<T>
-        where T : IDefinition
+        where T : class, IDefinition
     {
         /// <summary>
         /// Generates one or more code files for the specified IDefinition item
