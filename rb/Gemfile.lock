@@ -47,6 +47,7 @@ GEM
     drb (2.2.1)
     ffi (1.17.1-arm64-darwin)
     ffi (1.17.1-java)
+    ffi (1.17.1-x64-mingw-ucrt)
     ffi (1.17.1-x86_64-linux-gnu)
     fileutils (1.7.3)
     git (1.19.1)
@@ -173,8 +174,10 @@ GEM
     yard (0.9.37)
 
 PLATFORMS
+  arm64-darwin-23
   arm64-darwin-24
   universal-java-17
+  x64-mingw-ucrt
   x86_64-linux
 
 DEPENDENCIES
