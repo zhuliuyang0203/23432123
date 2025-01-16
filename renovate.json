@@ -39,6 +39,7 @@
     },
     {
       "matchManagers": [ "npm" ],
+      "rangeStrategy": "bump",
       "commitMessagePrefix": "[js]",
       "labels": [ "dependencies", "c-nodejs" ]
     },
@@ -69,6 +70,7 @@
     },
     {
       "matchManagers": [ "cargo" ],
+      "rangeStrategy": "bump",
       "commitMessagePrefix": "[rust]",
       "labels": [ "dependencies", "c-rust" ]
     },

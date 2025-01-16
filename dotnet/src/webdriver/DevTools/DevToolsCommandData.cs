@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -90,7 +91,7 @@ namespace OpenQA.Selenium.DevTools
         /// Get or sets the result of the command execution.
         /// </summary>
         [JsonIgnore]
-        public JsonNode Result { get; set; }
+        public JsonElement Result { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the command resulted in an error response.

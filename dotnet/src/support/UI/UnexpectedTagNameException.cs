@@ -19,7 +19,6 @@
 
 using System;
 using System.Globalization;
-using System.Runtime.Serialization;
 
 namespace OpenQA.Selenium.Support.UI
 {
@@ -53,7 +52,7 @@ namespace OpenQA.Selenium.Support.UI
         /// a specified error message.
         /// </summary>
         /// <param name="message">The message of the exception</param>
-        public UnexpectedTagNameException(string message)
+        public UnexpectedTagNameException(string? message)
             : base(message)
         {
         }
@@ -66,7 +65,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         /// or <see langword="null"/> if no inner exception is specified.</param>
-        public UnexpectedTagNameException(string message, Exception innerException)
+        public UnexpectedTagNameException(string? message, Exception? innerException)
             : base(message, innerException)
         {
         }
