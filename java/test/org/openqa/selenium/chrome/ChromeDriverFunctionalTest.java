@@ -204,18 +204,23 @@ class ChromeDriverFunctionalTest extends JupiterTestBase {
 
   @Test
   @NoDriverBeforeTest
-  void shouldLaunchSuccessfullyWithArabicDate() {
+  void shouldThrowNumberFormatException() {
     Locale arabicLocale = new Locale("ar", "EG");
     Locale.setDefault(arabicLocale);
-    Locale.setDefault(Locale.US);
 
     int port = PortProber.findFreePort();
     ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
     builder.usingPort(port);
-    ChromeDriverService service = builder.build();
 
-    driver = new ChromeDriver(service, (ChromeOptions) CHROME.getCapabilities());
-    driver.get(pages.simpleTestPage);
-    assertThat(driver.getTitle()).isEqualTo("Hello WebDriver");
+    assertThatExceptionOfType(NumberFormatException.class)
+        .isThrownBy(builder::build)
+        .withMessage(
+            "Couldn't format the port numbers because the System Language is arabic: \""
+                + String.format("--port=%d", port)
+                + "\", please make sure to add the required arguments \"-Duser.language=en"
+                + " -Duser.region=US\" to your JVM, for more info please visit :\n"
+                + "  https://www.selenium.dev/documentation/webdriver/browsers/");
+
+    Locale.setDefault(Locale.US);
   }
 }

@@ -384,6 +384,7 @@ class WebDriver(BaseWebDriver):
         ----------
         cmd : str,
             - Command name
+
         cmd_args : dict
             - Command args
             - Empty dict {} if there is no command args
@@ -407,6 +408,7 @@ class WebDriver(BaseWebDriver):
         ----------
         driver_command : str
             - The name of the command to execute as a string.
+
         params : dict
             - A dictionary of named Parameters to send with the command.
 
@@ -502,6 +504,7 @@ class WebDriver(BaseWebDriver):
         ----------
         script : str
             - The javascript to execute.
+
         *args : tuple
             - Any applicable arguments for your JavaScript.
 
@@ -531,6 +534,7 @@ class WebDriver(BaseWebDriver):
         ----------
         script : str
             - The javascript to execute.
+
         *args : tuple
             - Any applicable arguments for your JavaScript.
 
@@ -1005,6 +1009,7 @@ class WebDriver(BaseWebDriver):
         ----------
         width : int
             - the width in pixels to set the window to
+
         height : int
             - the height in pixels to set the window to
 
@@ -1038,6 +1043,7 @@ class WebDriver(BaseWebDriver):
         ---------
         x : float
             - The x-coordinate in pixels to set the window position
+
         y : float
             - The y-coordinate in pixels to set the window position
 
@@ -1398,6 +1404,7 @@ class WebDriver(BaseWebDriver):
         ----------
         file_name : str
             - The name of the file to download.
+
         target_directory : str
             - The path to the directory to save the downloaded file.
 
@@ -1493,8 +1500,10 @@ class WebDriver(BaseWebDriver):
         ----------
         timeout : int
             - How long to wait for the dialog
+
         poll_frequency : floatHow
             - Frequently to poll
+
         ignored_exceptions : Any
             - Exceptions to ignore while waiting
 

@@ -18,6 +18,7 @@
 package org.openqa.selenium.firefox;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -272,19 +273,24 @@ class FirefoxDriverTest extends JupiterTestBase {
 
   @Test
   @NoDriverBeforeTest
-  void shouldLaunchSuccessfullyWithArabicDate() {
+  void shouldThrowNumberFormatException() {
     Locale arabicLocale = new Locale("ar", "EG");
     Locale.setDefault(arabicLocale);
-    Locale.setDefault(Locale.US);
 
     int port = PortProber.findFreePort();
     GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
     builder.usingPort(port);
-    GeckoDriverService service = builder.build();
 
-    driver = new FirefoxDriver(service, (FirefoxOptions) FIREFOX.getCapabilities());
-    driver.get(pages.simpleTestPage);
-    assertThat(driver.getTitle()).isEqualTo("Hello WebDriver");
+    assertThatExceptionOfType(NumberFormatException.class)
+        .isThrownBy(builder::build)
+        .withMessage(
+            "Couldn't format the port numbers because the System Language is arabic: \""
+                + String.format("--port=%d", port)
+                + "\", please make sure to add the required arguments \"-Duser.language=en"
+                + " -Duser.region=US\" to your JVM, for more info please visit :\n"
+                + "  https://www.selenium.dev/documentation/webdriver/browsers/");
+
+    Locale.setDefault(Locale.US);
   }
 
   private static class CustomFirefoxProfile extends FirefoxProfile {}
