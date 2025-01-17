@@ -26,6 +26,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,8 +50,7 @@ namespace OpenQA.Selenium.Remote
         private readonly TimeSpan serverResponseTimeout;
         private bool isDisposed;
         private CommandInfoRepository commandInfoRepository = new W3CWireProtocolCommandInfoRepository();
-        private HttpClient? client;
-        private readonly object _createClientLock = new();
+        private readonly Lazy<HttpClient> client;
 
         private static readonly ILogger _logger = Log.GetLogger<HttpCommandExecutor>();
 
@@ -89,6 +89,7 @@ namespace OpenQA.Selenium.Remote
             this.remoteServerUri = addressOfRemoteServer;
             this.serverResponseTimeout = timeout;
             this.IsKeepAliveEnabled = enableKeepAlive;
+            this.client = new Lazy<HttpClient>(CreateHttpClient);
         }
 
         /// <summary>
@@ -218,54 +219,37 @@ namespace OpenQA.Selenium.Remote
             this.SendingRemoteHttpRequest?.Invoke(this, eventArgs);
         }
 
-        private HttpClient Client
+        private HttpClient CreateHttpClient()
         {
-            get
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            string userInfo = this.remoteServerUri.UserInfo;
+            if (!string.IsNullOrEmpty(userInfo) && userInfo.Contains(":"))
             {
-                if (this.client is null)
-                {
-                    lock (_createClientLock)
-                    {
-                        if (this.client is null)
-                        {
-                            HttpClientHandler httpClientHandler = new HttpClientHandler();
-                            string userInfo = this.remoteServerUri.UserInfo;
-                            if (!string.IsNullOrEmpty(userInfo) && userInfo.Contains(":"))
-                            {
-                                string[] userInfoComponents = this.remoteServerUri.UserInfo.Split(new char[] { ':' }, 2);
-                                httpClientHandler.Credentials = new NetworkCredential(userInfoComponents[0], userInfoComponents[1]);
-                                httpClientHandler.PreAuthenticate = true;
-                            }
-
-                            httpClientHandler.Proxy = this.Proxy;
-
-                            HttpMessageHandler handler = httpClientHandler;
-
-                            if (_logger.IsEnabled(LogEventLevel.Trace))
-                            {
-                                handler = new DiagnosticsHttpHandler(httpClientHandler, _logger);
-                            }
-
-                            var client = new HttpClient(handler);
-                            client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
-                            client.DefaultRequestHeaders.Accept.ParseAdd(RequestAcceptHeader);
-                            client.DefaultRequestHeaders.ExpectContinue = false;
-                            if (!this.IsKeepAliveEnabled)
-                            {
-                                client.DefaultRequestHeaders.Connection.ParseAdd("close");
-                            }
-
-                            client.Timeout = this.serverResponseTimeout;
-
-                            this.client = client;
-                        }
-                    }
-                }
-
-                return this.client;
+                string[] userInfoComponents = this.remoteServerUri.UserInfo.Split(new char[] { ':' }, 2);
+                httpClientHandler.Credentials = new NetworkCredential(userInfoComponents[0], userInfoComponents[1]);
+                httpClientHandler.PreAuthenticate = true;
             }
-        }
 
+            httpClientHandler.Proxy = this.Proxy;
+
+            HttpMessageHandler handler = httpClientHandler;
+
+            if (_logger.IsEnabled(LogEventLevel.Trace))
+            {
+                handler = new DiagnosticsHttpHandler(httpClientHandler, _logger);
+            }
+
+            var client = new HttpClient(handler);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
+            client.DefaultRequestHeaders.Accept.ParseAdd(RequestAcceptHeader);
+            client.DefaultRequestHeaders.ExpectContinue = false;
+            if (!this.IsKeepAliveEnabled)
+            {
+                client.DefaultRequestHeaders.Connection.ParseAdd("close");
+            }
+            return client;
+
+        }
         private async Task<HttpResponseInfo> MakeHttpRequest(HttpRequestInfo requestInfo)
         {
             SendingRemoteHttpRequestEventArgs eventArgs = new SendingRemoteHttpRequestEventArgs(requestInfo.HttpMethod, requestInfo.FullUri.ToString(), requestInfo.RequestBody);
@@ -300,7 +284,7 @@ namespace OpenQA.Selenium.Remote
                     requestMessage.Content.Headers.ContentType = contentTypeHeader;
                 }
 
-                using (HttpResponseMessage responseMessage = await this.Client.SendAsync(requestMessage).ConfigureAwait(false))
+                using (HttpResponseMessage responseMessage = await this.client.Value.SendAsync(requestMessage).ConfigureAwait(false))
                 {
                     var responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseContentType = responseMessage.Content.Headers.ContentType?.ToString();
@@ -362,7 +346,10 @@ namespace OpenQA.Selenium.Remote
         {
             if (!this.isDisposed)
             {
-                this.client?.Dispose();
+                if (this.client.IsValueCreated)
+                {
+                    this.client.Value.Dispose();
+                }
 
                 this.isDisposed = true;
             }
