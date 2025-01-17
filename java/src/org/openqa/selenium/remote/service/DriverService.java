@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -502,6 +503,17 @@ public class DriverService implements Closeable {
     public DS build() {
       if (port == 0) {
         port = PortProber.findFreePort();
+      }
+
+      if (Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("ar")) {
+        throw new NumberFormatException(
+            String.format(
+                "Couldn't format the port numbers because the System Language is arabic:"
+                    + " \"--port=%d\", please make sure to add the required arguments"
+                    + " \"-Duser.language=en -Duser.region=US\" to your JVM, for more info please"
+                    + " visit :%n"
+                    + "  https://www.selenium.dev/documentation/webdriver/browsers/",
+                getPort()));
       }
 
       if (timeout == null) {
