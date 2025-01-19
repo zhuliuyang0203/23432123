@@ -144,6 +144,23 @@ module Selenium
             expect(driver.find_element(name: 'login')).to be_displayed
           end
         end
+
+        it 'sets the cache to bypass' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = BrowsingContext.new(driver).create
+            network = described_class.new(driver.bidi)
+            network.set_cache_behavior('bypass', browsing_context)
+            expect(network.set_cache_behavior('bypass', browsing_context)).to be_a(Hash)
+          end
+        end
+
+        it 'sets the cache to default' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = BrowsingContext.new(driver).create
+            network = described_class.new(driver.bidi)
+            expect(network.set_cache_behavior('default', browsing_context)).to be_a(Hash)
+          end
+        end
       end
     end
   end
