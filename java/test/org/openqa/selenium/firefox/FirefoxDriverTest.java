@@ -18,7 +18,6 @@
 package org.openqa.selenium.firefox;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -274,15 +273,20 @@ class FirefoxDriverTest extends JupiterTestBase {
   @Test
   @NoDriverBeforeTest
   void shouldLaunchSuccessfullyWithArabicDate() {
-    Locale arabicLocale = new Locale("ar", "EG");
-    Locale.setDefault(arabicLocale);
+    try {
+        Locale arabicLocale = new Locale("ar", "EG");
+        Locale.setDefault(arabicLocale);
 
-    int port = PortProber.findFreePort();
-    GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
-    builder.usingPort(port);
-    builder.build();
+        int port = PortProber.findFreePort();
+        GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
+        builder.usingPort(port);
+        builder.build();
 
-    Locale.setDefault(Locale.US);
+    } catch (Exception e) {
+        throw e;
+    } finally {
+        Locale.setDefault(Locale.US);
+    }
   }
 
   private static class CustomFirefoxProfile extends FirefoxProfile {}
