@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -44,7 +45,7 @@ namespace OpenQA.Selenium
         private IFileDetector fileDetector = new DefaultFileDetector();
         private NetworkManager network;
         private WebElementFactory elementFactory;
-        private SessionId sessionId;
+
         private List<string> registeredCommands = new List<string>();
 
         /// <summary>
@@ -191,10 +192,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the <see cref="SessionId"/> for the current session of this driver.
         /// </summary>
-        public SessionId SessionId
-        {
-            get { return this.sessionId; }
-        }
+        public SessionId SessionId { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
@@ -612,22 +610,9 @@ namespace OpenQA.Selenium
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
         protected virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string, object> parameters)
         {
-            Command commandToExecute = new Command(this.sessionId, driverCommandToExecute, parameters);
+            Command commandToExecute = new Command(SessionId, driverCommandToExecute, parameters);
 
-            Response commandResponse;
-
-            try
-            {
-                commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                commandResponse = new Response
-                {
-                    Status = WebDriverResult.UnhandledError,
-                    Value = e
-                };
-            }
+            Response commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
 
             if (commandResponse.Status != WebDriverResult.Success)
             {
@@ -641,6 +626,7 @@ namespace OpenQA.Selenium
         /// Starts a session with the driver
         /// </summary>
         /// <param name="capabilities">Capabilities of the browser</param>
+        [MemberNotNull(nameof(SessionId))]
         protected void StartSession(ICapabilities capabilities)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -679,7 +665,9 @@ namespace OpenQA.Selenium
 
             ReturnedCapabilities returnedCapabilities = new ReturnedCapabilities(rawCapabilities);
             this.capabilities = returnedCapabilities;
-            this.sessionId = new SessionId(response.SessionId);
+
+            string sessionId = response.SessionId ?? throw new WebDriverException($"The remote end did not respond with ID of a session when it was required. {response.Value}");
+            this.SessionId = new SessionId(sessionId);
         }
 
         /// <summary>
@@ -723,7 +711,7 @@ namespace OpenQA.Selenium
         {
             try
             {
-                if (this.sessionId is not null)
+                if (this.SessionId is not null)
                 {
                     this.Execute(DriverCommand.Quit, null);
                 }
@@ -739,7 +727,7 @@ namespace OpenQA.Selenium
             }
             finally
             {
-                this.sessionId = null;
+                this.SessionId = null;
             }
             this.executor.Dispose();
         }
@@ -780,9 +768,6 @@ namespace OpenQA.Selenium
                         case WebDriverResult.InvalidElementState:
                         case WebDriverResult.ElementNotSelectable:
                             throw new InvalidElementStateException(errorMessage);
-
-                        case WebDriverResult.UnhandledError:
-                            throw new WebDriverException(errorMessage);
 
                         case WebDriverResult.NoSuchDocument:
                             throw new NoSuchElementException(errorMessage);
@@ -852,6 +837,18 @@ namespace OpenQA.Selenium
 
                         case WebDriverResult.InsecureCertificate:
                             throw new InsecureCertificateException(errorMessage);
+
+                        case WebDriverResult.UnknownError:
+                            throw new UnknownErrorException(errorMessage);
+
+                        case WebDriverResult.UnknownMethod:
+                            throw new UnknownMethodException(errorMessage);
+
+                        case WebDriverResult.UnsupportedOperation:
+                            throw new UnsupportedOperationException(errorMessage);
+
+                        case WebDriverResult.NoSuchCookie:
+                            throw new NoSuchCookieException(errorMessage);
 
                         default:
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));

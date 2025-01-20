@@ -110,6 +110,7 @@ class SessionQueueGridTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(5),
             Duration.ofSeconds(60),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);

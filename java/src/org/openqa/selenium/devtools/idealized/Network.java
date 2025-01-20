@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
@@ -300,7 +301,7 @@ public abstract class Network<AUTHREQUIRED, REQUESTPAUSED> {
   protected HttpMethod convertFromCdpHttpMethod(String method) {
     Require.nonNull("HTTP Method", method);
     try {
-      return HttpMethod.valueOf(method.toUpperCase());
+      return HttpMethod.valueOf(method.toUpperCase(Locale.ENGLISH));
     } catch (IllegalArgumentException e) {
       // Spam in a reasonable value
       return HttpMethod.GET;

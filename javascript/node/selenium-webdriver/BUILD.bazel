@@ -33,6 +33,7 @@ js_library(
         "io/*.js",
         "lib/*.js",
         "lib/atoms/bidi-mutation-listener.js",
+        "lib/fedcm/*.js",
         "net/*.js",
         "remote/*.js",
         "testing/*.js",

@@ -1247,7 +1247,7 @@ public class RemoteWebDriver
           Stream.concat(
                   credential.toMap().entrySet().stream(),
                   Stream.of(Map.entry("authenticatorId", id)))
-              .collect(Collectors.toUnmodifiableMap((e) -> e.getKey(), (e) -> e.getValue())));
+              .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     @Override

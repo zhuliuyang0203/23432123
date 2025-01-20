@@ -39,7 +39,7 @@ namespace OpenQA.Selenium.DevTools
             devTools = driver as IDevTools;
             if (devTools == null)
             {
-                Assert.Ignore("{0} does not support Chrome DevTools Protocol", EnvironmentManager.Instance.Browser);
+                Assert.Ignore($"{EnvironmentManager.Instance.Browser} does not support Chrome DevTools Protocol");
                 return;
             }
 

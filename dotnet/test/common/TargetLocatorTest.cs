@@ -89,7 +89,7 @@ namespace OpenQA.Selenium
             driver.Url = framesPage;
 
             driver.SwitchTo().Frame("first");
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("1"));
 
             driver.SwitchTo().DefaultContent();
 
@@ -99,7 +99,7 @@ namespace OpenQA.Selenium
                 Throws.TypeOf<NoSuchElementException>());
 
             driver.SwitchTo().Frame("second");
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "2");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
 
             driver.SwitchTo().DefaultContent();
 
@@ -115,7 +115,7 @@ namespace OpenQA.Selenium
             driver.Url = framesPage;
 
             driver.SwitchTo().Frame(0);
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "1");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("1"));
 
             driver.SwitchTo().DefaultContent();
 
@@ -126,7 +126,7 @@ namespace OpenQA.Selenium
 
 
             driver.SwitchTo().Frame(1);
-            Assert.AreEqual(driver.FindElement(By.Id("pageNumber")).Text, "2");
+            Assert.That(driver.FindElement(By.Id("pageNumber")).Text, Is.EqualTo("2"));
 
             driver.SwitchTo().DefaultContent();
 

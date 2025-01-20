@@ -26,34 +26,26 @@ namespace OpenQA.Selenium.Support.Events
     /// </summary>
     public class WebElementEventArgs : EventArgs
     {
-        private IWebDriver driver;
-        private IWebElement element;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementEventArgs"/> class.
         /// </summary>
         /// <param name="driver">The WebDriver instance used for the action.</param>
         /// <param name="element">The element used for the action.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> or <paramref name="element"/> are <see langword="null"/>.</exception>
         public WebElementEventArgs(IWebDriver driver, IWebElement element)
         {
-            this.driver = driver;
-            this.element = element;
+            this.Driver = driver ?? throw new ArgumentNullException(nameof(driver));
+            this.Element = element ?? throw new ArgumentNullException(nameof(element));
         }
 
         /// <summary>
         /// Gets the WebDriver instance used for the action.
         /// </summary>
-        public IWebDriver Driver
-        {
-            get { return this.driver; }
-        }
+        public IWebDriver Driver { get; }
 
         /// <summary>
         /// Gets the element used for the action.
         /// </summary>
-        public IWebElement Element
-        {
-            get { return this.element; }
-        }
+        public IWebElement Element { get; }
     }
 }

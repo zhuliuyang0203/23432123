@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -28,15 +30,16 @@ namespace OpenQA.Selenium
     /// </summary>
     public class Logs : ILogs
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logs"/> class.
         /// </summary>
         /// <param name="driver">Instance of the driver currently in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public Logs(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -50,12 +53,11 @@ namespace OpenQA.Selenium
                 try
                 {
                     Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAvailableLogTypes, null);
-                    object[] responseValue = commandResponse.Value as object[];
-                    if (responseValue != null)
+                    if (commandResponse.Value is object[] responseValue)
                     {
                         foreach (object logKind in responseValue)
                         {
-                            availableLogTypes.Add(logKind.ToString());
+                            availableLogTypes.Add(logKind.ToString()!);
                         }
                     }
                 }
@@ -74,21 +76,25 @@ namespace OpenQA.Selenium
         /// <param name="logKind">The log for which to retrieve the log entries.
         /// Log types can be found in the <see cref="LogType"/> class.</param>
         /// <returns>The list of <see cref="LogEntry"/> objects for the specified log.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="logKind"/> is <see langword="null"/>.</exception>
         public ReadOnlyCollection<LogEntry> GetLog(string logKind)
         {
+            if (logKind is null)
+            {
+                throw new ArgumentNullException(nameof(logKind));
+            }
+
             List<LogEntry> entries = new List<LogEntry>();
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", logKind);
             Response commandResponse = this.driver.InternalExecute(DriverCommand.GetLog, parameters);
 
-            object[] responseValue = commandResponse.Value as object[];
-            if (responseValue != null)
+            if (commandResponse.Value is object?[] responseValue)
             {
-                foreach (object rawEntry in responseValue)
+                foreach (object? rawEntry in responseValue)
                 {
-                    Dictionary<string, object> entryDictionary = rawEntry as Dictionary<string, object>;
-                    if (entryDictionary != null)
+                    if (rawEntry is Dictionary<string, object?> entryDictionary)
                     {
                         entries.Add(LogEntry.FromDictionary(entryDictionary));
                     }

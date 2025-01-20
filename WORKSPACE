@@ -6,17 +6,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "io_bazel_rules_closure",
-    patch_args = [
-        "-p1",
-    ],
-    patches = [
-        "//javascript:rules_closure_shell.patch",
-    ],
-    sha256 = "d66deed38a0bb20581c15664f0ab62270af5940786855c7adc3087b27168b529",
-    strip_prefix = "rules_closure-0.11.0",
-    urls = [
-        "https://github.com/bazelbuild/rules_closure/archive/0.11.0.tar.gz",
-    ],
+    strip_prefix = "rules_closure-0.12.0",
+    url = "https://github.com/bazelbuild/rules_closure/archive/refs/tags/0.12.0.tar.gz",
 )
 
 load("@io_bazel_rules_closure//closure:repositories.bzl", "rules_closure_dependencies", "rules_closure_toolchains")
@@ -34,8 +25,8 @@ rules_closure_toolchains()
 
 http_archive(
     name = "rules_rust",
-    integrity = "sha256-Zx3bP+Xrz53TTQUeynNS+68z+lO/Ye7Qt1pMNIKeVIA=",
-    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.52.2/rules_rust-v0.52.2.tar.gz"],
+    integrity = "sha256-eEXiHXSGUH6qD1bdI5KXZ/B04m0wIUeoyM7pmujzbbQ=",
+    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.55.5/rules_rust-0.55.5.tar.gz"],
 )
 
 load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")

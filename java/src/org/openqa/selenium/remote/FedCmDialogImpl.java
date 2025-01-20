@@ -46,6 +46,12 @@ class FedCmDialogImpl implements FederatedCredentialManagementDialog {
   }
 
   @Override
+  public void clickDialog() {
+    executeMethod.execute(
+        DriverCommand.CLICK_DIALOG, Map.of("dialogButton", "ConfirmIdpLoginContinue"));
+  }
+
+  @Override
   public String getTitle() {
     Map<String, Object> result =
         (Map<String, Object>) executeMethod.execute(DriverCommand.GET_FEDCM_TITLE, null);

@@ -114,7 +114,9 @@ public class GridModel {
                   "Re-adding node with id %s and URI %s.",
                   node.getNodeId(), node.getExternalUri()));
 
-          events.fire(new NodeRestartedEvent(node));
+          // Send the previous state to allow cleaning up the old node related resources.
+          // Nodes are initially added in the "down" state, so the new state must be ignored.
+          events.fire(new NodeRestartedEvent(next));
           iterator.remove();
           break;
         }
@@ -226,7 +228,8 @@ public class GridModel {
         if (nodeHealthCount.getOrDefault(id, 0) > UNHEALTHY_THRESHOLD) {
           LOG.info(
               String.format(
-                  "Removing Node %s, unhealthy threshold has been reached", node.getExternalUri()));
+                  "Removing Node %s (uri: %s), unhealthy threshold has been reached",
+                  node.getNodeId(), node.getExternalUri()));
           toRemove.add(node);
           break;
         }
@@ -239,11 +242,17 @@ public class GridModel {
             lastTouched.plus(node.getHeartbeatPeriod().multipliedBy(PURGE_TIMEOUT_MULTIPLIER));
 
         if (node.getAvailability() == UP && lostTime.isBefore(now)) {
-          LOG.info(String.format("Switching Node %s from UP to DOWN", node.getExternalUri()));
+          LOG.info(
+              String.format(
+                  "Switching Node %s (uri: %s) from UP to DOWN",
+                  node.getNodeId(), node.getExternalUri()));
           replacements.put(node, rewrite(node, DOWN));
           nodePurgeTimes.put(id, Instant.now());
         } else if (node.getAvailability() == DOWN && deadTime.isBefore(now)) {
-          LOG.info(String.format("Removing Node %s, DOWN for too long", node.getExternalUri()));
+          LOG.info(
+              String.format(
+                  "Removing Node %s (uri: %s), DOWN for too long",
+                  node.getNodeId(), node.getExternalUri()));
           toRemove.add(node);
         }
       }
@@ -400,7 +409,12 @@ public class GridModel {
     }
   }
 
-  public void reserve(NodeStatus status, Slot slot) {
+  /**
+   * A helper to reserve a slot of a node. The writeLock must be acquired outside to ensure the view
+   * of the NodeStatus is the current state, otherwise concurrent calls to amend will work with an
+   * outdated view of slots.
+   */
+  private void reserve(NodeStatus status, Slot slot) {
     Instant now = Instant.now();
 
     Slot reserved =
@@ -490,6 +504,11 @@ public class GridModel {
     }
   }
 
+  /**
+   * A helper to replace the availability and a slot of a node. The writeLock must be acquired
+   * outside to ensure the view of the NodeStatus is the current state, otherwise concurrent calls
+   * to amend will work with an outdated view of slots.
+   */
   private void amend(Availability availability, NodeStatus status, Slot slot) {
     Set<Slot> newSlots = new HashSet<>(status.getSlots());
     newSlots.removeIf(s -> s.getId().equals(slot.getId()));
@@ -497,23 +516,17 @@ public class GridModel {
 
     NodeStatus node = getNode(status.getNodeId());
 
-    Lock writeLock = lock.writeLock();
-    writeLock.lock();
-    try {
-      nodes.remove(node);
-      nodes.add(
-          new NodeStatus(
-              status.getNodeId(),
-              status.getExternalUri(),
-              status.getMaxSessionCount(),
-              newSlots,
-              availability,
-              status.getHeartbeatPeriod(),
-              status.getSessionTimeout(),
-              status.getVersion(),
-              status.getOsInfo()));
-    } finally {
-      writeLock.unlock();
-    }
+    nodes.remove(node);
+    nodes.add(
+        new NodeStatus(
+            status.getNodeId(),
+            status.getExternalUri(),
+            status.getMaxSessionCount(),
+            newSlots,
+            availability,
+            status.getHeartbeatPeriod(),
+            status.getSessionTimeout(),
+            status.getVersion(),
+            status.getOsInfo()));
   }
 }

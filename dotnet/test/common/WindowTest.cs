@@ -60,8 +60,8 @@ namespace OpenQA.Selenium
             ChangeSizeBy(-20, -20);
 
             Size newSize = window.Size;
-            Assert.AreEqual(targetSize.Width, newSize.Width);
-            Assert.AreEqual(targetSize.Height, newSize.Height);
+            Assert.That(newSize.Width, Is.EqualTo(targetSize.Width));
+            Assert.That(newSize.Height, Is.EqualTo(targetSize.Height));
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace OpenQA.Selenium
 
 
                 Size newSize = window.Size;
-                Assert.AreEqual(targetSize.Width, newSize.Width);
-                Assert.AreEqual(targetSize.Height, newSize.Height);
+                Assert.That(newSize.Width, Is.EqualTo(targetSize.Width));
+                Assert.That(newSize.Height, Is.EqualTo(targetSize.Height));
             }
             finally
             {
@@ -105,8 +105,8 @@ namespace OpenQA.Selenium
 
 
                 Size newSize = window.Size;
-                Assert.AreEqual(targetSize.Width, newSize.Width);
-                Assert.AreEqual(targetSize.Height, newSize.Height);
+                Assert.That(newSize.Width, Is.EqualTo(targetSize.Width));
+                Assert.That(newSize.Height, Is.EqualTo(targetSize.Height));
             }
             finally
             {
@@ -134,8 +134,8 @@ namespace OpenQA.Selenium
 
             Point newLocation = window.Position;
 
-            Assert.AreEqual(targetPosition.X, newLocation.X);
-            Assert.AreEqual(targetPosition.Y, newLocation.Y);
+            Assert.That(newLocation.X, Is.EqualTo(targetPosition.X));
+            Assert.That(newLocation.Y, Is.EqualTo(targetPosition.Y));
         }
 
         [Test]

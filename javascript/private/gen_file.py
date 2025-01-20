@@ -19,7 +19,8 @@ _copyright = """/*
 """
 
 def get_atom_name(name):
-    # TODO: Convert camelCase and snake_case to BIG_SNAKE_CASE
+    # We had a todo here to convert camelCase and snake_case to BIG_SNAKE_CASE, but this code
+    # will be removed when BiDi is the default, so we're not going to bother with that.
     name = os.path.basename(name)
     return name.upper()
 
@@ -76,7 +77,7 @@ def generate_header(file_name, out, js_map, just_declare, utf8):
     define_guard = "WEBDRIVER_%s" % os.path.basename(file_name.upper()).replace(".", "_")
     include_stddef = "" if utf8 else "\n#include <stddef.h>  // For wchar_t."
     out.write("""%s
-    
+
 /* AUTO GENERATED - DO NOT EDIT BY HAND */
 #ifndef %s
 #define %s
@@ -85,12 +86,12 @@ def generate_header(file_name, out, js_map, just_declare, utf8):
 
 namespace webdriver {
 namespace atoms {
-    
+
 """ % (_copyright, define_guard, define_guard, include_stddef))
 
     string_type = "std::string" if utf8 else "std::wstring"
     char_type = "char" if utf8 else "wchar_t"
-    
+
     for (name, file) in js_map.items():
         if just_declare:
             out.write("extern const %s* const %s[];\n" % (char_type, name.upper()))
@@ -109,7 +110,7 @@ static inline %s asString(const %s* const atom[]) {
 
 }  // namespace atoms
 }  // namespace webdriver
-    
+
 #endif  // %s
 """ % (string_type, char_type, string_type, define_guard))
 
@@ -123,7 +124,7 @@ def generate_cc_source(out, js_map, utf8):
 
 namespace webdriver {
 namespace atoms {
-    
+
 """ % _copyright)
 
     for (name, file) in js_map.items():

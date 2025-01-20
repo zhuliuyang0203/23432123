@@ -72,7 +72,7 @@ namespace OpenQA.Selenium.Internal.Logging
                     fileLogHandler2.Handle(new LogEvent(typeof(FileLogHandlerTest), DateTimeOffset.Now, LogEventLevel.Info, "test message"));
                 }
 
-                Assert.That(Regex.Matches(File.ReadAllText(tempFile), "test message").Count, Is.EqualTo(1));
+                Assert.That(Regex.Matches(File.ReadAllText(tempFile), "test message"), Has.Count.EqualTo(1));
             }
             finally
             {
@@ -97,7 +97,7 @@ namespace OpenQA.Selenium.Internal.Logging
                     fileLogHandler2.Handle(new LogEvent(typeof(FileLogHandlerTest), DateTimeOffset.Now, LogEventLevel.Info, "test message"));
                 }
 
-                Assert.That(Regex.Matches(File.ReadAllText(tempFilePath), "test message").Count, Is.EqualTo(2));
+                Assert.That(Regex.Matches(File.ReadAllText(tempFilePath), "test message"), Has.Count.EqualTo(2));
             }
             finally
             {
@@ -117,7 +117,7 @@ namespace OpenQA.Selenium.Internal.Logging
                     fileLogHandler.Handle(new LogEvent(typeof(FileLogHandlerTest), DateTimeOffset.Now, LogEventLevel.Info, "test message"));
                 }
 
-                Assert.That(Regex.Matches(File.ReadAllText(tempFile), "test message").Count, Is.EqualTo(1));
+                Assert.That(Regex.Matches(File.ReadAllText(tempFile), "test message"), Has.Count.EqualTo(1));
             }
             finally
             {
@@ -137,7 +137,7 @@ namespace OpenQA.Selenium.Internal.Logging
                     fileLogHandler.Handle(new LogEvent(typeof(FileLogHandlerTest), DateTimeOffset.Now, LogEventLevel.Info, "test message"));
                 }
 
-                Assert.That(Regex.Matches(File.ReadAllText(tempFilePath), "test message").Count, Is.EqualTo(1));
+                Assert.That(Regex.Matches(File.ReadAllText(tempFilePath), "test message"), Has.Count.EqualTo(1));
             }
             finally
             {

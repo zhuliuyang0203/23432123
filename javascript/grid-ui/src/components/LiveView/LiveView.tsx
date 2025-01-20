@@ -16,7 +16,7 @@
 // under the License.
 
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react'
-import RFB from '@novnc/novnc/core/rfb'
+import RFB from '@novnc/novnc/lib/rfb'
 import PasswordDialog from './PasswordDialog'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'

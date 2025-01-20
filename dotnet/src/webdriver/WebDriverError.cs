@@ -28,30 +28,14 @@ namespace OpenQA.Selenium
     internal static class WebDriverError
     {
         /// <summary>
-        /// Represents the detached shadow root error.
-        /// </summary>
-        public const string DetachedShadowRoot = "detached shadow root";
-
-        /// <summary>
         /// Represents the element click intercepted error.
         /// </summary>
         public const string ElementClickIntercepted = "element click intercepted";
 
         /// <summary>
-        /// Represents the element not selectable error.
-        /// </summary>
-        public const string ElementNotSelectable = "element not selectable";
-
-        /// <summary>
         /// Represents the element not interactable error.
         /// </summary>
         public const string ElementNotInteractable = "element not interactable";
-
-        /// <summary>
-        /// Represents the element not visible error.
-        /// </summary>
-        /// TODO: Remove this string; it is no longer valid in the specification.
-        public const string ElementNotVisible = "element not visible";
 
         /// <summary>
         /// Represents the insecure certificate error.
@@ -67,17 +51,6 @@ namespace OpenQA.Selenium
         /// Represents the invalid cookie domain error.
         /// </summary>
         public const string InvalidCookieDomain = "invalid cookie domain";
-
-        /// <summary>
-        /// Represents the invalid coordinates error.
-        /// </summary>
-        public const string InvalidCoordinates = "invalid coordinates";
-
-        /// <summary>
-        /// Represents the invalid element coordinates error.
-        /// </summary>
-        /// TODO: Remove this string; it is no longer valid in the specification.
-        public const string InvalidElementCoordinates = "invalid element coordinates";
 
         /// <summary>
         /// Represents the invalid element state error.
@@ -150,6 +123,11 @@ namespace OpenQA.Selenium
         public const string StaleElementReference = "stale element reference";
 
         /// <summary>
+        /// Represents the detached shadow root error.
+        /// </summary>
+        public const string DetachedShadowRoot = "detached shadow root";
+
+        /// <summary>
         /// Represents the timeout error.
         /// </summary>
         public const string Timeout = "timeout";
@@ -194,16 +172,11 @@ namespace OpenQA.Selenium
         static WebDriverError()
         {
             resultMap = new Dictionary<string, WebDriverResult>();
-            resultMap[DetachedShadowRoot] = WebDriverResult.DetachedShadowRoot;
             resultMap[ElementClickIntercepted] = WebDriverResult.ElementClickIntercepted;
-            resultMap[ElementNotSelectable] = WebDriverResult.ElementNotSelectable;
-            resultMap[ElementNotVisible] = WebDriverResult.ElementNotDisplayed;
             resultMap[ElementNotInteractable] = WebDriverResult.ElementNotInteractable;
             resultMap[InsecureCertificate] = WebDriverResult.InsecureCertificate;
             resultMap[InvalidArgument] = WebDriverResult.InvalidArgument;
             resultMap[InvalidCookieDomain] = WebDriverResult.InvalidCookieDomain;
-            resultMap[InvalidCoordinates] = WebDriverResult.InvalidElementCoordinates;
-            resultMap[InvalidElementCoordinates] = WebDriverResult.InvalidElementCoordinates;
             resultMap[InvalidElementState] = WebDriverResult.InvalidElementState;
             resultMap[InvalidSelector] = WebDriverResult.InvalidSelector;
             resultMap[InvalidSessionId] = WebDriverResult.NoSuchDriver;
@@ -218,14 +191,15 @@ namespace OpenQA.Selenium
             resultMap[ScriptTimeout] = WebDriverResult.AsyncScriptTimeout;
             resultMap[SessionNotCreated] = WebDriverResult.SessionNotCreated;
             resultMap[StaleElementReference] = WebDriverResult.ObsoleteElement;
+            resultMap[DetachedShadowRoot] = WebDriverResult.DetachedShadowRoot;
             resultMap[Timeout] = WebDriverResult.Timeout;
             resultMap[UnableToSetCookie] = WebDriverResult.UnableToSetCookie;
             resultMap[UnableToCaptureScreen] = WebDriverResult.UnableToCaptureScreen;
             resultMap[UnexpectedAlertOpen] = WebDriverResult.UnexpectedAlertOpen;
             resultMap[UnknownCommand] = WebDriverResult.UnknownCommand;
-            resultMap[UnknownError] = WebDriverResult.UnhandledError;
-            resultMap[UnknownMethod] = WebDriverResult.UnknownCommand;
-            resultMap[UnsupportedOperation] = WebDriverResult.UnhandledError;
+            resultMap[UnknownError] = WebDriverResult.UnknownError;
+            resultMap[UnknownMethod] = WebDriverResult.UnknownMethod;
+            resultMap[UnsupportedOperation] = WebDriverResult.UnsupportedOperation;
         }
 
         /// <summary>

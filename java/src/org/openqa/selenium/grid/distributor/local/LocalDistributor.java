@@ -77,6 +77,7 @@ import org.openqa.selenium.grid.data.NodeDrainComplete;
 import org.openqa.selenium.grid.data.NodeHeartBeatEvent;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeRemovedEvent;
+import org.openqa.selenium.grid.data.NodeRestartedEvent;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.NodeStatusEvent;
 import org.openqa.selenium.grid.data.RequestId;
@@ -205,6 +206,8 @@ public class LocalDistributor extends Distributor implements Closeable {
 
     bus.addListener(NodeStatusEvent.listener(this::register));
     bus.addListener(NodeStatusEvent.listener(model::refresh));
+    bus.addListener(
+        NodeRestartedEvent.listener(previousNodeStatus -> remove(previousNodeStatus.getNodeId())));
     bus.addListener(NodeRemovedEvent.listener(nodeStatus -> remove(nodeStatus.getNodeId())));
     bus.addListener(
         NodeHeartBeatEvent.listener(
@@ -334,6 +337,7 @@ public class LocalDistributor extends Distributor implements Closeable {
     // An exception occurs if Node heartbeat has started but the server is not ready.
     // Unhandled exception blocks the event-bus thread from processing any event henceforth.
     NodeStatus initialNodeStatus;
+    Runnable healthCheck;
     try {
       initialNodeStatus = node.getStatus();
       if (initialNodeStatus.getAvailability() != UP) {
@@ -342,8 +346,17 @@ public class LocalDistributor extends Distributor implements Closeable {
         // We do not need to add this Node for now.
         return this;
       }
-      model.add(initialNodeStatus);
-      nodes.put(node.getId(), node);
+      // Extract the health check
+      healthCheck = asRunnableHealthCheck(node);
+      Lock writeLock = lock.writeLock();
+      writeLock.lock();
+      try {
+        nodes.put(node.getId(), node);
+        model.add(initialNodeStatus);
+        allChecks.put(node.getId(), healthCheck);
+      } finally {
+        writeLock.unlock();
+      }
     } catch (Exception e) {
       LOG.log(
           Debug.getDebugLogLevel(),
@@ -351,10 +364,6 @@ public class LocalDistributor extends Distributor implements Closeable {
           e);
       return this;
     }
-
-    // Extract the health check
-    Runnable healthCheck = asRunnableHealthCheck(node);
-    allChecks.put(node.getId(), healthCheck);
 
     updateNodeStatus(initialNodeStatus, healthCheck);
 
@@ -394,7 +403,15 @@ public class LocalDistributor extends Distributor implements Closeable {
 
   private Runnable runNodeHealthChecks() {
     return () -> {
-      ImmutableMap<NodeId, Runnable> nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      ImmutableMap<NodeId, Runnable> nodeHealthChecks;
+      Lock readLock = this.lock.readLock();
+      readLock.lock();
+      try {
+        nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      } finally {
+        readLock.unlock();
+      }
+
       for (Runnable nodeHealthCheck : nodeHealthChecks.values()) {
         GuardedRunnable.guard(nodeHealthCheck).run();
       }
@@ -464,15 +481,13 @@ public class LocalDistributor extends Distributor implements Closeable {
     Lock writeLock = lock.writeLock();
     writeLock.lock();
     try {
-      Node node = nodes.get(nodeId);
+      Node node = nodes.remove(nodeId);
+      model.remove(nodeId);
+      allChecks.remove(nodeId);
 
       if (node instanceof RemoteNode) {
         ((RemoteNode) node).close();
       }
-
-      nodes.remove(nodeId);
-      model.remove(nodeId);
-      allChecks.remove(nodeId);
     } finally {
       writeLock.unlock();
     }
@@ -551,6 +566,11 @@ public class LocalDistributor extends Distributor implements Closeable {
           new SessionNotCreatedException("Unable to create new session");
       for (Capabilities caps : request.getDesiredCapabilities()) {
         if (isNotSupported(caps)) {
+          // e.g. the last node drained, we have to wait for a new to register
+          lastFailure =
+              new SessionNotCreatedException(
+                  "Unable to find a node supporting the desired capabilities");
+          retry = true;
           continue;
         }
 

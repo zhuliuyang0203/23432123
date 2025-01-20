@@ -78,6 +78,19 @@ class Options extends Capabilities {
     this.options_[TECHNOLOGY_PREVIEW_OPTIONS_KEY] = !!useTechnologyPreview
     return this
   }
+
+  /**
+   * Enables diagnostic logging for Safari.
+   *
+   * This method sets the `safari:diagnose` option to `true` in the current configuration.
+   * It is used to enable additional logging or diagnostic features specific to Safari.
+   *
+   * @returns {Options} Returns the current instance
+   */
+  enableLogging() {
+    this.set('safari:diagnose', true)
+    return this
+  }
 }
 
 /**

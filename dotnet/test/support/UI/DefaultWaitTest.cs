@@ -55,7 +55,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.AreEqual(defaultReturnValue, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(defaultReturnValue));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.IsTrue(wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.True);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.AreEqual(defaultReturnValue, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(defaultReturnValue));
         }
 
         [Test]
@@ -119,10 +119,10 @@ namespace OpenQA.Selenium.Support.UI
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
             var caughtException = Assert.Throws<NoSuchWindowException>(() => wait.Until(condition));
-            Assert.AreSame(ex, caughtException);
+            Assert.That(caughtException, Is.SameAs(ex));
 
             // Regression test for issue #6343
-            StringAssert.Contains("NonInlineableThrow", caughtException.StackTrace, "the stack trace must include the call to NonInlineableThrow()");
+            Assert.That(caughtException.StackTrace, Does.Contain("NonInlineableThrow"), "the stack trace must include the call to NonInlineableThrow()");
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.IgnoreExceptionTypes(typeof(NoSuchWindowException));
 
             var caughtException = Assert.Throws<WebDriverTimeoutException>(() => wait.Until(condition));
-            Assert.AreSame(ex, caughtException.InnerException);
+            Assert.That(caughtException.InnerException, Is.SameAs(ex));
         }
 
         [Test]

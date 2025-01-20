@@ -1,0 +1,68 @@
+name: CI - Renovate - RBE
+
+on:
+  push:
+    branches:
+      - renovate/*
+  workflow_dispatch:
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'seleniumhq'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: java - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[java]')
+        run: RULES_JVM_EXTERNAL_REPIN=1 bazel run @maven//:pin
+      - name: rust - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[rust]')
+        run: CARGO_BAZEL_REPIN=true bazel sync --only=crates
+      - name: js - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[js]')
+        run: bazel run -- @pnpm//:pnpm install --dir $PWD --lockfile-only
+      - name: dotnet - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[dotnet]')
+        run: ./dotnet/update-deps.sh
+      - name: py - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[py]')
+        run: bazel run //py:requirements.update
+      - name: Commit files
+        run: |
+          export CHANGES=$(git status -s)
+          if [ -n "$CHANGES" ]; then
+            git config --local user.email "selenium-ci@users.noreply.github.com"
+            git config --local user.name "Selenium CI Bot"
+            git add .
+            git commit -m 'Repin dependencies'
+            git push
+          fi
+
+  check-format:
+    needs: pin
+    name: Check format
+    if: github.repository_owner == 'seleniumhq'
+    uses: ./.github/workflows/bazel.yml
+    with:
+      name: Check format script run
+      caching: false
+      ruby-version: jruby-9.4.9.0
+      run: ./scripts/github-actions/check-format.sh
+
+  test:
+    name: Test
+    needs: pin
+    if: github.repository_owner == 'seleniumhq'
+    uses: ./.github/workflows/bazel.yml
+    with:
+      name: All RBE tests
+      caching: false
+      ruby-version: jruby-9.4.9.0
+      run: ./scripts/github-actions/ci-build.sh
+
+  ci-gh:
+    name: CI - GitHub
+    needs: pin
+    if: github.repository_owner == 'seleniumhq'
+    uses: ./.github/workflows/ci.yml

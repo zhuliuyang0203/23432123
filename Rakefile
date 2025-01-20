@@ -777,10 +777,9 @@ namespace :dotnet do
   task :docs, [:skip_update] do |_task, arguments|
     FileUtils.rm_rf('build/docs/api/dotnet/')
     begin
-      # Pinning to 2.75.3 to avoid breaking changes in newer versions
-      # See https://github.com/dotnet/docfx/issues/9855
+      # Pinning to 2.78.2 to avoid breaking changes in newer versions
       sh 'dotnet tool uninstall --global docfx || true'
-      sh 'dotnet tool install --global --version 2.75.3 docfx'
+      sh 'dotnet tool install --global --version 2.78.2 docfx'
       # sh 'dotnet tool update -g docfx'
     rescue StandardError
       puts 'Please ensure that .NET SDK is installed.'
@@ -891,7 +890,7 @@ namespace :java do
   task :update do
     # Make sure things are in a good state to start with
     args = ['--action_env=RULES_JVM_EXTERNAL_REPIN=1']
-    Bazel.execute('run', args, '@unpinned_maven//:pin')
+    Bazel.execute('run', args, '@maven//:pin')
 
     file_path = 'MODULE.bazel'
     content = File.read(file_path)
@@ -915,7 +914,7 @@ namespace :java do
     File.write(file_path, content)
 
     args = ['--action_env=RULES_JVM_EXTERNAL_REPIN=1']
-    Bazel.execute('run', args, '@unpinned_maven//:pin')
+    Bazel.execute('run', args, '@maven//:pin')
   end
 
   desc 'Update Java changelog'

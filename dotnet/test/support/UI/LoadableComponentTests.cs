@@ -45,7 +45,7 @@ namespace OpenQA.Selenium.Support.UI
 
             ok.Load();
 
-            Assert.True(ok.WasLoadCalled());
+            Assert.That(ok.WasLoadCalled(), Is.True);
         }
 
         [Test]
@@ -53,31 +53,21 @@ namespace OpenQA.Selenium.Support.UI
         {
             LoadsOk ok = new LoadsOk(false);
 
-            try
-            {
-                ok.Load();
-                Assert.Fail();
-            }
-            catch (LoadableComponentException e)
-            {
-                Assert.AreEqual("Expected failure", e.Message);
-            }
+            Assert.That(
+                () => ok.Load(),
+                Throws.InstanceOf<LoadableComponentException>().With.Message.EqualTo("Expected failure"));
         }
 
         [Test]
         public void ShouldCallHandleLoadErrorWhenWebDriverExceptionOccursDuringExecuteLoad()
         {
             ExecuteLoadThrows loadThrows = new ExecuteLoadThrows();
-            try
-            {
-                loadThrows.Load();
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("HandleLoadError called", e.Message);
-                Assert.AreEqual("Excpected failure in ExecuteLoad", e.InnerException.Message);
-            }
+
+            Assert.That(
+                () => loadThrows.Load(),
+                Throws.Exception
+                .With.Message.EqualTo("HandleLoadError called")
+                .And.InnerException.Message.EqualTo("Excpected failure in ExecuteLoad"));
 
         }
 

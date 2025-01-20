@@ -161,6 +161,11 @@
   </Match>
 
   <Match>
+    <Class name="org.openqa.selenium.safari.SafariTechPreviewDriverService"/>
+    <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.support.locators.RelativeLocator$RelativeBy" />
     <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
   </Match>
@@ -237,7 +242,7 @@
 
   <Match>
     <Class name="org.openqa.selenium.manager.SeleniumManager"/>
-    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE,IS2_INCONSISTENT_SYNC"/>
   </Match>
 
 </FindBugsFilter>

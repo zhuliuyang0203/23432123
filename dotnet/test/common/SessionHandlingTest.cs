@@ -49,7 +49,7 @@ namespace OpenQA.Selenium
             testDriver.Quit();
             testDriver = EnvironmentManager.Instance.CreateDriverInstance();
             testDriver.Url = xhtmlTestPage;
-            Assert.AreEqual("XHTML Test Page", testDriver.Title);
+            Assert.That(testDriver.Title, Is.EqualTo("XHTML Test Page"));
             testDriver.Quit();
         }
 
@@ -106,7 +106,7 @@ namespace OpenQA.Selenium
             testDriver.Dispose();
             testDriver = EnvironmentManager.Instance.CreateDriverInstance();
             testDriver.Url = xhtmlTestPage;
-            Assert.AreEqual("XHTML Test Page", testDriver.Title);
+            Assert.That(testDriver.Title, Is.EqualTo("XHTML Test Page"));
             testDriver.Close();
             testDriver.Dispose();
         }
@@ -143,7 +143,7 @@ namespace OpenQA.Selenium
             testDriver.Dispose();
             testDriver = EnvironmentManager.Instance.CreateDriverInstance();
             testDriver.Url = xhtmlTestPage;
-            Assert.AreEqual("XHTML Test Page", testDriver.Title);
+            Assert.That(testDriver.Title, Is.EqualTo("XHTML Test Page"));
             testDriver.Quit();
         }
 
@@ -155,7 +155,7 @@ namespace OpenQA.Selenium
                 EnvironmentManager.Instance.CloseCurrentDriver();
                 CreateFreshDriver();
                 driver.Url = simpleTestPage;
-                Assert.AreEqual(simpleTestTitle, driver.Title);
+                Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
             }
         }
     }

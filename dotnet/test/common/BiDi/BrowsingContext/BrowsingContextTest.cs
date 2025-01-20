@@ -289,8 +289,7 @@ class BrowsingContextTest : BiDiTestFixture
 
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
-            // TODO: Seems Node implements ISharedReference
-            Clip = new ClipRectangle.Element(new Modules.Script.SharedReference(nodes[0].SharedId))
+            Clip = new ClipRectangle.Element(nodes[0])
         });
 
         Assert.That(screenshot, Is.Not.Null);

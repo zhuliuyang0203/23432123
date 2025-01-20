@@ -17,7 +17,6 @@
 
 package org.openqa.selenium.remote.http;
 
-import static java.net.HttpURLConnection.HTTP_CLIENT_TIMEOUT;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
@@ -26,6 +25,9 @@ import static org.openqa.selenium.remote.http.Contents.asJson;
 import static org.openqa.selenium.remote.http.HttpMethod.GET;
 
 import com.google.common.collect.ImmutableMap;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.time.Duration;
@@ -37,6 +39,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +77,29 @@ class RetryRequestTest {
   }
 
   @Test
+  void noUnexpectedRetry() {
+    AtomicInteger count = new AtomicInteger();
+    HttpHandler handler =
+        new RetryRequest()
+            .andFinally(
+                (HttpRequest request) -> {
+                  if (count.getAndIncrement() == 0) {
+                    throw new StackOverflowError("Testing");
+                  } else {
+                    throw new UncheckedIOException("More testing", new IOException());
+                  }
+                });
+
+    Assertions.assertThrows(
+        StackOverflowError.class, () -> handler.execute(new HttpRequest(GET, "/")));
+    Assertions.assertEquals(1, count.get());
+
+    Assertions.assertThrows(
+        UncheckedIOException.class, () -> handler.execute(new HttpRequest(GET, "/")));
+    Assertions.assertEquals(2, count.get());
+  }
+
+  @Test
   void canReturnAppropriateFallbackResponse() {
     HttpHandler handler1 =
         new RetryRequest()
@@ -106,17 +132,23 @@ class RetryRequestTest {
         new RetryRequest()
             .andFinally((HttpRequest request) -> new HttpResponse().setStatus(HTTP_UNAVAILABLE));
 
-    ExecutorService executorService = Executors.newFixedThreadPool(2);
+    ExecutorService executorService = Executors.newFixedThreadPool(3);
     List<Callable<HttpResponse>> tasks = new ArrayList<>();
 
-    tasks.add(() -> client.execute(connectionTimeoutRequest));
-    tasks.add(() -> handler2.execute(new HttpRequest(GET, "/")));
+    for (int i = 0; i < 1024; i++) {
+      tasks.add(() -> client.execute(connectionTimeoutRequest));
+      tasks.add(() -> handler2.execute(new HttpRequest(GET, "/")));
+    }
 
     List<Future<HttpResponse>> results = executorService.invokeAll(tasks);
 
-    Assertions.assertEquals(HTTP_CLIENT_TIMEOUT, results.get(0).get().getStatus());
+    for (int i = 0; i < 1024; i++) {
+      int offset = i * 2;
+      Assertions.assertThrows(ExecutionException.class, () -> results.get(offset).get());
+      Assertions.assertEquals(HTTP_UNAVAILABLE, results.get(offset + 1).get().getStatus());
+    }
 
-    Assertions.assertEquals(HTTP_UNAVAILABLE, results.get(1).get().getStatus());
+    executorService.shutdown();
   }
 
   @Test
@@ -266,13 +298,59 @@ class RetryRequestTest {
 
   @Test
   void shouldBeAbleToRetryARequestOnConnectionFailure() {
-    AppServer server = new NettyAppServer(req -> new HttpResponse());
+    AtomicInteger count = new AtomicInteger(0);
+    HttpHandler handler =
+        new RetryRequest()
+            .andFinally(
+                (HttpRequest request) -> {
+                  if (count.getAndIncrement() < 2) {
+                    throw new UncheckedIOException(new ConnectException());
+                  } else {
+                    return new HttpResponse();
+                  }
+                });
 
-    URI uri = URI.create(server.whereIs("/"));
-    HttpRequest request =
-        new HttpRequest(GET, String.format(REQUEST_PATH, uri.getHost(), uri.getPort()));
+    HttpRequest request = new HttpRequest(GET, "/");
+    HttpResponse response = handler.execute(request);
 
-    HttpResponse response = client.execute(request);
-    assertThat(response).extracting(HttpResponse::getStatus).isEqualTo(HTTP_CLIENT_TIMEOUT);
+    assertThat(response).extracting(HttpResponse::getStatus).isEqualTo(HTTP_OK);
+    assertThat(count.get()).isEqualTo(3);
+  }
+
+  @Test
+  void shouldRethrowOnConnectFailure() {
+    AtomicInteger count = new AtomicInteger(0);
+    AtomicReference<UncheckedIOException> lastThrown = new AtomicReference<>();
+    HttpHandler handler =
+        new RetryRequest()
+            .andFinally(
+                (HttpRequest request) -> {
+                  count.getAndIncrement();
+                  lastThrown.set(new UncheckedIOException(new ConnectException()));
+                  throw lastThrown.get();
+                });
+
+    UncheckedIOException thrown =
+        Assertions.assertThrows(
+            UncheckedIOException.class, () -> handler.execute(new HttpRequest(GET, "/")));
+    assertThat(thrown).isSameAs(lastThrown.get());
+    assertThat(count.get()).isEqualTo(4);
+  }
+
+  @Test
+  void shouldDeliverUnmodifiedServerErrors() {
+    AtomicInteger count = new AtomicInteger(0);
+    AtomicReference<HttpResponse> lastResponse = new AtomicReference<>();
+    HttpHandler handler =
+        new RetryRequest()
+            .andFinally(
+                (HttpRequest request) -> {
+                  count.getAndIncrement();
+                  lastResponse.set(new HttpResponse().setStatus(500));
+                  return lastResponse.get();
+                });
+
+    assertThat(handler.execute(new HttpRequest(GET, "/"))).isSameAs(lastResponse.get());
+    assertThat(count.get()).isEqualTo(3);
   }
 }

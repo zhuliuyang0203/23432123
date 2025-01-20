@@ -21,14 +21,14 @@ use crate::config::{str_to_os, ManagerConfig};
 use crate::downloads::download_to_tmp_folder;
 use crate::edge::{EdgeManager, EDGEDRIVER_NAME, EDGE_NAMES, WEBVIEW2_NAME};
 use crate::files::{
-    capitalize, collect_files_from_cache, create_parent_path_if_not_exists,
-    create_path_if_not_exists, default_cache_folder, find_latest_from_cache, get_binary_extension,
-    path_to_string,
+    capitalize, collect_files_from_cache, create_path_if_not_exists, default_cache_folder,
+    find_latest_from_cache, get_binary_extension, path_to_string,
 };
 use crate::files::{parse_version, uncompress, BrowserPath};
 use crate::firefox::{FirefoxManager, FIREFOX_NAME, GECKODRIVER_NAME};
 use crate::grid::GRID_NAME;
 use crate::iexplorer::{IExplorerManager, IEDRIVER_NAME, IE_NAMES};
+use crate::lock::Lock;
 use crate::logger::Logger;
 use crate::metadata::{
     create_browser_metadata, create_stats_metadata, get_browser_version_from_metadata,
@@ -59,6 +59,7 @@ pub mod files;
 pub mod firefox;
 pub mod grid;
 pub mod iexplorer;
+pub mod lock;
 pub mod logger;
 pub mod metadata;
 pub mod mirror;
@@ -184,6 +185,22 @@ pub trait SeleniumManager {
     // ----------------------------------------------------------
 
     fn download_driver(&mut self) -> Result<(), Error> {
+        let driver_path_in_cache = self.get_driver_path_in_cache()?;
+        let driver_name_with_extension = self.get_driver_name_with_extension();
+
+        let mut lock = Lock::acquire(
+            &self.get_logger(),
+            &driver_path_in_cache,
+            Some(driver_name_with_extension.clone()),
+        )?;
+        if !lock.exists() && driver_path_in_cache.exists() {
+            self.get_logger().debug(format!(
+                "Driver already in cache: {}",
+                driver_path_in_cache.display()
+            ));
+            return Ok(());
+        }
+
         let driver_url = self.get_driver_url()?;
         self.get_logger().debug(format!(
             "Downloading {} {} from {}",
@@ -196,20 +213,20 @@ pub trait SeleniumManager {
 
         if self.is_grid() {
             let driver_path_in_cache = self.get_driver_path_in_cache()?;
-            create_parent_path_if_not_exists(&driver_path_in_cache)?;
-            Ok(fs::rename(driver_zip_file, driver_path_in_cache)?)
+            fs::rename(driver_zip_file, driver_path_in_cache)?;
         } else {
-            let driver_path_in_cache = self.get_driver_path_in_cache()?;
-            let driver_name_with_extension = self.get_driver_name_with_extension();
-            Ok(uncompress(
+            uncompress(
                 &driver_zip_file,
                 &driver_path_in_cache,
                 self.get_logger(),
                 self.get_os(),
                 Some(driver_name_with_extension),
                 None,
-            )?)
+            )?;
         }
+
+        lock.release();
+        Ok(())
     }
 
     fn download_browser(
@@ -304,6 +321,17 @@ pub trait SeleniumManager {
                 )));
             }
 
+            let browser_path_in_cache = self.get_browser_path_in_cache()?;
+            let mut lock = Lock::acquire(&self.get_logger(), &browser_path_in_cache, None)?;
+            if !lock.exists() && browser_binary_path.exists() {
+                self.get_logger().debug(format!(
+                    "Browser already in cache: {}",
+                    browser_binary_path.display()
+                ));
+                self.set_browser_path(path_to_string(&browser_binary_path));
+                return Ok(Some(browser_binary_path.clone()));
+            }
+
             let browser_url = self.get_browser_url_for_download(original_browser_version)?;
             self.get_logger().debug(format!(
                 "Downloading {} {} from {}",
@@ -318,12 +346,13 @@ pub trait SeleniumManager {
                 self.get_browser_label_for_download(original_browser_version)?;
             uncompress(
                 &driver_zip_file,
-                &self.get_browser_path_in_cache()?,
-                self.get_logger(),
+                &browser_path_in_cache,
+                &self.get_logger(),
                 self.get_os(),
                 None,
                 browser_label_for_download,
             )?;
+            lock.release();
         }
         if browser_binary_path.exists() {
             self.set_browser_path(path_to_string(&browser_binary_path));

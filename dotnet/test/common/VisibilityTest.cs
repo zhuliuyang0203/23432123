@@ -111,8 +111,8 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("zero"));
             Size size = element.Size;
 
-            Assert.AreEqual(0, size.Width, "Should have 0 width");
-            Assert.AreEqual(0, size.Height, "Should have 0 height");
+            Assert.That(size.Width, Is.Zero, "Should have 0 width");
+            Assert.That(size.Height, Is.Zero, "Should have 0 height");
             Assert.That(element.Displayed, Is.True);
         }
 
@@ -268,9 +268,9 @@ namespace OpenQA.Selenium
 
             driver.Url = clickJackerPage;
             IWebElement element = driver.FindElement(By.Id("clickJacker"));
-            Assert.AreEqual("0", element.GetCssValue("opacity"), "Precondition failed: clickJacker should be transparent");
+            Assert.That(element.GetCssValue("opacity"), Is.EqualTo("0"), "Precondition failed: clickJacker should be transparent");
             element.Click();
-            Assert.AreEqual("1", element.GetCssValue("opacity"));
+            Assert.That(element.GetCssValue("opacity"), Is.EqualTo("1"));
         }
 
         [Test]

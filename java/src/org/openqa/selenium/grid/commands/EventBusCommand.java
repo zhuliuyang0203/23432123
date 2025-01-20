@@ -26,7 +26,9 @@ import static org.openqa.selenium.remote.http.Contents.asJson;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -107,6 +109,24 @@ public class EventBusCommand extends TemplateGridCommand {
     EventBus bus = events.getEventBus();
 
     BaseServerOptions serverOptions = new BaseServerOptions(config);
+    List<CountDownLatch> pending = new ArrayList<>();
+
+    EventName healthCheck = new EventName("healthcheck");
+    bus.addListener(
+        new EventListener<>(
+            healthCheck,
+            Object.class,
+            obj -> {
+              synchronized (pending) {
+                // Concurrent health checks might influence each other, we can ignore this.
+                // We only want to see any event is delivered to tell the bus is healthy.
+                pending.removeIf(
+                    latch -> {
+                      latch.countDown();
+                      return true;
+                    });
+              }
+            }));
 
     return new NettyServer(
         serverOptions,
@@ -117,10 +137,10 @@ public class EventBusCommand extends TemplateGridCommand {
                         req -> {
                           CountDownLatch latch = new CountDownLatch(1);
 
-                          EventName healthCheck = new EventName("healthcheck");
-                          bus.addListener(
-                              new EventListener<>(
-                                  healthCheck, Object.class, obj -> latch.countDown()));
+                          synchronized (pending) {
+                            pending.add(latch);
+                          }
+
                           bus.fire(new Event(healthCheck, "ping"));
 
                           try {

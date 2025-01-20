@@ -17,7 +17,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-
 require_relative 'spec_helper'
 
 module Selenium
@@ -31,7 +30,7 @@ module Selenium
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           network.add_authentication_handler(username, password)
-          expect(network.auth_callbacks.count).to be 1
+          expect(network.callbacks.count).to be 1
         end
       end
 
@@ -39,8 +38,8 @@ module Selenium
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           id = network.add_authentication_handler(username, password)
-          network.remove_authentication_handler(id)
-          expect(network.auth_callbacks.count).to be 0
+          network.remove_handler(id)
+          expect(network.callbacks.count).to be 0
         end
       end
 
@@ -49,8 +48,35 @@ module Selenium
           network = described_class.new(driver)
           network.add_authentication_handler(username, password)
           network.add_authentication_handler(username, password)
-          network.clear_authentication_handlers
-          expect(network.auth_callbacks.count).to be 0
+          network.clear_handlers
+          expect(network.callbacks.count).to be 0
+        end
+      end
+
+      it 'adds a request handler' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'removes a request handler' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          id = network.add_request_handler
+          network.remove_handler(id)
+          expect(network.callbacks.count).to be 0
+        end
+      end
+
+      it 'clears all request handlers' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler
+          network.add_request_handler
+          network.clear_handlers
+          expect(network.callbacks.count).to be 0
         end
       end
     end

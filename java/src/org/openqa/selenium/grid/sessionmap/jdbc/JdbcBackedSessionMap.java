@@ -92,7 +92,8 @@ public class JdbcBackedSessionMap extends SessionMap implements Closeable {
                     .forEach(this::remove)));
 
     bus.addListener(
-        NodeRestartedEvent.listener(nodeStatus -> this.removeByUri(nodeStatus.getExternalUri())));
+        NodeRestartedEvent.listener(
+            previousNodeStatus -> this.removeByUri(previousNodeStatus.getExternalUri())));
   }
 
   public static SessionMap create(Config config) {

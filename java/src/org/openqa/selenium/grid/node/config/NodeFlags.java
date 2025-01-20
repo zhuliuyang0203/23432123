@@ -81,8 +81,8 @@ public class NodeFlags implements HasRoles {
   @Parameter(
       names = {"--connection-limit-per-session"},
       description =
-          "Let X be the maximum number of websocket connections per session.This will ensure one"
-              + " session is not able to exhaust the connection limit of the host")
+          "Let X be the maximum number of concurrent websocket connections per session. This will"
+              + " ensure one session is not able to exhaust the connection limit of the host")
   @ConfigValue(section = NODE_SECTION, name = "connection-limit-per-session", example = "8")
   public int connectionLimitPerSession = DEFAULT_CONNECTION_LIMIT;
 

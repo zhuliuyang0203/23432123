@@ -26,7 +26,7 @@ module Selenium
           response_started: 'network.responseStarted',
           response_completed: 'network.responseCompleted',
           auth_required: 'network.authRequired',
-          FETCH_ERROR: 'network.fetchError'
+          fetch_error: 'network.fetchError'
         }.freeze
 
         PHASES = {
@@ -57,6 +57,18 @@ module Selenium
               'username' => username,
               'password' => password
             }
+          )
+        end
+
+        def continue_with_request(**args)
+          @bidi.send_cmd(
+            'network.continueWithRequest',
+            request: args[:request_id],
+            'body' => args[:body],
+            'cookies' => args[:cookies],
+            'headers' => args[:headers],
+            'method' => args[:method],
+            'url' => args[:url]
           )
         end
 

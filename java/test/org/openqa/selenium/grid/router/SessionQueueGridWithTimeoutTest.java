@@ -108,6 +108,7 @@ class SessionQueueGridWithTimeoutTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(1),
             Duration.ofSeconds(5), // low timeout to allow simulating it
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);

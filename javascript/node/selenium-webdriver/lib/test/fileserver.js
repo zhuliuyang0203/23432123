@@ -118,7 +118,7 @@ const Pages = (function () {
   addPage('emptyText', 'bidi/emptyText.txt')
   addPage('redirectedHttpEquiv', 'bidi/redirected_http_equiv.html')
   addPage('releaseAction', 'bidi/release_action.html')
-
+  addPage('fedcm', 'fedcm/fedcm_async_js.html')
   return pages
 })()
 

@@ -30,8 +30,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.bidi.BiDi;
+import org.openqa.selenium.bidi.BiDiProvider;
 import org.openqa.selenium.grid.config.MapConfig;
 import org.openqa.selenium.grid.config.MemoizedConfig;
 import org.openqa.selenium.grid.config.TomlConfig;
@@ -43,6 +47,7 @@ import org.openqa.selenium.json.JsonInput;
 import org.openqa.selenium.netty.server.NettyServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.ClientConfig;
+import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpClient;
 import org.openqa.selenium.remote.http.HttpMethod;
@@ -76,7 +81,9 @@ class DistributedTest {
                         + "\n"
                         + "override-max-sessions = true"
                         + "\n"
-                        + "max-sessions = 2")));
+                        + "max-sessions = 2"
+                        + "\n"
+                        + "connection-limit-per-session = 3")));
     tearDowns.add(deployment);
 
     server = deployment.getServer();
@@ -190,6 +197,48 @@ class DistributedTest {
       }
     } finally {
       Safely.safelyCall(healthy::quit);
+    }
+  }
+
+  @Test
+  void connectionLimitIsRespected() throws Exception {
+    assertThat(server.isStarted()).isTrue();
+
+    // don't use the RemoteWebDriver.builder here, using it does create an unknown number of
+    // connections
+    WebDriver driver = new RemoteWebDriver(server.getUrl(), browser.getCapabilities());
+
+    try {
+      Capabilities caps = ((HasCapabilities) driver).getCapabilities();
+      BiDiProvider biDiProvider = new BiDiProvider();
+
+      BiDi cnn1 = biDiProvider.getImplementation(caps, null).getBiDi();
+      BiDi cnn2 = biDiProvider.getImplementation(caps, null).getBiDi();
+      BiDi cnn3 = biDiProvider.getImplementation(caps, null).getBiDi();
+
+      Assertions.assertThrows(
+          ConnectionFailedException.class,
+          () -> biDiProvider.getImplementation(caps, null).getBiDi());
+      cnn1.close();
+      BiDi cnn4 = biDiProvider.getImplementation(caps, null).getBiDi();
+
+      Assertions.assertThrows(
+          ConnectionFailedException.class,
+          () -> biDiProvider.getImplementation(caps, null).getBiDi());
+      cnn2.close();
+      cnn3.close();
+      BiDi cnn5 = biDiProvider.getImplementation(caps, null).getBiDi();
+      BiDi cnn6 = biDiProvider.getImplementation(caps, null).getBiDi();
+
+      Assertions.assertThrows(
+          ConnectionFailedException.class,
+          () -> biDiProvider.getImplementation(caps, null).getBiDi());
+
+      cnn4.close();
+      cnn5.close();
+      cnn6.close();
+    } finally {
+      Safely.safelyCall(driver::quit);
     }
   }
 }

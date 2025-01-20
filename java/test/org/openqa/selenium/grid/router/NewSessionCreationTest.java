@@ -101,6 +101,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(60),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -189,6 +190,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(10),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);
@@ -264,6 +266,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(5),
             Duration.ofSeconds(60),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);

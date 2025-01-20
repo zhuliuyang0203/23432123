@@ -63,7 +63,7 @@ namespace OpenQA.Selenium
             element.SendKeys("Dishy" + Keys.Backspace + Keys.Left + Keys.Left);
             element.SendKeys(Keys.Left + Keys.Left + "F" + Keys.Delete + Keys.End + "ee!");
 
-            Assert.AreEqual("Fishee!", element.Text);
+            Assert.That(element.Text, Is.EqualTo("Fishee!"));
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace OpenQA.Selenium
             IWebElement input = driver.FindElement(By.Id("editable"));
             input.SendKeys(", world!");
             WaitFor(() => input.Text != "Why hello", "Text remained the original text");
-            Assert.AreEqual("Why hello, world!", input.Text);
+            Assert.That(input.Text, Is.EqualTo("Why hello, world!"));
         }
     }
 }
