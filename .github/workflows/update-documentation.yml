@@ -140,10 +140,6 @@ jobs:
         run: |
           git config --local user.email "selenium-ci@users.noreply.github.com"
           git config --local user.name "Selenium CI Bot"
-      - name: Install specific version of DocFX tool
-        #  Pinning to 2.75.3 to avoid breaking changes in newer versions
-        #  See https://github.com/dotnet/docfx/issues/9855
-        run: dotnet tool install --global --version 2.75.3 docfx
       - name: Update Documentation
         if: needs.determine-language.outputs.language == 'all' || needs.determine-language.outputs.language == 'dotnet'
         run: ./go dotnet:docs

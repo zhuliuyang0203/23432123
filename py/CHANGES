@@ -1,3 +1,21 @@
+Selenium 4.28.0
+* Add CDP for Chrome 132 and remove 129
+* [py] fix packaging (#14823)
+* [py] Typing package import enhancement (#14283)
+* [py] moved all getters in `fedcm/account.py` into descriptor object. (#14858)
+* [py] add execute_cdp_cmd to Remote (#14809)
+* Added more detailed docstrings to find_element() (#14930)
+* [py] Refactored `remote/client_config.py` by moving `properties` into `descriptor` object (#14899)
+* py: Ensure DRIVER_PATH_ENV_KEY defaults to string (#14862)
+* [py] add doc for driver_path_env_key (#14997)
+* [py] Fix WebKitGTK driver name check (#15046)
+* [py] Upgraded WebDriverWait Docstrings (#15054)
+* [py] Added Docstrings to ActionBuilder (#15065)
+* [py] Upgraded WebElement Docstrings (#15056)
+* [py] Upgraded WebDriver Docstrings (#15055)
+* [java][js][py] Add straight relative-by locators (#14482)
+* [py] Added Docstrings to RelativeBy Class and Added Missing Deprecation Warning to with_tag_name() (#15097)
+
 Selenium 4.27.1
 * Fix `pyproject.toml` for installable from sdist (#14806)
 * Revert the Deprecation warnings of WebElement.get_attribute() (#14808)

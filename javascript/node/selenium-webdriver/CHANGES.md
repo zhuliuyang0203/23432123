@@ -1,3 +1,13 @@
+## 4.28.0
+
+- Add CDP for Chrome 132 and remove 129
+- [js] Add Federated Credential Management support (#15008)
+- [JS] Specify Node.js engine version as 22.x LTS in package.json (#15058)
+- [JS] Add detailed error message for invalid cookie name validation in getCookie method
+- [JS] Add err message for invalid cookie name in deleteCookie method
+- [JS] Enables diagnostic logging for Safari
+- [java][JS][py] Add straight relative-by locators (#14482)
+
 ## 4.27.0
 
 - Add CDP for Chrome 131 and remove 128

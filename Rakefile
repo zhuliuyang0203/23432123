@@ -98,7 +98,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v131:v131.publish
-  //java/src/org/openqa/selenium/devtools/v129:v129.publish
+  //java/src/org/openqa/selenium/devtools/v132:v132.publish
   //java/src/org/openqa/selenium/devtools/v130:v130.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
@@ -777,10 +777,9 @@ namespace :dotnet do
   task :docs, [:skip_update] do |_task, arguments|
     FileUtils.rm_rf('build/docs/api/dotnet/')
     begin
-      # Pinning to 2.75.3 to avoid breaking changes in newer versions
-      # See https://github.com/dotnet/docfx/issues/9855
+      # Pinning to 2.78.2 to avoid breaking changes in newer versions
       sh 'dotnet tool uninstall --global docfx || true'
-      sh 'dotnet tool install --global --version 2.75.3 docfx'
+      sh 'dotnet tool install --global --version 2.78.2 docfx'
       # sh 'dotnet tool update -g docfx'
     rescue StandardError
       puts 'Please ensure that .NET SDK is installed.'
