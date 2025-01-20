@@ -68,6 +68,74 @@ class DefaultSlotMatcherTest {
   }
 
   @Test
+  void fullMatchWithTestMetadata() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME, "chrome", CapabilityType.PLATFORM_NAME, Platform.LINUX);
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:name",
+            "testName");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void fullMatchWithVideoRecording() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:noVncPort",
+            7900,
+            "se:vncEnabled",
+            true,
+            "se:containerName",
+            "my-container");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:recordVideo",
+            true,
+            "se:screenResolution",
+            "1920x1080");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void notMatchWithTestMetadata() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "myApp:version",
+            "beta");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:recordVideo",
+            true,
+            "se:name",
+            "testName",
+            "myApp:version",
+            "stable");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isFalse();
+  }
+
+  @Test
   void matchesBrowserAndVersion() {
     Capabilities stereotype =
         new ImmutableCapabilities(

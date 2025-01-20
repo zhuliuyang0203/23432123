@@ -508,10 +508,10 @@ public class DriverService implements Closeable {
       if (Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("ar")) {
         throw new NumberFormatException(
             String.format(
-                "Couldn't format the port numbers because the System Language is arabic:"
-                    + " \"--port=%d\", please make sure to add the required arguments"
-                    + " \"-Duser.language=en -Duser.region=US\" to your JVM, for more info please"
-                    + " visit :%n"
+                "Couldn't format the port numbers because the System Language is arabic: \""
+                    + String.format("--port=%d", port)
+                    + "\", please make sure to add the required arguments \"-Duser.language=en"
+                    + " -Duser.region=US\" to your JVM, for more info please visit :\n"
                     + "  https://www.selenium.dev/documentation/webdriver/browsers/",
                 getPort()));
       }
