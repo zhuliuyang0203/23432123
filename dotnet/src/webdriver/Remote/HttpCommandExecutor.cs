@@ -43,12 +43,9 @@ namespace OpenQA.Selenium.Remote
         private const string RequestAcceptHeader = JsonMimeType + ", " + PngMimeType;
         private const string RequestContentTypeHeader = JsonMimeType + "; charset=" + Utf8CharsetType;
         private const string UserAgentHeaderTemplate = "selenium/{0} (.net {1})";
-        private Uri remoteServerUri;
-        private TimeSpan serverResponseTimeout;
-        private string userAgent;
-        private bool enableKeepAlive;
+        private readonly Uri remoteServerUri;
+        private readonly TimeSpan serverResponseTimeout;
         private bool isDisposed;
-        private IWebProxy proxy;
         private CommandInfoRepository commandInfoRepository = new W3CWireProtocolCommandInfoRepository();
         private HttpClient client;
 
@@ -71,6 +68,7 @@ namespace OpenQA.Selenium.Remote
         /// <param name="timeout">The timeout within which the server must respond.</param>
         /// <param name="enableKeepAlive"><see langword="true"/> if the KeepAlive header should be sent
         /// with HTTP requests; otherwise, <see langword="false"/>.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="addressOfRemoteServer"/> is <see langword="null"/>.</exception>
         public HttpCommandExecutor(Uri addressOfRemoteServer, TimeSpan timeout, bool enableKeepAlive)
         {
             if (addressOfRemoteServer == null)
@@ -83,10 +81,10 @@ namespace OpenQA.Selenium.Remote
                 addressOfRemoteServer = new Uri(addressOfRemoteServer.ToString() + "/");
             }
 
-            this.userAgent = string.Format(CultureInfo.InvariantCulture, UserAgentHeaderTemplate, ResourceUtilities.ProductVersion, ResourceUtilities.PlatformFamily);
+            this.UserAgent = string.Format(CultureInfo.InvariantCulture, UserAgentHeaderTemplate, ResourceUtilities.ProductVersion, ResourceUtilities.PlatformFamily);
             this.remoteServerUri = addressOfRemoteServer;
             this.serverResponseTimeout = timeout;
-            this.enableKeepAlive = enableKeepAlive;
+            this.IsKeepAliveEnabled = enableKeepAlive;
         }
 
         /// <summary>
@@ -100,41 +98,30 @@ namespace OpenQA.Selenium.Remote
         /// between this <see cref="HttpCommandExecutor"/> and the remote end WebDriver
         /// implementation.
         /// </summary>
-        public IWebProxy Proxy
-        {
-            get { return this.proxy; }
-            set { this.proxy = value; }
-        }
+        public IWebProxy Proxy { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether keep-alive is enabled for HTTP
         /// communication between this <see cref="HttpCommandExecutor"/> and the
         /// remote end WebDriver implementation.
         /// </summary>
-        public bool IsKeepAliveEnabled
-        {
-            get { return this.enableKeepAlive; }
-            set { this.enableKeepAlive = value; }
-        }
+        public bool IsKeepAliveEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the user agent string used for HTTP communication
         /// batween this <see cref="HttpCommandExecutor"/> and the remote end
         /// WebDriver implementation
         /// </summary>
-        public string UserAgent
-        {
-            get { return this.userAgent; }
-            set { this.userAgent = value; }
-        }
+        public string UserAgent { get; set; }
 
         /// <summary>
         /// Gets the repository of objects containing information about commands.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If the value is set to <see langword="null"/>.</exception>
         protected CommandInfoRepository CommandInfoRepository
         {
-            get { return this.commandInfoRepository; }
-            set { this.commandInfoRepository = value; }
+            get => this.commandInfoRepository;
+            set => this.commandInfoRepository = value ?? throw new ArgumentNullException(nameof(value), "CommandInfoRepository cannot be null");
         }
 
         /// <summary>
@@ -145,8 +132,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns><see langword="true"/> if the new command has been added successfully; otherwise, <see langword="false"/>.</returns>
         public bool TryAddCommand(string commandName, CommandInfo info)
         {
-            HttpCommandInfo commandInfo = info as HttpCommandInfo;
-            if (commandInfo == null)
+            if (info is not HttpCommandInfo commandInfo)
             {
                 return false;
             }
@@ -193,7 +179,7 @@ namespace OpenQA.Selenium.Remote
             }
 
             HttpRequestInfo requestInfo = new HttpRequestInfo(this.remoteServerUri, commandToExecute, info);
-            HttpResponseInfo responseInfo = null;
+            HttpResponseInfo responseInfo;
             try
             {
                 responseInfo = await this.MakeHttpRequest(requestInfo).ConfigureAwait(false);
@@ -304,12 +290,11 @@ namespace OpenQA.Selenium.Remote
 
                 using (HttpResponseMessage responseMessage = await this.client.SendAsync(requestMessage).ConfigureAwait(false))
                 {
-                    HttpResponseInfo httpResponseInfo = new HttpResponseInfo();
-                    httpResponseInfo.Body = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    httpResponseInfo.ContentType = responseMessage.Content.Headers.ContentType?.ToString();
-                    httpResponseInfo.StatusCode = responseMessage.StatusCode;
+                    var responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var responseContentType = responseMessage.Content.Headers.ContentType?.ToString();
+                    var responseStatusCode = responseMessage.StatusCode;
 
-                    return httpResponseInfo;
+                    return new HttpResponseInfo(responseBody, responseContentType, responseStatusCode);
                 }
             }
         }
@@ -340,11 +325,14 @@ namespace OpenQA.Selenium.Remote
 
             if (response.Value is string valueString)
             {
-                response.Value = valueString.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+                valueString = valueString.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+                response = new Response(response.SessionId, valueString, response.Status);
             }
 
             return response;
         }
+
+#nullable enable
 
         /// <summary>
         /// Releases all resources used by the <see cref="HttpCommandExecutor"/>.
@@ -352,6 +340,7 @@ namespace OpenQA.Selenium.Remote
         public void Dispose()
         {
             this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -364,10 +353,7 @@ namespace OpenQA.Selenium.Remote
         {
             if (!this.isDisposed)
             {
-                if (this.client != null)
-                {
-                    this.client.Dispose();
-                }
+                this.client?.Dispose();
 
                 this.isDisposed = true;
             }
@@ -377,6 +363,11 @@ namespace OpenQA.Selenium.Remote
         {
             public HttpRequestInfo(Uri serverUri, Command commandToExecute, HttpCommandInfo commandInfo)
             {
+                if (commandInfo is null)
+                {
+                    throw new ArgumentNullException(nameof(commandInfo));
+                }
+
                 this.FullUri = commandInfo.CreateCommandUri(serverUri, commandToExecute);
                 this.HttpMethod = commandInfo.Method;
                 this.RequestBody = commandToExecute.ParametersAsJsonString;
@@ -389,9 +380,16 @@ namespace OpenQA.Selenium.Remote
 
         private class HttpResponseInfo
         {
+            public HttpResponseInfo(string body, string? contentType, HttpStatusCode statusCode)
+            {
+                this.Body = body ?? throw new ArgumentNullException(nameof(body));
+                this.ContentType = contentType;
+                this.StatusCode = statusCode;
+            }
+
             public HttpStatusCode StatusCode { get; set; }
             public string Body { get; set; }
-            public string ContentType { get; set; }
+            public string? ContentType { get; set; }
         }
 
         /// <summary>
@@ -404,7 +402,12 @@ namespace OpenQA.Selenium.Remote
             public DiagnosticsHttpHandler(HttpMessageHandler messageHandler, ILogger logger)
                 : base(messageHandler)
             {
-                _logger = logger;
+                if (messageHandler is null)
+                {
+                    throw new ArgumentNullException(nameof(messageHandler));
+                }
+
+                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
             /// <summary>
