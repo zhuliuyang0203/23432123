@@ -274,18 +274,18 @@ class FirefoxDriverTest extends JupiterTestBase {
   @NoDriverBeforeTest
   void shouldLaunchSuccessfullyWithArabicDate() {
     try {
-        Locale arabicLocale = new Locale("ar", "EG");
-        Locale.setDefault(arabicLocale);
+      Locale arabicLocale = new Locale("ar", "EG");
+      Locale.setDefault(arabicLocale);
 
-        int port = PortProber.findFreePort();
-        GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
-        builder.usingPort(port);
-        builder.build();
+      int port = PortProber.findFreePort();
+      GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
+      builder.usingPort(port);
+      builder.build();
 
     } catch (Exception e) {
-        throw e;
+      throw e;
     } finally {
-        Locale.setDefault(Locale.US);
+      Locale.setDefault(Locale.US);
     }
   }
 

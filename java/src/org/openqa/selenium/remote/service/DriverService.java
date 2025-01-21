@@ -138,7 +138,7 @@ public class DriverService implements Closeable {
   }
 
   protected URL getUrl(int port) throws IOException {
-    return new URL(String.format(Locale.ROOT,"http://localhost:%d", port));
+    return new URL(String.format(Locale.ROOT, "http://localhost:%d", port));
   }
 
   protected Capabilities getDefaultDriverOptions() {
