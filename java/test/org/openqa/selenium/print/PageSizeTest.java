@@ -34,29 +34,30 @@ class PageSizeTest {
 
   @Test
   void verifiesPageSizeA4() {
-    PageSize pageSize = PageSize.setPageSize(PageSize.ISO_A4);
-    assertThat(pageSize.getHeight()).isEqualTo(29.7);
-    assertThat(pageSize.getWidth()).isEqualTo(21.0);
+    PrintOptions printOptions = new PrintOptions();
+    printOptions.setPageSize(PageSize.ISO_A4);
+    assertThat(printOptions.getPageSize().getHeight()).isEqualTo(29.7);
+    assertThat(printOptions.getPageSize().getWidth()).isEqualTo(21.0);
   }
 
   @Test
   void verifiesPageSizeLegal() {
-    PageSize pageSize = PageSize.setPageSize(PageSize.US_LEGAL);
-    assertThat(pageSize.getHeight()).isEqualTo(35.56);
-    assertThat(pageSize.getWidth()).isEqualTo(21.59);
+    printOptions.setPageSize(PageSize.US_LEGAL);
+    assertThat(printOptions.getPageSize().getHeight()).isEqualTo(35.56);
+    assertThat(printOptions.getPageSize().getWidth()).isEqualTo(21.59);
   }
 
   @Test
   void verifiesPageSizeLetter() {
-    PageSize pageSize = PageSize.setPageSize(PageSize.US_LETTER);
-    assertThat(pageSize.getHeight()).isEqualTo(27.94);
-    assertThat(pageSize.getWidth()).isEqualTo(21.59);
+    printOptions.setPageSize(PageSize.US_LETTER);
+    assertThat(printOptions.getPageSize().getHeight()).isEqualTo(27.94);
+    assertThat(printOptions.getPageSize().getWidth()).isEqualTo(21.59);
   }
 
   @Test
   void verifiesPageSizeTabloid() {
-    PageSize pageSize = PageSize.setPageSize(PageSize.ANSI_TABLOID);
-    assertThat(pageSize.getHeight()).isEqualTo(43.18);
-    assertThat(pageSize.getWidth()).isEqualTo(27.94);
+    printOptions.setPageSize(PageSize.ANSI_TABLOID);
+    assertThat(printOptions.getPageSize().getHeight()).isEqualTo(43.18);
+    assertThat(printOptions.getPageSize().getWidth()).isEqualTo(27.94);
   }
 }
