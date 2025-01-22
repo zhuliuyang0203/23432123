@@ -47,25 +47,25 @@ namespace OpenQA.Selenium.Chromium
         /// <para>Gets or sets the location of the log file written to by the ChromeDriver executable.</para>
         /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no log path.</para>
         /// </summary>
-        public string? LogPath { get; set; } = string.Empty;
+        public string? LogPath { get; set; }
 
         /// <summary>
         /// <para>Gets or sets the base URL path prefix for commands (e.g., "wd/url").</para>
         /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no prefix.</para>
         /// </summary>
-        public string? UrlPathPrefix { get; set; } = string.Empty;
+        public string? UrlPathPrefix { get; set; }
 
         /// <summary>
         /// <para>Gets or sets the address of a server to contact for reserving a port.</para>
         /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no port server.</para>
         /// </summary>
-        public string PortServerAddress { get; set; } = string.Empty;
+        public string? PortServerAddress { get; set; }
 
         /// <summary>
         /// <para>Gets or sets the port on which the Android Debug Bridge is listening for commands.</para>
-        /// <para>A value less than or equal to 0 indicates no Android Debug Bridge specified.</para>
+        /// <para>A value less than or equal to 0, or <see langword="null"/>, indicates no Android Debug Bridge specified.</para>
         /// </summary>
-        public int AndroidDebugBridgePort { get; set; } = -1;
+        public int? AndroidDebugBridgePort { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to skip version compatibility check
@@ -87,23 +87,21 @@ namespace OpenQA.Selenium.Chromium
         public bool EnableAppendLog { get; set; }
 
         /// <summary>
-        /// Gets or sets the comma-delimited list of IP addresses that are approved to
-        /// connect to this instance of the Chrome driver. Defaults to an empty string,
-        /// which means only the local loopback address can connect.
+        /// <para>Gets or sets the comma-delimited list of IP addresses that are approved to connect to this instance of the Chrome driver.</para>
+        /// <para>A value of <see langword="null"/> or <see cref="string.Empty"/> means only the local loopback address can connect.</para>
         /// </summary>
         [Obsolete($"Use {nameof(AllowedIPAddresses)}")]
-        public string WhitelistedIPAddresses
+        public string? WhitelistedIPAddresses
         {
             get => this.AllowedIPAddresses;
             set => this.AllowedIPAddresses = value;
         }
 
         /// <summary>
-        /// Gets or sets the comma-delimited list of IP addresses that are approved to
-        /// connect to this instance of the Chrome driver. Defaults to an empty string,
-        /// which means only the local loopback address can connect.
+        /// <para>Gets or sets the comma-delimited list of IP addresses that are approved to connect to this instance of the Chrome driver.</para>
+        /// <para>A value of <see langword="null"/> or <see cref="string.Empty"/> means only the local loopback address can connect.</para>
         /// </summary>
-        public string AllowedIPAddresses { get; set; } = string.Empty;
+        public string? AllowedIPAddresses { get; set; }
 
         /// <summary>
         /// Gets the command-line arguments for the driver service.
@@ -113,9 +111,9 @@ namespace OpenQA.Selenium.Chromium
             get
             {
                 StringBuilder argsBuilder = new StringBuilder(base.CommandLineArguments);
-                if (this.AndroidDebugBridgePort > 0)
+                if (this.AndroidDebugBridgePort is int adb && adb > 0)
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --adb-port={0}", this.AndroidDebugBridgePort);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --adb-port={0}", adb);
                 }
 
                 if (this.SuppressInitialDiagnosticInformation)
