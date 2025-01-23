@@ -69,6 +69,16 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
         return intercept;
     }
 
+    public Task SetCacheBehaviorAsync(CacheBehavior behavior, BrowsingContextSetCacheBehaviorOptions? options = null)
+    {
+        SetCacheBehaviorOptions setCacheBehaviorOptions = new(options)
+        {
+            Contexts = [context]
+        };
+
+        return networkModule.SetCacheBehaviorAsync(behavior, setCacheBehaviorOptions);
+    }
+
     public Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = null)
     {
         return networkModule.OnBeforeRequestSentAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
