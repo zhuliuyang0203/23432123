@@ -1,3 +1,8 @@
+v4.28.1
+======
+* [java]: Add Locale.ROOT to avoid port formatting issues for all drivers (#15121)
+* [grid]: Grid UI could not open session live view (#15132)
+
 v4.28.0
 ======
 * Add CDP for Chrome 132 and remove 129
