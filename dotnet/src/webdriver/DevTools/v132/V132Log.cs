@@ -1,4 +1,4 @@
-// <copyright file="V129Log.cs" company="Selenium Committers">
+// <copyright file="V132Log.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,23 +17,23 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V129.Log;
+using OpenQA.Selenium.DevTools.V132.Log;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V129
+namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>
-    /// Class containing the browser's log as referenced by version 129 of the DevTools Protocol.
+    /// Class containing the browser's log as referenced by version 132 of the DevTools Protocol.
     /// </summary>
-    public class V129Log : DevTools.Log
+    public class V132Log : DevTools.Log
     {
         private LogAdapter adapter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V129Log"/> class.
+        /// Initializes a new instance of the <see cref="V132Log"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Log domain.</param>
-        public V129Log(LogAdapter adapter)
+        public V132Log(LogAdapter adapter)
         {
             this.adapter = adapter;
             this.adapter.EntryAdded += OnAdapterEntryAdded;

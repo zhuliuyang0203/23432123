@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v129;
+package org.openqa.selenium.devtools.v132;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -30,35 +30,35 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.DevToolsException;
 import org.openqa.selenium.devtools.Event;
 import org.openqa.selenium.devtools.idealized.Network;
-import org.openqa.selenium.devtools.v129.fetch.Fetch;
-import org.openqa.selenium.devtools.v129.fetch.model.*;
-import org.openqa.selenium.devtools.v129.network.model.Request;
+import org.openqa.selenium.devtools.v132.fetch.Fetch;
+import org.openqa.selenium.devtools.v132.fetch.model.*;
+import org.openqa.selenium.devtools.v132.network.model.Request;
 import org.openqa.selenium.internal.Either;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 
-public class v129Network extends Network<AuthRequired, RequestPaused> {
+public class v132Network extends Network<AuthRequired, RequestPaused> {
 
-  private static final Logger LOG = Logger.getLogger(v129Network.class.getName());
+  private static final Logger LOG = Logger.getLogger(v132Network.class.getName());
 
-  public v129Network(DevTools devTools) {
+  public v132Network(DevTools devTools) {
     super(devTools);
   }
 
   @Override
   protected Command<Void> setUserAgentOverride(UserAgent userAgent) {
-    return org.openqa.selenium.devtools.v129.network.Network.setUserAgentOverride(
+    return org.openqa.selenium.devtools.v132.network.Network.setUserAgentOverride(
         userAgent.userAgent(), userAgent.acceptLanguage(), userAgent.platform(), Optional.empty());
   }
 
   @Override
   protected Command<Void> enableNetworkCaching() {
-    return org.openqa.selenium.devtools.v129.network.Network.setCacheDisabled(false);
+    return org.openqa.selenium.devtools.v132.network.Network.setCacheDisabled(false);
   }
 
   @Override
   protected Command<Void> disableNetworkCaching() {
-    return org.openqa.selenium.devtools.v129.network.Network.setCacheDisabled(true);
+    return org.openqa.selenium.devtools.v132.network.Network.setCacheDisabled(true);
   }
 
   @Override

@@ -1,3 +1,47 @@
+v4.28.0
+======
+* Add CDP for Chrome 132 and remove 129
+* [dotnet] Add nullability annotations to print types (#14773)
+* [dotnet] Propagate `IWebDriver.GetAttribute` obsoletion to `WebDriver` (#14802)
+* [dotnet] Add nullability annotations to `ShadowRoot` (#14812)
+* [dotnet] Fix `WebDriver.AuthenticatorId` to return proper state set by user (#14814)
+* [dotnet] Add future-proofing note on `Base64UrlEncoder` (#14821)
+* Run update_copyright script. No logical changes
+* [dotnet] Add nullable reference annotations to `Platform` (#14834)
+* [dotnet] Fix Virtual Authenticator removal, annotate NRT (#14822)
+* [dotnet] Annotate Nullable Reference Types on `OpenQA.Selenium.Internal` (#14840)
+* [dotnet] Annotate nullable reference types in internal logging (#14819)
+* [dotnet] Address warnings with `ActionSequence.inputDevice` and use proper alternative (#14848)
+* [dotnet] Add nullability annotations to `Proxy` (#14861)
+* [dotnet] Modernize `Response` type (#14839)
+* [dotnet] Add nullability to Logs API (#14875)
+* [dotnet] Add nullability to `CookieJar` (#14874)
+* [dotnet] Refactor away private constructor from `Response` (#14877)
+* [dotnet] Add nullability to `Alert`s (#14669)
+* [dotnet] [bidi] Convert RemoteRefrence to an interface
+* [dotnet] [bidi] Convert RemoteObjectReference to an interface
+* [dotnet] [bidi] Fix name of autodetect proxy configuration
+* [dotnet] [cdp] Add more internal logs around CDP implementation (Related to #14903)
+* [dotnet] Add nullability annotations to `SessionId` (#14841)
+* [dotnet] Align WebDriver errors with specification (#14936)
+* [dotnet] Add nullability to `IniFileReader` (#14929)
+* [dotnet] Annotate nullability on command repository (#14888)
+* [dotnet] Revert deprecation of GetAttribute method (#14956)
+* [dotnet] Annotate `DriverServiceCommandExecutor` for nullability (#14942)
+* [dotnet] Do not intercept exceptions from `ICommandExecutor.ExecuteAsync` (#14892)
+* [dotnet] Move `Response` constructors towards immutability (#14998)
+* [dotnet] Switch DevTools response JSON parsing to `JsonElement` (#14990)
+* [dotnet] Utilize dedicated WebDriver Spec endpoint to get named cookie (#14957)
+* [dotnet] Tolerate invalid UTF-16 strings in DevTools JSON response (#14972)
+* [dotnet] Fix logging issue when log context level conflicts with logger already captured level (#15057)
+* [dotnet] Safari driver supports /status endpoint (#15066)
+* [dotnet] Simplify nuget package readme code example
+* [dotnet] Guard for cookie deletion when name is empty (#15074)
+* [dotnet] Add nullability to `FirefoxExtension` (#14964)
+* [dotnet] Start adding nullable reference type annotations to the `Support` package (#14779)
+* [dotnet] Finish nullability annotations on `Support` package (#15089)
+* Update supported versions for Chrome DevTools
+
 v4.27.0
 ======
 * Copyright dotnet (#13522)
