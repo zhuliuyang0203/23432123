@@ -15,38 +15,20 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium;
+package org.openqa.selenium.bidi.network;
 
-import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
+public enum CacheBehavior {
+  DEFAULT("default"),
+  BYPASS("bypass");
 
-@NullMarked
-public enum UnexpectedAlertBehaviour {
-  ACCEPT("accept"),
-  DISMISS("dismiss"),
-  ACCEPT_AND_NOTIFY("accept and notify"),
-  DISMISS_AND_NOTIFY("dismiss and notify"),
-  IGNORE("ignore");
+  private final String behavior;
 
-  private final String text;
-
-  UnexpectedAlertBehaviour(String text) {
-    this.text = text;
+  CacheBehavior(String behavior) {
+    this.behavior = behavior;
   }
 
   @Override
   public String toString() {
-    return String.valueOf(text);
-  }
-
-  public static @Nullable UnexpectedAlertBehaviour fromString(@Nullable String text) {
-    if (text != null) {
-      for (UnexpectedAlertBehaviour b : UnexpectedAlertBehaviour.values()) {
-        if (text.equalsIgnoreCase(b.text)) {
-          return b;
-        }
-      }
-    }
-    return null;
+    return behavior;
   }
 }

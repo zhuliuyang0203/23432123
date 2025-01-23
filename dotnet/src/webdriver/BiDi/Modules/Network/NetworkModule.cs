@@ -68,6 +68,18 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         return intercept;
     }
 
+    public async Task SetCacheBehaviorAsync(CacheBehavior behavior, SetCacheBehaviorOptions? options = null)
+    {
+        var @params = new SetCacheBehaviorCommandParameters(behavior);
+
+        if (options is not null)
+        {
+            @params.Contexts = options.Contexts;
+        }
+
+        await Broker.ExecuteCommandAsync(new SetCacheBehaviorCommand(@params), options).ConfigureAwait(false);
+    }
+
     public async Task<Intercept> InterceptAuthAsync(Func<AuthRequiredEventArgs, Task> handler, AddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
     {
         var intercept = await AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);

@@ -98,7 +98,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v131:v131.publish
-  //java/src/org/openqa/selenium/devtools/v129:v129.publish
+  //java/src/org/openqa/selenium/devtools/v132:v132.publish
   //java/src/org/openqa/selenium/devtools/v130:v130.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
@@ -1126,7 +1126,7 @@ namespace :all do
 end
 
 at_exit do
-  system 'sh', '.git-fixfiles' if File.exist?('.git') && !SeleniumRake::Checks.windows?
+  system 'sh', '.git-fixfiles' if File.exist?('.git') && SeleniumRake::Checks.linux?
 end
 
 def updated_version(current, desired = nil, nightly = nil)
