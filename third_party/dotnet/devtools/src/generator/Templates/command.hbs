@@ -14,10 +14,7 @@ namespace {{rootNamespace}}.{{domain.Name}}
         /// Gets the name of the command.
         /// </summary>
         [JsonIgnore]
-        public string CommandName
-        {
-            get { return DevToolsRemoteInterface_CommandName; }
-        }
+        public string CommandName => DevToolsRemoteInterface_CommandName;
 
     {{#each command.Parameters}}
         {{#if Description}}
@@ -31,11 +28,8 @@ namespace {{rootNamespace}}.{{domain.Name}}
         {{/if}}
         [JsonPropertyName("{{Name}}")]
         {{#if Optional}}[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]{{/if}}
-        public {{typemap ../context}} {{dehumanize Name}}
-        {
-            get;
-            set;
-        }
+        public {{typemap ../context}} {{dehumanize Name}} { get; set; }
+
     {{/each}}
     }
 
@@ -56,11 +50,8 @@ namespace {{rootNamespace}}.{{domain.Name}}
         {{/if}}
         [JsonPropertyName("{{Name}}")]
         {{#if Optional}}[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]{{/if}}
-        public {{typemap ../context}} {{dehumanize Name}}
-        {
-            get;
-            set;
-        }
+        public {{typemap ../context}} {{dehumanize Name}} { get; set; }
+
     {{/each}}
     }
 }
