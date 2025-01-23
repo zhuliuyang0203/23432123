@@ -19,11 +19,19 @@ package org.openqa.selenium.print;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("UnitTests")
 class PageSizeTest {
+
+  private PrintOptions printOptions;
+
+  @BeforeEach
+  void setUp() {
+    printOptions = new PrintOptions();
+  }
 
   @Test
   void setsDefaultHeightWidth() {
@@ -34,7 +42,7 @@ class PageSizeTest {
 
   @Test
   void verifiesPageSizeA4() {
-    PrintOptions printOptions = new PrintOptions();
+
     printOptions.setPageSize(PageSize.ISO_A4);
     assertThat(printOptions.getPageSize().getHeight()).isEqualTo(29.7);
     assertThat(printOptions.getPageSize().getWidth()).isEqualTo(21.0);
