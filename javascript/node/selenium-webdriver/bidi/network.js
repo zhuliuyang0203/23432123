@@ -356,6 +356,33 @@ class Network {
   }
 
   /**
+   * Sets the cache behavior for network requests.
+   *
+   * @param {string} behavior - The cache behavior ("default" or "bypass")
+   * @param {Array<string>} [contexts] - Optional array of browsing context IDs
+   * @returns {Promise<void>} A promise that resolves when the cache behavior is set
+   * @throws {Error} If behavior is invalid or context IDs are invalid
+   */
+  async setCacheBehavior(behavior, contexts = null) {
+    if (behavior !== 'default' && behavior !== 'bypass') {
+      throw new Error('Cache behavior must be either "default" or "bypass"')
+    }
+
+    const command = {
+      method: 'network.setCacheBehavior',
+      params: {
+        cacheBehavior: behavior,
+      },
+    }
+
+    if (contexts) {
+      command.params.contexts = contexts
+    }
+
+    await this.bidi.send(command)
+  }
+
+  /**
    * Unsubscribes from network events for all browsing contexts.
    * @returns {Promise<void>} A promise that resolves when the network connection is closed.
    */
