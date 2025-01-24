@@ -37,12 +37,12 @@ namespace OpenQA.Selenium.Remote
         /// <param name="method">The HTTP method of the request being sent.</param>
         /// <param name="fullUrl">The full URL of the request being sent.</param>
         /// <param name="requestBody">The body of the request.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="method"/>, <paramref name="fullUrl"/>, or <paramref name="requestBody"/> are null.</exception>
-        public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string requestBody)
+        /// <exception cref="ArgumentNullException">If <paramref name="method"/>, <paramref name="fullUrl"/> are null.</exception>
+        public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string? requestBody)
         {
             this.Method = method ?? throw new ArgumentNullException(nameof(method));
             this.FullUrl = fullUrl ?? throw new ArgumentNullException(nameof(fullUrl));
-            this.RequestBody = requestBody ?? throw new ArgumentNullException(nameof(requestBody));
+            this.RequestBody = requestBody;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Gets the body of the HTTP request as a string.
         /// </summary>
-        public string RequestBody { get; }
+        public string? RequestBody { get; }
 
         /// <summary>
         /// Gets a read-only dictionary of the headers of the HTTP request.
