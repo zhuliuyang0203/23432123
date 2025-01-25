@@ -21,6 +21,8 @@ using OpenQA.Selenium.Chromium;
 using OpenQA.Selenium.Internal;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Chrome
 {
     /// <summary>
@@ -36,7 +38,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="executablePath">The full path to the ChromeDriver executable.</param>
         /// <param name="executableFileName">The file name of the ChromeDriver executable.</param>
         /// <param name="port">The port on which the ChromeDriver executable should listen.</param>
-        private ChromeDriverService(string executablePath, string executableFileName, int port)
+        private ChromeDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, executableFileName, port)
         {
         }
@@ -67,7 +69,7 @@ namespace OpenQA.Selenium.Chrome
             if (File.Exists(driverPath))
             {
                 fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                driverPath = Path.GetDirectoryName(driverPath)!;
             }
             else
             {
