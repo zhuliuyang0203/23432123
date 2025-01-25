@@ -55,31 +55,6 @@ namespace OpenQA.Selenium
         private Margins margins = new Margins();
         private readonly HashSet<object> pageRanges = new HashSet<object>();
 
-
-        /// <summary>
-        /// Represents the A4 paper size.
-        /// Width: 21.0 cm, Height: 29.7 cm
-        /// </summary>
-        public static PageSize A4 => new PageSize { Width = 21.0, Height = 29.7 }; // cm
-
-        /// <summary>
-        /// Represents the Legal paper size.
-        /// Width: 21.59 cm, Height: 35.56 cm
-        /// </summary>
-        public static PageSize Legal => new PageSize { Width = 21.59, Height = 35.56 }; // cm
-
-        /// <summary>
-        /// Represents the Letter paper size.
-        /// Width: 21.59 cm, Height: 27.94 cm
-        /// </summary>
-        public static PageSize Letter => new PageSize { Width = 21.59, Height = 27.94 }; // cm
-
-        /// <summary>
-        /// Represents the Tabloid paper size.
-        /// Width: 27.94 cm, Height: 43.18 cm
-        /// </summary>
-        public static PageSize Tabloid => new PageSize { Width = 27.94, Height = 43.18 }; // cm
-
         /// <summary>
         /// Gets or sets the orientation of the pages in the printed document.
         /// </summary>
@@ -124,20 +99,6 @@ namespace OpenQA.Selenium
             set => this.pageSize = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-
-        /// <summary>
-        /// Sets the page size to a predefined or custom size.
-        /// </summary>
-        /// <param name="pageSize">The page size to set.</param>
-        /// <exception cref="ArgumentNullException">Thrown if pageSize is null.</exception>
-        public void SetPageSize(PageSize pageSize)
-        {
-            if (pageSize == null)
-            {
-                throw new ArgumentNullException(nameof(pageSize), "Page size cannot be null.");
-            }
-            this.PageDimensions = pageSize;
-        }
 
         /// <summary>
         /// Gets or sets the margins for each page in the doucment.
@@ -298,6 +259,30 @@ namespace OpenQA.Selenium
         {
             private double height = DefaultPageHeight;
             private double width = DefaultPageWidth;
+
+            /// <summary>
+            /// Represents the A4 paper size.
+            /// Width: 21.0 cm, Height: 29.7 cm
+            /// </summary>
+            public static PageSize A4 => new PageSize { Width = 21.0, Height = 29.7 }; // cm
+
+            /// <summary>
+            /// Represents the Legal paper size.
+            /// Width: 21.59 cm, Height: 35.56 cm
+            /// </summary>
+            public static PageSize Legal => new PageSize { Width = 21.59, Height = 35.56 }; // cm
+
+            /// <summary>
+            /// Represents the Letter paper size.
+            /// Width: 21.59 cm, Height: 27.94 cm
+            /// </summary>
+            public static PageSize Letter => new PageSize { Width = 21.59, Height = 27.94 }; // cm
+
+            /// <summary>
+            /// Represents the Tabloid paper size.
+            /// Width: 27.94 cm, Height: 43.18 cm
+            /// </summary>
+            public static PageSize Tabloid => new PageSize { Width = 27.94, Height = 43.18 }; // cm
 
             /// <summary>
             /// Gets or sets the height of each page in centimeters.
