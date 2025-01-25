@@ -80,7 +80,6 @@ namespace OpenQA.Selenium
         /// </summary>
         public static PageSize Tabloid => new PageSize { Width = 27.94, Height = 43.18 }; // cm
 
-
         /// <summary>
         /// Gets or sets the orientation of the pages in the printed document.
         /// </summary>
@@ -90,8 +89,6 @@ namespace OpenQA.Selenium
         /// Gets or sets the amount which the printed content is zoomed. Valid values are 0.1 to 2.0.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">If the value is not set between 0.1 and 2.0.</exception>
-
-
 
         public double ScaleFactor
         {
