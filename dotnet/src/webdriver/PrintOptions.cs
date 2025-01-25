@@ -64,7 +64,6 @@ namespace OpenQA.Selenium
         /// Gets or sets the amount which the printed content is zoomed. Valid values are 0.1 to 2.0.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">If the value is not set between 0.1 and 2.0.</exception>
-
         public double ScaleFactor
         {
             get => this.scale;
@@ -98,7 +97,6 @@ namespace OpenQA.Selenium
             get => this.pageSize;
             set => this.pageSize = value ?? throw new ArgumentNullException(nameof(value));
         }
-
 
         /// <summary>
         /// Gets or sets the margins for each page in the doucment.
