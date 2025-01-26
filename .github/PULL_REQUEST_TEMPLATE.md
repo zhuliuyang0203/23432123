@@ -4,11 +4,7 @@
 Before submitting your PR, please check our [contributing](https://github.com/SeleniumHQ/selenium/blob/trunk/CONTRIBUTING.md) guidelines.
 Avoid large PRs, help reviewers by making them as simple and short as possible.
 
-
 <!--- Provide a general summary of your changes in the Title above -->
-
-### Description
-<!--- Describe your changes in detail -->
 
 ### Motivation and Context
 <!--- Why is this change required? What problem does it solve? -->
