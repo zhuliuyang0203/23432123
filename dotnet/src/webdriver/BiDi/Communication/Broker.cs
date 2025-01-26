@@ -54,7 +54,7 @@ public class Broker : IAsyncDisposable
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
-    private readonly BiDiSerializerContext _jsonSerializerContext;
+    private readonly BiDiJsonSerializerContext _jsonSerializerContext;
 
     internal Broker(BiDi bidi, ITransport transport)
     {
@@ -101,7 +101,7 @@ public class Broker : IAsyncDisposable
             }
         };
 
-        _jsonSerializerContext = new BiDiSerializerContext(jsonSerializerOptions);
+        _jsonSerializerContext = new BiDiJsonSerializerContext(jsonSerializerOptions);
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)

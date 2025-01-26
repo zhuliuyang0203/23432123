@@ -1,4 +1,4 @@
-// <copyright file="BiDiSerializerContext.cs" company="Selenium Committers">
+// <copyright file="BiDiJsonSerializerContext.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -134,4 +134,4 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(IEnumerable<Modules.Input.INoneSourceAction>))]
 [JsonSerializable(typeof(IEnumerable<Modules.Input.IWheelSourceAction>))]
 
-internal partial class BiDiSerializerContext: JsonSerializerContext;
+internal partial class BiDiJsonSerializerContext : JsonSerializerContext;
