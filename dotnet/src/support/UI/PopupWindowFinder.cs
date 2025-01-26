@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace OpenQA.Selenium.Support.UI
@@ -50,6 +51,7 @@ namespace OpenQA.Selenium.Support.UI
         /// to manipulate the popup window.</param>
         /// <remarks>When using this constructor overload, the timeout will be 5 seconds,
         /// and the check for a new window will be performed every 250 milliseconds.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public PopupWindowFinder(IWebDriver driver)
             : this(driver, DefaultTimeout, DefaultSleepInterval)
         {
@@ -65,6 +67,7 @@ namespace OpenQA.Selenium.Support.UI
         /// time to wait for the popup window to appear.</param>
         /// <remarks>When using this constructor overload, the check for a new window
         /// will be performed every 250 milliseconds.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public PopupWindowFinder(IWebDriver driver, TimeSpan timeout)
             : this(driver, timeout, DefaultSleepInterval)
         {
@@ -81,22 +84,17 @@ namespace OpenQA.Selenium.Support.UI
         /// time to wait for the popup window to appear.</param>
         /// <param name="sleepInterval">The <see cref="TimeSpan"/> representing the
         /// amount of time to wait between checks of the available window handles.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public PopupWindowFinder(IWebDriver driver, TimeSpan timeout, TimeSpan sleepInterval)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
             this.timeout = timeout;
             this.sleepInterval = sleepInterval;
         }
 
-        private static TimeSpan DefaultTimeout
-        {
-            get { return TimeSpan.FromSeconds(5); }
-        }
+        private static TimeSpan DefaultTimeout => TimeSpan.FromSeconds(5);
 
-        private static TimeSpan DefaultSleepInterval
-        {
-            get { return TimeSpan.FromMilliseconds(250); }
-        }
+        private static TimeSpan DefaultSleepInterval => TimeSpan.FromMilliseconds(250);
 
         /// <summary>
         /// Clicks on an element that is expected to trigger a popup browser window.
@@ -108,12 +106,12 @@ namespace OpenQA.Selenium.Support.UI
         /// <exception cref="ArgumentNullException">Thrown if the element to click is <see langword="null"/>.</exception>
         public string Click(IWebElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element), "element cannot be null");
             }
 
-            return this.Invoke(() => { element.Click(); });
+            return this.Invoke(element.Click);
         }
 
         /// <summary>
@@ -126,18 +124,18 @@ namespace OpenQA.Selenium.Support.UI
         /// <exception cref="ArgumentNullException">Thrown if the action to invoke is <see langword="null"/>.</exception>
         public string Invoke(Action popupMethod)
         {
-            if (popupMethod == null)
+            if (popupMethod is null)
             {
                 throw new ArgumentNullException(nameof(popupMethod), "popupMethod cannot be null");
             }
 
-            IList<string> existingHandles = this.driver.WindowHandles;
+            ReadOnlyCollection<string> existingHandles = this.driver.WindowHandles;
             popupMethod();
             WebDriverWait wait = new WebDriverWait(new SystemClock(), this.driver, this.timeout, this.sleepInterval);
             string popupHandle = wait.Until<string>((d) =>
             {
-                string foundHandle = null;
-                IList<string> differentHandles = GetDifference(existingHandles, this.driver.WindowHandles);
+                string? foundHandle = null;
+                List<string> differentHandles = GetDifference(existingHandles, this.driver.WindowHandles);
                 if (differentHandles.Count > 0)
                 {
                     foundHandle = differentHandles[0];
@@ -149,11 +147,11 @@ namespace OpenQA.Selenium.Support.UI
             return popupHandle;
         }
 
-        private static IList<string> GetDifference(IList<string> existingHandles, IList<string> currentHandles)
+        private static List<string> GetDifference(ReadOnlyCollection<string> existingHandles, ReadOnlyCollection<string> currentHandles)
         {
             // We are using LINQ to get the difference between the two lists.
             // The non-LINQ version looks like the following:
-            // IList<string> differentHandles = new List<string>();
+            // List<string> differentHandles = new List<string>();
             // foreach (string handle in currentHandles)
             // {
             //    if (!existingHandles.Contains(handle))

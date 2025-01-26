@@ -25,6 +25,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>
@@ -37,10 +39,10 @@ namespace OpenQA.Selenium.Safari
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariDriverService"/> class.
         /// </summary>
-        /// <param name="executablePath">The full path to the SafariDriver executable.</param>
+        /// <param name="executablePath">The directory of the SafariDriver executable.</param>
         /// <param name="executableFileName">The file name of the SafariDriver executable.</param>
         /// <param name="port">The port on which the SafariDriver executable should listen.</param>
-        private SafariDriverService(string executablePath, string executableFileName, int port)
+        private SafariDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, port, executableFileName)
         {
         }
@@ -73,7 +75,7 @@ namespace OpenQA.Selenium.Safari
             // because the executable does not have a clean shutdown command,
             // which means we have to kill the process. Using a short timeout
             // gets us to the termination point much faster.
-            get { return TimeSpan.FromMilliseconds(100); }
+            get => TimeSpan.FromMilliseconds(100);
         }
 
         /// <summary>
@@ -84,57 +86,7 @@ namespace OpenQA.Selenium.Safari
         {
             // The Safari driver executable does not have a clean shutdown command,
             // which means we have to kill the process.
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the service is responding to HTTP requests.
-        /// </summary>
-        protected override bool IsInitialized
-        {
-            get
-            {
-                bool isInitialized = false;
-
-                Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri("/session/FakeSessionIdForPollingPurposes", UriKind.Relative));
-
-                // Since Firefox driver won't implement the /session end point (because
-                // the W3C spec working group stupidly decided that it isn't necessary),
-                // we'll attempt to poll for a different URL which has no side effects.
-                // We've chosen to poll on the "quit" URL, passing in a nonexistent
-                // session id.
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.ConnectionClose = true;
-                    httpClient.Timeout = TimeSpan.FromSeconds(5);
-
-                    using (var httpRequest = new HttpRequestMessage(HttpMethod.Delete, serviceHealthUri))
-                    {
-                        try
-                        {
-                            using (var httpResponse = Task.Run(async () => await httpClient.SendAsync(httpRequest)).GetAwaiter().GetResult())
-                            {
-                                isInitialized = (httpResponse.StatusCode == HttpStatusCode.OK
-                                        || httpResponse.StatusCode == HttpStatusCode.InternalServerError
-                                        || httpResponse.StatusCode == HttpStatusCode.NotFound)
-                                    && httpResponse.Content.Headers.ContentType.MediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
-                            }
-                        }
-
-                        // Checking the response from deleting a nonexistent session. Note that we are simply
-                        // checking that the HTTP status returned is a 200 status, and that the resposne has
-                        // the correct Content-Type header. A more sophisticated check would parse the JSON
-                        // response and validate its values. At the moment we do not do this more sophisticated
-                        // check.
-                        catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-                        {
-                            // Do nothing. The exception is expected, meaning driver service is not initialized.
-                        }
-                    }
-                }
-
-                return isInitialized;
-            }
+            get => false;
         }
 
         /// <summary>
@@ -157,7 +109,7 @@ namespace OpenQA.Selenium.Safari
             if (File.Exists(driverPath))
             {
                 fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                driverPath = Path.GetDirectoryName(driverPath)!;
             }
             else
             {

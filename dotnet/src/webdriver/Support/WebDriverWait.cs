@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
@@ -49,6 +51,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <param name="driver">The WebDriver instance used to wait.</param>
         /// <param name="timeout">The timeout value indicating how long to wait for the condition.</param>
         /// <param name="sleepInterval">A <see cref="TimeSpan"/> value indicating how often to check for the condition to be true.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="clock"/> or <paramref name="driver"/> are <see langword="null"/>.</exception>
         public WebDriverWait(IClock clock, IWebDriver driver, TimeSpan timeout, TimeSpan sleepInterval)
             : base(driver, clock)
         {
@@ -57,9 +60,6 @@ namespace OpenQA.Selenium.Support.UI
             this.IgnoreExceptionTypes(typeof(NotFoundException));
         }
 
-        private static TimeSpan DefaultSleepTimeout
-        {
-            get { return TimeSpan.FromMilliseconds(500); }
-        }
+        private static TimeSpan DefaultSleepTimeout => TimeSpan.FromMilliseconds(500);
     }
 }

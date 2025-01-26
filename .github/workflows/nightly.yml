@@ -172,7 +172,7 @@ jobs:
     with:
       name: Nightly JavaScript Release
       cache-key: javascript-nightly
-      node-version: '18.x'
+      node-version: '22.x'
       run: |
         sed -i 's|https://registry.npmjs.org/|https://npm.pkg.github.com|g' javascript/node/selenium-webdriver/package.json
         sed -i 's|"name": "selenium-webdriver"|"name": "@seleniumhq/selenium-webdriver"|g' javascript/node/selenium-webdriver/package.json

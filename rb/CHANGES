@@ -1,3 +1,12 @@
+4.28.0 (2025-01-16)
+=========================
+* Add CDP for Chrome 132 and remove 129
+* [ci] Bumping versions for nightly
+* [rb] Add tests for the cookie named, and updates type (#14843)
+* [rb] Update note for return value of Hash (#14845)
+* [rb] BiDi Network: add_request_handler, remove_request_handler, clear_request_handlers (#14751)
+* Update supported versions for Chrome DevTools
+
 4.27.0 (2024-11-21)
 =========================
 * Add CDP for Chrome 131 and remove 128

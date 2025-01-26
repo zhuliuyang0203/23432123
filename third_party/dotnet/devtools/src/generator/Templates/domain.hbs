@@ -12,7 +12,6 @@ namespace {{rootNamespace}}.{{domain.Name}}
     /// </summary>
     public class {{dehumanize domain.Name}}Adapter
     {
-        private readonly IDevToolsSession m_session;
         private readonly string m_domainName = "{{dehumanize domain.Name}}";
         private Dictionary<string, DevToolsEventData> m_eventMap = new Dictionary<string, DevToolsEventData>();
 
@@ -20,10 +19,11 @@ namespace {{rootNamespace}}.{{domain.Name}}
         /// Initializes a new instance of the {{dehumanize domain.Name}}Adapter class.
         /// </summary>
         /// <param name="session">The IDevToolsSession to be used with this adapter.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="session"/> is <see langword="null"/>.</exception>
         public {{dehumanize domain.Name}}Adapter(IDevToolsSession session)
         {
-            m_session = session ?? throw new ArgumentNullException(nameof(session));
-            m_session.DevToolsEventReceived += OnDevToolsEventReceived;
+            Session = session ?? throw new ArgumentNullException(nameof(session));
+            Session.DevToolsEventReceived += OnDevToolsEventReceived;
     {{#each domain.Events}}
             m_eventMap["{{Name}}"] = new DevToolsEventData(typeof({{dehumanize Name}}EventArgs), On{{dehumanize Name}});
     {{/each}}
@@ -32,16 +32,14 @@ namespace {{rootNamespace}}.{{domain.Name}}
         /// <summary>
         /// Gets the DevToolsSession associated with the adapter.
         /// </summary>
-        public IDevToolsSession Session
-        {
-            get { return m_session; }
-        }
+        public IDevToolsSession Session { get; }
 
     {{#each domain.Events}}
         /// <summary>
         /// {{xml-code-comment Description 2}}
         /// </summary>
         public event EventHandler<{{dehumanize Name}}EventArgs> {{dehumanize Name}};
+
     {{/each}}
 
     {{#each domain.Commands}}
@@ -50,8 +48,9 @@ namespace {{rootNamespace}}.{{domain.Name}}
         /// </summary>
         public Task<{{dehumanize Name}}CommandResponse> {{dehumanize Name}}({{dehumanize Name}}CommandSettings command{{#if NoParameters}} = null{{/if}}, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
         {
-            return m_session.SendCommand<{{dehumanize Name}}CommandSettings, {{dehumanize Name}}CommandResponse>(command{{#if NoParameters}} ?? new {{dehumanize Name}}CommandSettings(){{/if}}, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived);
+            return Session.SendCommand<{{dehumanize Name}}CommandSettings, {{dehumanize Name}}CommandResponse>(command{{#if NoParameters}} ?? new {{dehumanize Name}}CommandSettings(){{/if}}, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived);
         }
+
     {{/each}}
 
         private void OnDevToolsEventReceived(object sender, DevToolsEventReceivedEventArgs e)
@@ -70,12 +69,12 @@ namespace {{rootNamespace}}.{{domain.Name}}
     {{#each domain.Events}}
         private void On{{dehumanize Name}}(object rawEventArgs)
         {
-            {{dehumanize Name}}EventArgs e = rawEventArgs as {{dehumanize Name}}EventArgs;
-            if (e != null && {{dehumanize Name}} != null)
+            if (rawEventArgs is {{dehumanize Name}}EventArgs e)
             {
-                {{dehumanize Name}}(this, e);
+                {{dehumanize Name}}?.Invoke(this, e);
             }
         }
+
     {{/each}}
     }
 }

@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,13 +29,24 @@ namespace OpenQA.Selenium.DevTools
     public class AuthRequiredEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="AuthRequiredEventArgs"/> type.
+        /// </summary>
+        /// <param name="requestId">The request ID of the request raised the event.</param>
+        /// <param name="uri">The URI for which the event is raised.</param>
+        public AuthRequiredEventArgs(string requestId, string uri)
+        {
+            Uri = uri;
+            RequestId = requestId;
+        }
+
+        /// <summary>
         /// Gets the URI for which the event is raised.
         /// </summary>
-        public string Uri { get; internal set; }
+        public string Uri { get; }
 
         /// <summary>
         /// Gets the request ID of the request raising the event.
         /// </summary>
-        public string RequestId { get; internal set; }
+        public string RequestId { get; }
     }
 }
