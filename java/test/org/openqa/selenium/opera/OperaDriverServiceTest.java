@@ -26,9 +26,12 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
+import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 @Tag("UnitTests")
 public class OperaDriverServiceTest {
@@ -40,7 +43,6 @@ public class OperaDriverServiceTest {
     Duration customTimeout = Duration.ofSeconds(60);
 
     OperaDriverService.Builder builderMock = spy(OperaDriverService.Builder.class);
-    doReturn(exe).when(builderMock).findDefaultExecutable();
     builderMock.build();
 
     verify(builderMock).createDriverService(any(), anyInt(), eq(defaultTimeout), any(), any());
@@ -48,5 +50,42 @@ public class OperaDriverServiceTest {
     builderMock.withTimeout(customTimeout);
     builderMock.build();
     verify(builderMock).createDriverService(any(), anyInt(), eq(customTimeout), any(), any());
+  }
+
+  @Test
+  void testScoring() {
+    OperaDriverService.Builder builder = new OperaDriverService.Builder();
+    assertThat(builder.score(new OperaOptions())).isPositive();
+  }
+
+  @Test
+  void logLevelLastWins() {
+    OperaDriverService.Builder builderMock = spy(OperaDriverService.Builder.class);
+
+    List<String> silentLast = Arrays.asList("--port=1", "--log-level=OFF");
+    builderMock.withLoglevel(ChromiumDriverLogLevel.ALL).usingPort(1).withSilent(true).build();
+    verify(builderMock).createDriverService(any(), anyInt(), any(), eq(silentLast), any());
+
+    List<String> silentFirst = Arrays.asList("--port=1", "--log-level=DEBUG");
+    builderMock.withSilent(true).withLoglevel(ChromiumDriverLogLevel.DEBUG).usingPort(1).build();
+    verify(builderMock).createDriverService(any(), anyInt(), any(), eq(silentFirst), any());
+
+    List<String> verboseLast = Arrays.asList("--port=1", "--log-level=ALL");
+    builderMock.withLoglevel(ChromiumDriverLogLevel.OFF).usingPort(1).withVerbose(true).build();
+    verify(builderMock).createDriverService(any(), anyInt(), any(), eq(verboseLast), any());
+
+    List<String> verboseFirst = Arrays.asList("--port=1", "--log-level=INFO");
+    builderMock.withVerbose(true).withLoglevel(ChromiumDriverLogLevel.INFO).usingPort(1).build();
+    verify(builderMock).createDriverService(any(), anyInt(), any(), eq(verboseFirst), any());
+  }
+
+  // Setting these to false makes no sense; we're just going to ignore it.
+  @Test
+  void ignoreFalseLogging() {
+    OperaDriverService.Builder builderMock = spy(OperaDriverService.Builder.class);
+
+    List<String> falseSilent = Arrays.asList("--port=1", "--log-level=DEBUG");
+    builderMock.withLoglevel(ChromiumDriverLogLevel.DEBUG).usingPort(1).withSilent(false).build();
+    verify(builderMock).createDriverService(any(), anyInt(), any(), eq(falseSilent), any());
   }
 }

@@ -6,10 +6,20 @@ java_export(
     srcs = glob(["*.java"]),
     maven_coordinates = "org.seleniumhq.selenium:selenium-opera-driver:%s" % SE_VERSION,
     pom_template = "//java/src/org/openqa/selenium:template-pom",
-    visibility = ["//visibility:public"],
+    tags = [
+        "release-artifact",
+    ],
+    visibility = [
+        "//visibility:public",
+    ],
+    exports = [
+        "//java/src/org/openqa/selenium/chromium",
+    ],
     deps = [
         "//java:auto-service",
         "//java/src/org/openqa/selenium:core",
+        "//java/src/org/openqa/selenium/chromium",
+        "//java/src/org/openqa/selenium/manager",
         "//java/src/org/openqa/selenium/remote",
     ],
 )
