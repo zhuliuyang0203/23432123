@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json;
 
-// https://github.com/dotnet/runtime/issues/72604
+#region https://github.com/dotnet/runtime/issues/72604
 [JsonSerializable(typeof(MessageSuccess))]
 [JsonSerializable(typeof(MessageError))]
 [JsonSerializable(typeof(MessageEvent))]
@@ -57,11 +57,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RemoteValue.Node))]
 [JsonSerializable(typeof(Modules.Script.RemoteValue.WindowProxy))]
 
-[JsonSerializable(typeof(Modules.Script.LocalValue.String), TypeInfoPropertyName = "Script_LocalValue_String")]
-
-[JsonSerializable(typeof(Modules.Script.Target.Realm), TypeInfoPropertyName = "Script_Target_Realm")]
-[JsonSerializable(typeof(Modules.Script.Target.Context), TypeInfoPropertyName = "Script_Target_Context")]
-
 [JsonSerializable(typeof(Modules.Script.RealmInfo.Window))]
 [JsonSerializable(typeof(Modules.Script.RealmInfo.DedicatedWorker))]
 [JsonSerializable(typeof(Modules.Script.RealmInfo.SharedWorker))]
@@ -73,7 +68,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 
 [JsonSerializable(typeof(Modules.Log.Entry.Console))]
 [JsonSerializable(typeof(Modules.Log.Entry.Javascript))]
-//
+#endregion
 
 [JsonSerializable(typeof(Command))]
 [JsonSerializable(typeof(Message))]
@@ -110,6 +105,9 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Network.AuthRequiredEventArgs))]
 
 [JsonSerializable(typeof(Modules.Script.Channel), TypeInfoPropertyName = "Script_Channel")]
+[JsonSerializable(typeof(Modules.Script.LocalValue.String), TypeInfoPropertyName = "Script_LocalValue_String")]
+[JsonSerializable(typeof(Modules.Script.Target.Realm), TypeInfoPropertyName = "Script_Target_Realm")]
+[JsonSerializable(typeof(Modules.Script.Target.Context), TypeInfoPropertyName = "Script_Target_Context")]
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
 [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
 [JsonSerializable(typeof(Modules.Script.GetRealmsResult))]
