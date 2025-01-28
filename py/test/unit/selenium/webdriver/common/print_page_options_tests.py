@@ -44,6 +44,7 @@ def test_raises_exception_if_scale_is_outside_range(print_options):
     with pytest.raises(ValueError):
         print_options.scale = 3
 
+
 def test_set_page_size(print_options):
     # Example of setting a default (A4)
     assert print_options.page_width == PrintOptions.A4["width"]

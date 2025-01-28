@@ -410,7 +410,10 @@ class PrintOptions:
 
     def __init__(self) -> None:
         self._print_options: _PrintOpts = {}
-        self._page: _PageOpts = {"height": PrintOptions.A4["height"], "width": PrintOptions.A4["width"]}  # Default page size set to A4
+        self._page: _PageOpts = {
+            "height": PrintOptions.A4["height"],
+            "width": PrintOptions.A4["width"],
+        }  # Default page size set to A4
         self._margin: _MarginOpts = {}
 
     def to_dict(self) -> _PrintOpts:
@@ -418,8 +421,7 @@ class PrintOptions:
         return self._print_options
 
     def set_page_size(self, page_size: dict) -> None:
-        """
-        Sets the page size to predefined or custom dimensions.
+        """Sets the page size to predefined or custom dimensions.
 
         Parameters
         ----------
@@ -430,14 +432,12 @@ class PrintOptions:
         -------
         self.set_page_size(PageSize.A4)  # A4 predefined size
         self.set_page_size({"height": 15.0, "width": 20.0})  # Custom size in cm
-
         """
         self._validate_num_property("height", page_size["height"])
         self._validate_num_property("width", page_size["width"])
         self._page["height"] = page_size["height"]
         self._page["width"] = page_size["width"]
         self._print_options["page"] = self._page
-
 
     def _validate_num_property(self, property_name: str, value: float) -> None:
         """Helper function to validate some of the properties."""
