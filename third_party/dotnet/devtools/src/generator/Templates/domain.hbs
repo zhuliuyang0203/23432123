@@ -10,7 +10,7 @@ namespace {{rootNamespace}}.{{domain.Name}}
     /// <summary>
     /// Represents an adapter for the {{domain.Name}} domain to simplify the command interface.
     /// </summary>
-    public class {{dehumanize domain.Name}}Adapter : global::OpenQA.Selenium.DevTools.IAdapter
+    public class {{dehumanize domain.Name}}Adapter
     {
         private static readonly JsonSerializerOptions jsonSerializerOptions = new()
         {
@@ -89,11 +89,6 @@ namespace {{rootNamespace}}.{{domain.Name}}
         }
 
     {{/each}}
-
-        global::System.Text.Json.Nodes.JsonNode IAdapter.SerializeToNode<TCommand>(TCommand command)
-        {
-            return JsonSerializer.SerializeToNode(command, jsonSerializerOptions);
-        }
     }
 }
 
