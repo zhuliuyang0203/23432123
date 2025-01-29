@@ -49,10 +49,13 @@ namespace {{rootNamespace}}
         }
     }
 
-    [global::System.Text.Json.Serialization.JsonSerializable(typeof(string))] // Placeholder in case nothing gets generated
 {{#each commands}}
     [global::System.Text.Json.Serialization.JsonSerializable(typeof({{FullTypeName}}))]
     [global::System.Text.Json.Serialization.JsonSerializable(typeof({{FullResponseTypeName}}))]
 {{/each}}
+{{#each events}}
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof({{fullTypeName}}))]
+{{/each}}
+    [global::System.Text.Json.Serialization.JsonSourceGenerationOptions(Converters = typeof(OpenQA.Selenium.DevTools.Json.StringConverter))]
     internal sealed partial class {{protocolVersion}}JsonSerializerContext : global::System.Text.Json.Serialization.JsonSerializerContext;
 }
