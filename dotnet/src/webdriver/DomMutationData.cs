@@ -26,33 +26,54 @@ namespace OpenQA.Selenium
     /// </summary>
     public class DomMutationData
     {
+        private string targetId;
+        private string attributeName;
+        private string attributeValue;
+        private string attributeOriginalValue;
+
         /// <summary>
         /// Gets the ID of the element whose value is changing.
         /// </summary>
         [JsonPropertyName("target")]
         [JsonInclude]
-        public string TargetId { get; internal set; }
+        public string TargetId
+        {
+            get { return this.targetId; }
+            internal set { this.targetId = value; }
+        }
 
         /// <summary>
         /// Gets the name of the attribute that is changing.
         /// </summary>
         [JsonPropertyName("name")]
         [JsonInclude]
-        public string AttributeName { get; internal set; }
+        public string AttributeName
+        {
+            get { return this.attributeName; }
+            internal set { this.attributeName = value; }
+        }
 
         /// <summary>
         /// Gets the value to which the attribute is being changed.
         /// </summary>
         [JsonPropertyName("value")]
         [JsonInclude]
-        public string AttributeValue { get; internal set; }
+        public string AttributeValue
+        {
+            get { return this.attributeValue; }
+            internal set { this.attributeValue = value; }
+        }
 
         /// <summary>
         /// Gets the value from which the attribute has been changed.
         /// </summary>
         [JsonPropertyName("oldValue")]
         [JsonInclude]
-        public string AttributeOriginalValue { get; internal set; }
+        public string AttributeOriginalValue
+        {
+            get { return this.attributeOriginalValue; }
+            internal set { this.attributeOriginalValue = value; }
+        }
 
         /// <summary>
         /// Stores the element associated with the target ID
@@ -66,7 +87,7 @@ namespace OpenQA.Selenium
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return string.Format("target: {0}, name: {1}, value: {2}, originalValue: {3}", this.TargetId, this.AttributeName, this.AttributeValue, this.AttributeOriginalValue);
+            return string.Format("target: {0}, name: {1}, value: {2}, originalValue: {3}", this.targetId, this.attributeName, this.attributeValue, this.attributeOriginalValue);
         }
     }
 }
