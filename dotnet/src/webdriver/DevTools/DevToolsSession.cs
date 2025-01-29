@@ -284,7 +284,7 @@ namespace OpenQA.Selenium.DevTools
 
                 LogTrace("Sending {0} {1}: {2}", message.CommandId, message.CommandName, commandParameters.ToString());
 
-                string contents = JsonSerializer.Serialize(message, DevToolsJsonOptions.DevToolsSerializerContext.Default.DevToolsCommandData);
+                string contents = JsonSerializer.Serialize(message, DevToolsSerializerContext.Default.DevToolsCommandData);
                 this.pendingCommands.TryAdd(message.CommandId, message);
                 await this.connection.SendData(contents).ConfigureAwait(false);
 
@@ -411,7 +411,7 @@ namespace OpenQA.Selenium.DevTools
                     rawVersionInfo = await client.GetStringAsync("/json/version").ConfigureAwait(false);
                 }
 
-                var versionInfo = JsonSerializer.Deserialize(rawVersionInfo, DevToolsJsonOptions.DevToolsSerializerContext.Default.DevToolsVersionInfo);
+                var versionInfo = JsonSerializer.Deserialize(rawVersionInfo, DevToolsSerializerContext.Default.DevToolsVersionInfo);
                 this.websocketAddress = versionInfo.WebSocketDebuggerUrl;
 
                 if (requestedProtocolVersion == AutoDetectDevToolsProtocolVersion)

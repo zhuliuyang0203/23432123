@@ -399,7 +399,7 @@ namespace OpenQA.Selenium
         {
             if (e.Name == MonitorBindingName)
             {
-                DomMutationData valueChangeData = JsonSerializer.Deserialize(e.Payload, DevToolsJsonOptions.DevToolsSerializerContext.Default.DomMutationData);
+                DomMutationData valueChangeData = JsonSerializer.Deserialize(e.Payload, DevToolsSerializerContext.Default.DomMutationData);
                 var locator = By.CssSelector($"*[data-__webdriver_id='{valueChangeData.TargetId}']");
                 valueChangeData.Element = driver.FindElements(locator).FirstOrDefault();
 

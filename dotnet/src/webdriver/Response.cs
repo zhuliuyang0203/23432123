@@ -33,6 +33,12 @@ namespace OpenQA.Selenium
     /// </summary>
     public class Response
     {
+        private static readonly JsonSerializerOptions s_jsonSerializerOptions = new()
+        {
+            TypeInfoResolver = ResponseJsonSerializerContext.Default,
+            Converters = { new ResponseValueJsonConverter() } // we still need it to make `Object` as `Dictionary`
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Response"/> class
         /// </summary>
@@ -73,7 +79,7 @@ namespace OpenQA.Selenium
         /// <exception cref="JsonException">If <paramref name="value"/> is not a valid JSON object.</exception>
         public static Response FromJson(string value)
         {
-            Dictionary<string, object?> rawResponse = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, ResponseJsonSerializerContext.Default.DictionaryStringObject)
+            Dictionary<string, object?> rawResponse = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, s_jsonSerializerOptions)
                 ?? throw new WebDriverException("JSON success response returned \"null\" value");
 
             object? contents;
@@ -172,7 +178,7 @@ namespace OpenQA.Selenium
         /// <exception cref="WebDriverException">If the JSON dictionary is not in the expected state, per spec.</exception>
         public static Response FromErrorJson(string value)
         {
-            Dictionary<string, object?> deserializedResponse = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, ResponseJsonSerializerContext.Default.DictionaryStringObject)
+            Dictionary<string, object?> deserializedResponse = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, s_jsonSerializerOptions)
                 ?? throw new WebDriverException("JSON error response returned \"null\" value");
 
             if (!deserializedResponse.TryGetValue("value", out object? valueObject))
@@ -220,6 +226,5 @@ namespace OpenQA.Selenium
     }
 
     [JsonSerializable(typeof(Dictionary<string, object>))]
-    [JsonSourceGenerationOptions(Converters = [typeof(ResponseValueJsonConverter)])] // we still need it to make `Object` as `Dictionary`
     internal sealed partial class ResponseJsonSerializerContext : JsonSerializerContext;
 }
