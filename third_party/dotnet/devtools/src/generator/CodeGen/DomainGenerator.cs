@@ -2,6 +2,7 @@ using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
@@ -61,7 +62,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 domain = domainDefinition,
                 className = className,
                 rootNamespace = Settings.RootNamespace,
-                context = context
+                context = context,
+                protocolVersion = Settings.RootNamespace.Split('.').Last()
             });
 
             var outputPath = Utility.ReplaceTokensInPath(Settings.DefinitionTemplates.DomainTemplate.OutputPath, className, context, Settings);
