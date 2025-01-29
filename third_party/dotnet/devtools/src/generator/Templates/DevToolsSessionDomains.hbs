@@ -56,6 +56,6 @@ namespace {{rootNamespace}}
 {{#each events}}
     [global::System.Text.Json.Serialization.JsonSerializable(typeof({{fullTypeName}}))]
 {{/each}}
-    [global::System.Text.Json.Serialization.JsonSourceGenerationOptions(Converters = typeof(OpenQA.Selenium.DevTools.Json.StringConverter))]
+    [global::System.Text.Json.Serialization.JsonSourceGenerationOptions(Converters = [typeof(OpenQA.Selenium.DevTools.Json.StringConverter)])]
     internal sealed partial class {{protocolVersion}}JsonSerializerContext : global::System.Text.Json.Serialization.JsonSerializerContext;
 }
