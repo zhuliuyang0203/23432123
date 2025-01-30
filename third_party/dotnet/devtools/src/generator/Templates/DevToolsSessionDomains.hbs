@@ -8,6 +8,11 @@ namespace {{rootNamespace}}
     ///</summary>
     public class DevToolsSessionDomains : OpenQA.Selenium.DevTools.DevToolsSessionDomains
     {
+        internal static readonly global::System.Text.Json.JsonSerializerOptions JsonOptions = new()
+        {
+            TypeInfoResolver = {{protocolVersion}}JsonSerializerContext.Default
+        };
+
 {{#each domains}}
         private Lazy<{{dehumanize Name}}.{{dehumanize Name}}Adapter> m_{{dehumanize Name}};
 {{/each}}
@@ -43,4 +48,14 @@ namespace {{rootNamespace}}
 {{/each}}
         }
     }
+
+{{#each commands}}
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof({{FullTypeName}}), TypeInfoPropertyName = "{{FullSnakeTypeName}}")]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof({{FullResponseTypeName}}), TypeInfoPropertyName = "{{FullSnakeResponseTypeName}}")]
+{{/each}}
+{{#each events}}
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof({{FullTypeName}}), TypeInfoPropertyName = "{{FullSnakeTypeName}}")]
+{{/each}}
+    [global::System.Text.Json.Serialization.JsonSourceGenerationOptions(Converters = [typeof(OpenQA.Selenium.DevTools.Json.StringConverter)])]
+    internal sealed partial class {{protocolVersion}}JsonSerializerContext : global::System.Text.Json.Serialization.JsonSerializerContext;
 }

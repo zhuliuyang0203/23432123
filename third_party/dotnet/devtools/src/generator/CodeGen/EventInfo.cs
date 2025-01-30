@@ -8,5 +8,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         public string EventName { get; } = eventName;
 
         public string FullTypeName { get; } = fullTypeName;
+
+        public string FullSnakeTypeName { get; } = fullTypeName.Replace(".", "_");
     }
 }

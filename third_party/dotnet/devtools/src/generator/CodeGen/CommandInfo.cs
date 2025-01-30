@@ -9,6 +9,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
         public string FullTypeName { get; } = fullTypeName;
 
+        public string FullSnakeTypeName { get; } = fullTypeName.Replace(".", "_");
+
         public string FullResponseTypeName { get; } = fullResponseTypeName;
+
+        public string FullSnakeResponseTypeName { get; } = fullResponseTypeName.Replace(".", "_");
     }
 }

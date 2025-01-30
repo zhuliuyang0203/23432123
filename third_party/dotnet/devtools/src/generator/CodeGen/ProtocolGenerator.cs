@@ -80,7 +80,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 domains = domains,
                 commands = commands,
                 events = events,
-                types = types.Values.ToList()
+                types = types.Values.ToList(),
+                protocolVersion = Settings.RootNamespace.Split('.').Last()
             };
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
