@@ -41,7 +41,7 @@ function Sessions (): JSX.Element {
     if (data === undefined || data.sessionsInfo === undefined || data.sessionsInfo.sessions === undefined) {
       return
     }
-    if ((sessionId !== undefined || sessionId === '') && data.sessionsInfo.sessions.length === 0) {
+    if (sessionId && data.sessionsInfo.sessions.length === 0) {
       navigate("/sessions")
     }
   }, [data, sessionId])
