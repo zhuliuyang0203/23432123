@@ -277,11 +277,11 @@ namespace OpenQA.Selenium.DevTools.V85
 
         private void OnFetchAuthRequired(object sender, Fetch.AuthRequiredEventArgs e)
         {
-            AuthRequiredEventArgs wrapped = new AuthRequiredEventArgs()
-            {
-                RequestId = e.RequestId,
-                Uri = e.Request.Url
-            };
+            AuthRequiredEventArgs wrapped = new AuthRequiredEventArgs
+            (
+                requestId: e.RequestId,
+                uri: e.Request.Url
+            );
 
             this.OnAuthRequired(wrapped);
         }
@@ -290,8 +290,7 @@ namespace OpenQA.Selenium.DevTools.V85
         {
             if (e.ResponseErrorReason == null && e.ResponseStatusCode == null)
             {
-                RequestPausedEventArgs wrapped = new RequestPausedEventArgs();
-                wrapped.RequestData = new HttpRequestData()
+                var requestData = new HttpRequestData()
                 {
                     RequestId = e.RequestId,
                     Method = e.Request.Method,
@@ -300,17 +299,18 @@ namespace OpenQA.Selenium.DevTools.V85
                     Headers = new Dictionary<string, string>(e.Request.Headers)
                 };
 
+                RequestPausedEventArgs wrapped = new RequestPausedEventArgs(null, requestData);
                 this.OnRequestPaused(wrapped);
             }
             else
             {
-                ResponsePausedEventArgs wrappedResponse = new ResponsePausedEventArgs();
-                wrappedResponse.ResponseData = new HttpResponseData()
+                var responseData = new HttpResponseData()
                 {
                     RequestId = e.RequestId,
                     Url = e.Request.Url,
                     ResourceType = e.ResourceType.ToString()
                 };
+                ResponsePausedEventArgs wrappedResponse = new ResponsePausedEventArgs(responseData);
 
                 if (e.ResponseStatusCode.HasValue)
                 {

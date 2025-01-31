@@ -1,4 +1,4 @@
-// <copyright file="V129JavaScript.cs" company="Selenium Committers">
+// <copyright file="V132JavaScript.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,28 +17,28 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V129.Page;
-using OpenQA.Selenium.DevTools.V129.Runtime;
+using OpenQA.Selenium.DevTools.V132.Page;
+using OpenQA.Selenium.DevTools.V132.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V129
+namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>
-    /// Class containing the JavaScript implementation for version 129 of the DevTools Protocol.
+    /// Class containing the JavaScript implementation for version 132 of the DevTools Protocol.
     /// </summary>
-    public class V129JavaScript : JavaScript
+    public class V132JavaScript : JavaScript
     {
         private RuntimeAdapter runtime;
         private PageAdapter page;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V129JavaScript"/> class.
+        /// Initializes a new instance of the <see cref="V132JavaScript"/> class.
         /// </summary>
         /// <param name="runtime">The DevTools Protocol adapter for the Runtime domain.</param>
         /// <param name="page">The DevTools Protocol adapter for the Page domain.</param>
-        public V129JavaScript(RuntimeAdapter runtime, PageAdapter page)
+        public V132JavaScript(RuntimeAdapter runtime, PageAdapter page)
         {
             this.runtime = runtime;
             this.page = page;
@@ -140,12 +140,12 @@ namespace OpenQA.Selenium.DevTools.V129
 
         private void OnRuntimeBindingCalled(object sender, Runtime.BindingCalledEventArgs e)
         {
-            BindingCalledEventArgs wrapped = new BindingCalledEventArgs()
-            {
-                ExecutionContextId = e.ExecutionContextId,
-                Name = e.Name,
-                Payload = e.Payload
-            };
+            BindingCalledEventArgs wrapped = new BindingCalledEventArgs
+            (
+                executionContextId: e.ExecutionContextId,
+                name: e.Name,
+                payload: e.Payload
+            );
 
             this.OnBindingCalled(wrapped);
         }
@@ -167,20 +167,16 @@ namespace OpenQA.Selenium.DevTools.V129
             List<ConsoleApiArgument> args = new List<ConsoleApiArgument>();
             foreach (var arg in e.Args)
             {
-                string argValue = null;
-                if (arg.Value != null)
-                {
-                    argValue = arg.Value.ToString();
-                }
-                args.Add(new ConsoleApiArgument() { Type = arg.Type.ToString(), Value = argValue });
+                string argValue = arg.Value?.ToString();
+                args.Add(new ConsoleApiArgument(arg.Type.ToString(), argValue));
             }
 
-            var wrapped = new ConsoleApiCalledEventArgs()
-            {
-                Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
-                Type = e.Type,
-                Arguments = args.AsReadOnly()
-            };
+            var wrapped = new ConsoleApiCalledEventArgs
+            (
+                timestamp: new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
+                type: e.Type,
+                arguments: args.AsReadOnly()
+            );
 
             this.OnConsoleApiCalled(wrapped);
         }

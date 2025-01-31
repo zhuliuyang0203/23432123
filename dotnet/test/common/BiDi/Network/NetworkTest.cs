@@ -211,4 +211,11 @@ class NetworkTest : BiDiTestFixture
 
         Assert.That(action, Throws.TypeOf<BiDiException>().With.Message.Contain("net::ERR_FAILED").Or.Message.Contain("NS_ERROR_ABORT"));
     }
+
+    [Test]
+    public void CanSetCacheBehavior()
+    {
+        Assert.That(async () => await bidi.Network.SetCacheBehaviorAsync(CacheBehavior.Default), Throws.Nothing);
+        Assert.That(async () => await context.Network.SetCacheBehaviorAsync(CacheBehavior.Default), Throws.Nothing);
+    }
 }

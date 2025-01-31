@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     internal class PauseInteraction : Interaction
     {
-        private TimeSpan duration = TimeSpan.Zero;
+        private readonly TimeSpan duration = TimeSpan.Zero;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PauseInteraction"/> class.

@@ -29,7 +29,7 @@ internal sealed class SessionModule(Broker broker) : Module(broker)
 {
     public async Task<StatusResult> StatusAsync(StatusOptions? options = null)
     {
-        return await Broker.ExecuteCommandAsync<StatusResult>(new StatusCommand(), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand(), options).ConfigureAwait(false);
     }
 
     public async Task SubscribeAsync(IEnumerable<string> events, SubscribeOptions? options = null)
@@ -60,7 +60,7 @@ internal sealed class SessionModule(Broker broker) : Module(broker)
     {
         var @params = new NewCommandParameters(capabilitiesRequest);
 
-        return await Broker.ExecuteCommandAsync<NewResult>(new NewCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<NewCommand, NewResult>(new NewCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task EndAsync(EndOptions? options = null)

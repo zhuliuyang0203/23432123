@@ -1,4 +1,4 @@
-// <copyright file="V129Target.cs" company="Selenium Committers">
+// <copyright file="V132Target.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,26 +17,26 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V129.Target;
+using OpenQA.Selenium.DevTools.V132.Target;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V129
+namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>
-    /// Class providing functionality for manipulating targets for version 129 of the DevTools Protocol
+    /// Class providing functionality for manipulating targets for version 132 of the DevTools Protocol
     /// </summary>
-    public class V129Target : DevTools.Target
+    public class V132Target : DevTools.Target
     {
         private TargetAdapter adapter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V129Target"/> class.
+        /// Initializes a new instance of the <see cref="V132Target"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Target domain.</param>
-        public V129Target(TargetAdapter adapter)
+        public V132Target(TargetAdapter adapter)
         {
             this.adapter = adapter;
             adapter.DetachedFromTarget += OnDetachedFromTarget;
@@ -119,26 +119,28 @@ namespace OpenQA.Selenium.DevTools.V129
 
         private void OnDetachedFromTarget(object sender, DetachedFromTargetEventArgs e)
         {
-            this.OnTargetDetached(new TargetDetachedEventArgs() { SessionId = e.SessionId, TargetId = e.TargetId });
+            this.OnTargetDetached(new TargetDetachedEventArgs(e.SessionId, e.TargetId));
         }
 
         private void OnAttachedToTarget(object sender, AttachedToTargetEventArgs e)
         {
-            this.OnTargetAttached(new TargetAttachedEventArgs()
+            var targetInfo = e.TargetInfo == null ? null : new TargetInfo
             {
-                SessionId = e.SessionId,
-                TargetInfo = e.TargetInfo == null ? null : new TargetInfo
-                {
-                    BrowserContextId = e.TargetInfo.BrowserContextId,
-                    IsAttached = e.TargetInfo.Attached,
-                    OpenerId = e.TargetInfo.OpenerId,
-                    TargetId = e.TargetInfo.TargetId,
-                    Title = e.TargetInfo.Title,
-                    Type = e.TargetInfo.Type,
-                    Url = e.TargetInfo.Url
-                },
-                WaitingForDebugger = e.WaitingForDebugger
-            });
+                BrowserContextId = e.TargetInfo.BrowserContextId,
+                IsAttached = e.TargetInfo.Attached,
+                OpenerId = e.TargetInfo.OpenerId,
+                TargetId = e.TargetInfo.TargetId,
+                Title = e.TargetInfo.Title,
+                Type = e.TargetInfo.Type,
+                Url = e.TargetInfo.Url
+            };
+
+            this.OnTargetAttached(new TargetAttachedEventArgs
+            (
+                sessionId: e.SessionId,
+                targetInfo: targetInfo,
+                waitingForDebugger: e.WaitingForDebugger
+            ));
         }
 
         internal override ICommand CreateSetAutoAttachCommand(bool waitForDebuggerOnStart)

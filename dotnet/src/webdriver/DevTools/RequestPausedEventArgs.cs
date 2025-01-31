@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,13 +29,24 @@ namespace OpenQA.Selenium.DevTools
     public class RequestPausedEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="RequestPausedEventArgs"/> type.
+        /// </summary>
+        /// <param name="requestId">The request ID.</param>
+        /// <param name="requestData">The <see cref="HttpRequestData"/> object for this request.</param>
+        public RequestPausedEventArgs(string? requestId, HttpRequestData requestData)
+        {
+            RequestId = requestId;
+            RequestData = requestData;
+        }
+
+        /// <summary>
         /// Gets the request ID.
         /// </summary>
-        public string RequestId { get; internal set; }
+        public string? RequestId { get; }
 
         /// <summary>
         /// Gets the <see cref="HttpRequestData"/> object for this request.
         /// </summary>
-        public HttpRequestData RequestData { get; internal set; }
+        public HttpRequestData RequestData { get; }
     }
 }

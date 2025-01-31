@@ -18,10 +18,13 @@
 // </copyright>
 
 using OpenQA.Selenium.Internal;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -30,10 +33,6 @@ namespace OpenQA.Selenium
     /// </summary>
     public class Command
     {
-        private SessionId commandSessionId;
-        private string commandName;
-        private Dictionary<string, object> commandParameters = new Dictionary<string, object>();
-
         private readonly static JsonSerializerOptions s_jsonSerializerOptions = new()
         {
             TypeInfoResolver = JsonTypeInfoResolver.Combine(CommandJsonSerializerContext.Default, new DefaultJsonTypeInfoResolver()),
@@ -56,43 +55,30 @@ namespace OpenQA.Selenium
         /// <param name="sessionId">Session ID the driver is using</param>
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
-        public Command(SessionId sessionId, string name, Dictionary<string, object> parameters)
+        public Command(SessionId? sessionId, string name, Dictionary<string, object>? parameters)
         {
-            this.commandSessionId = sessionId;
-            if (parameters != null)
-            {
-                this.commandParameters = parameters;
-            }
-
-            this.commandName = name;
+            this.SessionId = sessionId;
+            this.Parameters = parameters ?? new Dictionary<string, object>();
+            this.Name = name;
         }
 
         /// <summary>
         /// Gets the SessionID of the command
         /// </summary>
         [JsonPropertyName("sessionId")]
-        public SessionId SessionId
-        {
-            get { return this.commandSessionId; }
-        }
+        public SessionId? SessionId { get; }
 
         /// <summary>
         /// Gets the command name
         /// </summary>
         [JsonPropertyName("name")]
-        public string Name
-        {
-            get { return this.commandName; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the parameters of the command
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object> Parameters
-        {
-            get { return this.commandParameters; }
-        }
+        public Dictionary<string, object> Parameters { get; }
 
         /// <summary>
         /// Gets the parameters of the command as a JSON-encoded string.
@@ -101,13 +87,12 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string parametersString = string.Empty;
-                if (this.commandParameters != null && this.commandParameters.Count > 0)
+                string parametersString;
+                if (this.Parameters != null && this.Parameters.Count > 0)
                 {
-                    parametersString = JsonSerializer.Serialize(this.commandParameters, s_jsonSerializerOptions);
+                    parametersString = JsonSerializer.Serialize(this.Parameters, s_jsonSerializerOptions);
                 }
-
-                if (string.IsNullOrEmpty(parametersString))
+                else
                 {
                     parametersString = "{}";
                 }
@@ -130,9 +115,11 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="value">The JSON-encoded string representing the command parameters.</param>
         /// <returns>A <see cref="Dictionary{K, V}"/> with a string keys, and an object value. </returns>
-        private static Dictionary<string, object> ConvertParametersFromJson(string value)
+        /// <exception cref="JsonException">If <paramref name="value"/> is not a JSON object.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
+        private static Dictionary<string, object>? ConvertParametersFromJson(string value)
         {
-            Dictionary<string, object> parameters = JsonSerializer.Deserialize<Dictionary<string, object>>(value, s_jsonSerializerOptions);
+            Dictionary<string, object>? parameters = JsonSerializer.Deserialize<Dictionary<string, object>>(value, s_jsonSerializerOptions);
             return parameters;
         }
     }

@@ -479,7 +479,7 @@ namespace OpenQA.Selenium.VirtualAuth
         [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Virtual Authenticator")]
         [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Virtual Authenticator")]
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Virtual Authenticator")]
-        public void testSetUserVerified()
+        public void TestSetUserVerified()
         {
             CreateRKEnabledCTAP2Authenticator();
 

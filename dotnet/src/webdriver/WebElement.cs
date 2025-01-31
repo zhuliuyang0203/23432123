@@ -48,10 +48,11 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="parentDriver">The <see cref="WebDriver"/> instance that is driving this element.</param>
         /// <param name="id">The ID value provided to identify the element.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         public WebElement(WebDriver parentDriver, string id)
         {
             this.driver = parentDriver;
-            this.elementId = id;
+            this.elementId = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         /// <summary>

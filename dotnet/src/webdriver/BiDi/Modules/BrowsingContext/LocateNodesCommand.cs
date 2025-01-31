@@ -25,7 +25,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class LocateNodesCommand(LocateNodesCommandParameters @params) : Command<LocateNodesCommandParameters>(@params);
+internal class LocateNodesCommand(LocateNodesCommandParameters @params)
+    : Command<LocateNodesCommandParameters>(@params, "browsingContext.locateNodes");
 
 internal record LocateNodesCommandParameters(BrowsingContext Context, Locator Locator) : CommandParameters
 {

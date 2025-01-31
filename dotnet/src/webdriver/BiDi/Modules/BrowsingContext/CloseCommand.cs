@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CloseCommand(CloseCommandParameters @params) : Command<CloseCommandParameters>(@params);
+internal class CloseCommand(CloseCommandParameters @params)
+    : Command<CloseCommandParameters>(@params, "browsingContext.close");
 
 internal record CloseCommandParameters(BrowsingContext Context) : CommandParameters;
 

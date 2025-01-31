@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CreateCommand(CreateCommandParameters @params) : Command<CreateCommandParameters>(@params);
+internal class CreateCommand(CreateCommandParameters @params)
+    : Command<CreateCommandParameters>(@params, "browsingContext.create");
 
 internal record CreateCommandParameters(ContextType Type) : CommandParameters
 {

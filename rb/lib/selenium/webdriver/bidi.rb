@@ -26,6 +26,10 @@ module Selenium
       autoload :BrowsingContext, 'selenium/webdriver/bidi/browsing_context'
       autoload :Struct, 'selenium/webdriver/bidi/struct'
       autoload :Network, 'selenium/webdriver/bidi/network'
+      autoload :InterceptedRequest, 'selenium/webdriver/bidi/network/intercepted_request'
+      autoload :InterceptedResponse, 'selenium/webdriver/bidi/network/intercepted_response'
+      autoload :InterceptedAuth, 'selenium/webdriver/bidi/network/intercepted_auth'
+      autoload :InterceptedItem, 'selenium/webdriver/bidi/network/intercepted_item'
 
       def initialize(url:)
         @ws = WebSocketConnection.new(url: url)

@@ -19,6 +19,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools
 {
@@ -34,8 +37,19 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="commandSettingsType">The type of command to add the mapping for.</param>
         /// <param name="commandResponseType">The type of response object corresponding to the command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandSettingsType"/> or <paramref name="commandResponseType"/> are <see langword="null"/>.</exception>
         public void AddCommandResponseType(Type commandSettingsType, Type commandResponseType)
         {
+            if (commandSettingsType is null)
+            {
+                throw new ArgumentNullException(nameof(commandSettingsType));
+            }
+
+            if (commandResponseType is null)
+            {
+                throw new ArgumentNullException(nameof(commandResponseType));
+            }
+
             if (!commandResponseTypeDictionary.ContainsKey(commandSettingsType))
             {
                 commandResponseTypeDictionary.Add(commandSettingsType, commandResponseType);
@@ -48,7 +62,7 @@ namespace OpenQA.Selenium.DevTools
         /// <typeparam name="T">The type of command for which to retrieve the response type.</typeparam>
         /// <param name="commandResponseType">The returned response type.</param>
         /// <returns><see langword="true"/> if the specified command type has a mapped response type; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetCommandResponseType<T>(out Type commandResponseType)
+        public bool TryGetCommandResponseType<T>([NotNullWhen(true)] out Type? commandResponseType)
             where T : ICommand
         {
             return commandResponseTypeDictionary.TryGetValue(typeof(T), out commandResponseType);
@@ -60,7 +74,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="command">The type of command for which to retrieve the response type.</param>
         /// <param name="commandResponseType">The returned response type.</param>
         /// <returns><see langword="true"/> if the specified command type has a mapped response type; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetCommandResponseType(ICommand command, out Type commandResponseType)
+        public bool TryGetCommandResponseType(ICommand command, [NotNullWhen(true)] out Type? commandResponseType)
         {
             return commandResponseTypeDictionary.TryGetValue(command.GetType(), out commandResponseType);
         }

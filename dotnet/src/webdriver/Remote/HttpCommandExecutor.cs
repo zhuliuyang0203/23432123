@@ -280,7 +280,7 @@ namespace OpenQA.Selenium.Remote
                     acceptHeader.CharSet = Utf8CharsetType;
                     requestMessage.Headers.Accept.Add(acceptHeader);
 
-                    byte[] bytes = Encoding.UTF8.GetBytes(eventArgs.RequestBody);
+                    byte[] bytes = Encoding.UTF8.GetBytes(requestInfo.RequestBody);
                     requestMessage.Content = new ByteArrayContent(bytes, 0, bytes.Length);
 
                     MediaTypeHeaderValue contentTypeHeader = new MediaTypeHeaderValue(JsonMimeType);
