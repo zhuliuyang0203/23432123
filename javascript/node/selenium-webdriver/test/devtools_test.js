@@ -91,7 +91,7 @@ suite(
     })
 
     describe('Basic Auth Injection', function () {
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX, Browser.CHROME)).it(
+      ignore(browsers(Browser.SAFARI, Browser.CHROME)).it(
         'denies entry if username and password do not match',
         async function () {
           const pageCdpConnection = await driver.createCDPConnection('page')
@@ -103,7 +103,7 @@ suite(
         },
       )
 
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX, Browser.CHROME)).it(
+      ignore(browsers(Browser.SAFARI, Browser.CHROME)).it(
         'grants access if username and password are a match',
         async function () {
           const pageCdpConnection = await driver.createCDPConnection('page')
@@ -117,7 +117,7 @@ suite(
     })
 
     describe('Network Interception', function () {
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX)).it(
+      ignore(browsers(Browser.SAFARI).it(
         'Allows network requests to be captured and mocked',
         async function () {
           const connection = await driver.createCDPConnection('page')
@@ -134,5 +134,5 @@ suite(
       )
     })
   },
-  { browsers: ['firefox', 'chrome'] },
+  { browsers: ['chrome'] },
 )
