@@ -86,7 +86,7 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <summary>
         /// Gets the ID of the relying party of this credential.
         /// </summary>
-        public string RpId { get; }
+        public string? RpId { get; }
 
         /// <summary>
         /// Gets the private key of the credential.
