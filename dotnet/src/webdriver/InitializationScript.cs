@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using System;
 using System.Globalization;
 
 namespace OpenQA.Selenium
@@ -25,7 +24,7 @@ namespace OpenQA.Selenium
     /// <summary>
     /// Represents a JavaScript script that is loaded and run on every document load.
     /// </summary>
-    public class InitializationScript : IEquatable<InitializationScript>
+    public class InitializationScript
     {
         /// <summary>
         /// Gets the internal ID of the initialization script.
@@ -47,9 +46,9 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="other">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
         /// <returns><see langword="true"/> if the current <see cref="InitializationScript"/> is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-        public bool Equals(InitializationScript other)
+        public override bool Equals(object obj)
         {
-            return other is not null && this.ScriptId == other.ScriptId && this.ScriptName == other.ScriptName && this.ScriptSource == other.ScriptSource;
+            return obj is InitializationScript other && this.ScriptId == other.ScriptId && this.ScriptName == other.ScriptName && this.ScriptSource == other.ScriptSource;
         }
 
         /// <summary>
