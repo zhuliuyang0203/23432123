@@ -1201,9 +1201,7 @@ class WebDriver(BaseWebDriver):
 
                 devtools = cdp.import_devtools(version)
                 if self.caps["browserName"].lower() == "firefox":
-                    raise RuntimeError(
-                        "CDP support for Firefox has been removed. Please switch to WebDriver BiDi."
-                    )
+                    raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
             self._websocket_connection = WebSocketConnection(ws_url)
             targets = self._websocket_connection.execute(devtools.target.get_targets())
             target_id = targets[0].target_id
