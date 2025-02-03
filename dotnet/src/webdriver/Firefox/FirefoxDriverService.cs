@@ -200,7 +200,7 @@ namespace OpenQA.Selenium.Firefox
             if (File.Exists(driverPath))
             {
                 fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath)!;
+                driverPath = Path.GetDirectoryName(driverPath) ?? throw new ArgumentException("Driver file exists but parent directory is unreachable", nameof(driverPath));
             }
             else
             {
