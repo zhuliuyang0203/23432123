@@ -87,13 +87,7 @@ suite(
           it('allows setting android activity', function () {
             let options = new firefox.Options().enableMobile()
             let firefoxOptions = options.firefoxOptions_()
-            assert.deepStrictEqual(
-              {
-                androidPackage: 'org.mozilla.firefox',
-                prefs: { 'remote.active-protocols': 3 },
-              },
-              firefoxOptions,
-            )
+            assert.deepStrictEqual({ androidPackage: 'org.mozilla.firefox' }, firefoxOptions)
           })
         })
 
