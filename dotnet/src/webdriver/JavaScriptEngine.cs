@@ -27,6 +27,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -34,13 +36,13 @@ namespace OpenQA.Selenium
     /// </summary>
     public class JavaScriptEngine : IJavaScriptEngine
     {
-        private readonly string MonitorBindingName = "__webdriver_attribute";
+        private const string MonitorBindingName = "__webdriver_attribute";
 
-        private IWebDriver driver;
-        private Lazy<DevToolsSession> session;
-        private Dictionary<string, InitializationScript> initializationScripts = new Dictionary<string, InitializationScript>();
-        private Dictionary<string, PinnedScript> pinnedScripts = new Dictionary<string, PinnedScript>();
-        private HashSet<string> bindings = new HashSet<string>();
+        private readonly IWebDriver driver;
+        private readonly Lazy<DevToolsSession> session;
+        private readonly Dictionary<string, InitializationScript> initializationScripts = new Dictionary<string, InitializationScript>();
+        private readonly Dictionary<string, PinnedScript> pinnedScripts = new Dictionary<string, PinnedScript>();
+        private readonly HashSet<string> bindings = new HashSet<string>();
         private bool isEnabled = false;
         private bool isDisposed = false;
 
@@ -56,8 +58,7 @@ namespace OpenQA.Selenium
             this.driver = driver;
             this.session = new Lazy<DevToolsSession>(() =>
             {
-                IDevTools devToolsDriver = driver as IDevTools;
-                if (devToolsDriver == null)
+                if (driver is not IDevTools devToolsDriver)
                 {
                     throw new WebDriverException("Driver must implement IDevTools to use these features");
                 }
@@ -69,22 +70,22 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a JavaScript callback with a named binding is executed.
         /// </summary>
-        public event EventHandler<JavaScriptCallbackExecutedEventArgs> JavaScriptCallbackExecuted;
+        public event EventHandler<JavaScriptCallbackExecutedEventArgs>? JavaScriptCallbackExecuted;
 
         /// <summary>
-        /// Occurs when an exeception is thrown by JavaScript being executed in the browser.
+        /// Occurs when an exception is thrown by JavaScript being executed in the browser.
         /// </summary>
-        public event EventHandler<JavaScriptExceptionThrownEventArgs> JavaScriptExceptionThrown;
+        public event EventHandler<JavaScriptExceptionThrownEventArgs>? JavaScriptExceptionThrown;
 
         /// <summary>
         /// Occurs when methods on the JavaScript console are called.
         /// </summary>
-        public event EventHandler<JavaScriptConsoleApiCalledEventArgs> JavaScriptConsoleApiCalled;
+        public event EventHandler<JavaScriptConsoleApiCalledEventArgs>? JavaScriptConsoleApiCalled;
 
         /// <summary>
         /// Occurs when a value of an attribute in an element is being changed.
         /// </summary>
-        public event EventHandler<DomMutatedEventArgs> DomMutated;
+        public event EventHandler<DomMutatedEventArgs>? DomMutated;
 
         /// <summary>
         /// Gets the read-only list of initialization scripts added for this JavaScript engine.
@@ -162,23 +163,29 @@ namespace OpenQA.Selenium
         /// <param name="scriptName">The friendly name by which to refer to this initialization script.</param>
         /// <param name="script">The JavaScript to be loaded on every page.</param>
         /// <returns>A task containing an <see cref="InitializationScript"/> object representing the script to be loaded on each page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> or <paramref name="script"/> are <see langword="null"/>.</exception>
         public async Task<InitializationScript> AddInitializationScript(string scriptName, string script)
         {
-            if (this.initializationScripts.ContainsKey(scriptName))
+            if (scriptName is null)
             {
-                return this.initializationScripts[scriptName];
+                throw new ArgumentNullException(nameof(scriptName));
+            }
+
+            if (script is null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            if (this.initializationScripts.TryGetValue(scriptName, out InitializationScript? existingScript))
+            {
+                return existingScript;
             }
 
             await this.EnableDomains().ConfigureAwait(false);
 
             string scriptId = await this.session.Value.Domains.JavaScript.AddScriptToEvaluateOnNewDocument(script).ConfigureAwait(false);
-            InitializationScript initializationScript = new InitializationScript()
-            {
-                ScriptId = scriptId,
-                ScriptName = scriptName,
-                ScriptSource = script
-            };
 
+            InitializationScript initializationScript = new InitializationScript(scriptId, scriptName, script);
             this.initializationScripts[scriptName] = initializationScript;
             return initializationScript;
         }
@@ -188,18 +195,24 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="scriptName">The friendly name of the initialization script to be removed.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="scriptName"/> is <see langword="null"/>.</exception>
         public async Task RemoveInitializationScript(string scriptName)
         {
-            if (this.initializationScripts.ContainsKey(scriptName))
+            if (scriptName is null)
             {
-                string scriptId = this.initializationScripts[scriptName].ScriptId;
+                throw new ArgumentNullException(nameof(scriptName));
+            }
+
+            if (this.initializationScripts.TryGetValue(scriptName, out InitializationScript? script))
+            {
+                string scriptId = script.ScriptId;
                 await this.session.Value.Domains.JavaScript.RemoveScriptToEvaluateOnNewDocument(scriptId).ConfigureAwait(false);
                 this.initializationScripts.Remove(scriptName);
             }
         }
 
         /// <summary>
-        /// Asynchronously removes all intialization scripts from being loaded on every document load.
+        /// Asynchronously removes all initialization scripts from being loaded on every document load.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task ClearInitializationScripts()
@@ -269,8 +282,15 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="bindingName">The name of the callback that will trigger events when called by JavaScript executing in the browser.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="bindingName"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If A binding with the specified name already exists.</exception>
         public async Task AddScriptCallbackBinding(string bindingName)
         {
+            if (bindingName is null)
+            {
+                throw new ArgumentNullException(nameof(bindingName));
+            }
+
             if (!this.bindings.Add(bindingName))
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "A binding named {0} has already been added", bindingName));
@@ -285,8 +305,14 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="bindingName">The name of the callback to be removed.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="bindingName"/> is <see langword="null"/>.</exception>
         public async Task RemoveScriptCallbackBinding(string bindingName)
         {
+            if (bindingName is null)
+            {
+                throw new ArgumentNullException(nameof(bindingName));
+            }
+
             await this.session.Value.Domains.JavaScript.RemoveBinding(bindingName).ConfigureAwait(false);
             _ = this.bindings.Remove(bindingName);
         }
@@ -337,6 +363,7 @@ namespace OpenQA.Selenium
         public void Dispose()
         {
             this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -380,7 +407,7 @@ namespace OpenQA.Selenium
             }
         }
 
-        private string GetMutationListenerScript()
+        private static string GetMutationListenerScript()
         {
             string listenerScript = string.Empty;
             using (Stream resourceStream = ResourceUtilities.GetResourceStream("mutation-listener.js", "mutation-listener.js"))
@@ -394,57 +421,42 @@ namespace OpenQA.Selenium
             return listenerScript;
         }
 
-        private void OnScriptBindingCalled(object sender, BindingCalledEventArgs e)
+        private void OnScriptBindingCalled(object? sender, BindingCalledEventArgs e)
         {
             if (e.Name == MonitorBindingName)
             {
-                DomMutationData valueChangeData = JsonSerializer.Deserialize<DomMutationData>(e.Payload);
+                DomMutationData valueChangeData = JsonSerializer.Deserialize<DomMutationData>(e.Payload) ?? throw new JsonException("DomMutationData returned null");
                 var locator = By.CssSelector($"*[data-__webdriver_id='{valueChangeData.TargetId}']");
                 valueChangeData.Element = driver.FindElements(locator).FirstOrDefault();
 
-                if (this.DomMutated != null)
-                {
-                    this.DomMutated(this, new DomMutatedEventArgs()
-                    {
-                        AttributeData = valueChangeData
-                    });
-                }
+                this.DomMutated?.Invoke(this, new DomMutatedEventArgs(valueChangeData));
             }
 
-            if (this.JavaScriptCallbackExecuted != null)
-            {
-                this.JavaScriptCallbackExecuted(this, new JavaScriptCallbackExecutedEventArgs()
-                {
-                    ScriptPayload = e.Payload,
-                    BindingName = e.Name
-                });
-            }
+            this.JavaScriptCallbackExecuted?.Invoke(this, new JavaScriptCallbackExecutedEventArgs
+            (
+                scriptPayload: e.Payload,
+                bindingName: e.Name
+            ));
         }
 
-        private void OnJavaScriptExceptionThrown(object sender, ExceptionThrownEventArgs e)
+        private void OnJavaScriptExceptionThrown(object? sender, ExceptionThrownEventArgs e)
         {
-            if (this.JavaScriptExceptionThrown != null)
-            {
-                this.JavaScriptExceptionThrown(this, new JavaScriptExceptionThrownEventArgs()
-                {
-                    Message = e.Message
-                });
-            }
+            this.JavaScriptExceptionThrown?.Invoke(this, new JavaScriptExceptionThrownEventArgs(e.Message));
         }
 
 
-        private void OnConsoleApiCalled(object sender, ConsoleApiCalledEventArgs e)
+        private void OnConsoleApiCalled(object? sender, ConsoleApiCalledEventArgs e)
         {
             if (this.JavaScriptConsoleApiCalled != null)
             {
                 for (int i = 0; i < e.Arguments.Count; i++)
                 {
-                    this.JavaScriptConsoleApiCalled(this, new JavaScriptConsoleApiCalledEventArgs()
-                    {
-                        MessageContent = e.Arguments[i].Value,
-                        MessageTimeStamp = e.Timestamp,
-                        MessageType = e.Type
-                    });
+                    this.JavaScriptConsoleApiCalled(this, new JavaScriptConsoleApiCalledEventArgs
+                    (
+                        messageContent: e.Arguments[i].Value,
+                        messageTimeStamp: e.Timestamp,
+                        messageType: e.Type
+                    ));
                 }
             }
         }

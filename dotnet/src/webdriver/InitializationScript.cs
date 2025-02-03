@@ -17,29 +17,45 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Globalization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
     /// <summary>
     /// Represents a JavaScript script that is loaded and run on every document load.
     /// </summary>
-    public class InitializationScript
+    public class InitializationScript : IEquatable<InitializationScript>
     {
+        internal InitializationScript(string scriptId, string scriptName, string scriptSource)
+        {
+            this.ScriptId = scriptId ?? throw new ArgumentNullException(nameof(scriptId));
+            this.ScriptName = scriptName ?? throw new ArgumentNullException(nameof(scriptName));
+            this.ScriptSource = scriptSource ?? throw new ArgumentNullException(nameof(scriptSource));
+        }
+
         /// <summary>
         /// Gets the internal ID of the initialization script.
         /// </summary>
-        public string ScriptId { get; internal set; }
+        public string ScriptId { get; }
 
         /// <summary>
         /// Gets the friendly name of the initialization script.
         /// </summary>
-        public string ScriptName { get; internal set; }
+        public string ScriptName { get; }
 
         /// <summary>
         /// Gets the JavaScript source of the initialization script.
         /// </summary>
-        public string ScriptSource { get; internal set; }
+        public string ScriptSource { get; }
+
+        /// <inheritdoc />
+        public bool Equals(InitializationScript? other)
+        {
+            return other is not null && this.ScriptId.Equals(other.ScriptId) && this.ScriptName.Equals(other.ScriptName) && this.ScriptSource.Equals(other.ScriptSource);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.
