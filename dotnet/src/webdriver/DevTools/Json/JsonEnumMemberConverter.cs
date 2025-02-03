@@ -65,7 +65,7 @@ namespace OpenQA.Selenium.DevTools.Json
 
         public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var stringValue = reader.GetString() ?? throw new JsonException("Cannot read an enum string from \"null\"");
+            var stringValue = reader.GetString() ?? throw new JsonException("Could not read an enum string from \"null\"");
 
             if (_stringToEnum.TryGetValue(stringValue, out var enumValue))
             {
