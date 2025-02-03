@@ -171,10 +171,6 @@ namespace OpenQA.Selenium.Remote
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Debug($"Executing command: [{commandToExecute.SessionId}]: {commandToExecute.Name} {commandToExecute.ParametersAsJsonString}");
-            }
-            else if (_logger.IsEnabled(LogEventLevel.Debug))
-            {
                 _logger.Debug($"Executing command: [{commandToExecute.SessionId}]: {commandToExecute.Name}");
             }
 
