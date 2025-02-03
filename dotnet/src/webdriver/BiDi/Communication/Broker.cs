@@ -41,7 +41,7 @@ public class Broker : IAsyncDisposable
     private readonly BiDi _bidi;
     private readonly ITransport _transport;
 
-    private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
+    private readonly ConcurrentDictionary<int, TaskCompletionSource<JsonElement>> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
     private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
@@ -176,23 +176,26 @@ public class Broker : IAsyncDisposable
         }
     }
 
-    public async Task<TResult> ExecuteCommandAsync<TResult>(Command command, CommandOptions? options)
+    public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CommandOptions? options)
+        where TCommand: Command
     {
-        var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
+        var jsonElement = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
-        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSerializerContext)!;
+        return (TResult)jsonElement.Deserialize(typeof(TResult), _jsonSerializerContext)!;
     }
 
-    public async Task ExecuteCommandAsync(Command command, CommandOptions? options)
+    public async Task ExecuteCommandAsync<TCommand>(TCommand command, CommandOptions? options)
+        where TCommand: Command
     {
         await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
     }
 
-    private async Task<object> ExecuteCommandCoreAsync(Command command, CommandOptions? options)
+    private async Task<JsonElement> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
+        where TCommand: Command
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
-        var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var tcs = new TaskCompletionSource<JsonElement>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var timeout = options?.Timeout ?? TimeSpan.FromSeconds(30);
 

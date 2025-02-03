@@ -24,7 +24,8 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class SetCookieCommand(SetCookieCommandParameters @params) : Command<SetCookieCommandParameters>(@params);
+internal class SetCookieCommand(SetCookieCommandParameters @params)
+    : Command<SetCookieCommandParameters>(@params, "storage.setCookie");
 
 internal record SetCookieCommandParameters(PartialCookie Cookie) : CommandParameters
 {

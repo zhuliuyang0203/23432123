@@ -46,6 +46,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         /// <param name="sourceDevice">The input device on which to execute the pause.</param>
         /// <param name="duration">The length of time to pause for.</param>
+        /// <exception cref="ArgumentException">If <paramref name="duration"/> is negative.</exception>
         public PauseInteraction(InputDevice sourceDevice, TimeSpan duration)
             : base(sourceDevice)
         {

@@ -38,7 +38,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
             @params.UrlPatterns = options.UrlPatterns;
         }
 
-        var result = await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
 
         return result.Intercept;
     }

@@ -17,8 +17,11 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools
 {
@@ -30,17 +33,17 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Occurs when a network request requires authorization.
         /// </summary>
-        public event AsyncEventHandler<AuthRequiredEventArgs> AuthRequired;
+        public event AsyncEventHandler<AuthRequiredEventArgs>? AuthRequired;
 
         /// <summary>
         /// Occurs when a network request is intercepted.
         /// </summary>
-        public event AsyncEventHandler<RequestPausedEventArgs> RequestPaused;
+        public event AsyncEventHandler<RequestPausedEventArgs>? RequestPaused;
 
         /// <summary>
         /// Occurs when a network response is received.
         /// </summary>
-        public event AsyncEventHandler<ResponsePausedEventArgs> ResponsePaused;
+        public event AsyncEventHandler<ResponsePausedEventArgs>? ResponsePaused;
 
         /// <summary>
         /// Asynchronously disables network caching.
@@ -61,7 +64,7 @@ namespace OpenQA.Selenium.DevTools
         public abstract Task EnableNetwork();
 
         /// <summary>
-        /// Asynchronously diables the fetch domain.
+        /// Asynchronously disables the fetch domain.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public abstract Task DisableNetwork();
@@ -79,7 +82,7 @@ namespace OpenQA.Selenium.DevTools
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task SetUserAgentOverride(string userAgent)
         {
-            await SetUserAgentOverride(new UserAgent() { UserAgentString = userAgent }).ConfigureAwait(false);
+            await SetUserAgentOverride(new UserAgent(userAgent)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -87,10 +90,11 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="userAgent">A <see cref="UserAgent"/> object containing the user agent values to override.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userAgent"/> is null.</exception>
         public abstract Task SetUserAgentOverride(UserAgent userAgent);
 
         /// <summary>
-        /// Asynchronously diables the fetch domain.
+        /// Asynchronously disables the fetch domain.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public abstract Task DisableFetch();
@@ -100,6 +104,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public abstract Task ContinueRequest(HttpRequestData requestData);
 
         /// <summary>
@@ -108,13 +113,15 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <param name="responseData">The <see cref="HttpResponseData"/> with which to respond to the request</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> or <paramref name="responseData"/> are <see langword="null"/>.</exception>
         public abstract Task ContinueRequestWithResponse(HttpRequestData requestData, HttpResponseData responseData);
 
         /// <summary>
-        /// Asynchronously contines an intercepted network request without modification.
+        /// Asynchronously continues an intercepted network request without modification.
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the network request.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public abstract Task ContinueRequestWithoutModification(HttpRequestData requestData);
 
         /// <summary>
@@ -124,7 +131,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="userName">The user name with which to authenticate.</param>
         /// <param name="password">The password with which to authenticate.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public abstract Task ContinueWithAuth(string requestId, string userName, string password);
+        public abstract Task ContinueWithAuth(string requestId, string? userName, string? password);
 
         /// <summary>
         /// Asynchronously cancels authorization of an intercepted network request.
@@ -138,6 +145,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> object to which to add the response body.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public abstract Task AddResponseBody(HttpResponseData responseData);
 
         /// <summary>
@@ -145,6 +153,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> of the network response.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public abstract Task ContinueResponseWithoutModification(HttpResponseData responseData);
 
         /// <summary>
@@ -200,7 +209,7 @@ namespace OpenQA.Selenium.DevTools
 
         /// <returns>A task that represents the asynchronous operation.</returns>
         /// <summary>
-        /// Am asynchrounous delegate for handling network events.
+        /// Am asynchronous delegate for handling network events.
         /// </summary>
         /// <typeparam name="TEventArgs">The type of event args the event raises.</typeparam>
         /// <param name="sender">The sender of the event.</param>

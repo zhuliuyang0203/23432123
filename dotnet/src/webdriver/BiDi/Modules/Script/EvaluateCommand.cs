@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class EvaluateCommand(EvaluateCommandParameters @params) : Command<EvaluateCommandParameters>(@params);
+internal class EvaluateCommand(EvaluateCommandParameters @params)
+    : Command<EvaluateCommandParameters>(@params, "script.evaluate");
 
 internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise) : CommandParameters
 {

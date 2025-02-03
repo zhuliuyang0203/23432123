@@ -20,6 +20,8 @@
 using System;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -64,6 +66,7 @@ namespace OpenQA.Selenium
         /// should the underlying page change while your test is executing the results of
         /// future calls against this interface will be against the freshly loaded page.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is null.</exception>
         void GoToUrl(string url);
 
         /// <summary>
@@ -71,6 +74,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">String of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is null.</exception>
         Task GoToUrlAsync(string url);
 
         /// <summary>
@@ -86,6 +90,7 @@ namespace OpenQA.Selenium
         /// should the underlying page change while your test is executing the results of
         /// future calls against this interface will be against the freshly loaded page.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is null.</exception>
         void GoToUrl(Uri url);
 
         /// <summary>
@@ -93,6 +98,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">Uri object of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is null.</exception>
         Task GoToUrlAsync(Uri url);
 
         /// <summary>

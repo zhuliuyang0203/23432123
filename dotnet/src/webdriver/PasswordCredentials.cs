@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -37,7 +39,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="userName">The user name for the credentials.</param>
         /// <param name="password">The password for the credentials.</param>
-        public PasswordCredentials(string userName, string password)
+        public PasswordCredentials(string? userName, string? password)
         {
             UserName = userName;
             Password = password;
@@ -46,11 +48,11 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the user name.
         /// </summary>
-        public string UserName { get; private set; }
+        public string? UserName { get; }
 
         /// <summary>
         /// Gets the password.
         /// </summary>
-        public string Password { get; private set; }
+        public string? Password { get; }
     }
 }

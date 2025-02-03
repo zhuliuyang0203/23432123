@@ -177,7 +177,7 @@ namespace OpenQA.Selenium.Firefox
 
                 if (!string.IsNullOrEmpty(this.browserCommunicationHost))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-host \"{0}\"", this.host);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-host \"{0}\"", this.browserCommunicationHost);
                 }
 
                 if (this.Port > 0)
