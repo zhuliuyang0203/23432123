@@ -52,6 +52,18 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
+        /// Serves as a hash function for a particular <see cref="InitializationScript"/>.
+        /// </summary>
+        /// <returns>A hash code for the current <see cref="InitializationScript"/>.</returns>
+        public override int GetHashCode()
+        {
+            int result = this.ScriptId.GetHashCode();
+            result = (31 * result) + this.ScriptName.GetHashCode();
+            result = (31 * result) + this.ScriptSource.GetHashCode();
+            return result;
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
