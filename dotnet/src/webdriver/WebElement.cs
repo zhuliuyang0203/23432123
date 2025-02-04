@@ -81,7 +81,7 @@ namespace OpenQA.Selenium
 
                 if (commandResponse.Value is null)
                 {
-                    throw new WebDriverException($"GetElementTagName command was successful, but response was not an object: {commandResponse.Value}");
+                    throw new WebDriverException("GetElementTagName command returned a successful result, but contained no data");
                 }
                 return commandResponse.Value.ToString()!;
             }
@@ -103,7 +103,7 @@ namespace OpenQA.Selenium
 
                 if (commandResponse.Value is null)
                 {
-                    throw new WebDriverException($"GetElementText command was successful, but response was not an object: {commandResponse.Value}");
+                    throw new WebDriverException("GetElementText command returned a successful result, but contained no data");
                 }
 
                 return commandResponse.Value.ToString()!;
