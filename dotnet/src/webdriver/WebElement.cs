@@ -528,8 +528,6 @@ namespace OpenQA.Selenium
             return shadowRoot;
         }
 
-#nullable restore
-
         /// <summary>
         /// Gets the value of a CSS property of this element.
         /// </summary>
@@ -549,10 +547,13 @@ namespace OpenQA.Selenium
 
             Response commandResponse = this.Execute(DriverCommand.GetElementValueOfCssProperty, parameters);
 
-            return commandResponse.Value.ToString();
-        }
+            if (commandResponse.Value is null)
+            {
+                throw new WebDriverException("GetElementValueOfCssProperty command returned a successful result, but contained no data");
+            }
 
-#nullable enable
+            return commandResponse.Value.ToString()!;
+        }
 
         /// <summary>
         /// Gets a <see cref="Screenshot"/> object representing the image of this element on the screen.
