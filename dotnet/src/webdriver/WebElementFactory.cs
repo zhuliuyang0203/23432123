@@ -49,7 +49,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="elementDictionary">The dictionary containing the element reference.</param>
         /// <returns>A <see cref="WebElement"/> containing the information from the specified dictionary.</returns>
-        public virtual WebElement CreateElement(Dictionary<string, object> elementDictionary)
+        public virtual WebElement CreateElement(Dictionary<string, object?> elementDictionary)
         {
             string elementId = this.GetElementId(elementDictionary);
             return new WebElement(this.ParentDriver, elementId);
@@ -60,7 +60,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="elementDictionary">The dictionary to check.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element reference; otherwise, <see langword="false"/>.</returns>
-        public bool ContainsElementReference(Dictionary<string, object> elementDictionary)
+        public bool ContainsElementReference(Dictionary<string, object?> elementDictionary)
         {
             if (elementDictionary == null)
             {
@@ -78,7 +78,7 @@ namespace OpenQA.Selenium
         /// <exception cref="ArgumentNullException">If <paramref name="elementDictionary"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If the dictionary does not contain the element reference property name.</exception>
         /// <exception cref="InvalidOperationException">If the element property is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
-        public string GetElementId(Dictionary<string, object> elementDictionary)
+        public string GetElementId(Dictionary<string, object?> elementDictionary)
         {
             if (elementDictionary == null)
             {
@@ -90,13 +90,13 @@ namespace OpenQA.Selenium
                 throw new ArgumentException("elementDictionary", "The specified dictionary does not contain an element reference");
             }
 
-            string? elementId = elementIdObj.ToString();
+            string? elementId = elementIdObj?.ToString();
             if (string.IsNullOrEmpty(elementId))
             {
                 throw new InvalidOperationException("The specified element ID is either null or the empty string.");
             }
 
-            return elementId;
+            return elementId!;
         }
     }
 }
