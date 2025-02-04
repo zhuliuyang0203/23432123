@@ -79,7 +79,7 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementTagName, parameters);
 
-                if (commandResponse.Value is not Dictionary<string, object?> rawSize)
+                if (commandResponse.Value is null)
                 {
                     throw new WebDriverException($"GetElementTagName command was successful, but response was not an object: {commandResponse.Value}");
                 }
@@ -101,7 +101,7 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementText, parameters);
 
-                if (commandResponse.Value is not Dictionary<string, object?> rawSize)
+                if (commandResponse.Value is null)
                 {
                     throw new WebDriverException($"GetElementText command was successful, but response was not an object: {commandResponse.Value}");
                 }
