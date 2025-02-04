@@ -22,6 +22,8 @@ using OpenQA.Selenium.Internal;
 using System;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Edge
 {
     /// <summary>
@@ -37,7 +39,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="executablePath">The full path to the EdgeDriver executable.</param>
         /// <param name="executableFileName">The file name of the EdgeDriver executable.</param>
         /// <param name="port">The port on which the EdgeDriver executable should listen.</param>
-        private EdgeDriverService(string executablePath, string executableFileName, int port)
+        private EdgeDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, executableFileName, port)
         {
         }
@@ -54,8 +56,8 @@ namespace OpenQA.Selenium.Edge
         [Obsolete("Use EnableVerboseLogging")]
         public bool UseVerboseLogging
         {
-            get { return this.EnableVerboseLogging; }
-            set { this.EnableVerboseLogging = value; }
+            get => this.EnableVerboseLogging;
+            set => this.EnableVerboseLogging = value;
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace OpenQA.Selenium.Edge
             if (File.Exists(driverPath))
             {
                 fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                driverPath = Path.GetDirectoryName(driverPath)!;
             }
             else
             {

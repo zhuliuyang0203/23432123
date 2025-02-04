@@ -1,6 +1,6 @@
 {
   "name": "selenium-webdriver",
-  "version": "4.28.0",
+  "version": "4.29.0-nightly202501202154",
   "description": "The official WebDriver JavaScript bindings from the Selenium project",
   "license": "Apache-2.0",
   "keywords": [
@@ -20,7 +20,7 @@
     "url": "https://github.com/SeleniumHQ/selenium.git"
   },
   "engines": {
-    "node": ">= 22.13.0"
+    "node": ">= 18.20.5"
   },
   "dependencies": {
     "@bazel/runfiles": "^6.3.1",

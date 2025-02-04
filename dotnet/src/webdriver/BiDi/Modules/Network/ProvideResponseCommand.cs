@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ProvideResponseCommand(ProvideResponseCommandParameters @params) : Command<ProvideResponseCommandParameters>(@params);
+internal class ProvideResponseCommand(ProvideResponseCommandParameters @params)
+    : Command<ProvideResponseCommandParameters>(@params, "network.provideResponse");
 
 internal record ProvideResponseCommandParameters(Request Request) : CommandParameters
 {

@@ -20,18 +20,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 @pytest.mark.xfail_safari
+@pytest.mark.xfail_firefox
 def test_check_console_messages(driver, pages):
     with pytest.warns(None) as record:
         devtools, connection = driver.start_devtools()
     console_api_calls = []
 
-    if driver.caps["browserName"].lower() == "firefox":
-        assert (
-            record[0].message.args[0]
-            == "CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi."
-        )
-    else:
-        assert len(record) == 0
+    assert len(record) == 0
 
     connection.execute(devtools.runtime.enable())
     connection.on(devtools.runtime.ConsoleAPICalled, console_api_calls.append)

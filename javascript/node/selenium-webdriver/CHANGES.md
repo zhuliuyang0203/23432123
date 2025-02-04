@@ -1,3 +1,7 @@
+## 4.28.1
+
+- [JS] specify min required node versiton to 18.20.5
+
 ## 4.28.0
 
 - Add CDP for Chrome 132 and remove 129

@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class ActivateCommand(ActivateCommandParameters @params) : Command<ActivateCommandParameters>(@params);
+internal class ActivateCommand(ActivateCommandParameters @params)
+    : Command<ActivateCommandParameters>(@params, "browsingContext.activate");
 
 internal record ActivateCommandParameters(BrowsingContext Context) : CommandParameters;
 

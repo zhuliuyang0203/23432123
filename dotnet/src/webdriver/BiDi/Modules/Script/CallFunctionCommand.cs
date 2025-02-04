@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class CallFunctionCommand(CallFunctionCommandParameters @params) : Command<CallFunctionCommandParameters>(@params);
+internal class CallFunctionCommand(CallFunctionCommandParameters @params)
+    : Command<CallFunctionCommandParameters>(@params, "script.callFunction");
 
 internal record CallFunctionCommandParameters(string FunctionDeclaration, bool AwaitPromise, Target Target) : CommandParameters
 {

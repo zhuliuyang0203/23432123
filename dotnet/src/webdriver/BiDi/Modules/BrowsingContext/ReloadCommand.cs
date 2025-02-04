@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class ReloadCommand(ReloadCommandParameters @params) : Command<ReloadCommandParameters>(@params);
+internal class ReloadCommand(ReloadCommandParameters @params)
+    : Command<ReloadCommandParameters>(@params, "browsingContext.reload");
 
 internal record ReloadCommandParameters(BrowsingContext Context) : CommandParameters
 {

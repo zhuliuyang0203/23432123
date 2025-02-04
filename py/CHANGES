@@ -1,3 +1,6 @@
+Selenium 4.28.1
+* [py] Fix installing most of the data from source distributions
+
 Selenium 4.28.0
 * Add CDP for Chrome 132 and remove 129
 * [py] fix packaging (#14823)

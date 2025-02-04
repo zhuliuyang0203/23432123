@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -352,13 +354,14 @@ namespace OpenQA.Selenium
         /// </summary>
         public static readonly string ZenkakuHankaku = Convert.ToString(Convert.ToChar(0xE040, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-        private static Dictionary<string, string> descriptions;
+        private static Dictionary<string, string>? descriptions;
 
         /// <summary>
         /// Gets the description of a specific key.
         /// </summary>
         /// <param name="value">The key value for which to get the description.</param>
         /// <returns>The description of the key.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
         internal static object GetDescription(string value)
         {
             if (descriptions == null)
@@ -423,9 +426,9 @@ namespace OpenQA.Selenium
                 descriptions.Add(ZenkakuHankaku, "Zenkaku Hankaku");
             }
 
-            if (descriptions.ContainsKey(value))
+            if (descriptions.TryGetValue(value, out string? description))
             {
-                return descriptions[value];
+                return description;
             }
 
             return value;

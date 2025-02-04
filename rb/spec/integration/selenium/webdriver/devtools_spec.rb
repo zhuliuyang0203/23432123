@@ -22,7 +22,7 @@ require_relative 'spec_helper'
 module Selenium
   module WebDriver
     describe DevTools, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'},
-                                   {browser: %i[chrome edge firefox]}] do
+                                   {browser: %i[chrome edge]}] do
       after { |example| reset_driver!(example: example) }
 
       it 'sends commands' do
@@ -36,8 +36,7 @@ module Selenium
         expect(driver.devtools.dom_debugger).not_to be_nil
       end
 
-      it 'supports events', except: {browser: :firefox,
-                                     reason: 'https://bugzilla.mozilla.org/show_bug.cgi?id=1819965'} do
+      it 'supports events' do
         expect { |block|
           driver.devtools.page.enable
           driver.devtools.page.on(:load_event_fired, &block)
@@ -46,8 +45,7 @@ module Selenium
         }.to yield_control
       end
 
-      it 'propagates errors in events', except: {browser: :firefox,
-                                                 reason: 'https://bugzilla.mozilla.org/show_bug.cgi?id=1819965'} do
+      it 'propagates errors in events' do
         expect {
           driver.devtools.page.enable
           driver.devtools.page.on(:load_event_fired) { raise 'This is fine!' }
@@ -56,8 +54,7 @@ module Selenium
         }.to raise_error(RuntimeError, 'This is fine!')
       end
 
-      describe '#register', except: {browser: :firefox,
-                                     reason: 'Fetch.enable is not yet supported'} do
+      describe '#register' do
         let(:username) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.first }
         let(:password) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.last }
 
@@ -80,8 +77,7 @@ module Selenium
         end
       end
 
-      it 'notifies about log messages', except: {browser: :firefox,
-                                                 reason: 'https://bugzilla.mozilla.org/show_bug.cgi?id=1819965'} do
+      it 'notifies about log messages' do
         logs = []
         driver.on_log_event(:console) { |log| logs.push(log) }
         driver.navigate.to url_for('javascriptPage.html')
@@ -105,8 +101,7 @@ module Selenium
         )
       end
 
-      it 'notifies about document log messages', except: {browser: :firefox,
-                                                          reason: 'Firefox & Chrome parse document differently'} do
+      it 'notifies about document log messages' do
         logs = []
         driver.on_log_event(:console) { |log| logs.push(log) }
         driver.navigate.to url_for('javascriptPage.html')
@@ -117,24 +112,12 @@ module Selenium
         expect(logs).to include(
           an_object_having_attributes(type: :log, args: [hash_including('type' => 'object')])
         )
-      end
-
-      it 'notifies about document log messages',
-         except: {browser: %i[chrome edge firefox], reason: 'https://bugzilla.mozilla.org/show_bug.cgi?id=1819965'} do
-        logs = []
-        driver.on_log_event(:console) { |log| logs.push(log) }
-        driver.navigate.to url_for('javascriptPage.html')
-
-        driver.execute_script('console.log(document);')
-        wait.until { !logs.empty? }
-
         expect(logs).to include(
           an_object_having_attributes(type: :log, args: [hash_including('location')])
         )
       end
 
-      it 'notifies about exceptions', except: {browser: :firefox,
-                                               reason: 'https://bugzilla.mozilla.org/show_bug.cgi?id=1819965'} do
+      it 'notifies about exceptions' do
         exceptions = []
         driver.on_log_event(:exception) { |exception| exceptions.push(exception) }
         driver.navigate.to url_for('javascriptPage.html')
@@ -147,8 +130,7 @@ module Selenium
         expect(exception.stacktrace).not_to be_empty
       end
 
-      it 'notifies about DOM mutations', except: {browser: :firefox,
-                                                  reason: 'Runtime.addBinding not yet supported'} do
+      it 'notifies about DOM mutations' do
         mutations = []
         driver.on_log_event(:mutation) { |mutation| mutations.push(mutation) }
         driver.navigate.to url_for('dynamic.html')
@@ -163,8 +145,7 @@ module Selenium
         expect(mutation.old_value).to eq('display:none;')
       end
 
-      describe '#intercept', except: {browser: :firefox,
-                                      reason: 'Fetch.enable is not yet supported'} do
+      describe '#intercept' do
         it 'continues requests' do
           requests = []
           driver.intercept do |request, &continue|

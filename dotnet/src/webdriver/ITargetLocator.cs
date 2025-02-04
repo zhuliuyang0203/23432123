@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
+using System;
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -38,6 +42,7 @@ namespace OpenQA.Selenium
         /// <param name="frameName">The name of the frame to select.</param>
         /// <returns>An <see cref="IWebDriver"/> instance focused on the specified frame.</returns>
         /// <exception cref="NoSuchFrameException">If the frame cannot be found.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="frameName"/> is <see langword="null"/>.</exception>
         IWebDriver Frame(string frameName);
 
         /// <summary>
@@ -47,6 +52,8 @@ namespace OpenQA.Selenium
         /// <returns>An <see cref="IWebDriver"/> instance focused on the specified frame.</returns>
         /// <exception cref="NoSuchFrameException">If the element is neither a FRAME nor an IFRAME element.</exception>
         /// <exception cref="StaleElementReferenceException">If the element is no longer valid.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="frameElement"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="frameElement"/> cannot be converted to an <see cref="IWebDriverObjectReference"/>.</exception>
         IWebDriver Frame(IWebElement frameElement);
 
         /// <summary>
@@ -61,6 +68,7 @@ namespace OpenQA.Selenium
         /// <param name="windowName">The name of the window to select.</param>
         /// <returns>An <see cref="IWebDriver"/> instance focused on the given window.</returns>
         /// <exception cref="NoSuchWindowException">If the window cannot be found.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="windowName"/> is <see langword="null"/>.</exception>
         IWebDriver Window(string windowName);
 
         /// <summary>

@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>
@@ -27,10 +29,7 @@ namespace OpenQA.Selenium.Remote
     /// </summary>
     public class SendingRemoteHttpRequestEventArgs : EventArgs
     {
-        private string method;
-        private string fullUrl;
-        private string requestBody;
-        private Dictionary<string, string> headers = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SendingRemoteHttpRequestEventArgs"/> class.
@@ -38,45 +37,34 @@ namespace OpenQA.Selenium.Remote
         /// <param name="method">The HTTP method of the request being sent.</param>
         /// <param name="fullUrl">The full URL of the request being sent.</param>
         /// <param name="requestBody">The body of the request.</param>
-        public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string requestBody)
+        /// <exception cref="ArgumentNullException">If <paramref name="method"/>, <paramref name="fullUrl"/> are null.</exception>
+        public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string? requestBody)
         {
-            this.method = method;
-            this.fullUrl = fullUrl;
-            this.requestBody = requestBody;
+            this.Method = method ?? throw new ArgumentNullException(nameof(method));
+            this.FullUrl = fullUrl ?? throw new ArgumentNullException(nameof(fullUrl));
+            this.RequestBody = requestBody;
         }
 
         /// <summary>
         /// Gets the HTTP method for the HTTP request.
         /// </summary>
-        public string Method
-        {
-            get { return this.method; }
-        }
+        public string Method { get; }
 
         /// <summary>
         /// Gets the full URL of the HTTP request.
         /// </summary>
-        public string FullUrl
-        {
-            get { return this.fullUrl; }
-        }
+        public string FullUrl { get; }
 
         /// <summary>
         /// Gets the body of the HTTP request as a string.
         /// </summary>
-        public string RequestBody
-        {
-            get { return this.requestBody; }
-        }
+        public string? RequestBody { get; }
 
         /// <summary>
         /// Gets a read-only dictionary of the headers of the HTTP request.
         /// Does not include default headers of the web client making the request.
         /// </summary>
-        public IReadOnlyDictionary<string, string> Headers
-        {
-            get { return this.headers; }
-        }
+        public IReadOnlyDictionary<string, string> Headers => this.headers;
 
         /// <summary>
         /// Adds a header to the HTTP request.
@@ -88,6 +76,8 @@ namespace OpenQA.Selenium.Remote
         /// HTTP request being sent; however, be aware they may be overwritten by
         /// the client raising the event.
         /// </remarks>
+        /// <exception cref="ArgumentException">If <paramref name="headerName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="headerValue"/> is <see langword="null"/>.</exception>
         public void AddHeader(string headerName, string headerValue)
         {
             if (string.IsNullOrEmpty(headerName))

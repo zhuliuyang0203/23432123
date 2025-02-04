@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class GetTreeCommand(GetTreeCommandParameters @params) : Command<GetTreeCommandParameters>(@params);
+internal class GetTreeCommand(GetTreeCommandParameters @params)
+    : Command<GetTreeCommandParameters>(@params, "browsingContext.getTree");
 
 internal record GetTreeCommandParameters : CommandParameters
 {

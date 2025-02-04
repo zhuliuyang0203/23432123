@@ -23,7 +23,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class SetViewportCommand(SetViewportCommandParameters @params) : Command<SetViewportCommandParameters>(@params);
+internal class SetViewportCommand(SetViewportCommandParameters @params)
+    : Command<SetViewportCommandParameters>(@params, "browsingContext.setViewport");
 
 internal record SetViewportCommandParameters(BrowsingContext Context) : CommandParameters
 {

@@ -18,8 +18,11 @@
 // </copyright>
 
 using OpenQA.Selenium.Internal;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -28,7 +31,7 @@ namespace OpenQA.Selenium.Firefox
     /// </summary>
     public class FirefoxAndroidOptions : AndroidOptions
     {
-        private List<string> androidIntentArguments = new List<string>();
+        private readonly List<string> androidIntentArguments = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxAndroidOptions"/> class.
@@ -41,10 +44,7 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets a read-only list of the intent arguments set for this set of options.
         /// </summary>
-        public ReadOnlyCollection<string> AndroidIntentArguments
-        {
-            get { return this.androidIntentArguments.AsReadOnly(); }
-        }
+        public ReadOnlyCollection<string> AndroidIntentArguments => this.androidIntentArguments.AsReadOnly();
 
         /// <summary>
         /// Argument to launch the intent with. The given intent arguments are appended to the "am start" command.
@@ -59,6 +59,7 @@ namespace OpenQA.Selenium.Firefox
         /// Arguments to launch the intent with. The given intent arguments are appended to the "am start" command.
         /// </summary>
         /// <param name="arguments">The arguments to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="arguments"/> is <see langword="null"/>.</exception>
         public void AddIntentArguments(params string[] arguments)
         {
             this.androidIntentArguments.AddRange(arguments);

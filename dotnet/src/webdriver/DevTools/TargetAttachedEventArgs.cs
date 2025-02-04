@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,16 +29,31 @@ namespace OpenQA.Selenium.DevTools
     public class TargetAttachedEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TargetAttachedEventArgs"/> type.
+        /// </summary>
+        /// <param name="sessionId">The ID of the session of the target attached.</param>
+        /// <param name="targetInfo">The target which is attached.</param>
+        /// <param name="waitingForDebugger">If the target is waiting on the debugger. Target continues after invoking <c>Runtime.runIfWaitingForDebugger</c>.</param>
+        public TargetAttachedEventArgs(string sessionId, TargetInfo? targetInfo, bool waitingForDebugger)
+        {
+            SessionId = sessionId;
+            TargetInfo = targetInfo;
+            WaitingForDebugger = waitingForDebugger;
+        }
+
+        /// <summary>
         /// Gets the ID of the session of the target attached.
         /// </summary>
-        public string SessionId { get; internal set; }
+        public string SessionId { get; }
+
         /// <summary>
         /// Gets the target which is attached.
         /// </summary>
-        public TargetInfo TargetInfo { get; internal set; }
+        public TargetInfo? TargetInfo { get; }
+
         /// <summary>
-        /// Gets if the target is waiting on the debugger. Target continues after invoking Runtime.runIfWaitingForDebugger.
+        /// Gets if the target is waiting on the debugger. Target continues after invoking <c>Runtime.runIfWaitingForDebugger</c>.
         /// </summary>
-        public bool WaitingForDebugger { get; internal set; }
+        public bool WaitingForDebugger { get; }
     }
 }

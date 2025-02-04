@@ -3,7 +3,7 @@ PATH
   specs:
     selenium-devtools (0.132.0)
       selenium-webdriver (~> 4.2)
-    selenium-webdriver (4.28.0)
+    selenium-webdriver (4.29.0.nightly)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -45,16 +45,18 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     drb (2.2.1)
+    ffi (1.17.1)
     ffi (1.17.1-arm64-darwin)
     ffi (1.17.1-java)
     ffi (1.17.1-x64-mingw-ucrt)
+    ffi (1.17.1-x86_64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     fileutils (1.7.3)
     git (1.19.1)
       addressable (~> 2.8)
       rchardet (~> 1.8)
     hashdiff (1.1.2)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
     io-console (0.8.0-java)
@@ -74,10 +76,10 @@ GEM
     parser (3.3.7.0)
       ast (~> 2.4.1)
       racc
-    psych (5.2.2)
+    psych (5.2.3)
       date
       stringio
-    psych (5.2.2-java)
+    psych (5.2.3-java)
       date
       jar-dependencies (>= 0.1.7)
     public_suffix (6.0.1)
@@ -174,17 +176,17 @@ GEM
     yard (0.9.37)
 
 PLATFORMS
+  arm64-darwin-23
+  arm64-darwin-24
   java
   ruby
   universal-java-1.8
-  arm64-darwin-23
-  arm64-darwin-24
   universal-java-17
   universal-java-18
   universal-java-21
+  x64-mingw-ucrt
   x64-mingw32
   x86_64-darwin-22
-  x64-mingw-ucrt
   x86_64-linux
 
 DEPENDENCIES

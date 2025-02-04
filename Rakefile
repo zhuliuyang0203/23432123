@@ -1126,7 +1126,7 @@ namespace :all do
 end
 
 at_exit do
-  system 'sh', '.git-fixfiles' if File.exist?('.git') && !SeleniumRake::Checks.windows?
+  system 'sh', '.git-fixfiles' if File.exist?('.git') && SeleniumRake::Checks.linux?
 end
 
 def updated_version(current, desired = nil, nightly = nil)
