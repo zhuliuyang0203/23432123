@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -33,11 +35,11 @@ namespace OpenQA.Selenium
         private const string PageLoadTimeoutName = "pageLoad";
         private const string LegacyPageLoadTimeoutName = "page load";
 
-        private readonly TimeSpan DefaultImplicitWaitTimeout = TimeSpan.FromSeconds(0);
-        private readonly TimeSpan DefaultAsyncScriptTimeout = TimeSpan.FromSeconds(30);
-        private readonly TimeSpan DefaultPageLoadTimeout = TimeSpan.FromSeconds(300);
+        private static readonly TimeSpan DefaultImplicitWaitTimeout = TimeSpan.FromSeconds(0);
+        private static readonly TimeSpan DefaultAsyncScriptTimeout = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan DefaultPageLoadTimeout = TimeSpan.FromSeconds(300);
 
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Timeouts"/> class
@@ -45,7 +47,7 @@ namespace OpenQA.Selenium
         /// <param name="driver">The driver that is currently in use</param>
         public Timeouts(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -70,8 +72,8 @@ namespace OpenQA.Selenium
         /// </remarks>
         public TimeSpan ImplicitWait
         {
-            get { return this.ExecuteGetTimeout(ImplicitTimeoutName); }
-            set { this.ExecuteSetTimeout(ImplicitTimeoutName, value); }
+            get => this.ExecuteGetTimeout(ImplicitTimeoutName);
+            set => this.ExecuteSetTimeout(ImplicitTimeoutName, value);
         }
 
         /// <summary>
@@ -87,8 +89,8 @@ namespace OpenQA.Selenium
         /// </remarks>
         public TimeSpan AsynchronousJavaScript
         {
-            get { return this.ExecuteGetTimeout(AsyncScriptTimeoutName); }
-            set { this.ExecuteSetTimeout(AsyncScriptTimeoutName, value); }
+            get => this.ExecuteGetTimeout(AsyncScriptTimeoutName);
+            set => this.ExecuteSetTimeout(AsyncScriptTimeoutName, value);
         }
 
         /// <summary>
@@ -103,29 +105,21 @@ namespace OpenQA.Selenium
         /// </remarks>
         public TimeSpan PageLoad
         {
-            get
-            {
-                string timeoutName = PageLoadTimeoutName;
-                return this.ExecuteGetTimeout(timeoutName);
-            }
-
-            set
-            {
-                string timeoutName = PageLoadTimeoutName;
-                this.ExecuteSetTimeout(timeoutName, value);
-            }
+            get => this.ExecuteGetTimeout(PageLoadTimeoutName);
+            set => this.ExecuteSetTimeout(PageLoadTimeoutName, value);
         }
 
         private TimeSpan ExecuteGetTimeout(string timeoutType)
         {
             Response commandResponse = this.driver.InternalExecute(DriverCommand.GetTimeouts, null);
-            Dictionary<string, object> responseValue = (Dictionary<string, object>)commandResponse.Value;
-            if (!responseValue.ContainsKey(timeoutType))
+
+            Dictionary<string, object?> responseValue = (Dictionary<string, object?>)commandResponse.Value!;
+            if (!responseValue.TryGetValue(timeoutType, out object? timeout))
             {
                 throw new WebDriverException("Specified timeout type not defined");
             }
 
-            return TimeSpan.FromMilliseconds(Convert.ToDouble(responseValue[timeoutType], CultureInfo.InvariantCulture));
+            return TimeSpan.FromMilliseconds(Convert.ToDouble(timeout, CultureInfo.InvariantCulture));
         }
 
         private void ExecuteSetTimeout(string timeoutType, TimeSpan timeToWait)
@@ -149,6 +143,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add(timeoutType, Convert.ToInt64(milliseconds));
+
             this.driver.InternalExecute(DriverCommand.SetTimeouts, parameters);
         }
     }

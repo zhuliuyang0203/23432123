@@ -1244,9 +1244,7 @@ class WebDriver {
     const caps = await this.getCapabilities()
 
     if (caps['map_'].get('browserName') === 'firefox') {
-      console.warn(
-        'CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.',
-      )
+      throw new Error('CDP support for Firefox is removed. Please switch to WebDriver BiDi.')
     }
 
     if (process.env.SELENIUM_REMOTE_URL) {
@@ -1255,11 +1253,7 @@ class WebDriver {
       debuggerUrl = `ws://${host}/session/${sessionId}/se/cdp`
     } else {
       const seCdp = caps['map_'].get('se:cdp')
-      const vendorInfo =
-        caps['map_'].get('goog:chromeOptions') ||
-        caps['map_'].get('ms:edgeOptions') ||
-        caps['map_'].get('moz:debuggerAddress') ||
-        new Map()
+      const vendorInfo = caps['map_'].get('goog:chromeOptions') || caps['map_'].get('ms:edgeOptions') || new Map()
       debuggerUrl = seCdp || vendorInfo['debuggerAddress'] || vendorInfo
     }
     this._wsUrl = await this.getWsUrl(debuggerUrl, target, caps)

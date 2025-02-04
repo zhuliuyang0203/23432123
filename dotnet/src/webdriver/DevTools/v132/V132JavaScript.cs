@@ -140,12 +140,12 @@ namespace OpenQA.Selenium.DevTools.V132
 
         private void OnRuntimeBindingCalled(object sender, Runtime.BindingCalledEventArgs e)
         {
-            BindingCalledEventArgs wrapped = new BindingCalledEventArgs()
-            {
-                ExecutionContextId = e.ExecutionContextId,
-                Name = e.Name,
-                Payload = e.Payload
-            };
+            BindingCalledEventArgs wrapped = new BindingCalledEventArgs
+            (
+                executionContextId: e.ExecutionContextId,
+                name: e.Name,
+                payload: e.Payload
+            );
 
             this.OnBindingCalled(wrapped);
         }
@@ -153,11 +153,11 @@ namespace OpenQA.Selenium.DevTools.V132
         private void OnRuntimeExceptionThrown(object sender, Runtime.ExceptionThrownEventArgs e)
         {
             // TODO: Collect stack trace elements
-            var wrapped = new ExceptionThrownEventArgs()
-            {
-                Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
-                Message = e.ExceptionDetails.Text
-            };
+            var wrapped = new ExceptionThrownEventArgs
+            (
+                timestamp: new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
+                message: e.ExceptionDetails.Text
+            );
 
             this.OnExceptionThrown(wrapped);
         }
@@ -167,20 +167,16 @@ namespace OpenQA.Selenium.DevTools.V132
             List<ConsoleApiArgument> args = new List<ConsoleApiArgument>();
             foreach (var arg in e.Args)
             {
-                string argValue = null;
-                if (arg.Value != null)
-                {
-                    argValue = arg.Value.ToString();
-                }
-                args.Add(new ConsoleApiArgument() { Type = arg.Type.ToString(), Value = argValue });
+                string argValue = arg.Value?.ToString();
+                args.Add(new ConsoleApiArgument(arg.Type.ToString(), argValue));
             }
 
-            var wrapped = new ConsoleApiCalledEventArgs()
-            {
-                Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
-                Type = e.Type,
-                Arguments = args.AsReadOnly()
-            };
+            var wrapped = new ConsoleApiCalledEventArgs
+            (
+                timestamp: new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
+                type: e.Type,
+                arguments: args.AsReadOnly()
+            );
 
             this.OnConsoleApiCalled(wrapped);
         }

@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -40,6 +42,7 @@ namespace OpenQA.Selenium.Interactions
         /// Initializes a new instance of the <see cref="KeyInputDevice"/> class, given the device's name.
         /// </summary>
         /// <param name="deviceName">The unique name of this input device.</param>
+        /// <exception cref="ArgumentException">If <paramref name="deviceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public KeyInputDevice(string deviceName)
             : base(deviceName)
         {
@@ -48,10 +51,7 @@ namespace OpenQA.Selenium.Interactions
         /// <summary>
         /// Gets the type of device for this input device.
         /// </summary>
-        public override InputDeviceKind DeviceKind
-        {
-            get { return InputDeviceKind.Key; }
-        }
+        public override InputDeviceKind DeviceKind => InputDeviceKind.Key;
 
         /// <summary>
         /// Converts this input device into an object suitable for serializing across the wire.
@@ -115,27 +115,23 @@ namespace OpenQA.Selenium.Interactions
 
         private class TypingInteraction : Interaction
         {
-            private string type;
-            private string value;
+            private readonly string type;
 
             public TypingInteraction(InputDevice sourceDevice, string type, char codePoint)
                 : base(sourceDevice)
             {
                 this.type = type;
-                this.value = codePoint.ToString();
+                this.Value = codePoint.ToString();
             }
 
-            protected string Value
-            {
-                get { return this.value; }
-            }
+            protected string Value { get; }
 
             public override Dictionary<string, object> ToDictionary()
             {
                 Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
                 toReturn["type"] = this.type;
-                toReturn["value"] = this.value;
+                toReturn["value"] = this.Value;
 
                 return toReturn;
             }

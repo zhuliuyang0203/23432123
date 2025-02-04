@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params) : Command<AddPreloadScriptCommandParameters>(@params);
+internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params)
+    : Command<AddPreloadScriptCommandParameters>(@params, "script.addPreloadScript");
 
 internal record AddPreloadScriptCommandParameters(string FunctionDeclaration) : CommandParameters
 {

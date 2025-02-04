@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -27,29 +29,19 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public abstract class Interaction
     {
-        private InputDevice sourceDevice;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Interaction"/> class.
         /// </summary>
         /// <param name="sourceDevice">The input device which performs this action.</param>
         protected Interaction(InputDevice sourceDevice)
         {
-            if (sourceDevice == null)
-            {
-                throw new ArgumentNullException(nameof(sourceDevice), "Source device cannot be null");
-            }
-
-            this.sourceDevice = sourceDevice;
+            this.SourceDevice = sourceDevice ?? throw new ArgumentNullException(nameof(sourceDevice), "Source device cannot be null");
         }
 
         /// <summary>
         /// Gets the device for which this action is intended.
         /// </summary>
-        public InputDevice SourceDevice
-        {
-            get { return this.sourceDevice; }
-        }
+        public InputDevice SourceDevice { get; }
 
         /// <summary>
         /// Returns a value for this action that can be transmitted across the wire to a remote end.
@@ -65,7 +57,7 @@ namespace OpenQA.Selenium.Interactions
         /// otherwise, <see langword="false"/>.</returns>
         public virtual bool IsValidFor(InputDeviceKind sourceDeviceKind)
         {
-            return this.sourceDevice.DeviceKind == sourceDeviceKind;
+            return this.SourceDevice.DeviceKind == sourceDeviceKind;
         }
     }
 }

@@ -19,7 +19,6 @@
 
 using OpenQA.Selenium.BiDi.Communication;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,7 +39,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             @params.UserActivation = options.UserActivation;
         }
 
-        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<EvaluateCommand, EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
 
         if (result is EvaluateResult.Exception exp)
         {
@@ -70,7 +69,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             @params.UserActivation = options.UserActivation;
         }
 
-        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<CallFunctionCommand, EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
 
         if (result is EvaluateResult.Exception exp)
         {
@@ -97,7 +96,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Type = options.Type;
         }
 
-        return await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetRealmsCommand, GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, AddPreloadScriptOptions? options = null)
@@ -111,7 +110,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Sandbox = options.Sandbox;
         }
 
-        var result = await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<AddPreloadScriptCommand, AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
 
         return result.Script;
     }

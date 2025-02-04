@@ -21,6 +21,8 @@ using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -40,6 +42,7 @@ namespace OpenQA.Selenium.Interactions
         /// Initializes a new instance of the <see cref="WheelInputDevice"/> class, given the device's name.
         /// </summary>
         /// <param name="deviceName">The unique name of this input device.</param>
+        /// <exception cref="ArgumentException">If <paramref name="deviceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public WheelInputDevice(string deviceName)
             : base(deviceName)
         {
@@ -48,10 +51,7 @@ namespace OpenQA.Selenium.Interactions
         /// <summary>
         /// Gets the type of device for this input device.
         /// </summary>
-        public override InputDeviceKind DeviceKind
-        {
-            get { return InputDeviceKind.Wheel; }
-        }
+        public override InputDeviceKind DeviceKind => InputDeviceKind.Wheel;
 
         /// <summary>
         /// Returns a value for this input device that can be transmitted across the wire to a remote end.
@@ -89,8 +89,14 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="deltaY">The distance along the Y axis to scroll using the wheel.</param>
         /// <param name="duration">The duration of the scroll action.</param>
         /// <returns>The <see cref="Interaction"/> representing the wheel scroll.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         public Interaction CreateWheelScroll(IWebElement target, int xOffset, int yOffset, int deltaX, int deltaY, TimeSpan duration)
         {
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
             return new WheelScrollInteraction(this, target, CoordinateOrigin.Element, xOffset, yOffset, deltaX, deltaY, duration);
         }
 
@@ -114,60 +120,39 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         public class ScrollOrigin
         {
-            private IWebElement element;
-            private bool viewport;
-            private int xOffset = 0;
-            private int yOffset = 0;
-
             /// <summary>
             /// Gets or sets the element for the scroll origin.
             /// </summary>
-            public IWebElement Element
-            {
-                get { return this.element; }
-                set { this.element = value; }
-            }
+            public IWebElement? Element { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether the viewport should be used as the origin.
             /// </summary>
-            public bool Viewport
-            {
-                get { return this.viewport; }
-                set { this.viewport = value; }
-            }
+            public bool Viewport { get; set; }
 
             /// <summary>
             /// Gets or sets the horizontal offset of the scroll origin.
             /// </summary>
-            public int XOffset
-            {
-                get { return this.xOffset; }
-                set { this.xOffset = value; }
-            }
+            public int XOffset { get; set; } = 0;
 
             /// <summary>
             /// Gets or sets the vertical offset of the scroll origin.
             /// </summary>
-            public int YOffset
-            {
-                get { return this.yOffset; }
-                set { this.yOffset = value; }
-            }
+            public int YOffset { get; set; } = 0;
 
         }
 
         private class WheelScrollInteraction : Interaction
         {
-            private IWebElement target;
-            private int x = 0;
-            private int y = 0;
-            private int deltaX = 0;
-            private int deltaY = 0;
-            private TimeSpan duration = TimeSpan.MinValue;
-            private CoordinateOrigin origin = CoordinateOrigin.Viewport;
+            private readonly IWebElement? target;
+            private readonly int x = 0;
+            private readonly int y = 0;
+            private readonly int deltaX = 0;
+            private readonly int deltaY = 0;
+            private readonly TimeSpan duration = TimeSpan.MinValue;
+            private readonly CoordinateOrigin origin = CoordinateOrigin.Viewport;
 
-            public WheelScrollInteraction(InputDevice sourceDevice, IWebElement target, CoordinateOrigin origin, int x, int y, int deltaX, int deltaY, TimeSpan duration)
+            public WheelScrollInteraction(InputDevice sourceDevice, IWebElement? target, CoordinateOrigin origin, int x, int y, int deltaX, int deltaY, TimeSpan duration)
                 : base(sourceDevice)
             {
                 if (target != null)
@@ -224,10 +209,10 @@ namespace OpenQA.Selenium.Interactions
 
             private Dictionary<string, object> ConvertElement()
             {
-                IWebDriverObjectReference elementReference = this.target as IWebDriverObjectReference;
+                IWebDriverObjectReference? elementReference = this.target as IWebDriverObjectReference;
                 if (elementReference == null)
                 {
-                    IWrapsElement elementWrapper = this.target as IWrapsElement;
+                    IWrapsElement? elementWrapper = this.target as IWrapsElement;
                     if (elementWrapper != null)
                     {
                         elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;

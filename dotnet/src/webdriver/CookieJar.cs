@@ -127,7 +127,7 @@ namespace OpenQA.Selenium
             {
                 var rawCookie = driver.InternalExecute(DriverCommand.GetCookie, new() { { "name", name } }).Value;
 
-                return Cookie.FromDictionary((Dictionary<string, object>)rawCookie);
+                return Cookie.FromDictionary((Dictionary<string, object>)rawCookie!);
             }
             catch (NoSuchCookieException)
             {

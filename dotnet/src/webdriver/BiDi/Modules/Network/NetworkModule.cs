@@ -38,7 +38,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
             @params.UrlPatterns = options.UrlPatterns;
         }
 
-        var result = await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
 
         return result.Intercept;
     }
@@ -66,6 +66,18 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await intercept.OnResponseStartedAsync(handler, options).ConfigureAwait(false);
 
         return intercept;
+    }
+
+    public async Task SetCacheBehaviorAsync(CacheBehavior behavior, SetCacheBehaviorOptions? options = null)
+    {
+        var @params = new SetCacheBehaviorCommandParameters(behavior);
+
+        if (options is not null)
+        {
+            @params.Contexts = options.Contexts;
+        }
+
+        await Broker.ExecuteCommandAsync(new SetCacheBehaviorCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<Intercept> InterceptAuthAsync(Func<AuthRequiredEventArgs, Task> handler, AddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)

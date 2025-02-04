@@ -68,10 +68,11 @@ namespace OpenQA.Selenium.DevTools.V130
 
         private void OnAdapterEntryAdded(object sender, Log.EntryAddedEventArgs e)
         {
-            EntryAddedEventArgs propagated = new EntryAddedEventArgs();
-            propagated.Entry = new LogEntry();
-            propagated.Entry.Kind = e.Entry.Source.ToString();
-            propagated.Entry.Message = e.Entry.Text;
+            var entry = new LogEntry(
+                kind: e.Entry.Source.ToString(),
+                message: e.Entry.Text
+            );
+            EntryAddedEventArgs propagated = new EntryAddedEventArgs(entry);
             this.OnEntryAdded(propagated);
         }
     }

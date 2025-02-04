@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -29,8 +31,8 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <typeparam name="TCommandResponse">The concrete implementation type of command response expected.</typeparam>
         /// <param name="response">The <see cref="ICommandResponse"/> object to convert to the implementation type</param>
-        /// <returns>The concrete implementation of the command response.</returns>
-        public static TCommandResponse GetResponse<TCommandResponse>(this ICommandResponse response)
+        /// <returns>The concrete implementation of the command response, or <see langword="null"/> if <paramref name="response"/> is not the right type.</returns>
+        public static TCommandResponse? GetResponse<TCommandResponse>(this ICommandResponse response)
             where TCommandResponse : class, ICommandResponse
         {
             return response as TCommandResponse;

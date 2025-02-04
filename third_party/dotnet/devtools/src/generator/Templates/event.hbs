@@ -21,11 +21,8 @@ namespace {{rootNamespace}}.{{domain.Name}}
         {{/if}}
         [JsonPropertyName("{{Name}}")]
         {{#if Optional}}[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]{{/if}}
-        public {{typemap ../context}} {{dehumanize Name}}
-        {
-            get;
-            set;
-        }
+        public {{typemap ../context}} {{dehumanize Name}} { get; set; }
+
     {{/each}}
     }
 }

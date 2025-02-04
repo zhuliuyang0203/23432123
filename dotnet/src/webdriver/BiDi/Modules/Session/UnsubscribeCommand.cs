@@ -23,6 +23,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class UnsubscribeCommand(SubscribeCommandParameters @params) : Command<SubscribeCommandParameters>(@params);
+internal class UnsubscribeCommand(SubscribeCommandParameters @params)
+    : Command<SubscribeCommandParameters>(@params, "session.unsubscribe");
 
 public record UnsubscribeOptions : SubscribeOptions;

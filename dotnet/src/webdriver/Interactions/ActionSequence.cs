@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -29,7 +31,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public class ActionSequence
     {
-        private List<Interaction> interactions = new List<Interaction>();
+        private readonly List<Interaction> interactions = new List<Interaction>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionSequence"/> class.
@@ -47,26 +49,18 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="initialSize">the initial size of the sequence.</param>
         public ActionSequence(InputDevice device, int initialSize)
         {
-            if (device == null)
-            {
-                throw new ArgumentNullException(nameof(device), "Input device cannot be null.");
-            }
-
-            this.InputDevice = device;
+            this.InputDevice = device ?? throw new ArgumentNullException(nameof(device), "Input device cannot be null.");
 
             for (int i = 0; i < initialSize; i++)
             {
-                this.AddAction(new PauseInteraction(device, TimeSpan.Zero));
+                this.AddAction(new PauseInteraction(this.InputDevice, TimeSpan.Zero));
             }
         }
 
         /// <summary>
         /// Gets the count of actions in the sequence.
         /// </summary>
-        public int Count
-        {
-            get { return this.interactions.Count; }
-        }
+        public int Count => this.interactions.Count;
 
         /// <summary>
         /// Gets the input device for this Action sequence.

@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -24,8 +26,6 @@ namespace OpenQA.Selenium.DevTools
     /// </summary>
     public abstract class DevToolsSessionDomains
     {
-        private CommandResponseTypeMap responseTypeMap = new CommandResponseTypeMap();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DevToolsSessionDomains"/> class.
         /// </summary>
@@ -37,7 +37,7 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Gets the <see cref="CommandResponseTypeMap"/> containing information about the types returned by DevTools Protocol commands.,
         /// </summary>
-        internal CommandResponseTypeMap ResponseTypeMap => this.responseTypeMap;
+        internal CommandResponseTypeMap ResponseTypeMap { get; } = new CommandResponseTypeMap();
 
         /// <summary>
         /// Populates the command response type map.
