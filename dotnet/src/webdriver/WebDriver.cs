@@ -459,7 +459,7 @@ namespace OpenQA.Selenium
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
         /// <exception cref="WebDriverException">The command returned an exceptional value.</exception>
-        public object? ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object?>? parameters)
+        public object? ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object> parameters)
         {
             if (this.registeredCommands.Contains(driverCommandToExecute))
             {
