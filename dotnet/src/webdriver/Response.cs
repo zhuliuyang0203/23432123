@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -216,13 +217,16 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// Gets the <see cref="Value"/> of this response, or throws if it is <see langword="null"/>.
+        /// Throws if <see cref="Value"/> is <see langword="null"/>.
         /// </summary>
-        /// <returns>The <see cref="Value"/> instance.</returns>
         /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
-        internal object GetNotNullValue()
+        [MemberNotNull(nameof(Value))]
+        internal void ThrowIfValueNull()
         {
-            return Value ?? throw new WebDriverException("Expected not-null response");
+            if (Value is null)
+            {
+                throw new WebDriverException("Expected not-null response");
+            }
         }
 
         /// <summary>
