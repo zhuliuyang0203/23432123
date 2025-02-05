@@ -20,7 +20,8 @@
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
 const { Pages, suite, ignore } = require('../../lib/test')
-const Network = require('selenium-webdriver/bidi/network')
+const { Network, CacheBehavior } = require('selenium-webdriver/bidi/network')
+const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
 const until = require('selenium-webdriver/lib/until')
 
 suite(
@@ -210,6 +211,52 @@ suite(
         await driver.get(Pages.emptyText)
         assert.equal(onResponseCompleted[0].response.url, await driver.getCurrentUrl())
         assert(onResponseCompleted[0].response.mimeType.includes('text/plain'))
+      })
+    })
+
+    describe('setCacheBehavior', function () {
+      it('can set cache behavior to bypass for a context', async function () {
+        await driver.get(Pages.emptyPage)
+        const browsingContext = await BrowsingContext(driver, {
+          type: 'tab',
+        })
+        const contextId = browsingContext.id
+        await network.setCacheBehavior(CacheBehavior.BYPASS, [contextId])
+      })
+
+      it('can set cache behavior to default for a context', async function () {
+        await driver.get(Pages.emptyPage)
+        const browsingContext = await BrowsingContext(driver, {
+          type: 'tab',
+        })
+        const contextId = browsingContext.id
+        await network.setCacheBehavior(CacheBehavior.DEFAULT, [contextId])
+      })
+
+      it('can set cache behavior to default/bypass with no context id', async function () {
+        await driver.get(Pages.emptyPage)
+        await network.setCacheBehavior(CacheBehavior.DEFAULT)
+        await network.setCacheBehavior(CacheBehavior.BYPASS)
+      })
+
+      it('throws error for invalid cache behavior', async function () {
+        await driver.get(Pages.emptyPage)
+        await assert.rejects(
+          async () => await network.setCacheBehavior('invalid'),
+          /Cache behavior must be either "default" or "bypass"/,
+        )
+      })
+
+      it('throws error for invalid context id types', async function () {
+        await driver.get(Pages.emptyPage)
+        await assert.rejects(
+          async () => await network.setCacheBehavior(CacheBehavior.BYPASS, ''),
+          /Contexts must be an array of non-empty strings/,
+        )
+        await assert.rejects(
+          async () => await network.setCacheBehavior(CacheBehavior.BYPASS, ['', ' ']),
+          /Contexts must be an array of non-empty strings/,
+        )
       })
     })
   },

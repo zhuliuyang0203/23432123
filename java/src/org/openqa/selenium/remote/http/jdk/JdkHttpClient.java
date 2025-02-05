@@ -511,7 +511,7 @@ public class JdkHttpClient implements HttpClient {
     if (this.client == null) {
       return;
     }
-    this.client = null;
+
     for (WebSocket websocket : websockets) {
       try {
         websocket.close();
@@ -519,7 +519,20 @@ public class JdkHttpClient implements HttpClient {
         LOG.log(Level.WARNING, "failed to close the websocket: " + websocket, e);
       }
     }
-    executorService.shutdownNow();
+
+    if (this.client instanceof AutoCloseable) {
+      AutoCloseable closeable = (AutoCloseable) this.client;
+      executorService.submit(
+          () -> {
+            try {
+              closeable.close();
+            } catch (Exception e) {
+              LOG.log(Level.WARNING, "failed to close the http client: " + closeable, e);
+            }
+          });
+    }
+    this.client = null;
+    executorService.shutdown();
   }
 
   @AutoService(HttpClient.Factory.class)

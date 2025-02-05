@@ -77,6 +77,7 @@ namespace OpenQA.Selenium.Interactions
         /// of the pause. Note that <see cref="TimeSpan.Zero"/> pauses to synchronize
         /// with other action sequences for other devices.</param>
         /// <returns>The <see cref="Interaction"/> representing the action.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="duration"/> is negative.</exception>
         public Interaction CreatePause(TimeSpan duration)
         {
             return new PauseInteraction(this, duration);

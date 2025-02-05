@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     internal class PauseInteraction : Interaction
     {
-        private TimeSpan duration = TimeSpan.Zero;
+        private readonly TimeSpan duration = TimeSpan.Zero;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PauseInteraction"/> class.
@@ -44,6 +46,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         /// <param name="sourceDevice">The input device on which to execute the pause.</param>
         /// <param name="duration">The length of time to pause for.</param>
+        /// <exception cref="ArgumentException">If <paramref name="duration"/> is negative.</exception>
         public PauseInteraction(InputDevice sourceDevice, TimeSpan duration)
             : base(sourceDevice)
         {

@@ -91,7 +91,7 @@ suite(
     })
 
     describe('Basic Auth Injection', function () {
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX, Browser.CHROME)).it(
+      ignore(browsers(Browser.SAFARI, Browser.CHROME)).it(
         'denies entry if username and password do not match',
         async function () {
           const pageCdpConnection = await driver.createCDPConnection('page')
@@ -103,7 +103,7 @@ suite(
         },
       )
 
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX, Browser.CHROME)).it(
+      ignore(browsers(Browser.SAFARI, Browser.CHROME)).it(
         'grants access if username and password are a match',
         async function () {
           const pageCdpConnection = await driver.createCDPConnection('page')
@@ -117,22 +117,19 @@ suite(
     })
 
     describe('Network Interception', function () {
-      ignore(browsers(Browser.SAFARI, Browser.FIREFOX)).it(
-        'Allows network requests to be captured and mocked',
-        async function () {
-          const connection = await driver.createCDPConnection('page')
-          let url = fileServer.whereIs('/cheese')
-          let httpResponse = new HttpResponse(url)
-          httpResponse.addHeaders('Content-Type', 'UTF-8')
-          httpResponse.body = 'sausages'
-          await driver.onIntercept(connection, httpResponse, async function () {
-            let body = await driver.getPageSource()
-            assert.strictEqual(body.includes('sausages'), true, `Body contains: ${body}`)
-          })
-          await driver.get(url)
-        },
-      )
+      ignore(browsers(Browser.SAFARI)).it('Allows network requests to be captured and mocked', async function () {
+        const connection = await driver.createCDPConnection('page')
+        let url = fileServer.whereIs('/cheese')
+        let httpResponse = new HttpResponse(url)
+        httpResponse.addHeaders('Content-Type', 'UTF-8')
+        httpResponse.body = 'sausages'
+        await driver.onIntercept(connection, httpResponse, async function () {
+          let body = await driver.getPageSource()
+          assert.strictEqual(body.includes('sausages'), true, `Body contains: ${body}`)
+        })
+        await driver.get(url)
+      })
     })
   },
-  { browsers: ['firefox', 'chrome'] },
+  { browsers: ['chrome'] },
 )

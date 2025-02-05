@@ -25,6 +25,7 @@ using System.Threading;
 using System.Text.Json;
 using System.Text;
 using OpenQA.Selenium.Internal.Logging;
+using System.Text.Json.Serialization;
 
 #nullable enable
 
@@ -44,7 +45,7 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
         using var ms = new MemoryStream();
 
@@ -62,17 +63,18 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
 
         if (_logger.IsEnabled(LogEventLevel.Trace))
         {
-            _logger.Trace($"BiDi RCV << {Encoding.UTF8.GetString(ms.ToArray())}");
+            _logger.Trace($"BiDi RCV <-- {Encoding.UTF8.GetString(ms.ToArray())}");
         }
 
-        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerContext, cancellationToken).ConfigureAwait(false);
 
         return (T)res!;
     }
 
-    public async Task SendAsJsonAsync(Command command, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+    public async Task SendAsJsonAsync<TCommand>(TCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+        where TCommand : Command
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(Command), jsonSerializerOptions);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), jsonSerializerContext);
 
         await _socketSendSemaphoreSlim.WaitAsync(cancellationToken);
 
@@ -80,7 +82,7 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
         {
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"BiDi SND >> {Encoding.UTF8.GetString(buffer)}");
+                _logger.Trace($"BiDi SND --> {Encoding.UTF8.GetString(buffer)}");
             }
 
             await _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);

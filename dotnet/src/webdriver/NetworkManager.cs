@@ -200,7 +200,7 @@ namespace OpenQA.Selenium
             {
                 if (authenticationHandler.UriMatcher.Invoke(uri))
                 {
-                    PasswordCredentials credentials = authenticationHandler.Credentials as PasswordCredentials;
+                    PasswordCredentials credentials = (PasswordCredentials)authenticationHandler.Credentials;
                     await this.session.Value.Domains.Network.ContinueWithAuth(e.RequestId, credentials.UserName, credentials.Password).ConfigureAwait(false);
                     successfullyAuthenticated = true;
                     break;

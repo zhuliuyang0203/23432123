@@ -17,10 +17,10 @@
 // under the License.
 // </copyright>
 
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Text.Json.Serialization;
 
 #nullable enable
 
@@ -30,7 +30,8 @@ interface ITransport : IDisposable
 {
     Task ConnectAsync(CancellationToken cancellationToken);
 
-    Task<T> ReceiveAsJsonAsync<T>(JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken);
+    Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken);
 
-    Task SendAsJsonAsync(Command command, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken);
+    Task SendAsJsonAsync<TCommand>(TCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+        where TCommand : Command;
 }

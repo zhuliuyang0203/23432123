@@ -24,7 +24,8 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class AddInterceptCommand(AddInterceptCommandParameters @params) : Command<AddInterceptCommandParameters>(@params);
+internal class AddInterceptCommand(AddInterceptCommandParameters @params)
+    : Command<AddInterceptCommandParameters>(@params, "network.addIntercept");
 
 internal record AddInterceptCommandParameters(IEnumerable<InterceptPhase> Phases) : CommandParameters
 {

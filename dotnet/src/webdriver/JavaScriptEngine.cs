@@ -40,7 +40,7 @@ namespace OpenQA.Selenium
         private Lazy<DevToolsSession> session;
         private Dictionary<string, InitializationScript> initializationScripts = new Dictionary<string, InitializationScript>();
         private Dictionary<string, PinnedScript> pinnedScripts = new Dictionary<string, PinnedScript>();
-        private List<string> bindings = new List<string>();
+        private HashSet<string> bindings = new HashSet<string>();
         private bool isEnabled = false;
         private bool isDisposed = false;
 
@@ -271,7 +271,7 @@ namespace OpenQA.Selenium
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task AddScriptCallbackBinding(string bindingName)
         {
-            if (this.bindings.Contains(bindingName))
+            if (!this.bindings.Add(bindingName))
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "A binding named {0} has already been added", bindingName));
             }
@@ -288,7 +288,7 @@ namespace OpenQA.Selenium
         public async Task RemoveScriptCallbackBinding(string bindingName)
         {
             await this.session.Value.Domains.JavaScript.RemoveBinding(bindingName).ConfigureAwait(false);
-            this.bindings.Remove(bindingName);
+            _ = this.bindings.Remove(bindingName);
         }
 
         /// <summary>

@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ContinueResponseCommand(ContinueResponseCommandParameters @params) : Command<ContinueResponseCommandParameters>(@params);
+internal class ContinueResponseCommand(ContinueResponseCommandParameters @params)
+    : Command<ContinueResponseCommandParameters>(@params, "network.continueResponse");
 
 internal record ContinueResponseCommandParameters(Request Request) : CommandParameters
 {

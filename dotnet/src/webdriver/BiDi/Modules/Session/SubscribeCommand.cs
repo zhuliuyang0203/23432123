@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class SubscribeCommand(SubscribeCommandParameters @params) : Command<SubscribeCommandParameters>(@params);
+internal class SubscribeCommand(SubscribeCommandParameters @params)
+    : Command<SubscribeCommandParameters>(@params, "session.subscribe");
 
 internal record SubscribeCommandParameters(IEnumerable<string> Events) : CommandParameters
 {

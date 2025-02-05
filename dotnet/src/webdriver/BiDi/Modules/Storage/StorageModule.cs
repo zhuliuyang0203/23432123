@@ -36,7 +36,7 @@ public class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetCookiesCommand, GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<DeleteCookiesResult> DeleteCookiesAsync(DeleteCookiesOptions? options = null)
@@ -49,7 +49,7 @@ public class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<DeleteCookiesResult>(new DeleteCookiesCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<DeleteCookiesCommand, DeleteCookiesResult>(new DeleteCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<SetCookieResult> SetCookieAsync(PartialCookie cookie, SetCookieOptions? options = null)
@@ -61,6 +61,6 @@ public class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<SetCookieResult>(new SetCookieCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<SetCookieCommand, SetCookieResult>(new SetCookieCommand(@params), options).ConfigureAwait(false);
     }
 }

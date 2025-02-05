@@ -402,15 +402,42 @@ class PrintOptions:
     - Set
         - `None`
     """
+    # Reference for predefined page size constants: https://www.agooddaytoprint.com/page/paper-size-chart-faq
+    A4 = {"height": 29.7, "width": 21.0}  # size in cm
+    LEGAL = {"height": 35.56, "width": 21.59}  # size in cm
+    LETTER = {"height": 27.94, "width": 21.59}  # size in cm
+    TABLOID = {"height": 43.18, "width": 27.94}  # size in cm
 
     def __init__(self) -> None:
         self._print_options: _PrintOpts = {}
-        self._page: _PageOpts = {}
+        self._page: _PageOpts = {
+            "height": PrintOptions.A4["height"],
+            "width": PrintOptions.A4["width"],
+        }  # Default page size set to A4
         self._margin: _MarginOpts = {}
 
     def to_dict(self) -> _PrintOpts:
         """:Returns: A hash of print options configured."""
         return self._print_options
+
+    def set_page_size(self, page_size: dict) -> None:
+        """Sets the page size to predefined or custom dimensions.
+
+        Parameters
+        ----------
+        page_size: dict
+        A dictionary containing `height` and `width` as keys with respective values.
+
+        Example
+        -------
+        self.set_page_size(PageSize.A4)  # A4 predefined size
+        self.set_page_size({"height": 15.0, "width": 20.0})  # Custom size in cm
+        """
+        self._validate_num_property("height", page_size["height"])
+        self._validate_num_property("width", page_size["width"])
+        self._page["height"] = page_size["height"]
+        self._page["width"] = page_size["width"]
+        self._print_options["page"] = self._page
 
     def _validate_num_property(self, property_name: str, value: float) -> None:
         """Helper function to validate some of the properties."""

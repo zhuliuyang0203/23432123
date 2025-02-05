@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,13 +29,24 @@ namespace OpenQA.Selenium.DevTools
     public class ExceptionThrownEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes new instance of the <see cref="ExceptionThrownEventArgs"/> type.
+        /// </summary>
+        /// <param name="timestamp">The time stamp of the exception.</param>
+        /// <param name="message">The text of the exception.</param>
+        public ExceptionThrownEventArgs(DateTime timestamp, string message)
+        {
+            Timestamp = timestamp;
+            Message = message;
+        }
+
+        /// <summary>
         /// Gets the time stamp of the exception.
         /// </summary>
-        public DateTime Timestamp { get; internal set; }
+        public DateTime Timestamp { get; }
 
         /// <summary>
         /// Gets the text of the exception.
         /// </summary>
-        public string Message { get; internal set; }
+        public string Message { get; }
     }
 }
