@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Firefox
 {
     /// <summary>
@@ -60,16 +62,10 @@ namespace OpenQA.Selenium.Firefox
         private const string FirefoxEnvCapability = "env";
         private const string FirefoxOptionsCapability = "moz:firefoxOptions";
         private const string FirefoxEnableDevToolsProtocolCapability = "moz:debuggerAddress";
-
-        private bool enableDevToolsProtocol;
-        private string binaryLocation;
-        private FirefoxDriverLogLevel logLevel = FirefoxDriverLogLevel.Default;
-        private FirefoxProfile profile;
-        private List<string> firefoxArguments = new List<string>();
-        private Dictionary<string, object> profilePreferences = new Dictionary<string, object>();
-        private Dictionary<string, object> additionalFirefoxOptions = new Dictionary<string, object>();
-        private Dictionary<string, object> environmentVariables = new Dictionary<string, object>();
-        private FirefoxAndroidOptions androidOptions;
+        private readonly List<string> firefoxArguments = new List<string>();
+        private readonly Dictionary<string, object> profilePreferences = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> additionalFirefoxOptions = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> environmentVariables = new Dictionary<string, object>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxOptions"/> class.
@@ -97,63 +93,44 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets or sets the <see cref="FirefoxProfile"/> object to be used with this instance.
         /// </summary>
-        public FirefoxProfile Profile
-        {
-            get { return this.profile; }
-            set { this.profile = value; }
-        }
+        public FirefoxProfile? Profile { get; set; }
 
         /// <summary>
         /// Gets or sets the path and file name of the Firefox browser executable.
         /// </summary>
-        public override string BinaryLocation
-        {
-            get { return this.binaryLocation; }
-            set { this.binaryLocation = value; }
-        }
+        public override string? BinaryLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the path and file name of the Firefox browser executable.
         /// </summary>
         [Obsolete("Use BinaryLocation property instead of BrowserExecutableLocation. This one will be removed soon.")]
-        public string BrowserExecutableLocation
+        public string? BrowserExecutableLocation
         {
-            get { return this.binaryLocation; }
-            set { this.binaryLocation = value; }
+            get => this.BinaryLocation;
+            set => this.BinaryLocation = value;
         }
 
         /// <summary>
         /// Gets or sets the logging level of the Firefox driver.
         /// </summary>
-        public FirefoxDriverLogLevel LogLevel
-        {
-            get { return this.logLevel; }
-            set { this.logLevel = value; }
-        }
+        public FirefoxDriverLogLevel LogLevel { get; set; } = FirefoxDriverLogLevel.Default;
 
         /// <summary>
         /// Gets or sets a value indicating whether to enable the DevTools protocol for the launched browser.
         /// </summary>
-        public bool EnableDevToolsProtocol
-        {
-            get { return this.enableDevToolsProtocol; }
-            set { this.enableDevToolsProtocol = value; }
-        }
+        public bool EnableDevToolsProtocol { get; set; }
 
         /// <summary>
         /// Gets or sets the options for automating Firefox on Android.
         /// </summary>
-        public FirefoxAndroidOptions AndroidOptions
-        {
-            get { return this.androidOptions; }
-            set { this.androidOptions = value; }
-        }
+        public FirefoxAndroidOptions? AndroidOptions { get; set; }
 
         /// <summary>
         /// Adds an argument to be used in launching the Firefox browser.
         /// </summary>
         /// <param name="argumentName">The argument to add.</param>
-        /// <remarks>Arguments must be preceeded by two dashes ("--").</remarks>
+        /// <remarks>Arguments must be preceded by two dashes ("--").</remarks>
+        /// <exception cref="ArgumentException">If <paramref name="argumentName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void AddArgument(string argumentName)
         {
             if (string.IsNullOrEmpty(argumentName))
@@ -168,16 +145,18 @@ namespace OpenQA.Selenium.Firefox
         /// Adds a list arguments to be used in launching the Firefox browser.
         /// </summary>
         /// <param name="argumentsToAdd">An array of arguments to add.</param>
-        /// <remarks>Each argument must be preceeded by two dashes ("--").</remarks>
+        /// <remarks>Each argument must be preceded by two dashes ("--").</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToAdd"/> is <see langword="null"/>.</exception>
         public void AddArguments(params string[] argumentsToAdd)
         {
-            this.AddArguments(new List<string>(argumentsToAdd));
+            this.AddArguments((IEnumerable<string>)argumentsToAdd);
         }
 
         /// <summary>
         /// Adds a list arguments to be used in launching the Firefox browser.
         /// </summary>
         /// <param name="argumentsToAdd">An array of arguments to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToAdd"/> is <see langword="null"/>.</exception>
         public void AddArguments(IEnumerable<string> argumentsToAdd)
         {
             if (argumentsToAdd == null)
@@ -193,6 +172,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">Name of the preference to set.</param>
         /// <param name="preferenceValue">Value of the preference to set.</param>
+        /// <exception cref="ArgumentException">If <paramref name="preferenceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPreference(string preferenceName, bool preferenceValue)
         {
             this.SetPreferenceValue(preferenceName, preferenceValue);
@@ -203,6 +183,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">Name of the preference to set.</param>
         /// <param name="preferenceValue">Value of the preference to set.</param>
+        /// <exception cref="ArgumentException">If <paramref name="preferenceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPreference(string preferenceName, int preferenceValue)
         {
             this.SetPreferenceValue(preferenceName, preferenceValue);
@@ -213,6 +194,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">Name of the preference to set.</param>
         /// <param name="preferenceValue">Value of the preference to set.</param>
+        /// <exception cref="ArgumentException">If <paramref name="preferenceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPreference(string preferenceName, long preferenceValue)
         {
             this.SetPreferenceValue(preferenceName, preferenceValue);
@@ -223,6 +205,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">Name of the preference to set.</param>
         /// <param name="preferenceValue">Value of the preference to set.</param>
+        /// <exception cref="ArgumentException">If <paramref name="preferenceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPreference(string preferenceName, double preferenceValue)
         {
             this.SetPreferenceValue(preferenceName, preferenceValue);
@@ -233,29 +216,26 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">Name of the preference to set.</param>
         /// <param name="preferenceValue">Value of the preference to set.</param>
+        /// <exception cref="ArgumentException">If <paramref name="preferenceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPreference(string preferenceName, string preferenceValue)
         {
             this.SetPreferenceValue(preferenceName, preferenceValue);
         }
 
         /// <summary>
-        /// Sets an environment variable to be set in the operating system's environment under which the Firerox browser is launched.
+        /// Sets an environment variable to be set in the operating system's environment under which the Firefox browser is launched.
         /// </summary>
         /// <param name="variableName">The name of the environment variable.</param>
         /// <param name="variableValue">The value of the environment variable.</param>
-        public void SetEnvironmentVariable(string variableName, string variableValue)
+        /// <exception cref="ArgumentException">If <paramref name="variableName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
+        public void SetEnvironmentVariable(string variableName, string? variableValue)
         {
             if (string.IsNullOrEmpty(variableName))
             {
                 throw new ArgumentException("Environment variable name cannot be null or an empty string");
             }
 
-            if (variableValue == null)
-            {
-                variableValue = string.Empty;
-            }
-
-            this.environmentVariables[variableName] = variableValue;
+            this.environmentVariables[variableName] = variableValue ?? string.Empty;
         }
 
         /// <summary>
@@ -290,7 +270,7 @@ namespace OpenQA.Selenium.Firefox
             IWritableCapabilities capabilities = GenerateDesiredCapabilities(true);
             Dictionary<string, object> firefoxOptions = this.GenerateFirefoxOptionsDictionary();
             capabilities.SetCapability(FirefoxOptionsCapability, firefoxOptions);
-            if (this.enableDevToolsProtocol)
+            if (this.EnableDevToolsProtocol)
             {
                 capabilities.SetCapability(FirefoxEnableDevToolsProtocolCapability, true);
             }
@@ -302,30 +282,26 @@ namespace OpenQA.Selenium.Firefox
         {
             Dictionary<string, object> firefoxOptions = new Dictionary<string, object>();
 
-            if (this.profile != null)
+            if (this.Profile != null)
             {
-                firefoxOptions[FirefoxProfileCapability] = this.profile.ToBase64String();
+                firefoxOptions[FirefoxProfileCapability] = this.Profile.ToBase64String();
             }
 
-            if (!string.IsNullOrEmpty(this.binaryLocation))
+            if (!string.IsNullOrEmpty(this.BinaryLocation))
             {
-                firefoxOptions[FirefoxBinaryCapability] = this.binaryLocation;
+                firefoxOptions[FirefoxBinaryCapability] = this.BinaryLocation;
             }
 
-            if (this.logLevel != FirefoxDriverLogLevel.Default)
+            if (this.LogLevel != FirefoxDriverLogLevel.Default)
             {
                 Dictionary<string, object> logObject = new Dictionary<string, object>();
-                logObject["level"] = this.logLevel.ToString().ToLowerInvariant();
+                logObject["level"] = this.LogLevel.ToString().ToLowerInvariant();
                 firefoxOptions[FirefoxLogCapability] = logObject;
             }
 
             if (this.firefoxArguments.Count > 0)
             {
-                List<object> args = new List<object>();
-                foreach (string argument in this.firefoxArguments)
-                {
-                    args.Add(argument);
-                }
+                List<object> args = [.. this.firefoxArguments];
 
                 firefoxOptions[FirefoxArgumentsCapability] = args;
             }
@@ -340,9 +316,9 @@ namespace OpenQA.Selenium.Firefox
                 firefoxOptions[FirefoxEnvCapability] = this.environmentVariables;
             }
 
-            if (this.androidOptions != null)
+            if (this.AndroidOptions != null)
             {
-                this.AddAndroidOptions(firefoxOptions);
+                AddAndroidOptions(this.AndroidOptions, firefoxOptions);
             }
 
             foreach (KeyValuePair<string, object> pair in this.additionalFirefoxOptions)
@@ -363,27 +339,23 @@ namespace OpenQA.Selenium.Firefox
             this.profilePreferences[preferenceName] = preferenceValue;
         }
 
-        private void AddAndroidOptions(Dictionary<string, object> firefoxOptions)
+        private static void AddAndroidOptions(FirefoxAndroidOptions androidOptions, Dictionary<string, object> firefoxOptions)
         {
-            firefoxOptions["androidPackage"] = this.androidOptions.AndroidPackage;
+            firefoxOptions["androidPackage"] = androidOptions.AndroidPackage;
 
-            if (!string.IsNullOrEmpty(this.androidOptions.AndroidDeviceSerial))
+            if (!string.IsNullOrEmpty(androidOptions.AndroidDeviceSerial))
             {
-                firefoxOptions["androidDeviceSerial"] = this.androidOptions.AndroidDeviceSerial;
+                firefoxOptions["androidDeviceSerial"] = androidOptions.AndroidDeviceSerial;
             }
 
-            if (!string.IsNullOrEmpty(this.androidOptions.AndroidActivity))
+            if (!string.IsNullOrEmpty(androidOptions.AndroidActivity))
             {
-                firefoxOptions["androidActivity"] = this.androidOptions.AndroidActivity;
+                firefoxOptions["androidActivity"] = androidOptions.AndroidActivity;
             }
 
-            if (this.androidOptions.AndroidIntentArguments.Count > 0)
+            if (androidOptions.AndroidIntentArguments.Count > 0)
             {
-                List<object> args = new List<object>();
-                foreach (string argument in this.androidOptions.AndroidIntentArguments)
-                {
-                    args.Add(argument);
-                }
+                List<object> args = [.. androidOptions.AndroidIntentArguments];
 
                 firefoxOptions["androidIntentArguments"] = args;
             }

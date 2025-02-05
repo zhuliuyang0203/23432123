@@ -42,6 +42,28 @@ namespace OpenQA.Selenium
         public string ScriptSource { get; internal set; }
 
         /// <summary>
+        /// Indicates whether the current <see cref="InitializationScript"/> is equal to another <see cref="InitializationScript"/> of the same type.
+        /// </summary>
+        /// <param name="other">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
+        /// <returns><see langword="true"/> if the current <see cref="InitializationScript"/> is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+        public override bool Equals(object obj)
+        {
+            return obj is InitializationScript other && this.ScriptId == other.ScriptId && this.ScriptName == other.ScriptName && this.ScriptSource == other.ScriptSource;
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular <see cref="InitializationScript"/>.
+        /// </summary>
+        /// <returns>A hash code for the current <see cref="InitializationScript"/>.</returns>
+        public override int GetHashCode()
+        {
+            int result = this.ScriptId.GetHashCode();
+            result = (31 * result) + this.ScriptName.GetHashCode();
+            result = (31 * result) + this.ScriptSource.GetHashCode();
+            return result;
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

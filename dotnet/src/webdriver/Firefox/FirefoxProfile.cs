@@ -20,9 +20,12 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -32,13 +35,10 @@ namespace OpenQA.Selenium.Firefox
     public class FirefoxProfile
     {
         private const string UserPreferencesFileName = "user.js";
-
-        private string profileDir;
-        private string sourceProfileDir;
-        private bool deleteSource;
-        private bool deleteOnClean = true;
-        private Preferences profilePreferences;
-        private Dictionary<string, FirefoxExtension> extensions = new Dictionary<string, FirefoxExtension>();
+        private readonly string? sourceProfileDir;
+        private readonly bool deleteSource;
+        private readonly Preferences profilePreferences;
+        private readonly Dictionary<string, FirefoxExtension> extensions = new Dictionary<string, FirefoxExtension>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxProfile"/> class.
@@ -53,7 +53,7 @@ namespace OpenQA.Selenium.Firefox
         /// specific profile directory.
         /// </summary>
         /// <param name="profileDirectory">The directory containing the profile.</param>
-        public FirefoxProfile(string profileDirectory)
+        public FirefoxProfile(string? profileDirectory)
             : this(profileDirectory, false)
         {
         }
@@ -64,31 +64,24 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="profileDirectory">The directory containing the profile.</param>
         /// <param name="deleteSourceOnClean">Delete the source directory of the profile upon cleaning.</param>
-        public FirefoxProfile(string profileDirectory, bool deleteSourceOnClean)
+        public FirefoxProfile(string? profileDirectory, bool deleteSourceOnClean)
         {
             this.sourceProfileDir = profileDirectory;
             this.deleteSource = deleteSourceOnClean;
-            this.ReadDefaultPreferences();
+            this.profilePreferences = this.ReadDefaultPreferences();
             this.profilePreferences.AppendPreferences(this.ReadExistingPreferences());
         }
 
         /// <summary>
         /// Gets the directory containing the profile.
         /// </summary>
-        public string ProfileDirectory
-        {
-            get { return this.profileDir; }
-        }
+        public string? ProfileDirectory { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to delete this profile after use with
         /// the <see cref="FirefoxDriver"/>.
         /// </summary>
-        public bool DeleteAfterUse
-        {
-            get { return this.deleteOnClean; }
-            set { this.deleteOnClean = value; }
-        }
+        public bool DeleteAfterUse { get; set; } = true;
 
         /// <summary>
         /// Converts a base64-encoded string into a <see cref="FirefoxProfile"/>.
@@ -130,6 +123,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="name">The name of the preference to add.</param>
         /// <param name="value">A <see cref="string"/> value to add to the profile.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="value"/> are <see langword="null"/>.</exception>
         public void SetPreference(string name, string value)
         {
             this.profilePreferences.SetPreference(name, value);
@@ -140,6 +134,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="name">The name of the preference to add.</param>
         /// <param name="value">A <see cref="int"/> value to add to the profile.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         public void SetPreference(string name, int value)
         {
             this.profilePreferences.SetPreference(name, value);
@@ -150,6 +145,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="name">The name of the preference to add.</param>
         /// <param name="value">A <see cref="bool"/> value to add to the profile.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         public void SetPreference(string name, bool value)
         {
             this.profilePreferences.SetPreference(name, value);
@@ -158,22 +154,23 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Writes this in-memory representation of a profile to disk.
         /// </summary>
+        [MemberNotNull(nameof(ProfileDirectory))]
         public void WriteToDisk()
         {
-            this.profileDir = GenerateProfileDirectoryName();
+            this.ProfileDirectory = GenerateProfileDirectoryName();
             if (!string.IsNullOrEmpty(this.sourceProfileDir))
             {
-                FileUtilities.CopyDirectory(this.sourceProfileDir, this.profileDir);
+                FileUtilities.CopyDirectory(this.sourceProfileDir, this.ProfileDirectory);
             }
             else
             {
-                Directory.CreateDirectory(this.profileDir);
+                Directory.CreateDirectory(this.ProfileDirectory);
             }
 
-            this.InstallExtensions();
-            this.DeleteLockFiles();
-            this.DeleteExtensionsCache();
-            this.UpdateUserPreferences();
+            this.InstallExtensions(this.ProfileDirectory);
+            this.DeleteLockFiles(this.ProfileDirectory);
+            this.DeleteExtensionsCache(this.ProfileDirectory);
+            this.UpdateUserPreferences(this.ProfileDirectory);
         }
 
         /// <summary>
@@ -185,9 +182,9 @@ namespace OpenQA.Selenium.Firefox
         /// is deleted.</remarks>
         public void Clean()
         {
-            if (this.deleteOnClean && !string.IsNullOrEmpty(this.profileDir) && Directory.Exists(this.profileDir))
+            if (this.DeleteAfterUse && !string.IsNullOrEmpty(this.ProfileDirectory) && Directory.Exists(this.ProfileDirectory))
             {
-                FileUtilities.DeleteDirectory(this.profileDir);
+                FileUtilities.DeleteDirectory(this.ProfileDirectory);
             }
 
             if (this.deleteSource && !string.IsNullOrEmpty(this.sourceProfileDir) && Directory.Exists(this.sourceProfileDir))
@@ -202,17 +199,17 @@ namespace OpenQA.Selenium.Firefox
         /// <returns>A base64-encoded string containing the contents of the profile.</returns>
         public string ToBase64String()
         {
-            string base64zip = string.Empty;
+            string base64zip;
             this.WriteToDisk();
 
             using (MemoryStream profileMemoryStream = new MemoryStream())
             {
                 using (ZipArchive profileZipArchive = new ZipArchive(profileMemoryStream, ZipArchiveMode.Create, true))
                 {
-                    string[] files = Directory.GetFiles(this.profileDir, "*.*", SearchOption.AllDirectories);
+                    string[] files = Directory.GetFiles(this.ProfileDirectory, "*.*", SearchOption.AllDirectories);
                     foreach (string file in files)
                     {
-                        string fileNameInZip = file.Substring(this.profileDir.Length + 1).Replace(Path.DirectorySeparatorChar, '/');
+                        string fileNameInZip = file.Substring(this.ProfileDirectory.Length + 1).Replace(Path.DirectorySeparatorChar, '/');
                         profileZipArchive.CreateEntryFromFile(file, fileNameInZip);
                     }
                 }
@@ -236,20 +233,20 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Deletes the lock files for a profile.
         /// </summary>
-        private void DeleteLockFiles()
+        private void DeleteLockFiles(string profileDirectory)
         {
-            File.Delete(Path.Combine(this.profileDir, ".parentlock"));
-            File.Delete(Path.Combine(this.profileDir, "parent.lock"));
+            File.Delete(Path.Combine(profileDirectory, ".parentlock"));
+            File.Delete(Path.Combine(profileDirectory, "parent.lock"));
         }
 
         /// <summary>
         /// Installs all extensions in the profile in the directory on disk.
         /// </summary>
-        private void InstallExtensions()
+        private void InstallExtensions(string profileDirectory)
         {
             foreach (string extensionKey in this.extensions.Keys)
             {
-                this.extensions[extensionKey].Install(this.profileDir);
+                this.extensions[extensionKey].Install(profileDirectory);
             }
         }
 
@@ -259,10 +256,10 @@ namespace OpenQA.Selenium.Firefox
         /// <remarks>If the extensions cache does not exist for this profile, the
         /// <see cref="DeleteExtensionsCache"/> method performs no operations, but
         /// succeeds.</remarks>
-        private void DeleteExtensionsCache()
+        private void DeleteExtensionsCache(string profileDirectory)
         {
-            DirectoryInfo ex = new DirectoryInfo(Path.Combine(this.profileDir, "extensions"));
-            string cacheFile = Path.Combine(ex.Parent.FullName, "extensions.cache");
+            DirectoryInfo ex = new DirectoryInfo(Path.Combine(profileDirectory, "extensions"));
+            string cacheFile = Path.Combine(ex.Parent!.FullName, "extensions.cache");
             if (File.Exists(cacheFile))
             {
                 File.Delete(cacheFile);
@@ -272,9 +269,9 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Writes the user preferences to the profile.
         /// </summary>
-        private void UpdateUserPreferences()
+        private void UpdateUserPreferences(string profileDirectory)
         {
-            string userPrefs = Path.Combine(this.profileDir, UserPreferencesFileName);
+            string userPrefs = Path.Combine(profileDirectory, UserPreferencesFileName);
             if (File.Exists(userPrefs))
             {
                 try
@@ -300,7 +297,7 @@ namespace OpenQA.Selenium.Firefox
             this.profilePreferences.WriteToFile(userPrefs);
         }
 
-        private void ReadDefaultPreferences()
+        private Preferences ReadDefaultPreferences()
         {
             using (Stream defaultPrefsStream = ResourceUtilities.GetResourceStream("webdriver_prefs.json", "webdriver_prefs.json"))
             {
@@ -309,7 +306,7 @@ namespace OpenQA.Selenium.Firefox
                 JsonElement immutableDefaultPreferences = defaultPreferences.RootElement.GetProperty("frozen");
                 JsonElement editableDefaultPreferences = defaultPreferences.RootElement.GetProperty("mutable");
 
-                this.profilePreferences = new Preferences(immutableDefaultPreferences, editableDefaultPreferences);
+                return new Preferences(immutableDefaultPreferences, editableDefaultPreferences);
             }
         }
 

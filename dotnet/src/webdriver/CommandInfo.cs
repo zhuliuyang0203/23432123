@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -45,7 +47,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="obj">The <see cref="CommandInfo"/> to compare to this instance.</param>
         /// <returns><see langword="true"/> if <paramref name="obj"/> is a <see cref="CommandInfo"/> and its value is the same as this instance; otherwise, <see langword="false"/>. If <paramref name="obj"/> is <see langword="null"/>, the method returns <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this.Equals(obj as CommandInfo);
         }
@@ -55,7 +57,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="other">The <see cref="CommandInfo"/> to compare to this instance.</param>
         /// <returns><see langword="true"/> if the value of the <paramref name="other"/> parameter is the same as this instance; otherwise, <see langword="false"/>. If <paramref name="other"/> is <see langword="null"/>, the method returns <see langword="false"/>.</returns>
-        public bool Equals(CommandInfo other)
+        public bool Equals(CommandInfo? other)
         {
             if (other is null)
             {
@@ -63,7 +65,7 @@ namespace OpenQA.Selenium
             }
 
             // Optimization for a common success case.
-            if (Object.ReferenceEquals(this, other))
+            if (object.ReferenceEquals(this, other))
             {
                 return true;
             }
@@ -86,7 +88,7 @@ namespace OpenQA.Selenium
         /// <param name="left">The first <see cref="CommandInfo"/> object to compare.</param>
         /// <param name="right">The second <see cref="CommandInfo"/> object to compare.</param>
         /// <returns><see langword="true"/> if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(CommandInfo left, CommandInfo right)
+        public static bool operator ==(CommandInfo? left, CommandInfo? right)
         {
             if (left is null)
             {
@@ -107,7 +109,7 @@ namespace OpenQA.Selenium
         /// <param name="left">The first <see cref="CommandInfo"/> object to compare.</param>
         /// <param name="right">The second <see cref="CommandInfo"/> object to compare.</param>
         /// <returns><see langword="true"/> if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(CommandInfo left, CommandInfo right)
+        public static bool operator !=(CommandInfo? left, CommandInfo? right)
         {
             return !(left == right);
         }

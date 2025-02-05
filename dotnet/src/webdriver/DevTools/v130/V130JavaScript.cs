@@ -153,11 +153,11 @@ namespace OpenQA.Selenium.DevTools.V130
         private void OnRuntimeExceptionThrown(object sender, Runtime.ExceptionThrownEventArgs e)
         {
             // TODO: Collect stack trace elements
-            var wrapped = new ExceptionThrownEventArgs()
-            {
-                Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
-                Message = e.ExceptionDetails.Text
-            };
+            var wrapped = new ExceptionThrownEventArgs
+            (
+                timestamp: new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(e.Timestamp),
+                message: e.ExceptionDetails.Text
+            );
 
             this.OnExceptionThrown(wrapped);
         }

@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>
@@ -39,10 +41,11 @@ namespace OpenQA.Selenium.DevTools.V132
         /// </summary>
         /// <param name="network">The adapter for the Network domain.</param>
         /// <param name="fetch">The adapter for the Fetch domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="network"/> or <paramref name="fetch"/> are <see langword="null"/>.</exception>
         public V132Network(NetworkAdapter network, FetchAdapter fetch)
         {
-            this.network = network;
-            this.fetch = fetch;
+            this.network = network ?? throw new ArgumentNullException(nameof(network));
+            this.fetch = fetch ?? throw new ArgumentNullException(nameof(fetch));
             fetch.AuthRequired += OnFetchAuthRequired;
             fetch.RequestPaused += OnFetchRequestPaused;
         }
@@ -101,7 +104,7 @@ namespace OpenQA.Selenium.DevTools.V132
         }
 
         /// <summary>
-        /// Asynchronously diables the fetch domain.
+        /// Asynchronously disables the fetch domain.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public override async Task DisableFetch()
@@ -114,8 +117,14 @@ namespace OpenQA.Selenium.DevTools.V132
         /// </summary>
         /// <param name="userAgent">A <see cref="UserAgent"/> object containing the user agent values to override.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userAgent"/> is null.</exception>
         public override async Task SetUserAgentOverride(UserAgent userAgent)
         {
+            if (userAgent is null)
+            {
+                throw new ArgumentNullException(nameof(userAgent));
+            }
+
             await network.SetUserAgentOverride(new SetUserAgentOverrideCommandSettings()
             {
                 UserAgent = userAgent.UserAgentString,
@@ -129,8 +138,14 @@ namespace OpenQA.Selenium.DevTools.V132
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueRequest(HttpRequestData requestData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
             var commandSettings = new ContinueRequestCommandSettings()
             {
                 RequestId = requestData.RequestId,
@@ -163,8 +178,19 @@ namespace OpenQA.Selenium.DevTools.V132
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <param name="responseData">The <see cref="HttpResponseData"/> with which to respond to the request</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> or <paramref name="responseData"/> are <see langword="null"/>.</exception>
         public override async Task ContinueRequestWithResponse(HttpRequestData requestData, HttpResponseData responseData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             var commandSettings = new FulfillRequestCommandSettings()
             {
                 RequestId = requestData.RequestId,
@@ -196,12 +222,18 @@ namespace OpenQA.Selenium.DevTools.V132
         }
 
         /// <summary>
-        /// Asynchronously contines an intercepted network call without modification.
+        /// Asynchronously continues an intercepted network call without modification.
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the network call.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueRequestWithoutModification(HttpRequestData requestData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
             await fetch.ContinueRequest(new ContinueRequestCommandSettings() { RequestId = requestData.RequestId }).ConfigureAwait(false);
         }
 
@@ -212,7 +244,7 @@ namespace OpenQA.Selenium.DevTools.V132
         /// <param name="userName">The user name with which to authenticate.</param>
         /// <param name="password">The password with which to authenticate.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public override async Task ContinueWithAuth(string requestId, string userName, string password)
+        public override async Task ContinueWithAuth(string requestId, string? userName, string? password)
         {
             await fetch.ContinueWithAuth(new ContinueWithAuthCommandSettings()
             {
@@ -248,8 +280,14 @@ namespace OpenQA.Selenium.DevTools.V132
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> object to which to add the response body.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public override async Task AddResponseBody(HttpResponseData responseData)
         {
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             // If the response is a redirect, retrieving the body will throw an error in CDP.
             if (responseData.StatusCode < 300 || responseData.StatusCode > 399)
             {
@@ -273,12 +311,18 @@ namespace OpenQA.Selenium.DevTools.V132
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> of the network response.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueResponseWithoutModification(HttpResponseData responseData)
         {
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             await fetch.ContinueResponse(new ContinueResponseCommandSettings() { RequestId = responseData.RequestId }).ConfigureAwait(false);
         }
 
-        private void OnFetchAuthRequired(object sender, Fetch.AuthRequiredEventArgs e)
+        private void OnFetchAuthRequired(object? sender, Fetch.AuthRequiredEventArgs e)
         {
             AuthRequiredEventArgs wrapped = new AuthRequiredEventArgs
             (
@@ -289,7 +333,7 @@ namespace OpenQA.Selenium.DevTools.V132
             this.OnAuthRequired(wrapped);
         }
 
-        private void OnFetchRequestPaused(object sender, Fetch.RequestPausedEventArgs e)
+        private void OnFetchRequestPaused(object? sender, Fetch.RequestPausedEventArgs e)
         {
             if (e.ResponseErrorReason == null && e.ResponseStatusCode == null)
             {

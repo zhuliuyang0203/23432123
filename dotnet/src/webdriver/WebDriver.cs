@@ -463,13 +463,16 @@ namespace OpenQA.Selenium
             return new Navigator(this);
         }
 
+#nullable enable
+
         /// <summary>
         /// Executes a command with this driver.
         /// </summary>
         /// <param name="driverCommandToExecute">The name of the command to execute. The command name must be registered with the command executor, and must not be a command name known to this driver type.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
-        public object ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object> parameters)
+        /// <exception cref="WebDriverException">The command returned an exceptional value.</exception>
+        public object? ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object> parameters)
         {
             if (this.registeredCommands.Contains(driverCommandToExecute))
             {
@@ -497,7 +500,7 @@ namespace OpenQA.Selenium
         /// <param name="commandName">The unique name of the command to register.</param>
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        public bool RegisterCustomDriverCommand(string commandName, CommandInfo commandInfo)
+        public bool RegisterCustomDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo)
         {
             return this.RegisterDriverCommand(commandName, commandInfo, false);
         }
@@ -509,16 +512,22 @@ namespace OpenQA.Selenium
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <param name="isInternalCommand"><see langword="true"/> if the registered command is internal to the driver; otherwise <see langword="false"/>.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        internal bool RegisterDriverCommand(string commandName, CommandInfo commandInfo, bool isInternalCommand)
+        internal bool RegisterDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo, bool isInternalCommand)
         {
-            bool commandAdded = this.CommandExecutor.TryAddCommand(commandName, commandInfo);
-            if (commandAdded && isInternalCommand)
+            if (this.CommandExecutor.TryAddCommand(commandName, commandInfo))
             {
-                this.registeredCommands.Add(commandName);
+                if (isInternalCommand)
+                {
+                    this.registeredCommands.Add(commandName);
+                }
+
+                return true;
             }
 
-            return commandAdded;
+            return false;
         }
+
+#nullable restore
 
         /// <summary>
         /// Find the element in the response
@@ -692,16 +701,20 @@ namespace OpenQA.Selenium
             return capabilitiesDictionary;
         }
 
+#nullable enable
+
         /// <summary>
         /// Registers a command to be executed with this driver instance as an internally known driver command.
         /// </summary>
         /// <param name="commandName">The unique name of the command to register.</param>
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        protected bool RegisterInternalDriverCommand(string commandName, CommandInfo commandInfo)
+        protected bool RegisterInternalDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo)
         {
             return this.RegisterDriverCommand(commandName, commandInfo, true);
         }
+
+#nullable restore
 
         /// <summary>
         /// Stops the client from running

@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -71,11 +70,8 @@ namespace OpenQA.Selenium.Firefox
     /// }
     /// </code>
     /// </example>
-    public class FirefoxDriver : WebDriver, IDevTools
+    public class FirefoxDriver : WebDriver
     {
-        private const int FirefoxDevToolsProtocolVersion = 85;
-        private const string FirefoxDevToolsCapabilityName = "moz:debuggerAddress";
-
         /// <summary>
         /// Command for setting the command context of a Firefox driver.
         /// </summary>
@@ -109,8 +105,6 @@ namespace OpenQA.Selenium.Firefox
             { UninstallAddOnCommand, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/moz/addon/uninstall") },
             { GetFullPageScreenshotCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/moz/screenshot/full") }
         };
-
-        private DevToolsSession devToolsSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class.
@@ -242,14 +236,6 @@ namespace OpenQA.Selenium.Firefox
         {
             get { return base.FileDetector; }
             set { }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether a DevTools session is active.
-        /// </summary>
-        public bool HasActiveDevToolsSession
-        {
-            get { return this.devToolsSession != null; }
         }
 
         /// <summary>
@@ -390,68 +376,6 @@ namespace OpenQA.Selenium.Firefox
         }
 
         /// <summary>
-        /// Creates a session to communicate with a browser using the Chromium Developer Tools debugging protocol.
-        /// </summary>
-        /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
-        [Obsolete("CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.")]
-        public DevToolsSession GetDevToolsSession()
-        {
-            return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = FirefoxDevToolsProtocolVersion });
-        }
-
-        /// <summary>
-        /// Creates a session to communicate with a browser using the Chromium Developer Tools debugging protocol.
-        /// </summary>
-        /// <param name="devToolsProtocolVersion">The version of the Chromium Developer Tools protocol to use. Defaults to autodetect the protocol version.</param>
-        /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
-        [Obsolete("Use GetDevToolsSession(DevToolsOptions options)")]
-        public DevToolsSession GetDevToolsSession(int devToolsProtocolVersion)
-        {
-            return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = devToolsProtocolVersion });
-        }
-
-        /// <summary>
-        /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
-        /// </summary>
-        /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
-        [Obsolete("CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.")]
-        public DevToolsSession GetDevToolsSession(DevToolsOptions options)
-        {
-            if (this.devToolsSession == null)
-            {
-                if (!this.Capabilities.HasCapability(FirefoxDevToolsCapabilityName))
-                {
-                    throw new WebDriverException("Cannot find " + FirefoxDevToolsCapabilityName + " capability for driver");
-                }
-
-                string debuggerAddress = this.Capabilities.GetCapability(FirefoxDevToolsCapabilityName).ToString();
-                try
-                {
-                    DevToolsSession session = new DevToolsSession(debuggerAddress, options);
-                    Task.Run(async () => await session.StartSession()).GetAwaiter().GetResult();
-                    this.devToolsSession = session;
-                }
-                catch (Exception e)
-                {
-                    throw new WebDriverException("Unexpected error creating WebSocket DevTools session.", e);
-                }
-            }
-
-            return this.devToolsSession;
-        }
-
-        /// <summary>
-        /// Closes a DevTools session.
-        /// </summary>
-        public void CloseDevToolsSession()
-        {
-            if (this.devToolsSession != null)
-            {
-                Task.Run(async () => await this.devToolsSession.StopSession(true)).GetAwaiter().GetResult();
-            }
-        }
-
-        /// <summary>
         /// In derived classes, the <see cref="PrepareEnvironment"/> method prepares the environment for test execution.
         /// </summary>
         protected virtual void PrepareEnvironment()
@@ -467,15 +391,6 @@ namespace OpenQA.Selenium.Firefox
         /// disposing the object; otherwise <see langword="false"/>.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                if (this.devToolsSession != null)
-                {
-                    this.devToolsSession.Dispose();
-                    this.devToolsSession = null;
-                }
-            }
-
             base.Dispose(disposing);
         }
 

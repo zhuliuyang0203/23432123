@@ -23,22 +23,25 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
     /// Provides a mechanism for finding elements on the page with locators.
     /// </summary>
-    internal class TargetLocator : ITargetLocator
+    internal sealed class TargetLocator : ITargetLocator
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TargetLocator"/> class
         /// </summary>
         /// <param name="driver">The driver that is currently in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
         public TargetLocator(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -59,6 +62,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="frameName">name of the frame</param>
         /// <returns>A WebDriver instance that is currently in use</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="frameName"/> is <see langword="null"/>.</exception>
         public IWebDriver Frame(string frameName)
         {
             if (frameName == null)
@@ -85,6 +89,8 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="frameElement">a previously found FRAME or IFRAME element.</param>
         /// <returns>A WebDriver instance that is currently in use.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="frameElement"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="frameElement"/> cannot be converted to an <see cref="IWebDriverObjectReference"/>.</exception>
         public IWebDriver Frame(IWebElement frameElement)
         {
             if (frameElement == null)
@@ -92,11 +98,10 @@ namespace OpenQA.Selenium
                 throw new ArgumentNullException(nameof(frameElement), "Frame element cannot be null");
             }
 
-            IWebDriverObjectReference elementReference = frameElement as IWebDriverObjectReference;
+            IWebDriverObjectReference? elementReference = frameElement as IWebDriverObjectReference;
             if (elementReference == null)
             {
-                IWrapsElement elementWrapper = frameElement as IWrapsElement;
-                if (elementWrapper != null)
+                if (frameElement is IWrapsElement elementWrapper)
                 {
                     elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;
                 }
@@ -104,7 +109,7 @@ namespace OpenQA.Selenium
 
             if (elementReference == null)
             {
-                throw new ArgumentException("frameElement cannot be converted to IWebElementReference", nameof(frameElement));
+                throw new ArgumentException($"{nameof(frameElement)} cannot be converted to {nameof(IWebDriverObjectReference)}", nameof(frameElement));
             }
 
             Dictionary<string, object> elementDictionary = elementReference.ToDictionary();
@@ -131,8 +136,14 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="windowHandleOrName">Window handle or name of the window that you wish to move to</param>
         /// <returns>A WebDriver instance that is currently in use</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="windowHandleOrName"/> is <see langword="null"/>.</exception>
         public IWebDriver Window(string windowHandleOrName)
         {
+            if (windowHandleOrName is null)
+            {
+                throw new ArgumentNullException(nameof(windowHandleOrName));
+            }
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("handle", windowHandleOrName);
             try
@@ -143,7 +154,7 @@ namespace OpenQA.Selenium
             catch (NoSuchWindowException)
             {
                 // simulate search by name
-                string original = null;
+                string? original = null;
                 try
                 {
                     original = this.driver.CurrentWindowHandle;
@@ -183,10 +194,13 @@ namespace OpenQA.Selenium
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", typeHint.ToString().ToLowerInvariant());
+
             Response response = this.driver.InternalExecute(DriverCommand.NewWindow, parameters);
-            Dictionary<string, object> result = response.Value as Dictionary<string, object>;
-            string newWindowHandle = result["handle"].ToString();
+
+            Dictionary<string, object> result = (Dictionary<string, object>)response.Value!;
+            string newWindowHandle = result["handle"].ToString()!;
             this.Window(newWindowHandle);
+
             return this.driver;
         }
 
@@ -196,7 +210,7 @@ namespace OpenQA.Selenium
         /// <returns>Element of the default</returns>
         public IWebDriver DefaultContent()
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object?> parameters = new Dictionary<string, object?>();
             parameters.Add("id", null);
             this.driver.InternalExecute(DriverCommand.SwitchToFrame, parameters);
             return this.driver;

@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -27,24 +29,20 @@ namespace OpenQA.Selenium
     /// </summary>
     public class WebElementFactory
     {
-        private WebDriver driver;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementFactory"/> class.
         /// </summary>
         /// <param name="parentDriver">The <see cref="WebDriver"/> object used to locate the elements.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="parentDriver"/> is <see langword="null"/>.</exception>
         public WebElementFactory(WebDriver parentDriver)
         {
-            this.driver = parentDriver;
+            this.ParentDriver = parentDriver ?? throw new ArgumentNullException(nameof(parentDriver));
         }
 
         /// <summary>
         /// Gets the <see cref="WebDriver"/> instance used to locate elements.
         /// </summary>
-        protected WebDriver ParentDriver
-        {
-            get { return this.driver; }
-        }
+        protected WebDriver ParentDriver { get; }
 
         /// <summary>
         /// Creates a <see cref="WebElement"/> from a dictionary containing a reference to an element.
@@ -58,14 +56,18 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// Gets a value indicating wether the specified dictionary represents a reference to a web element.
+        /// Gets a value indicating whether the specified dictionary represents a reference to a web element.
         /// </summary>
         /// <param name="elementDictionary">The dictionary to check.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element reference; otherwise, <see langword="false"/>.</returns>
         public bool ContainsElementReference(Dictionary<string, object> elementDictionary)
         {
-            string elementPropertyName;
-            return this.TryGetElementPropertyName(elementDictionary, out elementPropertyName);
+            if (elementDictionary == null)
+            {
+                throw new ArgumentNullException(nameof(elementDictionary), "The dictionary containing the element reference cannot be null");
+            }
+
+            return elementDictionary.ContainsKey(WebElement.ElementReferencePropertyName);
         }
 
         /// <summary>
@@ -73,38 +75,28 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="elementDictionary">A dictionary containing the element reference.</param>
         /// <returns>The internal ID associated with the element.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="elementDictionary"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the dictionary does not contain the element reference property name.</exception>
+        /// <exception cref="InvalidOperationException">If the element property is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public string GetElementId(Dictionary<string, object> elementDictionary)
-        {
-            string elementPropertyName;
-            if (!this.TryGetElementPropertyName(elementDictionary, out elementPropertyName))
-            {
-                throw new ArgumentException("elementDictionary", "The specified dictionary does not contain an element reference");
-            }
-
-            string elementId = elementDictionary[elementPropertyName].ToString();
-            if (string.IsNullOrEmpty(elementId))
-            {
-                throw new InvalidOperationException("The specified element ID is either null or the empty string.");
-            }
-
-            return elementId;
-        }
-
-        private bool TryGetElementPropertyName(Dictionary<string, object> elementDictionary, out string elementPropertyName)
         {
             if (elementDictionary == null)
             {
                 throw new ArgumentNullException(nameof(elementDictionary), "The dictionary containing the element reference cannot be null");
             }
 
-            if (elementDictionary.ContainsKey(WebElement.ElementReferencePropertyName))
+            if (!elementDictionary.TryGetValue(WebElement.ElementReferencePropertyName, out object? elementIdObj))
             {
-                elementPropertyName = WebElement.ElementReferencePropertyName;
-                return true;
+                throw new ArgumentException("elementDictionary", "The specified dictionary does not contain an element reference");
             }
 
-            elementPropertyName = string.Empty;
-            return false;
+            string? elementId = elementIdObj.ToString();
+            if (string.IsNullOrEmpty(elementId))
+            {
+                throw new InvalidOperationException("The specified element ID is either null or the empty string.");
+            }
+
+            return elementId;
         }
     }
 }

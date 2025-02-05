@@ -98,8 +98,14 @@ public class LoggingOptions {
       return;
     }
 
-    // Keep current loggers if they are being manually set
-    if (LogManager.getLogManager().getProperty("handlers") != null) return;
+    String configClass = System.getProperty("java.util.logging.config.class");
+    String configFile = System.getProperty("java.util.logging.config.file");
+
+    // Check if the java logging config class or file is set. If so, give that priority.
+    // Else default to the Selenium logging and respect the Selenium logging options.
+    if (configClass != null || configFile != null) {
+      return;
+    }
 
     // Remove all handlers from existing loggers
     LogManager logManager = LogManager.getLogManager();

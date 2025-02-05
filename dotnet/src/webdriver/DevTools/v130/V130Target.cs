@@ -125,14 +125,14 @@ namespace OpenQA.Selenium.DevTools.V130
         private void OnAttachedToTarget(object sender, AttachedToTargetEventArgs e)
         {
             var targetInfo = e.TargetInfo == null ? null : new TargetInfo
-                {
-                    BrowserContextId = e.TargetInfo.BrowserContextId,
-                    IsAttached = e.TargetInfo.Attached,
-                    OpenerId = e.TargetInfo.OpenerId,
-                    TargetId = e.TargetInfo.TargetId,
-                    Title = e.TargetInfo.Title,
-                    Type = e.TargetInfo.Type,
-                    Url = e.TargetInfo.Url
+            {
+                BrowserContextId = e.TargetInfo.BrowserContextId,
+                IsAttached = e.TargetInfo.Attached,
+                OpenerId = e.TargetInfo.OpenerId,
+                TargetId = e.TargetInfo.TargetId,
+                Title = e.TargetInfo.Title,
+                Type = e.TargetInfo.Type,
+                Url = e.TargetInfo.Url
             };
 
             this.OnTargetAttached(new TargetAttachedEventArgs

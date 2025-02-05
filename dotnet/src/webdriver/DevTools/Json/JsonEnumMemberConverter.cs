@@ -24,9 +24,12 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.Json
 {
-    internal class JsonEnumMemberConverter<TEnum> : JsonConverter<TEnum> where TEnum : Enum
+    internal sealed class JsonEnumMemberConverter<TEnum> : JsonConverter<TEnum>
+        where TEnum : struct, Enum
     {
         private readonly Dictionary<TEnum, string> _enumToString = new Dictionary<TEnum, string>();
         private readonly Dictionary<string, TEnum> _stringToEnum = new Dictionary<string, TEnum>();
@@ -34,11 +37,14 @@ namespace OpenQA.Selenium.DevTools.Json
         public JsonEnumMemberConverter()
         {
             var type = typeof(TEnum);
-            var values = Enum.GetValues(type);
-
+#if NET8_0_OR_GREATER
+            TEnum[] values = Enum.GetValues<TEnum>();
+#else
+            Array values = Enum.GetValues(type);
+#endif
             foreach (var value in values)
             {
-                var enumMember = type.GetMember(value.ToString())[0];
+                var enumMember = type.GetField(value.ToString());
                 var attr = enumMember.GetCustomAttributes(typeof(EnumMemberAttribute), false)
                   .Cast<EnumMemberAttribute>()
                   .FirstOrDefault();
@@ -59,7 +65,7 @@ namespace OpenQA.Selenium.DevTools.Json
 
         public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var stringValue = reader.GetString();
+            var stringValue = reader.GetString() ?? throw new JsonException("Could not read an enum string from \"null\"");
 
             if (_stringToEnum.TryGetValue(stringValue, out var enumValue))
             {

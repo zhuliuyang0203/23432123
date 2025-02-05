@@ -62,7 +62,6 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
   public FirefoxOptions() {
     setCapability(CapabilityType.BROWSER_NAME, FIREFOX.browserName());
     setAcceptInsecureCerts(true);
-    setCapability("moz:debuggerAddress", true);
     // Firefox 129 onwards the CDP protocol will not be enabled by default. Setting this preference
     // will enable it.
     // https://fxdx.dev/deprecating-cdp-support-in-firefox-embracing-the-future-with-webdriver-bidi/.

@@ -1,5 +1,5 @@
 group nuget
-framework: net7.0,netstandard2.0
+framework: net8.0,netstandard2.0
 source https://api.nuget.org/v3/index.json
 
 nuget BenderProxy 1.0.0
@@ -15,7 +15,7 @@ nuget Microsoft.NETCore.App.Runtime.osx-arm64 6.0.15
 nuget Microsoft.NETCore.App.Runtime.osx-x64 6.0.15
 nuget Microsoft.NETCore.App.Runtime.win-x64 6.0.15
 nuget Microsoft.NETCore.App.Ref 6.0.9
-nuget Moq 4.12.0
+nuget Moq 4.20.72
 nuget NETStandard.Library 2.0.3
 nuget Newtonsoft.Json 13.0.1
 nuget NUnit 3.13.2

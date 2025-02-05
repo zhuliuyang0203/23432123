@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Chromium
 {
     /// <summary>
@@ -42,25 +44,18 @@ namespace OpenQA.Selenium.Chromium
         private const string PerformanceLoggingPreferencesChromeOption = "perfLoggingPrefs";
         private const string WindowTypesChromeOption = "windowTypes";
         private const string UseSpecCompliantProtocolOption = "w3c";
-
-        private bool leaveBrowserRunning;
         private bool useSpecCompliantProtocol = true;
-        private string binaryLocation;
-        private string debuggerAddress;
-        private string minidumpPath;
-        private List<string> arguments = new List<string>();
-        private List<string> extensionFiles = new List<string>();
-        private List<string> encodedExtensions = new List<string>();
-        private List<string> excludedSwitches = new List<string>();
-        private List<string> windowTypes = new List<string>();
-        private Dictionary<string, object> additionalChromeOptions = new Dictionary<string, object>();
-        private Dictionary<string, object> userProfilePreferences;
-        private Dictionary<string, object> localStatePreferences;
+        private readonly List<string> arguments = new List<string>();
+        private readonly List<string> extensionFiles = new List<string>();
+        private readonly List<string> encodedExtensions = new List<string>();
+        private readonly List<string> excludedSwitches = new List<string>();
+        private readonly List<string> windowTypes = new List<string>();
+        private readonly Dictionary<string, object> additionalChromeOptions = new Dictionary<string, object>();
+        private Dictionary<string, object>? userProfilePreferences;
+        private Dictionary<string, object>? localStatePreferences;
 
-        private string mobileEmulationDeviceName;
-        private ChromiumMobileEmulationDeviceSettings mobileEmulationDeviceSettings;
-        private ChromiumPerformanceLoggingPreferences perfLoggingPreferences;
-        private ChromiumAndroidOptions androidOptions;
+        private string? mobileEmulationDeviceName;
+        private ChromiumMobileEmulationDeviceSettings? mobileEmulationDeviceSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromiumOptions"/> class.
@@ -90,10 +85,7 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         protected abstract string VendorPrefix { get; }
 
-        private string LoggingPreferencesChromeOption
-        {
-            get { return this.VendorPrefix + ":loggingPrefs"; }
-        }
+        private string LoggingPreferencesChromeOption => this.VendorPrefix + ":loggingPrefs";
 
         /// <summary>
         /// Gets the name of the capability used to store Chromium options in
@@ -104,29 +96,18 @@ namespace OpenQA.Selenium.Chromium
         /// <summary>
         /// Gets or sets the location of the Chromium browser's binary executable file.
         /// </summary>
-        public override string BinaryLocation
-        {
-            get { return this.binaryLocation; }
-            set { this.binaryLocation = value; }
-        }
+        public override string? BinaryLocation { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Chromium should be left running after the
         /// ChromeDriver instance is exited. Defaults to <see langword="false"/>.
         /// </summary>
-        public bool LeaveBrowserRunning
-        {
-            get { return this.leaveBrowserRunning; }
-            set { this.leaveBrowserRunning = value; }
-        }
+        public bool LeaveBrowserRunning { get; set; }
 
         /// <summary>
         /// Gets the list of arguments appended to the Chromium command line as a string array.
         /// </summary>
-        public ReadOnlyCollection<string> Arguments
-        {
-            get { return this.arguments.AsReadOnly(); }
-        }
+        public ReadOnlyCollection<string> Arguments => this.arguments.AsReadOnly();
 
         /// <summary>
         /// Gets the list of extensions to be installed as an array of base64-encoded strings.
@@ -151,43 +132,28 @@ namespace OpenQA.Selenium.Chromium
         /// Gets or sets the address of a Chromium debugger server to connect to.
         /// Should be of the form "{hostname|IP address}:port".
         /// </summary>
-        public string DebuggerAddress
-        {
-            get { return this.debuggerAddress; }
-            set { this.debuggerAddress = value; }
-        }
+        public string? DebuggerAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the directory in which to store minidump files.
         /// </summary>
-        public string MinidumpPath
-        {
-            get { return this.minidumpPath; }
-            set { this.minidumpPath = value; }
-        }
+        public string? MinidumpPath { get; set; }
 
         /// <summary>
         /// Gets or sets the performance logging preferences for the driver.
         /// </summary>
-        public ChromiumPerformanceLoggingPreferences PerformanceLoggingPreferences
-        {
-            get { return this.perfLoggingPreferences; }
-            set { this.perfLoggingPreferences = value; }
-        }
+        public ChromiumPerformanceLoggingPreferences? PerformanceLoggingPreferences { get; set; }
 
         /// <summary>
         /// Gets or sets the options for automating Chromium applications on Android.
         /// </summary>
-        public ChromiumAndroidOptions AndroidOptions
-        {
-            get { return this.androidOptions; }
-            set { this.androidOptions = value; }
-        }
+        public ChromiumAndroidOptions? AndroidOptions { get; set; }
 
         /// <summary>
         /// Adds a single argument to the list of arguments to be appended to the browser executable command line.
         /// </summary>
         /// <param name="argument">The argument to add.</param>
+        /// <exception cref="ArgumentException">If <paramref name="argument"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void AddArgument(string argument)
         {
             if (string.IsNullOrEmpty(argument))
@@ -202,15 +168,17 @@ namespace OpenQA.Selenium.Chromium
         /// Adds arguments to be appended to the browser executable command line.
         /// </summary>
         /// <param name="argumentsToAdd">An array of arguments to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToAdd"/> is <see langword="null"/>.</exception>
         public void AddArguments(params string[] argumentsToAdd)
         {
-            this.AddArguments(new List<string>(argumentsToAdd));
+            this.AddArguments((IEnumerable<string>)argumentsToAdd);
         }
 
         /// <summary>
         /// Adds arguments to be appended to the browser executable command line.
         /// </summary>
         /// <param name="argumentsToAdd">An <see cref="IEnumerable{T}"/> object of arguments to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToAdd"/> is <see langword="null"/>.</exception>
         public void AddArguments(IEnumerable<string> argumentsToAdd)
         {
             if (argumentsToAdd == null)
@@ -226,6 +194,7 @@ namespace OpenQA.Selenium.Chromium
         /// to the browser executable command line by chromedriver.exe.
         /// </summary>
         /// <param name="argument">The argument to exclude.</param>
+        /// <exception cref="ArgumentException">If <paramref name="argument"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void AddExcludedArgument(string argument)
         {
             if (string.IsNullOrEmpty(argument))
@@ -241,9 +210,10 @@ namespace OpenQA.Selenium.Chromium
         /// to the browser executable command line by chromedriver.exe.
         /// </summary>
         /// <param name="argumentsToExclude">An array of arguments to exclude.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToExclude"/> is <see langword="null"/>.</exception>
         public void AddExcludedArguments(params string[] argumentsToExclude)
         {
-            this.AddExcludedArguments(new List<string>(argumentsToExclude));
+            this.AddExcludedArguments((IEnumerable<string>)argumentsToExclude);
         }
 
         /// <summary>
@@ -251,6 +221,7 @@ namespace OpenQA.Selenium.Chromium
         /// to the browser executable command line by chromedriver.exe.
         /// </summary>
         /// <param name="argumentsToExclude">An <see cref="IEnumerable{T}"/> object of arguments to exclude.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="argumentsToExclude"/> is <see langword="null"/>.</exception>
         public void AddExcludedArguments(IEnumerable<string> argumentsToExclude)
         {
             if (argumentsToExclude == null)
@@ -266,6 +237,7 @@ namespace OpenQA.Selenium.Chromium
         /// to be installed in the instance of Chrome.
         /// </summary>
         /// <param name="pathToExtension">The full path to the extension to add.</param>
+        /// <exception cref="ArgumentException">If <paramref name="pathToExtension"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void AddExtension(string pathToExtension)
         {
             if (string.IsNullOrEmpty(pathToExtension))
@@ -281,9 +253,11 @@ namespace OpenQA.Selenium.Chromium
         /// in the instance of Chrome.
         /// </summary>
         /// <param name="extensions">An array of full paths to the extensions to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="extensions"/> is <see langword="null"/>.</exception>
+        /// <exception cref="FileNotFoundException">If any extension file path does not point to a file.</exception>
         public void AddExtensions(params string[] extensions)
         {
-            this.AddExtensions(new List<string>(extensions));
+            this.AddExtensions((IEnumerable<string>)extensions);
         }
 
         /// <summary>
@@ -291,6 +265,8 @@ namespace OpenQA.Selenium.Chromium
         /// in the instance of Chrome.
         /// </summary>
         /// <param name="extensions">An <see cref="IEnumerable{T}"/> of full paths to the extensions to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="extensions"/> is <see langword="null"/>.</exception>
+        /// <exception cref="FileNotFoundException">If any extension file path does not point to a file.</exception>
         public void AddExtensions(IEnumerable<string> extensions)
         {
             if (extensions == null)
@@ -314,6 +290,8 @@ namespace OpenQA.Selenium.Chromium
         /// to be installed in the instance of Chrome.
         /// </summary>
         /// <param name="extension">A base64-encoded string representing the extension to add.</param>
+        /// <exception cref="ArgumentException">If <paramref name="extension"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
+        /// <exception cref="WebDriverException">If the extension string is not valid base-64.</exception>
         public void AddEncodedExtension(string extension)
         {
             if (string.IsNullOrEmpty(extension))
@@ -329,9 +307,11 @@ namespace OpenQA.Selenium.Chromium
         /// to be installed in the instance of Chrome.
         /// </summary>
         /// <param name="extensions">An array of base64-encoded strings representing the extensions to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="extensions"/> is <see langword="null"/>.</exception>
+        /// <exception cref="WebDriverException">If an extension string is not valid base-64.</exception>
         public void AddEncodedExtensions(params string[] extensions)
         {
-            this.AddEncodedExtensions(new List<string>(extensions));
+            this.AddEncodedExtensions((IEnumerable<string>)extensions);
         }
 
         /// <summary>
@@ -340,6 +320,8 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         /// <param name="extensions">An <see cref="IEnumerable{T}"/> of base64-encoded strings
         /// representing the extensions to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="extensions"/> is <see langword="null"/>.</exception>
+        /// <exception cref="WebDriverException">If an extension string is not valid base-64.</exception>
         public void AddEncodedExtensions(IEnumerable<string> extensions)
         {
             if (extensions == null)
@@ -370,6 +352,7 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         /// <param name="preferenceName">The name of the preference to set.</param>
         /// <param name="preferenceValue">The value of the preference to set.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="preferenceName"/> is <see langword="null"/>.</exception>
         public void AddUserProfilePreference(string preferenceName, object preferenceValue)
         {
             if (this.userProfilePreferences == null)
@@ -386,6 +369,7 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         /// <param name="preferenceName">The name of the preference to set.</param>
         /// <param name="preferenceValue">The value of the preference to set.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="preferenceName"/> is <see langword="null"/>.</exception>
         public void AddLocalStatePreference(string preferenceName, object preferenceValue)
         {
             if (this.localStatePreferences == null)
@@ -404,7 +388,7 @@ namespace OpenQA.Selenium.Chromium
         /// <remarks>Specifying an invalid device name will not throw an exeption, but
         /// will generate an error in Chrome when the driver starts. To unset mobile
         /// emulation, call this method with <see langword="null"/> as the argument.</remarks>
-        public void EnableMobileEmulation(string deviceName)
+        public void EnableMobileEmulation(string? deviceName)
         {
             this.mobileEmulationDeviceSettings = null;
             this.mobileEmulationDeviceName = deviceName;
@@ -420,7 +404,7 @@ namespace OpenQA.Selenium.Chromium
         /// <remarks>Specifying an invalid device name will not throw an exeption, but
         /// will generate an error in Chrome when the driver starts. To unset mobile
         /// emulation, call this method with <see langword="null"/> as the argument.</remarks>
-        public void EnableMobileEmulation(ChromiumMobileEmulationDeviceSettings deviceSettings)
+        public void EnableMobileEmulation(ChromiumMobileEmulationDeviceSettings? deviceSettings)
         {
             this.mobileEmulationDeviceName = null;
             if (deviceSettings != null && string.IsNullOrEmpty(deviceSettings.UserAgent))
@@ -438,6 +422,7 @@ namespace OpenQA.Selenium.Chromium
         /// <param name="windowType">The name of the window type to add.</param>
         /// <remarks>This method can be used to allow the driver to access {webview}
         /// elements by adding "webview" as a window type.</remarks>
+        /// <exception cref="ArgumentException">If <paramref name="windowType"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void AddWindowType(string windowType)
         {
             if (string.IsNullOrEmpty(windowType))
@@ -453,9 +438,10 @@ namespace OpenQA.Selenium.Chromium
         /// returned by the Chromium driver.
         /// </summary>
         /// <param name="windowTypesToAdd">An array of window types to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="windowTypesToAdd"/> is <see langword="null"/>.</exception>
         public void AddWindowTypes(params string[] windowTypesToAdd)
         {
-            this.AddWindowTypes(new List<string>(windowTypesToAdd));
+            this.AddWindowTypes((IEnumerable<string>)windowTypesToAdd);
         }
 
         /// <summary>
@@ -463,6 +449,7 @@ namespace OpenQA.Selenium.Chromium
         /// returned by the Chromium driver.
         /// </summary>
         /// <param name="windowTypesToAdd">An <see cref="IEnumerable{T}"/> of window types to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="windowTypesToAdd"/> is <see langword="null"/>.</exception>
         public void AddWindowTypes(IEnumerable<string> windowTypesToAdd)
         {
             if (windowTypesToAdd == null)
@@ -488,6 +475,10 @@ namespace OpenQA.Selenium.Chromium
         /// existing value with the new value in <paramref name="optionValue"/>.
         /// Calling this method adds capabilities to the Chromium-specific options object passed to
         /// webdriver executable (e.g. property name 'goog:chromeOptions').</remarks>
+        /// <exception cref="ArgumentException">
+        /// thrown when attempting to add a capability for which there is already a type safe option, or
+        /// when <paramref name="optionName"/> is <see langword="null"/> or the empty string.
+        /// </exception>
         protected void AddAdditionalChromiumOption(string optionName, object optionValue)
         {
             this.ValidateCapabilityName(optionName);
@@ -509,7 +500,7 @@ namespace OpenQA.Selenium.Chromium
 
             AddVendorSpecificChromiumCapabilities(capabilities);
 
-            Dictionary<string, object> loggingPreferences = this.GenerateLoggingPreferencesDictionary();
+            Dictionary<string, object>? loggingPreferences = this.GenerateLoggingPreferencesDictionary();
             if (loggingPreferences != null)
             {
                 capabilities.SetCapability(LoggingPreferencesChromeOption, loggingPreferences);
@@ -534,9 +525,9 @@ namespace OpenQA.Selenium.Chromium
                 chromeOptions[ArgumentsChromeOption] = this.Arguments;
             }
 
-            if (!string.IsNullOrEmpty(this.binaryLocation))
+            if (!string.IsNullOrEmpty(this.BinaryLocation))
             {
-                chromeOptions[BinaryChromeOption] = this.binaryLocation;
+                chromeOptions[BinaryChromeOption] = this.BinaryLocation!;
             }
 
             ReadOnlyCollection<string> extensions = this.Extensions;
@@ -555,9 +546,9 @@ namespace OpenQA.Selenium.Chromium
                 chromeOptions[PreferencesChromeOption] = this.userProfilePreferences;
             }
 
-            if (this.leaveBrowserRunning)
+            if (this.LeaveBrowserRunning)
             {
-                chromeOptions[DetachChromeOption] = this.leaveBrowserRunning;
+                chromeOptions[DetachChromeOption] = this.LeaveBrowserRunning;
             }
 
             if (!this.useSpecCompliantProtocol)
@@ -565,9 +556,9 @@ namespace OpenQA.Selenium.Chromium
                 chromeOptions[UseSpecCompliantProtocolOption] = this.useSpecCompliantProtocol;
             }
 
-            if (!string.IsNullOrEmpty(this.debuggerAddress))
+            if (!string.IsNullOrEmpty(this.DebuggerAddress))
             {
-                chromeOptions[DebuggerAddressChromeOption] = this.debuggerAddress;
+                chromeOptions[DebuggerAddressChromeOption] = this.DebuggerAddress!;
             }
 
             if (this.excludedSwitches.Count > 0)
@@ -575,24 +566,24 @@ namespace OpenQA.Selenium.Chromium
                 chromeOptions[ExcludeSwitchesChromeOption] = this.excludedSwitches;
             }
 
-            if (!string.IsNullOrEmpty(this.minidumpPath))
+            if (!string.IsNullOrEmpty(this.MinidumpPath))
             {
-                chromeOptions[MinidumpPathChromeOption] = this.minidumpPath;
+                chromeOptions[MinidumpPathChromeOption] = this.MinidumpPath!;
             }
 
             if (!string.IsNullOrEmpty(this.mobileEmulationDeviceName) || this.mobileEmulationDeviceSettings != null)
             {
-                chromeOptions[MobileEmulationChromeOption] = this.GenerateMobileEmulationSettingsDictionary();
+                chromeOptions[MobileEmulationChromeOption] = GenerateMobileEmulationSettingsDictionary(this.mobileEmulationDeviceSettings, this.mobileEmulationDeviceName);
             }
 
-            if (this.perfLoggingPreferences != null)
+            if (this.PerformanceLoggingPreferences != null)
             {
-                chromeOptions[PerformanceLoggingPreferencesChromeOption] = this.GeneratePerformanceLoggingPreferencesDictionary();
+                chromeOptions[PerformanceLoggingPreferencesChromeOption] = GeneratePerformanceLoggingPreferencesDictionary(this.PerformanceLoggingPreferences);
             }
 
-            if (this.androidOptions != null)
+            if (this.AndroidOptions != null)
             {
-                this.AddAndroidOptions(chromeOptions);
+                AddAndroidOptions(chromeOptions, this.AndroidOptions);
             }
 
             if (this.windowTypes.Count > 0)
@@ -608,66 +599,66 @@ namespace OpenQA.Selenium.Chromium
             return chromeOptions;
         }
 
-        private void AddAndroidOptions(Dictionary<string, object> chromeOptions)
+        private static void AddAndroidOptions(Dictionary<string, object> chromeOptions, ChromiumAndroidOptions androidOptions)
         {
-            chromeOptions["androidPackage"] = this.androidOptions.AndroidPackage;
+            chromeOptions["androidPackage"] = androidOptions.AndroidPackage;
 
-            if (!string.IsNullOrEmpty(this.androidOptions.AndroidDeviceSerial))
+            if (!string.IsNullOrEmpty(androidOptions.AndroidDeviceSerial))
             {
-                chromeOptions["androidDeviceSerial"] = this.androidOptions.AndroidDeviceSerial;
+                chromeOptions["androidDeviceSerial"] = androidOptions.AndroidDeviceSerial!;
             }
 
-            if (!string.IsNullOrEmpty(this.androidOptions.AndroidActivity))
+            if (!string.IsNullOrEmpty(androidOptions.AndroidActivity))
             {
-                chromeOptions["androidActivity"] = this.androidOptions.AndroidActivity;
+                chromeOptions["androidActivity"] = androidOptions.AndroidActivity!;
             }
 
-            if (!string.IsNullOrEmpty(this.androidOptions.AndroidProcess))
+            if (!string.IsNullOrEmpty(androidOptions.AndroidProcess))
             {
-                chromeOptions["androidProcess"] = this.androidOptions.AndroidProcess;
+                chromeOptions["androidProcess"] = androidOptions.AndroidProcess;
             }
 
-            if (this.androidOptions.UseRunningApp)
+            if (androidOptions.UseRunningApp)
             {
-                chromeOptions["androidUseRunningApp"] = this.androidOptions.UseRunningApp;
+                chromeOptions["androidUseRunningApp"] = androidOptions.UseRunningApp;
             }
         }
 
-        private Dictionary<string, object> GeneratePerformanceLoggingPreferencesDictionary()
+        private static Dictionary<string, object> GeneratePerformanceLoggingPreferencesDictionary(ChromiumPerformanceLoggingPreferences prefs)
         {
             Dictionary<string, object> perfLoggingPrefsDictionary = new Dictionary<string, object>();
-            perfLoggingPrefsDictionary["enableNetwork"] = this.perfLoggingPreferences.IsCollectingNetworkEvents;
-            perfLoggingPrefsDictionary["enablePage"] = this.perfLoggingPreferences.IsCollectingPageEvents;
+            perfLoggingPrefsDictionary["enableNetwork"] = prefs.IsCollectingNetworkEvents;
+            perfLoggingPrefsDictionary["enablePage"] = prefs.IsCollectingPageEvents;
 
-            string tracingCategories = this.perfLoggingPreferences.TracingCategories;
+            string tracingCategories = prefs.TracingCategories;
             if (!string.IsNullOrEmpty(tracingCategories))
             {
                 perfLoggingPrefsDictionary["traceCategories"] = tracingCategories;
             }
 
-            perfLoggingPrefsDictionary["bufferUsageReportingInterval"] = Convert.ToInt64(this.perfLoggingPreferences.BufferUsageReportingInterval.TotalMilliseconds);
+            perfLoggingPrefsDictionary["bufferUsageReportingInterval"] = Convert.ToInt64(prefs.BufferUsageReportingInterval.TotalMilliseconds);
 
             return perfLoggingPrefsDictionary;
         }
 
-        private Dictionary<string, object> GenerateMobileEmulationSettingsDictionary()
+        private static Dictionary<string, object> GenerateMobileEmulationSettingsDictionary(ChromiumMobileEmulationDeviceSettings? settings, string? deviceName)
         {
             Dictionary<string, object> mobileEmulationSettings = new Dictionary<string, object>();
 
-            if (!string.IsNullOrEmpty(this.mobileEmulationDeviceName))
+            if (!string.IsNullOrEmpty(deviceName))
             {
-                mobileEmulationSettings["deviceName"] = this.mobileEmulationDeviceName;
+                mobileEmulationSettings["deviceName"] = deviceName!;
             }
-            else if (this.mobileEmulationDeviceSettings != null)
+            else if (settings != null)
             {
-                mobileEmulationSettings["userAgent"] = this.mobileEmulationDeviceSettings.UserAgent;
+                mobileEmulationSettings["userAgent"] = settings.UserAgent;
                 Dictionary<string, object> deviceMetrics = new Dictionary<string, object>();
-                deviceMetrics["width"] = this.mobileEmulationDeviceSettings.Width;
-                deviceMetrics["height"] = this.mobileEmulationDeviceSettings.Height;
-                deviceMetrics["pixelRatio"] = this.mobileEmulationDeviceSettings.PixelRatio;
-                if (!this.mobileEmulationDeviceSettings.EnableTouchEvents)
+                deviceMetrics["width"] = settings.Width;
+                deviceMetrics["height"] = settings.Height;
+                deviceMetrics["pixelRatio"] = settings.PixelRatio;
+                if (!settings.EnableTouchEvents)
                 {
-                    deviceMetrics["touch"] = this.mobileEmulationDeviceSettings.EnableTouchEvents;
+                    deviceMetrics["touch"] = settings.EnableTouchEvents;
                 }
 
                 mobileEmulationSettings["deviceMetrics"] = deviceMetrics;

@@ -142,6 +142,7 @@ public class LocalDistributor extends Distributor implements Closeable {
   private final GridModel model;
   private final Map<NodeId, Node> nodes;
   private final SlotMatcher slotMatcher;
+  private final Duration purgeNodesInterval;
 
   private final ScheduledExecutorService newSessionService =
       Executors.newSingleThreadScheduledExecutor(
@@ -188,7 +189,8 @@ public class LocalDistributor extends Distributor implements Closeable {
       boolean rejectUnsupportedCaps,
       Duration sessionRequestRetryInterval,
       int newSessionThreadPoolSize,
-      SlotMatcher slotMatcher) {
+      SlotMatcher slotMatcher,
+      Duration purgeNodesInterval) {
     super(tracer, clientFactory, registrationSecret);
     this.tracer = Require.nonNull("Tracer", tracer);
     this.bus = Require.nonNull("Event bus", bus);
@@ -202,6 +204,7 @@ public class LocalDistributor extends Distributor implements Closeable {
     this.nodes = new ConcurrentHashMap<>();
     this.rejectUnsupportedCaps = rejectUnsupportedCaps;
     this.slotMatcher = slotMatcher;
+    this.purgeNodesInterval = purgeNodesInterval;
     Require.nonNull("Session request interval", sessionRequestRetryInterval);
 
     bus.addListener(NodeStatusEvent.listener(this::register));
@@ -232,8 +235,14 @@ public class LocalDistributor extends Distributor implements Closeable {
     NewSessionRunnable newSessionRunnable = new NewSessionRunnable();
     bus.addListener(NodeDrainComplete.listener(this::remove));
 
-    purgeDeadNodesService.scheduleAtFixedRate(
-        GuardedRunnable.guard(model::purgeDeadNodes), 30, 30, TimeUnit.SECONDS);
+    // Disable purge dead nodes service if interval is set to zero
+    if (!this.purgeNodesInterval.isZero()) {
+      purgeDeadNodesService.scheduleAtFixedRate(
+          GuardedRunnable.guard(model::purgeDeadNodes),
+          this.purgeNodesInterval.getSeconds(),
+          this.purgeNodesInterval.getSeconds(),
+          TimeUnit.SECONDS);
+    }
 
     nodeHealthCheckService.scheduleAtFixedRate(
         runNodeHealthChecks(),
@@ -276,7 +285,8 @@ public class LocalDistributor extends Distributor implements Closeable {
         distributorOptions.shouldRejectUnsupportedCaps(),
         newSessionQueueOptions.getSessionRequestRetryInterval(),
         distributorOptions.getNewSessionThreadPoolSize(),
-        distributorOptions.getSlotMatcher());
+        distributorOptions.getSlotMatcher(),
+        distributorOptions.getPurgeNodesInterval());
   }
 
   @Override

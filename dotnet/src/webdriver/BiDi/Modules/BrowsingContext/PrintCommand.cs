@@ -25,7 +25,8 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class PrintCommand(PrintCommandParameters @params) : Command<PrintCommandParameters>(@params);
+internal class PrintCommand(PrintCommandParameters @params)
+    : Command<PrintCommandParameters>(@params, "browsingContext.print");
 
 internal record PrintCommandParameters(BrowsingContext Context) : CommandParameters
 {
