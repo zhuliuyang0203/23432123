@@ -216,6 +216,16 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
+        /// Gets the <see cref="Value"/> of this response, or throws if it is <see langword="null"/>.
+        /// </summary>
+        /// <returns>The <see cref="Value"/> instance.</returns>
+        /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
+        internal object GetNotNullValue()
+        {
+            return Value ?? throw new WebDriverException("Expected not-null response");
+        }
+
+        /// <summary>
         /// Returns the object as a string.
         /// </summary>
         /// <returns>A string with the Session ID, status value, and the value from JSON.</returns>
