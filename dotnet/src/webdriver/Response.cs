@@ -221,12 +221,9 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
         [MemberNotNull(nameof(Value))]
-        internal void EnsureHasValue()
+        internal object EnsureValueIsNotNull(string? errorMessage = null)
         {
-            if (Value is null)
-            {
-                throw new WebDriverException("Expected not-null response");
-            }
+            return Value ?? throw new WebDriverException(errorMessage ?? "Expected not-null response");
         }
 
         /// <summary>
