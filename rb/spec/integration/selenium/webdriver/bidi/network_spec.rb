@@ -144,6 +144,38 @@ module Selenium
             expect(driver.find_element(name: 'login')).to be_displayed
           end
         end
+
+        it 'provides response' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            network.add_intercept(phases: [described_class::PHASES[:response_started]])
+            network.on(:response_started) do |event|
+              request_id = event['request']['request']
+              network.provide_response(
+                id: request_id,
+                status: 200,
+                headers: [
+                  {
+                    name: 'foo',
+                    value: {
+                      type: 'string',
+                      value: 'bar'
+                    }
+                  }
+                ],
+                body: {
+                  type: 'string',
+                  value: '<html><head><title>Hello World!</title></head><body/></html>'
+                }
+              )
+            end
+
+            driver.navigate.to url_for('formPage.html')
+            source = driver.page_source
+            expect(source).not_to include('There should be a form here:')
+            expect(source).to include('Hello World!')
+          end
+        end
       end
     end
   end

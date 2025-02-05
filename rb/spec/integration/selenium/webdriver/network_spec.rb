@@ -262,6 +262,22 @@ module Selenium
         end
       end
 
+      it 'adds a response handler that provides a response' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler do |response|
+            response.status = 200
+            response.headers['foo'] = 'bar'
+            response.body = '<html><head><title>Hello World!</title></head><body/></html>'
+            response.provide_response
+          end
+          driver.navigate.to url_for('formPage.html')
+          source = driver.page_source
+          expect(source).not_to include('There should be a form here:')
+          expect(source).to include('Hello World!')
+        end
+      end
+
       it 'removes a response handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
