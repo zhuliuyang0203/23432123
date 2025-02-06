@@ -27,11 +27,13 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
     /// Represents a WebSocket connection to a running DevTools instance that can be used to send
-    /// commands and recieve events.
+    /// commands and receive events.
     ///</summary>
     public class DevToolsSession : IDevToolsSession
     {
@@ -42,20 +44,17 @@ namespace OpenQA.Selenium.DevTools
         public const int AutoDetectDevToolsProtocolVersion = 0;
 
         private readonly string debuggerEndpoint;
-        private string websocketAddress;
         private readonly TimeSpan openConnectionWaitTimeSpan = TimeSpan.FromSeconds(30);
         private readonly TimeSpan closeConnectionWaitTimeSpan = TimeSpan.FromSeconds(2);
 
         private bool isDisposed = false;
-        private string attachedTargetId;
+        private string? attachedTargetId;
 
-        private WebSocketConnection connection;
+        private WebSocketConnection? connection;
         private ConcurrentDictionary<long, DevToolsCommandData> pendingCommands = new ConcurrentDictionary<long, DevToolsCommandData>();
         private readonly BlockingCollection<string> messageQueue = new BlockingCollection<string>();
         private readonly Task messageQueueMonitorTask;
         private long currentCommandId = 0;
-
-        private DevToolsDomains domains;
         private readonly DevToolsOptions options;
 
         private readonly static ILogger logger = Internal.Logging.Log.GetLogger<DevToolsSession>();
@@ -72,7 +71,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="endpointAddress"></param>
         /// <param name="options"></param>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>, or <paramref name="endpointAddress"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public DevToolsSession(string endpointAddress, DevToolsOptions options)
         {
             if (string.IsNullOrWhiteSpace(endpointAddress))
@@ -85,7 +84,7 @@ namespace OpenQA.Selenium.DevTools
             this.debuggerEndpoint = endpointAddress;
             if (endpointAddress.StartsWith("ws", StringComparison.InvariantCultureIgnoreCase))
             {
-                this.websocketAddress = endpointAddress;
+                this.EndpointAddress = endpointAddress;
             }
             this.messageQueueMonitorTask = Task.Run(() => this.MonitorMessageQueue());
         }
@@ -93,12 +92,12 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Event raised when the DevToolsSession logs informational messages.
         /// </summary>
-        public event EventHandler<DevToolsSessionLogMessageEventArgs> LogMessage;
+        public event EventHandler<DevToolsSessionLogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Event raised an event notification is received from the DevTools session.
         /// </summary>
-        public event EventHandler<DevToolsEventReceivedEventArgs> DevToolsEventReceived;
+        public event EventHandler<DevToolsEventReceivedEventArgs>? DevToolsEventReceived;
 
         /// <summary>
         /// Gets or sets the time to wait for a command to complete. Default is 30 seconds.
@@ -108,17 +107,17 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Gets or sets the active session ID of the connection.
         /// </summary>
-        public string ActiveSessionId { get; private set; }
+        public string? ActiveSessionId { get; private set; }
 
         /// <summary>
         /// Gets the endpoint address of the session.
         /// </summary>
-        public string EndpointAddress => this.websocketAddress;
+        public string? EndpointAddress { get; private set; }
 
         /// <summary>
         /// Gets the version-independent domain implementation for this Developer Tools connection
         /// </summary>
-        public DevToolsDomains Domains => this.domains;
+        public DevToolsDomains Domains { get; private set; } = null!; // TODO handle nullability for this
 
         /// <summary>
         /// Gets the version-specific implementation of domains for this DevTools session.
@@ -128,11 +127,10 @@ namespace OpenQA.Selenium.DevTools
         /// <returns>The version-specific DevTools Protocol domain implementation.</returns>
         public T GetVersionSpecificDomains<T>() where T : DevToolsSessionDomains
         {
-            T versionSpecificDomains = this.domains.VersionSpecificDomains as T;
-            if (versionSpecificDomains == null)
+            if (this.Domains.VersionSpecificDomains is not T versionSpecificDomains)
             {
                 string errorTemplate = "The type is invalid for conversion. You requested domains of type '{0}', but the version-specific domains for this session are '{1}'";
-                string exceptionMessage = string.Format(CultureInfo.InvariantCulture, errorTemplate, typeof(T).ToString(), this.domains.GetType().ToString());
+                string exceptionMessage = string.Format(CultureInfo.InvariantCulture, errorTemplate, typeof(T).ToString(), this.Domains.GetType().ToString());
                 throw new InvalidOperationException(exceptionMessage);
             }
 
@@ -148,7 +146,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        public async Task<ICommandResponse<TCommand>> SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<ICommandResponse<TCommand>?> SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
             where TCommand : ICommand
         {
             if (command == null)
@@ -156,14 +154,15 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var result = await SendCommand(command.CommandName, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            JsonNode commandParameters = JsonSerializer.SerializeToNode(command) ?? throw new InvalidOperationException("Command serialized to \"null\".");
+            var result = await SendCommand(command.CommandName, commandParameters, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
                 return null;
             }
 
-            if (!this.domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType<TCommand>(out Type commandResponseType))
+            if (!this.Domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType<TCommand>(out Type? commandResponseType))
             {
                 throw new InvalidOperationException($"Type {command.GetType()} does not correspond to a known command response type.");
             }
@@ -181,7 +180,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        public async Task<ICommandResponse<TCommand>> SendCommand<TCommand>(TCommand command, string sessionId, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<ICommandResponse<TCommand>?> SendCommand<TCommand>(TCommand command, string sessionId, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
             where TCommand : ICommand
         {
             if (command == null)
@@ -189,14 +188,15 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var result = await SendCommand(command.CommandName, sessionId, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            JsonNode commandParameters = JsonSerializer.SerializeToNode(command) ?? throw new InvalidOperationException("Command serialized to \"null\".");
+            var result = await SendCommand(command.CommandName, sessionId, commandParameters, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
                 return null;
             }
 
-            if (!this.domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType(command, out Type commandResponseType))
+            if (!this.Domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType(command, out Type? commandResponseType))
             {
                 throw new InvalidOperationException($"Type {typeof(TCommand)} does not correspond to a known command response type.");
             }
@@ -214,7 +214,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        public async Task<TCommandResponse> SendCommand<TCommand, TCommandResponse>(TCommand command, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<TCommandResponse?> SendCommand<TCommand, TCommandResponse>(TCommand command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
             where TCommand : ICommand
             where TCommandResponse : ICommandResponse<TCommand>
         {
@@ -223,11 +223,12 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var result = await SendCommand(command.CommandName, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            JsonNode commandParameters = JsonSerializer.SerializeToNode(command) ?? throw new InvalidOperationException("Command serialized to \"null\".");
+            var result = await SendCommand(command.CommandName, commandParameters, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
-                return default(TCommandResponse);
+                return default;
             }
 
             return result.Value.Deserialize<TCommandResponse>();
@@ -242,8 +243,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        //[DebuggerStepThrough]
-        public async Task<JsonElement?> SendCommand(string commandName, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<JsonElement?> SendCommand(string commandName, JsonNode commandParameters, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
         {
             if (this.attachedTargetId == null)
             {
@@ -264,13 +264,9 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        //[DebuggerStepThrough]
-        public async Task<JsonElement?> SendCommand(string commandName, string sessionId, JsonNode commandParameters, CancellationToken cancellationToken = default(CancellationToken), int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
+        public async Task<JsonElement?> SendCommand(string commandName, string? sessionId, JsonNode commandParameters, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)
         {
-            if (millisecondsTimeout.HasValue == false)
-            {
-                millisecondsTimeout = Convert.ToInt32(CommandTimeout.TotalMilliseconds);
-            }
+            millisecondsTimeout ??= Convert.ToInt32(CommandTimeout.TotalMilliseconds);
 
             var message = new DevToolsCommandData(Interlocked.Increment(ref this.currentCommandId), sessionId, commandName, commandParameters);
 
@@ -294,7 +290,7 @@ namespace OpenQA.Selenium.DevTools
                     throw new InvalidOperationException($"A command response was not received: {commandName}, timeout: {millisecondsTimeout.Value}ms");
                 }
 
-                if (this.pendingCommands.TryRemove(message.CommandId, out DevToolsCommandData modified))
+                if (this.pendingCommands.TryRemove(message.CommandId, out DevToolsCommandData? modified))
                 {
                     if (modified.IsError)
                     {
@@ -307,7 +303,7 @@ namespace OpenQA.Selenium.DevTools
                             exceptionMessage = $"{exceptionMessage} - {errorData}";
                         }
 
-                        LogTrace("Recieved Error Response {0}: {1} {2}", modified.CommandId, message, errorData);
+                        LogTrace("Received Error Response {0}: {1} {2}", modified.CommandId, message, errorData);
                         throw new CommandResponseException(exceptionMessage)
                         {
                             Code = modified.Result.TryGetProperty("code", out var code) ? code.GetInt64() : -1
@@ -331,6 +327,7 @@ namespace OpenQA.Selenium.DevTools
         public void Dispose()
         {
             this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -339,16 +336,17 @@ namespace OpenQA.Selenium.DevTools
         /// <returns>A task that represents the asynchronous operation.</returns>
         internal async Task StartSession()
         {
-            var requestedProtocolVersion = options.ProtocolVersion.HasValue ? options.ProtocolVersion.Value : AutoDetectDevToolsProtocolVersion;
+            int requestedProtocolVersion = options.ProtocolVersion ?? AutoDetectDevToolsProtocolVersion;
             int protocolVersion = await InitializeProtocol(requestedProtocolVersion).ConfigureAwait(false);
-            this.domains = DevToolsDomains.InitializeDomains(protocolVersion, this);
+            this.Domains = DevToolsDomains.InitializeDomains(protocolVersion, this);
+
             await this.InitializeSocketConnection().ConfigureAwait(false);
             await this.InitializeSession().ConfigureAwait(false);
             try
             {
                 // Wrap this in a try-catch, because it's not the end of the
                 // world if clearing the log doesn't work.
-                await this.domains.Log.Clear().ConfigureAwait(false);
+                await this.Domains.Log.Clear().ConfigureAwait(false);
                 LogTrace("Log cleared.", this.attachedTargetId);
             }
             catch (WebDriverException)
@@ -360,14 +358,14 @@ namespace OpenQA.Selenium.DevTools
         /// Asynchronously stops the session.
         /// </summary>
         /// <param name="manualDetach"><see langword="true"/> to manually detach the session
-        /// from its attached target; otherswise <see langword="false"/>.</param>
+        /// from its attached target; otherwise <see langword="false"/>.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         internal async Task StopSession(bool manualDetach)
         {
             if (this.attachedTargetId != null)
             {
                 this.Domains.Target.TargetDetached -= this.OnTargetDetached;
-                string sessionId = this.ActiveSessionId;
+                string? sessionId = this.ActiveSessionId;
                 this.ActiveSessionId = null;
                 if (manualDetach)
                 {
@@ -400,23 +398,22 @@ namespace OpenQA.Selenium.DevTools
         private async Task<int> InitializeProtocol(int requestedProtocolVersion)
         {
             int protocolVersion = requestedProtocolVersion;
-            if (this.websocketAddress == null)
+            if (this.EndpointAddress == null)
             {
                 string debuggerUrl = string.Format(CultureInfo.InvariantCulture, "http://{0}", this.debuggerEndpoint);
-                string rawVersionInfo = string.Empty;
+                string rawVersionInfo;
                 using (HttpClient client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(debuggerUrl);
                     rawVersionInfo = await client.GetStringAsync("/json/version").ConfigureAwait(false);
                 }
 
-                var versionInfo = JsonSerializer.Deserialize<DevToolsVersionInfo>(rawVersionInfo);
-                this.websocketAddress = versionInfo.WebSocketDebuggerUrl;
+                var versionInfo = JsonSerializer.Deserialize<DevToolsVersionInfo>(rawVersionInfo) ?? throw new JsonException("/json/version endpoint returned null response");
+                this.EndpointAddress = versionInfo.WebSocketDebuggerUrl;
 
                 if (requestedProtocolVersion == AutoDetectDevToolsProtocolVersion)
                 {
-                    bool versionParsed = int.TryParse(versionInfo.BrowserMajorVersion, out protocolVersion);
-                    if (!versionParsed)
+                    if (!int.TryParse(versionInfo.BrowserMajorVersion, out protocolVersion))
                     {
                         throw new WebDriverException(string.Format(CultureInfo.InvariantCulture, "Unable to parse version number received from browser. Reported browser version string is '{0}'", versionInfo.Browser));
                     }
@@ -443,7 +440,7 @@ namespace OpenQA.Selenium.DevTools
                 // that when getting the available targets, we won't
                 // recursively try to call InitializeSession.
                 this.attachedTargetId = "";
-                var targets = await this.domains.Target.GetTargets().ConfigureAwait(false);
+                var targets = await this.Domains.Target.GetTargets().ConfigureAwait(false);
                 foreach (var target in targets)
                 {
                     if (target.Type == "page")
@@ -458,30 +455,30 @@ namespace OpenQA.Selenium.DevTools
             if (this.attachedTargetId == "")
             {
                 this.attachedTargetId = null;
-                throw new WebDriverException("Unable to find target to attach to, no taargets of type 'page' available");
+                throw new WebDriverException("Unable to find target to attach to, no targets of type 'page' available");
             }
 
-            string sessionId = await this.domains.Target.AttachToTarget(this.attachedTargetId).ConfigureAwait(false);
+            string sessionId = await this.Domains.Target.AttachToTarget(this.attachedTargetId).ConfigureAwait(false);
             LogTrace("Target ID {0} attached. Active session ID: {1}", this.attachedTargetId, sessionId);
             this.ActiveSessionId = sessionId;
 
-            await this.domains.Target.SetAutoAttach().ConfigureAwait(false);
+            await this.Domains.Target.SetAutoAttach().ConfigureAwait(false);
             LogTrace("AutoAttach is set.", this.attachedTargetId);
 
-            // The Target domain needs to send Sessionless commands! Else the waitForDebugger setting in setAutoAttach wont work!
+            // The Target domain needs to send Session-less commands! Else the waitForDebugger setting in setAutoAttach wont work!
             if (options.WaitForDebuggerOnStart)
             {
-                var setAutoAttachCommand = domains.Target.CreateSetAutoAttachCommand(true);
-                var setDiscoverTargetsCommand = domains.Target.CreateDiscoverTargetsCommand();
+                var setAutoAttachCommand = Domains.Target.CreateSetAutoAttachCommand(true);
+                var setDiscoverTargetsCommand = Domains.Target.CreateDiscoverTargetsCommand();
 
-                await SendCommand(setAutoAttachCommand, string.Empty, default(CancellationToken), null, true).ConfigureAwait(false);
-                await SendCommand(setDiscoverTargetsCommand, string.Empty, default(CancellationToken), null, true).ConfigureAwait(false);
+                await SendCommand(setAutoAttachCommand, string.Empty, default, null, true).ConfigureAwait(false);
+                await SendCommand(setDiscoverTargetsCommand, string.Empty, default, null, true).ConfigureAwait(false);
             }
 
-            this.domains.Target.TargetDetached += this.OnTargetDetached;
+            this.Domains.Target.TargetDetached += this.OnTargetDetached;
         }
 
-        private void OnTargetDetached(object sender, TargetDetachedEventArgs e)
+        private void OnTargetDetached(object? sender, TargetDetachedEventArgs e)
         {
             if (e.SessionId == this.ActiveSessionId && e.TargetId == this.attachedTargetId)
             {
@@ -494,7 +491,7 @@ namespace OpenQA.Selenium.DevTools
             LogTrace("Creating WebSocket");
             this.connection = new WebSocketConnection(this.openConnectionWaitTimeSpan, this.closeConnectionWaitTimeSpan);
             connection.DataReceived += OnConnectionDataReceived;
-            await connection.Start(this.websocketAddress).ConfigureAwait(false);
+            await connection.Start(this.EndpointAddress).ConfigureAwait(false);
             LogTrace("WebSocket created");
         }
 
@@ -504,18 +501,18 @@ namespace OpenQA.Selenium.DevTools
             if (this.connection != null && this.connection.IsActive)
             {
                 await this.connection.Stop().ConfigureAwait(false);
-                await this.ShutdownMessageQueue().ConfigureAwait(false);
+                await this.ShutdownMessageQueue(this.connection).ConfigureAwait(false);
             }
             LogTrace("WebSocket closed");
         }
 
-        private async Task ShutdownMessageQueue()
+        private async Task ShutdownMessageQueue(WebSocketConnection connection)
         {
-            // THe WebSockect connection is always closed before this method
+            // THe WebSocket connection is always closed before this method
             // is called, so there will eventually be no more data written
             // into the message queue, meaning this loop should be guaranteed
             // to complete.
-            while (this.connection.IsActive)
+            while (connection.IsActive)
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(10));
             }
@@ -534,7 +531,7 @@ namespace OpenQA.Selenium.DevTools
             // in the IEnumerable, meaning the foreach loop will terminate gracefully.
             foreach (string message in this.messageQueue.GetConsumingEnumerable())
             {
-                // Don't breake entire thread in case of unsuccessful message,
+                // Don't break entire thread in case of unsuccessful message,
                 // and give a chance for the next message in queue to be processed
                 try
                 {
@@ -544,10 +541,10 @@ namespace OpenQA.Selenium.DevTools
                 {
                     if (logger.IsEnabled(LogEventLevel.Error))
                     {
-                        logger.Error($"Unexpected error occured while processing message: {ex}");
+                        logger.Error($"Unexpected error occurred while processing message: {ex}");
                     }
 
-                    LogError("Unexpected error occured while processing message: {0}", ex);
+                    LogError("Unexpected error occurred while processing message: {0}", ex);
                 }
             }
         }
@@ -569,8 +566,7 @@ namespace OpenQA.Selenium.DevTools
             {
                 long commandId = idProperty.GetInt64();
 
-                DevToolsCommandData commandInfo;
-                if (this.pendingCommands.TryGetValue(commandId, out commandInfo))
+                if (this.pendingCommands.TryGetValue(commandId, out DevToolsCommandData? commandInfo))
                 {
                     if (messageObject.TryGetProperty("error", out var errorProperty))
                     {
@@ -580,7 +576,7 @@ namespace OpenQA.Selenium.DevTools
                     else
                     {
                         commandInfo.Result = messageObject.GetProperty("result");
-                        LogTrace("Recieved Response {0}: {1}", commandId, commandInfo.Result.ToString());
+                        LogTrace("Received Response {0}: {1}", commandId, commandInfo.Result.ToString());
                     }
 
                     commandInfo.SyncEvent.Set();
@@ -589,10 +585,10 @@ namespace OpenQA.Selenium.DevTools
                 {
                     if (logger.IsEnabled(LogEventLevel.Error))
                     {
-                        logger.Error($"Recieved Unknown Response {commandId}: {message}");
+                        logger.Error($"Received Unknown Response {commandId}: {message}");
                     }
 
-                    LogError("Recieved Unknown Response {0}: {1}", commandId, message);
+                    LogError("Received Unknown Response {0}: {1}", commandId, message);
                 }
 
                 return;
@@ -600,11 +596,11 @@ namespace OpenQA.Selenium.DevTools
 
             if (messageObject.TryGetProperty("method", out var methodProperty))
             {
-                var method = methodProperty.GetString();
+                var method = methodProperty.GetString() ?? throw new InvalidOperationException("CDP message contained \"method\" property with a value of \"null\".");
                 var methodParts = method.Split(new char[] { '.' }, 2);
                 var eventData = messageObject.GetProperty("params");
 
-                LogTrace("Recieved Event {0}: {1}", method, eventData.ToString());
+                LogTrace("Received Event {0}: {1}", method, eventData.ToString());
 
                 // Dispatch the event on a new thread so that any event handlers
                 // responding to the event will not block this thread from processing
@@ -621,7 +617,7 @@ namespace OpenQA.Selenium.DevTools
                     {
                         if (logger.IsEnabled(LogEventLevel.Warn))
                         {
-                            logger.Warn($"CDP VNT ^^ Unhandled error occured in event handler of '{method}' method. {ex}");
+                            logger.Warn($"CDP VNT ^^ Unhandled error occurred in event handler of '{method}' method. {ex}");
                         }
 
                         throw;
@@ -631,7 +627,7 @@ namespace OpenQA.Selenium.DevTools
                 return;
             }
 
-            LogTrace("Recieved Other: {0}", message);
+            LogTrace("Received Other: {0}", message);
         }
 
         private void OnDevToolsEventReceived(DevToolsEventReceivedEventArgs e)
@@ -642,12 +638,12 @@ namespace OpenQA.Selenium.DevTools
             }
         }
 
-        private void OnConnectionDataReceived(object sender, WebSocketConnectionDataReceivedEventArgs e)
+        private void OnConnectionDataReceived(object? sender, WebSocketConnectionDataReceivedEventArgs e)
         {
             this.messageQueue.Add(e.Data);
         }
 
-        private void LogTrace(string message, params object[] args)
+        private void LogTrace(string message, params object?[] args)
         {
             if (LogMessage != null)
             {
@@ -655,7 +651,7 @@ namespace OpenQA.Selenium.DevTools
             }
         }
 
-        private void LogError(string message, params object[] args)
+        private void LogError(string message, params object?[] args)
         {
             if (LogMessage != null)
             {

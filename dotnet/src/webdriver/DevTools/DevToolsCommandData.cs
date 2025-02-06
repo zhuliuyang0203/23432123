@@ -35,7 +35,7 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Initializes a new instance of the DevToolsCommandData class.
         /// </summary>
-        /// <param name="commandId">The ID of the commmand execution.</param>
+        /// <param name="commandId">The ID of the command execution.</param>
         /// <param name="commandName">The method name of the DevTools command.</param>
         /// <param name="commandParameters">The parameters of the DevTools command.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
@@ -47,7 +47,7 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Initializes a new instance of the DevToolsCommandData class.
         /// </summary>
-        /// <param name="commandId">The ID of the commmand execution.</param>
+        /// <param name="commandId">The ID of the command execution.</param>
         /// <param name="sessionId">The session ID of the current command execution.</param>
         /// <param name="commandName">The method name of the DevTools command.</param>
         /// <param name="commandParameters">The parameters of the DevTools command.</param>

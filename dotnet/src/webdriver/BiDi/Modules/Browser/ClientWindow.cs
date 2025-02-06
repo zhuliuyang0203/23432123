@@ -1,4 +1,4 @@
-// <copyright file="DomMutatedEventArgs.cs" company="Selenium Committers">
+// <copyright file="ClientWindow.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,23 +17,16 @@
 // under the License.
 // </copyright>
 
-using System;
+#nullable enable
 
-namespace OpenQA.Selenium
+namespace OpenQA.Selenium.BiDi.Modules.Browser;
+
+public record ClientWindow
 {
-    /// <summary>
-    /// Provides data for the AttributeValueChanged event
-    /// </summary>
-    public class DomMutatedEventArgs : EventArgs
+    internal ClientWindow(string id)
     {
-        internal DomMutatedEventArgs(DomMutationData attributeData)
-        {
-            AttributeData = attributeData;
-        }
-
-        /// <summary>
-        /// Gets the data about the attribute being changed.
-        /// </summary>
-        public DomMutationData AttributeData { get; }
+        Id = id;
     }
+
+    internal string Id { get; }
 }

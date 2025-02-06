@@ -70,6 +70,7 @@ public class Broker : IAsyncDisposable
             {
                 new BrowsingContextConverter(_bidi),
                 new BrowserUserContextConverter(bidi),
+                new BrowserClientWindowConverter(),
                 new NavigationConverter(),
                 new InterceptConverter(_bidi),
                 new RequestConverter(_bidi),
@@ -97,6 +98,7 @@ public class Broker : IAsyncDisposable
                 new Json.Converters.Enumerable.LocateNodesResultConverter(),
                 new Json.Converters.Enumerable.InputSourceActionsConverter(),
                 new Json.Converters.Enumerable.GetUserContextsResultConverter(),
+                new Json.Converters.Enumerable.GetClientWindowsResultConverter(),
                 new Json.Converters.Enumerable.GetRealmsResultConverter(),
             }
         };
