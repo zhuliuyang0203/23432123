@@ -37,6 +37,7 @@ namespace OpenQA.Selenium
     public abstract class DriverService : ICommandServer
     {
         private bool isDisposed;
+        private readonly object driverServiceProcessLock = new();
         private Process? driverServiceProcess;
 
         /// <summary>
@@ -220,42 +221,55 @@ namespace OpenQA.Selenium
         [MemberNotNull(nameof(driverServiceProcess))]
         public void Start()
         {
-            if (this.driverServiceProcess != null)
+            if (this.driverServiceProcess is null)
             {
-                return;
-            }
-
-            this.driverServiceProcess = new Process();
-
-            if (this.DriverServicePath != null)
-            {
-                if (this.DriverServiceExecutableName is null)
+                lock (this.driverServiceProcessLock)
                 {
-                    throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                    if (this.driverServiceProcess is null)
+                    {
+                        var driverServiceProcess = new Process();
+
+                        try
+                        {
+                            if (this.DriverServicePath != null)
+                            {
+                                if (this.DriverServiceExecutableName is null)
+                                {
+                                    throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                                }
+
+                                driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                            }
+                            else
+                            {
+                                driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+                            }
+
+                            driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
+                            driverServiceProcess.StartInfo.UseShellExecute = false;
+                            driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
+
+                            this.OnDriverProcessStarting(new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo));
+
+                            driverServiceProcess.Start();
+                            bool serviceAvailable = this.WaitForServiceInitialization();
+
+                            this.OnDriverProcessStarted(new DriverProcessStartedEventArgs(driverServiceProcess));
+
+                            if (!serviceAvailable)
+                            {
+                                throw new WebDriverException($"Cannot start the driver service on {this.ServiceUrl}");
+                            }
+                        }
+                        catch
+                        {
+                            driverServiceProcess.Dispose();
+                            throw;
+                        }
+
+                        this.driverServiceProcess = driverServiceProcess;
+                    }
                 }
-
-                this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
-            }
-            else
-            {
-                this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
-            }
-
-            this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
-            this.driverServiceProcess.StartInfo.UseShellExecute = false;
-            this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
-
-            DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
-            this.OnDriverProcessStarting(eventArgs);
-
-            this.driverServiceProcess.Start();
-            bool serviceAvailable = this.WaitForServiceInitialization();
-            DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(this.driverServiceProcess);
-            this.OnDriverProcessStarted(processStartedEventArgs);
-
-            if (!serviceAvailable)
-            {
-                throw new WebDriverException($"Cannot start the driver service on {this.ServiceUrl}");
             }
         }
 
