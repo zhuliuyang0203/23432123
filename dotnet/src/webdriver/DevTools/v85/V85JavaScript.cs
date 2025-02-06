@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.V85
 {
     /// <summary>
@@ -30,18 +32,19 @@ namespace OpenQA.Selenium.DevTools.V85
     /// </summary>
     public class V85JavaScript : JavaScript
     {
-        private RuntimeAdapter runtime;
-        private PageAdapter page;
+        private readonly RuntimeAdapter runtime;
+        private readonly PageAdapter page;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="V85JavaScript"/> class.
         /// </summary>
         /// <param name="runtime">The DevTools Protocol adapter for the Runtime domain.</param>
         /// <param name="page">The DevTools Protocol adapter for the Page domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="runtime"/> or <paramref name="page"/> are <see langword="null"/>.</exception>
         public V85JavaScript(RuntimeAdapter runtime, PageAdapter page)
         {
-            this.runtime = runtime;
-            this.page = page;
+            this.runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            this.page = page ?? throw new ArgumentNullException(nameof(page));
             this.runtime.BindingCalled += OnRuntimeBindingCalled;
             this.runtime.ConsoleAPICalled += OnRuntimeConsoleApiCalled;
             this.runtime.ExceptionThrown += OnRuntimeExceptionThrown;
@@ -138,7 +141,7 @@ namespace OpenQA.Selenium.DevTools.V85
             await runtime.Evaluate(new EvaluateCommandSettings { Expression = script }).ConfigureAwait(false);
         }
 
-        private void OnRuntimeBindingCalled(object sender, Runtime.BindingCalledEventArgs e)
+        private void OnRuntimeBindingCalled(object? sender, Runtime.BindingCalledEventArgs e)
         {
             BindingCalledEventArgs wrapped = new BindingCalledEventArgs
             (
@@ -150,7 +153,7 @@ namespace OpenQA.Selenium.DevTools.V85
             this.OnBindingCalled(wrapped);
         }
 
-        private void OnRuntimeExceptionThrown(object sender, Runtime.ExceptionThrownEventArgs e)
+        private void OnRuntimeExceptionThrown(object? sender, Runtime.ExceptionThrownEventArgs e)
         {
             // TODO: Collect stack trace elements
             var wrapped = new ExceptionThrownEventArgs
@@ -162,12 +165,12 @@ namespace OpenQA.Selenium.DevTools.V85
             this.OnExceptionThrown(wrapped);
         }
 
-        private void OnRuntimeConsoleApiCalled(object sender, ConsoleAPICalledEventArgs e)
+        private void OnRuntimeConsoleApiCalled(object? sender, ConsoleAPICalledEventArgs e)
         {
-            List<ConsoleApiArgument> args = new List<ConsoleApiArgument>();
+            List<ConsoleApiArgument> args = new List<ConsoleApiArgument>(e.Args.Length);
             foreach (var arg in e.Args)
             {
-                string argValue = arg.Value?.ToString();
+                string? argValue = arg.Value?.ToString();
                 args.Add(new ConsoleApiArgument(arg.Type.ToString(), argValue));
             }
 

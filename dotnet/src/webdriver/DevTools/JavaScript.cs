@@ -20,6 +20,8 @@
 using System;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -30,17 +32,17 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Occurs when a JavaScript script binding is called.
         /// </summary>
-        public event EventHandler<BindingCalledEventArgs> BindingCalled;
+        public event EventHandler<BindingCalledEventArgs>? BindingCalled;
 
         /// <summary>
         /// Occurs when the browser's JavaScript console API is called.
         /// </summary>
-        public event EventHandler<ConsoleApiCalledEventArgs> ConsoleApiCalled;
+        public event EventHandler<ConsoleApiCalledEventArgs>? ConsoleApiCalled;
 
         /// <summary>
         /// Occurs when a JavaScript exception is thrown.
         /// </summary>
-        public event EventHandler<ExceptionThrownEventArgs> ExceptionThrown;
+        public event EventHandler<ExceptionThrownEventArgs>? ExceptionThrown;
 
         /// <summary>
         /// Asynchronously enables the Runtime domain in the DevTools Protocol.

@@ -18,7 +18,10 @@
 // </copyright>
 
 using OpenQA.Selenium.DevTools.V85.Log;
+using System;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools.V85
 {
@@ -27,12 +30,13 @@ namespace OpenQA.Selenium.DevTools.V85
     /// </summary>
     public class V85Log : DevTools.Log
     {
-        private LogAdapter adapter;
+        private readonly LogAdapter adapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="V85Log"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Log domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="adapter"/> is <see langword="null"/>.</exception>
         public V85Log(LogAdapter adapter)
         {
             this.adapter = adapter;
@@ -66,14 +70,14 @@ namespace OpenQA.Selenium.DevTools.V85
             await adapter.Clear().ConfigureAwait(false);
         }
 
-        private void OnAdapterEntryAdded(object sender, Log.EntryAddedEventArgs e)
+        private void OnAdapterEntryAdded(object? sender, Log.EntryAddedEventArgs e)
         {
             var entry = new LogEntry(
                 kind: e.Entry.Source.ToString(),
                 message: e.Entry.Text
             );
-            EntryAddedEventArgs propagated = new EntryAddedEventArgs(entry);
-            this.OnEntryAdded(propagated);
+
+            this.OnEntryAdded(new EntryAddedEventArgs(entry));
         }
     }
 }
