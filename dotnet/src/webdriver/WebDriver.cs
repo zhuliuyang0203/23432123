@@ -106,6 +106,8 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetCurrentUrl, null);
+
+                commandResponse.EnsureValueIsNotNull();
                 return commandResponse.Value.ToString();
             }
 
@@ -136,6 +138,7 @@ namespace OpenQA.Selenium
             {
                 Response commandResponse = this.Execute(DriverCommand.GetPageSource, null);
 
+                commandResponse.EnsureValueIsNotNull();
                 return commandResponse.Value.ToString();
             }
         }
@@ -150,6 +153,7 @@ namespace OpenQA.Selenium
             {
                 Response commandResponse = this.Execute(DriverCommand.GetCurrentWindowHandle, null);
 
+                commandResponse.EnsureValueIsNotNull();
                 return commandResponse.Value.ToString();
             }
         }
@@ -162,6 +166,8 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetWindowHandles, null);
+
+                commandResponse.EnsureValueIsNotNull();
                 object[] handles = (object[])commandResponse.Value;
                 List<string> handleList = new List<string>(handles.Length);
                 foreach (object handle in handles)
@@ -355,7 +361,8 @@ namespace OpenQA.Selenium
         {
             Response screenshotResponse = this.Execute(DriverCommand.Screenshot, null);
 
-            string base64 = screenshotResponse.Value?.ToString() ?? throw new WebDriverException("Screenshot command returned successfully, but response was empty");
+            screenshotResponse.EnsureValueIsNotNull();
+            string base64 = screenshotResponse.Value.ToString()!;
             return new Screenshot(base64);
         }
 
@@ -374,7 +381,8 @@ namespace OpenQA.Selenium
 
             Response commandResponse = this.Execute(DriverCommand.Print, printOptions.ToDictionary());
 
-            string base64 = commandResponse.Value?.ToString() ?? throw new WebDriverException("Print command returned successfully, but response was empty");
+            commandResponse.EnsureValueIsNotNull();
+            string base64 = commandResponse.Value.ToString()!;
             return new PrintDocument(base64);
         }
 
@@ -653,6 +661,7 @@ namespace OpenQA.Selenium
 
             Response response = this.Execute(DriverCommand.NewSession, parameters);
 
+            response.EnsureValueIsNotNull();
             if (response.Value is not Dictionary<string, object> rawCapabilities)
             {
                 string errorMessage = string.Format(CultureInfo.InvariantCulture, "The new session command returned a value ('{0}') that is not a valid JSON object.", response.Value);
@@ -1044,7 +1053,9 @@ namespace OpenQA.Selenium
             }
 
             Response commandResponse = this.Execute(DriverCommand.AddVirtualAuthenticator, options.ToDictionary());
-            string id = (string)commandResponse.Value!;
+
+            commandResponse.EnsureValueIsNotNull();
+            string id = (string)commandResponse.Value;
             this.AuthenticatorId = id;
             return id;
         }
@@ -1108,6 +1119,7 @@ namespace OpenQA.Selenium
 
             Response getCredentialsResponse = this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters);
 
+            getCredentialsResponse.EnsureValueIsNotNull();
             if (getCredentialsResponse.Value is not object?[] credentialsList)
             {
                 throw new WebDriverException($"Get credentials call succeeded, but the response was not a list of credentials: {getCredentialsResponse.Value}");
