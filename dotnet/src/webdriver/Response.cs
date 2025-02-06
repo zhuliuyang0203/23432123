@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -213,6 +214,21 @@ namespace OpenQA.Selenium
         public string ToJson()
         {
             return JsonSerializer.Serialize(this);
+        }
+
+        /// <summary>
+        /// Throws if <see cref="Value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
+        [MemberNotNull(nameof(Value))]
+        internal Response EnsureValueIsNotNull()
+        {
+            if (Value is null)
+            {
+                throw new WebDriverException("Response from remote end doesn't have $.Value property");
+            }
+
+            return this;
         }
 
         /// <summary>

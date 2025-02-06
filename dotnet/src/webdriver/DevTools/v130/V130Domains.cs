@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
+
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.V130
 {
     /// <summary>
@@ -24,15 +28,16 @@ namespace OpenQA.Selenium.DevTools.V130
     /// </summary>
     public class V130Domains : DevToolsDomains
     {
-        private DevToolsSessionDomains domains;
+        private readonly DevToolsSessionDomains domains;
 
         /// <summary>
         /// Initializes a new instance of the V130Domains class.
         /// </summary>
         /// <param name="session">The DevToolsSession to use with this set of domains.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="session"/> is <see langword="null"/>.</exception>
         public V130Domains(DevToolsSession session)
         {
-            this.domains = new DevToolsSessionDomains(session);
+            this.domains = new DevToolsSessionDomains(session ?? throw new ArgumentNullException(nameof(session)));
         }
 
         /// <summary>

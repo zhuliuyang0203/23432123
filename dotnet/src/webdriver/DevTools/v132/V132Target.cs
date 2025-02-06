@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>
@@ -30,15 +32,16 @@ namespace OpenQA.Selenium.DevTools.V132
     /// </summary>
     public class V132Target : DevTools.Target
     {
-        private TargetAdapter adapter;
+        private readonly TargetAdapter adapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="V132Target"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Target domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="adapter"/> is <see langword="null"/>.</exception>
         public V132Target(TargetAdapter adapter)
         {
-            this.adapter = adapter;
+            this.adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
             adapter.DetachedFromTarget += OnDetachedFromTarget;
             adapter.AttachedToTarget += OnAttachedToTarget;
         }
@@ -51,28 +54,26 @@ namespace OpenQA.Selenium.DevTools.V132
         /// contains the list of <see cref="TargetInfo"/> objects describing the
         /// targets available for this session.
         /// </returns>
-        public override async Task<ReadOnlyCollection<TargetInfo>> GetTargets(Object settings = null)
-
+        public override async Task<ReadOnlyCollection<TargetInfo>> GetTargets(object? settings = null)
         {
-            List<TargetInfo> targets = new List<TargetInfo>();
-            if (settings == null)
-            {
-                settings = new GetTargetsCommandSettings();
-            }
+            settings ??= new GetTargetsCommandSettings();
+
             var response = await adapter.GetTargets((GetTargetsCommandSettings)settings).ConfigureAwait(false);
+
+            List<TargetInfo> targets = new List<TargetInfo>(response.TargetInfos.Length);
             for (int i = 0; i < response.TargetInfos.Length; i++)
             {
                 var targetInfo = response.TargetInfos[i];
-                var mapped = new TargetInfo()
-                {
-                    TargetId = targetInfo.TargetId,
-                    Title = targetInfo.Title,
-                    Type = targetInfo.Type,
-                    Url = targetInfo.Url,
-                    OpenerId = targetInfo.OpenerId,
-                    BrowserContextId = targetInfo.BrowserContextId,
-                    IsAttached = targetInfo.Attached
-                };
+                var mapped = new TargetInfo
+                (
+                    targetId: targetInfo.TargetId,
+                    title: targetInfo.Title,
+                    type: targetInfo.Type,
+                    url: targetInfo.Url,
+                    openerId: targetInfo.OpenerId,
+                    browserContextId: targetInfo.BrowserContextId,
+                    isAttached: targetInfo.Attached
+                );
                 targets.Add(mapped);
             }
 
@@ -99,7 +100,7 @@ namespace OpenQA.Selenium.DevTools.V132
         /// <param name="sessionId">The ID of the session of the target from which to detach.</param>
         /// <param name="targetId">The ID of the target from which to detach.</param>
         /// <returns>A task representing the asynchronous detach operation.</returns>
-        public override async Task DetachFromTarget(string sessionId = null, string targetId = null)
+        public override async Task DetachFromTarget(string? sessionId = null, string? targetId = null)
         {
             await adapter.DetachFromTarget(new DetachFromTargetCommandSettings()
             {
@@ -117,23 +118,23 @@ namespace OpenQA.Selenium.DevTools.V132
             await adapter.SetAutoAttach(new SetAutoAttachCommandSettings() { AutoAttach = true, WaitForDebuggerOnStart = false, Flatten = true }).ConfigureAwait(false);
         }
 
-        private void OnDetachedFromTarget(object sender, DetachedFromTargetEventArgs e)
+        private void OnDetachedFromTarget(object? sender, DetachedFromTargetEventArgs e)
         {
             this.OnTargetDetached(new TargetDetachedEventArgs(e.SessionId, e.TargetId));
         }
 
-        private void OnAttachedToTarget(object sender, AttachedToTargetEventArgs e)
+        private void OnAttachedToTarget(object? sender, AttachedToTargetEventArgs e)
         {
             var targetInfo = e.TargetInfo == null ? null : new TargetInfo
-            {
-                BrowserContextId = e.TargetInfo.BrowserContextId,
-                IsAttached = e.TargetInfo.Attached,
-                OpenerId = e.TargetInfo.OpenerId,
-                TargetId = e.TargetInfo.TargetId,
-                Title = e.TargetInfo.Title,
-                Type = e.TargetInfo.Type,
-                Url = e.TargetInfo.Url
-            };
+            (
+                browserContextId: e.TargetInfo.BrowserContextId,
+                isAttached: e.TargetInfo.Attached,
+                openerId: e.TargetInfo.OpenerId,
+                targetId: e.TargetInfo.TargetId,
+                title: e.TargetInfo.Title,
+                type: e.TargetInfo.Type,
+                url: e.TargetInfo.Url
+            );
 
             this.OnTargetAttached(new TargetAttachedEventArgs
             (
