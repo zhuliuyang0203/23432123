@@ -111,15 +111,17 @@ public class Broker : IAsyncDisposable
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
         _receiveMessagesCancellationTokenSource = new CancellationTokenSource();
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token), TaskCreationOptions.LongRunning).Unwrap();
-        _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync(), TaskCreationOptions.LongRunning).Unwrap();
+        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token)).Unwrap();
+        _eventEmitterTask = _myTaskFactory.StartNew(ProcessEventsAwaiterAsync).Unwrap();
     }
 
     private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSerializerContext, cancellationToken);
+            var data = await _transport.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+
+            var message = JsonSerializer.Deserialize(new ReadOnlySpan<byte>(data), _jsonSerializerContext.Message);
 
             switch (message)
             {
@@ -179,7 +181,7 @@ public class Broker : IAsyncDisposable
     }
 
     public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         var jsonElement = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
@@ -187,13 +189,13 @@ public class Broker : IAsyncDisposable
     }
 
     public async Task ExecuteCommandAsync<TCommand>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
     }
 
     private async Task<JsonElement> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
@@ -207,7 +209,9 @@ public class Broker : IAsyncDisposable
 
         _pendingCommands[command.Id] = tcs;
 
-        await _transport.SendAsJsonAsync(command, _jsonSerializerContext, cts.Token).ConfigureAwait(false);
+        var data = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), _jsonSerializerContext);
+
+        await _transport.SendAsync(data, cts.Token).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }

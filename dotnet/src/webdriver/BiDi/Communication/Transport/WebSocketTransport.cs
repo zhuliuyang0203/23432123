@@ -22,10 +22,8 @@ using System.IO;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Text.Json;
 using System.Text;
 using OpenQA.Selenium.Internal.Logging;
-using System.Text.Json.Serialization;
 
 #nullable enable
 
@@ -45,7 +43,7 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+    public async Task<byte[]> ReceiveAsync(CancellationToken cancellationToken)
     {
         using var ms = new MemoryStream();
 
@@ -61,31 +59,28 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
 
         ms.Seek(0, SeekOrigin.Begin);
 
+        byte[] data = ms.ToArray();
+
         if (_logger.IsEnabled(LogEventLevel.Trace))
         {
-            _logger.Trace($"BiDi RCV <-- {Encoding.UTF8.GetString(ms.ToArray())}");
+            _logger.Trace($"BiDi RCV <-- {Encoding.UTF8.GetString(data)}");
         }
 
-        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerContext, cancellationToken).ConfigureAwait(false);
-
-        return (T)res!;
+        return data;
     }
 
-    public async Task SendAsJsonAsync<TCommand>(TCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
-        where TCommand : Command
+    public async Task SendAsync(byte[] data, CancellationToken cancellationToken)
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), jsonSerializerContext);
-
         await _socketSendSemaphoreSlim.WaitAsync(cancellationToken);
 
         try
         {
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"BiDi SND --> {Encoding.UTF8.GetString(buffer)}");
+                _logger.Trace($"BiDi SND --> {Encoding.UTF8.GetString(data)}");
             }
 
-            await _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
+            await _webSocket.SendAsync(new ArraySegment<byte>(data), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
