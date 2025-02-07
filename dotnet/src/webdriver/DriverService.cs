@@ -238,50 +238,48 @@ namespace OpenQA.Selenium
         /// <returns>A task that represents the asynchronous start operation.</returns>
         public async Task StartAsync()
         {
-            if (this.driverServiceProcess != null)
+            if (this.driverServiceProcess == null)
             {
-                return;
-            }
-
-            lock (this.driverServiceProcessLock)
-            {
-
-                if (this.driverServiceProcess == null)
+                lock (this.driverServiceProcessLock)
                 {
-                    var driverServiceProcess = new Process();
 
-                    try
+                    if (this.driverServiceProcess == null)
                     {
-                        if (this.DriverServicePath != null)
+                        var driverServiceProcess = new Process();
+
+                        try
                         {
-                            if (this.DriverServiceExecutableName is null)
+                            if (this.DriverServicePath != null)
                             {
-                                throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                                if (this.DriverServiceExecutableName is null)
+                                {
+                                    throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                                }
+
+                                driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                            }
+                            else
+                            {
+                                driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
                             }
 
-                            driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                            driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
+                            driverServiceProcess.StartInfo.UseShellExecute = false;
+                            driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
+
+                            DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo);
+                            this.OnDriverProcessStarting(eventArgs);
+
+                            driverServiceProcess.Start();
                         }
-                        else
+                        catch
                         {
-                            driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+                            driverServiceProcess.Dispose();
+                            throw;
                         }
 
-                        driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
-                        driverServiceProcess.StartInfo.UseShellExecute = false;
-                        driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
-
-                        DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo);
-                        this.OnDriverProcessStarting(eventArgs);
-
-                        driverServiceProcess.Start();
+                        this.driverServiceProcess = driverServiceProcess;
                     }
-                    catch
-                    {
-                        driverServiceProcess.Dispose();
-                        throw;
-                    }
-
-                    this.driverServiceProcess = driverServiceProcess;
                 }
             }
 
