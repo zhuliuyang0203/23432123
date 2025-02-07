@@ -35,11 +35,6 @@ namespace OpenQA.Selenium.IE
         {
         }
 
-        public EdgeInternetExplorerModeDriver(InternetExplorerDriverService service)
-            : base(service)
-        {
-        }
-
         public EdgeInternetExplorerModeDriver(InternetExplorerDriverService service, InternetExplorerOptions options)
             : base(service, options)
         {

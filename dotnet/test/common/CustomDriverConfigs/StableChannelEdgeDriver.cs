@@ -33,11 +33,6 @@ namespace OpenQA.Selenium.Edge
         {
         }
 
-        public StableChannelEdgeDriver(EdgeDriverService service)
-            : base(service)
-        {
-        }
-
         public StableChannelEdgeDriver(EdgeDriverService service, EdgeOptions options)
             : base(service, options)
         {

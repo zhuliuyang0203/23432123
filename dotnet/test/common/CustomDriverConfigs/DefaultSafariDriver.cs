@@ -30,11 +30,6 @@ namespace OpenQA.Selenium.Safari
         {
         }
 
-        public DefaultSafariDriver(SafariDriverService service)
-            : base(service)
-        {
-        }
-
         public DefaultSafariDriver(SafariDriverService service, SafariOptions options)
             : base(service, options)
         {

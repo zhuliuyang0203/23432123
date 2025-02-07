@@ -32,11 +32,6 @@ namespace OpenQA.Selenium.Chrome
         {
         }
 
-        public DevChannelChromeDriver(ChromeDriverService service)
-            : base(service)
-        {
-        }
-
         public DevChannelChromeDriver(ChromeDriverService service, ChromeOptions options)
             : base(service, options)
         {
