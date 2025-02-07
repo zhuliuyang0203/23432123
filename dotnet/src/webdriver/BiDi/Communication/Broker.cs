@@ -28,6 +28,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -42,13 +43,11 @@ public class Broker : IAsyncDisposable
     private readonly ITransport _transport;
 
     private readonly ConcurrentDictionary<int, TaskCompletionSource<JsonElement>> _pendingCommands = new();
-    private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
+    private readonly Channel<MessageEvent> _pendingEvents = Channel.CreateUnbounded<MessageEvent>(new() { SingleReader = true, SingleWriter = true });
 
     private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
 
     private int _currentCommandId;
-
-    private static readonly TaskFactory _myTaskFactory = new(CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskContinuationOptions.None, TaskScheduler.Default);
 
     private Task? _receivingMessageTask;
     private Task? _eventEmitterTask;
@@ -111,11 +110,11 @@ public class Broker : IAsyncDisposable
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
         _receiveMessagesCancellationTokenSource = new CancellationTokenSource();
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token), TaskCreationOptions.LongRunning).Unwrap();
-        _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync(), TaskCreationOptions.LongRunning).Unwrap();
+        _receivingMessageTask = Task.Run(async () => await ReceiveMessagesLoopAsync(_receiveMessagesCancellationTokenSource.Token));
+        _eventEmitterTask = Task.Run(ProcessEventsLoopAsync);
     }
 
-    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
+    private async Task ReceiveMessagesLoopAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -128,7 +127,7 @@ public class Broker : IAsyncDisposable
                     _pendingCommands.TryRemove(messageSuccess.Id, out _);
                     break;
                 case MessageEvent messageEvent:
-                    _pendingEvents.Add(messageEvent);
+                    await _pendingEvents.Writer.WriteAsync(messageEvent).ConfigureAwait(false);
                     break;
                 case MessageError mesageError:
                     _pendingCommands[mesageError.Id].SetException(new BiDiException($"{mesageError.Error}: {mesageError.Message}"));
@@ -138,12 +137,14 @@ public class Broker : IAsyncDisposable
         }
     }
 
-    private async Task ProcessEventsAwaiterAsync()
+    private async Task ProcessEventsLoopAsync()
     {
-        foreach (var result in _pendingEvents.GetConsumingEnumerable())
+        while (await _pendingEvents.Reader.WaitToReadAsync().ConfigureAwait(false))
         {
             try
             {
+                var result = await _pendingEvents.Reader.ReadAsync().ConfigureAwait(false);
+
                 if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
                 {
                     if (eventHandlers is not null)
@@ -179,7 +180,7 @@ public class Broker : IAsyncDisposable
     }
 
     public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         var jsonElement = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
@@ -187,13 +188,13 @@ public class Broker : IAsyncDisposable
     }
 
     public async Task ExecuteCommandAsync<TCommand>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
     }
 
     private async Task<JsonElement> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
-        where TCommand: Command
+        where TCommand : Command
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
@@ -290,7 +291,7 @@ public class Broker : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        _pendingEvents.CompleteAdding();
+        _pendingEvents.Writer.Complete();
 
         _receiveMessagesCancellationTokenSource?.Cancel();
 
