@@ -143,39 +143,40 @@ public class Broker : IAsyncDisposable
     {
         while (await _pendingEvents.Reader.WaitToReadAsync().ConfigureAwait(false))
         {
-            try
+            while (_pendingEvents.Reader.TryRead(out var eventMessage))
             {
-                var result = await _pendingEvents.Reader.ReadAsync().ConfigureAwait(false);
-
-                if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                try
                 {
-                    if (eventHandlers is not null)
+                    if (_eventHandlers.TryGetValue(eventMessage.Method, out var eventHandlers))
                     {
-                        foreach (var handler in eventHandlers.ToArray()) // copy handlers avoiding modified collection while iterating
+                        if (eventHandlers is not null)
                         {
-                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerContext)!;
-
-                            args.BiDi = _bidi;
-
-                            // handle browsing context subscriber
-                            if (handler.Contexts is not null && args is BrowsingContextEventArgs browsingContextEventArgs && handler.Contexts.Contains(browsingContextEventArgs.Context))
+                            foreach (var handler in eventHandlers.ToArray()) // copy handlers avoiding modified collection while iterating
                             {
-                                await handler.InvokeAsync(args).ConfigureAwait(false);
-                            }
-                            // handle only session subscriber
-                            else if (handler.Contexts is null)
-                            {
-                                await handler.InvokeAsync(args).ConfigureAwait(false);
+                                var args = (EventArgs)eventMessage.Params.Deserialize(handler.EventArgsType, _jsonSerializerContext)!;
+
+                                args.BiDi = _bidi;
+
+                                // handle browsing context subscriber
+                                if (handler.Contexts is not null && args is BrowsingContextEventArgs browsingContextEventArgs && handler.Contexts.Contains(browsingContextEventArgs.Context))
+                                {
+                                    await handler.InvokeAsync(args).ConfigureAwait(false);
+                                }
+                                // handle only session subscriber
+                                else if (handler.Contexts is null)
+                                {
+                                    await handler.InvokeAsync(args).ConfigureAwait(false);
+                                }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                if (_logger.IsEnabled(LogEventLevel.Error))
+                catch (Exception ex)
                 {
-                    _logger.Error($"Unhandled error processing BiDi event: {ex}");
+                    if (_logger.IsEnabled(LogEventLevel.Error))
+                    {
+                        _logger.Error($"Unhandled error processing BiDi event: {ex}");
+                    }
                 }
             }
         }
