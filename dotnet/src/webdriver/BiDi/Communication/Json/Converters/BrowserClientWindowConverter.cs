@@ -1,4 +1,4 @@
-// <copyright file="GetCookiesResultConverter.cs" company="Selenium Committers">
+// <copyright file="BrowserClientWindowConverter.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,29 +17,26 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Modules.Storage;
+using OpenQA.Selenium.BiDi.Modules.Browser;
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 #nullable enable
 
-namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
+namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
-internal class GetCookiesResultConverter : JsonConverter<GetCookiesResult>
+internal class BrowserClientWindowConverter : JsonConverter<ClientWindow>
 {
-    public override GetCookiesResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ClientWindow? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        using var doc = JsonDocument.ParseValue(ref reader);
-        var cookies = doc.RootElement.GetProperty("cookies").Deserialize<IReadOnlyList<Modules.Network.Cookie>>(options);
-        var partitionKey = doc.RootElement.GetProperty("partitionKey").Deserialize<PartitionKey>(options);
+        var id = reader.GetString();
 
-        return new GetCookiesResult(cookies!, partitionKey!);
+        return new ClientWindow(id!);
     }
 
-    public override void Write(Utf8JsonWriter writer, GetCookiesResult value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, ClientWindow value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        writer.WriteStringValue(value.Id);
     }
 }

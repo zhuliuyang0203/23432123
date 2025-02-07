@@ -17,7 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Globalization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -26,27 +29,34 @@ namespace OpenQA.Selenium
     /// </summary>
     public class InitializationScript
     {
+        internal InitializationScript(string scriptId, string scriptName, string scriptSource)
+        {
+            this.ScriptId = scriptId ?? throw new ArgumentNullException(nameof(scriptId));
+            this.ScriptName = scriptName ?? throw new ArgumentNullException(nameof(scriptName));
+            this.ScriptSource = scriptSource ?? throw new ArgumentNullException(nameof(scriptSource));
+        }
+
         /// <summary>
         /// Gets the internal ID of the initialization script.
         /// </summary>
-        public string ScriptId { get; internal set; }
+        public string ScriptId { get; }
 
         /// <summary>
         /// Gets the friendly name of the initialization script.
         /// </summary>
-        public string ScriptName { get; internal set; }
+        public string ScriptName { get; }
 
         /// <summary>
         /// Gets the JavaScript source of the initialization script.
         /// </summary>
-        public string ScriptSource { get; internal set; }
+        public string ScriptSource { get; }
 
         /// <summary>
         /// Indicates whether the current <see cref="InitializationScript"/> is equal to another <see cref="InitializationScript"/> of the same type.
         /// </summary>
-        /// <param name="other">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
+        /// <param name="obj">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
         /// <returns><see langword="true"/> if the current <see cref="InitializationScript"/> is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is InitializationScript other && this.ScriptId == other.ScriptId && this.ScriptName == other.ScriptName && this.ScriptSource == other.ScriptSource;
         }

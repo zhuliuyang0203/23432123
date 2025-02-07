@@ -50,7 +50,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="level">The level of the log message.</param>
         /// <param name="message">The content of the log message.</param>
         /// <param name="args">Arguments to be substituted when the message is formatted.</param>
-        public DevToolsSessionLogMessageEventArgs(DevToolsSessionLogLevel level, string message, params object[] args)
+        public DevToolsSessionLogMessageEventArgs(DevToolsSessionLogLevel level, string message, params object?[] args)
         {
             Level = level;
             Message = string.Format(message, args);

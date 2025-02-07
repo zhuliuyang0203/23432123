@@ -23,6 +23,8 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -34,18 +36,18 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Event raised when the DevToolsSession logs informational messages.
         /// </summary>
-        event EventHandler<DevToolsSessionLogMessageEventArgs> LogMessage;
+        event EventHandler<DevToolsSessionLogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Event raised an event notification is received from the DevTools session.
         /// </summary>
-        event EventHandler<DevToolsEventReceivedEventArgs> DevToolsEventReceived;
+        event EventHandler<DevToolsEventReceivedEventArgs>? DevToolsEventReceived;
 
         /// <summary>
-        /// Gets the domains that are valid for the specfied version of Developer Tools connection.
+        /// Gets the domains that are valid for the specified version of Developer Tools connection.
         /// </summary>
         /// <typeparam name="T">
-        /// A <see cref="DevToolsSessionDomains"/> type specific to the version of Develoepr Tools with which to communicate.
+        /// A <see cref="DevToolsSessionDomains"/> type specific to the version of Developer Tools with which to communicate.
         /// </typeparam>
         /// <returns>The version-specific domains for this Developer Tools connection.</returns>
         T GetVersionSpecificDomains<T>() where T : DevToolsSessionDomains;
@@ -59,7 +61,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        Task<ICommandResponse<TCommand>> SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived)
+        Task<ICommandResponse<TCommand>?> SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived)
             where TCommand : ICommand;
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace OpenQA.Selenium.DevTools
         /// <param name="millisecondsTimeout">The execution timeout of the command in milliseconds.</param>
         /// <param name="throwExceptionIfResponseNotReceived"><see langword="true"/> to throw an exception if a response is not received; otherwise, <see langword="false"/>.</param>
         /// <returns>The command response object implementing the <see cref="ICommandResponse{T}"/> interface.</returns>
-        Task<TCommandResponse> SendCommand<TCommand, TCommandResponse>(TCommand command, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived)
+        Task<TCommandResponse?> SendCommand<TCommand, TCommandResponse>(TCommand command, CancellationToken cancellationToken, int? millisecondsTimeout, bool throwExceptionIfResponseNotReceived)
             where TCommand : ICommand
             where TCommandResponse : ICommandResponse<TCommand>;
 
