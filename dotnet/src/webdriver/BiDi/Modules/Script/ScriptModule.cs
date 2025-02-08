@@ -19,7 +19,6 @@
 
 using OpenQA.Selenium.BiDi.Communication;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -30,14 +29,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
 {
     public async Task<EvaluateResult.Success> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)
     {
-        var @params = new EvaluateCommandParameters(expression, target, awaitPromise);
-
-        if (options is not null)
-        {
-            @params.ResultOwnership = options.ResultOwnership;
-            @params.SerializationOptions = options.SerializationOptions;
-            @params.UserActivation = options.UserActivation;
-        }
+        var @params = new EvaluateCommandParameters(expression, target, awaitPromise, options?.ResultOwnership, options?.SerializationOptions, options?.UserActivation);
 
         var result = await Broker.ExecuteCommandAsync<EvaluateCommand, EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
 
@@ -58,16 +50,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
 
     public async Task<EvaluateResult.Success> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)
     {
-        var @params = new CallFunctionCommandParameters(functionDeclaration, awaitPromise, target);
-
-        if (options is not null)
-        {
-            @params.Arguments = options.Arguments?.Select(LocalValue.ConvertFrom);
-            @params.ResultOwnership = options.ResultOwnership;
-            @params.SerializationOptions = options.SerializationOptions;
-            @params.This = LocalValue.ConvertFrom(options.This);
-            @params.UserActivation = options.UserActivation;
-        }
+        var @params = new CallFunctionCommandParameters(functionDeclaration, awaitPromise, target, options?.Arguments, options?.ResultOwnership, options?.SerializationOptions, options?.This, options?.UserActivation);
 
         var result = await Broker.ExecuteCommandAsync<CallFunctionCommand, EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
 
@@ -88,27 +71,14 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
 
     public async Task<GetRealmsResult> GetRealmsAsync(GetRealmsOptions? options = null)
     {
-        var @params = new GetRealmsCommandParameters();
-
-        if (options is not null)
-        {
-            @params.Context = options.Context;
-            @params.Type = options.Type;
-        }
+        var @params = new GetRealmsCommandParameters(options?.Context, options?.Type);
 
         return await Broker.ExecuteCommandAsync<GetRealmsCommand, GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, AddPreloadScriptOptions? options = null)
     {
-        var @params = new AddPreloadScriptCommandParameters(functionDeclaration);
-
-        if (options is not null)
-        {
-            @params.Contexts = options.Contexts;
-            @params.Arguments = options.Arguments;
-            @params.Sandbox = options.Sandbox;
-        }
+        var @params = new AddPreloadScriptCommandParameters(functionDeclaration, options?.Arguments, options?.Contexts, options?.Sandbox);
 
         var result = await Broker.ExecuteCommandAsync<AddPreloadScriptCommand, AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
 

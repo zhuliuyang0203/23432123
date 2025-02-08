@@ -32,28 +32,25 @@ internal sealed class SessionModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand(), options).ConfigureAwait(false);
     }
 
-    public async Task SubscribeAsync(IEnumerable<string> events, SubscribeOptions? options = null)
+    public async Task<SubscribeResult> SubscribeAsync(IEnumerable<string> events, SubscribeOptions? options = null)
     {
-        var @params = new SubscribeCommandParameters(events);
+        var @params = new SubscribeCommandParameters(events, options?.Contexts);
 
-        if (options is not null)
-        {
-            @params.Contexts = options.Contexts;
-        }
-
-        await Broker.ExecuteCommandAsync(new SubscribeCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<SubscribeCommand, SubscribeResult>(new(@params), options).ConfigureAwait(false);
     }
 
-    public async Task UnsubscribeAsync(IEnumerable<string> events, UnsubscribeOptions? options = null)
+    public async Task UnsubscribeAsync(IEnumerable<Subscription> subscriptions, UnsubscribeByIdOptions? options = null)
     {
-        var @params = new SubscribeCommandParameters(events);
+        var @params = new UnsubscribeByIdCommandParameters(subscriptions);
 
-        if (options is not null)
-        {
-            @params.Contexts = options.Contexts;
-        }
+        await Broker.ExecuteCommandAsync(new UnsubscribeByIdCommand(@params), options).ConfigureAwait(false);
+    }
 
-        await Broker.ExecuteCommandAsync(new UnsubscribeCommand(@params), options).ConfigureAwait(false);
+    public async Task UnsubscribeAsync(IEnumerable<string> eventNames, UnsubscribeByAttributesOptions? options = null)
+    {
+        var @params = new UnsubscribeByAttributesCommandParameters(eventNames, options?.Contexts);
+
+        await Broker.ExecuteCommandAsync(new UnsubscribeByAttributesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<NewResult> NewAsync(CapabilitiesRequest capabilitiesRequest, NewOptions? options = null)

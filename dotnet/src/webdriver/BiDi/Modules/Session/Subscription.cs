@@ -1,4 +1,4 @@
-// <copyright file="SubscribeCommand.cs" company="Selenium Committers">
+// <copyright file="Subscription.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,21 +17,16 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Communication;
-using System.Collections.Generic;
-
 #nullable enable
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class SubscribeCommand(SubscribeCommandParameters @params)
-    : Command<SubscribeCommandParameters>(@params, "session.subscribe");
-
-internal record SubscribeCommandParameters(IEnumerable<string> Events, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
-
-public record SubscribeOptions : CommandOptions
+public sealed class Subscription
 {
-    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
-}
+    internal Subscription(string id)
+    {
+        Id = id;
+    }
 
-internal record SubscribeResult(Subscription Subscription);
+    internal string Id { get; }
+}

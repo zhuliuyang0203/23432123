@@ -26,14 +26,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 internal class EvaluateCommand(EvaluateCommandParameters @params)
     : Command<EvaluateCommandParameters>(@params, "script.evaluate");
 
-internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise) : CommandParameters
-{
-    public ResultOwnership? ResultOwnership { get; set; }
-
-    public SerializationOptions? SerializationOptions { get; set; }
-
-    public bool? UserActivation { get; set; }
-}
+internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise, ResultOwnership? ResultOwnership, SerializationOptions? SerializationOptions, bool? UserActivation) : CommandParameters;
 
 public record EvaluateOptions : CommandOptions
 {

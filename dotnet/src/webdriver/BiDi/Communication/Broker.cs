@@ -83,6 +83,7 @@ public class Broker : IAsyncDisposable
                 new DateTimeOffsetConverter(),
                 new PrintPageRangeConverter(),
                 new InputOriginConverter(),
+                new SubscriptionConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
 
                 // https://github.com/dotnet/runtime/issues/72604
@@ -223,23 +224,23 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, browsingContextsOptions?.Contexts);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
         else
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
     }
 
@@ -250,44 +251,51 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, browsingContextsOptions.Contexts);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
         else
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
     }
 
-    public async Task UnsubscribeAsync(EventHandler eventHandler)
+    public async Task UnsubscribeAsync(Modules.Session.Subscription subscription, EventHandler eventHandler)
     {
         var eventHandlers = _eventHandlers[eventHandler.EventName];
 
         eventHandlers.Remove(eventHandler);
 
-        if (eventHandler.Contexts is not null)
+        if (subscription is not null)
         {
-            if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
-            {
-                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
-            }
+            await _bidi.SessionModule.UnsubscribeAsync([subscription]).ConfigureAwait(false);
         }
         else
         {
-            if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
+            if (eventHandler.Contexts is not null)
             {
-                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
+                if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
+                {
+                    await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
+                {
+                    await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
+                }
             }
         }
     }
