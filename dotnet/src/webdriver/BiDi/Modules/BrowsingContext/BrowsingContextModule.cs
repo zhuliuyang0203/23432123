@@ -247,6 +247,16 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.SubscribeAsync("browsingContext.navigationFailed", handler, options).ConfigureAwait(false);
     }
 
+    public async Task<Subscription> OnNavigationCommittedAsync(Func<NavigationInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.navigationCommitted", handler, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnNavigationCommittedAsync(Action<NavigationInfo> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.navigationCommitted", handler, options).ConfigureAwait(false);
+    }
+
     public async Task<Subscription> OnContextCreatedAsync(Func<BrowsingContextInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = null)
     {
         return await Broker.SubscribeAsync("browsingContext.contextCreated", handler, options).ConfigureAwait(false);
