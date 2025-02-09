@@ -31,6 +31,16 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpRequestData"/> type.
         /// </summary>
+        public HttpRequestData()
+        {
+            this.Method = null!;
+            this.Url = null!;
+            this.Headers = null!;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpRequestData"/> type.
+        /// </summary>
         /// <param name="method">The method of the HTTP request.</param>
         /// <param name="url">The URL of the HTTP request.</param>
         /// <param name="postData">The POST data of the HTTP request.</param>
@@ -68,6 +78,6 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the ID of the HTTP request.
         /// </summary>
-        public string RequestId { get; }
+        public string? RequestId { get; }
     }
 }
