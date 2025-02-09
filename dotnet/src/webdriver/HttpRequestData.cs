@@ -33,9 +33,6 @@ namespace OpenQA.Selenium
         /// </summary>
         public HttpRequestData()
         {
-            this.Method = null!;
-            this.Url = null!;
-            this.Headers = null!;
         }
 
         /// <summary>
@@ -58,12 +55,12 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the method of the HTTP request.
         /// </summary>
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         /// <summary>
         /// Gets the URL of the HTTP request.
         /// </summary>
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         /// <summary>
         /// Gets the POST data of the HTTP request, if any.
@@ -73,7 +70,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the headers of the HTTP request.
         /// </summary>
-        public Dictionary<string, string> Headers { get; set; }
+        public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Gets the ID of the HTTP request.
