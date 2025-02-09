@@ -42,14 +42,12 @@ namespace OpenQA.Selenium
         /// <param name="url">The URL of the HTTP request.</param>
         /// <param name="postData">The POST data of the HTTP request.</param>
         /// <param name="headers">The headers of the HTTP request.</param>
-        /// <param name="requestId">The ID of the HTTP request.</param>
-        public HttpRequestData(string method, string url, string? postData, Dictionary<string, string> headers, string requestId)
+        public HttpRequestData(string method, string url, string? postData, Dictionary<string, string> headers)
         {
             this.Method = method;
             this.Url = url;
             this.PostData = postData;
             this.Headers = headers;
-            this.RequestId = requestId;
         }
 
         /// <summary>
@@ -75,6 +73,6 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the ID of the HTTP request.
         /// </summary>
-        public string? RequestId { get; }
+        public string? RequestId { get; internal set; }
     }
 }

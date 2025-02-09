@@ -336,12 +336,14 @@ namespace OpenQA.Selenium.DevTools.V85
             {
                 var requestData = new HttpRequestData
                 (
-                    requestId: e.RequestId,
                     method: e.Request.Method,
                     url: e.Request.Url,
                     postData: e.Request.PostData,
                     headers: new Dictionary<string, string>(e.Request.Headers)
-                );
+                )
+                {
+                    RequestId = e.RequestId
+                };
 
                 RequestPausedEventArgs wrapped = new RequestPausedEventArgs(null, requestData);
                 this.OnRequestPaused(wrapped);
