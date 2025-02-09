@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>
@@ -65,25 +67,22 @@ namespace OpenQA.Selenium.Remote
         {
             if (rawMap != null)
             {
-                foreach (string key in rawMap.Keys)
+                foreach (KeyValuePair<string, object> entry in rawMap)
                 {
-                    if (key == CapabilityType.Platform)
+                    if (entry.Key == CapabilityType.Platform)
                     {
-                        object raw = rawMap[CapabilityType.Platform];
-                        string rawAsString = raw as string;
-                        Platform rawAsPlatform = raw as Platform;
-                        if (rawAsString != null)
+                        if (entry.Value is string rawAsString)
                         {
                             this.SetCapability(CapabilityType.Platform, Platform.FromString(rawAsString));
                         }
-                        else if (rawAsPlatform != null)
+                        else if (entry.Value is Platform rawAsPlatform)
                         {
                             this.SetCapability(CapabilityType.Platform, rawAsPlatform);
                         }
                     }
                     else
                     {
-                        this.SetCapability(key, rawMap[key]);
+                        this.SetCapability(entry.Key, entry.Value);
                     }
                 }
             }
@@ -107,54 +106,21 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Gets the browser name
         /// </summary>
-        public string BrowserName
-        {
-            get
-            {
-                string name = string.Empty;
-                object capabilityValue = this.GetCapability(CapabilityType.BrowserName);
-                if (capabilityValue != null)
-                {
-                    name = capabilityValue.ToString();
-                }
-
-                return name;
-            }
-        }
+        public string BrowserName => this.GetCapability(CapabilityType.BrowserName)?.ToString() ?? string.Empty;
 
         /// <summary>
         /// Gets or sets the platform
         /// </summary>
         public Platform Platform
         {
-            get
-            {
-                return this.GetCapability(CapabilityType.Platform) as Platform ?? new Platform(PlatformType.Any);
-            }
-
-            set
-            {
-                this.SetCapability(CapabilityType.Platform, value);
-            }
+            get => this.GetCapability(CapabilityType.Platform) as Platform ?? new Platform(PlatformType.Any);
+            set => this.SetCapability(CapabilityType.Platform, value);
         }
 
         /// <summary>
         /// Gets the browser version
         /// </summary>
-        public string Version
-        {
-            get
-            {
-                string browserVersion = string.Empty;
-                object capabilityValue = this.GetCapability(CapabilityType.Version);
-                if (capabilityValue != null)
-                {
-                    browserVersion = capabilityValue.ToString();
-                }
-
-                return browserVersion;
-            }
-        }
+        public string Version => this.GetCapability(CapabilityType.Version)?.ToString() ?? string.Empty;
 
         /// <summary>
         /// Gets or sets a value indicating whether the browser accepts SSL certificates.
@@ -164,7 +130,7 @@ namespace OpenQA.Selenium.Remote
             get
             {
                 bool acceptSSLCerts = false;
-                object capabilityValue = this.GetCapability(CapabilityType.AcceptInsecureCertificates);
+                object? capabilityValue = this.GetCapability(CapabilityType.AcceptInsecureCertificates);
                 if (capabilityValue != null)
                 {
                     acceptSSLCerts = (bool)capabilityValue;
@@ -173,27 +139,18 @@ namespace OpenQA.Selenium.Remote
                 return acceptSSLCerts;
             }
 
-            set
-            {
-                this.SetCapability(CapabilityType.AcceptInsecureCertificates, value);
-            }
+            set => this.SetCapability(CapabilityType.AcceptInsecureCertificates, value);
         }
 
         /// <summary>
         /// Gets the underlying Dictionary for a given set of capabilities.
         /// </summary>
-        IDictionary<string, object> IHasCapabilitiesDictionary.CapabilitiesDictionary
-        {
-            get { return this.CapabilitiesDictionary; }
-        }
+        IDictionary<string, object> IHasCapabilitiesDictionary.CapabilitiesDictionary => this.CapabilitiesDictionary;
 
         /// <summary>
         /// Gets the underlying Dictionary for a given set of capabilities.
         /// </summary>
-        internal IDictionary<string, object> CapabilitiesDictionary
-        {
-            get { return new ReadOnlyDictionary<string, object>(this.capabilities); }
-        }
+        internal IDictionary<string, object> CapabilitiesDictionary => new ReadOnlyDictionary<string, object>(this.capabilities);
 
         /// <summary>
         /// Gets the capability value with the specified name.
@@ -207,12 +164,12 @@ namespace OpenQA.Selenium.Remote
         {
             get
             {
-                if (!this.capabilities.ContainsKey(capabilityName))
+                if (!this.capabilities.TryGetValue(capabilityName, out object? capabilityValue))
                 {
                     throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "The capability {0} is not present in this set of capabilities", capabilityName));
                 }
 
-                return this.capabilities[capabilityName];
+                return capabilityValue;
             }
         }
 
@@ -232,16 +189,15 @@ namespace OpenQA.Selenium.Remote
         /// <param name="capability">The capability to get.</param>
         /// <returns>An object associated with the capability, or <see langword="null"/>
         /// if the capability is not set on the browser.</returns>
-        public object GetCapability(string capability)
+        public object? GetCapability(string capability)
         {
-            object capabilityValue = null;
-            if (this.capabilities.ContainsKey(capability))
+            object? capabilityValue = null;
+            if (this.capabilities.TryGetValue(capability, out object? value))
             {
-                capabilityValue = this.capabilities[capability];
-                string capabilityValueString = capabilityValue as string;
-                if (capability == CapabilityType.Platform && capabilityValueString != null)
+                capabilityValue = value;
+                if (capability == CapabilityType.Platform && capabilityValue is string capabilityValueString)
                 {
-                    capabilityValue = Platform.FromString(capabilityValue.ToString());
+                    capabilityValue = Platform.FromString(capabilityValueString);
                 }
             }
 
@@ -258,8 +214,7 @@ namespace OpenQA.Selenium.Remote
             // Handle the special case of Platform objects. These should
             // be stored in the underlying dictionary as their protocol
             // string representation.
-            Platform platformCapabilityValue = capabilityValue as Platform;
-            if (platformCapabilityValue != null)
+            if (capabilityValue is Platform platformCapabilityValue)
             {
                 this.capabilities[capability] = platformCapabilityValue.ProtocolPlatformType;
             }
@@ -296,15 +251,14 @@ namespace OpenQA.Selenium.Remote
         /// </summary>
         /// <param name="obj">DesiredCapabilities you wish to compare</param>
         /// <returns>true if they are the same or false if they are not</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (this == obj)
             {
                 return true;
             }
 
-            DesiredCapabilities other = obj as DesiredCapabilities;
-            if (other == null)
+            if (obj is not DesiredCapabilities other)
             {
                 return false;
             }
@@ -333,8 +287,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>A read-only version of this capabilities object.</returns>
         public ICapabilities AsReadOnly()
         {
-            ReadOnlyDesiredCapabilities readOnlyCapabilities = new ReadOnlyDesiredCapabilities(this);
-            return readOnlyCapabilities;
+            return new ReadOnlyDesiredCapabilities(this);
         }
     }
 }

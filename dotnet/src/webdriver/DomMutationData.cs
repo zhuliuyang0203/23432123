@@ -60,7 +60,7 @@ namespace OpenQA.Selenium
         /// Stores the element associated with the target ID
         /// </summary>
         [JsonIgnore]
-        public IWebElement Element { get; internal set; } = null!; // Set internally
+        public IWebElement? Element { get; internal set; }
 
         /// <summary>
         /// Returns a string that represents the current object.

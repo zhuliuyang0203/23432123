@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -30,13 +32,13 @@ namespace OpenQA.Selenium
         /// Gets or sets a function that evaluates returned response data in an <see cref="HttpResponseData"/> object,
         /// and returns a value indicating whether the data matches the specified criteria.
         /// </summary>
-        public Func<HttpResponseData, bool> ResponseMatcher { get; set; }
+        public Func<HttpResponseData, bool> ResponseMatcher { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets a function that accepts an <see cref="HttpResponseData"/> object describing a network
         /// response received by the browser, and returns a modified <see cref="HttpResponseData"/> object to used
         /// as the actual network response.
         /// </summary>
-        public Func<HttpResponseData, HttpResponseData> ResponseTransformer { get; set; }
+        public Func<HttpResponseData, HttpResponseData> ResponseTransformer { get; set; } = null!;
     }
 }

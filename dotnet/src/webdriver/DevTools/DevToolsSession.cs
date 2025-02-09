@@ -496,7 +496,7 @@ namespace OpenQA.Selenium.DevTools
             LogTrace("Creating WebSocket");
             this.connection = new WebSocketConnection(this.openConnectionWaitTimeSpan, this.closeConnectionWaitTimeSpan);
             connection.DataReceived += OnConnectionDataReceived;
-            await connection.Start(this.EndpointAddress).ConfigureAwait(false);
+            await connection.Start(this.EndpointAddress!).ConfigureAwait(false);
             LogTrace("WebSocket created");
         }
 
