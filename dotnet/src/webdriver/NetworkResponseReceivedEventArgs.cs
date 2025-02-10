@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -27,11 +29,6 @@ namespace OpenQA.Selenium
     /// </summary>
     public class NetworkResponseReceivedEventArgs : EventArgs
     {
-        private readonly string requestId;
-        private readonly string responseUrl;
-        private readonly long responseStatusCode;
-        private readonly HttpResponseContent responseContent;
-        private readonly string responseResourceType;
         private readonly Dictionary<string, string> responseHeaders = new Dictionary<string, string>();
 
         /// <summary>
@@ -40,11 +37,11 @@ namespace OpenQA.Selenium
         /// <param name="responseData">The <see cref="HttpResponseData"/> that describes the network response.</param>
         public NetworkResponseReceivedEventArgs(HttpResponseData responseData)
         {
-            this.requestId = responseData.RequestId;
-            this.responseUrl = responseData.Url;
-            this.responseStatusCode = responseData.StatusCode;
-            this.responseContent = responseData.Content;
-            this.responseResourceType = responseData.ResourceType;
+            this.RequestId = responseData.RequestId;
+            this.ResponseUrl = responseData.Url;
+            this.ResponseStatusCode = responseData.StatusCode;
+            this.ResponseContent = responseData.Content;
+            this.ResponseResourceType = responseData.ResourceType;
             foreach (KeyValuePair<string, string> header in responseData.Headers)
             {
                 this.responseHeaders[header.Key] = header.Value;
@@ -54,17 +51,17 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the request ID of the network request that generated this response.
         /// </summary>
-        public string RequestId => this.requestId;
+        public string RequestId { get; }
 
         /// <summary>
         /// Gets the URL of the network response.
         /// </summary>
-        public string ResponseUrl => this.responseUrl;
+        public string ResponseUrl { get; }
 
         /// <summary>
         /// Gets the HTTP status code of the network response.
         /// </summary>
-        public long ResponseStatusCode => this.responseStatusCode;
+        public long ResponseStatusCode { get; }
 
         /// <summary>
         /// Gets the body of the network response.
@@ -72,17 +69,17 @@ namespace OpenQA.Selenium
         /// <remarks>
         /// This property is an alias for <see cref="ResponseContent"/>.ReadAsString() to keep backward compatibility.
         /// </remarks>
-        public string ResponseBody => this.ResponseContent?.ReadAsString();
+        public string? ResponseBody => this.ResponseContent?.ReadAsString();
 
         /// <summary>
-        /// Gets the content of the network response.
+        /// Gets the content of the network response, if any.
         /// </summary>
-        public HttpResponseContent ResponseContent => this.responseContent;
+        public HttpResponseContent? ResponseContent { get; }
 
         /// <summary>
         /// Gets the type of resource of the network response.
         /// </summary>
-        public string ResponseResourceType => this.responseResourceType;
+        public string ResponseResourceType { get; }
 
         /// <summary>
         /// Gets the headers associated with this network response.

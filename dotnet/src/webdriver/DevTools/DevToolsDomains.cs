@@ -82,7 +82,7 @@ namespace OpenQA.Selenium.DevTools
         /// Initializes the supplied DevTools session's domains for the specified browser version.
         /// </summary>
         /// <param name="protocolVersion">The version of the DevTools Protocol to use.</param>
-        /// <param name="session">The <see cref="DevToolsSession"/> for which to initialiize the domains.</param>
+        /// <param name="session">The <see cref="DevToolsSession"/> for which to initialize the domains.</param>
         /// <returns>The <see cref="DevToolsDomains"/> object containing the version-specific domains.</returns>
         /// <exception cref="ArgumentException">If <paramref name="protocolVersion"/> is negative.</exception>
         /// <exception cref="WebDriverException">If the desired protocol version is not supported.</exception>
@@ -95,7 +95,7 @@ namespace OpenQA.Selenium.DevTools
         /// Initializes the supplied DevTools session's domains for the specified browser version within the specified number of versions.
         /// </summary>
         /// <param name="protocolVersion">The version of the DevTools Protocol to use.</param>
-        /// <param name="session">The <see cref="DevToolsSession"/> for which to initialiize the domains.</param>
+        /// <param name="session">The <see cref="DevToolsSession"/> for which to initialize the domains.</param>
         /// <param name="versionRange">The range of versions within which to match the provided version number. Defaults to 5 versions.</param>
         /// <returns>The <see cref="DevToolsDomains"/> object containing the version-specific domains.</returns>
         /// <exception cref="ArgumentException">If <paramref name="protocolVersion"/> is negative.</exception>

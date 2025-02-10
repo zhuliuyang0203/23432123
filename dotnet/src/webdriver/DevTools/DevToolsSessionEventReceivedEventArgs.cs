@@ -21,6 +21,8 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -44,16 +46,16 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Gets the domain on which the event is to be raised.
         /// </summary>
-        public string DomainName { get; private set; }
+        public string DomainName { get; }
 
         /// <summary>
         /// Gets the name of the event to be raised.
         /// </summary>
-        public string EventName { get; private set; }
+        public string EventName { get; }
 
         /// <summary>
         /// Gets the data with which the event is to be raised.
         /// </summary>
-        public JsonElement EventData { get; private set; }
+        public JsonElement EventData { get; }
     }
 }

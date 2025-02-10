@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>
@@ -46,17 +48,13 @@ namespace OpenQA.Selenium.Safari
         private const string EnableAutomaticInspectionSafariOption = "safari:automaticInspection";
         private const string EnableAutomaticProfilingSafariOption = "safari:automaticProfiling";
 
-        private bool enableAutomaticInspection = false;
-        private bool enableAutomaticProfiling = false;
-        private bool technologyPreview = false;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariOptions"/> class.
         /// </summary>
         public SafariOptions() : base()
         {
             this.BrowserName = BrowserNameValue;
-            this.technologyPreview = false;
+            this.TechnologyPreview = false;
             this.AddKnownCapabilityName(SafariOptions.EnableAutomaticInspectionSafariOption, "EnableAutomaticInspection property");
             this.AddKnownCapabilityName(SafariOptions.EnableAutomaticProfilingSafariOption, "EnableAutomaticProfiling property");
         }
@@ -66,7 +64,7 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         public void UseTechnologyPreview()
         {
-            this.technologyPreview = true;
+            this.TechnologyPreview = true;
             this.BrowserName = "Safari Technology Preview";
         }
 
@@ -74,30 +72,19 @@ namespace OpenQA.Selenium.Safari
         /// Gets or sets a value indicating whether to have the driver preload the
         /// Web Inspector and JavaScript debugger in the background.
         /// </summary>
-        public bool TechnologyPreview
-        {
-            get { return this.technologyPreview; }
-        }
+        public bool TechnologyPreview { get; private set; } = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to have the driver preload the
         /// Web Inspector and JavaScript debugger in the background.
         /// </summary>
-        public bool EnableAutomaticInspection
-        {
-            get { return this.enableAutomaticInspection; }
-            set { this.enableAutomaticInspection = value; }
-        }
+        public bool EnableAutomaticInspection { get; set; } = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to have the driver preload the
         /// Web Inspector and start a timeline recording in the background.
         /// </summary>
-        public bool EnableAutomaticProfiling
-        {
-            get { return this.enableAutomaticProfiling; }
-            set { this.enableAutomaticProfiling = value; }
-        }
+        public bool EnableAutomaticProfiling { get; set; } = false;
 
         /// <summary>
         /// Returns ICapabilities for Safari with these options included as
@@ -108,12 +95,12 @@ namespace OpenQA.Selenium.Safari
         public override ICapabilities ToCapabilities()
         {
             IWritableCapabilities capabilities = this.GenerateDesiredCapabilities(true);
-            if (this.enableAutomaticInspection)
+            if (this.EnableAutomaticInspection)
             {
                 capabilities.SetCapability(EnableAutomaticInspectionSafariOption, true);
             }
 
-            if (this.enableAutomaticProfiling)
+            if (this.EnableAutomaticProfiling)
             {
                 capabilities.SetCapability(EnableAutomaticProfilingSafariOption, true);
             }

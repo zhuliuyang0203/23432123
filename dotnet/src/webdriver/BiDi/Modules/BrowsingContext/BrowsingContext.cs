@@ -154,6 +154,11 @@ public class BrowsingContext
         return BiDi.BrowsingContext.OnDomContentLoadedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
+    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnDomContentLoadedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
     public Task<Subscription> OnLoadAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
     {
         return BiDi.BrowsingContext.OnLoadAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
@@ -194,9 +199,14 @@ public class BrowsingContext
         return BiDi.BrowsingContext.OnNavigationFailedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
+    public Task<Subscription> OnNavigationCommittedAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
     {
-        return BiDi.BrowsingContext.OnDomContentLoadedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+        return BiDi.BrowsingContext.OnNavigationCommittedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
+    public Task<Subscription> OnNavigationCommittedAsync(Func<NavigationInfo, Task> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnNavigationCommittedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
     public override bool Equals(object? obj)

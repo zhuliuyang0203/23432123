@@ -18,6 +18,7 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -78,7 +79,7 @@ namespace OpenQA.Selenium.Remote
         //    get { return this.HttpExecutor.CommandInfoRepository; }
         //}
 
-        public bool TryAddCommand(string commandName, CommandInfo info)
+        public bool TryAddCommand(string commandName, [NotNullWhen(true)] CommandInfo? info)
         {
             return this.HttpExecutor.TryAddCommand(commandName, info);
         }
@@ -94,6 +95,7 @@ namespace OpenQA.Selenium.Remote
         /// </summary>
         /// <param name="commandToExecute">The command you wish to execute</param>
         /// <returns>A response from the browser</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandToExecute"/> is <see langword="null"/>.</exception>
         public Response Execute(Command commandToExecute)
         {
             return Task.Run(() => this.ExecuteAsync(commandToExecute)).GetAwaiter().GetResult();
@@ -104,6 +106,7 @@ namespace OpenQA.Selenium.Remote
         /// </summary>
         /// <param name="commandToExecute">The command you wish to execute</param>
         /// <returns>A task object representing the asynchronous operation</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandToExecute"/> is <see langword="null"/>.</exception>
         public async Task<Response> ExecuteAsync(Command commandToExecute)
         {
             if (commandToExecute == null)

@@ -17,14 +17,16 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
     /// Provides a mechanism for setting options needed for the driver during the test.
     /// </summary>
-    internal class OptionsManager : IOptions
+    internal sealed class OptionsManager : IOptions
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsManager"/> class
@@ -32,34 +34,25 @@ namespace OpenQA.Selenium
         /// <param name="driver">Instance of the driver currently in use</param>
         public OptionsManager(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new System.ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
         /// Gets an object allowing the user to manipulate cookies on the page.
         /// </summary>
-        public ICookieJar Cookies
-        {
-            get { return new CookieJar(this.driver); }
-        }
+        public ICookieJar Cookies => new CookieJar(this.driver);
 
         /// <summary>
         /// Gets an object allowing the user to manipulate the currently-focused browser window.
         /// </summary>
         /// <remarks>"Currently-focused" is defined as the browser window having the window handle
         /// returned when IWebDriver.CurrentWindowHandle is called.</remarks>
-        public IWindow Window
-        {
-            get { return new Window(this.driver); }
-        }
+        public IWindow Window => new Window(this.driver);
 
         /// <summary>
         /// Gets an object allowing the user to examine the logs of the current driver instance.
         /// </summary>
-        public ILogs Logs
-        {
-            get { return new Logs(this.driver); }
-        }
+        public ILogs Logs => new Logs(this.driver);
 
         /// <summary>
         /// Provides access to the timeouts defined for this driver.
@@ -70,9 +63,6 @@ namespace OpenQA.Selenium
             return new Timeouts(this.driver);
         }
 
-        public INetwork Network
-        {
-            get { return this.driver.Network; }
-        }
+        public INetwork Network => this.driver.Network;
     }
 }

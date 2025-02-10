@@ -18,6 +18,9 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -26,8 +29,22 @@ namespace OpenQA.Selenium
     /// </summary>
     public class HttpResponseData
     {
-        private Dictionary<string, string> headers = new Dictionary<string, string>();
-        private List<string> cookies = new List<string>();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpResponseData"/> type.
+        /// </summary>
+        /// <param name="requestId">The ID of the request that generated this response.</param>
+        /// <param name="url">The URL of the HTTP response.</param>
+        /// <param name="resourceType">The type of resource for this response.</param>
+        /// <param name="statusCode">The numeric status code of the HTTP response.</param>
+        /// <param name="errorReason">The reason for an error response.</param>
+        public HttpResponseData(string requestId, string url, string resourceType, long statusCode, string? errorReason)
+        {
+            RequestId = requestId;
+            Url = url;
+            ResourceType = resourceType;
+            StatusCode = statusCode;
+            ErrorReason = errorReason;
+        }
 
         /// <summary>
         /// Gets or sets the ID of the request that generated this response.
@@ -47,22 +64,17 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the body of the HTTP response.
         /// </summary>
-        public string Body
+        [DisallowNull]
+        public string? Body
         {
-            get
-            {
-                return this.Content?.ReadAsString();
-            }
-            set
-            {
-                this.Content = new HttpResponseContent(value);
-            }
+            get => this.Content?.ReadAsString();
+            set => this.Content = new HttpResponseContent(value);
         }
 
         /// <summary>
         /// Gets or sets the content of the HTTP response.
         /// </summary>
-        public HttpResponseContent Content { get; set; }
+        public HttpResponseContent? Content { get; set; }
 
         /// <summary>
         /// Gets or sets the type of resource for this response.
@@ -72,16 +84,16 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the reason for an error response.
         /// </summary>
-        public string ErrorReason { get; set; }
+        public string? ErrorReason { get; set; }
 
         /// <summary>
         /// Gets the headers of the HTTP response.
         /// </summary>
-        public Dictionary<string, string> Headers => this.headers;
+        public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Gets the cookie headers of the HTTP response.
         /// </summary>
-        public List<string> CookieHeaders => this.cookies;
+        public List<string> CookieHeaders { get; } = new List<string>();
     }
 }

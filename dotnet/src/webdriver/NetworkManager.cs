@@ -200,7 +200,7 @@ namespace OpenQA.Selenium
             {
                 if (authenticationHandler.UriMatcher.Invoke(uri))
                 {
-                    PasswordCredentials credentials = authenticationHandler.Credentials as PasswordCredentials;
+                    PasswordCredentials credentials = (PasswordCredentials)authenticationHandler.Credentials;
                     await this.session.Value.Domains.Network.ContinueWithAuth(e.RequestId, credentials.UserName, credentials.Password).ConfigureAwait(false);
                     successfullyAuthenticated = true;
                     break;
@@ -262,7 +262,7 @@ namespace OpenQA.Selenium
                     // method demands one; however, the only property used by that method is the RequestId property.
                     // It might be better to refactor that method signature to simply pass the request ID, or
                     // alternatively, just pass the response data, which should also contain the request ID anyway.
-                    HttpRequestData requestData = new HttpRequestData() { RequestId = e.ResponseData.RequestId };
+                    HttpRequestData requestData = new HttpRequestData(null, null, null, null, requestId: e.ResponseData.RequestId);
                     await this.session.Value.Domains.Network.ContinueRequestWithResponse(requestData, handler.ResponseTransformer(e.ResponseData)).ConfigureAwait(false);
                     return;
                 }

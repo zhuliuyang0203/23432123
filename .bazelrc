@@ -8,7 +8,11 @@ try-import %workspace%/.bazelrc.windows.local
 # https://github.com/bazelbuild/bazel/issues/20369
 # https://github.com/bazelbuild/bazel/issues/21491
 
-common --enable_bzlmod --lockfile_mode=off
+common --lockfile_mode=off
+
+# Prepare for Bazel 8. These become the default in 8.0.0
+common --incompatible_disallow_empty_glob
+common --incompatible_use_plus_in_repo_names
 
 # Ensure Windows support is accurate.
 

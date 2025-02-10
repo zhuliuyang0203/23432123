@@ -40,28 +40,24 @@ namespace OpenQA.Selenium
         /// </summary>
         public const string ElementReferencePropertyName = "element-6066-11e4-a52e-4f735466cecf";
 
-        private WebDriver driver;
-        private string elementId;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElement"/> class.
         /// </summary>
         /// <param name="parentDriver">The <see cref="WebDriver"/> instance that is driving this element.</param>
         /// <param name="id">The ID value provided to identify the element.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="parentDriver"/> or <paramref name="id"/> are <see langword="null"/>.</exception>
         public WebElement(WebDriver parentDriver, string id)
         {
-            this.driver = parentDriver;
-            this.elementId = id ?? throw new ArgumentNullException(nameof(id));
+            this.driver = parentDriver ?? throw new ArgumentNullException(nameof(parentDriver));
+            this.Id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         /// <summary>
         /// Gets the <see cref="IWebDriver"/> driving this element.
         /// </summary>
-        public IWebDriver WrappedDriver
-        {
-            get { return this.driver; }
-        }
+        public IWebDriver WrappedDriver => this.driver;
 
         /// <summary>
         /// Gets the tag name of this element.
@@ -77,8 +73,10 @@ namespace OpenQA.Selenium
             get
             {
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("id", this.elementId);
+                parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.GetElementTagName, parameters);
+
                 return commandResponse.Value.ToString();
             }
         }
@@ -93,8 +91,10 @@ namespace OpenQA.Selenium
             get
             {
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("id", this.elementId);
+                parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.GetElementText, parameters);
+
                 return commandResponse.Value.ToString();
             }
         }
@@ -110,9 +110,11 @@ namespace OpenQA.Selenium
             get
             {
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("id", this.elementId);
+                parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.IsElementEnabled, parameters);
-                return (bool)Convert.ChangeType(commandResponse.Value, typeof(bool));
+
+                return Convert.ToBoolean(commandResponse.Value);
             }
         }
 
@@ -127,9 +129,11 @@ namespace OpenQA.Selenium
             get
             {
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
-                parameters.Add("id", this.elementId);
+                parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.IsElementSelected, parameters);
-                return (bool)Convert.ChangeType(commandResponse.Value, typeof(bool));
+
+                return Convert.ToBoolean(commandResponse.Value);
             }
         }
 
@@ -142,10 +146,11 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string getLocationCommand = DriverCommand.GetElementRect;
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("id", this.Id);
-                Response commandResponse = this.Execute(getLocationCommand, parameters);
+
+                Response commandResponse = this.Execute(DriverCommand.GetElementRect, parameters);
+
                 Dictionary<string, object> rawPoint = (Dictionary<string, object>)commandResponse.Value;
                 int x = Convert.ToInt32(rawPoint["x"], CultureInfo.InvariantCulture);
                 int y = Convert.ToInt32(rawPoint["y"], CultureInfo.InvariantCulture);
@@ -161,10 +166,11 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string getSizeCommand = DriverCommand.GetElementRect;
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("id", this.Id);
-                Response commandResponse = this.Execute(getSizeCommand, parameters);
+
+                Response commandResponse = this.Execute(DriverCommand.GetElementRect, parameters);
+
                 Dictionary<string, object> rawSize = (Dictionary<string, object>)commandResponse.Value;
                 int width = Convert.ToInt32(rawSize["width"], CultureInfo.InvariantCulture);
                 int height = Convert.ToInt32(rawSize["height"], CultureInfo.InvariantCulture);
@@ -183,14 +189,14 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse = null;
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 string atom = GetAtom("is-displayed.js");
                 parameters.Add("script", atom);
-                parameters.Add("args", new object[] { this.ToElementReference().ToDictionary() });
-                commandResponse = this.Execute(DriverCommand.ExecuteScript, parameters);
+                parameters.Add("args", new object[] { ((IWebDriverObjectReference)this).ToDictionary() });
 
-                return (bool)Convert.ChangeType(commandResponse.Value, typeof(bool));
+                Response commandResponse = Execute(DriverCommand.ExecuteScript, parameters);
+
+                return Convert.ToBoolean(commandResponse.Value);
             }
         }
 
@@ -201,9 +207,9 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Dictionary<string, object> rawLocation;
                 object scriptResponse = this.driver.ExecuteScript("var rect = arguments[0].getBoundingClientRect(); return {'x': rect.left, 'y': rect.top};", this);
-                rawLocation = scriptResponse as Dictionary<string, object>;
+
+                Dictionary<string, object> rawLocation = (Dictionary<string, object>)scriptResponse;
 
                 int x = Convert.ToInt32(rawLocation["x"], CultureInfo.InvariantCulture);
                 int y = Convert.ToInt32(rawLocation["y"], CultureInfo.InvariantCulture);
@@ -220,7 +226,9 @@ namespace OpenQA.Selenium
             {
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.GetComputedAccessibleLabel, parameters);
+
                 return commandResponse.Value.ToString();
             }
         }
@@ -233,12 +241,14 @@ namespace OpenQA.Selenium
             get
             {
                 // TODO: Returning this as a string is incorrect. The W3C WebDriver Specification
-                // needs to be updated to more throughly document the structure of what is returned
+                // needs to be updated to more thoroughly document the structure of what is returned
                 // by this command. Once that is done, a type-safe class will be created, and will
                 // be returned by this property.
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("id", this.Id);
+
                 Response commandResponse = this.Execute(DriverCommand.GetComputedAccessibleRole, parameters);
+
                 return commandResponse.Value.ToString();
             }
         }
@@ -247,18 +257,12 @@ namespace OpenQA.Selenium
         /// Gets the coordinates identifying the location of this element using
         /// various frames of reference.
         /// </summary>
-        public virtual ICoordinates Coordinates
-        {
-            get { return new ElementCoordinates(this); }
-        }
+        public virtual ICoordinates Coordinates => new ElementCoordinates(this);
 
         /// <summary>
         /// Gets the internal ID of the element.
         /// </summary>
-        string IWebDriverObjectReference.ObjectReferenceId
-        {
-            get { return this.elementId; }
-        }
+        string IWebDriverObjectReference.ObjectReferenceId => this.Id;
 
         /// <summary>
         /// Gets the ID of the element
@@ -270,10 +274,7 @@ namespace OpenQA.Selenium
         /// and the parent driver hosting the element have a need to access the
         /// internal element ID. Therefore, we have two properties returning the
         /// same value, one scoped as internal, the other as protected.</remarks>
-        protected string Id
-        {
-            get { return this.elementId; }
-        }
+        protected string Id { get; }
 
         /// <summary>
         /// Clears the content of this element.
@@ -285,7 +286,8 @@ namespace OpenQA.Selenium
         public virtual void Clear()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
+
             this.Execute(DriverCommand.ClearElement, parameters);
         }
 
@@ -306,7 +308,8 @@ namespace OpenQA.Selenium
         public virtual void Click()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
+
             this.Execute(DriverCommand.ClickElement, parameters);
         }
 
@@ -335,10 +338,12 @@ namespace OpenQA.Selenium
         public virtual IWebElement FindElement(string mechanism, string value)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
             parameters.Add("using", mechanism);
             parameters.Add("value", value);
+
             Response commandResponse = this.Execute(DriverCommand.FindChildElement, parameters);
+
             return this.driver.GetElementFromResponse(commandResponse);
         }
 
@@ -368,10 +373,12 @@ namespace OpenQA.Selenium
         public virtual ReadOnlyCollection<IWebElement> FindElements(string mechanism, string value)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
             parameters.Add("using", mechanism);
             parameters.Add("value", value);
+
             Response commandResponse = this.Execute(DriverCommand.FindChildElements, parameters);
+
             return this.driver.GetElementsFromResponse(commandResponse);
         }
 
@@ -419,25 +426,17 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             string atom = GetAtom("get-attribute.js");
             parameters.Add("script", atom);
-            parameters.Add("args", new object[] { this.ToElementReference().ToDictionary(), attributeName });
+            parameters.Add("args", new object[] { ((IWebDriverObjectReference)this).ToDictionary(), attributeName });
             commandResponse = this.Execute(DriverCommand.ExecuteScript, parameters);
 
-            if (commandResponse.Value == null)
-            {
-                attributeValue = null;
-            }
-            else
-            {
-                attributeValue = commandResponse.Value.ToString();
 
-                // Normalize string values of boolean results as lowercase.
-                if (commandResponse.Value is bool)
-                {
-                    attributeValue = attributeValue.ToLowerInvariant();
-                }
+            // Normalize string values of boolean results as lowercase.
+            if (commandResponse.Value is bool b)
+            {
+                return b ? "true" : "false";
             }
 
-            return attributeValue;
+            return commandResponse.Value?.ToString();
         }
 
         /// <summary>
@@ -455,22 +454,13 @@ namespace OpenQA.Selenium
         /// </remarks>
         public virtual string GetDomAttribute(string attributeName)
         {
-            string attributeValue = string.Empty;
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", this.Id);
             parameters.Add("name", attributeName);
 
             Response commandResponse = this.Execute(DriverCommand.GetElementAttribute, parameters);
-            if (commandResponse.Value == null)
-            {
-                attributeValue = null;
-            }
-            else
-            {
-                attributeValue = commandResponse.Value.ToString();
-            }
 
-            return attributeValue;
+            return commandResponse.Value?.ToString();
         }
 
         /// <summary>
@@ -482,22 +472,13 @@ namespace OpenQA.Selenium
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual string GetDomProperty(string propertyName)
         {
-            string propertyValue = string.Empty;
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", this.Id);
             parameters.Add("name", propertyName);
 
             Response commandResponse = this.Execute(DriverCommand.GetElementProperty, parameters);
-            if (commandResponse.Value == null)
-            {
-                propertyValue = null;
-            }
-            else
-            {
-                propertyValue = commandResponse.Value.ToString();
-            }
 
-            return propertyValue;
+            return commandResponse.Value?.ToString();
         }
 
         /// <summary>
@@ -512,19 +493,17 @@ namespace OpenQA.Selenium
             parameters.Add("id", this.Id);
 
             Response commandResponse = this.Execute(DriverCommand.GetElementShadowRoot, parameters);
-            Dictionary<string, object> shadowRootDictionary = commandResponse.Value as Dictionary<string, object>;
-            if (shadowRootDictionary == null)
+            if (commandResponse.Value is not Dictionary<string, object> shadowRootDictionary)
             {
                 throw new WebDriverException("Get shadow root command succeeded, but response value does not represent a shadow root.");
             }
 
-            if (!shadowRootDictionary.ContainsKey(ShadowRoot.ShadowRootReferencePropertyName))
+            if (!ShadowRoot.TryCreate(this.driver, shadowRootDictionary, out ShadowRoot shadowRoot))
             {
                 throw new WebDriverException("Get shadow root command succeeded, but response value does not have a shadow root key value.");
             }
 
-            string shadowRootId = shadowRootDictionary[ShadowRoot.ShadowRootReferencePropertyName].ToString();
-            return new ShadowRoot(this.driver, shadowRootId);
+            return shadowRoot;
         }
 
         /// <summary>
@@ -555,7 +534,7 @@ namespace OpenQA.Selenium
         public virtual Screenshot GetScreenshot()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
 
             // Get the screenshot as base64.
             Response screenshotResponse = this.Execute(DriverCommand.ElementScreenshot, parameters);
@@ -601,7 +580,7 @@ namespace OpenQA.Selenium
             // TODO: Remove either "keysToSend" or "value" property, whichever is not the
             // appropriate one for spec compliance.
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("id", this.elementId);
+            parameters.Add("id", this.Id);
             parameters.Add("text", text);
             parameters.Add("value", text.ToCharArray());
 
@@ -625,7 +604,7 @@ namespace OpenQA.Selenium
             }
             else
             {
-                String script = "/* submitForm */var form = arguments[0];\n" +
+                string script = "/* submitForm */var form = arguments[0];\n" +
                                 "while (form.nodeName != \"FORM\" && form.parentNode) {\n" +
                                 "  form = form.parentNode;\n" +
                                 "}\n" +
@@ -645,7 +624,7 @@ namespace OpenQA.Selenium
         /// <returns>A string that represents the current <see cref="WebElement"/>.</returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "Element (id = {0})", this.elementId);
+            return string.Format(CultureInfo.InvariantCulture, "Element (id = {0})", this.Id);
         }
 
         /// <summary>
@@ -654,7 +633,7 @@ namespace OpenQA.Selenium
         /// <returns>Integer of the hash code for the element</returns>
         public override int GetHashCode()
         {
-            return this.elementId.GetHashCode();
+            return this.Id.GetHashCode();
         }
 
         /// <summary>
@@ -664,25 +643,22 @@ namespace OpenQA.Selenium
         /// <returns>A boolean if it is equal or not</returns>
         public override bool Equals(object obj)
         {
-            IWebElement other = obj as IWebElement;
-            if (other == null)
+            if (obj is not IWebElement other)
             {
                 return false;
             }
 
-            IWrapsElement objAsWrapsElement = obj as IWrapsElement;
-            if (objAsWrapsElement != null)
+            if (obj is IWrapsElement objAsWrapsElement)
             {
                 other = objAsWrapsElement.WrappedElement;
             }
 
-            WebElement otherAsElement = other as WebElement;
-            if (otherAsElement == null)
+            if (other is not WebElement otherAsElement)
             {
                 return false;
             }
 
-            if (this.elementId == otherAsElement.Id)
+            if (this.Id == otherAsElement.Id)
             {
                 // For drivers that implement ID equality, we can check for equal IDs
                 // here, and expect them to be equal. There is a potential danger here
@@ -696,7 +672,7 @@ namespace OpenQA.Selenium
         Dictionary<string, object> IWebDriverObjectReference.ToDictionary()
         {
             Dictionary<string, object> elementDictionary = new Dictionary<string, object>();
-            elementDictionary.Add(ElementReferencePropertyName, this.elementId);
+            elementDictionary.Add(ElementReferencePropertyName, this.Id);
             return elementDictionary;
         }
 
@@ -729,7 +705,7 @@ namespace OpenQA.Selenium
 
         private string UploadFile(string localFile)
         {
-            string base64zip = string.Empty;
+            string base64zip;
             try
             {
                 using (MemoryStream fileUploadMemoryStream = new MemoryStream())
@@ -751,11 +727,6 @@ namespace OpenQA.Selenium
             {
                 throw new WebDriverException("Cannot upload " + localFile, e);
             }
-        }
-
-        private IWebDriverObjectReference ToElementReference()
-        {
-            return this as IWebDriverObjectReference;
         }
     }
 }

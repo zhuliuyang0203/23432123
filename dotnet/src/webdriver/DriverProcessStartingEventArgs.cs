@@ -20,6 +20,8 @@
 using System;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -27,25 +29,21 @@ namespace OpenQA.Selenium
     /// </summary>
     public class DriverProcessStartingEventArgs : EventArgs
     {
-        private ProcessStartInfo startInfo;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DriverProcessStartingEventArgs"/> class.
         /// </summary>
         /// <param name="startInfo">The <see cref="ProcessStartInfo"/> of the
         /// driver process to be started.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="startInfo"/> is <see langword="null"/>.</exception>
         public DriverProcessStartingEventArgs(ProcessStartInfo startInfo)
         {
-            this.startInfo = startInfo;
+            this.DriverServiceProcessStartInfo = startInfo ?? throw new ArgumentNullException(nameof(startInfo));
         }
 
         /// <summary>
         /// Gets the <see cref="ProcessStartInfo"/> object with which the
         /// driver service process will be started.
         /// </summary>
-        public ProcessStartInfo DriverServiceProcessStartInfo
-        {
-            get { return this.startInfo; }
-        }
+        public ProcessStartInfo DriverServiceProcessStartInfo { get; }
     }
 }

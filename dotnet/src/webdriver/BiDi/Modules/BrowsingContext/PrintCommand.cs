@@ -28,22 +28,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class PrintCommand(PrintCommandParameters @params)
     : Command<PrintCommandParameters>(@params, "browsingContext.print");
 
-internal record PrintCommandParameters(BrowsingContext Context) : CommandParameters
-{
-    public bool? Background { get; set; }
-
-    public PrintMargin? Margin { get; set; }
-
-    public PrintOrientation? Orientation { get; set; }
-
-    public PrintPage? Page { get; set; }
-
-    public IEnumerable<PrintPageRange>? PageRanges { get; set; }
-
-    public double? Scale { get; set; }
-
-    public bool? ShrinkToFit { get; set; }
-}
+internal record PrintCommandParameters(BrowsingContext Context, bool? Background, PrintMargin? Margin, PrintOrientation? Orientation, PrintPage? Page, IEnumerable<PrintPageRange>? PageRanges, double? Scale, bool? ShrinkToFit) : CommandParameters;
 
 public record PrintOptions : CommandOptions
 {
