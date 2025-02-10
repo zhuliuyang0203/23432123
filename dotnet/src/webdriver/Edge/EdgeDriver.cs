@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Edge
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace OpenQA.Selenium.Edge
     /// </summary>
     public class EdgeDriver : ChromiumDriver
     {
-        private static Dictionary<string, CommandInfo> edgeCustomCommands = new Dictionary<string, CommandInfo>()
+        private static readonly Dictionary<string, CommandInfo> edgeCustomCommands = new Dictionary<string, CommandInfo>()
         {
             { ExecuteCdp, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/ms/cdp/execute") },
             { GetCastSinksCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/ms/cast/get_sinks") },
@@ -53,6 +55,7 @@ namespace OpenQA.Selenium.Edge
         /// Initializes a new instance of the <see cref="EdgeDriver"/> class using the specified options.
         /// </summary>
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public EdgeDriver(EdgeOptions options)
             : this(EdgeDriverService.CreateDefaultService(), options)
         {
@@ -62,6 +65,7 @@ namespace OpenQA.Selenium.Edge
         /// Initializes a new instance of the <see cref="EdgeDriver"/> class using the specified driver service.
         /// </summary>
         /// <param name="service">The <see cref="EdgeDriverService"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         public EdgeDriver(EdgeDriverService service)
             : this(service, new EdgeOptions())
         {
@@ -83,6 +87,7 @@ namespace OpenQA.Selenium.Edge
         /// </summary>
         /// <param name="edgeDriverDirectory">The full path to the directory containing the WebDriver executable.</param>
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public EdgeDriver(string edgeDriverDirectory, EdgeOptions options)
             : this(edgeDriverDirectory, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -95,6 +100,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="edgeDriverDirectory">The full path to the directory containing the WebDriver executable.</param>
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public EdgeDriver(string edgeDriverDirectory, EdgeOptions options, TimeSpan commandTimeout)
             : this(EdgeDriverService.CreateDefaultService(edgeDriverDirectory), options, commandTimeout)
         {
@@ -106,6 +112,7 @@ namespace OpenQA.Selenium.Edge
         /// </summary>
         /// <param name="service">The <see cref="EdgeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="EdgeOptions"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public EdgeDriver(EdgeDriverService service, EdgeOptions options)
             : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -117,6 +124,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="service">The <see cref="EdgeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public EdgeDriver(EdgeDriverService service, EdgeOptions options, TimeSpan commandTimeout)
             : base(service, options, commandTimeout)
         {

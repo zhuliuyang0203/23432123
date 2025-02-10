@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -32,7 +34,7 @@ namespace OpenQA.Selenium
         /// <param name="messageContent">The content of the message written to the JavaScript console.</param>
         /// <param name="messageTimeStamp">The time stamp of the message written to the JavaScript console.</param>
         /// <param name="messageType">The type of message written to the JavaScript console.</param>
-        public JavaScriptConsoleApiCalledEventArgs(string messageContent, DateTime messageTimeStamp, string messageType)
+        public JavaScriptConsoleApiCalledEventArgs(string? messageContent, DateTime messageTimeStamp, string messageType)
         {
             this.MessageContent = messageContent;
             this.MessageTimeStamp = messageTimeStamp;
@@ -42,7 +44,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the content of the message written to the JavaScript console.
         /// </summary>
-        public string MessageContent { get; set; }
+        public string? MessageContent { get; set; }
 
         /// <summary>
         /// Gets or sets the time stamp of the message written to the JavaScript console.

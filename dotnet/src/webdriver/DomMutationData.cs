@@ -19,6 +19,8 @@
 
 using System.Text.Json.Serialization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -31,34 +33,34 @@ namespace OpenQA.Selenium
         /// </summary>
         [JsonPropertyName("target")]
         [JsonInclude]
-        public string TargetId { get; internal set; }
+        public string TargetId { get; internal set; } = null!;
 
         /// <summary>
         /// Gets the name of the attribute that is changing.
         /// </summary>
         [JsonPropertyName("name")]
         [JsonInclude]
-        public string AttributeName { get; internal set; }
+        public string AttributeName { get; internal set; } = null!;
 
         /// <summary>
         /// Gets the value to which the attribute is being changed.
         /// </summary>
         [JsonPropertyName("value")]
         [JsonInclude]
-        public string AttributeValue { get; internal set; }
+        public string AttributeValue { get; internal set; } = null!;
 
         /// <summary>
         /// Gets the value from which the attribute has been changed.
         /// </summary>
         [JsonPropertyName("oldValue")]
         [JsonInclude]
-        public string AttributeOriginalValue { get; internal set; }
+        public string AttributeOriginalValue { get; internal set; } = null!;
 
         /// <summary>
         /// Stores the element associated with the target ID
         /// </summary>
         [JsonIgnore]
-        public IWebElement Element { get; internal set; }
+        public IWebElement Element { get; internal set; } = null!; // Set internally
 
         /// <summary>
         /// Returns a string that represents the current object.

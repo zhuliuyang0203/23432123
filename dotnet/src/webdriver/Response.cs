@@ -66,9 +66,11 @@ namespace OpenQA.Selenium
         /// <param name="status">The WebDriver result status of the response.</param>
         public Response(string? sessionId, object? value, WebDriverResult status)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             this.SessionId = sessionId;
             this.Value = value;
             this.Status = status;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>

@@ -26,6 +26,9 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class CloseCommand(CloseCommandParameters @params)
     : Command<CloseCommandParameters>(@params, "browsingContext.close");
 
-internal record CloseCommandParameters(BrowsingContext Context) : CommandParameters;
+internal record CloseCommandParameters(BrowsingContext Context, bool? PromptUnload) : CommandParameters;
 
-public record CloseOptions : CommandOptions;
+public record CloseOptions : CommandOptions
+{
+    public bool? PromptUnload { get; set; }
+}

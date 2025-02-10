@@ -1,4 +1,4 @@
-// <copyright file="DomMutatedEventArgs.cs" company="Selenium Committers">
+// <copyright file="SubscriptionConverter.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -18,24 +18,24 @@
 // </copyright>
 
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 #nullable enable
 
-namespace OpenQA.Selenium
-{
-    /// <summary>
-    /// Provides data for the AttributeValueChanged event
-    /// </summary>
-    public class DomMutatedEventArgs : EventArgs
-    {
-        internal DomMutatedEventArgs(DomMutationData attributeData)
-        {
-            AttributeData = attributeData;
-        }
+namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
-        /// <summary>
-        /// Gets the data about the attribute being changed.
-        /// </summary>
-        public DomMutationData AttributeData { get; }
+internal class SubscriptionConverter : JsonConverter<Modules.Session.Subscription>
+{
+    public override Modules.Session.Subscription? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var id = reader.GetString();
+
+        return new Modules.Session.Subscription(id!);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Modules.Session.Subscription value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.Id);
     }
 }

@@ -44,7 +44,7 @@ namespace OpenQA.Selenium.DevTools.Json
 #endif
             foreach (var value in values)
             {
-                var enumMember = type.GetField(value.ToString());
+                var enumMember = type.GetField(value.ToString())!;
                 var attr = enumMember.GetCustomAttributes(typeof(EnumMemberAttribute), false)
                   .Cast<EnumMemberAttribute>()
                   .FirstOrDefault();
