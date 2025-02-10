@@ -25,7 +25,7 @@ from selenium.webdriver.support.ui import Select
 disabledSelect = {"name": "no-select", "values": ["Foo"]}
 disabledSingleSelect = {"name": "single_disabled", "values": ["Enabled", "Disabled"]}
 disabledMultiSelect = {"name": "multi_disabled", "values": ["Enabled", "Disabled"]}
-invisibleMultiSelect = {"id": "invisible_multi_select", "values": ["Apples", "Oranges", "Lemons"]}
+invisibleMultiSelect = {"id": "invisible_multi_select", "values": ["Apples", "Pears", "Oranges", "Lemons"]}
 singleSelectValues1 = {
     "name": "selectomatic",
     "values": ["One", "Two", "Four", "Still learning how to count, apparently"],
@@ -166,8 +166,9 @@ def test_raises_exception_select_by_text_multiple_hidden(driver, pages):
     pages.load("formPage.html")
 
     sel = Select(driver.find_element(By.ID, invisibleMultiSelect["id"]))
-    with pytest.raises(NoSuchElementException):
-        sel.select_by_visible_text(invisibleMultiSelect["values"][0])
+    for option in invisibleMultiSelect["values"]:
+        with pytest.raises(NoSuchElementException):
+            sel.select_by_visible_text(option)
 
 
 def test_deselect_all_single(driver, pages):
