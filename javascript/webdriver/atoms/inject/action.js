@@ -88,6 +88,19 @@ webdriver.atoms.inject.action.click = function (element, opt_window) {
       [element], opt_window);
 };
 
+/**
+ * Tap an element.
+ *
+ * @param {bot.inject.JsonElement} element The element to tap.
+ * @param {bot.inject.JsonWindow=} opt_window The optional window
+ *     containing the element.
+ * @return {string} A stringified {@link bot.response.ResponseObject}.
+ * @see bot.action.tap
+ */
+webdriver.atoms.inject.action.tap = function (element, opt_window) {
+  return webdriver.atoms.inject.action.executeActionFunction_(bot.action.tap,
+      [element], opt_window);
+};
 
 /**
  * JSON representation of a {@link bot.Mouse.State} object.

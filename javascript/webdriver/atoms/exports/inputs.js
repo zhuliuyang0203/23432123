@@ -37,3 +37,5 @@ goog.exportSymbol('webdriver.atoms.inputs.mouseMove',
                   webdriver.atoms.inputs.mouseMove);
 goog.exportSymbol('webdriver.atoms.inputs.sendKeys',
                   webdriver.atoms.inputs.sendKeys);
+goog.exportSymbol('webdriver.atoms.inputs.tap',
+                  webdriver.atoms.inputs.tap);

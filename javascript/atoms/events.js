@@ -523,7 +523,8 @@ bot.events.TouchEventFactory_.prototype.create = function (target, opt_args) {
   } else if (strategy == bot.events.TouchEventStrategy_.INIT_TOUCH_EVENT) {
     event = doc.createEvent('TouchEvent');
     // Different browsers have different implementations of initTouchEvent.
-    if (event.initTouchEvent.length == 0) {
+    // if (event.initTouchEvent.length == 0) {
+    if (!goog.userAgent.product.IOS) {
       // Chrome/Android.
       event.initTouchEvent(touches, targetTouches, changedTouches,
         this.type_, view, /*screenX*/ 0, /*screenY*/ 0, args.clientX,
