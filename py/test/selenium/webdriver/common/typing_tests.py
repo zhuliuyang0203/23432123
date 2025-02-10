@@ -347,6 +347,7 @@ def test_should_type_an_integer(driver, pages):
     element.send_keys(1234)
     assert element.get_attribute("value") == "1234"
 
+
 def test_should_type_ctrl_or_command_based_on_os(driver, pages):
     pages.load("javascriptPage.html")
     element = driver.find_element(by=By.ID, value="keyReporter")
