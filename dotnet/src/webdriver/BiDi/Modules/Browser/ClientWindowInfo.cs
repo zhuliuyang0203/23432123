@@ -1,4 +1,4 @@
-// <copyright file="DomMutatedEventArgs.cs" company="Selenium Committers">
+// <copyright file="ClientWindowInfo.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,25 +17,18 @@
 // under the License.
 // </copyright>
 
-using System;
-
 #nullable enable
 
-namespace OpenQA.Selenium
-{
-    /// <summary>
-    /// Provides data for the AttributeValueChanged event
-    /// </summary>
-    public class DomMutatedEventArgs : EventArgs
-    {
-        internal DomMutatedEventArgs(DomMutationData attributeData)
-        {
-            AttributeData = attributeData;
-        }
+using System.Text.Json.Serialization;
 
-        /// <summary>
-        /// Gets the data about the attribute being changed.
-        /// </summary>
-        public DomMutationData AttributeData { get; }
-    }
+namespace OpenQA.Selenium.BiDi.Modules.Browser;
+
+public record ClientWindowInfo([property: JsonPropertyName("active")] bool IsActive, ClientWindow ClientWindow, ClientWindowState State, int Height, int Width, int X, int Y);
+
+public enum ClientWindowState
+{
+    Fullscreen,
+    Maximized,
+    Minimized,
+    Normal
 }

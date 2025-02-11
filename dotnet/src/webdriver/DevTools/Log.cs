@@ -20,6 +20,8 @@
 using System;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Occurs when an entry is added to the browser's log.
         /// </summary>
-        public event EventHandler<EntryAddedEventArgs> EntryAdded;
+        public event EventHandler<EntryAddedEventArgs>? EntryAdded;
 
         /// <summary>
         /// Asynchronously enables manipulation of the browser's log.

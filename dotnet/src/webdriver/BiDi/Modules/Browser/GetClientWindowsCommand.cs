@@ -1,4 +1,4 @@
-// <copyright file="ContinueRequestCommand.cs" company="Selenium Committers">
+// <copyright file="GetClientWindowsCommand.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -18,26 +18,32 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System.Collections;
 using System.Collections.Generic;
 
 #nullable enable
 
-namespace OpenQA.Selenium.BiDi.Modules.Network;
+namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class ContinueRequestCommand(ContinueRequestCommandParameters @params)
-    : Command<ContinueRequestCommandParameters>(@params, "network.continueRequest");
+internal class GetClientWindowsCommand()
+    : Command<CommandParameters>(CommandParameters.Empty, "browser.getClientWindows");
 
-internal record ContinueRequestCommandParameters(Request Request, BytesValue? Body, IEnumerable<CookieHeader>? Cookies, IEnumerable<Header>? Headers, string? Method, string? Url) : CommandParameters;
+public record GetClientWindowsOptions : CommandOptions;
 
-public record ContinueRequestOptions : CommandOptions
+public record GetClientWindowsResult : IReadOnlyList<ClientWindowInfo>
 {
-    public BytesValue? Body { get; set; }
+    private readonly IReadOnlyList<ClientWindowInfo> _clientWindows;
 
-    public IEnumerable<CookieHeader>? Cookies { get; set; }
+    internal GetClientWindowsResult(IReadOnlyList<ClientWindowInfo> clientWindows)
+    {
+        _clientWindows = clientWindows;
+    }
 
-    public IEnumerable<Header>? Headers { get; set; }
+    public ClientWindowInfo this[int index] => _clientWindows[index];
 
-    public string? Method { get; set; }
+    public int Count => _clientWindows.Count;
 
-    public string? Url { get; set; }
+    public IEnumerator<ClientWindowInfo> GetEnumerator() => _clientWindows.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => (_clientWindows as IEnumerable).GetEnumerator();
 }

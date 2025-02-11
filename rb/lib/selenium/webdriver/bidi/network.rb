@@ -112,6 +112,18 @@ module Selenium
           )
         end
 
+        def provide_response(**args)
+          @bidi.send_cmd(
+            'network.provideResponse',
+            request: args[:id],
+            body: args[:body],
+            cookies: args[:cookies],
+            headers: args[:headers],
+            reasonPhrase: args[:reason],
+            statusCode: args[:status]
+          )
+        end
+
         def on(event, &)
           event = EVENTS[event] if event.is_a?(Symbol)
           @bidi.add_callback(event, &)

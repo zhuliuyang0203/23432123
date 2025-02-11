@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -65,9 +66,11 @@ namespace OpenQA.Selenium
         /// <param name="status">The WebDriver result status of the response.</param>
         public Response(string? sessionId, object? value, WebDriverResult status)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             this.SessionId = sessionId;
             this.Value = value;
             this.Status = status;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -213,6 +216,21 @@ namespace OpenQA.Selenium
         public string ToJson()
         {
             return JsonSerializer.Serialize(this);
+        }
+
+        /// <summary>
+        /// Throws if <see cref="Value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
+        [MemberNotNull(nameof(Value))]
+        internal Response EnsureValueIsNotNull()
+        {
+            if (Value is null)
+            {
+                throw new WebDriverException("Response from remote end doesn't have $.Value property");
+            }
+
+            return this;
         }
 
         /// <summary>

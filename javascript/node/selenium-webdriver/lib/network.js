@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-const network = require('../bidi/network')
+const { Network: getNetwork } = require('../bidi/network')
 const { InterceptPhase } = require('../bidi/interceptPhase')
 const { AddInterceptParameters } = require('../bidi/addInterceptParameters')
 
@@ -39,7 +39,7 @@ class Network {
     if (this.#network !== undefined) {
       return
     }
-    this.#network = await network(this.#driver)
+    this.#network = await getNetwork(this.#driver)
 
     await this.#network.addIntercept(new AddInterceptParameters(InterceptPhase.AUTH_REQUIRED))
 

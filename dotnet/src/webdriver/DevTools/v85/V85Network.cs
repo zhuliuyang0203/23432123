@@ -153,7 +153,7 @@ namespace OpenQA.Selenium.DevTools.V85
                 Url = requestData.Url,
             };
 
-            if (requestData.Headers.Count > 0)
+            if (requestData.Headers?.Count > 0)
             {
                 List<HeaderEntry> headers = new List<HeaderEntry>();
                 foreach (KeyValuePair<string, string> headerPair in requestData.Headers)
@@ -304,7 +304,7 @@ namespace OpenQA.Selenium.DevTools.V85
         }
 
         /// <summary>
-        /// Asynchronously contines an intercepted network response without modification.
+        /// Asynchronously contiunes an intercepted network response without modification.
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> of the network response.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
@@ -334,7 +334,7 @@ namespace OpenQA.Selenium.DevTools.V85
         {
             if (e.ResponseErrorReason == null && e.ResponseStatusCode == null)
             {
-                var requestData = new HttpRequestData()
+                var requestData = new HttpRequestData
                 {
                     RequestId = e.RequestId,
                     Method = e.Request.Method,
@@ -348,43 +348,38 @@ namespace OpenQA.Selenium.DevTools.V85
             }
             else
             {
-                var responseData = new HttpResponseData()
+                var responseData = new HttpResponseData
                 {
                     RequestId = e.RequestId,
                     Url = e.Request.Url,
-                    ResourceType = e.ResourceType.ToString()
+                    ResourceType = e.ResourceType.ToString(),
+                    StatusCode = e.ResponseStatusCode.GetValueOrDefault(),
+                    ErrorReason = e.ResponseErrorReason?.ToString()
                 };
-                ResponsePausedEventArgs wrappedResponse = new ResponsePausedEventArgs(responseData);
-
-                if (e.ResponseStatusCode.HasValue)
-                {
-                    wrappedResponse.ResponseData.StatusCode = e.ResponseStatusCode.Value;
-                }
 
                 if (e.ResponseHeaders != null)
                 {
                     foreach (var header in e.ResponseHeaders)
                     {
-                        if (header.Name.ToLowerInvariant() == "set-cookie")
+                        if (header.Name.Equals("set-cookie", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            wrappedResponse.ResponseData.CookieHeaders.Add(header.Value);
+                            responseData.CookieHeaders.Add(header.Value);
                         }
                         else
                         {
-                            if (wrappedResponse.ResponseData.Headers.ContainsKey(header.Name))
+                            if (responseData.Headers.TryGetValue(header.Name, out string? currentHeaderValue))
                             {
-                                string currentHeaderValue = wrappedResponse.ResponseData.Headers[header.Name];
-                                wrappedResponse.ResponseData.Headers[header.Name] = currentHeaderValue + ", " + header.Value;
+                                responseData.Headers[header.Name] = currentHeaderValue + ", " + header.Value;
                             }
                             else
                             {
-                                wrappedResponse.ResponseData.Headers.Add(header.Name, header.Value);
+                                responseData.Headers.Add(header.Name, header.Value);
                             }
                         }
                     }
                 }
 
-                this.OnResponsePaused(wrappedResponse);
+                this.OnResponsePaused(new ResponsePausedEventArgs(responseData));
             }
         }
     }

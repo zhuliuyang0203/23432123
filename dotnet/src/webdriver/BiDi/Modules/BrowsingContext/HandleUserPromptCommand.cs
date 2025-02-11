@@ -26,12 +26,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 class HandleUserPromptCommand(HandleUserPromptCommandParameters @params)
     : Command<HandleUserPromptCommandParameters>(@params, "browsingContext.handleUserPrompt");
 
-internal record HandleUserPromptCommandParameters(BrowsingContext Context) : CommandParameters
-{
-    public bool? Accept { get; set; }
-
-    public string? UserText { get; set; }
-}
+internal record HandleUserPromptCommandParameters(BrowsingContext Context, bool? Accept, string? UserText) : CommandParameters;
 
 public record HandleUserPromptOptions : CommandOptions
 {

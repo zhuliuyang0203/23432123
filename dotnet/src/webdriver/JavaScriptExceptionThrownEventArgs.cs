@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -26,11 +28,18 @@ namespace OpenQA.Selenium
     /// </summary>
     public class JavaScriptExceptionThrownEventArgs : EventArgs
     {
-        private string message;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JavaScriptExceptionThrownEventArgs"/> type.
+        /// </summary>
+        /// <param name="message">The message of the exception thrown by JavaScript executing in the browser.</param>
+        public JavaScriptExceptionThrownEventArgs(string message)
+        {
+            Message = message;
+        }
 
         /// <summary>
         /// Gets or sets the message of the exception thrown by JavaScript executing in the browser.
         /// </summary>
-        public string Message { get => message; set => message = value; }
+        public string Message { get; set; }
     }
 }

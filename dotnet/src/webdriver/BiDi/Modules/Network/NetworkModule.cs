@@ -30,13 +30,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 {
     internal async Task<Intercept> AddInterceptAsync(IEnumerable<InterceptPhase> phases, AddInterceptOptions? options = null)
     {
-        var @params = new AddInterceptCommandParameters(phases);
-
-        if (options is not null)
-        {
-            @params.Contexts = options.Contexts;
-            @params.UrlPatterns = options.UrlPatterns;
-        }
+        var @params = new AddInterceptCommandParameters(phases, options?.Contexts, options?.UrlPatterns);
 
         var result = await Broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
 
@@ -70,12 +64,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     public async Task SetCacheBehaviorAsync(CacheBehavior behavior, SetCacheBehaviorOptions? options = null)
     {
-        var @params = new SetCacheBehaviorCommandParameters(behavior);
-
-        if (options is not null)
-        {
-            @params.Contexts = options.Contexts;
-        }
+        var @params = new SetCacheBehaviorCommandParameters(behavior, options?.Contexts);
 
         await Broker.ExecuteCommandAsync(new SetCacheBehaviorCommand(@params), options).ConfigureAwait(false);
     }
@@ -91,32 +80,14 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     internal async Task ContinueRequestAsync(Request request, ContinueRequestOptions? options = null)
     {
-        var @params = new ContinueRequestCommandParameters(request);
-
-        if (options is not null)
-        {
-            @params.Body = options.Body;
-            @params.Cookies = options.Cookies;
-            @params.Headers = options.Headers;
-            @params.Method = options.Method;
-            @params.Url = options.Url;
-        }
+        var @params = new ContinueRequestCommandParameters(request, options?.Body, options?.Cookies, options?.Headers, options?.Method, options?.Url);
 
         await Broker.ExecuteCommandAsync(new ContinueRequestCommand(@params), options).ConfigureAwait(false);
     }
 
     internal async Task ContinueResponseAsync(Request request, ContinueResponseOptions? options = null)
     {
-        var @params = new ContinueResponseCommandParameters(request);
-
-        if (options is not null)
-        {
-            @params.Cookies = options.Cookies;
-            @params.Credentials = options.Credentials;
-            @params.Headers = options.Headers;
-            @params.ReasonPhrase = options.ReasonPhrase;
-            @params.StatusCode = options.StatusCode;
-        }
+        var @params = new ContinueResponseCommandParameters(request, options?.Cookies, options?.Credentials, options?.Headers, options?.ReasonPhrase, options?.StatusCode);
 
         await Broker.ExecuteCommandAsync(new ContinueResponseCommand(@params), options).ConfigureAwait(false);
     }
@@ -130,16 +101,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     internal async Task ProvideResponseAsync(Request request, ProvideResponseOptions? options = null)
     {
-        var @params = new ProvideResponseCommandParameters(request);
-
-        if (options is not null)
-        {
-            @params.Body = options.Body;
-            @params.Cookies = options.Cookies;
-            @params.Headers = options.Headers;
-            @params.ReasonPhrase = options.ReasonPhrase;
-            @params.StatusCode = options.StatusCode;
-        }
+        var @params = new ProvideResponseCommandParameters(request, options?.Body, options?.Cookies, options?.Headers, options?.ReasonPhrase, options?.StatusCode);
 
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }

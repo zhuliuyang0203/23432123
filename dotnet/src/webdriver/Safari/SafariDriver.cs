@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>
@@ -80,6 +82,7 @@ namespace OpenQA.Selenium.Safari
         /// Initializes a new instance of the <see cref="SafariDriver"/> class using the specified <see cref="SafariOptions"/>.
         /// </summary>
         /// <param name="options">The <see cref="SafariOptions"/> to use for this <see cref="SafariDriver"/> instance.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public SafariDriver(SafariOptions options)
             : this(SafariDriverService.CreateDefaultService(), options)
         {
@@ -89,6 +92,7 @@ namespace OpenQA.Selenium.Safari
         /// Initializes a new instance of the <see cref="SafariDriver"/> class using the specified driver service.
         /// </summary>
         /// <param name="service">The <see cref="SafariDriverService"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         public SafariDriver(SafariDriverService service)
             : this(service, new SafariOptions())
         {
@@ -96,7 +100,7 @@ namespace OpenQA.Selenium.Safari
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariDriver"/> class using the specified path
-        /// to the directory containing safaridriver.
+        /// to the directory containing <c>safaridriver</c>.
         /// </summary>
         /// <param name="safariDriverDirectory">The full path to the directory containing SafariDriver executable.</param>
         public SafariDriver(string safariDriverDirectory)
@@ -106,10 +110,11 @@ namespace OpenQA.Selenium.Safari
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariDriver"/> class using the specified path
-        /// to the directory containing safaridriver and options.
+        /// to the directory containing <c>safaridriver</c> and options.
         /// </summary>
         /// <param name="safariDriverDirectory">The full path to the directory containing SafariDriver executable.</param>
         /// <param name="options">The <see cref="SafariOptions"/> to be used with the Safari driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public SafariDriver(string safariDriverDirectory, SafariOptions options)
             : this(safariDriverDirectory, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -117,11 +122,12 @@ namespace OpenQA.Selenium.Safari
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariDriver"/> class using the specified path
-        /// to the directory containing safaridriver, options, and command timeout.
+        /// to the directory containing <c>safaridriver</c>, options, and command timeout.
         /// </summary>
         /// <param name="safariDriverDirectory">The full path to the directory containing SafariDriver executable.</param>
         /// <param name="options">The <see cref="SafariOptions"/> to be used with the Safari driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public SafariDriver(string safariDriverDirectory, SafariOptions options, TimeSpan commandTimeout)
             : this(SafariDriverService.CreateDefaultService(safariDriverDirectory), options, commandTimeout)
         {
@@ -133,6 +139,7 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         /// <param name="service">The <see cref="SafariDriverService"/> to use.</param>
         /// <param name="options">The <see cref="SafariOptions"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public SafariDriver(SafariDriverService service, SafariOptions options)
             : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -144,6 +151,7 @@ namespace OpenQA.Selenium.Safari
         /// <param name="service">The <see cref="SafariDriverService"/> to use.</param>
         /// <param name="options">The <see cref="SafariOptions"/> to be used with the Safari driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public SafariDriver(SafariDriverService service, SafariOptions options, TimeSpan commandTimeout)
             : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
@@ -161,6 +169,16 @@ namespace OpenQA.Selenium.Safari
         /// <returns></returns>
         private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
         {
+            if (service is null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             if (service.DriverServicePath == null)
             {
                 DriverFinder finder = new DriverFinder(options);
@@ -178,7 +196,7 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         public void AttachDebugger()
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object?> parameters = new Dictionary<string, object?>();
             parameters["attachDebugger"] = null;
             this.Execute(AttachDebuggerCommand, parameters);
         }
@@ -188,6 +206,7 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         /// <param name="permissionName">The name of the item to set permission on.</param>
         /// <param name="permissionValue">Whether the permission has been granted.</param>
+        /// <exception cref="ArgumentException">If <paramref name="permissionName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public void SetPermission(string permissionName, bool permissionValue)
         {
             if (string.IsNullOrEmpty(permissionName))
@@ -206,7 +225,7 @@ namespace OpenQA.Selenium.Safari
         /// Returns Each available permission item and whether it is allowed or not.
         /// </summary>
         /// <returns>whether the item is allowed or not.</returns>
-        public Object GetPermissions()
+        public object? GetPermissions()
         {
             Response response = this.Execute(GetPermissionsCommand, null);
             return response.Value;
@@ -224,7 +243,7 @@ namespace OpenQA.Selenium.Safari
         /// in conjunction with a standalone WebDriver server.</remarks>
         public override IFileDetector FileDetector
         {
-            get { return base.FileDetector; }
+            get => base.FileDetector;
             set { }
         }
 

@@ -27,12 +27,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class GetTreeCommand(GetTreeCommandParameters @params)
     : Command<GetTreeCommandParameters>(@params, "browsingContext.getTree");
 
-internal record GetTreeCommandParameters : CommandParameters
-{
-    public long? MaxDepth { get; set; }
-
-    public BrowsingContext? Root { get; set; }
-}
+internal record GetTreeCommandParameters(long? MaxDepth, BrowsingContext? Root) : CommandParameters;
 
 public record GetTreeOptions : CommandOptions
 {

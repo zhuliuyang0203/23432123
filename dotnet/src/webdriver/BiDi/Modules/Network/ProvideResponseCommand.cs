@@ -27,18 +27,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 internal class ProvideResponseCommand(ProvideResponseCommandParameters @params)
     : Command<ProvideResponseCommandParameters>(@params, "network.provideResponse");
 
-internal record ProvideResponseCommandParameters(Request Request) : CommandParameters
-{
-    public BytesValue? Body { get; set; }
-
-    public IEnumerable<SetCookieHeader>? Cookies { get; set; }
-
-    public IEnumerable<Header>? Headers { get; set; }
-
-    public string? ReasonPhrase { get; set; }
-
-    public long? StatusCode { get; set; }
-}
+internal record ProvideResponseCommandParameters(Request Request, BytesValue? Body, IEnumerable<SetCookieHeader>? Cookies, IEnumerable<Header>? Headers, string? ReasonPhrase, long? StatusCode) : CommandParameters;
 
 public record ProvideResponseOptions : CommandOptions
 {

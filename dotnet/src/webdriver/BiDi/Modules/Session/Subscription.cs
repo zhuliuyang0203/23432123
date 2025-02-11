@@ -1,4 +1,4 @@
-// <copyright file="DomMutatedEventArgs.cs" company="Selenium Committers">
+// <copyright file="Subscription.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,25 +17,16 @@
 // under the License.
 // </copyright>
 
-using System;
-
 #nullable enable
 
-namespace OpenQA.Selenium
-{
-    /// <summary>
-    /// Provides data for the AttributeValueChanged event
-    /// </summary>
-    public class DomMutatedEventArgs : EventArgs
-    {
-        internal DomMutatedEventArgs(DomMutationData attributeData)
-        {
-            AttributeData = attributeData;
-        }
+namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-        /// <summary>
-        /// Gets the data about the attribute being changed.
-        /// </summary>
-        public DomMutationData AttributeData { get; }
+public sealed class Subscription
+{
+    internal Subscription(string id)
+    {
+        Id = id;
     }
+
+    internal string Id { get; }
 }
