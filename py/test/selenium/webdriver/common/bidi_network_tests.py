@@ -24,6 +24,7 @@ from selenium.webdriver.common.by import By
 def test_network_initialized(driver):
     assert driver.network is not None
 
+
 @pytest.mark.xfail_safari
 def test_add_response_handler(driver, pages):
     passed = [False]
@@ -35,6 +36,7 @@ def test_add_response_handler(driver, pages):
     driver.network.add_response_handler(callback)
     pages.load("basicAuth")
     assert passed[0], "Callback was NOT successful"
+
 
 @pytest.mark.xfail_safari
 def test_remove_response_handler(driver, pages):
@@ -49,6 +51,7 @@ def test_remove_response_handler(driver, pages):
     pages.load("basicAuth")
     assert not passed[0], "Callback should NOT be successful"
 
+
 @pytest.mark.xfail_safari
 def test_add_request_handler(driver, pages):
     passed = [False]
@@ -60,6 +63,7 @@ def test_add_request_handler(driver, pages):
     driver.network.add_request_handler(callback)
     pages.load("basicAuth")
     assert passed[0], "Callback was NOT successful"
+
 
 @pytest.mark.xfail_safari
 def test_remove_request_handler(driver, pages):
@@ -74,15 +78,17 @@ def test_remove_request_handler(driver, pages):
     pages.load("basicAuth")
     assert not passed[0], "Callback should NOT be successful"
 
+
 @pytest.mark.xfail_safari
 def test_add_authentication_handler(driver, pages):
-    driver.network.add_authentication_handler('test','test')
+    driver.network.add_authentication_handler("test", "test")
     pages.load("basicAuth")
-    assert driver.find_element(By.TAG_NAME, 'h1').text == 'authorized', "Authentication was NOT successful"
+    assert driver.find_element(By.TAG_NAME, "h1").text == "authorized", "Authentication was NOT successful"
+
 
 @pytest.mark.xfail_safari
 def test_remove_authentication_handler(driver, pages):
-    driver.network.add_authentication_handler('test', 'test')
+    driver.network.add_authentication_handler("test", "test")
     driver.network.remove_authentication_handler()
     pages.load("basicAuth")
-    assert driver.find_element(By.TAG_NAME, 'h1').text != 'authorized', "Authentication was successful"
+    assert driver.find_element(By.TAG_NAME, "h1").text != "authorized", "Authentication was successful"

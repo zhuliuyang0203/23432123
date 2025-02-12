@@ -70,7 +70,7 @@ class WebSocketConnection:
             return self._deserialize_result(result, command)
 
     def add_callback(self, event, callback):
-        event_name = event.event_class if hasattr(event, 'event_class') else event
+        event_name = event.event_class if hasattr(event, "event_class") else event
         if event_name not in self.callbacks:
             self.callbacks[event_name] = []
 
