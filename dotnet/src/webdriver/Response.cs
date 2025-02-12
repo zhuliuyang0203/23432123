@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -42,6 +43,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Initializes a new instance of the <see cref="Response"/> class
         /// </summary>
+        [Obsolete("Set all values using the Response(string, object, WebDriverResult) constructor instead. This constructor will be removed in Selenium 4.30")]
         public Response()
         {
         }
@@ -50,6 +52,7 @@ namespace OpenQA.Selenium
         /// Initializes a new instance of the <see cref="Response"/> class
         /// </summary>
         /// <param name="sessionId">Session ID in use</param>
+        [Obsolete("Set all values using the Response(string, object, WebDriverResult) constructor instead. This constructor will be removed in Selenium 4.30")]
         public Response(SessionId? sessionId)
         {
             this.SessionId = sessionId?.ToString();
@@ -63,9 +66,11 @@ namespace OpenQA.Selenium
         /// <param name="status">The WebDriver result status of the response.</param>
         public Response(string? sessionId, object? value, WebDriverResult status)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             this.SessionId = sessionId;
             this.Value = value;
             this.Status = status;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -136,18 +141,35 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the value from JSON.
         /// </summary>
-        public object? Value { get; set; }
+        public object? Value
+        {
+            get;
+
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the session ID.
         /// </summary>
-        public string? SessionId { get; set; }
+        public string? SessionId
+        {
+            get;
+
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the status value of the response.
         /// </summary>
-        public WebDriverResult Status { get; set; }
+        public WebDriverResult Status
+        {
+            get;
 
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Returns a new <see cref="Response"/> from a JSON-encoded string.
@@ -194,6 +216,21 @@ namespace OpenQA.Selenium
         public string ToJson()
         {
             return JsonSerializer.Serialize(this);
+        }
+
+        /// <summary>
+        /// Throws if <see cref="Value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
+        [MemberNotNull(nameof(Value))]
+        internal Response EnsureValueIsNotNull()
+        {
+            if (Value is null)
+            {
+                throw new WebDriverException("Response from remote end doesn't have $.Value property");
+            }
+
+            return this;
         }
 
         /// <summary>

@@ -22,8 +22,11 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chromium
 {
@@ -108,9 +111,9 @@ namespace OpenQA.Selenium.Chromium
         public static readonly string SetPermissionCommand = "setPermission";
 
         private readonly string optionsCapabilityName;
-        private DevToolsSession devToolsSession;
+        private DevToolsSession? devToolsSession;
 
-        private static Dictionary<string, CommandInfo> chromiumCustomCommands = new Dictionary<string, CommandInfo>()
+        private static readonly Dictionary<string, CommandInfo> chromiumCustomCommands = new Dictionary<string, CommandInfo>()
         {
             { GetNetworkConditionsCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/chromium/network_conditions") },
             { SetNetworkConditionsCommand, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/chromium/network_conditions") },
@@ -127,19 +130,18 @@ namespace OpenQA.Selenium.Chromium
         /// <param name="service">The <see cref="ChromiumDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromiumOptions"/> to be used with the ChromiumDriver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the Chromium options capability name is <see langword="null"/>.</exception>
         protected ChromiumDriver(ChromiumDriverService service, ChromiumOptions options, TimeSpan commandTimeout)
             : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
-            this.optionsCapabilityName = options.CapabilityName;
+            this.optionsCapabilityName = options.CapabilityName ?? throw new ArgumentException("No chromium options capability name specified", nameof(options));
         }
 
         /// <summary>
         /// Gets the dictionary of custom Chromium commands registered with the driver.
         /// </summary>
-        protected static IReadOnlyDictionary<string, CommandInfo> ChromiumCustomCommands
-        {
-            get { return new ReadOnlyDictionary<string, CommandInfo>(chromiumCustomCommands); }
-        }
+        protected static IReadOnlyDictionary<string, CommandInfo> ChromiumCustomCommands => new ReadOnlyDictionary<string, CommandInfo>(chromiumCustomCommands);
 
         /// <summary>
         /// Uses DriverFinder to set Service attributes if necessary when creating the command executor
@@ -150,6 +152,16 @@ namespace OpenQA.Selenium.Chromium
         /// <returns></returns>
         private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
         {
+            if (service is null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             if (service.DriverServicePath == null)
             {
                 DriverFinder finder = new DriverFinder(options);
@@ -177,27 +189,31 @@ namespace OpenQA.Selenium.Chromium
         /// in conjunction with a standalone WebDriver server.</remarks>
         public override IFileDetector FileDetector
         {
-            get { return base.FileDetector; }
+            get => base.FileDetector;
             set { }
         }
 
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
-        public bool HasActiveDevToolsSession
-        {
-            get { return this.devToolsSession != null; }
-        }
+        [MemberNotNullWhen(true, nameof(devToolsSession))]
+        public bool HasActiveDevToolsSession => this.devToolsSession != null;
 
         /// <summary>
         /// Gets or sets the network condition emulation for Chromium.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If the value is set to <see langword="null"/>.</exception>
         public ChromiumNetworkConditions NetworkConditions
         {
             get
             {
                 Response response = this.Execute(GetNetworkConditionsCommand, null);
-                return ChromiumNetworkConditions.FromDictionary(response.Value as Dictionary<string, object>);
+                if (response.Value is not Dictionary<string, object?> responseDictionary)
+                {
+                    throw new WebDriverException($"GetNetworkConditions command returned successfully, but data was not an object: {response.Value}");
+                }
+
+                return ChromiumNetworkConditions.FromDictionary(responseDictionary);
             }
 
             set
@@ -209,6 +225,7 @@ namespace OpenQA.Selenium.Chromium
 
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters["network_conditions"] = value;
+
                 this.Execute(SetNetworkConditionsCommand, parameters);
             }
         }
@@ -217,6 +234,7 @@ namespace OpenQA.Selenium.Chromium
         /// Launches a Chromium based application.
         /// </summary>
         /// <param name="id">ID of the chromium app to launch.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="id"/> is <see langword="null"/>.</exception>
         public void LaunchApp(string id)
         {
             if (id == null)
@@ -226,6 +244,7 @@ namespace OpenQA.Selenium.Chromium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters["id"] = id;
+
             this.Execute(LaunchAppCommand, parameters);
         }
 
@@ -234,6 +253,7 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         /// <param name="permissionName">Name of item to set the permission on.</param>
         /// <param name="permissionValue">Value to set the permission to.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="permissionName"/> or <paramref name="permissionValue"/> are <see langword="null"/>.</exception>
         public void SetPermission(string permissionName, string permissionValue)
         {
             if (permissionName == null)
@@ -260,7 +280,8 @@ namespace OpenQA.Selenium.Chromium
         /// <param name="commandName">Name of the command to execute.</param>
         /// <param name="commandParameters">Parameters of the command to execute.</param>
         /// <returns>An object representing the result of the command, if applicable.</returns>
-        public object ExecuteCdpCommand(string commandName, Dictionary<string, object> commandParameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
+        public object? ExecuteCdpCommand(string commandName, Dictionary<string, object> commandParameters)
         {
             if (commandName == null)
             {
@@ -296,21 +317,20 @@ namespace OpenQA.Selenium.Chromium
                     throw new WebDriverException("Cannot find " + this.optionsCapabilityName + " capability for driver");
                 }
 
-                Dictionary<string, object> optionsCapability = this.Capabilities.GetCapability(this.optionsCapabilityName) as Dictionary<string, object>;
-                if (optionsCapability == null)
+                object? optionsCapabilityObject = this.Capabilities.GetCapability(this.optionsCapabilityName);
+                if (optionsCapabilityObject is not Dictionary<string, object?> optionsCapability)
                 {
-                    throw new WebDriverException("Found " + this.optionsCapabilityName + " capability, but is not an object");
+                    throw new WebDriverException($"Found {this.optionsCapabilityName} capability, but is not an object: {optionsCapabilityObject}");
                 }
 
-                if (!optionsCapability.ContainsKey("debuggerAddress"))
+                if (!optionsCapability.TryGetValue("debuggerAddress", out object? debuggerAddress))
                 {
                     throw new WebDriverException("Did not find debuggerAddress capability in " + this.optionsCapabilityName);
                 }
 
-                string debuggerAddress = optionsCapability["debuggerAddress"].ToString();
                 try
                 {
-                    DevToolsSession session = new DevToolsSession(debuggerAddress, options);
+                    DevToolsSession session = new DevToolsSession(debuggerAddress?.ToString(), options);
                     Task.Run(async () => await session.StartSession()).GetAwaiter().GetResult();
                     this.devToolsSession = session;
                 }
@@ -341,7 +361,7 @@ namespace OpenQA.Selenium.Chromium
         {
             if (this.devToolsSession != null)
             {
-                Task.Run(async () => await this.devToolsSession.StopSession(true)).GetAwaiter().GetResult();
+                Task.Run(async () => await this.devToolsSession.StopSession(manualDetach: true)).GetAwaiter().GetResult();
             }
         }
 
@@ -361,18 +381,16 @@ namespace OpenQA.Selenium.Chromium
         {
             List<Dictionary<string, string>> returnValue = new List<Dictionary<string, string>>();
             Response response = this.Execute(GetCastSinksCommand, null);
-            object[] responseValue = response.Value as object[];
-            if (responseValue != null)
+            if (response.Value is object?[] responseValue)
             {
-                foreach (object entry in responseValue)
+                foreach (object? entry in responseValue)
                 {
-                    Dictionary<string, object> entryValue = entry as Dictionary<string, object>;
-                    if (entryValue != null)
+                    if (entry is Dictionary<string, object?> entryValue)
                     {
                         Dictionary<string, string> sink = new Dictionary<string, string>();
-                        foreach (KeyValuePair<string, object> pair in entryValue)
+                        foreach (KeyValuePair<string, object?> pair in entryValue)
                         {
-                            sink[pair.Key] = pair.Value.ToString();
+                            sink[pair.Key] = pair.Value!.ToString()!;
                         }
 
                         returnValue.Add(sink);
@@ -434,10 +452,10 @@ namespace OpenQA.Selenium.Chromium
         /// Returns the error message if there is any issue in a Cast session.
         /// </summary>
         /// <returns>An error message.</returns>
-        public String GetCastIssueMessage()
+        public string? GetCastIssueMessage()
         {
             Response response = this.Execute(GetCastIssueMessageCommand, null);
-            return (string)response.Value;
+            return (string?)response.Value;
         }
 
         /// <summary>

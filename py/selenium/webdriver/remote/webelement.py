@@ -554,9 +554,10 @@ class WebElement(BaseWebElement):
 
         Parameters:
         ----------
-          command : any
+        command : any
             The name of the command to _execute as a string.
-          params : dict
+
+        params : dict
             A dictionary of named Parameters to send with the command.
 
         Returns:

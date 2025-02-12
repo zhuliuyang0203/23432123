@@ -17,6 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
+
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -29,6 +33,7 @@ namespace OpenQA.Selenium
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
         /// sequences of keystrokes representing file paths and names.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If the value is set to <see langword="null"/>.</exception>
         IFileDetector FileDetector { get; set; }
     }
 }

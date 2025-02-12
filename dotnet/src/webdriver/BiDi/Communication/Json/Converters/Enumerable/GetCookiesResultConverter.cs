@@ -31,7 +31,7 @@ internal class GetCookiesResultConverter : JsonConverter<GetCookiesResult>
 {
     public override GetCookiesResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var doc = JsonDocument.ParseValue(ref reader);
+        using var doc = JsonDocument.ParseValue(ref reader);
         var cookies = doc.RootElement.GetProperty("cookies").Deserialize<IReadOnlyList<Modules.Network.Cookie>>(options);
         var partitionKey = doc.RootElement.GetProperty("partitionKey").Deserialize<PartitionKey>(options);
 

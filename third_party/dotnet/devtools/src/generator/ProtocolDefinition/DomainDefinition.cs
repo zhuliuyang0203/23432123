@@ -7,7 +7,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
     public sealed class DomainDefinition : ProtocolDefinitionItem
     {
         [JsonPropertyName("domain")]
-        public override string Name { get; set; }
+        public override string? Name { get; set; }
 
         [JsonPropertyName("types")]
         public ICollection<TypeDefinition> Types { get; set; } = new Collection<TypeDefinition>();

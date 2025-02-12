@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selenium"
-version = "4.28.0.202411261607"
+version = "4.29.0.202501231718"
 license = { text = "Apache 2.0" }
 description = "Official Python bindings for Selenium WebDriver."
 readme = "README.rst"
@@ -40,7 +40,7 @@ zip-safe = false
 [tool.setuptools.packages.find]
 include = ["selenium*"]
 exclude = ["test*"]
-namespaces = false
+namespaces = true
 # include-package-data is `true` by default in pyproject.toml
 
 [[tool.setuptools-rust.bins]]
@@ -54,7 +54,7 @@ Documentation = "https://www.selenium.dev/documentation/overview/"
 SourceCode = "https://github.com/SeleniumHQ/selenium/tree/trunk/py"
 
 [tool.setuptools.package-data]
-selenium_package = [
+"*" = [
     "*.py",
     "*.rst",
     "*.json",

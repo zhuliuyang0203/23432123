@@ -39,7 +39,7 @@ namespace OpenQA.Selenium.Chrome
 
         public static ChromeOptions DefaultOptions
         {
-            get { return new ChromeOptions() { BrowserVersion = "131" }; }
+            get { return new ChromeOptions() { BrowserVersion = "132" }; }
         }
     }
 }

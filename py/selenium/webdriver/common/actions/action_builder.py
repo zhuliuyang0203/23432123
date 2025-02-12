@@ -113,6 +113,7 @@ class ActionBuilder:
                 - "mouse"
                 - "touch"
                 - "pen"
+
         name : str
             The name of the pointer input device.
 

@@ -386,6 +386,7 @@ class WebDriver(BaseWebDriver):
         ----------
         cmd : str,
             - Command name
+
         cmd_args : dict
             - Command args
             - Empty dict {} if there is no command args
@@ -409,6 +410,7 @@ class WebDriver(BaseWebDriver):
         ----------
         driver_command : str
             - The name of the command to execute as a string.
+
         params : dict
             - A dictionary of named Parameters to send with the command.
 
@@ -504,6 +506,7 @@ class WebDriver(BaseWebDriver):
         ----------
         script : str
             - The javascript to execute.
+
         *args : tuple
             - Any applicable arguments for your JavaScript.
 
@@ -533,6 +536,7 @@ class WebDriver(BaseWebDriver):
         ----------
         script : str
             - The javascript to execute.
+
         *args : tuple
             - Any applicable arguments for your JavaScript.
 
@@ -713,24 +717,34 @@ class WebDriver(BaseWebDriver):
         return self.execute(Command.GET_ALL_COOKIES)["value"]
 
     def get_cookie(self, name) -> Optional[Dict]:
-        """Get a single cookie by name. Returns the cookie if found, None if
-        not.
+        """Get a single cookie by name. Raises ValueError if the name is empty
+        or whitespace. Returns the cookie if found, None if not.
 
         Example:
         --------
         >>> cookie = driver.get_cookie('my_cookie')
         """
+        if not name or name.isspace():
+            raise ValueError("Cookie name cannot be empty")
+
         with contextlib.suppress(NoSuchCookieException):
             return self.execute(Command.GET_COOKIE, {"name": name})["value"]
+
         return None
 
     def delete_cookie(self, name) -> None:
-        """Deletes a single cookie with the given name.
+        """Deletes a single cookie with the given name. Raises ValueError if
+        the name is empty or whitespace.
 
         Example:
         --------
         >>> driver.delete_cookie('my_cookie')
         """
+
+        # firefox deletes all cookies when "" is passed as name
+        if not name or name.isspace():
+            raise ValueError("Cookie name cannot be empty")
+
         self.execute(Command.DELETE_COOKIE, {"name": name})
 
     def delete_all_cookies(self) -> None:
@@ -1007,6 +1021,7 @@ class WebDriver(BaseWebDriver):
         ----------
         width : int
             - the width in pixels to set the window to
+
         height : int
             - the height in pixels to set the window to
 
@@ -1040,6 +1055,7 @@ class WebDriver(BaseWebDriver):
         ---------
         x : float
             - The x-coordinate in pixels to set the window position
+
         y : float
             - The y-coordinate in pixels to set the window position
 
@@ -1197,11 +1213,7 @@ class WebDriver(BaseWebDriver):
 
                 devtools = cdp.import_devtools(version)
                 if self.caps["browserName"].lower() == "firefox":
-                    warnings.warn(
-                        "CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
+                    raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
             self._websocket_connection = WebSocketConnection(ws_url)
             targets = self._websocket_connection.execute(devtools.target.get_targets())
             target_id = targets[0].target_id
@@ -1263,14 +1275,11 @@ class WebDriver(BaseWebDriver):
         import urllib3
 
         http = urllib3.PoolManager()
-        _firefox = False
         if self.caps.get("browserName") == "chrome":
             debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
         elif self.caps.get("browserName") == "MicrosoftEdge":
             debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
-        else:
-            _firefox = True
-            debugger_address = self.caps.get("moz:debuggerAddress")
+
         res = http.request("GET", f"http://{debugger_address}/json/version")
         data = json.loads(res.data)
 
@@ -1279,12 +1288,7 @@ class WebDriver(BaseWebDriver):
 
         import re
 
-        if _firefox:
-            # Mozilla Automation Team asked to only support 85
-            # until WebDriver Bidi is available.
-            version = 85
-        else:
-            version = re.search(r".*/(\d+)\.", browser_version).group(1)
+        version = re.search(r".*/(\d+)\.", browser_version).group(1)
 
         return version, websocket_url
 
@@ -1410,6 +1414,7 @@ class WebDriver(BaseWebDriver):
         ----------
         file_name : str
             - The name of the file to download.
+
         target_directory : str
             - The path to the directory to save the downloaded file.
 
@@ -1505,8 +1510,10 @@ class WebDriver(BaseWebDriver):
         ----------
         timeout : int
             - How long to wait for the dialog
+
         poll_frequency : floatHow
             - Frequently to poll
+
         ignored_exceptions : Any
             - Exceptions to ignore while waiting
 

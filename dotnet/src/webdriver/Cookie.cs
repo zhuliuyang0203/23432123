@@ -277,7 +277,7 @@ namespace OpenQA.Selenium
         {
             if (rawCookie == null)
             {
-                throw new ArgumentNullException(nameof(rawCookie), "Dictionary cannot be null");
+                throw new ArgumentNullException(nameof(rawCookie));
             }
 
             string name = rawCookie["name"].ToString();

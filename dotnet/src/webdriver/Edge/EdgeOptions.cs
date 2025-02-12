@@ -21,6 +21,8 @@ using OpenQA.Selenium.Chromium;
 using System;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Edge
 {
     /// <summary>
@@ -60,27 +62,21 @@ namespace OpenQA.Selenium.Edge
         /// <summary>
         /// Gets the vendor prefix to apply to Chromium-specific capability names.
         /// </summary>
-        protected override string VendorPrefix
-        {
-            get { return "ms"; }
-        }
+        protected override string VendorPrefix => "ms";
 
         /// <summary>
         /// Gets the name of the capability used to store Chromium options in
         /// an <see cref="ICapabilities"/> object.
         /// </summary>
-        public override string CapabilityName
-        {
-            get { return string.Format(CultureInfo.InvariantCulture, "{0}:{1}", this.VendorPrefix, EdgeOptionsCapabilityName); }
-        }
+        public override string CapabilityName => string.Format(CultureInfo.InvariantCulture, "{0}:{1}", this.VendorPrefix, EdgeOptionsCapabilityName);
 
         /// <summary>
         /// Gets or sets whether to create a WebView session used for launching an Edge (Chromium) WebView-based app on desktop.
         /// </summary>
         public bool UseWebView
         {
-            get { return this.BrowserName == WebViewBrowserNameValue; }
-            set { this.BrowserName = value ? WebViewBrowserNameValue : DefaultBrowserNameValue; }
+            get => this.BrowserName == WebViewBrowserNameValue;
+            set => this.BrowserName = value ? WebViewBrowserNameValue : DefaultBrowserNameValue;
         }
 
         /// <summary>
@@ -97,7 +93,7 @@ namespace OpenQA.Selenium.Edge
         /// where <paramref name="optionName"/> has already been added will overwrite the
         /// existing value with the new value in <paramref name="optionValue"/>.
         /// Calling this method adds capabilities to the Edge-specific options object passed to
-        /// webdriver executable (property name 'ms:edgeOptions').</remarks>
+        /// WebDriver executable (property name 'ms:edgeOptions').</remarks>
         public void AddAdditionalEdgeOption(string optionName, object optionValue)
         {
             this.AddAdditionalChromiumOption(optionName, optionValue);

@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+#nullable enable
+
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>
@@ -25,13 +27,13 @@ namespace OpenQA.Selenium.Remote
     public class DriverOptionsMergeResult
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the DriverOptions would conflict when merged with another option
+        /// Gets or sets a value indicating whether the DriverOptions would conflict when merged with another option.
         /// </summary>
         public bool IsMergeConflict { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the name of the option that is in conflict.
+        /// Gets or sets the name of the name of the option that is in conflict, if any.
         /// </summary>
-        public string MergeConflictOptionName { get; set; }
+        public string? MergeConflictOptionName { get; set; }
     }
 }

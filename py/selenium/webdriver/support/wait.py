@@ -53,11 +53,14 @@ class WebDriverWait(Generic[D]):
         driver
             - Instance of WebDriver (Ie, Firefox, Chrome or Remote) or
             a WebElement
+
         timeout
             - Number of seconds before timing out
+
         poll_frequency
             - Sleep interval between calls
             - By default, it is 0.5 second.
+
         ignored_exceptions
             - Iterable structure of exception classes ignored during calls.
             - By default, it contains NoSuchElementException only.
@@ -99,6 +102,7 @@ class WebDriverWait(Generic[D]):
         ----------
         method: callable(WebDriver)
             - A callable object that takes a WebDriver instance as an argument.
+
         message: str
             - Optional message for :exc:`TimeoutException`
 
@@ -151,6 +155,7 @@ class WebDriverWait(Generic[D]):
         ----------
         method: callable(WebDriver)
             - A callable object that takes a WebDriver instance as an argument.
+
         message: str
             - Optional message for :exc:`TimeoutException`
 

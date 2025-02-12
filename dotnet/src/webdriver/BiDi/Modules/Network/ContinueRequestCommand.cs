@@ -24,20 +24,10 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ContinueRequestCommand(ContinueRequestCommandParameters @params) : Command<ContinueRequestCommandParameters>(@params);
+internal class ContinueRequestCommand(ContinueRequestCommandParameters @params)
+    : Command<ContinueRequestCommandParameters>(@params, "network.continueRequest");
 
-internal record ContinueRequestCommandParameters(Request Request) : CommandParameters
-{
-    public BytesValue? Body { get; set; }
-
-    public IEnumerable<CookieHeader>? Cookies { get; set; }
-
-    public IEnumerable<Header>? Headers { get; set; }
-
-    public string? Method { get; set; }
-
-    public string? Url { get; set; }
-}
+internal record ContinueRequestCommandParameters(Request Request, BytesValue? Body, IEnumerable<CookieHeader>? Cookies, IEnumerable<Header>? Headers, string? Method, string? Url) : CommandParameters;
 
 public record ContinueRequestOptions : CommandOptions
 {

@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -50,6 +50,7 @@ import RunningSessionsSearchBar from './RunningSessionsSearchBar'
 import { Size } from '../../models/size'
 import LiveView from '../LiveView/LiveView'
 import SessionData, { createSessionData } from '../../models/session-data'
+import { useNavigate } from 'react-router-dom'
 
 function descendingComparator<T> (a: T, b: T, orderBy: keyof T): number {
   if (orderBy === 'sessionDurationMillis') {
@@ -181,12 +182,13 @@ function RunningSessions (props) {
   const [searchFilter, setSearchFilter] = useState('')
   const [searchBarHelpOpen, setSearchBarHelpOpen] = useState(false)
   const liveViewRef = useRef(null)
+  const navigate = useNavigate()
 
   const handleDialogClose = () => {
     if (liveViewRef.current) {
       liveViewRef.current.disconnect()
     }
-    setRowLiveViewOpen('')
+    navigate('/sessions')
   }
 
   const handleRequestSort = (event: React.MouseEvent<unknown>,
@@ -247,7 +249,7 @@ function RunningSessions (props) {
 
   const displayLiveView = (id: string): JSX.Element => {
     const handleLiveViewIconClick = (): void => {
-      setRowLiveViewOpen(id)
+      navigate(`/session/${id}`)
     }
     return (
       <IconButton
@@ -260,7 +262,7 @@ function RunningSessions (props) {
     )
   }
 
-  const { sessions, origin } = props
+  const { sessions, origin, sessionId } = props
 
   const rows = sessions.map((session) => {
     return createSessionData(
@@ -276,6 +278,19 @@ function RunningSessions (props) {
     )
   })
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
+
+  useEffect(() => {
+    let s = sessionId || ''
+
+    let session_ids = sessions.map((session) => session.id)
+
+    if (!session_ids.includes(s)) {
+      setRowLiveViewOpen('')
+      navigate('/sessions')
+    } else {
+      setRowLiveViewOpen(s)
+    }
+  }, [sessionId, sessions])
 
   return (
     <Box width='100%'>
@@ -354,7 +369,7 @@ function RunningSessions (props) {
                             {
                                 (row.vnc as string).length > 0 &&
                                   <Dialog
-                                    onClose={() => setRowLiveViewOpen('')}
+                                    onClose={() => navigate("/sessions")}
                                     aria-labelledby='live-view-dialog'
                                     open={rowLiveViewOpen === row.id}
                                     fullWidth
@@ -393,7 +408,7 @@ function RunningSessions (props) {
                                         ref={liveViewRef}
                                         url={row.vnc as string}
                                         scaleViewport
-                                        onClose={() => setRowLiveViewOpen('')}
+                                        onClose={() => navigate("/sessions")}
                                       />
                                     </DialogContent>
                                     <DialogActions>

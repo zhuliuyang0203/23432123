@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,13 +29,24 @@ namespace OpenQA.Selenium.DevTools
     public class TargetDetachedEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TargetDetachedEventArgs"/> type.
+        /// </summary>
+        /// <param name="sessionId">The ID of the session of the target detached.</param>
+        /// <param name="targetId">The ID of the target detached.</param>
+        public TargetDetachedEventArgs(string sessionId, string? targetId)
+        {
+            SessionId = sessionId;
+            TargetId = targetId;
+        }
+
+        /// <summary>
         /// Gets the ID of the session of the target detached.
         /// </summary>
-        public string SessionId { get; internal set; }
+        public string SessionId { get; }
 
         /// <summary>
         /// Gets the ID of the target detached.
         /// </summary>
-        public string TargetId { get; internal set; }
+        public string? TargetId { get; }
     }
 }

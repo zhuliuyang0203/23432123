@@ -20,6 +20,8 @@
 using System;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -28,18 +30,32 @@ namespace OpenQA.Selenium.DevTools
     public class ConsoleApiCalledEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ConsoleApiCalledEventArgs"/> type.
+        /// </summary>
+        /// <param name="timestamp">The time stanp when the browser's console API is called.</param>
+        /// <param name="type">The type of message when the browser's console API is called.</param>
+        /// <param name="arguments">The arguments of the call to the browser's console API.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="arguments"/> is <see langword="null"/>.</exception>
+        public ConsoleApiCalledEventArgs(DateTime timestamp, string type, ReadOnlyCollection<ConsoleApiArgument> arguments)
+        {
+            Timestamp = timestamp;
+            Type = type;
+            Arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
+        }
+
+        /// <summary>
         /// Gets the time stanp when the browser's console API is called.
         /// </summary>
-        public DateTime Timestamp { get; internal set; }
+        public DateTime Timestamp { get; }
 
         /// <summary>
         /// Gets the type of message when the browser's console API is called.
         /// </summary>
-        public string Type { get; internal set; }
+        public string Type { get; }
 
         /// <summary>
         /// Gets the arguments of the call to the browser's console API.
         /// </summary>
-        public ReadOnlyCollection<ConsoleApiArgument> Arguments { get; internal set; }
+        public ReadOnlyCollection<ConsoleApiArgument> Arguments { get; }
     }
 }

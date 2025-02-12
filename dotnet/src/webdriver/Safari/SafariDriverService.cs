@@ -25,6 +25,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>
@@ -37,10 +39,10 @@ namespace OpenQA.Selenium.Safari
         /// <summary>
         /// Initializes a new instance of the <see cref="SafariDriverService"/> class.
         /// </summary>
-        /// <param name="executablePath">The full path to the SafariDriver executable.</param>
+        /// <param name="executablePath">The directory of the SafariDriver executable.</param>
         /// <param name="executableFileName">The file name of the SafariDriver executable.</param>
         /// <param name="port">The port on which the SafariDriver executable should listen.</param>
-        private SafariDriverService(string executablePath, string executableFileName, int port)
+        private SafariDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, port, executableFileName)
         {
         }
@@ -73,7 +75,7 @@ namespace OpenQA.Selenium.Safari
             // because the executable does not have a clean shutdown command,
             // which means we have to kill the process. Using a short timeout
             // gets us to the termination point much faster.
-            get { return TimeSpan.FromMilliseconds(100); }
+            get => TimeSpan.FromMilliseconds(100);
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace OpenQA.Selenium.Safari
         {
             // The Safari driver executable does not have a clean shutdown command,
             // which means we have to kill the process.
-            get { return false; }
+            get => false;
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace OpenQA.Selenium.Safari
             if (File.Exists(driverPath))
             {
                 fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                driverPath = Path.GetDirectoryName(driverPath)!;
             }
             else
             {

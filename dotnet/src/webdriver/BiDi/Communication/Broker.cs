@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json;
 using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using OpenQA.Selenium.BiDi.Communication.Transport;
 using OpenQA.Selenium.Internal.Logging;
@@ -40,7 +41,7 @@ public class Broker : IAsyncDisposable
     private readonly BiDi _bidi;
     private readonly ITransport _transport;
 
-    private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
+    private readonly ConcurrentDictionary<int, TaskCompletionSource<JsonElement>> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
     private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
@@ -53,14 +54,14 @@ public class Broker : IAsyncDisposable
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly BiDiJsonSerializerContext _jsonSerializerContext;
 
     internal Broker(BiDi bidi, ITransport transport)
     {
         _bidi = bidi;
         _transport = transport;
 
-        _jsonSerializerOptions = new JsonSerializerOptions
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -69,6 +70,7 @@ public class Broker : IAsyncDisposable
             {
                 new BrowsingContextConverter(_bidi),
                 new BrowserUserContextConverter(bidi),
+                new BrowserClientWindowConverter(),
                 new NavigationConverter(),
                 new InterceptConverter(_bidi),
                 new RequestConverter(_bidi),
@@ -81,6 +83,7 @@ public class Broker : IAsyncDisposable
                 new DateTimeOffsetConverter(),
                 new PrintPageRangeConverter(),
                 new InputOriginConverter(),
+                new SubscriptionConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
 
                 // https://github.com/dotnet/runtime/issues/72604
@@ -96,9 +99,12 @@ public class Broker : IAsyncDisposable
                 new Json.Converters.Enumerable.LocateNodesResultConverter(),
                 new Json.Converters.Enumerable.InputSourceActionsConverter(),
                 new Json.Converters.Enumerable.GetUserContextsResultConverter(),
+                new Json.Converters.Enumerable.GetClientWindowsResultConverter(),
                 new Json.Converters.Enumerable.GetRealmsResultConverter(),
             }
         };
+
+        _jsonSerializerContext = new BiDiJsonSerializerContext(jsonSerializerOptions);
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
@@ -106,15 +112,17 @@ public class Broker : IAsyncDisposable
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
         _receiveMessagesCancellationTokenSource = new CancellationTokenSource();
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token), TaskCreationOptions.LongRunning).Unwrap();
-        _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync(), TaskCreationOptions.LongRunning).Unwrap();
+        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token)).Unwrap();
+        _eventEmitterTask = _myTaskFactory.StartNew(ProcessEventsAwaiterAsync).Unwrap();
     }
 
     private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSerializerOptions, cancellationToken);
+            var data = await _transport.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+
+            var message = JsonSerializer.Deserialize(new ReadOnlySpan<byte>(data), _jsonSerializerContext.Message);
 
             switch (message)
             {
@@ -145,7 +153,7 @@ public class Broker : IAsyncDisposable
                     {
                         foreach (var handler in eventHandlers.ToArray()) // copy handlers avoiding modified collection while iterating
                         {
-                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
+                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerContext)!;
 
                             args.BiDi = _bidi;
 
@@ -173,23 +181,26 @@ public class Broker : IAsyncDisposable
         }
     }
 
-    public async Task<TResult> ExecuteCommandAsync<TResult>(Command command, CommandOptions? options)
+    public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CommandOptions? options)
+        where TCommand : Command
     {
-        var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
+        var jsonElement = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
-        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSerializerOptions)!;
+        return (TResult)jsonElement.Deserialize(typeof(TResult), _jsonSerializerContext)!;
     }
 
-    public async Task ExecuteCommandAsync(Command command, CommandOptions? options)
+    public async Task ExecuteCommandAsync<TCommand>(TCommand command, CommandOptions? options)
+        where TCommand : Command
     {
         await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
     }
 
-    private async Task<object> ExecuteCommandCoreAsync(Command command, CommandOptions? options)
+    private async Task<JsonElement> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
+        where TCommand : Command
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
-        var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var tcs = new TaskCompletionSource<JsonElement>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var timeout = options?.Timeout ?? TimeSpan.FromSeconds(30);
 
@@ -199,7 +210,9 @@ public class Broker : IAsyncDisposable
 
         _pendingCommands[command.Id] = tcs;
 
-        await _transport.SendAsJsonAsync(command, _jsonSerializerOptions, cts.Token).ConfigureAwait(false);
+        var data = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), _jsonSerializerContext);
+
+        await _transport.SendAsync(data, cts.Token).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }
@@ -211,23 +224,23 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, browsingContextsOptions?.Contexts);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
         else
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
     }
 
@@ -238,44 +251,51 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, browsingContextsOptions.Contexts);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
         else
         {
-            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            var subscribeResult = await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func);
 
             handlers.Add(eventHandler);
 
-            return new Subscription(this, eventHandler);
+            return new Subscription(subscribeResult.Subscription, this, eventHandler);
         }
     }
 
-    public async Task UnsubscribeAsync(EventHandler eventHandler)
+    public async Task UnsubscribeAsync(Modules.Session.Subscription subscription, EventHandler eventHandler)
     {
         var eventHandlers = _eventHandlers[eventHandler.EventName];
 
         eventHandlers.Remove(eventHandler);
 
-        if (eventHandler.Contexts is not null)
+        if (subscription is not null)
         {
-            if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
-            {
-                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
-            }
+            await _bidi.SessionModule.UnsubscribeAsync([subscription]).ConfigureAwait(false);
         }
         else
         {
-            if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
+            if (eventHandler.Contexts is not null)
             {
-                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
+                if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
+                {
+                    await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
+                {
+                    await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
+                }
             }
         }
     }

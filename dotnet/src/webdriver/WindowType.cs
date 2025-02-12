@@ -17,6 +17,9 @@
 // under the License.
 // </copyright>
 
+
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>

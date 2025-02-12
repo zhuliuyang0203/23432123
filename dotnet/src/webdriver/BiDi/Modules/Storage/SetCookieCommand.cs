@@ -24,12 +24,10 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class SetCookieCommand(SetCookieCommandParameters @params) : Command<SetCookieCommandParameters>(@params);
+internal class SetCookieCommand(SetCookieCommandParameters @params)
+    : Command<SetCookieCommandParameters>(@params, "storage.setCookie");
 
-internal record SetCookieCommandParameters(PartialCookie Cookie) : CommandParameters
-{
-    public PartitionDescriptor? Partition { get; set; }
-}
+internal record SetCookieCommandParameters(PartialCookie Cookie, PartitionDescriptor? Partition) : CommandParameters;
 
 public record PartialCookie(string Name, Network.BytesValue Value, string Domain)
 {

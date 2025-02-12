@@ -21,6 +21,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -31,12 +33,12 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Occurs when a target is detached.
         /// </summary>
-        public event EventHandler<TargetDetachedEventArgs> TargetDetached;
+        public event EventHandler<TargetDetachedEventArgs>? TargetDetached;
 
         /// <summary>
         /// Occurs when a target is attached.
         /// </summary>
-        public event EventHandler<TargetAttachedEventArgs> TargetAttached;
+        public event EventHandler<TargetAttachedEventArgs>? TargetAttached;
 
         /// <summary>
         /// Asynchronously gets the targets available for this session.
@@ -46,7 +48,7 @@ namespace OpenQA.Selenium.DevTools
         /// contains the list of <see cref="TargetInfo"/> objects describing the
         /// targets available for this session.
         /// </returns>
-        public abstract Task<ReadOnlyCollection<TargetInfo>> GetTargets(Object settings = null);
+        public abstract Task<ReadOnlyCollection<TargetInfo>> GetTargets(object? settings = null);
 
         /// <summary>
         /// Asynchronously attaches to a target.
@@ -66,7 +68,7 @@ namespace OpenQA.Selenium.DevTools
         /// <returns>
         /// A task representing the asynchronous detach operation.
         /// </returns>
-        public abstract Task DetachFromTarget(string sessionId = null, string targetId = null);
+        public abstract Task DetachFromTarget(string? sessionId = null, string? targetId = null);
 
         /// <summary>
         /// Asynchronously sets the DevTools Protocol connection to automatically attach to new targets.

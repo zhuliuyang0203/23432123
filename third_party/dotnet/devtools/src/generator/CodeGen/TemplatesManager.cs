@@ -34,9 +34,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         public Func<object, string> GetGeneratorForTemplate(CodeGenerationTemplateSettings templateSettings)
         {
             var templatePath = templateSettings.TemplatePath;
-            if (m_templateGenerators.ContainsKey(templatePath))
+            if (m_templateGenerators.TryGetValue(templatePath, out Func<object, string>? value))
             {
-                return m_templateGenerators[templatePath];
+                return value;
             }
 
             var targetTemplate = templatePath;
@@ -47,7 +47,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
             if (!File.Exists(targetTemplate))
             {
-                throw new FileNotFoundException($"Unable to locate a template at {targetTemplate} - please ensure that a template file exists at this location.");
+                throw new FileNotFoundException($"Unable to locate a template at {targetTemplate} - please ensure that a template file exists at this location.", targetTemplate);
             }
 
             var templateContents = File.ReadAllText(targetTemplate);
@@ -59,7 +59,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                     throw new HandlebarsException("{{humanize}} helper must have exactly one argument");
                 }
 
-                var str = arguments[0].ToString();
+                var str = arguments[0].ToString()!;
 
                 //Some overrides for values that start with '-' -- this fixes two instances in Runtime.UnserializableValue
                 if (str.StartsWith("-"))

@@ -8,9 +8,11 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     public class CodeGenerationTemplateSettings
     {
         [JsonPropertyName("templatePath")]
-        public string TemplatePath { get; set; }
+        [JsonRequired]
+        public string TemplatePath { get; set; } = null!;
 
         [JsonPropertyName("outputPath")]
-        public string OutputPath { get; set; }
+        [JsonRequired]
+        public string OutputPath { get; set; } = null!;
     }
 }
