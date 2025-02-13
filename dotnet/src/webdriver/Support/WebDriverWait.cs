@@ -40,7 +40,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <param name="driver">The WebDriver instance used to wait.</param>
         /// <param name="timeout">The timeout value indicating how long to wait for the condition.</param>
         public WebDriverWait(IWebDriver driver, TimeSpan timeout)
-            : this(new SystemClock(), driver, timeout, DefaultSleepTimeout)
+            : this(SystemClock.Instance, driver, timeout, DefaultSleepTimeout)
         {
         }
 

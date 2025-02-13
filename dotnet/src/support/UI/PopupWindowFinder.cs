@@ -131,7 +131,7 @@ namespace OpenQA.Selenium.Support.UI
 
             ReadOnlyCollection<string> existingHandles = this.driver.WindowHandles;
             popupMethod();
-            WebDriverWait wait = new WebDriverWait(new SystemClock(), this.driver, this.timeout, this.sleepInterval);
+            WebDriverWait wait = new WebDriverWait(SystemClock.Instance, this.driver, this.timeout, this.sleepInterval);
             string popupHandle = wait.Until<string>((d) =>
             {
                 string? foundHandle = null;
