@@ -25,7 +25,14 @@ bazel_dep(name = "rules_oci", version = "1.8.0")
 bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "rules_python", version = "1.1.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
-bazel_dep(name = "rules_ruby", version = "0.17.0")
+bazel_dep(name = "rules_ruby", version = "0.17.1")
+
+archive_override(
+    module_name = "rules_ruby",
+    urls = ["https://github.com/bazel-contrib/rules_ruby/releases/download/v0.17.1/rules_ruby-v0.17.1.tar.gz"],
+    integrity = "sha256-9cxlpYmjZodsoPUnJ5g4X0YIBgVhJWtGOWD5yP4DNO0=",
+    strip_prefix = "rules_ruby-0.17.1",
+)
 
 linter = use_extension("@apple_rules_lint//lint:extensions.bzl", "linter")
 linter.configure(
