@@ -3,6 +3,7 @@
 - Add CDP for Chrome 133 and remove 130
 - [js] Remove Firefox CDP (#15200)
 - [js][bidi] Implement bidi `setCacheBehavior` command (#15136)
+- [js][bidi] Implement bidi getClientWindows command in browser module (#15248)
 
 ## 4.28.1
 
