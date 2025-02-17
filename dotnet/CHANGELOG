@@ -1,5 +1,6 @@
 v4.29.0
 ======
+* Add CDP for Chrome 133 and remove 130
 * [dotnet] [bidi] Add network SetCacheBehavior command (#15133)
 * [dotnet] Annotate nullability on devtools event args (#15134)
 * [dotnet] Annotate nullability for `DriverService` and chromium/safari services (#15101)
@@ -29,8 +30,7 @@ v4.29.0
 * [dotnet] Annotate nullability on Firefox profile (#15207)
 * [dotnet] Annotate nullability on network interactions (#15209)
 * [dotnet] Add nullability to `Manage()` (#15210)
-* [java][js][rb][py][dotnet] Remove firefox cdp (#15200)
-* [bazel] Remove empty globs
+* [dotnet] Remove Firefox CDP (#15200)
 * [dotnet] Fully annotate nullability on `HttpCommandExecutor` (#15110)
 * [dotnet] Annotate nullability on `SafariOptions`, error, and enums (#15219)
 * [dotnet] Fix `JavaScriptEngine.ScriptCallbackBindings` not containing new bindings (#15221)
@@ -55,7 +55,6 @@ v4.29.0
 * [dotnet] Simplify user creation of network types (#15267)
 * [dotnet][bidi] Remove AsBiDiContextAsync helper to avoid disposal issue (#15279)
 * [dotnet] Possibility to override underlying HttpClient/HttpClientHandler for all HTTP requests (#15283)
-* Update supported versions for Chrome DevTools
 
 v4.28.0
 ======

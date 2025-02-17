@@ -1,11 +1,8 @@
 ## 4.29.0
 
-- [javascript] Bumping version to nightly
-- [javascript] Fixing changelog
-- [java][js][rb][py][dotnet] Remove firefox cdp (#15200)
-- [bazel] Remove empty globs
-- [js][bidi]: implement bidi `setCacheBehavior` command (#15136)
-- Update supported versions for Chrome DevTools
+- Add CDP for Chrome 133 and remove 130
+- [js] Remove Firefox CDP (#15200)
+- [js][bidi] Implement bidi `setCacheBehavior` command (#15136)
 
 ## 4.28.1
 
