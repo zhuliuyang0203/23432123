@@ -201,7 +201,7 @@ jobs:
         with:
           name: linux-recordings
           path: |
-            $HOME/.cache/selenium/recordings/*.avi
+            /home/runner/.cache/selenium/recordings/*.avi
           retention-days: 6
       - name: Save recordings (macOS)
         if: inputs.save-recordings && inputs.os == 'macos'
@@ -209,5 +209,5 @@ jobs:
         with:
           name: macos-recordings
           path: |
-            $HOME/.cache/selenium/recordings/*.avi
+            /home/runner/.cache/selenium/recordings/*.avi
           retention-days: 6
