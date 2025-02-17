@@ -1,3 +1,21 @@
+v4.29.0
+======
+* [Java] Add Locale.ROOT to avoid port formatting issues for all drivers (#15121)
+* [java][bidi]: implement bidi `setCacheBehavior` (#15130)
+* [java] Enhance PageSize class to support for predefined and custom Paper Sizes (#15052)
+* [java] Ensure purging dead nodes service interval is configurable (#15175)
+* [java] Ensure Selenium logging options are respected if java logging properties are not set (#15197)
+* [java] Do not enable CDP deprecation warning if BiDi enabled (#15170)
+* [java][js][rb][py][dotnet] Remove firefox cdp (#15200)
+* [bazel] Remove empty globs
+* [grid] Add default sessionTimeout to NodeStatus to increase backward compatibility (#15229)
+* [java] close the HttpClient if possible
+* [java] Avoid augmenting CDP for Firefox (#15271)
+* [java] Remove deprecated non-w3c compliant NetworkConnection interface (#15270)
+* [java] avoid downloading not needed browsers #15261
+* [java]: fix return type and docstring for `getDownloadableFiles` (#15293)
+* Update supported versions for Chrome DevTools
+
 v4.28.1
 ======
 * [java]: Add Locale.ROOT to avoid port formatting issues for all drivers (#15121)

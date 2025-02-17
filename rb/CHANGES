@@ -1,3 +1,12 @@
+4.29.0 (2025-02-17)
+=========================
+* Bumping version for nightly
+* [rb] Add Bidi Network Response Handler (#14900)
+* [java][js][rb][py][dotnet] Remove firefox cdp (#15200)
+* [rb][BiDi] Add support for provide response command (#15080)
+* [rb][BiDi] Add set cache behaviour (#15114)
+* Update supported versions for Chrome DevTools
+
 4.28.0 (2025-01-16)
 =========================
 * Add CDP for Chrome 132 and remove 129

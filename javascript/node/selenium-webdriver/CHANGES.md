@@ -1,3 +1,11 @@
+## 4.29.0
+- [javascript] Bumping version to nightly
+- [javascript] Fixing changelog
+- [java][js][rb][py][dotnet] Remove firefox cdp (#15200)
+- [bazel] Remove empty globs
+- [js][bidi]: implement bidi `setCacheBehavior` command (#15136)
+- Update supported versions for Chrome DevTools
+
 ## 4.28.1
 
 - [JS] specify min required node versiton to 18.20.5
