@@ -45,7 +45,6 @@ const FFMPEG_RECORD_FRAME_RATE: &str = "30";
 const FFMPEG_RECORD_DESKTOP_WINDOWS_COMMAND: &str = "{} -f gdigrab -i desktop -r {} -q:v 1 -y {}";
 const FFMPEG_RECORD_DESKTOP_LINUX_COMMAND: &str = "{} -f x11grab -i {} -r {} -vcodec huffyuv -y {}";
 const FFMPEG_RECORD_DESKTOP_MACOS_COMMAND: &str = "{} -f avfoundation -i {} -r {} -y {}";
-const FFMPEG_HELP_COMMAND: &str = "{} -h";
 const FFMPEG_RECORDING_EXTENSION: &str = "avi";
 const FFMPEG_RECORDING_FOLDER: &str = "recordings";
 
@@ -210,7 +209,6 @@ pub fn record_desktop_with_ffmpeg(
         "Recording desktop with {} to {}",
         FFMPEG_NAME, &recording_name
     ));
-    /*
     let command = if WINDOWS.is(os) {
         Command::new_single(format_three_args(
             get_recording_command(os),
@@ -228,11 +226,6 @@ pub fn record_desktop_with_ffmpeg(
             &recording_name,
         ))
     };
-    */
-    let command = Command::new_single(format_one_arg(
-        FFMPEG_HELP_COMMAND,
-        &path_to_string(&ffmpeg_path),
-    ));
     run_shell_command_with_log(log, os, command).unwrap();
     Ok(())
 }
