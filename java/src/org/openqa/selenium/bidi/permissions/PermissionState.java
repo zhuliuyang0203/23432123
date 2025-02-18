@@ -18,7 +18,6 @@
 package org.openqa.selenium.bidi.permissions;
 
 public enum PermissionState {
-
   GRANTED("granted"),
   DENIED("denied"),
   PROMPT("prompt");

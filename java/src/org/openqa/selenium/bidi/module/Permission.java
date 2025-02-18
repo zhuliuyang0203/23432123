@@ -17,15 +17,14 @@
 
 package org.openqa.selenium.bidi.module;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.Command;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.permissions.PermissionState;
 import org.openqa.selenium.internal.Require;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Permission {
 
@@ -41,12 +40,16 @@ public class Permission {
     this.bidi = ((HasBiDi) driver).getBiDi();
   }
 
-  public void setPermission(Map<String, String> permissionDescriptor, PermissionState state, String origin) {
+  public void setPermission(
+      Map<String, String> permissionDescriptor, PermissionState state, String origin) {
     this.setPermission(permissionDescriptor, state, origin, null);
   }
 
   public void setPermission(
-      Map<String, String> permissionDescriptor, PermissionState state, String origin, String userContext) {
+      Map<String, String> permissionDescriptor,
+      PermissionState state,
+      String origin,
+      String userContext) {
     Require.nonNull("Permission descriptor", permissionDescriptor);
     Require.nonNull("Permission state", state);
     Require.nonNull("Origin", origin);
