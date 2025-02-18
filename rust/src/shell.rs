@@ -96,7 +96,9 @@ pub fn run_shell_command(shell: &str, flag: &str, command: Command) -> Result<St
         }
     }
     let output = process.output()?;
-    Ok(strip_trailing_newline(&String::from_utf8_lossy(&output.stdout)).to_string())
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    Ok(strip_trailing_newline(&(stdout + " " + stderr)).to_string())
 }
 
 pub fn strip_trailing_newline(input: &str) -> &str {
