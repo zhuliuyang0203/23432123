@@ -292,9 +292,7 @@ module Selenium
         end
       end
 
-      it 'clears all response handlers',
-         except: { browser: :firefox,
-                   reason: 'https://github.com/w3c/webdriver-bidi/issues/747' } do
+      it 'clears all response handlers' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           2.times { network.add_response_handler(&:continue) }
