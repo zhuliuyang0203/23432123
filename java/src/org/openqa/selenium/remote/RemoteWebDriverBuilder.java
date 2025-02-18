@@ -306,7 +306,6 @@ public class RemoteWebDriverBuilder {
 
     Set<WebDriverInfo> infos =
         StreamSupport.stream(ServiceLoader.load(WebDriverInfo.class).spliterator(), false)
-            .filter(WebDriverInfo::isAvailable)
             .collect(Collectors.toSet());
 
     Capabilities additional = new ImmutableCapabilities(additionalCapabilities);
@@ -316,8 +315,8 @@ public class RemoteWebDriverBuilder {
             .flatMap(
                 caps ->
                     infos.stream()
-                        .filter(WebDriverInfo::isAvailable)
                         .filter(info -> info.isSupporting(caps))
+                        .filter(WebDriverInfo::isAvailable)
                         .map(
                             info ->
                                 (Supplier<WebDriver>)

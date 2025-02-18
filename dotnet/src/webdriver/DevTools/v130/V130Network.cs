@@ -338,27 +338,27 @@ namespace OpenQA.Selenium.DevTools.V130
             if (e.ResponseErrorReason == null && e.ResponseStatusCode == null)
             {
                 var requestData = new HttpRequestData
-                (
-                    requestId: e.RequestId,
-                    method: e.Request.Method,
-                    url: e.Request.Url,
-                    postData: e.Request.PostData,
-                    headers: new Dictionary<string, string>(e.Request.Headers)
-                );
+                {
+                    RequestId = e.RequestId,
+                    Method = e.Request.Method,
+                    Url = e.Request.Url,
+                    PostData = e.Request.PostData,
+                    Headers = new Dictionary<string, string>(e.Request.Headers)
+                };
 
                 RequestPausedEventArgs wrapped = new RequestPausedEventArgs(null, requestData);
                 this.OnRequestPaused(wrapped);
             }
             else
             {
-                var responseData = new HttpResponseData
-                (
-                    requestId: e.RequestId,
-                    url: e.Request.Url,
-                    resourceType: e.ResourceType.ToString(),
-                    statusCode: e.ResponseStatusCode.GetValueOrDefault(),
-                    errorReason: e.ResponseErrorReason?.ToString()
-                );
+                var responseData = new HttpResponseData()
+                {
+                    RequestId = e.RequestId,
+                    Url = e.Request.Url,
+                    ResourceType = e.ResourceType.ToString(),
+                    StatusCode = e.ResponseStatusCode.GetValueOrDefault(),
+                    ErrorReason = e.ResponseErrorReason?.ToString()
+                };
 
                 if (e.ResponseHeaders != null)
                 {

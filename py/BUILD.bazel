@@ -520,10 +520,13 @@ py_test_suite(
 py_test_suite(
     name = "test-firefox",
     size = "large",
-    srcs = glob([
-        "test/selenium/webdriver/marionette/**/*.py",
-        "test/selenium/webdriver/firefox/**/*.py",
-    ]),
+    srcs = glob(
+        [
+            "test/selenium/webdriver/marionette/**/*.py",
+            "test/selenium/webdriver/firefox/**/*.py",
+        ],
+        exclude = ["test/selenium/webdriver/common/devtools_tests.py"],
+    ),
     args = [
         "--instafail",
     ] + BROWSERS["firefox"]["args"],

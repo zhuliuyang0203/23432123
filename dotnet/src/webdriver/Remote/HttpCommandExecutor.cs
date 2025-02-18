@@ -221,18 +221,38 @@ namespace OpenQA.Selenium.Remote
             this.SendingRemoteHttpRequest?.Invoke(this, eventArgs);
         }
 
-        private HttpClient CreateHttpClient()
+        /// <summary>
+        /// Creates an instance of <see cref="HttpClientHandler"/> as underlying handler,
+        /// used by <see cref="CreateHttpClient"/>. Invoked only once when required.
+        /// </summary>
+        /// <returns>An instance of <see cref="HttpClientHandler"/>.</returns>
+        protected virtual HttpClientHandler CreateHttpClientHandler()
         {
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            HttpClientHandler httpClientHandler = new();
+
             string userInfo = this.remoteServerUri.UserInfo;
-            if (!string.IsNullOrEmpty(userInfo) && userInfo.Contains(":"))
+
+            if (!string.IsNullOrEmpty(userInfo) && userInfo.Contains(':'))
             {
-                string[] userInfoComponents = this.remoteServerUri.UserInfo.Split(new char[] { ':' }, 2);
+                string[] userInfoComponents = this.remoteServerUri.UserInfo.Split([':'], 2);
                 httpClientHandler.Credentials = new NetworkCredential(userInfoComponents[0], userInfoComponents[1]);
                 httpClientHandler.PreAuthenticate = true;
             }
 
             httpClientHandler.Proxy = this.Proxy;
+
+            return httpClientHandler;
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="HttpClient"/> used by making all HTTP calls to remote end.
+        /// Invoked only once when required.
+        /// </summary>
+        /// <returns>An instance of <see cref="HttpClient"/>.</returns>
+        protected virtual HttpClient CreateHttpClient()
+        {
+            var httpClientHandler = CreateHttpClientHandler()
+                ?? throw new InvalidOperationException($"{nameof(CreateHttpClientHandler)} method returned null");
 
             HttpMessageHandler handler = httpClientHandler;
 
@@ -242,15 +262,18 @@ namespace OpenQA.Selenium.Remote
             }
 
             var client = new HttpClient(handler);
+
             client.DefaultRequestHeaders.UserAgent.ParseAdd(this.UserAgent);
             client.DefaultRequestHeaders.Accept.ParseAdd(RequestAcceptHeader);
             client.DefaultRequestHeaders.ExpectContinue = false;
+
             if (!this.IsKeepAliveEnabled)
             {
                 client.DefaultRequestHeaders.Connection.ParseAdd("close");
             }
 
             client.Timeout = this.serverResponseTimeout;
+
             return client;
         }
 

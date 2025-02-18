@@ -1110,7 +1110,11 @@ namespace :all do
              'rb/lib/selenium/webdriver/version.rb',
              'rb/CHANGES',
              'rb/Gemfile.lock',
-             'rust/CHANGELOG.md'])
+             'rust/CHANGELOG.md',
+             'rust/BUILD.bazel',
+             'rust/Cargo.Bazel.lock',
+             'rust/Cargo.toml',
+             'rust/Cargo.lock'])
   end
 
   desc 'Update all versions'
@@ -1122,6 +1126,7 @@ namespace :all do
     Rake::Task['node:version'].invoke(version)
     Rake::Task['py:version'].invoke(version)
     Rake::Task['dotnet:version'].invoke(version)
+    Rake::Task['rust:version'].invoke(version)
   end
 end
 
@@ -1186,7 +1191,11 @@ end
 
 def update_changelog(version, language, path, changelog, header)
   tag = previous_tag(version, language)
-  log = `git --no-pager log #{tag}...HEAD --pretty=format:"--> %B" --reverse #{path}`
+  log = if language == 'javascript'
+          `git --no-pager log #{tag}...HEAD --pretty=format:"- %s" --reverse #{path}`
+        else
+          `git --no-pager log #{tag}...HEAD --pretty=format:"* %s" --reverse #{path}`
+        end
   commits = log.split('>>>').map { |entry|
     lines = entry.split("\n")
     lines.reject! { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }

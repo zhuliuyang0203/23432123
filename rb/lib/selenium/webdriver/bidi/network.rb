@@ -124,6 +124,10 @@ module Selenium
           )
         end
 
+        def set_cache_behavior(behavior, *contexts)
+          @bidi.send_cmd('network.setCacheBehavior', cacheBehavior: behavior, contexts: contexts)
+        end
+
         def on(event, &)
           event = EVENTS[event] if event.is_a?(Symbol)
           @bidi.add_callback(event, &)

@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Threading.Tasks;
 
@@ -43,14 +42,5 @@ public static class WebDriverExtensions
         var bidi = await BiDi.ConnectAsync(webSocketUrl).ConfigureAwait(false);
 
         return bidi;
-    }
-
-    public static async Task<BrowsingContext> AsBiDiContextAsync(this IWebDriver webDriver)
-    {
-        var bidi = await webDriver.AsBiDiAsync();
-
-        var currentBrowsingContext = new BrowsingContext(bidi, webDriver.CurrentWindowHandle);
-
-        return currentBrowsingContext;
     }
 }

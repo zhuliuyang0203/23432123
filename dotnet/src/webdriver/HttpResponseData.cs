@@ -32,29 +32,19 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponseData"/> type.
         /// </summary>
-        /// <param name="requestId">The ID of the request that generated this response.</param>
-        /// <param name="url">The URL of the HTTP response.</param>
-        /// <param name="resourceType">The type of resource for this response.</param>
-        /// <param name="statusCode">The numeric status code of the HTTP response.</param>
-        /// <param name="errorReason">The reason for an error response.</param>
-        public HttpResponseData(string requestId, string url, string resourceType, long statusCode, string? errorReason)
+        public HttpResponseData()
         {
-            RequestId = requestId;
-            Url = url;
-            ResourceType = resourceType;
-            StatusCode = statusCode;
-            ErrorReason = errorReason;
         }
 
         /// <summary>
         /// Gets or sets the ID of the request that generated this response.
         /// </summary>
-        public string RequestId { get; set; }
+        public string? RequestId { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the HTTP response.
         /// </summary>
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         /// <summary>
         /// Gets or sets the numeric status code of the HTTP response.
@@ -79,7 +69,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the type of resource for this response.
         /// </summary>
-        public string ResourceType { get; set; }
+        public string? ResourceType { get; set; }
 
         /// <summary>
         /// Gets or sets the reason for an error response.
