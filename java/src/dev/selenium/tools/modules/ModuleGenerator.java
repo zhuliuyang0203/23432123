@@ -212,11 +212,7 @@ public class ModuleGenerator {
     }
     if (result != 0) {
       throw new RuntimeException(
-          "Unable to process module:\n"
-              + "jdeps "
-              + String.join(" ", jdepsArgs)
-              + "\n"
-              + bos);
+          "Unable to process module:\n" + "jdeps " + String.join(" ", jdepsArgs) + "\n" + bos);
     }
 
     AtomicReference<Path> moduleInfo = new AtomicReference<>();
