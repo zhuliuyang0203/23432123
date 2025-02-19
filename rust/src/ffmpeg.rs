@@ -44,8 +44,10 @@ const FFMPEG_MACOS_RELEASE_URL: &str = "https://evermeet.cx/ffmpeg/ffmpeg-{}.zip
 const FFMPEG_RECORD_FRAME_RATE: &str = "30";
 const FFMPEG_RECORD_DESKTOP_WINDOWS_COMMAND: &str = "{} -f gdigrab -i desktop -r {} -q:v 1 -y {}";
 const FFMPEG_RECORD_DESKTOP_LINUX_COMMAND: &str = "{} -f x11grab -i {} -r {} -vcodec huffyuv -y {}";
-const FFMPEG_RECORD_DESKTOP_MACOS_COMMAND: &str = r#"{} -f avfoundation  -i "0:0" -r {} -y {}"#;
+const FFMPEG_RECORD_DESKTOP_MACOS_COMMAND: &str =
+    r#"{} -f avfoundation -video_device_index 0 -r {} -y {}"#;
 const FFMPEG_RECORDING_EXTENSION_AVI: &str = "avi";
+const FFMPEG_RECORDING_EXTENSION_MKV: &str = "mkv";
 const FFMPEG_RECORDING_FOLDER: &str = "recordings";
 const FFMPEG_DEFAULT_DISPLAY: &str = ":0";
 
@@ -189,9 +191,14 @@ pub fn uncompress_ffmpeg(
     Ok(())
 }
 
-fn get_recording_name() -> String {
+fn get_recording_name(os: &str) -> String {
     let now = chrono::Local::now();
-    now.format("%Y-%m-%d_%H-%M-%S").to_string() + "." + FFMPEG_RECORDING_EXTENSION_AVI
+    let extension = if MACOS.is(os) {
+        FFMPEG_RECORDING_EXTENSION_MKV
+    } else {
+        FFMPEG_RECORDING_EXTENSION_AVI
+    };
+    now.format("%Y-%m-%d_%H-%M-%S").to_string() + "." + extension
 }
 
 pub fn record_desktop_with_ffmpeg(
@@ -202,7 +209,7 @@ pub fn record_desktop_with_ffmpeg(
 ) -> Result<(), Error> {
     let recording_target = cache_path
         .join(FFMPEG_RECORDING_FOLDER)
-        .join(get_recording_name());
+        .join(get_recording_name(os));
     let recording_name = path_to_string(&recording_target);
     create_parent_path_if_not_exists(&recording_target)?;
 
