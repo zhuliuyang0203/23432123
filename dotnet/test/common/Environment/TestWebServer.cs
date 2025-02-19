@@ -23,7 +23,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,21 +32,17 @@ namespace OpenQA.Selenium.Environment
     {
         private Process webserverProcess;
 
-        private string standaloneAppserverPath = @"_main/java/test/org/openqa/selenium/environment/appserver";
+        private string standaloneAppserverPath;
         private string projectRootPath;
         private bool captureWebServerOutput;
         private bool hideCommandPrompt;
-        private string javaHomeDirectory;
         private string port;
-
-        private StringBuilder outputData = new StringBuilder();
 
         public TestWebServer(string projectRoot, TestWebServerConfig config)
         {
             this.projectRootPath = projectRoot;
             this.captureWebServerOutput = config.CaptureConsoleOutput;
             this.hideCommandPrompt = config.HideCommandPromptWindow;
-            this.javaHomeDirectory = config.JavaHomeDirectory;
             this.port = config.Port;
         }
 
@@ -58,41 +53,30 @@ namespace OpenQA.Selenium.Environment
                 try
                 {
                     var runfiles = Runfiles.Create();
-                    standaloneAppserverPath = runfiles.Rlocation(standaloneAppserverPath);
+                    standaloneAppserverPath = runfiles.Rlocation(@"_main/java/test/org/openqa/selenium/environment/appserver");
                 }
+                // means we are NOT running under bazel runtime
+                // most likely in IDE
                 catch (FileNotFoundException)
                 {
-                    var baseDirectory = AppContext.BaseDirectory;
-                    standaloneAppserverPath = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
+                    //var baseDirectory = AppContext.BaseDirectory;
+                    //standaloneAppserverPath = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
                 }
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                var processFileName = standaloneAppserverPath ?? "bazel";
+
+                string processArguments = $"{port}";
+
+                if (standaloneAppserverPath is null)
                 {
-                    standaloneAppserverPath += ".exe";
+                    processArguments = $"run //java/test/org/openqa/selenium/environment:appserver {processArguments}";
+                    projectRootPath = Path.Combine(AppContext.BaseDirectory, "../../../../../..");
                 }
-
-                Console.Write("Test Appserver is " + standaloneAppserverPath);
-
-                if (!File.Exists(standaloneAppserverPath))
-                {
-                    throw new FileNotFoundException(
-                        string.Format(
-                            "Test Appserver at {0} didn't exist. Project root is {2}. Please build it using something like {1}.",
-                            standaloneAppserverPath,
-                            "bazel build //java/test/org/openqa/selenium/environment:appserver",
-                            projectRootPath));
-                }
-
-                StringBuilder processArgsBuilder = new StringBuilder();
-
-                processArgsBuilder.AppendFormat(" {0}", this.port);
-
-                Console.Write(processArgsBuilder.ToString());
 
                 webserverProcess = new Process();
-                webserverProcess.StartInfo.FileName = standaloneAppserverPath;
 
-                webserverProcess.StartInfo.Arguments = processArgsBuilder.ToString();
+                webserverProcess.StartInfo.FileName = processFileName;
+                webserverProcess.StartInfo.Arguments = processArguments;
                 webserverProcess.StartInfo.WorkingDirectory = projectRootPath;
                 webserverProcess.StartInfo.UseShellExecute = !(hideCommandPrompt || captureWebServerOutput);
                 webserverProcess.StartInfo.CreateNoWindow = hideCommandPrompt;
@@ -140,7 +124,8 @@ namespace OpenQA.Selenium.Environment
                         output = webserverProcess.StandardOutput.ReadToEnd();
                     }
 
-                    string errorMessage = string.Format("Could not start the test web server in {0} seconds.\nWorking directory: {1}\nProcess Args: {2}\nstdout: {3}\nstderr: {4}", timeout.TotalSeconds, projectRootPath, processArgsBuilder, output, error);
+                    string errorMessage = string.Format("Could not start the test web server in {0} seconds.\nWorking directory: {1}\nProcess Args: {2}\nstdout: {3}\nstderr: {4}", timeout.TotalSeconds, projectRootPath, processArguments, output, error);
+
                     throw new TimeoutException(errorMessage);
                 }
             }
