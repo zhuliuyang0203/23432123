@@ -55,6 +55,7 @@ v4.29.0
 * [dotnet] Simplify user creation of network types (#15267)
 * [dotnet][bidi] Remove AsBiDiContextAsync helper to avoid disposal issue (#15279)
 * [dotnet] Possibility to override underlying HttpClient/HttpClientHandler for all HTTP requests (#15283)
+* [dotnet][bidi] Underlying local/remote script number as double (#15301)
 
 v4.28.0
 ======
