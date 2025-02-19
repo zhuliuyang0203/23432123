@@ -201,10 +201,3 @@ jobs:
           name: recordings-linux
           path: /home/runner/.cache/selenium/recordings/*.*
           retention-days: 6
-      - name: Save recordings (macOS)
-        if: inputs.save-recordings && inputs.os == 'macos'
-        uses: actions/upload-artifact@v4
-        with:
-          name: recordings-macos
-          path: /Users/runner/.cache/selenium/recordings/*.*
-          retention-days: 6
