@@ -216,7 +216,7 @@ public class ModuleGenerator {
               + "jdeps "
               + String.join(" ", jdepsArgs)
               + "\n"
-              + new String(bos.toByteArray()));
+              + bos);
     }
 
     AtomicReference<Path> moduleInfo = new AtomicReference<>();
