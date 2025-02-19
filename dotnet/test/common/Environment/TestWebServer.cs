@@ -33,7 +33,7 @@ namespace OpenQA.Selenium.Environment
     {
         private Process webserverProcess;
 
-        private string standaloneTestJar = @"_main/java/test/org/openqa/selenium/environment/appserver";
+        private string standaloneAppserverPath;
         private string projectRootPath;
         private bool captureWebServerOutput;
         private bool hideCommandPrompt;
@@ -58,73 +58,44 @@ namespace OpenQA.Selenium.Environment
                 try
                 {
                     var runfiles = Runfiles.Create();
-                    standaloneTestJar = runfiles.Rlocation(standaloneTestJar);
+                    standaloneAppserverPath = runfiles.Rlocation(standaloneAppserverPath);
                 }
                 catch (FileNotFoundException)
                 {
                     var baseDirectory = AppContext.BaseDirectory;
-                    standaloneTestJar = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
+                    standaloneAppserverPath = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    standaloneTestJar += ".exe";
+                    standaloneAppserverPath += ".exe";
                 }
 
-                Console.Write("Standalone jar is " + standaloneTestJar);
+                Console.Write("Test Appserver is " + standaloneAppserverPath);
 
-                if (!File.Exists(standaloneTestJar))
+                if (!File.Exists(standaloneAppserverPath))
                 {
                     throw new FileNotFoundException(
                         string.Format(
-                            "Test webserver jar at {0} didn't exist. Project root is {2}. Please build it using something like {1}.",
-                            standaloneTestJar,
-                            "bazel build //java/test/org/openqa/selenium/environment:appserver_deploy.jar",
+                            "Test Appserver at {0} didn't exist. Project root is {2}. Please build it using something like {1}.",
+                            standaloneAppserverPath,
+                            "bazel build //java/test/org/openqa/selenium/environment:appserver",
                             projectRootPath));
                 }
 
-                //List<string> javaSystemProperties = new List<string>();
-
                 StringBuilder processArgsBuilder = new StringBuilder();
-                // foreach (string systemProperty in javaSystemProperties)
-                // {
-                //     if (processArgsBuilder.Length > 0)
-                //     {
-                //         processArgsBuilder.Append(" ");
-                //     }
-                //
-                //     processArgsBuilder.AppendFormat("-D{0}", systemProperty);
-                // }
-                //
-                // if (processArgsBuilder.Length > 0)
-                // {
-                //     processArgsBuilder.Append(" ");
-                // }
-                //
-                // processArgsBuilder.AppendFormat("-jar {0}", standaloneTestJar);
+
                 processArgsBuilder.AppendFormat(" {0}", this.port);
 
                 Console.Write(processArgsBuilder.ToString());
 
                 webserverProcess = new Process();
-                webserverProcess.StartInfo.FileName = standaloneTestJar;
-                // if (!string.IsNullOrEmpty(javaExecutablePath))
-                // {
-                //     webserverProcess.StartInfo.FileName = Path.Combine(javaExecutablePath, javaExecutableName);
-                // }
-                // else
-                // {
-                //     webserverProcess.StartInfo.FileName = javaExecutableName;
-                // }
+                webserverProcess.StartInfo.FileName = standaloneAppserverPath;
 
                 webserverProcess.StartInfo.Arguments = processArgsBuilder.ToString();
                 webserverProcess.StartInfo.WorkingDirectory = projectRootPath;
                 webserverProcess.StartInfo.UseShellExecute = !(hideCommandPrompt || captureWebServerOutput);
                 webserverProcess.StartInfo.CreateNoWindow = hideCommandPrompt;
-                if (!string.IsNullOrEmpty(this.javaHomeDirectory))
-                {
-                    webserverProcess.StartInfo.EnvironmentVariables["JAVA_HOME"] = this.javaHomeDirectory;
-                }
 
                 captureWebServerOutput = true;
 
