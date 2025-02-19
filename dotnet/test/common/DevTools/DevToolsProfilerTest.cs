@@ -109,7 +109,7 @@ namespace OpenQA.Selenium.DevTools
 
             await domains.Profiler.Start();
             startSync.Wait(TimeSpan.FromSeconds(5));
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
 
             ManualResetEventSlim finishSync = new ManualResetEventSlim(false);
             EventHandler<CurrentCdpVersion.Profiler.ConsoleProfileFinishedEventArgs> consoleProfileFinishedHandler = (sender, e) =>

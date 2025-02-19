@@ -19,6 +19,7 @@
 
 using NUnit.Framework;
 using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
 {
@@ -29,13 +30,13 @@ namespace OpenQA.Selenium
         private ISupportsPrint printer;
 
         [SetUp]
-        public void LocalSetUp()
+        public async Task LocalSetUp()
         {
             Assert.That(driver, Is.InstanceOf<ISupportsPrint>(), $"Driver does not support {nameof(ISupportsPrint)}.");
 
             printer = driver as ISupportsPrint;
 
-            driver.Navigate().GoToUrl(this.printPage);
+            await driver.Navigate().GoToUrlAsync(this.printPage);
         }
 
         [Test]

@@ -154,13 +154,13 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        public void ShouldGoToUrlUsingUriAsync()
+        public async Task ShouldGoToUrlUsingUriAsync()
         {
             var navigation = driver.Navigate();
 
-            navigation.GoToUrlAsync(new Uri(macbethPage));
+            await navigation.GoToUrlAsync(new Uri(macbethPage));
             Assert.That(macbethTitle, Is.EqualTo(driver.Title));
-            navigation.GoToUrl(new Uri(simpleTestPage));
+            await navigation.GoToUrlAsync(new Uri(simpleTestPage));
             Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 

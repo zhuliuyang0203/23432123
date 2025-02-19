@@ -20,6 +20,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
 {
@@ -63,7 +64,7 @@ namespace OpenQA.Selenium
 
 
         [Test]
-        public void NoneStrategyShouldNotWaitForPageToRefresh()
+        public async Task NoneStrategyShouldNotWaitForPageToRefresh()
         {
             InitLocalDriver(PageLoadStrategy.None);
 
@@ -73,7 +74,7 @@ namespace OpenQA.Selenium
             WaitFor(() => localDriver.FindElement(By.TagName("body")), TimeSpan.FromSeconds(10), "did not find body");
 
             DateTime start = DateTime.Now;
-            localDriver.Navigate().Refresh();
+            await localDriver.Navigate().RefreshAsync();
             DateTime end = DateTime.Now;
 
             TimeSpan duration = end - start;
@@ -103,7 +104,7 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        public void EagerStrategyShouldNotWaitForResourcesOnRefresh()
+        public async Task EagerStrategyShouldNotWaitForResourcesOnRefresh()
         {
             InitLocalDriver(PageLoadStrategy.Eager);
 
@@ -115,7 +116,7 @@ namespace OpenQA.Selenium
             WaitFor(() => localDriver.FindElement(By.Id("peas")), TimeSpan.FromSeconds(10), "did not find element");
 
             DateTime start = DateTime.Now;
-            localDriver.Navigate().Refresh();
+            await localDriver.Navigate().RefreshAsync();
             // We discard the element, but want a check to make sure the GET actually
             // completed.
             WaitFor(() => localDriver.FindElement(By.Id("peas")), TimeSpan.FromSeconds(10), "did not find element");
@@ -211,24 +212,24 @@ namespace OpenQA.Selenium
 
         [Test]
         [NeedsFreshDriver(IsCreatedBeforeTest = true)]
-        public void ShouldDoNothingIfThereIsNothingToGoBackTo()
+        public async Task ShouldDoNothingIfThereIsNothingToGoBackTo()
         {
             string originalTitle = driver.Title;
             driver.Url = formsPage;
 
-            driver.Navigate().Back();
+            await driver.Navigate().BackAsync();
             // We may have returned to the browser's home page
             string currentTitle = driver.Title;
             Assert.That(currentTitle, Is.EqualTo(originalTitle).Or.EqualTo("We Leave From Here"));
             if (driver.Title == originalTitle)
             {
-                driver.Navigate().Back();
+                await driver.Navigate().BackAsync();
                 Assert.That(driver.Title, Is.EqualTo(originalTitle));
             }
         }
 
         [Test]
-        public void ShouldBeAbleToNavigateBackInTheBrowserHistory()
+        public async Task ShouldBeAbleToNavigateBackInTheBrowserHistory()
         {
             driver.Url = formsPage;
 
@@ -236,13 +237,13 @@ namespace OpenQA.Selenium
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
             Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
 
-            driver.Navigate().Back();
+            await driver.Navigate().BackAsync();
             WaitFor(TitleToBeEqualTo("We Leave From Here"), "Browser title was not 'We Leave From Here'");
             Assert.That(driver.Title, Is.EqualTo("We Leave From Here"));
         }
 
         [Test]
-        public void ShouldBeAbleToNavigateBackInTheBrowserHistoryInPresenceOfIframes()
+        public async Task ShouldBeAbleToNavigateBackInTheBrowserHistoryInPresenceOfIframes()
         {
             driver.Url = xhtmlTestPage;
 
@@ -250,13 +251,13 @@ namespace OpenQA.Selenium
             WaitFor(TitleToBeEqualTo("This page has iframes"), "Browser title was not 'This page has iframes'");
             Assert.That(driver.Title, Is.EqualTo("This page has iframes"));
 
-            driver.Navigate().Back();
+            await driver.Navigate().BackAsync();
             WaitFor(TitleToBeEqualTo("XHTML Test Page"), "Browser title was not 'XHTML Test Page'");
             Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
 
         [Test]
-        public void ShouldBeAbleToNavigateForwardsInTheBrowserHistory()
+        public async Task ShouldBeAbleToNavigateForwardsInTheBrowserHistory()
         {
             driver.Url = formsPage;
 
@@ -264,11 +265,11 @@ namespace OpenQA.Selenium
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
             Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
 
-            driver.Navigate().Back();
+            await driver.Navigate().BackAsync();
             WaitFor(TitleToBeEqualTo("We Leave From Here"), "Browser title was not 'We Leave From Here'");
             Assert.That(driver.Title, Is.EqualTo("We Leave From Here"));
 
-            driver.Navigate().Forward();
+            await driver.Navigate().ForwardAsync();
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
             Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
@@ -287,11 +288,11 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        public void ShouldBeAbleToRefreshAPage()
+        public async Task ShouldBeAbleToRefreshAPage()
         {
             driver.Url = xhtmlTestPage;
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
 
             Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
@@ -326,8 +327,8 @@ namespace OpenQA.Selenium
             long pageLoadTimeBuffer = 10;
             string slowLoadingPageUrl = EnvironmentManager.Instance.UrlBuilder.WhereIs("sleep?time=" + (pageLoadTimeout + pageLoadTimeBuffer));
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(2);
-            AssertPageLoadTimeoutIsEnforced(() => driver.Url = slowLoadingPageUrl, pageLoadTimeout, pageLoadTimeBuffer);
-            AssertPageLoadTimeoutIsEnforced(() => driver.Url = slowLoadingPageUrl, pageLoadTimeout, pageLoadTimeBuffer);
+            AssertPageLoadTimeoutIsEnforced(async () => await driver.Navigate().GoToUrlAsync(slowLoadingPageUrl), pageLoadTimeout, pageLoadTimeBuffer);
+            AssertPageLoadTimeoutIsEnforced(async () => await driver.Navigate().GoToUrlAsync(slowLoadingPageUrl), pageLoadTimeout, pageLoadTimeBuffer);
         }
 
         [Test]
@@ -359,7 +360,7 @@ namespace OpenQA.Selenium
 
             try
             {
-                AssertPageLoadTimeoutIsEnforced(() => link.Click(), 2, 3);
+                AssertPageLoadTimeoutIsEnforced(async () => link.Click(), 2, 3);
             }
             finally
             {
@@ -385,7 +386,7 @@ namespace OpenQA.Selenium
 
             try
             {
-                AssertPageLoadTimeoutIsEnforced(() => driver.Navigate().Refresh(), 2, 4);
+                AssertPageLoadTimeoutIsEnforced(async () => await driver.Navigate().RefreshAsync(), 2, 4);
             }
             finally
             {
@@ -449,12 +450,14 @@ namespace OpenQA.Selenium
             long pageLoadTimeBufferInSeconds = 10;
             string slowLoadingPageUrl = EnvironmentManager.Instance.UrlBuilder.WhereIs("sleep?time=" + (webDriverPageLoadTimeoutInSeconds + pageLoadTimeBufferInSeconds));
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(webDriverPageLoadTimeoutInSeconds);
-            AssertPageLoadTimeoutIsEnforced(() => driver.Url = slowLoadingPageUrl, webDriverPageLoadTimeoutInSeconds, pageLoadTimeBufferInSeconds);
+            AssertPageLoadTimeoutIsEnforced(async () => await driver.Navigate().GoToUrlAsync(slowLoadingPageUrl), webDriverPageLoadTimeoutInSeconds, pageLoadTimeBufferInSeconds);
         }
 
-        private void AssertPageLoadTimeoutIsEnforced(TestDelegate delegateToTest, long webDriverPageLoadTimeoutInSeconds, long pageLoadTimeBufferInSeconds)
+        private void AssertPageLoadTimeoutIsEnforced(AsyncTestDelegate delegateToTest, long webDriverPageLoadTimeoutInSeconds, long pageLoadTimeBufferInSeconds)
         {
             DateTime start = DateTime.Now;
+
+            // TODO in NUnit 4, change this to await Assert.ThatAsync
             Assert.That(delegateToTest, Throws.InstanceOf<WebDriverTimeoutException>(), "I should have timed out after " + webDriverPageLoadTimeoutInSeconds + " seconds");
             DateTime end = DateTime.Now;
             TimeSpan duration = end - start;

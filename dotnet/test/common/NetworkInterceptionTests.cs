@@ -101,7 +101,7 @@ namespace OpenQA.Selenium
                 networkInterceptor.AddResponseHandler(handler);
                 await networkInterceptor.StartMonitoring();
 
-                driver.Navigate().GoToUrl("https://www.selenium.dev");
+                await driver.Navigate().GoToUrlAsync("https://www.selenium.dev");
                 await networkInterceptor.StopMonitoring();
 
                 var body = driver.FindElement(By.TagName("body"));

@@ -521,35 +521,35 @@ namespace OpenQA.Selenium
 
             await jsEngine.StartEventMonitoring();
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             driver.SwitchTo().Alert().Accept();
 
             Assert.That(jsEngine.InitializationScripts, Does.Contain(initScript));
             await jsEngine.RemoveInitializationScript(ScriptName);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
 
             Assert.That(jsEngine.InitializationScripts, Does.Not.Contain(initScript));
 
             await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             driver.SwitchTo().Alert().Accept();
             Assert.That(jsEngine.InitializationScripts, Does.Contain(initScript));
 
             await jsEngine.ClearInitializationScripts();
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
             Assert.That(jsEngine.InitializationScripts, Is.Empty);
 
             await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             driver.SwitchTo().Alert().Accept();
 
             await jsEngine.ClearAll();
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
             Assert.That(jsEngine.InitializationScripts, Is.Empty);
         }
@@ -571,17 +571,17 @@ namespace OpenQA.Selenium
             await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
             await jsEngine.StartEventMonitoring();
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             driver.SwitchTo().Alert().Accept();
 
             await jsEngine.AddScriptCallbackBinding(ScriptName);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
 
             Assert.That(executedBindings, Does.Contain(ScriptName));
             int oldCount = executedBindings.Count;
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
 
             Assert.That(executedBindings, Has.Count.GreaterThan(oldCount));
             Assert.That(jsEngine.ScriptCallbackBindings, Does.Contain(ScriptName));
@@ -595,7 +595,7 @@ namespace OpenQA.Selenium
             Assert.That(jsEngine.ScriptCallbackBindings, Is.Empty);
 
             jsEngine.JavaScriptCallbackExecuted -= AddToList;
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(executedBindings, Has.Count.EqualTo(oldCount));
 
             void AddToList(object sender, JavaScriptCallbackExecutedEventArgs e) => executedBindings.Add(e.BindingName);

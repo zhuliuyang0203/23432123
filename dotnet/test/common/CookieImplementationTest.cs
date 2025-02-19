@@ -24,6 +24,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
 {
@@ -478,14 +479,14 @@ namespace OpenQA.Selenium
         [Test]
         [Ignore("Unable to open secure url")]
         [IgnoreBrowser(Browser.IE, "Browser does not handle untrusted SSL certificates.")]
-        public void CanHandleSecureCookie()
+        public async Task CanHandleSecureCookie()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIsSecure("animals");
 
             Cookie addedCookie = new ReturnedCookie("fish", "cod", null, "/common/animals", null, true, false, null);
             driver.Manage().Cookies.AddCookie(addedCookie);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
 
             Cookie retrieved = driver.Manage().Cookies.GetCookieNamed("fish");
             Assert.That(retrieved, Is.Not.Null);
@@ -494,7 +495,7 @@ namespace OpenQA.Selenium
         [Test]
         [Ignore("Unable to open secure url")]
         [IgnoreBrowser(Browser.IE, "Browser does not handle untrusted SSL certificates.")]
-        public void ShouldRetainCookieSecure()
+        public async Task ShouldRetainCookieSecure()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIsSecure("animals");
 
@@ -502,7 +503,7 @@ namespace OpenQA.Selenium
 
             driver.Manage().Cookies.AddCookie(addedCookie);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
 
             Cookie retrieved = driver.Manage().Cookies.GetCookieNamed("fish");
             Assert.That(retrieved, Is.Not.Null);

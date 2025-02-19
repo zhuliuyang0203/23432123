@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -266,7 +267,7 @@ namespace OpenQA.Selenium.Firefox
         }
 
         [Test]
-        public void ShouldInstallAndUninstallXpiAddon()
+        public async Task ShouldInstallAndUninstallXpiAddon()
         {
             FirefoxDriver firefoxDriver = driver as FirefoxDriver;
 
@@ -280,12 +281,12 @@ namespace OpenQA.Selenium.Firefox
 
             firefoxDriver.UninstallAddOn(id);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
         [Test]
-        public void ShouldInstallAndUninstallUnSignedZipAddon()
+        public async Task ShouldInstallAndUninstallUnSignedZipAddon()
         {
             FirefoxDriver firefoxDriver = driver as FirefoxDriver;
 
@@ -299,12 +300,12 @@ namespace OpenQA.Selenium.Firefox
 
             firefoxDriver.UninstallAddOn(id);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
         [Test]
-        public void ShouldInstallAndUninstallSignedZipAddon()
+        public async Task ShouldInstallAndUninstallSignedZipAddon()
         {
             FirefoxDriver firefoxDriver = driver as FirefoxDriver;
 
@@ -318,12 +319,12 @@ namespace OpenQA.Selenium.Firefox
 
             firefoxDriver.UninstallAddOn(id);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
         [Test]
-        public void ShouldInstallAndUninstallSignedDirAddon()
+        public async Task ShouldInstallAndUninstallSignedDirAddon()
         {
             FirefoxDriver firefoxDriver = driver as FirefoxDriver;
 
@@ -337,12 +338,12 @@ namespace OpenQA.Selenium.Firefox
 
             firefoxDriver.UninstallAddOn(id);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
         [Test]
-        public void ShouldInstallAndUninstallUnSignedDirAddon()
+        public async Task ShouldInstallAndUninstallUnSignedDirAddon()
         {
             FirefoxDriver firefoxDriver = driver as FirefoxDriver;
 
@@ -356,7 +357,7 @@ namespace OpenQA.Selenium.Firefox
 
             firefoxDriver.UninstallAddOn(id);
 
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 

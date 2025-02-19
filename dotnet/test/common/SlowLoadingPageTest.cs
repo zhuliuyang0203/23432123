@@ -19,6 +19,7 @@
 
 using NUnit.Framework;
 using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
 {
@@ -51,7 +52,7 @@ namespace OpenQA.Selenium
 
         [Test]
         [NeedsFreshDriver(IsCreatedBeforeTest = true)]
-        public void RefreshShouldBlockUntilPageLoads()
+        public async Task RefreshShouldBlockUntilPageLoads()
         {
             DateTime start = DateTime.Now;
             driver.Url = sleepingPage + "?time=" + LoadTimeInSeconds.ToString();
@@ -59,7 +60,7 @@ namespace OpenQA.Selenium
             double elapsedTime = now.Subtract(start).TotalSeconds;
             Assert.That(elapsedTime, Is.GreaterThanOrEqualTo(LoadTimeInSeconds));
             start = DateTime.Now;
-            driver.Navigate().Refresh();
+            await driver.Navigate().RefreshAsync();
             now = DateTime.Now;
             elapsedTime = now.Subtract(start).TotalSeconds;
             Assert.That(elapsedTime, Is.GreaterThanOrEqualTo(LoadTimeInSeconds));
