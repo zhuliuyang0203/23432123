@@ -75,6 +75,9 @@ Metrics/PerceivedComplexity:
     - 'lib/selenium/webdriver/common/local_driver.rb'
     - 'lib/selenium/webdriver/common/logger.rb'
 
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
+
 Naming/FileName:
   Exclude:
     - 'lib/selenium-webdriver.rb'
