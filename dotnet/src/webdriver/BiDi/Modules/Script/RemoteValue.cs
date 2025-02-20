@@ -56,7 +56,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 public abstract record RemoteValue
 {
     public static implicit operator int(RemoteValue remoteValue) => (int)((Number)remoteValue).Value;
-    public static implicit operator long(RemoteValue remoteValue) => ((Number)remoteValue).Value;
+    public static implicit operator long(RemoteValue remoteValue) => (long)((Number)remoteValue).Value;
     public static implicit operator string(RemoteValue remoteValue)
     {
         return remoteValue switch
@@ -93,7 +93,7 @@ public abstract record RemoteValue
         throw new BiDiException("Cannot convert .....");
     }
 
-    public record Number(long Value) : PrimitiveProtocolRemoteValue;
+    public record Number(double Value) : PrimitiveProtocolRemoteValue;
 
     public record Boolean(bool Value) : PrimitiveProtocolRemoteValue;
 
