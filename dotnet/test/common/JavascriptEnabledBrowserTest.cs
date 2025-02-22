@@ -52,8 +52,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Not working properly in Chrome")]
-        [IgnoreBrowser(Browser.Edge, "Not working properly in Edge")]
         public void ShouldWaitForLoadsToCompleteAfterJavascriptCausesANewPageToLoad()
         {
             driver.Url = formsPage;
