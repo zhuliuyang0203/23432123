@@ -53,7 +53,7 @@ jobs:
             os: ubuntu
     with:
       name: Unit Tests (${{ matrix.ruby-version }}, ${{ matrix.os }})
-      cache-key: rb-unit-test-${{ matrix.ruby-version }}
+      cache-key: rb-unit-test-${{ matrix.ruby-version }}-${{ matrix.os }}
       os: ${{ matrix.os }}
       ruby-version: ${{ matrix.ruby-version }}
       run: >
@@ -83,7 +83,7 @@ jobs:
     with:
       name: Local Tests (${{ matrix.browser }}, ${{ matrix.os }})
       browser: ${{ matrix.browser }}
-      cache-key: rb-${{ matrix.browser }}-test
+      cache-key: rb-${{ matrix.browser }}-${{ matrix.os }}-test
       os: ${{ matrix.os }}
       run: >
         bazel test
@@ -109,7 +109,7 @@ jobs:
     with:
       name: Remote Tests (${{ matrix.browser }}, ${{ matrix.os }})
       browser: ${{ matrix.browser }}
-      cache-key: rb-remote-${{ matrix.browser }}-test
+      cache-key: rb-remote-${{ matrix.browser }}-${{ matrix.os }}-test
       os: ${{ matrix.os }}
       java-version: 11
       run: >

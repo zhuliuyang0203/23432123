@@ -43,8 +43,8 @@ module Selenium
         @ws.callbacks
       end
 
-      def add_callback(event, &)
-        @ws.add_callback(event, &)
+      def add_callback(event, &block)
+        @ws.add_callback(event, &block)
       end
 
       def remove_callback(event, id)
