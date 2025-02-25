@@ -778,15 +778,8 @@ namespace OpenQA.Selenium
                         case WebDriverResult.ElementNotInteractable:
                             throw new ElementNotInteractableException(errorMessage);
 
-                        case WebDriverResult.ElementNotDisplayed:
-                            throw new ElementNotVisibleException(errorMessage);
-
                         case WebDriverResult.InvalidElementState:
-                        case WebDriverResult.ElementNotSelectable:
                             throw new InvalidElementStateException(errorMessage);
-
-                        case WebDriverResult.NoSuchDocument:
-                            throw new NoSuchElementException(errorMessage);
 
                         case WebDriverResult.Timeout:
                             throw new WebDriverTimeoutException(errorMessage);
