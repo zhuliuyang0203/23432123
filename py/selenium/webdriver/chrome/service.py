@@ -37,7 +37,7 @@ class Service(service.ChromiumService):
 
     def __init__(
         self,
-        executable_path=None,
+        executable_path: Optional[str] = None,
         port: int = 0,
         service_args: Optional[List[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
