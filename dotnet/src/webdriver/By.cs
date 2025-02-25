@@ -37,7 +37,7 @@ namespace OpenQA.Selenium
     /// through static methods of this class. An example of this can be found in OpenQA.Support.ByIdOrName
     /// </remarks>
     [Serializable]
-    public partial class By
+    public class By
     {
         private const string CssSelectorMechanism = "css selector";
         private const string XPathSelectorMechanism = "xpath";
@@ -403,14 +403,6 @@ namespace OpenQA.Selenium
             return escaped;
         }
 
-#if NET8_0_OR_GREATER
-        private static Regex InvalidCharsRegex => InvalidCharsRegexCore();
-
-        [GeneratedRegex(@"([ '""\\#.:;,!?+<>=~*^$|%&@`{}\-/\[\]\(\)])")]
-        private static partial Regex InvalidCharsRegexCore();
-
-#else
-        private static Regex InvalidCharsRegex { get; } = new Regex(@"([ '""\\#.:;,!?+<>=~*^$|%&@`{}\-/\[\]\(\)])", RegexOptions.Compiled);
-#endif
+        private static readonly Regex InvalidCharsRegex = new Regex(@"([ '""\\#.:;,!?+<>=~*^$|%&@`{}\-/\[\]\(\)])", RegexOptions.Compiled);
     }
 }
