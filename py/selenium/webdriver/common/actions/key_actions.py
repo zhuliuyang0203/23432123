@@ -26,7 +26,7 @@ from .wheel_input import WheelInput
 
 class KeyActions(Interaction):
     def __init__(self, source: KeyInput | PointerInput | WheelInput | None = None) -> None:
-        if not source:
+        if source is None:
             source = KeyInput(KEY)
         self.source = source
         super().__init__(source)

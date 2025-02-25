@@ -23,7 +23,7 @@ from .wheel_input import WheelInput
 
 class WheelActions(Interaction):
     def __init__(self, source: Optional[WheelInput] = None):
-        if not source:
+        if source is None:
             source = WheelInput("wheel")
         super().__init__(source)
 
