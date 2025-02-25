@@ -491,7 +491,7 @@ def frame_to_be_available_and_switch_to_it(locator: Union[Tuple[str, str], str, 
 
     Parameters:
     ----------
-    locator : Union[Tuple[str, str], str]
+    locator: Union[Tuple[str, str], str, WebElement]
         Used to find the frame.
 
     Returns:
