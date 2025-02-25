@@ -181,11 +181,6 @@ namespace OpenQA.Selenium
                 throw new ArgumentException("Matcher for response cannot be null", nameof(handler));
             }
 
-            if (handler.ResponseTransformer == null)
-            {
-                throw new ArgumentException("Transformer for response cannot be null", nameof(handler));
-            }
-
             this.responseHandlers.Add(handler);
         }
 
