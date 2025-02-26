@@ -485,13 +485,15 @@ def text_to_be_present_in_element_attribute(
     return _predicate
 
 
-def frame_to_be_available_and_switch_to_it(locator: Union[Tuple[str, str], str]) -> Callable[[WebDriver], bool]:
+def frame_to_be_available_and_switch_to_it(
+    locator: Union[Tuple[str, str], str, WebElement]
+) -> Callable[[WebDriver], bool]:
     """An expectation for checking whether the given frame is available to
     switch to.
 
     Parameters:
     ----------
-    locator : Union[Tuple[str, str], str]
+    locator : Union[Tuple[str, str], str, WebElement]
         Used to find the frame.
 
     Returns:
