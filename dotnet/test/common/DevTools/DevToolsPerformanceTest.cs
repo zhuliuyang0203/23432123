@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.DevTools
 {
-    using CurrentCdpVersion = V132;
+    using CurrentCdpVersion = V133;
 
     [TestFixture]
     public class DevToolsPerformanceTest : DevToolsTestFixture

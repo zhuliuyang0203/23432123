@@ -1381,9 +1381,8 @@ class WebDriver(BaseWebDriver):
         """
         self.execute(Command.SET_USER_VERIFIED, {"authenticatorId": self._authenticator_id, "isUserVerified": verified})
 
-    def get_downloadable_files(self) -> dict:
-        """Retrieves the downloadable files as a map of file names and their
-        corresponding URLs.
+    def get_downloadable_files(self) -> list:
+        """Retrieves the downloadable files as a list of file names.
 
         Example:
         --------

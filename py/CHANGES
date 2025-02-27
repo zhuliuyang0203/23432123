@@ -1,3 +1,12 @@
+Selenium 4.29.0
+* Add CDP for Chrome 133 and remove 130
+* [py] Disable strict time stamps in Firefox profile (#15141)
+* [py] Enhance PrintOptions to support default, predefined, and custom page sizes (#15052) (#15064)
+* [py] Remove Firefox CDP (#15200)
+* [py] Handle named `get_cookie` and `delete_cookie` for None and empty strings (#15073)
+* [py] Document cygwin path for `send_keys` (#15275)
+* [py] Fix return type and docstring of get_downloadable_files (#15292)
+
 Selenium 4.28.1
 * [py] Fix installing most of the data from source distributions
 

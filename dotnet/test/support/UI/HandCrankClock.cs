@@ -1,3 +1,4 @@
+// <copyright file="HandCrankClock.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -14,16 +15,31 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+// </copyright>
 
-package org.openqa.selenium.devtools.v130;
+using System;
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
+namespace OpenQA.Selenium.Support.UI
+{
+    public class HandCrankClock : IClock
+    {
+        private DateTime fakeNow = new DateTime(50000);
+        public DateTime Now => fakeNow;
 
-@AutoService(CdpInfo.class)
-public class v130CdpInfo extends CdpInfo {
+        public DateTime LaterBy(TimeSpan delay)
+        {
+            return Now + delay;
 
-  public v130CdpInfo() {
-    super(130, v130Domains::new);
-  }
+        }
+
+        public bool IsNowBefore(DateTime otherDateTime)
+        {
+            return Now < otherDateTime;
+        }
+
+        public void MoveTime(TimeSpan timespan)
+        {
+            fakeNow = fakeNow + timespan;
+        }
+    }
 }

@@ -28,6 +28,8 @@ module Selenium
 
         def provide_response: -> Hash[nil, nil]
 
+        def set_cache_behavior: (String behavior, Array[BrowsingContext]) -> Hash[nil, nil]
+
         def on: (Symbol event) { (?) -> untyped } -> Hash[nil, nil]
       end
     end

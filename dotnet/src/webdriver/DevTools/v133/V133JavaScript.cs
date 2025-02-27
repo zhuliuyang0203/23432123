@@ -1,4 +1,4 @@
-// <copyright file="V130JavaScript.cs" company="Selenium Committers">
+// <copyright file="V133JavaScript.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,31 +17,31 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V130.Page;
-using OpenQA.Selenium.DevTools.V130.Runtime;
+using OpenQA.Selenium.DevTools.V133.Page;
+using OpenQA.Selenium.DevTools.V133.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 #nullable enable
 
-namespace OpenQA.Selenium.DevTools.V130
+namespace OpenQA.Selenium.DevTools.V133
 {
     /// <summary>
-    /// Class containing the JavaScript implementation for version 130 of the DevTools Protocol.
+    /// Class containing the JavaScript implementation for version 133 of the DevTools Protocol.
     /// </summary>
-    public class V130JavaScript : JavaScript
+    public class V133JavaScript : JavaScript
     {
         private readonly RuntimeAdapter runtime;
         private readonly PageAdapter page;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V130JavaScript"/> class.
+        /// Initializes a new instance of the <see cref="V133JavaScript"/> class.
         /// </summary>
         /// <param name="runtime">The DevTools Protocol adapter for the Runtime domain.</param>
         /// <param name="page">The DevTools Protocol adapter for the Page domain.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="runtime"/> or <paramref name="page"/> are <see langword="null"/>.</exception>
-        public V130JavaScript(RuntimeAdapter runtime, PageAdapter page)
+        public V133JavaScript(RuntimeAdapter runtime, PageAdapter page)
         {
             this.runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
             this.page = page ?? throw new ArgumentNullException(nameof(page));

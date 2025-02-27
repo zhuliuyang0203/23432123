@@ -1,4 +1,3 @@
-// <copyright file="FakeClock.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -15,40 +14,31 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// </copyright>
 
-using System;
+package org.openqa.selenium.bidi.browser;
 
-namespace OpenQA.Selenium.Support.UI
-{
+public enum ClientWindowState {
+  FULLSCREEN("fullscreen"),
+  MAXIMIZED("maximized"),
+  MINIMIZED("minimized"),
+  NORMAL("normal");
 
-    public class FakeClock : IClock
-    {
+  private final String state;
 
-        private DateTime fakeNow = new DateTime(50000);
-        public DateTime Now
-        {
-            get
-            {
-                return fakeNow;
-            }
-        }
+  ClientWindowState(String state) {
+    this.state = state;
+  }
 
-        public DateTime LaterBy(TimeSpan delay)
-        {
-            return Now + delay;
+  public String toString() {
+    return state;
+  }
 
-        }
-
-        public bool IsNowBefore(DateTime otherDateTime)
-        {
-            return Now < otherDateTime;
-        }
-
-        public void TimePasses(TimeSpan timespan)
-        {
-            fakeNow = fakeNow + timespan;
-        }
+  public static ClientWindowState fromString(String state) {
+    for (ClientWindowState windowState : values()) {
+      if (windowState.state.equals(state)) {
+        return windowState;
+      }
     }
-
+    throw new IllegalArgumentException("Invalid window state: " + state);
+  }
 }

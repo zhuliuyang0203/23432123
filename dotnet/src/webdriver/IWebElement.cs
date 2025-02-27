@@ -104,7 +104,6 @@ namespace OpenQA.Selenium
         /// <see cref="Keys"/>.</remarks>
         /// <seealso cref="Keys"/>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void SendKeys(string text);
 
@@ -134,7 +133,6 @@ namespace OpenQA.Selenium
         /// simulate a users to accidentally missing the target when clicking.
         /// </para>
         /// </remarks>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void Click();
 

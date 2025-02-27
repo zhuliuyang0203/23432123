@@ -31,7 +31,7 @@ internal record CallFunctionCommandParameters(string FunctionDeclaration, bool A
 
 public record CallFunctionOptions : CommandOptions
 {
-    public IEnumerable<LocalValue?>? Arguments { get; set; }
+    public IEnumerable<LocalValue>? Arguments { get; set; }
 
     public ResultOwnership? ResultOwnership { get; set; }
 

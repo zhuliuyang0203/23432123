@@ -70,7 +70,7 @@
     <None Include="$(BaseSeleniumManagerPath)\windows\selenium-manager.exe" Pack="true" PackagePath="manager\windows" Visible="false" />
   </ItemGroup>
 
-  <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="PrepareForBuild">
+  <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="BeforeBuild">
     <Exec Command="bazel build //dotnet/src/webdriver:manager-linux //dotnet/src/webdriver:manager-windows //dotnet/src/webdriver:manager-macos" WorkingDirectory="../../.." />
 
     <PropertyGroup>
@@ -78,7 +78,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="GenerateAtoms" BeforeTargets="PrepareForBuild">
+  <Target Name="GenerateAtoms" BeforeTargets="BeforeBuild">
     <Exec Command="bazel build //javascript/webdriver/atoms:get-attribute.js //javascript/atoms/fragments:is-displayed.js //javascript/atoms/fragments:find-elements.js" WorkingDirectory="../../.." />
 
     <ItemGroup>

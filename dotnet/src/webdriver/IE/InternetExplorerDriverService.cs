@@ -138,20 +138,22 @@ namespace OpenQA.Selenium.IE
         /// </summary>
         /// <param name="driverPath">The path to the executable or the directory containing the <c>IEDriverServer</c> executable.</param>
         /// <returns>A InternetExplorerDriverService using a random port.</returns>
-        public static InternetExplorerDriverService CreateDefaultService(string driverPath)
+        public static InternetExplorerDriverService CreateDefaultService(string? driverPath)
         {
-            string fileName;
             if (File.Exists(driverPath))
             {
-                fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath)!;
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
             }
             else
             {
-                fileName = InternetExplorerDriverServiceFileName;
-            }
+                string fileName = InternetExplorerDriverServiceFileName;
+                string? driverFolder = driverPath;
 
-            return CreateDefaultService(driverPath, fileName);
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -160,7 +162,7 @@ namespace OpenQA.Selenium.IE
         /// <param name="driverPath">The directory containing the <c>IEDriverServer</c> executable.</param>
         /// <param name="driverExecutableFileName">The name of the <c>IEDriverServer</c> executable file.</param>
         /// <returns>A InternetExplorerDriverService using a random port.</returns>
-        public static InternetExplorerDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static InternetExplorerDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new InternetExplorerDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }

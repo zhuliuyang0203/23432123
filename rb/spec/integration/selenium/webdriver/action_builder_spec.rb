@@ -317,7 +317,7 @@ module Selenium
       end
 
       describe '#scroll_by' do
-        it 'scrolls by given amount' do
+        it 'scrolls by given amount', except: {browser: :firefox, reason: 'returns false on firefox'} do
           driver.navigate.to url_for('scrolling_tests/frame_with_nested_scrolling_frame_out_of_view.html')
           footer = driver.find_element(tag_name: 'footer')
           delta_y = footer.rect.y.round
