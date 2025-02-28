@@ -38,6 +38,9 @@ namespace OpenQA.Selenium
     /// </summary>
     public static class SeleniumManager
     {
+        internal const string DriverPath = "driver_path";
+        internal const string BrowserPath = "browser_path";
+
         private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
         private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
@@ -80,7 +83,7 @@ namespace OpenQA.Selenium
         /// <returns>
         /// An array with two entries, one for the driver path, and another one for the browser path.
         /// </returns>
-        public static SeleniumManagerPaths BinaryPaths(string arguments)
+        public static Dictionary<string, string> BinaryPaths(string arguments)
         {
             StringBuilder argsBuilder = new StringBuilder(arguments);
             argsBuilder.Append(" --language-binding csharp");
@@ -90,12 +93,17 @@ namespace OpenQA.Selenium
                 argsBuilder.Append(" --debug");
             }
 
-            var binaryPaths = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
+            var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
+            Dictionary<string, string> binaryPaths = new()
+            {
+                { BrowserPath, smCommandResult.BrowserPath },
+                { DriverPath, smCommandResult.DriverPath }
+            };
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"Driver path: {binaryPaths.DriverPath}");
-                _logger.Trace($"Browser path: {binaryPaths.BrowserPath}");
+                _logger.Trace($"Driver path: {binaryPaths[DriverPath]}");
+                _logger.Trace($"Browser path: {binaryPaths[BrowserPath]}");
             }
 
             return binaryPaths;
@@ -109,7 +117,7 @@ namespace OpenQA.Selenium
         /// <returns>
         /// the standard output of the execution.
         /// </returns>
-        private static SeleniumManagerPaths RunCommand(string fileName, string arguments)
+        private static ResultResponse RunCommand(string fileName, string arguments)
         {
             Process process = new Process();
             process.StartInfo.FileName = _lazyBinaryFullPath.Value;
@@ -203,23 +211,19 @@ namespace OpenQA.Selenium
         }
     }
 
-    internal sealed record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, SeleniumManagerPaths Result)
+    internal sealed record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
     {
         public sealed record LogEntryResponse(string Level, string Message);
+
+        internal sealed record ResultResponse
+        (
+            [property: JsonPropertyName("driver_path")]
+            string DriverPath,
+            [property: JsonPropertyName("browser_path")]
+            string BrowserPath
+        );
     }
 
-    /// <summary>
-    /// Response from Selenium Manager about the paths and their locations.
-    /// </summary>
-    /// <param name="DriverPath">The path to the driver binary.</param>
-    /// <param name="BrowserPath">The path to the browser binary, or <see cref="string.Empty"/> if none exists.</param>
-    public sealed record SeleniumManagerPaths
-    (
-        [property: JsonPropertyName("driver_path")]
-            string DriverPath,
-        [property: JsonPropertyName("browser_path")]
-            string BrowserPath
-    );
 
     [JsonSerializable(typeof(SeleniumManagerResponse))]
     [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]

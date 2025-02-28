@@ -18,6 +18,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -34,7 +35,7 @@ namespace OpenQA.Selenium
     public class DriverFinder
     {
         private readonly DriverOptions options;
-        private SeleniumManagerPaths? paths;
+        private Dictionary<string, string>? paths;
         private const string BrowserPathKey = "browser_path";
         private const string DriverPathKey = "driver_path";
 
@@ -55,7 +56,7 @@ namespace OpenQA.Selenium
         /// </returns>
         public string GetBrowserPath()
         {
-            return BinaryPaths().BrowserPath;
+            return BinaryPaths()[SeleniumManager.BrowserPath];
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace OpenQA.Selenium
         /// </returns>
         public string GetDriverPath()
         {
-            return BinaryPaths().DriverPath;
+            return BinaryPaths()[SeleniumManager.DriverPath];
         }
 
         /// <summary>
@@ -103,16 +104,16 @@ namespace OpenQA.Selenium
         /// A Dictionary with the validated browser and driver path.
         /// </returns>
         /// <exception cref="NoSuchDriverException">If one of the paths does not exist.</exception>
-        private SeleniumManagerPaths BinaryPaths()
+        private Dictionary<string, string> BinaryPaths()
         {
-            if (paths is not null && !string.IsNullOrWhiteSpace(paths.DriverPath))
+            if (paths is not null && !string.IsNullOrWhiteSpace(paths[SeleniumManager.DriverPath]))
             {
                 return paths;
             }
 
-            SeleniumManagerPaths binaryPaths = SeleniumManager.BinaryPaths(CreateArguments());
-            string driverPath = binaryPaths.DriverPath;
-            string browserPath = binaryPaths.BrowserPath;
+            Dictionary<string, string> binaryPaths = SeleniumManager.BinaryPaths(CreateArguments());
+            string driverPath = binaryPaths[SeleniumManager.DriverPath];
+            string browserPath = binaryPaths[SeleniumManager.BrowserPath];
 
             if (File.Exists(driverPath))
             {
