@@ -215,7 +215,7 @@ namespace OpenQA.Selenium
     {
         public sealed record LogEntryResponse(string Level, string Message);
 
-        internal sealed record ResultResponse
+        public sealed record ResultResponse
         (
             [property: JsonPropertyName(SeleniumManager.DriverPathKey)]
             string DriverPath,
@@ -223,7 +223,6 @@ namespace OpenQA.Selenium
             string BrowserPath
         );
     }
-
 
     [JsonSerializable(typeof(SeleniumManagerResponse))]
     [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
