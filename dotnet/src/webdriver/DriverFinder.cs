@@ -54,7 +54,7 @@ namespace OpenQA.Selenium
         /// </returns>
         public string GetBrowserPath()
         {
-            return BinaryPaths()[SeleniumManager.BrowserPath];
+            return BinaryPaths()[SeleniumManager.BrowserPathKey];
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace OpenQA.Selenium
         /// </returns>
         public string GetDriverPath()
         {
-            return BinaryPaths()[SeleniumManager.DriverPath];
+            return BinaryPaths()[SeleniumManager.DriverPathKey];
         }
 
         /// <summary>
@@ -104,14 +104,14 @@ namespace OpenQA.Selenium
         /// <exception cref="NoSuchDriverException">If one of the paths does not exist.</exception>
         private Dictionary<string, string> BinaryPaths()
         {
-            if (paths is not null && !string.IsNullOrWhiteSpace(paths[SeleniumManager.DriverPath]))
+            if (paths is not null && !string.IsNullOrWhiteSpace(paths[SeleniumManager.DriverPathKey]))
             {
                 return paths;
             }
 
             Dictionary<string, string> binaryPaths = SeleniumManager.BinaryPaths(CreateArguments());
-            string driverPath = binaryPaths[SeleniumManager.DriverPath];
-            string browserPath = binaryPaths[SeleniumManager.BrowserPath];
+            string driverPath = binaryPaths[SeleniumManager.DriverPathKey];
+            string browserPath = binaryPaths[SeleniumManager.BrowserPathKey];
 
             if (File.Exists(driverPath))
             {

@@ -38,8 +38,8 @@ namespace OpenQA.Selenium
     /// </summary>
     public static class SeleniumManager
     {
-        internal const string DriverPath = "driver_path";
-        internal const string BrowserPath = "browser_path";
+        internal const string DriverPathKey = "driver_path";
+        internal const string BrowserPathKey = "browser_path";
 
         private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
@@ -96,14 +96,14 @@ namespace OpenQA.Selenium
             var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
             Dictionary<string, string> binaryPaths = new()
             {
-                { BrowserPath, smCommandResult.BrowserPath },
-                { DriverPath, smCommandResult.DriverPath }
+                { BrowserPathKey, smCommandResult.BrowserPath },
+                { DriverPathKey, smCommandResult.DriverPath }
             };
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"Driver path: {binaryPaths[DriverPath]}");
-                _logger.Trace($"Browser path: {binaryPaths[BrowserPath]}");
+                _logger.Trace($"Driver path: {binaryPaths[DriverPathKey]}");
+                _logger.Trace($"Browser path: {binaryPaths[BrowserPathKey]}");
             }
 
             return binaryPaths;
@@ -217,9 +217,9 @@ namespace OpenQA.Selenium
 
         internal sealed record ResultResponse
         (
-            [property: JsonPropertyName(SeleniumManager.DriverPath)]
+            [property: JsonPropertyName(SeleniumManager.DriverPathKey)]
             string DriverPath,
-            [property: JsonPropertyName(SeleniumManager.BrowserPath)]
+            [property: JsonPropertyName(SeleniumManager.BrowserPathKey)]
             string BrowserPath
         );
     }
