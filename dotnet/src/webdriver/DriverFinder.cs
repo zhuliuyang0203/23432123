@@ -35,7 +35,7 @@ namespace OpenQA.Selenium
     public class DriverFinder
     {
         private readonly DriverOptions options;
-        private Dictionary<string, string>? paths;
+        private Dictionary<string, string> paths = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DriverFinder"/> class.
@@ -104,7 +104,7 @@ namespace OpenQA.Selenium
         /// <exception cref="NoSuchDriverException">If one of the paths does not exist.</exception>
         private Dictionary<string, string> BinaryPaths()
         {
-            if (paths is not null && !string.IsNullOrWhiteSpace(paths[SeleniumManager.DriverPathKey]))
+            if (paths.ContainsKey(SeleniumManager.DriverPathKey) && !string.IsNullOrWhiteSpace(paths[SeleniumManager.DriverPathKey]))
             {
                 return paths;
             }
@@ -115,18 +115,23 @@ namespace OpenQA.Selenium
 
             if (File.Exists(driverPath))
             {
+                paths.Add(SeleniumManager.DriverPathKey, driverPath);
             }
             else
             {
                 throw new NoSuchDriverException($"The driver path is not a valid file: {driverPath}");
             }
 
-            if (!File.Exists(browserPath))
+            if (File.Exists(browserPath))
+            {
+                paths.Add(SeleniumManager.BrowserPathKey, browserPath);
+            }
+            else
             {
                 throw new NoSuchDriverException($"The browser path is not a valid file: {browserPath}");
             }
 
-            return paths = binaryPaths;
+            return paths;
         }
 
         /// <summary>
