@@ -29,6 +29,11 @@ namespace OpenQA.Selenium.Support.UI
     public class SystemClock : IClock
     {
         /// <summary>
+        /// An instance of the <see cref="SystemClock"/> type.
+        /// </summary>
+        public static SystemClock Instance { get; } = new();
+
+        /// <summary>
         /// Gets the current date and time values.
         /// </summary>
         public DateTime Now => DateTime.Now;

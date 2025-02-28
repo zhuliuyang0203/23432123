@@ -55,11 +55,12 @@ namespace OpenQA.Selenium
         /// <param name="sessionId">Session ID the driver is using</param>
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         public Command(SessionId? sessionId, string name, Dictionary<string, object>? parameters)
         {
             this.SessionId = sessionId;
             this.Parameters = parameters ?? new Dictionary<string, object>();
-            this.Name = name;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>

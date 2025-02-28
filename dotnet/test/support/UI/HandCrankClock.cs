@@ -1,4 +1,4 @@
-// <copyright file="FakeClock.cs" company="Selenium Committers">
+// <copyright file="HandCrankClock.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -21,18 +21,10 @@ using System;
 
 namespace OpenQA.Selenium.Support.UI
 {
-
-    public class FakeClock : IClock
+    public class HandCrankClock : IClock
     {
-
         private DateTime fakeNow = new DateTime(50000);
-        public DateTime Now
-        {
-            get
-            {
-                return fakeNow;
-            }
-        }
+        public DateTime Now => fakeNow;
 
         public DateTime LaterBy(TimeSpan delay)
         {
@@ -45,10 +37,9 @@ namespace OpenQA.Selenium.Support.UI
             return Now < otherDateTime;
         }
 
-        public void TimePasses(TimeSpan timespan)
+        public void MoveTime(TimeSpan timespan)
         {
             fakeNow = fakeNow + timespan;
         }
     }
-
 }
