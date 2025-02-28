@@ -105,7 +105,7 @@ namespace OpenQA.Selenium
         /// <exception cref="NoSuchDriverException">If one of the paths does not exist.</exception>
         private SeleniumManagerPaths BinaryPaths()
         {
-            if (paths is not null)
+            if (paths is not null && !string.IsNullOrWhiteSpace(paths.DriverPath))
             {
                 return paths;
             }
