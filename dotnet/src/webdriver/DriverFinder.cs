@@ -114,18 +114,12 @@ namespace OpenQA.Selenium
             string driverPath = binaryPaths.DriverPath;
             string browserPath = binaryPaths.BrowserPath;
 
-            if (File.Exists(driverPath))
-            {
-            }
-            else
+            if (!File.Exists(driverPath))
             {
                 throw new NoSuchDriverException($"The driver path is not a valid file: {driverPath}");
             }
 
-            if (File.Exists(browserPath))
-            {
-            }
-            else
+            if (!File.Exists(browserPath))
             {
                 throw new NoSuchDriverException($"The browser path is not a valid file: {browserPath}");
             }
