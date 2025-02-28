@@ -289,7 +289,7 @@ namespace OpenQA.Selenium.Firefox
 
             if (!string.IsNullOrEmpty(this.BinaryLocation))
             {
-                firefoxOptions[FirefoxBinaryCapability] = this.BinaryLocation;
+                firefoxOptions[FirefoxBinaryCapability] = this.BinaryLocation!;
             }
 
             if (this.LogLevel != FirefoxDriverLogLevel.Default)
@@ -345,12 +345,12 @@ namespace OpenQA.Selenium.Firefox
 
             if (!string.IsNullOrEmpty(androidOptions.AndroidDeviceSerial))
             {
-                firefoxOptions["androidDeviceSerial"] = androidOptions.AndroidDeviceSerial;
+                firefoxOptions["androidDeviceSerial"] = androidOptions.AndroidDeviceSerial!;
             }
 
             if (!string.IsNullOrEmpty(androidOptions.AndroidActivity))
             {
-                firefoxOptions["androidActivity"] = androidOptions.AndroidActivity;
+                firefoxOptions["androidActivity"] = androidOptions.AndroidActivity!;
             }
 
             if (androidOptions.AndroidIntentArguments.Count > 0)

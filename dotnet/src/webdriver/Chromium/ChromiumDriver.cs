@@ -299,6 +299,8 @@ namespace OpenQA.Selenium.Chromium
         /// Creates a session to communicate with a browser using the Chromium Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession()
         {
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = DevToolsSession.AutoDetectDevToolsProtocolVersion });
@@ -308,6 +310,8 @@ namespace OpenQA.Selenium.Chromium
         /// Creates a session to communicate with a browser using the Chromium Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(DevToolsOptions options)
         {
             if (this.devToolsSession == null)
@@ -330,7 +334,7 @@ namespace OpenQA.Selenium.Chromium
 
                 try
                 {
-                    DevToolsSession session = new DevToolsSession(debuggerAddress?.ToString(), options);
+                    DevToolsSession session = new DevToolsSession(debuggerAddress?.ToString()!, options);
                     Task.Run(async () => await session.StartSession()).GetAwaiter().GetResult();
                     this.devToolsSession = session;
                 }
@@ -349,6 +353,8 @@ namespace OpenQA.Selenium.Chromium
         /// <param name="devToolsProtocolVersion">The version of the Chromium Developer Tools protocol to use. Defaults to autodetect the protocol version.</param>
         /// <returns>The active session to use to communicate with the Chromium Developer Tools debugging protocol.</returns>
         [Obsolete("Use GetDevToolsSession(DevToolsOptions options)")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(int devToolsProtocolVersion)
         {
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = devToolsProtocolVersion });

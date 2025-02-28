@@ -318,7 +318,6 @@ namespace OpenQA.Selenium
         /// behavior.
         /// </remarks>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual void Click()
         {
@@ -580,7 +579,6 @@ namespace OpenQA.Selenium
         /// <see cref="Keys"/>.</remarks>
         /// <seealso cref="Keys"/>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual void SendKeys(string text)
         {

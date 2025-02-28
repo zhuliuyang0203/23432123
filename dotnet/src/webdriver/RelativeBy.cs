@@ -24,6 +24,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -31,16 +33,16 @@ namespace OpenQA.Selenium
     /// </summary>
     public class RelativeBy : By
     {
-        private string wrappedAtom;
-        private object root;
-        private List<object> filters = new List<object>();
+        private readonly string wrappedAtom;
+        private readonly object root;
+        private readonly List<object> filters = new List<object>();
 
         /// <summary>
         /// Prevents a default instance of the <see cref="RelativeBy"/> class.
         /// </summary>
         protected RelativeBy() : base()
         {
-            string atom = string.Empty;
+            string atom;
             using (Stream atomStream = ResourceUtilities.GetResourceStream("find-elements.js", "find-elements.js"))
             {
                 using (StreamReader atomReader = new StreamReader(atomStream))
@@ -52,15 +54,11 @@ namespace OpenQA.Selenium
             wrappedAtom = string.Format(CultureInfo.InvariantCulture, "/* findElements */return ({0}).apply(null, arguments);", atom);
         }
 
-        private RelativeBy(object root) : this(root, null)
+        private RelativeBy(object root, List<object>? filters = null) : this()
         {
-        }
+            this.root = GetSerializableRoot(root);
 
-        private RelativeBy(object root, List<object> filters) : this()
-        {
-            this.root = this.GetSerializableRoot(root);
-
-            if (filters != null && filters.Count > 0)
+            if (filters != null)
             {
                 this.filters.AddRange(filters);
             }
@@ -71,6 +69,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">A By object that will be used to find the initial element.</param>
         /// <returns>A <see cref="RelativeBy"/> object to be used in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by"/> is null.</exception>
         public static RelativeBy WithLocator(By by)
         {
             return new RelativeBy(by);
@@ -82,6 +81,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="context">An <see cref="ISearchContext"/> object to use to search for the elements.</param>
         /// <returns>The first matching <see cref="IWebElement"/> on the current context.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="context"/> is not <see cref="IJavaScriptExecutor"/> or wraps a driver that does.</exception>
         public override IWebElement FindElement(ISearchContext context)
         {
             ReadOnlyCollection<IWebElement> elements = FindElements(context);
@@ -99,12 +99,13 @@ namespace OpenQA.Selenium
         /// <param name="context">An <see cref="ISearchContext"/> object to use to search for the elements.</param>
         /// <returns>A <see cref="ReadOnlyCollection{T}"/> of all <see cref="IWebElement">WebElements</see>
         /// matching the current criteria, or an empty list if nothing matches.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="context"/> is not <see cref="IJavaScriptExecutor"/> or wraps a driver that does.</exception>
         public override ReadOnlyCollection<IWebElement> FindElements(ISearchContext context)
         {
             IJavaScriptExecutor js = GetExecutor(context);
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             Dictionary<string, object> filterParameters = new Dictionary<string, object>();
-            filterParameters["root"] = this.GetSerializableObject(this.root);
+            filterParameters["root"] = GetSerializableObject(this.root);
             filterParameters["filters"] = this.filters;
             parameters["relative"] = filterParameters;
             object rawElements = js.ExecuteScript(wrappedAtom, parameters);
@@ -137,6 +138,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="element">The element to look above for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
         public RelativeBy Above(IWebElement element)
         {
             if (element == null)
@@ -152,6 +154,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="locator">The locator describing the element to look above for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
         public RelativeBy Above(By locator)
         {
             if (locator == null)
@@ -167,6 +170,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="element">The element to look below for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
         public RelativeBy Below(IWebElement element)
         {
             if (element == null)
@@ -182,6 +186,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="locator">The locator describing the element to look below for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
         public RelativeBy Below(By locator)
         {
             if (locator == null)
@@ -197,6 +202,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="element">The element to look to the left of for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
         public RelativeBy LeftOf(IWebElement element)
         {
             if (element == null)
@@ -212,6 +218,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="locator">The locator describing the element to look to the left of for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
         public RelativeBy LeftOf(By locator)
         {
             if (locator == null)
@@ -227,6 +234,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="element">The element to look to the right of for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
         public RelativeBy RightOf(IWebElement element)
         {
             if (element == null)
@@ -242,6 +250,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="locator">The locator describing the element to look to the right of for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
         public RelativeBy RightOf(By locator)
         {
             if (locator == null)
@@ -257,6 +266,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="element">The element to look near for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
         public RelativeBy Near(IWebElement element)
         {
             return Near(element, 50);
@@ -268,6 +278,8 @@ namespace OpenQA.Selenium
         /// <param name="element">The element to look near for elements.</param>
         /// <param name="atMostDistanceInPixels">The maximum distance from the element to be considered "near."</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="element"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="atMostDistanceInPixels"/> is not a positive value.</exception>
         public RelativeBy Near(IWebElement element, int atMostDistanceInPixels)
         {
             return Near((object)element, atMostDistanceInPixels);
@@ -278,6 +290,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="locator">The locator describing the element to look near for elements.</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
         public RelativeBy Near(By locator)
         {
             return Near(locator, 50);
@@ -289,6 +302,8 @@ namespace OpenQA.Selenium
         /// <param name="locator">The locator describing the element to look near for elements.</param>
         /// <param name="atMostDistanceInPixels">The maximum distance from the element to be considered "near."</param>
         /// <returns>A <see cref="RelativeBy"/> object for use in finding the elements.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="locator"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="atMostDistanceInPixels"/> is not a positive value.</exception>
         public RelativeBy Near(By locator, int atMostDistanceInPixels)
         {
             return Near((object)locator, atMostDistanceInPixels);
@@ -303,7 +318,7 @@ namespace OpenQA.Selenium
 
             if (atMostDistanceInPixels <= 0)
             {
-                throw new ArgumentException("Distance must be greater than zero", nameof(atMostDistanceInPixels));
+                throw new ArgumentOutOfRangeException(nameof(atMostDistanceInPixels), "Distance must be greater than zero");
             }
 
             Dictionary<string, object> filter = new Dictionary<string, object>();
@@ -334,27 +349,24 @@ namespace OpenQA.Selenium
             return new RelativeBy(this.root, this.filters);
         }
 
-        private object GetSerializableRoot(object toSerialize)
+        private static object GetSerializableRoot(object root)
         {
-            if (toSerialize == null)
+            if (root == null)
             {
-                throw new ArgumentNullException(nameof(toSerialize), "object to serialize must not be null");
+                throw new ArgumentNullException(nameof(root), "object to serialize must not be null");
             }
 
-            By asBy = toSerialize as By;
-            if (asBy != null)
+            if (root is By asBy)
             {
                 return asBy;
             }
 
-            IWebElement element = toSerialize as IWebElement;
-            if (element != null)
+            if (root is IWebElement element)
             {
                 return element;
             }
 
-            IWrapsElement wrapper = toSerialize as IWrapsElement;
-            if (wrapper != null)
+            if (root is IWrapsElement wrapper)
             {
                 return wrapper.WrappedElement;
             }
@@ -362,29 +374,26 @@ namespace OpenQA.Selenium
             throw new WebDriverException("Serializable locator must be a By, an IWebElement, or a wrapped element using IWrapsElement");
         }
 
-        private object GetSerializableObject(object toSerialize)
+        private static object GetSerializableObject(object root)
         {
-            if (toSerialize == null)
+            if (root == null)
             {
-                throw new ArgumentNullException(nameof(toSerialize), "object to serialize must not be null");
+                throw new ArgumentNullException(nameof(root), "object to serialize must not be null");
             }
 
-            By asBy = toSerialize as By;
-            if (asBy != null)
+            if (root is By asBy)
             {
                 Dictionary<string, object> serializedBy = new Dictionary<string, object>();
                 serializedBy[asBy.Mechanism] = asBy.Criteria;
                 return serializedBy;
             }
 
-            IWebElement element = toSerialize as IWebElement;
-            if (element != null)
+            if (root is IWebElement element)
             {
                 return element;
             }
 
-            IWrapsElement wrapper = toSerialize as IWrapsElement;
-            if (wrapper != null)
+            if (root is IWrapsElement wrapper)
             {
                 return wrapper.WrappedElement;
             }
@@ -392,15 +401,15 @@ namespace OpenQA.Selenium
             throw new WebDriverException("Serializable locator must be a By, an IWebElement, or a wrapped element using IWrapsElement");
         }
 
-        private IJavaScriptExecutor GetExecutor(ISearchContext context)
+        private static IJavaScriptExecutor GetExecutor(ISearchContext context)
         {
-            IJavaScriptExecutor executor = context as IJavaScriptExecutor;
+            IJavaScriptExecutor? executor = context as IJavaScriptExecutor;
             if (executor != null)
             {
                 return executor;
             }
 
-            IWrapsDriver current = context as IWrapsDriver;
+            IWrapsDriver? current = context as IWrapsDriver;
             while (current != null)
             {
                 IWebDriver driver = current.WrappedDriver;
@@ -415,7 +424,7 @@ namespace OpenQA.Selenium
 
             if (executor == null)
             {
-                throw new ArgumentException("Search context must support JavaScript or IWrapsDriver where the wrappted driver supports JavaScript", nameof(context));
+                throw new ArgumentException("Search context must support JavaScript or IWrapsDriver where the wrapped driver supports JavaScript", nameof(context));
             }
 
             return executor;

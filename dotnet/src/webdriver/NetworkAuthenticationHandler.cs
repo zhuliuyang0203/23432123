@@ -18,6 +18,9 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -30,12 +33,14 @@ namespace OpenQA.Selenium
         /// Gets or sets a function that takes a <see cref="Uri"/> object, and returns a
         /// value indicating whether the supplied URI matches the specified criteria.
         /// </summary>
-        public Func<Uri, bool> UriMatcher { get; set; }
+        [DisallowNull]
+        public Func<Uri, bool>? UriMatcher { get; set; }
 
         /// <summary>
         /// Gets or sets the credentials to use when responding to an authentication request
         /// that matches the specified criteria.
         /// </summary>
-        public ICredentials Credentials { get; set; }
+        [DisallowNull]
+        public ICredentials? Credentials { get; set; }
     }
 }
