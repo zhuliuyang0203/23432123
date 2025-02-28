@@ -91,12 +91,12 @@ namespace OpenQA.Selenium.Chromium
         /// </summary>
         /// <param name="dictionary">The dictionary to use to create the object.</param>
         /// <returns>The ChromiumNetworkConditions object created from the dictionary.</returns>
-        public static ChromiumNetworkConditions FromDictionary(Dictionary<string, object> dictionary)
+        public static ChromiumNetworkConditions FromDictionary(Dictionary<string, object?> dictionary)
         {
             ChromiumNetworkConditions conditions = new ChromiumNetworkConditions();
             if (dictionary.TryGetValue("offline", out object? offline))
             {
-                conditions.IsOffline = (bool)offline;
+                conditions.IsOffline = (bool)offline!;
             }
 
             if (dictionary.TryGetValue("latency", out object? latency))
@@ -106,12 +106,12 @@ namespace OpenQA.Selenium.Chromium
 
             if (dictionary.TryGetValue("upload_throughput", out object? uploadThroughput))
             {
-                conditions.UploadThroughput = (long)uploadThroughput;
+                conditions.UploadThroughput = (long)uploadThroughput!;
             }
 
             if (dictionary.TryGetValue("download_throughput", out object? downloadThroughput))
             {
-                conditions.DownloadThroughput = (long)downloadThroughput;
+                conditions.DownloadThroughput = (long)downloadThroughput!;
             }
 
             return conditions;

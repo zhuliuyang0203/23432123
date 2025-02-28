@@ -28,12 +28,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 internal class GetRealmsCommand(GetRealmsCommandParameters @params)
     : Command<GetRealmsCommandParameters>(@params, "script.getRealms");
 
-internal record GetRealmsCommandParameters : CommandParameters
-{
-    public BrowsingContext.BrowsingContext? Context { get; set; }
-
-    public RealmType? Type { get; set; }
-}
+internal record GetRealmsCommandParameters(BrowsingContext.BrowsingContext? Context, RealmType? Type) : CommandParameters;
 
 public record GetRealmsOptions : CommandOptions
 {

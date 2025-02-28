@@ -807,4 +807,21 @@ class RemoteWebDriverUnitTest {
     RemoteWebDriver driver = new RemoteWebDriver() {}; // anonymous subclass
     assertThat(driver.getCapabilities()).isEqualTo(new ImmutableCapabilities());
   }
+
+  @Test
+  void getDownloadableFilesReturnsType() {
+    List<String> expectedFiles = Arrays.asList("file1.txt", "file2.pdf");
+
+    WebDriverFixture fixture =
+        new WebDriverFixture(
+            new ImmutableCapabilities("se:downloadsEnabled", true),
+            echoCapabilities,
+            valueResponder(ImmutableMap.of("names", expectedFiles)));
+
+    List<String> result = fixture.driver.getDownloadableFiles();
+
+    assertThat(result).isInstanceOf(List.class).isEqualTo(expectedFiles);
+
+    fixture.verifyCommands(new CommandPayload(DriverCommand.GET_DOWNLOADABLE_FILES, emptyMap()));
+  }
 }

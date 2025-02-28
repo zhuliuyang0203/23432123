@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -28,7 +29,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.DevTools.Json
 {
-    internal sealed class JsonEnumMemberConverter<TEnum> : JsonConverter<TEnum>
+    internal sealed class JsonEnumMemberConverter<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields)] TEnum> : JsonConverter<TEnum>
         where TEnum : struct, Enum
     {
         private readonly Dictionary<TEnum, string> _enumToString = new Dictionary<TEnum, string>();
@@ -44,7 +45,7 @@ namespace OpenQA.Selenium.DevTools.Json
 #endif
             foreach (var value in values)
             {
-                var enumMember = type.GetField(value.ToString());
+                var enumMember = type.GetField(value.ToString())!;
                 var attr = enumMember.GetCustomAttributes(typeof(EnumMemberAttribute), false)
                   .Cast<EnumMemberAttribute>()
                   .FirstOrDefault();

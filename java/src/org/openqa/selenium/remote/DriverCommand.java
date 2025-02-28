@@ -136,9 +136,6 @@ public interface DriverCommand {
   // Logging API
   String GET_AVAILABLE_LOG_TYPES = "getAvailableLogTypes";
   String GET_LOG = "getLog";
-  // Mobile API
-  String GET_NETWORK_CONNECTION = "getNetworkConnection";
-  String SET_NETWORK_CONNECTION = "setNetworkConnection";
   // Virtual Authenticator API
   // http://w3c.github.io/webauthn#sctn-automation
   String ADD_VIRTUAL_AUTHENTICATOR = "addVirtualAuthenticator";

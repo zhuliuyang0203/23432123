@@ -62,25 +62,25 @@ module Selenium
         )
       end
 
-      def add_request_handler(*filter, pattern_type: nil, &)
+      def add_request_handler(*filter, pattern_type: nil, &block)
         add_handler(
           :before_request,
           BiDi::Network::PHASES[:before_request],
           BiDi::InterceptedRequest,
           filter,
           pattern_type: pattern_type,
-          &
+          &block
         )
       end
 
-      def add_response_handler(*filter, pattern_type: nil, &)
+      def add_response_handler(*filter, pattern_type: nil, &block)
         add_handler(
           :response_started,
           BiDi::Network::PHASES[:response_started],
           BiDi::InterceptedResponse,
           filter,
           pattern_type: pattern_type,
-          &
+          &block
         )
       end
 

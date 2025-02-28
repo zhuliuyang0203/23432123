@@ -24,7 +24,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -97,7 +98,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         public static readonly string GetFullPageScreenshotCommand = "fullPageScreenshot";
 
-        private static Dictionary<string, CommandInfo> firefoxCustomCommands = new Dictionary<string, CommandInfo>()
+        private static readonly Dictionary<string, CommandInfo> firefoxCustomCommands = new Dictionary<string, CommandInfo>()
         {
             { SetContextCommand, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/moz/context") },
             { GetContextCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/moz/context") },
@@ -118,6 +119,7 @@ namespace OpenQA.Selenium.Firefox
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class using the specified options. Uses the Mozilla-provided Marionette driver implementation.
         /// </summary>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public FirefoxDriver(FirefoxOptions options)
             : this(FirefoxDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -127,6 +129,7 @@ namespace OpenQA.Selenium.Firefox
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class using the specified driver service. Uses the Mozilla-provided Marionette driver implementation.
         /// </summary>
         /// <param name="service">The <see cref="FirefoxDriverService"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         public FirefoxDriver(FirefoxDriverService service)
             : this(service, new FirefoxOptions(), RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -134,9 +137,9 @@ namespace OpenQA.Selenium.Firefox
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class using the specified path
-        /// to the directory containing geckodriver.exe.
+        /// to the directory containing <c>geckodriver.exe</c>.
         /// </summary>
-        /// <param name="geckoDriverDirectory">The full path to the directory containing geckodriver.exe.</param>
+        /// <param name="geckoDriverDirectory">The full path to the directory containing <c>geckodriver.exe</c>.</param>
         public FirefoxDriver(string geckoDriverDirectory)
             : this(geckoDriverDirectory, new FirefoxOptions())
         {
@@ -144,10 +147,11 @@ namespace OpenQA.Selenium.Firefox
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class using the specified path
-        /// to the directory containing geckodriver.exe and options.
+        /// to the directory containing <c>geckodriver.exe</c> and options.
         /// </summary>
-        /// <param name="geckoDriverDirectory">The full path to the directory containing geckodriver.exe.</param>
+        /// <param name="geckoDriverDirectory">The full path to the directory containing <c>geckodriver.exe</c>.</param>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public FirefoxDriver(string geckoDriverDirectory, FirefoxOptions options)
             : this(geckoDriverDirectory, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -155,11 +159,12 @@ namespace OpenQA.Selenium.Firefox
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriver"/> class using the specified path
-        /// to the directory containing geckodriver.exe, options, and command timeout.
+        /// to the directory containing <c>geckodriver.exe</c>, options, and command timeout.
         /// </summary>
-        /// <param name="geckoDriverDirectory">The full path to the directory containing geckodriver.exe.</param>
+        /// <param name="geckoDriverDirectory">The full path to the directory containing <c>geckodriver.exe</c>.</param>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public FirefoxDriver(string geckoDriverDirectory, FirefoxOptions options, TimeSpan commandTimeout)
             : this(FirefoxDriverService.CreateDefaultService(geckoDriverDirectory), options, commandTimeout)
         {
@@ -170,6 +175,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="service">The <see cref="FirefoxDriverService"/> to use.</param>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public FirefoxDriver(FirefoxDriverService service, FirefoxOptions options)
             : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -181,6 +187,7 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="service">The <see cref="FirefoxDriverService"/> to use.</param>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public FirefoxDriver(FirefoxDriverService service, FirefoxOptions options, TimeSpan commandTimeout)
             : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
@@ -195,8 +202,19 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="commandTimeout"></param>
         /// <param name="options"></param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (service is null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+
             if (service.DriverServicePath == null)
             {
                 DriverFinder finder = new DriverFinder(options);
@@ -217,10 +235,7 @@ namespace OpenQA.Selenium.Firefox
         /// The keys of the dictionary are the names assigned to the command; the values are the
         /// <see cref="CommandInfo"/> objects describing the command behavior.
         /// </summary>
-        public static IReadOnlyDictionary<string, CommandInfo> CustomCommandDefinitions
-        {
-            get { return new ReadOnlyDictionary<string, CommandInfo>(firefoxCustomCommands); }
-        }
+        public static IReadOnlyDictionary<string, CommandInfo> CustomCommandDefinitions => new ReadOnlyDictionary<string, CommandInfo>(firefoxCustomCommands);
 
         /// <summary>
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
@@ -234,31 +249,30 @@ namespace OpenQA.Selenium.Firefox
         /// conjunction with a standalone WebDriver server.</remarks>
         public override IFileDetector FileDetector
         {
-            get { return base.FileDetector; }
+            get => base.FileDetector;
             set { }
         }
 
         /// <summary>
-        /// Sets the command context used when issuing commands to geckodriver.
+        /// Sets the command context used when issuing commands to <c>geckodriver</c>.
         /// </summary>
         /// <exception cref="WebDriverException">If response is not recognized</exception>
         /// <returns>The context of commands.</returns>
         public FirefoxCommandContext GetContext()
         {
-            FirefoxCommandContext output;
-            string response = this.Execute(GetContextCommand, null).Value.ToString();
+            Response commandResponse = this.Execute(GetContextCommand, null);
 
-            bool success = Enum.TryParse<FirefoxCommandContext>(response, true, out output);
-            if (!success)
+            if (commandResponse.Value is not string response
+                || !Enum.TryParse(response, ignoreCase: true, out FirefoxCommandContext output))
             {
-                throw new WebDriverException(string.Format(CultureInfo.InvariantCulture, "Do not recognize response: {0}; expected Context or Chrome"));
+                throw new WebDriverException(string.Format(CultureInfo.InvariantCulture, "Do not recognize response: {0}; expected Context or Chrome", commandResponse.Value));
             }
 
             return output;
         }
 
         /// <summary>
-        /// Sets the command context used when issuing commands to geckodriver.
+        /// Sets the command context used when issuing commands to <c>geckodriver</c>.
         /// </summary>
         /// <param name="context">The <see cref="FirefoxCommandContext"/> value to which to set the context.</param>
         public void SetContext(FirefoxCommandContext context)
@@ -313,12 +327,16 @@ namespace OpenQA.Selenium.Firefox
                 throw new ArgumentNullException(nameof(addOnFileToInstall), "Add-on file name must not be null or the empty string");
             }
 
-            if (!File.Exists(addOnFileToInstall))
+            byte[] addOnBytes;
+            try
             {
-                throw new ArgumentException("File " + addOnFileToInstall + " does not exist", nameof(addOnFileToInstall));
+                addOnBytes = File.ReadAllBytes(addOnFileToInstall);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Failed to read from file {addOnFileToInstall}", nameof(addOnFileToInstall), ex);
             }
 
-            byte[] addOnBytes = File.ReadAllBytes(addOnFileToInstall);
             string base64EncodedAddOn = Convert.ToBase64String(addOnBytes);
 
             return this.InstallAddOn(base64EncodedAddOn, temporary);
@@ -344,7 +362,8 @@ namespace OpenQA.Selenium.Firefox
                 ["temporary"] = temporary
             };
             Response response = this.Execute(InstallAddOnCommand, parameters);
-            return (string)response.Value;
+
+            return (string)response.Value!;
         }
 
         /// <summary>
@@ -371,7 +390,9 @@ namespace OpenQA.Selenium.Firefox
         public Screenshot GetFullPageScreenshot()
         {
             Response screenshotResponse = this.Execute(GetFullPageScreenshotCommand, null);
-            string base64 = screenshotResponse.Value.ToString();
+
+            screenshotResponse.EnsureValueIsNotNull();
+            string base64 = screenshotResponse.Value.ToString()!;
             return new Screenshot(base64);
         }
 

@@ -48,4 +48,9 @@ public sealed class BrowserModule(Broker broker) : Module(broker)
 
         await Broker.ExecuteCommandAsync(new RemoveUserContextCommand(@params), options).ConfigureAwait(false);
     }
+
+    public async Task<GetClientWindowsResult> GetClientWindowsAsync(GetClientWindowsOptions? options = null)
+    {
+        return await Broker.ExecuteCommandAsync<GetClientWindowsCommand, GetClientWindowsResult>(new(), options).ConfigureAwait(false);
+    }
 }

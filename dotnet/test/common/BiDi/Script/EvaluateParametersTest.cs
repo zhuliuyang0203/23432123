@@ -46,7 +46,7 @@ class EvaluateParametersTest : BiDiTestFixture
     [Test]
     public async Task СanEvaluateScriptWithUserActivationTrue()
     {
-        await context.Script.EvaluateAsync("window.open();", true, new() { UserActivation = true });
+        await context.Script.EvaluateAsync("window.open();", true);
 
         var res = await context.Script.EvaluateAsync<bool>("""
             navigator.userActivation.isActive && navigator.userActivation.hasBeenActive

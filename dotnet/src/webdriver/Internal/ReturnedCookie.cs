@@ -20,6 +20,8 @@
 using System;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
@@ -42,7 +44,7 @@ namespace OpenQA.Selenium.Internal
         /// <exception cref="ArgumentException">If the name is <see langword="null"/> or an empty string,
         /// or if it contains a semi-colon.</exception>
         /// <exception cref="ArgumentNullException">If the value or currentUrl is <see langword="null"/>.</exception>
-        public ReturnedCookie(string name, string value, string domain, string path, DateTime? expiry, bool isSecure, bool isHttpOnly)
+        public ReturnedCookie(string name, string value, string? domain, string? path, DateTime? expiry, bool isSecure, bool isHttpOnly)
             : this(name, value, domain, path, expiry, isSecure, isHttpOnly, null)
         {
         }
@@ -62,7 +64,7 @@ namespace OpenQA.Selenium.Internal
         /// <exception cref="ArgumentException">If the name is <see langword="null"/> or an empty string,
         /// or if it contains a semi-colon.</exception>
         /// <exception cref="ArgumentNullException">If the value or currentUrl is <see langword="null"/>.</exception>
-        public ReturnedCookie(string name, string value, string domain, string path, DateTime? expiry, bool isSecure, bool isHttpOnly, string sameSite)
+        public ReturnedCookie(string name, string value, string? domain, string? path, DateTime? expiry, bool isSecure, bool isHttpOnly, string? sameSite)
             : base(name, value, domain, path, expiry, isSecure, isHttpOnly, sameSite)
         {
 

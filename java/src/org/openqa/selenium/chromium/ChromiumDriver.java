@@ -61,7 +61,6 @@ import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.json.TypeToken;
 import org.openqa.selenium.logging.EventType;
 import org.openqa.selenium.logging.HasLogEvents;
-import org.openqa.selenium.mobile.NetworkConnection;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.FileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -70,7 +69,6 @@ import org.openqa.selenium.remote.html5.RemoteWebStorage;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.openqa.selenium.remote.http.HttpClient;
-import org.openqa.selenium.remote.mobile.RemoteNetworkConnection;
 
 /**
  * A {@link WebDriver} implementation that controls a Chromium browser running on the local machine.
@@ -87,7 +85,6 @@ public class ChromiumDriver extends RemoteWebDriver
         HasNetworkConditions,
         HasPermissions,
         LocationContext,
-        NetworkConnection,
         WebStorage {
 
   public static final Predicate<String> IS_CHROMIUM_BROWSER =
@@ -97,7 +94,6 @@ public class ChromiumDriver extends RemoteWebDriver
   private final Capabilities capabilities;
   private final RemoteLocationContext locationContext;
   private final RemoteWebStorage webStorage;
-  private final RemoteNetworkConnection networkConnection;
   private final HasNetworkConditions networkConditions;
   private final HasPermissions permissions;
   private final HasLaunchApp launch;
@@ -115,7 +111,6 @@ public class ChromiumDriver extends RemoteWebDriver
     locationContext = new RemoteLocationContext(getExecuteMethod());
     webStorage = new RemoteWebStorage(getExecuteMethod());
     permissions = new AddHasPermissions().getImplementation(getCapabilities(), getExecuteMethod());
-    networkConnection = new RemoteNetworkConnection(getExecuteMethod());
     networkConditions =
         new AddHasNetworkConditions().getImplementation(getCapabilities(), getExecuteMethod());
     launch = new AddHasLaunchApp().getImplementation(getCapabilities(), getExecuteMethod());
@@ -315,19 +310,6 @@ public class ChromiumDriver extends RemoteWebDriver
   public void setLocation(Location location) {
     Require.nonNull("Location", location);
     locationContext.setLocation(location);
-  }
-
-  @Override
-  @Deprecated
-  public ConnectionType getNetworkConnection() {
-    return networkConnection.getNetworkConnection();
-  }
-
-  @Override
-  @Deprecated
-  public ConnectionType setNetworkConnection(ConnectionType type) {
-    Require.nonNull("Network Connection Type", type);
-    return networkConnection.setNetworkConnection(type);
   }
 
   @Override

@@ -87,6 +87,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="commandName">The <see cref="DriverCommand"/> for which to get the information.</param>
         /// <returns>The <see cref="HttpCommandInfo"/> for the specified command, or <see langword="null"/> if not found or value is not <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
         public T? GetCommandInfo<T>(string commandName) where T : CommandInfo
         {
             T? toReturn = default;

@@ -18,7 +18,10 @@
 // </copyright>
 
 using OpenQA.Selenium.Interactions;
+using System;
 using System.Collections.Generic;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -36,6 +39,8 @@ namespace OpenQA.Selenium
         /// Performs the specified list of actions with this action executor.
         /// </summary>
         /// <param name="actionSequenceList">The list of action sequences to perform.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="actionSequenceList"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If an element in <paramref name="actionSequenceList"/> is <see langword="null"/>.</exception>
         void PerformActions(IList<ActionSequence> actionSequenceList);
 
         /// <summary>

@@ -21,8 +21,8 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe Network, exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
-                      only: {browser: %i[chrome edge firefox]} do
+    describe Network, exclusive: { bidi: true, reason: 'only executed when bidi is enabled' },
+             only: { browser: %i[chrome edge firefox] } do
       let(:username) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.first }
       let(:password) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.last }
 
@@ -160,7 +160,7 @@ module Selenium
                               sameSite: 'Strict',
                               expiry: 1234
                             })
-            request.body = ({test: 'example'})
+            request.body = ({ test: 'example' })
             request.continue
           end
           driver.navigate.to url_for('formPage.html')
@@ -259,6 +259,24 @@ module Selenium
           driver.navigate.to url_for('formPage.html')
           expect(driver.current_url).to eq(url_for('formPage.html'))
           expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a response handler that provides a response',
+         except: { browser: :firefox,
+                   reason: 'https://github.com/w3c/webdriver-bidi/issues/747' } do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler do |response|
+            response.status = 200
+            response.headers['foo'] = 'bar'
+            response.body = '<html><head><title>Hello World!</title></head><body/></html>'
+            response.provide_response
+          end
+          driver.navigate.to url_for('formPage.html')
+          source = driver.page_source
+          expect(source).not_to include('There should be a form here:')
+          expect(source).to include('Hello World!')
         end
       end
 

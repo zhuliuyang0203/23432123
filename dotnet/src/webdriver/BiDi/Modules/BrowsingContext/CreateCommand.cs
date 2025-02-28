@@ -26,14 +26,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class CreateCommand(CreateCommandParameters @params)
     : Command<CreateCommandParameters>(@params, "browsingContext.create");
 
-internal record CreateCommandParameters(ContextType Type) : CommandParameters
-{
-    public BrowsingContext? ReferenceContext { get; set; }
-
-    public bool? Background { get; set; }
-
-    public Browser.UserContext? UserContext { get; set; }
-}
+internal record CreateCommandParameters(ContextType Type, BrowsingContext? ReferenceContext, bool? Background, Browser.UserContext? UserContext) : CommandParameters;
 
 public record CreateOptions : CommandOptions
 {
