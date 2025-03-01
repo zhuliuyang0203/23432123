@@ -63,7 +63,7 @@ namespace OpenQA.Selenium.Remote
         /// DesiredCapabilities capabilities = new DesiredCapabilities(new Dictionary<![CDATA[<string,object>]]>(){["browserName","firefox"],["version",string.Empty],["javaScript",true]});
         /// </code>
         /// </example>
-        public DesiredCapabilities(Dictionary<string, object> rawMap)
+        public DesiredCapabilities(Dictionary<string, object>? rawMap)
         {
             if (rawMap != null)
             {
