@@ -42,10 +42,16 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <!--TODO when AOT is ready https://github.com/SeleniumHQ/selenium/issues/14480-->
-  <!--<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
-    <IsAotCompatible>true</IsAotCompatible>
-  </PropertyGroup>-->
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+    <Nullable>enable</Nullable>
+    
+    <!--TODO when AOT is ready https://github.com/SeleniumHQ/selenium/issues/14480-->
+    <!--<IsAotCompatible>true</IsAotCompatible>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="WebDriver.Common.Tests" />
