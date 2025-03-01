@@ -24,8 +24,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

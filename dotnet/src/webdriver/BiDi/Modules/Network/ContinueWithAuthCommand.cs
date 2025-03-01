@@ -20,8 +20,6 @@
 using OpenQA.Selenium.BiDi.Communication;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class ContinueWithAuthCommand(ContinueWithAuthParameters @params)

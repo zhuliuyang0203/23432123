@@ -23,8 +23,6 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

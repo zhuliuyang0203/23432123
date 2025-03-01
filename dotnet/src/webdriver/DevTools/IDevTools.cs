@@ -20,8 +20,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

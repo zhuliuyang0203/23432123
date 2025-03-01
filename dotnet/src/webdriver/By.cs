@@ -24,8 +24,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

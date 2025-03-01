@@ -24,8 +24,6 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

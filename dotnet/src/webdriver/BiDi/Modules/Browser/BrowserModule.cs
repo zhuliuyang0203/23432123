@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 public sealed class BrowserModule(Broker broker) : Module(broker)

@@ -21,8 +21,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

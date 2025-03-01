@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>

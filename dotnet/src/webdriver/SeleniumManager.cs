@@ -28,8 +28,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using static OpenQA.Selenium.SeleniumManagerResponse;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

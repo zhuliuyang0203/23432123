@@ -28,8 +28,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

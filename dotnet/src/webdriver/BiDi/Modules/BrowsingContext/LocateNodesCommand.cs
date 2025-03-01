@@ -21,8 +21,6 @@ using OpenQA.Selenium.BiDi.Communication;
 using System.Collections;
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class LocateNodesCommand(LocateNodesCommandParameters @params)

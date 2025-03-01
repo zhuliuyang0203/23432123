@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

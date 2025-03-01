@@ -25,8 +25,6 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools.Json
 {
     internal sealed class JsonEnumMemberConverter<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields)] TEnum> : JsonConverter<TEnum>

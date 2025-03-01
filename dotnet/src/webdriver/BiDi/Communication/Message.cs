@@ -19,8 +19,6 @@
 
 using System.Text.Json;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication;
 
 // https://github.com/dotnet/runtime/issues/72604

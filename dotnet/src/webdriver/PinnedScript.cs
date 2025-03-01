@@ -19,8 +19,6 @@
 
 using System.Globalization;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

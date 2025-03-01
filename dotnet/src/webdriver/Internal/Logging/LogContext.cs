@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
