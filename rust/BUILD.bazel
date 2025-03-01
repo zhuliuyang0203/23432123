@@ -1,5 +1,5 @@
 load("@crates//:defs.bzl", "all_crate_deps")
-load("//rust:defs.bzl", "rust_binary", "rust_library", "rust_test", "rustfmt_config")
+load("//rust:defs.bzl", "rust_binary", "rust_library", "rust_shared_library", "rust_test", "rustfmt_config")
 
 rustfmt_config(
     name = "enable-rustfmt",
@@ -87,6 +87,18 @@ rust_binary(
 rust_library(
     # The name here is used as the crate name
     name = "selenium_manager",
+    srcs = glob(
+        ["src/**/*.rs"],
+        exclude = ["main.rs"],
+    ),
+    edition = "2021",
+    visibility = ["//rust:__subpackages__"],
+    deps = all_crate_deps(normal = True),
+)
+
+rust_shared_library(
+    # The name here is used as the crate name
+    name = "selenium_manager_shared",
     srcs = glob(
         ["src/**/*.rs"],
         exclude = ["main.rs"],

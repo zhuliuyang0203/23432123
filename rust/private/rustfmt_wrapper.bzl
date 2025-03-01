@@ -4,6 +4,7 @@ load(
     "rustfmt_test",
     _rust_binary = "rust_binary",
     _rust_library = "rust_library",
+    _rust_shared_library = "rust_shared_library",
     _rust_test = "rust_test",
     _rust_test_suite = "rust_test_suite",
 )
@@ -25,6 +26,10 @@ def _wrap_with_fmt_test(name, tags):
 
 def rust_library(name, **kwargs):
     _rust_library(name = name, **kwargs)
+    _wrap_with_fmt_test(name, kwargs.get("tags", []))
+
+def rust_shared_library(name, **kwargs):
+    _rust_shared_library(name = name, **kwargs)
     _wrap_with_fmt_test(name, kwargs.get("tags", []))
 
 def rust_binary(name, **kwargs):

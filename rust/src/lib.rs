@@ -1674,3 +1674,15 @@ fn get_index_version(full_version: &str, index: usize) -> Result<String, Error> 
         .ok_or(anyhow!(format!("Wrong version: {}", full_version)))?
         .to_string())
 }
+
+// ----------------------------------------------------------
+// Exported functions
+// ----------------------------------------------------------
+
+// this just an example how to expose function for external usage
+#[no_mangle]
+pub extern "C" fn get_test() -> *mut std::os::raw::c_char {
+    let a = get_manager_by_browser("chrome".to_string()).unwrap();
+    let s = std::ffi::CString::new(a.get_driver_path_in_cache().unwrap().display().to_string()).unwrap();
+    s.into_raw() // Transfer ownership to C
+}
