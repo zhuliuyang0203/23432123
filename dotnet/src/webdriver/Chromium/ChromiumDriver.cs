@@ -168,7 +168,7 @@ namespace OpenQA.Selenium.Chromium
                 string fullServicePath = finder.GetDriverPath();
                 service.DriverServicePath = Path.GetDirectoryName(fullServicePath);
                 service.DriverServiceExecutableName = Path.GetFileName(fullServicePath);
-                if (finder.TryGetBrowserPath(out string browserPath))
+                if (finder.TryGetBrowserPath(out string? browserPath))
                 {
                     options.BinaryLocation = browserPath;
                     options.BrowserVersion = null;
