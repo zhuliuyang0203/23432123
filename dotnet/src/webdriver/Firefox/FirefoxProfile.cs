@@ -160,7 +160,7 @@ namespace OpenQA.Selenium.Firefox
             this.ProfileDirectory = GenerateProfileDirectoryName();
             if (!string.IsNullOrEmpty(this.sourceProfileDir))
             {
-                FileUtilities.CopyDirectory(this.sourceProfileDir, this.ProfileDirectory);
+                FileUtilities.CopyDirectory(this.sourceProfileDir!, this.ProfileDirectory);
             }
             else
             {

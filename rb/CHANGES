@@ -1,3 +1,7 @@
+4.29.1 (2025-02-22)
+=========================
+* [rb] Fix "no anonymous block parameter" in ruby 3.1 (#15315)
+
 4.29.0 (2025-02-17)
 =========================
 * Add CDP for Chrome 133 and remove 130

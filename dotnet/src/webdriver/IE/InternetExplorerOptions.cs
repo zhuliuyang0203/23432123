@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace OpenQA.Selenium.IE
 {
     /// <summary>
@@ -92,27 +94,8 @@ namespace OpenQA.Selenium.IE
         private const string LegacyFileUploadDialogHandlingCapability = "ie.useLegacyFileUploadDialogHandling";
         private const string AttachToEdgeChromeCapability = "ie.edgechromium";
         private const string IgnoreProcessMatchCapability = "ie.ignoreprocessmatch";
-
-        private bool ignoreProtectedModeSettings;
-        private bool ignoreZoomLevel;
-        private bool enableNativeEvents = true;
-        private bool requireWindowFocus;
-        private bool enablePersistentHover = true;
-        private bool forceCreateProcessApi;
-        private bool forceShellWindowsApi;
-        private bool usePerProcessProxy;
-        private bool ensureCleanSession;
-        private bool enableFullPageScreenshot = true;
-        private bool legacyFileUploadDialogHandling;
-        private bool attachToEdgeChrome;
-        private bool ignoreProcessMatch;
-        private TimeSpan browserAttachTimeout = TimeSpan.MinValue;
-        private TimeSpan fileUploadDialogTimeout = TimeSpan.MinValue;
-        private string initialBrowserUrl = string.Empty;
-        private string browserCommandLineArguments = string.Empty;
-        private string edgeExecutablePath = string.Empty;
-        private InternetExplorerElementScrollBehavior elementScrollBehavior = InternetExplorerElementScrollBehavior.Default;
-        private Dictionary<string, object> additionalInternetExplorerOptions = new Dictionary<string, object>();
+        private readonly bool enableFullPageScreenshot = true;
+        private readonly Dictionary<string, object> additionalInternetExplorerOptions = new Dictionary<string, object>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InternetExplorerOptions"/> class.
@@ -147,38 +130,22 @@ namespace OpenQA.Selenium.IE
         /// <summary>
         /// Gets or sets a value indicating whether to ignore the settings of the Internet Explorer Protected Mode.
         /// </summary>
-        public bool IntroduceInstabilityByIgnoringProtectedModeSettings
-        {
-            get { return this.ignoreProtectedModeSettings; }
-            set { this.ignoreProtectedModeSettings = value; }
-        }
+        public bool IntroduceInstabilityByIgnoringProtectedModeSettings { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to ignore the zoom level of Internet Explorer .
         /// </summary>
-        public bool IgnoreZoomLevel
-        {
-            get { return this.ignoreZoomLevel; }
-            set { this.ignoreZoomLevel = value; }
-        }
+        public bool IgnoreZoomLevel { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use native events in interacting with elements.
         /// </summary>
-        public bool EnableNativeEvents
-        {
-            get { return this.enableNativeEvents; }
-            set { this.enableNativeEvents = value; }
-        }
+        public bool EnableNativeEvents { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether to require the browser window to have focus before interacting with elements.
         /// </summary>
-        public bool RequireWindowFocus
-        {
-            get { return this.requireWindowFocus; }
-            set { this.requireWindowFocus = value; }
-        }
+        public bool RequireWindowFocus { get; set; }
 
         /// <summary>
         /// Gets or sets the initial URL displayed when IE is launched. If not set, the browser launches
@@ -190,82 +157,50 @@ namespace OpenQA.Selenium.IE
         /// to avoid the flakiness introduced by ignoring the Protected Mode settings. Nevertheless, setting Protected Mode
         /// zone settings to the same value in the IE configuration is the preferred method.
         /// </remarks>
-        public string InitialBrowserUrl
-        {
-            get { return this.initialBrowserUrl; }
-            set { this.initialBrowserUrl = value; }
-        }
+        public string? InitialBrowserUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the value for describing how elements are scrolled into view in the IE driver. Defaults
         /// to scrolling the element to the top of the viewport.
         /// </summary>
-        public InternetExplorerElementScrollBehavior ElementScrollBehavior
-        {
-            get { return this.elementScrollBehavior; }
-            set { this.elementScrollBehavior = value; }
-        }
+        public InternetExplorerElementScrollBehavior ElementScrollBehavior { get; set; } = InternetExplorerElementScrollBehavior.Default;
 
         /// <summary>
         /// Gets or sets a value indicating whether to enable persistently sending WM_MOUSEMOVE messages
         /// to the IE window during a mouse hover.
         /// </summary>
-        public bool EnablePersistentHover
-        {
-            get { return this.enablePersistentHover; }
-            set { this.enablePersistentHover = value; }
-        }
+        public bool EnablePersistentHover { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the amount of time the driver will attempt to look for a newly launched instance
         /// of Internet Explorer.
         /// </summary>
-        public TimeSpan BrowserAttachTimeout
-        {
-            get { return this.browserAttachTimeout; }
-            set { this.browserAttachTimeout = value; }
-        }
+        public TimeSpan BrowserAttachTimeout { get; set; } = TimeSpan.MinValue;
 
         /// <summary>
         /// Gets or sets the amount of time the driver will attempt to look for the file selection
         /// dialog when attempting to upload a file.
         /// </summary>
-        public TimeSpan FileUploadDialogTimeout
-        {
-            get { return this.fileUploadDialogTimeout; }
-            set { this.fileUploadDialogTimeout = value; }
-        }
+        public TimeSpan FileUploadDialogTimeout { get; set; } = TimeSpan.MinValue;
 
         /// <summary>
         /// Gets or sets a value indicating whether to force the use of the Windows CreateProcess API
         /// when launching Internet Explorer. The default value is <see langword="false"/>.
         /// </summary>
-        public bool ForceCreateProcessApi
-        {
-            get { return this.forceCreateProcessApi; }
-            set { this.forceCreateProcessApi = value; }
-        }
+        public bool ForceCreateProcessApi { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to force the use of the Windows ShellWindows API
         /// when attaching to Internet Explorer. The default value is <see langword="false"/>.
         /// </summary>
-        public bool ForceShellWindowsApi
-        {
-            get { return this.forceShellWindowsApi; }
-            set { this.forceShellWindowsApi = value; }
-        }
+        public bool ForceShellWindowsApi { get; set; }
 
         /// <summary>
         /// Gets or sets the command line arguments used in launching Internet Explorer when the
         /// Windows CreateProcess API is used. This property only has an effect when the
         /// <see cref="ForceCreateProcessApi"/> is <see langword="true"/>.
         /// </summary>
-        public string BrowserCommandLineArguments
-        {
-            get { return this.browserCommandLineArguments; }
-            set { this.browserCommandLineArguments = value; }
-        }
+        public string? BrowserCommandLineArguments { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use the supplied <see cref="Proxy"/>
@@ -275,11 +210,7 @@ namespace OpenQA.Selenium.IE
         /// <see cref="ProxyKind.System"/>, or <see cref="ProxyKind.Manual"/>, and is
         /// otherwise ignored. Defaults to <see langword="false"/>.
         /// </summary>
-        public bool UsePerProcessProxy
-        {
-            get { return this.usePerProcessProxy; }
-            set { this.usePerProcessProxy = value; }
-        }
+        public bool UsePerProcessProxy { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to clear the Internet Explorer cache
@@ -287,47 +218,27 @@ namespace OpenQA.Selenium.IE
         /// system cache for all instances of Internet Explorer, even those already running
         /// when the driven instance is launched. Defaults to <see langword="false"/>.
         /// </summary>
-        public bool EnsureCleanSession
-        {
-            get { return this.ensureCleanSession; }
-            set { this.ensureCleanSession = value; }
-        }
+        public bool EnsureCleanSession { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use the legacy handling for file upload dialogs.
         /// </summary>
-        public bool LegacyFileUploadDialogHanlding
-        {
-            get { return this.legacyFileUploadDialogHandling; }
-            set { this.legacyFileUploadDialogHandling = value; }
-        }
+        public bool LegacyFileUploadDialogHanlding { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to attach to Edge Chrome browser.
         /// </summary>
-        public bool AttachToEdgeChrome
-        {
-            get { return this.attachToEdgeChrome; }
-            set { this.attachToEdgeChrome = value; }
-        }
+        public bool AttachToEdgeChrome { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to ignore process id match with IE Mode on Edge.
         /// </summary>
-        public bool IgnoreProcessMatch
-        {
-            get { return this.ignoreProcessMatch; }
-            set { this.ignoreProcessMatch = value; }
-        }
+        public bool IgnoreProcessMatch { get; set; }
 
         /// <summary>
         /// Gets or sets the path to the Edge Browser Executable.
         /// </summary>
-        public string EdgeExecutablePath
-        {
-            get { return this.edgeExecutablePath; }
-            set { this.edgeExecutablePath = value; }
-        }
+        public string? EdgeExecutablePath { get; set; }
 
         /// <summary>
         /// Provides a means to add additional capabilities not yet added as type safe options
@@ -369,32 +280,32 @@ namespace OpenQA.Selenium.IE
         private Dictionary<string, object> BuildInternetExplorerOptionsDictionary()
         {
             Dictionary<string, object> internetExplorerOptionsDictionary = new Dictionary<string, object>();
-            internetExplorerOptionsDictionary[CapabilityType.HasNativeEvents] = this.enableNativeEvents;
-            internetExplorerOptionsDictionary[EnablePersistentHoverCapability] = this.enablePersistentHover;
+            internetExplorerOptionsDictionary[CapabilityType.HasNativeEvents] = this.EnableNativeEvents;
+            internetExplorerOptionsDictionary[EnablePersistentHoverCapability] = this.EnablePersistentHover;
 
-            if (this.requireWindowFocus)
+            if (this.RequireWindowFocus)
             {
                 internetExplorerOptionsDictionary[RequireWindowFocusCapability] = true;
             }
 
-            if (this.ignoreProtectedModeSettings)
+            if (this.IntroduceInstabilityByIgnoringProtectedModeSettings)
             {
                 internetExplorerOptionsDictionary[IgnoreProtectedModeSettingsCapability] = true;
             }
 
-            if (this.ignoreZoomLevel)
+            if (this.IgnoreZoomLevel)
             {
                 internetExplorerOptionsDictionary[IgnoreZoomSettingCapability] = true;
             }
 
-            if (!string.IsNullOrEmpty(this.initialBrowserUrl))
+            if (!string.IsNullOrEmpty(this.InitialBrowserUrl))
             {
-                internetExplorerOptionsDictionary[InitialBrowserUrlCapability] = this.initialBrowserUrl;
+                internetExplorerOptionsDictionary[InitialBrowserUrlCapability] = this.InitialBrowserUrl!;
             }
 
-            if (this.elementScrollBehavior != InternetExplorerElementScrollBehavior.Default)
+            if (this.ElementScrollBehavior != InternetExplorerElementScrollBehavior.Default)
             {
-                if (this.elementScrollBehavior == InternetExplorerElementScrollBehavior.Bottom)
+                if (this.ElementScrollBehavior == InternetExplorerElementScrollBehavior.Bottom)
                 {
                     internetExplorerOptionsDictionary[ElementScrollBehaviorCapability] = 1;
                 }
@@ -404,36 +315,36 @@ namespace OpenQA.Selenium.IE
                 }
             }
 
-            if (this.browserAttachTimeout != TimeSpan.MinValue)
+            if (this.BrowserAttachTimeout != TimeSpan.MinValue)
             {
-                internetExplorerOptionsDictionary[BrowserAttachTimeoutCapability] = Convert.ToInt32(this.browserAttachTimeout.TotalMilliseconds);
+                internetExplorerOptionsDictionary[BrowserAttachTimeoutCapability] = Convert.ToInt32(this.BrowserAttachTimeout.TotalMilliseconds);
             }
 
-            if (this.fileUploadDialogTimeout != TimeSpan.MinValue)
+            if (this.FileUploadDialogTimeout != TimeSpan.MinValue)
             {
-                internetExplorerOptionsDictionary[FileUploadDialogTimeoutCapability] = Convert.ToInt32(this.fileUploadDialogTimeout.TotalMilliseconds);
+                internetExplorerOptionsDictionary[FileUploadDialogTimeoutCapability] = Convert.ToInt32(this.FileUploadDialogTimeout.TotalMilliseconds);
             }
 
-            if (this.forceCreateProcessApi)
+            if (this.ForceCreateProcessApi)
             {
                 internetExplorerOptionsDictionary[ForceCreateProcessApiCapability] = true;
-                if (!string.IsNullOrEmpty(this.browserCommandLineArguments))
+                if (!string.IsNullOrEmpty(this.BrowserCommandLineArguments))
                 {
-                    internetExplorerOptionsDictionary[BrowserCommandLineSwitchesCapability] = this.browserCommandLineArguments;
+                    internetExplorerOptionsDictionary[BrowserCommandLineSwitchesCapability] = this.BrowserCommandLineArguments!;
                 }
             }
 
-            if (this.forceShellWindowsApi)
+            if (this.ForceShellWindowsApi)
             {
                 internetExplorerOptionsDictionary[ForceShellWindowsApiCapability] = true;
             }
 
             if (this.Proxy != null)
             {
-                internetExplorerOptionsDictionary[UsePerProcessProxyCapability] = this.usePerProcessProxy;
+                internetExplorerOptionsDictionary[UsePerProcessProxyCapability] = this.UsePerProcessProxy;
             }
 
-            if (this.ensureCleanSession)
+            if (this.EnsureCleanSession)
             {
                 internetExplorerOptionsDictionary[EnsureCleanSessionCapability] = true;
             }
@@ -443,24 +354,24 @@ namespace OpenQA.Selenium.IE
                 internetExplorerOptionsDictionary[EnableFullPageScreenshotCapability] = false;
             }
 
-            if (this.legacyFileUploadDialogHandling)
+            if (this.LegacyFileUploadDialogHanlding)
             {
                 internetExplorerOptionsDictionary[LegacyFileUploadDialogHandlingCapability] = true;
             }
 
-            if (this.attachToEdgeChrome)
+            if (this.AttachToEdgeChrome)
             {
                 internetExplorerOptionsDictionary[AttachToEdgeChromeCapability] = true;
             }
 
-            if (this.ignoreProcessMatch)
+            if (this.IgnoreProcessMatch)
             {
                 internetExplorerOptionsDictionary[IgnoreProcessMatchCapability] = true;
             }
 
-            if (!string.IsNullOrEmpty(this.edgeExecutablePath))
+            if (!string.IsNullOrEmpty(this.EdgeExecutablePath))
             {
-                internetExplorerOptionsDictionary[EdgeExecutablePathCapability] = this.edgeExecutablePath;
+                internetExplorerOptionsDictionary[EdgeExecutablePathCapability] = this.EdgeExecutablePath!;
             }
 
             foreach (KeyValuePair<string, object> pair in this.additionalInternetExplorerOptions)

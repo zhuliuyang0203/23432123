@@ -166,7 +166,7 @@ namespace OpenQA.Selenium
                 foreach (string handle in this.driver.WindowHandles)
                 {
                     this.Window(handle);
-                    if (windowHandleOrName == this.driver.ExecuteScript("return window.name").ToString())
+                    if (windowHandleOrName == this.driver.ExecuteScript("return window.name")!.ToString())
                     {
                         return this.driver; // found by name
                     }
@@ -223,7 +223,7 @@ namespace OpenQA.Selenium
         public IWebElement ActiveElement()
         {
             Response response = this.driver.InternalExecute(DriverCommand.GetActiveElement, null);
-            return this.driver.GetElementFromResponse(response);
+            return this.driver.GetElementFromResponse(response)!;
         }
 
         /// <summary>

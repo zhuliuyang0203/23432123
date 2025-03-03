@@ -615,7 +615,7 @@ namespace OpenQA.Selenium.Chromium
 
             if (!string.IsNullOrEmpty(androidOptions.AndroidProcess))
             {
-                chromeOptions["androidProcess"] = androidOptions.AndroidProcess;
+                chromeOptions["androidProcess"] = androidOptions.AndroidProcess!;
             }
 
             if (androidOptions.UseRunningApp)

@@ -280,10 +280,6 @@ namespace OpenQA.Selenium.Interactions
             driver.Url = javascriptPage;
 
             IWebElement element = driver.FindElement(By.Id("menu1"));
-            if (!Platform.CurrentPlatform.IsPlatformType(PlatformType.Windows))
-            {
-                Assert.Ignore("Skipping test: Simulating hover needs native events");
-            }
 
             IWebElement item = driver.FindElement(By.Id("item1"));
             Assert.That(item.Text, Is.EqualTo(""));
