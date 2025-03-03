@@ -12,6 +12,8 @@ module Selenium
 
         def navigate: (String url, String? context_id) -> void
 
+        def set_viewport: (String context_id, Integer width, Integer height, Float device_pixel_ratio) -> Hash[nil, nil]
+
         def traverse_history: (Integer delta, String? context_id) -> void
 
         def reload: (String? context_id, ?ignore_cache: bool) -> void
