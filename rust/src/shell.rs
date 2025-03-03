@@ -65,7 +65,7 @@ impl Command {
 }
 
 pub fn run_powershell_command_with_log(log: &Logger, command: Command) -> Result<String, Error> {
-    log.debug(format!("Running command: {}", command.display()));
+    log.debug(format!("Running ps command: {}", command.display()));
     let output = run_powershell_command(command)?;
     log.debug(format!("Output: {:?}", output));
     Ok(output)
