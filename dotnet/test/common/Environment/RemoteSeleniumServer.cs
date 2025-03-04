@@ -1,7 +1,28 @@
+// <copyright file="RemoteSeleniumServer.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Environment
 {
@@ -18,7 +39,7 @@ namespace OpenQA.Selenium.Environment
             autoStart = autoStartServer;
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
             if (autoStart && (webserverProcess == null || webserverProcess.HasExited))
             {
@@ -32,40 +53,29 @@ namespace OpenQA.Selenium.Environment
                             "go //java/src/org/openqa/grid/selenium:selenium"));
                 }
 
-                string serviceDirectory = EnvironmentManager.Instance.DriverServiceDirectory;
-                if (string.IsNullOrEmpty(serviceDirectory))
-                {
-                    serviceDirectory = EnvironmentManager.Instance.CurrentDirectory;
-                }
-
-                string ieDriverExe = System.IO.Path.Combine(serviceDirectory, "IEDriverServer.exe");
-                string chromeDriverExe = System.IO.Path.Combine(serviceDirectory, "chromedriver.exe");
-                string geckoDriverExe = System.IO.Path.Combine(serviceDirectory, "geckodriver.exe");
-                string edgeDriverExe = System.IO.Path.Combine(serviceDirectory, "msedgedriver.exe");
                 webserverProcess = new Process();
                 webserverProcess.StartInfo.FileName = "java.exe";
-                webserverProcess.StartInfo.Arguments = "-Dwebdriver.ie.driver=" + ieDriverExe
-                                                     + " -Dwebdriver.gecko.driver=" + geckoDriverExe
-                                                     + " -Dwebdriver.chrome.driver=" + chromeDriverExe
-                                                     + " -Dwebdriver.edge.driver=" + edgeDriverExe
-                                                     + " -jar " + serverJarName + " standalone --port 6000";
+                webserverProcess.StartInfo.Arguments = " -jar " + serverJarName + " standalone --port 6000 --selenium-manager true --enable-managed-downloads true";
                 webserverProcess.StartInfo.WorkingDirectory = projectRootPath;
                 webserverProcess.Start();
                 DateTime timeout = DateTime.Now.Add(TimeSpan.FromSeconds(30));
                 bool isRunning = false;
+
+                // Poll until the webserver is correctly serving pages.
+                using var httpClient = new HttpClient();
+
                 while (!isRunning && DateTime.Now < timeout)
                 {
-                    // Poll until the webserver is correctly serving pages.
-                    HttpWebRequest request = WebRequest.Create("http://localhost:6000/wd/hub/status") as HttpWebRequest;
                     try
                     {
-                        HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                        using var response = await httpClient.GetAsync("http://localhost:6000/wd/hub/status");
+
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
                             isRunning = true;
                         }
                     }
-                    catch (WebException)
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
                     {
                     }
                 }
@@ -77,17 +87,19 @@ namespace OpenQA.Selenium.Environment
             }
         }
 
-        public void Stop()
+        public async Task StopAsync()
         {
-            if (autoStart && (webserverProcess != null && !webserverProcess.HasExited))
+            if (autoStart && webserverProcess != null && !webserverProcess.HasExited)
             {
-                HttpWebRequest request = WebRequest.Create("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer") as HttpWebRequest;
-                try
+                using (var httpClient = new HttpClient())
                 {
-                    request.GetResponse();
-                }
-                catch (WebException)
-                {
+                    try
+                    {
+                        using var response = await httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
+                    {
+                    }
                 }
 
                 webserverProcess.WaitForExit(10000);

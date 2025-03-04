@@ -20,7 +20,6 @@ package org.openqa.selenium.remote;
 import static org.openqa.selenium.remote.DriverCommand.FIND_CHILD_ELEMENT;
 import static org.openqa.selenium.remote.DriverCommand.FIND_CHILD_ELEMENTS;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -213,24 +212,6 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
         this, (using, value) -> FIND_CHILD_ELEMENT(getId(), using, String.valueOf(value)), locator);
   }
 
-  /**
-   * @deprecated Rely on using {@link By.Remotable} instead
-   */
-  @Deprecated
-  protected WebElement findElement(String using, String value) {
-    throw new UnsupportedOperationException(
-        "`findElement` has been replaced by usages of " + By.Remotable.class);
-  }
-
-  /**
-   * @deprecated Rely on using {@link By.Remotable} instead
-   */
-  @Deprecated
-  protected List<WebElement> findElements(String using, String value) {
-    throw new UnsupportedOperationException(
-        "`findElement` has been replaced by usages of " + By.Remotable.class);
-  }
-
   @Override
   public SearchContext getShadowRoot() {
     Response response = execute(DriverCommand.GET_ELEMENT_SHADOW_ROOT(getId()));
@@ -280,7 +261,10 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
    */
   @Override
   public int hashCode() {
-    return id.hashCode();
+    if (id != null) {
+      return id.hashCode();
+    }
+    return super.hashCode();
   }
 
   /*
@@ -397,6 +381,6 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
   }
 
   public Map<String, Object> toJson() {
-    return ImmutableMap.of(Dialect.W3C.getEncodedElementKey(), getId());
+    return Map.of(Dialect.W3C.getEncodedElementKey(), getId());
   }
 }

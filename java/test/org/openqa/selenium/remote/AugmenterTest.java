@@ -44,6 +44,8 @@ import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.support.decorators.Decorated;
 import org.openqa.selenium.support.decorators.WebDriverDecorator;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
 
 @Tag("UnitTests")
 class AugmenterTest {
@@ -240,6 +242,40 @@ class AugmenterTest {
     assertThat(number).isEqualTo(42);
   }
 
+  @Test
+  void shouldAugmentDecoratedWebDriver() {
+    final Capabilities caps =
+        new ImmutableCapabilities(
+            "magic.numbers", true,
+            "numbers", true);
+    WebDriver driver = new RemoteWebDriver(new StubExecutor(caps), caps);
+    WebDriver eventFiringDecorate =
+        new EventFiringDecorator<>(
+                new WebDriverListener() {
+                  @Override
+                  public void beforeAnyCall(Object target, Method method, Object[] args) {
+                    System.out.println("Bazinga!");
+                  }
+                })
+            .decorate(driver);
+
+    WebDriver modifyTitleDecorate =
+        new ModifyTitleWebDriverDecorator().decorate(eventFiringDecorate);
+
+    WebDriver augmented =
+        getAugmenter()
+            .addDriverAugmentation("magic.numbers", HasMagicNumbers.class, (c, exe) -> () -> 42)
+            .augment(modifyTitleDecorate);
+
+    assertThat(modifyTitleDecorate).isNotSameAs(driver);
+
+    assertThat(((HasMagicNumbers) augmented).getMagicNumber()).isEqualTo(42);
+    assertThat(augmented.getTitle()).isEqualTo("title");
+
+    assertThat(augmented).isNotSameAs(modifyTitleDecorate);
+    assertThat(augmented).isInstanceOf(Decorated.class);
+  }
+
   private static class ByMagic extends By {
 
     private final String magicWord;
@@ -272,6 +308,7 @@ class AugmenterTest {
     public Response execute(Command command) {
       if (DriverCommand.NEW_SESSION.equals(command.getName())) {
         Response response = new Response(new SessionId("foo"));
+        response.setState("success");
         response.setValue(capabilities.asMap());
         return response;
       }
@@ -280,6 +317,7 @@ class AugmenterTest {
         if (possibleMatch.commandName.equals(command.getName())
             && possibleMatch.args.equals(command.getParameters())) {
           Response response = new Response(new SessionId("foo"));
+          response.setState("success");
           response.setValue(possibleMatch.returnValue);
           return response;
         }
@@ -294,9 +332,9 @@ class AugmenterTest {
 
     private static class Data {
 
-      public String commandName;
-      public Map<String, ?> args;
-      public Object returnValue;
+      public final String commandName;
+      public final Map<String, ?> args;
+      public final Object returnValue;
 
       public Data(String commandName, Map<String, ?> args, Object returnValue) {
         this.commandName = commandName;
@@ -342,8 +380,6 @@ class AugmenterTest {
 
   public static class ChildRemoteDriver extends RemoteWebDriver implements HasMagicNumbers {
 
-    private int magicNumber = 3;
-
     @Override
     public Capabilities getCapabilities() {
       return new FirefoxOptions();
@@ -351,13 +387,11 @@ class AugmenterTest {
 
     @Override
     public int getMagicNumber() {
-      return magicNumber;
+      return 3;
     }
   }
 
   public static class WithFinals extends RemoteWebDriver {
-
-    public final String finalField = "FINAL";
 
     @Override
     public Capabilities getCapabilities() {

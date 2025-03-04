@@ -30,10 +30,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 import org.openqa.selenium.Capabilities;
@@ -98,6 +100,8 @@ public class OneShotNode extends Node {
   private final Duration heartbeatPeriod;
   private final URI gridUri;
   private final UUID slotId = UUID.randomUUID();
+  private final int connectionLimitPerSession;
+  private final AtomicInteger connectionCounter = new AtomicInteger();
   private RemoteWebDriver driver;
   private SessionId sessionId;
   private HttpClient client;
@@ -109,18 +113,21 @@ public class OneShotNode extends Node {
       EventBus events,
       Secret registrationSecret,
       Duration heartbeatPeriod,
+      Duration sessionTimeout,
       NodeId id,
       URI uri,
       URI gridUri,
       Capabilities stereotype,
-      WebDriverInfo driverInfo) {
-    super(tracer, id, uri, registrationSecret);
+      WebDriverInfo driverInfo,
+      int connectionLimitPerSession) {
+    super(tracer, id, uri, registrationSecret, Require.positive(sessionTimeout));
 
     this.heartbeatPeriod = heartbeatPeriod;
     this.events = Require.nonNull("Event bus", events);
     this.gridUri = Require.nonNull("Public Grid URI", gridUri);
     this.stereotype = ImmutableCapabilities.copyOf(Require.nonNull("Stereotype", stereotype));
     this.driverInfo = Require.nonNull("Driver info", driverInfo);
+    this.connectionLimitPerSession = connectionLimitPerSession;
 
     new JMXHelper().register(this);
   }
@@ -151,7 +158,7 @@ public class OneShotNode extends Node {
             .filter(
                 info ->
                     driverName
-                        .map(name -> name.equals(info.getDisplayName().toLowerCase()))
+                        .map(name -> name.equals(info.getDisplayName().toLowerCase(Locale.ENGLISH)))
                         .orElse(true))
             .findFirst()
             .orElseThrow(
@@ -169,13 +176,15 @@ public class OneShotNode extends Node {
         eventOptions.getEventBus(),
         secretOptions.getRegistrationSecret(),
         nodeOptions.getHeartbeatPeriod(),
+        nodeOptions.getSessionTimeout(),
         new NodeId(UUID.randomUUID()),
         serverOptions.getExternalUri(),
         nodeOptions
             .getPublicGridUri()
             .orElseThrow(() -> new ConfigException("Unable to determine public grid address")),
         stereotype,
-        driverInfo);
+        driverInfo,
+        nodeOptions.getConnectionLimitPerSession());
   }
 
   @Override
@@ -356,6 +365,28 @@ public class OneShotNode extends Node {
   }
 
   @Override
+  public boolean tryAcquireConnection(SessionId id) {
+    if (!sessionId.equals(id)) {
+      return false;
+    }
+
+    if (connectionLimitPerSession > connectionCounter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    connectionCounter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    if (sessionId.equals(id)) {
+      connectionCounter.getAndDecrement();
+    }
+  }
+
+  @Override
   public boolean isSupporting(Capabilities capabilities) {
     return driverInfo.isSupporting(capabilities);
   }
@@ -376,6 +407,7 @@ public class OneShotNode extends Node {
                     : new Session(sessionId, getUri(), stereotype, capabilities, Instant.now()))),
         isDraining() ? DRAINING : UP,
         heartbeatPeriod,
+        getSessionTimeout(),
         getNodeVersion(),
         getOsInfo());
   }

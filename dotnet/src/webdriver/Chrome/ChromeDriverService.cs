@@ -1,24 +1,27 @@
-// <copyright file="ChromeDriverService.cs" company="WebDriver Committers">
+// <copyright file="ChromeDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
-using System;
-using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Chromium;
+using OpenQA.Selenium.Internal;
+using System.IO;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chrome
 {
@@ -29,17 +32,21 @@ namespace OpenQA.Selenium.Chrome
     {
         private const string DefaultChromeDriverServiceExecutableName = "chromedriver";
 
-        private static readonly Uri ChromeDriverDownloadUrl = new Uri("http://chromedriver.storage.googleapis.com/index.html");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeDriverService"/> class.
         /// </summary>
         /// <param name="executablePath">The full path to the ChromeDriver executable.</param>
         /// <param name="executableFileName">The file name of the ChromeDriver executable.</param>
         /// <param name="port">The port on which the ChromeDriver executable should listen.</param>
-        private ChromeDriverService(string executablePath, string executableFileName, int port)
-            : base(executablePath, executableFileName, port, ChromeDriverDownloadUrl)
+        private ChromeDriverService(string? executablePath, string? executableFileName, int port)
+            : base(executablePath, executableFileName, port)
         {
+        }
+
+        /// <inheritdoc />
+        protected override DriverOptions GetDefaultDriverOptions()
+        {
+            return new ChromeOptions();
         }
 
         /// <summary>
@@ -48,30 +55,30 @@ namespace OpenQA.Selenium.Chrome
         /// <returns>A ChromeDriverService that implements default settings.</returns>
         public static ChromeDriverService CreateDefaultService()
         {
-            return CreateDefaultService(new ChromeOptions());
-        }
-
-        /// <summary>
-        /// Creates a default instance of the ChromeDriverService.
-        /// </summary>
-        /// /// <param name="options">Browser options used to find the correct ChromeDriver binary.</param>
-        /// <returns>A ChromeDriverService that implements default settings.</returns>
-        public static ChromeDriverService CreateDefaultService(ChromeOptions options)
-        {
-            string serviceDirectory = DriverService.FindDriverServiceExecutable(ChromiumDriverServiceFileName(DefaultChromeDriverServiceExecutableName),
-                                                                                ChromeDriverDownloadUrl);
-            ChromeDriverService service = CreateDefaultService(serviceDirectory);
-            return DriverFinder.VerifyDriverServicePath(service, options) as ChromeDriverService;;
+            return new ChromeDriverService(null, null, PortUtilities.FindFreePort());
         }
 
         /// <summary>
         /// Creates a default instance of the ChromeDriverService using a specified path to the ChromeDriver executable.
         /// </summary>
-        /// <param name="driverPath">The directory containing the ChromeDriver executable.</param>
+        /// <param name="driverPath">The path to the executable or the directory containing the ChromeDriver executable.</param>
         /// <returns>A ChromeDriverService using a random port.</returns>
-        public static ChromeDriverService CreateDefaultService(string driverPath)
+        public static ChromeDriverService CreateDefaultService(string? driverPath)
         {
-            return CreateDefaultService(driverPath, ChromiumDriverServiceFileName(DefaultChromeDriverServiceExecutableName));
+            if (File.Exists(driverPath))
+            {
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
+            }
+            else
+            {
+                string fileName = ChromiumDriverServiceFileName(DefaultChromeDriverServiceExecutableName);
+                string? driverFolder = driverPath;
+
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -80,7 +87,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="driverPath">The directory containing the ChromeDriver executable.</param>
         /// <param name="driverExecutableFileName">The name of the ChromeDriver executable file.</param>
         /// <returns>A ChromeDriverService using a random port.</returns>
-        public static ChromeDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static ChromeDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new ChromeDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }

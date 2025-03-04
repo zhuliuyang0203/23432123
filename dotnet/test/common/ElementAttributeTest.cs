@@ -1,8 +1,27 @@
+// <copyright file="ElementAttributeTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using NUnit.Framework;
+using OpenQA.Selenium.Environment;
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using System.Collections.ObjectModel;
-using OpenQA.Selenium.Environment;
 
 namespace OpenQA.Selenium
 {
@@ -33,7 +52,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
             IWebElement img = driver.FindElement(By.Id("validImgTag"));
             string attribute = img.GetAttribute("src");
-            Assert.AreEqual(EnvironmentManager.Instance.UrlBuilder.WhereIs("icon.gif"), attribute);
+            Assert.That(attribute, Is.EqualTo(EnvironmentManager.Instance.UrlBuilder.WhereIs("icon.gif")));
         }
 
         [Test]
@@ -42,7 +61,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
             IWebElement img = driver.FindElement(By.Id("validAnchorTag"));
             string attribute = img.GetAttribute("href");
-            Assert.AreEqual(EnvironmentManager.Instance.UrlBuilder.WhereIs("icon.gif"), attribute);
+            Assert.That(attribute, Is.EqualTo(EnvironmentManager.Instance.UrlBuilder.WhereIs("icon.gif")));
         }
 
 
@@ -51,7 +70,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             IWebElement body = driver.FindElement(By.XPath("//body"));
-            Assert.AreEqual(string.Empty, body.GetAttribute("style"));
+            Assert.That(body.GetAttribute("style"), Is.Empty);
         }
 
         [Test]
@@ -74,7 +93,7 @@ namespace OpenQA.Selenium
 
             IWebElement multiSelect = driver.FindElement(By.Id("multi"));
             ReadOnlyCollection<IWebElement> options = multiSelect.FindElements(By.TagName("option"));
-            Assert.AreEqual("1", options[1].GetAttribute("index"));
+            Assert.That(options[1].GetAttribute("index"), Is.EqualTo("1"));
         }
 
 
@@ -108,30 +127,21 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement disabledTextElement1 = driver.FindElement(By.Id("disabledTextElement1"));
-            try
+
+            Assert.That(() =>
             {
                 disabledTextElement1.SendKeys("foo");
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidElementStateException)
-            {
-                //Expected
-            }
+            }, Throws.TypeOf<ElementNotInteractableException>());
 
-            Assert.AreEqual(string.Empty, disabledTextElement1.Text);
+            Assert.That(disabledTextElement1.Text, Is.Empty);
 
             IWebElement disabledTextElement2 = driver.FindElement(By.Id("disabledTextElement2"));
-            try
-            {
-                disabledTextElement2.SendKeys("bar");
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidElementStateException)
-            {
-                //Expected
-            }
 
-            Assert.AreEqual(string.Empty, disabledTextElement2.Text);
+            Assert.That(
+                () => disabledTextElement2.SendKeys("bar"),
+                Throws.TypeOf<ElementNotInteractableException>());
+
+            Assert.That(disabledTextElement2.Text, Is.Empty);
         }
 
         [Test]
@@ -159,9 +169,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement checkbox = driver.FindElement(By.XPath("//input[@id='checky']"));
-            Assert.AreEqual(null, checkbox.GetAttribute("checked"));
+            Assert.That(checkbox.GetAttribute("checked"), Is.Null);
             checkbox.Click();
-            Assert.AreEqual("true", checkbox.GetAttribute("checked"));
+            Assert.That(checkbox.GetAttribute("checked"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -172,14 +182,14 @@ namespace OpenQA.Selenium
             IWebElement initiallyNotSelected = driver.FindElement(By.Id("peas"));
             IWebElement initiallySelected = driver.FindElement(By.Id("cheese_and_peas"));
 
-            Assert.AreEqual(null, neverSelected.GetAttribute("selected"), "false");
-            Assert.AreEqual(null, initiallyNotSelected.GetAttribute("selected"), "false");
-            Assert.AreEqual("true", initiallySelected.GetAttribute("selected"), "true");
+            Assert.That(neverSelected.GetAttribute("selected"), Is.Null, "false");
+            Assert.That(initiallyNotSelected.GetAttribute("selected"), Is.Null, "false");
+            Assert.That(initiallySelected.GetAttribute("selected"), Is.EqualTo("true"), "true");
 
             initiallyNotSelected.Click();
-            Assert.AreEqual(null, neverSelected.GetAttribute("selected"));
-            Assert.AreEqual("true", initiallyNotSelected.GetAttribute("selected"));
-            Assert.AreEqual(null, initiallySelected.GetAttribute("selected"));
+            Assert.That(neverSelected.GetAttribute("selected"), Is.Null);
+            Assert.That(initiallyNotSelected.GetAttribute("selected"), Is.EqualTo("true"));
+            Assert.That(initiallySelected.GetAttribute("selected"), Is.Null);
         }
 
         [Test]
@@ -192,8 +202,8 @@ namespace OpenQA.Selenium
             IWebElement two = options[1];
             Assert.That(one.Selected, Is.True);
             Assert.That(two.Selected, Is.False);
-            Assert.AreEqual("true", one.GetAttribute("selected"));
-            Assert.AreEqual(null, two.GetAttribute("selected"));
+            Assert.That(one.GetAttribute("selected"), Is.EqualTo("true"));
+            Assert.That(two.GetAttribute("selected"), Is.Null);
         }
 
         [Test]
@@ -204,7 +214,7 @@ namespace OpenQA.Selenium
             IWebElement heading = driver.FindElement(By.XPath("//h1"));
             String className = heading.GetAttribute("class");
 
-            Assert.AreEqual("header", className);
+            Assert.That(className, Is.EqualTo("header"));
         }
 
         [Test]
@@ -214,7 +224,7 @@ namespace OpenQA.Selenium
 
             String value = driver.FindElement(By.Id("withText")).GetAttribute("value");
 
-            Assert.AreEqual("Example text", value);
+            Assert.That(value, Is.EqualTo("Example text"));
         }
 
         [Test]
@@ -250,7 +260,7 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("hiddenline"));
             string textContent = element.GetAttribute("textContent");
 
-            Assert.AreEqual("A hidden line of text", textContent);
+            Assert.That(textContent, Is.EqualTo("A hidden line of text"));
         }
 
         [Test]
@@ -258,7 +268,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement element = driver.FindElement(By.Id("withText"));
-            Assert.AreEqual("5", element.GetAttribute("rows"));
+            Assert.That(element.GetAttribute("rows"), Is.EqualTo("5"));
         }
 
         [Test]
@@ -278,11 +288,11 @@ namespace OpenQA.Selenium
             IWebElement th1 = driver.FindElement(By.Id("th1"));
             IWebElement td2 = driver.FindElement(By.Id("td2"));
 
-            Assert.AreEqual("th1", th1.GetAttribute("id"), "th1 id");
-            Assert.AreEqual("3", th1.GetAttribute("colspan"), "th1 colspan should be 3");
+            Assert.That(th1.GetAttribute("id"), Is.EqualTo("th1"), "th1 id");
+            Assert.That(th1.GetAttribute("colspan"), Is.EqualTo("3"), "th1 colspan should be 3");
 
-            Assert.AreEqual("td2", td2.GetAttribute("id"), "td2 id");
-            Assert.AreEqual("2", td2.GetAttribute("colspan"), "td2 colspan should be 2");
+            Assert.That(td2.GetAttribute("id"), Is.EqualTo("td2"), "td2 id");
+            Assert.That(td2.GetAttribute("colspan"), Is.EqualTo("2"), "td2 colspan should be 2");
         }
 
         // This is a test-case re-creating issue 900.
@@ -315,7 +325,7 @@ namespace OpenQA.Selenium
 
             driver.Url = svgPage;
             IWebElement svgElement = driver.FindElement(By.Id("rotate"));
-            Assert.AreEqual("rotate(30)", svgElement.GetAttribute("transform"));
+            Assert.That(svgElement.GetAttribute("transform"), Is.EqualTo("rotate(30)"));
         }
 
         [Test]
@@ -323,9 +333,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement element = driver.FindElement(By.Id("working"));
-            Assert.AreEqual(string.Empty, element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.Empty);
             element.SendKeys("hello world");
-            Assert.AreEqual("hello world", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("hello world"));
         }
 
         [Test]
@@ -333,9 +343,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement element = driver.FindElement(By.Id("email"));
-            Assert.AreEqual(string.Empty, element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.Empty);
             element.SendKeys("hello world");
-            Assert.AreEqual("hello world", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("hello world"));
         }
 
         [Test]
@@ -343,9 +353,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement element = driver.FindElement(By.Id("emptyTextArea"));
-            Assert.AreEqual(string.Empty, element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.Empty);
             element.SendKeys("hello world");
-            Assert.AreEqual("hello world", element.GetAttribute("value"));
+            Assert.That(element.GetAttribute("value"), Is.EqualTo("hello world"));
         }
 
         [Test]
@@ -363,15 +373,15 @@ namespace OpenQA.Selenium
         {
             driver.Url = booleanAttributes;
             IWebElement element1 = driver.FindElement(By.Id("emailRequired"));
-            Assert.AreEqual("true", element1.GetAttribute("required"));
+            Assert.That(element1.GetAttribute("required"), Is.EqualTo("true"));
             IWebElement element2 = driver.FindElement(By.Id("emptyTextAreaRequired"));
-            Assert.AreEqual("true", element2.GetAttribute("required"));
+            Assert.That(element2.GetAttribute("required"), Is.EqualTo("true"));
             IWebElement element3 = driver.FindElement(By.Id("inputRequired"));
-            Assert.AreEqual("true", element3.GetAttribute("required"));
+            Assert.That(element3.GetAttribute("required"), Is.EqualTo("true"));
             IWebElement element4 = driver.FindElement(By.Id("textAreaRequired"));
-            Assert.AreEqual("true", element4.GetAttribute("required"));
+            Assert.That(element4.GetAttribute("required"), Is.EqualTo("true"));
             IWebElement element5 = driver.FindElement(By.Id("unwrappable"));
-            Assert.AreEqual("true", element5.GetAttribute("nowrap"));
+            Assert.That(element5.GetAttribute("nowrap"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -379,7 +389,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithoutMultiple"));
-            Assert.AreEqual(null, element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.Null);
         }
 
         [Test]
@@ -387,7 +397,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithMultipleEqualsMultiple"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -395,7 +405,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithEmptyStringMultiple"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -403,7 +413,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithMultipleWithoutValue"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -411,7 +421,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = selectPage;
             IWebElement element = driver.FindElement(By.Id("selectWithRandomMultipleValue"));
-            Assert.AreEqual("true", element.GetAttribute("multiple"));
+            Assert.That(element.GetAttribute("multiple"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -419,7 +429,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("userDefinedProperty.html");
             IWebElement element = driver.FindElement(By.Id("d"));
-            Assert.AreEqual("sampleValue", element.GetAttribute("dynamicProperty"));
+            Assert.That(element.GetAttribute("dynamicProperty"), Is.EqualTo("sampleValue"));
         }
 
         [Test]
@@ -430,7 +440,7 @@ namespace OpenQA.Selenium
 
             IWebElement wallace = driver.FindElement(By.XPath("//div[@id='wallace']"));
             String className = wallace.GetAttribute("class");
-            Assert.AreEqual("gromit", className);
+            Assert.That(className, Is.EqualTo("gromit"));
         }
     }
 }

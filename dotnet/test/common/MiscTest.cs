@@ -1,3 +1,22 @@
+// <copyright file="MiscTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System.Collections.Generic;
@@ -21,13 +40,13 @@ namespace OpenQA.Selenium
         public void ShouldReportTheCurrentUrlCorrectly()
         {
             driver.Url = macbethPage;
-            Assert.AreEqual(macbethPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(macbethPage));
 
             driver.Url = simpleTestPage;
-            Assert.AreEqual(simpleTestPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(simpleTestPage));
 
             driver.Url = javascriptPage;
-            Assert.AreEqual(javascriptPage, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(javascriptPage));
         }
 
         [Test]
@@ -63,7 +82,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleXmlDocument;
             string source = driver.PageSource.ToLower();
             source = System.Text.RegularExpressions.Regex.Replace(source, "\\s", string.Empty);
-            Assert.AreEqual("<xml><foo><bar>baz</bar></foo></xml>", source);
+            Assert.That(source, Is.EqualTo("<xml><foo><bar>baz</bar></foo></xml>"));
         }
 
         // Test is ignored for all browsers, but is kept here in the source code for
@@ -89,14 +108,14 @@ namespace OpenQA.Selenium
 
             foreach (string val in values)
             {
-                Assert.AreEqual(val, GetGlobalVar(driver, val));
+                Assert.That(GetGlobalVar(driver, val), Is.EqualTo(val));
             }
 
             driver.FindElement(By.Id("toclick")).Click();
 
             foreach (string val in values)
             {
-                Assert.AreEqual(val, GetGlobalVar(driver, val));
+                Assert.That(GetGlobalVar(driver, val), Is.EqualTo(val));
             }
         }
 

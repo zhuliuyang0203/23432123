@@ -61,7 +61,8 @@ class JavaScriptTestSuite {
 
   @BeforeEach
   public void setup() {
-    testEnvironment = GlobalTestEnvironment.getOrCreate(InProcessTestEnvironment::new);
+    // this field is actually in use, javascript test do access it
+    testEnvironment = GlobalTestEnvironment.getOrCreate(() -> new InProcessTestEnvironment(true));
   }
 
   @AfterEach
@@ -83,7 +84,7 @@ class JavaScriptTestSuite {
           try {
             String url = "/" + s;
             if (isBazel() && !url.startsWith("/common/generated/")) {
-              url = "/filez/selenium" + url;
+              url = "/filez/_main" + url;
             }
             return new URL(appServer.whereIs(url));
           } catch (MalformedURLException e) {

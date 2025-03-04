@@ -66,9 +66,9 @@ class DistributedCdpTest {
             new TomlConfig(
                 new StringReader(
                     "[node]\n"
-                        + "selenium-manager = true\n"
+                        + "selenium-manager = false\n"
                         + "driver-implementation = "
-                        + browser.displayName())));
+                        + String.format("\"%s\"", browser.displayName()))));
 
     Server<?> server =
         new NettyServer(

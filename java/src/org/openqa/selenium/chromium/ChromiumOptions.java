@@ -24,16 +24,7 @@ import static java.util.stream.Collectors.toList;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Stream;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -76,13 +67,6 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
   public ChromiumOptions(String capabilityType, String browserType, String capability) {
     this.capabilityName = capability;
     setCapability(capabilityType, browserType);
-    if (!"jdk-http-client".equalsIgnoreCase(System.getProperty("webdriver.http.factory", ""))) {
-      // Allowing any origin "*" might sound risky but an attacker would need to know
-      // the port used to start DevTools to establish a connection. Given these sessions
-      // are relatively short-lived, the risk is reduced. Only set when the Java 11 client
-      // is not used.
-      addArguments("--remote-allow-origins=*");
-    }
   }
 
   /**
@@ -127,24 +111,12 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
    *       "allow-outdated-plugins");
    * </code></pre>
    *
-   * <p>Each argument may contain an option "--" prefix: "--foo" or "foo". Arguments with an
+   * <p>Each argument may contain an optional "--" prefix: "--foo" or "foo". Arguments with an
    * associated value should be delimited with an "=": "foo=bar".
    *
    * @param arguments The arguments to use when starting Chrome.
    */
   public T addArguments(List<String> arguments) {
-    /*
-     --remote-allow-origins is being added by default since Chrome 111. We need to check
-     if the argument already exists and then remove it.
-    */
-    String remoteAllowOrigins = "remote-allow-origins";
-    Optional<String> newArg =
-        arguments.stream().filter(arg -> arg.contains(remoteAllowOrigins)).findFirst();
-    Optional<String> existingArg =
-        args.stream().filter(arg -> arg.contains(remoteAllowOrigins)).findFirst();
-    if (newArg.isPresent() && existingArg.isPresent()) {
-      args.remove(existingArg.get());
-    }
     args.addAll(arguments);
     return (T) this;
   }
@@ -165,7 +137,7 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
    * @param paths Paths to the extensions to install.
    */
   public T addExtensions(List<File> paths) {
-    paths.forEach(path -> Require.argument("Extension", path).isFile());
+    paths.forEach(path -> Require.argument("Extension", path.toPath()).isFile());
     extensionFiles.addAll(paths);
     return (T) this;
   }
@@ -193,6 +165,11 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
     return (T) this;
   }
 
+  public T enableBiDi() {
+    setCapability("webSocketUrl", true);
+    return (T) this;
+  }
+
   /**
    * Sets an experimental option. Useful for new ChromeDriver options not yet exposed through the
    * {@link ChromiumOptions} API.
@@ -202,20 +179,6 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
    */
   public T setExperimentalOption(String name, Object value) {
     experimentalOptions.put(Require.nonNull("Option name", name), value);
-    return (T) this;
-  }
-
-  /**
-   * @deprecated Use {@link #addArguments(String...)}. Recommended to use '--headless=chrome' as
-   *     argument for browsers v94-108. Recommended to use '--headless=new' as argument for browsers
-   *     v109+. Example: `addArguments("--headless=new")`.
-   */
-  @Deprecated
-  public T setHeadless(boolean headless) {
-    args.remove("--headless");
-    if (headless) {
-      args.add("--headless");
-    }
     return (T) this;
   }
 
@@ -268,8 +231,7 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
       return null;
     }
 
-    Map<String, Object> options = new TreeMap<>();
-    experimentalOptions.forEach(options::put);
+    Map<String, Object> options = new TreeMap<>(experimentalOptions);
 
     if (binary != null) {
       options.put("binary", binary);
@@ -350,10 +312,13 @@ public class ChromiumOptions<T extends ChromiumOptions<?>>
       }
       addExtensions(options.extensionFiles);
       addEncodedExtensions(options.extensions);
-      if (options.binary != null) {
-        setBinary(options.binary);
-      }
+
+      Optional.ofNullable(options.binary).ifPresent(this::setBinary);
+
       options.experimentalOptions.forEach(this::setExperimentalOption);
+
+      Optional.ofNullable(options.androidOptions)
+          .ifPresent(opts -> opts.forEach(this::setAndroidCapability));
     }
   }
 

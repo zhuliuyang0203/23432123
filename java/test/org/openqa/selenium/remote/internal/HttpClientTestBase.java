@@ -35,6 +35,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,6 +46,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.environment.webserver.AppServer;
 import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.json.Json;
@@ -56,8 +61,10 @@ public abstract class HttpClientTestBase {
 
   protected abstract HttpClient.Factory createFactory();
 
-  static HttpHandler delegate;
+  static volatile HttpHandler delegate;
   static AppServer server;
+
+  private static final Logger LOG = Logger.getLogger(HttpClientTestBase.class.getName());
 
   @BeforeAll
   public static void setUp() {
@@ -192,12 +199,128 @@ public abstract class HttpClientTestBase {
                       try {
                         Thread.sleep(1000);
                       } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        LOG.severe("Error during execution: " + e.getMessage());
                       }
                       return new HttpResponse()
                           .setContent(Contents.utf8String(req.getHeader("user-agent")));
                     },
                     ClientConfig.defaultConfig().readTimeout(Duration.ofMillis(500))));
+  }
+
+  @Test
+  public void shouldAllowConfigurationFromSystemProperties() {
+    delegate =
+        req -> {
+          try {
+            Thread.sleep(3000);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
+          return new HttpResponse().setContent(Contents.utf8String("Connection timed out"));
+        };
+    try {
+      System.setProperty("webdriver.httpclient.connectionTimeout", "1");
+      System.setProperty("webdriver.httpclient.readTimeout", "2");
+      System.setProperty("webdriver.httpclient.version", "HTTP_1_1");
+      ClientConfig clientConfig = ClientConfig.defaultConfig();
+      assertThat(clientConfig.connectionTimeout()).isEqualTo(Duration.ofSeconds(1));
+      assertThat(clientConfig.readTimeout()).isEqualTo(Duration.ofSeconds(2));
+      assertThat(clientConfig.version()).isEqualTo("HTTP_1_1");
+      HttpClient client =
+          createFactory().createClient(clientConfig.baseUri(URI.create(server.whereIs("/"))));
+      HttpRequest request = new HttpRequest(GET, "/delayed");
+      assertThatExceptionOfType(TimeoutException.class).isThrownBy(() -> client.execute(request));
+    } finally {
+      System.clearProperty("webdriver.httpclient.connectionTimeout");
+      System.clearProperty("webdriver.httpclient.readTimeout");
+      System.clearProperty("webdriver.httpclient.version");
+    }
+  }
+
+  private ClientConfig prepareShouldStopTest(
+      CountDownLatch executing, CountDownLatch interrupted, int timeout) {
+    CountDownLatch unlock = new CountDownLatch(1);
+
+    delegate =
+        req -> {
+          try {
+            unlock.await(20, TimeUnit.SECONDS);
+          } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(ex);
+          }
+
+          return new HttpResponse();
+        };
+
+    return ClientConfig.defaultConfig()
+        .withFilter(
+            (handler) ->
+                (request) -> {
+                  try {
+                    executing.countDown();
+                    return handler.execute(request);
+                  } catch (WebDriverException ex) {
+                    if (ex.getCause() instanceof InterruptedException) {
+                      interrupted.countDown();
+                    }
+
+                    throw ex;
+                  } finally {
+                    unlock.countDown();
+                  }
+                })
+        .readTimeout(Duration.ofMillis(timeout));
+  }
+
+  @Test
+  public void shouldStopRequestAfterTimeout() throws InterruptedException {
+    CountDownLatch executing = new CountDownLatch(1);
+    CountDownLatch interrupted = new CountDownLatch(1);
+    ClientConfig clientConfig = prepareShouldStopTest(executing, interrupted, 400);
+
+    try (HttpClient client =
+        createFactory().createClient(clientConfig.baseUri(URI.create(server.whereIs("/"))))) {
+      HttpRequest request = new HttpRequest(GET, "/delayed");
+
+      assertThatExceptionOfType(TimeoutException.class).isThrownBy(() -> client.execute(request));
+      assertThat(interrupted.await(800, TimeUnit.MILLISECONDS)).isTrue();
+    }
+  }
+
+  @Test
+  public void shouldStopAsyncRequestAfterTimeout() throws InterruptedException {
+    CountDownLatch executing = new CountDownLatch(1);
+    CountDownLatch interrupted = new CountDownLatch(1);
+    ClientConfig clientConfig = prepareShouldStopTest(executing, interrupted, 400);
+
+    try (HttpClient client =
+        createFactory().createClient(clientConfig.baseUri(URI.create(server.whereIs("/"))))) {
+      HttpRequest request = new HttpRequest(GET, "/delayed");
+      // does intentionally not read the future
+      client.executeAsync(request);
+      assertThat(interrupted.await(800, TimeUnit.MILLISECONDS)).isTrue();
+    }
+  }
+
+  @Test
+  public void shouldStopRequestOnCancel() throws InterruptedException {
+    CountDownLatch executing = new CountDownLatch(1);
+    CountDownLatch interrupted = new CountDownLatch(1);
+    CountDownLatch unlock = new CountDownLatch(1);
+    ClientConfig clientConfig = prepareShouldStopTest(executing, interrupted, 4000);
+
+    try (HttpClient client =
+        createFactory().createClient(clientConfig.baseUri(URI.create(server.whereIs("/"))))) {
+      HttpRequest request = new HttpRequest(GET, "/delayed");
+
+      Future<?> future = client.executeAsync(request);
+
+      assertThat(executing.await(800, TimeUnit.MILLISECONDS)).isTrue();
+      assertThat(future.cancel(true)).isTrue();
+      assertThat(interrupted.await(800, TimeUnit.MILLISECONDS)).isTrue();
+      unlock.countDown();
+    }
   }
 
   private HttpResponse getResponseWithHeaders(final Multimap<String, String> headers) {

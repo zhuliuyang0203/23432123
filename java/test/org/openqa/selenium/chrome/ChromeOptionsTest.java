@@ -23,8 +23,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import static org.assertj.core.api.InstanceOfAssertFactories.STRING;
-import static org.openqa.selenium.chrome.ChromeDriverLogLevel.OFF;
-import static org.openqa.selenium.chrome.ChromeDriverLogLevel.SEVERE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.openqa.selenium.chromium.ChromiumDriverLogLevel.OFF;
+import static org.openqa.selenium.chromium.ChromiumDriverLogLevel.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.TIMEOUTS;
 
@@ -43,6 +44,7 @@ import org.openqa.selenium.AcceptedW3CCapabilityKeys;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 import org.openqa.selenium.testing.TestUtilities;
 
 @Tag("UnitTests")
@@ -69,8 +71,8 @@ class ChromeOptionsTest {
 
   @Test
   void canBuildLogLevelFromStringRepresentation() {
-    assertThat(ChromeDriverLogLevel.fromString("off")).isEqualTo(OFF);
-    assertThat(ChromeDriverLogLevel.fromString("SEVERE")).isEqualTo(SEVERE);
+    assertThat(ChromiumDriverLogLevel.fromString("off")).isEqualTo(OFF);
+    assertThat(ChromiumDriverLogLevel.fromString("SEVERE")).isEqualTo(SEVERE);
   }
 
   @Test
@@ -83,6 +85,7 @@ class ChromeOptionsTest {
         .setAcceptInsecureCerts(true)
         .setPageLoadStrategy(PageLoadStrategy.EAGER)
         .setStrictFileInteractability(true)
+        .setEnableDownloads(true)
         .setImplicitWaitTimeout(Duration.ofSeconds(1))
         .setPageLoadTimeout(Duration.ofSeconds(2))
         .setScriptTimeout(Duration.ofSeconds(3));
@@ -95,6 +98,7 @@ class ChromeOptionsTest {
     assertThat(mappedOptions.get("acceptInsecureCerts")).isEqualTo(true);
     assertThat(mappedOptions.get("pageLoadStrategy")).hasToString("eager");
     assertThat(mappedOptions.get("strictFileInteractability")).isEqualTo(true);
+    assertThat(mappedOptions.get("se:downloadsEnabled")).isEqualTo(true);
 
     Map<String, Long> expectedTimeouts = new HashMap<>();
     expectedTimeouts.put("implicit", 1000L);
@@ -146,7 +150,7 @@ class ChromeOptionsTest {
         .asInstanceOf(MAP)
         .extractingByKey("args")
         .asInstanceOf(LIST)
-        .containsExactly("--remote-allow-origins=*", "verbose", "silent");
+        .containsExactly("verbose", "silent");
   }
 
   @Test
@@ -262,7 +266,7 @@ class ChromeOptionsTest {
         .asInstanceOf(MAP)
         .extractingByKey("args")
         .asInstanceOf(LIST)
-        .containsExactly("--remote-allow-origins=*", "verbose", "silent");
+        .containsExactly("verbose", "silent");
 
     assertThat(map)
         .asInstanceOf(MAP)
@@ -327,7 +331,7 @@ class ChromeOptionsTest {
         .asInstanceOf(MAP)
         .extractingByKey("args")
         .asInstanceOf(LIST)
-        .containsExactly("--remote-allow-origins=*", "verbose", "silent");
+        .containsExactly("verbose", "silent");
 
     assertThat(map).asInstanceOf(MAP).containsEntry("opt1", "val1");
 
@@ -360,11 +364,7 @@ class ChromeOptionsTest {
   @Test
   void isW3CSafe() {
     Map<String, Object> converted =
-        new ChromeOptions()
-            .setBinary("some/path")
-            .addArguments("--headless")
-            .setLogLevel(ChromeDriverLogLevel.INFO)
-            .asMap();
+        new ChromeOptions().setBinary("some/path").addArguments("--headless").asMap();
 
     Predicate<String> badKeys = new AcceptedW3CCapabilityKeys().negate();
     Set<String> seen = converted.keySet().stream().filter(badKeys).collect(toSet());
@@ -382,5 +382,19 @@ class ChromeOptionsTest {
         .asInstanceOf(MAP)
         .extractingByKey("androidActivity")
         .isEqualTo("com.cheese.nom");
+  }
+
+  @Test
+  void shouldBeAbleToMergeAnAndroidOption() {
+    var original = new ChromeOptions();
+    original.setAndroidActivity("co_activity");
+    original.setAndroidPackage("co_package");
+    original.setExperimentalOption("experimental", "co_experimental");
+    original.addArguments("--co_argument");
+
+    var caps = new MutableCapabilities();
+    var merged = original.merge(caps);
+
+    assertEquals(original.asMap(), merged.asMap());
   }
 }

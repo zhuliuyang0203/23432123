@@ -19,33 +19,24 @@ package org.openqa.selenium.firefox;
 
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
 
-import com.google.common.collect.ImmutableMap;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.openqa.selenium.Beta;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.PersistentCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.HasBiDi;
-import org.openqa.selenium.devtools.CdpEndpointFinder;
-import org.openqa.selenium.devtools.CdpInfo;
-import org.openqa.selenium.devtools.CdpVersionFinder;
-import org.openqa.selenium.devtools.Connection;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.DevToolsException;
-import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.noop.NoOpCdpInfo;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.SessionStorage;
 import org.openqa.selenium.html5.WebStorage;
@@ -77,7 +68,7 @@ import org.openqa.selenium.remote.service.DriverService;
  * </pre>
  */
 public class FirefoxDriver extends RemoteWebDriver
-    implements WebStorage, HasExtensions, HasFullPageScreenshot, HasContext, HasDevTools, HasBiDi {
+    implements WebStorage, HasExtensions, HasFullPageScreenshot, HasContext, HasBiDi {
 
   private static final Logger LOG = Logger.getLogger(FirefoxDriver.class.getName());
   private final Capabilities capabilities;
@@ -85,11 +76,8 @@ public class FirefoxDriver extends RemoteWebDriver
   private final HasExtensions extensions;
   private final HasFullPageScreenshot fullPageScreenshot;
   private final HasContext context;
-  private final Optional<URI> cdpUri;
   private final Optional<URI> biDiUri;
-  private Connection connection;
-  private DevTools devTools;
-  private Optional<BiDi> biDi;
+  private final Optional<BiDi> biDi;
 
   /**
    * Creates a new FirefoxDriver using the {@link GeckoDriverService#createDefaultService)} server
@@ -136,9 +124,11 @@ public class FirefoxDriver extends RemoteWebDriver
     Require.nonNull("Driver service", service);
     Require.nonNull("Driver options", options);
     Require.nonNull("Driver clientConfig", clientConfig);
-    if (service.getExecutable() == null) {
-      String path = DriverFinder.getPath(service, options);
-      service.setExecutable(path);
+    DriverFinder finder = new DriverFinder(service, options);
+    service.setExecutable(finder.getDriverPath());
+    if (finder.hasBrowserPath()) {
+      options.setBinary(finder.getBrowserPath());
+      options.setCapability("browserVersion", (Object) null);
     }
     return new FirefoxDriverCommandExecutor(service, clientConfig);
   }
@@ -157,34 +147,6 @@ public class FirefoxDriver extends RemoteWebDriver
     context = new AddHasContext().getImplementation(getCapabilities(), getExecuteMethod());
 
     Capabilities capabilities = super.getCapabilities();
-    HttpClient.Factory factory = HttpClient.Factory.createDefault();
-
-    Optional<URI> reportedUri =
-        CdpEndpointFinder.getReportedUri("moz:debuggerAddress", capabilities);
-    Optional<HttpClient> client =
-        reportedUri.map(uri -> CdpEndpointFinder.getHttpClient(factory, uri));
-    Optional<URI> cdpUri;
-
-    try {
-      cdpUri = client.flatMap(httpClient -> CdpEndpointFinder.getCdpEndPoint(httpClient));
-    } catch (Exception e) {
-      try {
-        client.ifPresent(HttpClient::close);
-      } catch (Exception ex) {
-        e.addSuppressed(ex);
-      }
-      throw e;
-    }
-
-    try {
-      client.ifPresent(HttpClient::close);
-    } catch (Exception e) {
-      LOG.log(
-          Level.FINE,
-          "failed to close the http client used to check the reported CDP endpoint: "
-              + reportedUri.get(),
-          e);
-    }
 
     Optional<String> webSocketUrl =
         Optional.ofNullable((String) capabilities.getCapability("webSocketUrl"));
@@ -202,16 +164,7 @@ public class FirefoxDriver extends RemoteWebDriver
 
     this.biDi = createBiDi(biDiUri);
 
-    this.cdpUri = cdpUri;
-    this.capabilities =
-        cdpUri
-            .map(
-                uri ->
-                    new ImmutableCapabilities(
-                        new PersistentCapabilities(capabilities)
-                            .setCapability("se:cdp", uri.toString())
-                            .setCapability("se:cdpVersion", "85.0")))
-            .orElse(new ImmutableCapabilities(capabilities));
+    this.capabilities = new ImmutableCapabilities(capabilities);
   }
 
   @Beta
@@ -249,11 +202,13 @@ public class FirefoxDriver extends RemoteWebDriver
   }
 
   @Override
+  @Deprecated
   public LocalStorage getLocalStorage() {
     return webStorage.getLocalStorage();
   }
 
   @Override
+  @Deprecated
   public SessionStorage getSessionStorage() {
     return webStorage.getSessionStorage();
   }
@@ -303,60 +258,17 @@ public class FirefoxDriver extends RemoteWebDriver
     context.setContext(commandContext);
   }
 
-  /**
-   * @deprecated Use W3C-compliant BiDi protocol. Use {{@link #maybeGetBiDi()}}
-   */
-  @Deprecated
-  @Override
-  public Optional<DevTools> maybeGetDevTools() {
-    if (devTools != null) {
-      return Optional.of(devTools);
-    }
-
-    if (!cdpUri.isPresent()) {
-      return Optional.empty();
-    }
-
-    URI wsUri =
-        cdpUri.orElseThrow(
-            () ->
-                new DevToolsException(
-                    "This version of Firefox or geckodriver does not support CDP"));
-    HttpClient.Factory clientFactory = HttpClient.Factory.createDefault();
-
-    ClientConfig wsConfig = ClientConfig.defaultConfig().baseUri(wsUri);
-    HttpClient wsClient = clientFactory.createClient(wsConfig);
-
-    connection = new Connection(wsClient, wsUri.toString());
-    CdpInfo cdpInfo = new CdpVersionFinder().match("85.0").orElseGet(NoOpCdpInfo::new);
-    devTools = new DevTools(cdpInfo::getDomains, connection);
-
-    return Optional.of(devTools);
-  }
-
-  /**
-   * @deprecated Use W3C-compliant BiDi protocol. Use {{@link #getBiDi()}}
-   */
-  @Deprecated
-  @Override
-  public DevTools getDevTools() {
-    if (!cdpUri.isPresent()) {
-      throw new DevToolsException("This version of Firefox or geckodriver does not support CDP");
-    }
-
-    return maybeGetDevTools()
-        .orElseThrow(() -> new DevToolsException("Unable to initialize CDP connection"));
-  }
-
   private Optional<BiDi> createBiDi(Optional<URI> biDiUri) {
-    if (!biDiUri.isPresent()) {
+    if (biDiUri.isEmpty()) {
       return Optional.empty();
     }
 
     URI wsUri =
         biDiUri.orElseThrow(
             () ->
-                new BiDiException("This version of Firefox or geckodriver does not support BiDi"));
+                new BiDiException(
+                    "Check if this browser version supports BiDi and if the 'webSocketUrl: true'"
+                        + " capability is set."));
 
     HttpClient.Factory clientFactory = HttpClient.Factory.createDefault();
     ClientConfig wsConfig = ClientConfig.defaultConfig().baseUri(wsUri);
@@ -375,12 +287,14 @@ public class FirefoxDriver extends RemoteWebDriver
 
   @Override
   public BiDi getBiDi() {
-    if (!biDiUri.isPresent()) {
-      throw new BiDiException("This version of Firefox or geckodriver does not support Bidi");
+    if (biDiUri.isEmpty()) {
+      throw new BiDiException(
+          "Check if this browser version supports BiDi and if the 'webSocketUrl: true' capability"
+              + " is set.");
     }
 
     return maybeGetBiDi()
-        .orElseThrow(() -> new DevToolsException("Unable to initialize Bidi connection"));
+        .orElseThrow(() -> new BiDiException("Unable to initialize Bidi connection"));
   }
 
   @Override
@@ -392,14 +306,6 @@ public class FirefoxDriver extends RemoteWebDriver
 
     /** System property that defines the location of the Firefox executable file. */
     public static final String BROWSER_BINARY = "webdriver.firefox.bin";
-
-    /**
-     * System property that defines the location of the file where Firefox log should be stored.
-     *
-     * @deprecated equivalent constant located at {@link
-     *     GeckoDriverService#GECKO_DRIVER_LOG_PROPERTY}
-     */
-    @Deprecated public static final String BROWSER_LOGFILE = "webdriver.firefox.logfile";
 
     /**
      * System property that defines the profile that should be used as a template. When the driver
@@ -420,11 +326,12 @@ public class FirefoxDriver extends RemoteWebDriver
     }
 
     private static Map<String, CommandInfo> getExtraCommands() {
-      return ImmutableMap.<String, CommandInfo>builder()
-          .putAll(new AddHasContext().getAdditionalCommands())
-          .putAll(new AddHasExtensions().getAdditionalCommands())
-          .putAll(new AddHasFullPageScreenshot().getAdditionalCommands())
-          .build();
+      return Stream.of(
+              new AddHasContext().getAdditionalCommands(),
+              new AddHasExtensions().getAdditionalCommands(),
+              new AddHasFullPageScreenshot<>().getAdditionalCommands())
+          .flatMap((m) -> m.entrySet().stream())
+          .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
   }
 }

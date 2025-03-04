@@ -21,8 +21,10 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static net.bytebuddy.jar.asm.Opcodes.ACC_MANDATED;
 import static net.bytebuddy.jar.asm.Opcodes.ACC_MODULE;
 import static net.bytebuddy.jar.asm.Opcodes.ACC_OPEN;
+import static net.bytebuddy.jar.asm.Opcodes.ACC_STATIC_PHASE;
 import static net.bytebuddy.jar.asm.Opcodes.ACC_TRANSITIVE;
 import static net.bytebuddy.jar.asm.Opcodes.ASM9;
+import static net.bytebuddy.jar.asm.Opcodes.V11;
 
 import com.github.bazelbuild.rules_jvm_external.zip.StableZipEntry;
 import com.github.javaparser.JavaParser;
@@ -56,6 +58,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collection;
@@ -164,11 +167,29 @@ public class ModuleGenerator {
     // It doesn't matter what we use for writing to the stream: jdeps doesn't use it. *facepalm*
     List<String> jdepsArgs = new LinkedList<>(List.of("--api-only", "--multi-release", "9"));
     if (!modulePath.isEmpty()) {
+      Path tmp = Files.createTempDirectory("automatic_module_jars");
       jdepsArgs.addAll(
           List.of(
               "--module-path",
               modulePath.stream()
-                  .map(Object::toString)
+                  .map(
+                      (s) -> {
+                        String file = s.getFileName().toString();
+
+                        if (file.startsWith("processed_")) {
+                          Path copy = tmp.resolve(file.substring(10));
+
+                          try {
+                            Files.copy(s, copy, StandardCopyOption.REPLACE_EXISTING);
+                          } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                          }
+
+                          return copy.toString();
+                        }
+
+                        return s.toString();
+                      })
                   .collect(Collectors.joining(File.pathSeparator))));
     }
     jdepsArgs.addAll(List.of("--generate-module-info", temp.toAbsolutePath().toString()));
@@ -299,9 +320,7 @@ public class ModuleGenerator {
                         exportedPackages.stream().map(Name::new).collect(Collectors.toSet())))));
 
     ClassWriter classWriter = new ClassWriter(0);
-    classWriter.visit(
-        /* version 9 */
-        53, ACC_MODULE, "module-info", null, null, null);
+    classWriter.visit(V11, ACC_MODULE, "module-info", null, null, null);
     ModuleVisitor moduleVisitor = classWriter.visitModule(moduleName, isOpen ? ACC_OPEN : 0, null);
     moduleVisitor.visitRequire("java.base", ACC_MANDATED, null);
 
@@ -314,24 +333,14 @@ public class ModuleGenerator {
 
     Manifest manifest = new Manifest();
     manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-    manifest.getMainAttributes().put(Attributes.Name.MULTI_RELEASE, "true");
 
     try (OutputStream os = Files.newOutputStream(outJar);
         JarOutputStream jos = new JarOutputStream(os, manifest)) {
       jos.setLevel(ZipOutputStream.STORED);
 
-      ZipEntry dir = new StableZipEntry("META-INF/");
-      jos.putNextEntry(dir);
-
-      dir = new StableZipEntry("META-INF/versions/");
-      jos.putNextEntry(dir);
-
-      dir = new StableZipEntry("META-INF/versions/9/");
-      jos.putNextEntry(dir);
-
       byte[] bytes = classWriter.toByteArray();
 
-      ZipEntry entry = new StableZipEntry("META-INF/versions/9/module-info.class");
+      ZipEntry entry = new StableZipEntry("module-info.class");
       entry.setSize(bytes.length);
 
       jos.putNextEntry(entry);
@@ -467,12 +476,19 @@ public class ModuleGenerator {
     @Override
     public void visit(ModuleRequiresDirective n, Void arg) {
       String name = n.getNameAsString();
-      if (name.startsWith("processed_")) {
+      if (name.startsWith("processed.")) {
         // When 'Automatic-Module-Name' is not set, we must derive the module name from the jar file
-        // name. Therefore, the 'processed_' prefix added by bazel must be removed to get the name.
+        // name. Therefore, the 'processed.' prefix added by bazel must be removed to get the name.
         name = name.substring(10);
       }
-      byteBuddyVisitor.visitRequire(name, getByteBuddyModifier(n.getModifiers()), null);
+      int modifiers = getByteBuddyModifier(n.getModifiers());
+      if (!name.startsWith("org.seleniumhq.selenium.") && !name.startsWith("java.")) {
+        // Some people like to exclude jars from the classpath. To allow this we need to make these
+        // modules static,
+        // otherwise a 'module not found' error while compiling their code would be the consequence.
+        modifiers |= ACC_STATIC_PHASE;
+      }
+      byteBuddyVisitor.visitRequire(name, modifiers, null);
     }
 
     @Override
@@ -511,8 +527,11 @@ public class ModuleGenerator {
       return modifiers.stream()
           .mapToInt(
               mod -> {
-                if (mod.getKeyword() == Modifier.Keyword.TRANSITIVE) {
-                  return ACC_TRANSITIVE;
+                switch (mod.getKeyword()) {
+                  case STATIC:
+                    return ACC_STATIC_PHASE;
+                  case TRANSITIVE:
+                    return ACC_TRANSITIVE;
                 }
                 throw new RuntimeException("Unknown modifier: " + mod);
               })

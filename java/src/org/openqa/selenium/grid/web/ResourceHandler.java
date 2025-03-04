@@ -23,6 +23,7 @@ import static com.google.common.net.MediaType.GIF;
 import static com.google.common.net.MediaType.HTML_UTF_8;
 import static com.google.common.net.MediaType.JAVASCRIPT_UTF_8;
 import static com.google.common.net.MediaType.JPEG;
+import static com.google.common.net.MediaType.JSON_UTF_8;
 import static com.google.common.net.MediaType.OCTET_STREAM;
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8;
 import static com.google.common.net.MediaType.PNG;
@@ -41,6 +42,7 @@ import com.google.common.net.MediaType;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.openqa.selenium.internal.Require;
@@ -133,7 +135,7 @@ public class ResourceHandler implements Routable {
     String extension = (index == -1 || uri.length() == index) ? "" : uri.substring(index + 1);
 
     MediaType type;
-    switch (extension.toLowerCase()) {
+    switch (extension.toLowerCase(Locale.ENGLISH)) {
       case "appcache":
         type = CACHE_MANIFEST_UTF_8;
         break;
@@ -158,6 +160,10 @@ public class ResourceHandler implements Routable {
 
       case "js":
         type = JAVASCRIPT_UTF_8;
+        break;
+
+      case "json":
+        type = JSON_UTF_8;
         break;
 
       case "md":

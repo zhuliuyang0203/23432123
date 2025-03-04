@@ -1,1 +1,1 @@
-jruby 9.2.8.0 (2.5.3) 2019-08-12 a1ac7ff OpenJDK 64-Bit Server VM 15.0.2+7 on 15.0.2+7 +jit [darwin-x86_64]
+jruby 9.4.12.0 (3.1.4) 2025-02-11 f4ab75096a Java HotSpot(TM) 64-Bit Server VM 25.172-b11 on 1.8.0_172-b11 +jit [x86_64-darwin]

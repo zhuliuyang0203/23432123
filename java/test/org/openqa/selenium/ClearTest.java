@@ -19,10 +19,12 @@ package org.openqa.selenium;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.openqa.selenium.testing.drivers.Browser.HTMLUNIT;
+import static org.openqa.selenium.testing.drivers.Browser.CHROME;
+import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 import static org.openqa.selenium.testing.drivers.Browser.IE;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NotYetImplemented;
 
@@ -37,6 +39,8 @@ class ClearTest extends JupiterTestBase {
   }
 
   @Test
+  @Ignore(value = CHROME, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4743")
+  @Ignore(value = EDGE, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4743")
   void testTextInputShouldNotClearWhenDisabled() {
     driver.get(pages.readOnlyPage);
     WebElement element = driver.findElement(By.id("textInputNotEnabled"));
@@ -60,6 +64,8 @@ class ClearTest extends JupiterTestBase {
   }
 
   @Test
+  @Ignore(value = CHROME, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4743")
+  @Ignore(value = EDGE, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4743")
   void testTextAreaShouldNotClearWhenDisabled() {
     driver.get(pages.readOnlyPage);
     WebElement element = driver.findElement(By.id("textAreaNotEnabled"));
@@ -122,20 +128,17 @@ class ClearTest extends JupiterTestBase {
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearRangeInput() {
     shouldBeAbleToClearInput(By.name("range_input"), "42", "50");
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   @NotYetImplemented(IE)
   public void shouldBeAbleToClearColorInput() {
     shouldBeAbleToClearInput(By.name("color_input"), "#00ffff", "#000000");
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearDateInput() {
     shouldBeAbleToClearInput(By.name("date_input"), "2017-11-22");
   }
@@ -146,25 +149,21 @@ class ClearTest extends JupiterTestBase {
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearDatetimeLocalInput() {
     shouldBeAbleToClearInput(By.name("datetime_local_input"), "2017-11-22T11:22");
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearTimeInput() {
     shouldBeAbleToClearInput(By.name("time_input"), "11:22");
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearMonthInput() {
     shouldBeAbleToClearInput(By.name("month_input"), "2017-11");
   }
 
   @Test
-  @NotYetImplemented(HTMLUNIT)
   public void shouldBeAbleToClearWeekInput() {
     shouldBeAbleToClearInput(By.name("week_input"), "2017-W47");
   }

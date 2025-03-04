@@ -1,10 +1,29 @@
+// <copyright file="IeSpecificTests.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
-using System;
-using System.Linq;
 using OpenQA.Selenium.Environment;
-using System.Collections.ObjectModel;
 using OpenQA.Selenium.Interactions;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace OpenQA.Selenium.IE
 {
@@ -99,7 +118,7 @@ namespace OpenQA.Selenium.IE
                 }
             }
 
-            Assert.IsTrue(passed, errors);
+            Assert.That(passed, errors);
         }
 
         //[Test]
@@ -121,7 +140,7 @@ namespace OpenQA.Selenium.IE
                 WaitFor(FrameToExistAndBeSwitchedTo("scrolling_frame"), "No frame with name or id 'scrolling_frame' found");
                 IWebElement element = driver.FindElement(By.Name("scroll_checkbox"));
                 element.Click();
-                Assert.IsTrue(element.Selected);
+                Assert.That(element.Selected);
 
                 driver.SwitchTo().DefaultContent();
 
@@ -129,7 +148,7 @@ namespace OpenQA.Selenium.IE
                 WaitFor(FrameToExistAndBeSwitchedTo("scrolling_frame"), "No frame with name or id 'scrolling_frame' found");
                 element = driver.FindElement(By.Name("scroll_checkbox"));
                 element.Click();
-                Assert.IsTrue(element.Selected);
+                Assert.That(element.Selected);
             }
             finally
             {
@@ -157,11 +176,11 @@ namespace OpenQA.Selenium.IE
             driver.FindElement(By.Id("x")).Click();
             // Sleep is required; driver may not be fast enough after this Click().
             System.Threading.Thread.Sleep(2000);
-            Assert.AreEqual("XHTML Test Page", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
 
             // Act on the result page to make sure the window handling is still valid.
             driver.FindElement(By.Id("linkId")).Click();
-            Assert.AreEqual("We Arrive Here", driver.Title);
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         //[Test]
@@ -172,8 +191,8 @@ namespace OpenQA.Selenium.IE
             driver.Url = xhtmlTestPage;
             secondDriver.Url = formsPage;
 
-            Assert.AreEqual("XHTML Test Page", driver.Title);
-            Assert.AreEqual("We Leave From Here", secondDriver.Title);
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
+            Assert.That(secondDriver.Title, Is.EqualTo("We Arrive Here"));
 
             // We only need to quit the second driver if the test passes
             secondDriver.Quit();
@@ -193,7 +212,7 @@ namespace OpenQA.Selenium.IE
             string bodyStyle = driver.FindElement(By.TagName("body")).GetAttribute("style");
             driver.Close();
             driver.SwitchTo().Window(startWindow);
-            Assert.IsTrue(bodyStyle.Contains("BACKGROUND-COLOR: #80ffff") || bodyStyle.Contains("background-color: rgb(128, 255, 255)"));
+            Assert.That(bodyStyle, Does.Contain("BACKGROUND-COLOR: #80ffff").Or.Contain("background-color: rgb(128, 255, 255)"));
         }
 
         //[Test]
@@ -207,7 +226,7 @@ namespace OpenQA.Selenium.IE
             WaitFor(() => { return driver.WindowHandles.Count > 1; }, "Window count was not greater than 1");
 
             ReadOnlyCollection<string> windowHandles = driver.WindowHandles;
-            Assert.AreEqual(2, windowHandles.Count);
+            Assert.That(windowHandles, Has.Exactly(2).Items);
 
             string dialogHandle = string.Empty;
             foreach (string handle in windowHandles)
@@ -219,7 +238,7 @@ namespace OpenQA.Selenium.IE
                 }
             }
 
-            Assert.AreNotEqual(string.Empty, dialogHandle);
+            Assert.That(dialogHandle, Is.Not.Empty);
 
             driver.SwitchTo().Window(dialogHandle);
             IWebElement closeElement = driver.FindElement(By.Id("close"));
@@ -228,7 +247,7 @@ namespace OpenQA.Selenium.IE
             WaitFor(() => { return driver.WindowHandles.Count == 1; }, "Window count was not 1");
 
             windowHandles = driver.WindowHandles;
-            Assert.AreEqual(1, windowHandles.Count);
+            Assert.That(windowHandles, Has.One.Items);
             driver.SwitchTo().Window(originalWindowHandle);
         }
 
@@ -237,9 +256,9 @@ namespace OpenQA.Selenium.IE
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("scroll.html");
             driver.FindElement(By.Id("line8")).Click();
-            Assert.AreEqual("line8", driver.FindElement(By.Id("clicked")).Text);
+            Assert.That(driver.FindElement(By.Id("clicked")).Text, Is.EqualTo("line8"));
             driver.FindElement(By.Id("line1")).Click();
-            Assert.AreEqual("line1", driver.FindElement(By.Id("clicked")).Text);
+            Assert.That(driver.FindElement(By.Id("clicked")).Text, Is.EqualTo("line1"));
         }
 
         //[Test]
@@ -249,7 +268,7 @@ namespace OpenQA.Selenium.IE
             var list = driver.FindElement(By.TagName("ul"));
             var item = list.FindElement(By.Id("desired"));
             item.Click();
-            Assert.AreEqual(0, ((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].scrollTop;", list), "Should not have scrolled");
+            Assert.That(((IJavaScriptExecutor)driver).ExecuteScript("return arguments[0].scrollTop;", list), Is.Zero, "Should not have scrolled");
         }
 
         //[Test]
@@ -259,7 +278,7 @@ namespace OpenQA.Selenium.IE
             driver.FindElement(By.Id("button1")).Click();
             var scrollTop = GetScrollTop();
             driver.FindElement(By.Id("button2")).Click();
-            Assert.AreEqual(scrollTop, GetScrollTop());
+            Assert.That(GetScrollTop(), Is.EqualTo(scrollTop));
         }
 
         //[Test]
@@ -274,7 +293,7 @@ namespace OpenQA.Selenium.IE
             ReadOnlyCollection<string> windows = driver.WindowHandles;
             string firstWindowHandle = windows.Except(new List<string>() { parentHandle }).First();
             driver.SwitchTo().Window(firstWindowHandle);
-            Assert.AreEqual(2, windows.Count);
+            Assert.That(windows, Has.Exactly(2).Items);
 
             // Launch second modal
             driver.FindElement(By.CssSelector("input[type='button'][value='btn2']")).Click();
@@ -282,14 +301,14 @@ namespace OpenQA.Selenium.IE
             ReadOnlyCollection<string> windows_1 = driver.WindowHandles;
             string secondWindowHandle = windows_1.Except(windows).First();
             driver.SwitchTo().Window(secondWindowHandle);
-            Assert.AreEqual(3, windows_1.Count);
+            Assert.That(windows_1, Has.Exactly(3).Items);
 
             // Launch third modal
             driver.FindElement(By.CssSelector("input[type='button'][value='btn3']")).Click();
             WaitFor(() => { return driver.WindowHandles.Count > 3; }, "Window count was not greater than 3");
             ReadOnlyCollection<string> windows_2 = driver.WindowHandles;
             string finalWindowHandle = windows_2.Except(windows_1).First();
-            Assert.AreEqual(4, windows_2.Count);
+            Assert.That(windows_2, Has.Exactly(4).Items);
 
             driver.SwitchTo().Window(finalWindowHandle).Close();
             driver.SwitchTo().Window(secondWindowHandle).Close();
@@ -309,7 +328,7 @@ namespace OpenQA.Selenium.IE
             ReadOnlyCollection<string> windows = driver.WindowHandles;
             string firstWindowHandle = windows.Except(new List<string>() { parentHandle }).First();
             driver.SwitchTo().Window(firstWindowHandle);
-            Assert.AreEqual(2, windows.Count);
+            Assert.That(windows, Has.Exactly(2).Items);
 
             // Launch second modal
             driver.FindElement(By.CssSelector("a[id='lnk2']")).Click();
@@ -318,14 +337,14 @@ namespace OpenQA.Selenium.IE
             ReadOnlyCollection<string> windows_1 = driver.WindowHandles;
             string secondWindowHandle = windows_1.Except(windows).First();
             driver.SwitchTo().Window(secondWindowHandle);
-            Assert.AreEqual(3, windows_1.Count);
+            Assert.That(windows_1, Has.Exactly(3).Items);
 
             // Launch third modal
             driver.FindElement(By.CssSelector("a[id='lnk3']")).Click();
             WaitFor(() => { return driver.WindowHandles.Count > 3; }, "Window count was not greater than 3");
             ReadOnlyCollection<string> windows_2 = driver.WindowHandles;
             string finalWindowHandle = windows_2.Except(windows_1).First();
-            Assert.AreEqual(4, windows_2.Count);
+            Assert.That(windows_2, Has.Exactly(4).Items);
 
             driver.SwitchTo().Window(finalWindowHandle).Close();
             driver.SwitchTo().Window(secondWindowHandle).Close();

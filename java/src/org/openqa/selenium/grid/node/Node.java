@@ -28,6 +28,7 @@ import static org.openqa.selenium.remote.http.Route.post;
 import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -100,6 +101,18 @@ import org.openqa.selenium.status.HasReadyState;
  * by {@code sessionId}. This returns a boolean.</td>
  * </tr>
  * <tr>
+ * <td>DELETE</td>
+ * <td>/se/grid/node/connection/{sessionId}</td>
+ * <td>Notifies the node about closure of a websocket connection for the {@link Session}
+ * identified by {@code sessionId}.</td>
+ * </tr>
+ * <tr>
+ * <td>POST</td>
+ * <td>/se/grid/node/connection/{sessionId}</td>
+ * <td>Allows the node to be ask about whether or not new websocket connections are allowed for the {@link Session}
+ * identified by {@code sessionId}. This returns a boolean.</td>
+ * </tr>
+ * <tr>
  * <td>*</td>
  * <td>/session/{sessionId}/*</td>
  * <td>The request is forwarded to the {@link Session} identified by {@code sessionId}. When the
@@ -116,13 +129,16 @@ public abstract class Node implements HasReadyState, Routable {
   protected final Tracer tracer;
   private final NodeId id;
   private final URI uri;
+  private final Duration sessionTimeout;
   private final Route routes;
   protected boolean draining;
 
-  protected Node(Tracer tracer, NodeId id, URI uri, Secret registrationSecret) {
+  protected Node(
+      Tracer tracer, NodeId id, URI uri, Secret registrationSecret, Duration sessionTimeout) {
     this.tracer = Require.nonNull("Tracer", tracer);
     this.id = Require.nonNull("Node id", id);
     this.uri = Require.nonNull("URI", uri);
+    this.sessionTimeout = Require.positive("Session timeout", sessionTimeout);
     Require.nonNull("Registration secret", registrationSecret);
 
     RequiresSecretFilter requiresSecret = new RequiresSecretFilter(registrationSecret);
@@ -144,18 +160,10 @@ public abstract class Node implements HasReadyState, Routable {
         combine(
             // "getSessionId" is aggressive about finding session ids, so this needs to be the last
             // route that is checked.
-            matching(
-                    req ->
-                        getSessionId(req.getUri())
-                            .map(SessionId::new)
-                            .map(this::isSessionOwner)
-                            .orElse(false))
+            matching(req -> getSessionId(req.getUri()).map(SessionId::new).isPresent())
                 .to(() -> new ForwardWebDriverCommand(this))
                 .with(spanDecorator("node.forward_command")),
             new CustomLocatorHandler(this, registrationSecret, customLocators),
-            post("/session/{sessionId}/file")
-                .to(params -> new UploadFile(this, sessionIdFrom(params)))
-                .with(spanDecorator("node.upload_file")),
             post("/session/{sessionId}/se/file")
                 .to(params -> new UploadFile(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.upload_file")),
@@ -165,8 +173,17 @@ public abstract class Node implements HasReadyState, Routable {
             post("/session/{sessionId}/se/files")
                 .to(params -> new DownloadFile(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.download_file")),
+            delete("/session/{sessionId}/se/files")
+                .to(params -> new DownloadFile(this, sessionIdFrom(params)))
+                .with(spanDecorator("node.download_file")),
             get("/se/grid/node/owner/{sessionId}")
                 .to(params -> new IsSessionOwner(this, sessionIdFrom(params)))
+                .with(spanDecorator("node.is_session_owner").andThen(requiresSecret)),
+            delete("/se/grid/node/connection/{sessionId}")
+                .to(params -> new ReleaseConnection(this, sessionIdFrom(params)))
+                .with(spanDecorator("node.is_session_owner").andThen(requiresSecret)),
+            post("/se/grid/node/connection/{sessionId}")
+                .to(params -> new TryAcquireConnection(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.is_session_owner").andThen(requiresSecret)),
             delete("/se/grid/node/session/{sessionId}")
                 .to(params -> new StopNodeSession(this, sessionIdFrom(params)))
@@ -240,11 +257,19 @@ public abstract class Node implements HasReadyState, Routable {
 
   public abstract boolean isSessionOwner(SessionId id);
 
+  public abstract boolean tryAcquireConnection(SessionId id);
+
+  public abstract void releaseConnection(SessionId id);
+
   public abstract boolean isSupporting(Capabilities capabilities);
 
   public abstract NodeStatus getStatus();
 
   public abstract HealthCheck getHealthCheck();
+
+  public Duration getSessionTimeout() {
+    return sessionTimeout;
+  }
 
   public boolean isDraining() {
     return draining;

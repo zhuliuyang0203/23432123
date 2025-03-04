@@ -43,6 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -81,6 +82,7 @@ import org.openqa.selenium.support.ui.Wait;
 
 class LocalDistributorTest {
 
+  private static final Logger LOG = Logger.getLogger(LocalDistributorTest.class.getName());
   private final Secret registrationSecret = new Secret("bavarian smoked");
   private static final int newSessionThreadPoolSize = Runtime.getRuntime().availableProcessors();
   private Tracer tracer;
@@ -100,6 +102,8 @@ class LocalDistributorTest {
         LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
             .add(caps, new TestSessionFactory((id, c) -> new Handler(c)))
             .maximumConcurrentSessions(2)
+            .sessionTimeout(Duration.ofSeconds(30))
+            .heartbeatPeriod(Duration.ofSeconds(5))
             .build();
 
     wait =
@@ -114,6 +118,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -128,7 +133,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     DistributorStatus status = distributor.getStatus();
 
@@ -140,6 +147,8 @@ class LocalDistributorTest {
     NodeStatus distributorNode = nodes.iterator().next();
     assertThat(distributorNode.getNodeId()).isEqualByComparingTo(localNode.getId());
     assertThat(distributorNode.getExternalUri()).isEqualTo(uri);
+    assertThat(distributorNode.getSessionTimeout()).isEqualTo(Duration.ofSeconds(30));
+    assertThat(distributorNode.getHeartbeatPeriod()).isEqualTo(Duration.ofSeconds(5));
   }
 
   @Test
@@ -150,6 +159,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -164,7 +174,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
 
     // Check the size
@@ -187,6 +199,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -201,7 +214,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     distributor.add(localNode);
     DistributorStatus status = distributor.getStatus();
@@ -219,6 +234,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -261,7 +277,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -311,6 +329,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -325,7 +344,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     assertThat(localNode.isDraining()).isFalse();
 
@@ -355,6 +376,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -369,7 +391,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
 
     localNode.drain();
@@ -384,6 +408,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -399,7 +424,9 @@ class LocalDistributorTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     Capabilities caps = new ImmutableCapabilities("browserName", "cheese");
 
@@ -414,7 +441,7 @@ class LocalDistributorTest {
                       try {
                         Thread.sleep(delay);
                       } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        LOG.severe("Error during execution: " + e.getMessage());
                       }
                       return new Handler(c);
                     }))

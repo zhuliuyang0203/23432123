@@ -14,15 +14,13 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
-import warnings
 from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service
 from selenium.webdriver.common import utils
-
-DEFAULT_EXECUTABLE_PATH = "geckodriver"
 
 
 class Service(service.Service):
@@ -32,39 +30,30 @@ class Service(service.Service):
     :param executable_path: install path of the geckodriver executable, defaults to `geckodriver`.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
-    :param log_path: (Optional) File path for the file to be opened and passed as the subprocess stdout/stderr handler,
-        defaults to `geckodriver.log`.
+    :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
         self,
-        executable_path: str = DEFAULT_EXECUTABLE_PATH,
+        executable_path: str = None,
         port: int = 0,
-        service_args: typing.Optional[typing.List[str]] = None,
-        log_path: typing.Optional[str] = None,
+        service_args: Optional[List[str]] = None,
         log_output: SubprocessStdAlias = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []
-        if log_path is not None:
-            warnings.warn("log_path has been deprecated, please use log_output", DeprecationWarning, stacklevel=2)
-            log_output = open(log_path, "a+", encoding="utf-8")
-
-        if log_path is None and log_output is None:
-            warnings.warn(
-                "Firefox will soon stop logging to geckodriver.log by default; Specify desired logs with log_output",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-            log_output = open("geckodriver.log", "a+", encoding="utf-8")
+        driver_path_env_key = driver_path_env_key or "SE_GECKODRIVER"
 
         super().__init__(
-            executable=executable_path,
+            executable_path=executable_path,
             port=port,
             log_output=log_output,
             env=env,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 

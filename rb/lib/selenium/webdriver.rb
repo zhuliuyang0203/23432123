@@ -23,6 +23,7 @@ require 'date'
 require 'json'
 require 'set'
 require 'uri'
+require 'net/http'
 
 require 'selenium/webdriver/atoms'
 require 'selenium/webdriver/common'
@@ -48,7 +49,7 @@ module Selenium
     # @api private
 
     def self.root
-      @root ||= File.expand_path('..', __dir__)
+      @root ||= File.expand_path('..', __dir__.to_s)
     end
 
     #

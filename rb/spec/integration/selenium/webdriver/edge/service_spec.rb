@@ -22,15 +22,19 @@ require_relative '../spec_helper'
 module Selenium
   module WebDriver
     module Edge
-      describe Service, exclusive: {browser: :edge} do
+      describe Service, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {browser: :edge}] do
         let(:service) { described_class.new }
         let(:service_manager) { service.launch }
 
-        before { service.executable_path = DriverFinder.path(Options.new, described_class) }
         after { service_manager.stop }
 
         it 'auto uses edgedriver' do
-          allow(Platform).to receive(:find_binary)
+          service.executable_path = DriverFinder.new(Options.new, described_class.new).driver_path
+
+          expect(service_manager.uri).to be_a(URI)
+        end
+
+        it 'can be started outside driver' do
           expect(service_manager.uri).to be_a(URI)
         end
       end

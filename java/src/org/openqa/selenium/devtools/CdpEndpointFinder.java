@@ -89,9 +89,6 @@ public class CdpEndpointFinder {
       case "msedge":
         key = "ms:edgeOptions";
         break;
-      case "firefox":
-        key = "moz:debuggerAddress";
-        break;
       default:
         return Optional.empty();
     }

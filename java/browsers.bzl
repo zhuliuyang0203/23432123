@@ -10,10 +10,10 @@ chromedriver_jvm_flags = select({
 
 chrome_jvm_flags = select({
     "@selenium//common:use_pinned_linux_chrome": [
-        "-Dwebdriver.chrome.binary=$(location @linux_chrome//:chrome-linux/chrome)",
+        "-Dwebdriver.chrome.binary=$(location @linux_chrome//:chrome-linux64/chrome)",
     ],
     "@selenium//common:use_pinned_macos_chrome": [
-        "-Dwebdriver.chrome.binary=$(location @mac_chrome//:Chromium.app)/Contents/MacOS/Chromium",
+        "-Dwebdriver.chrome.binary=$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
     ],
     "@selenium//common:use_local_chromedriver": [],
     "//conditions:default": [
@@ -27,6 +27,9 @@ chrome_jvm_flags = select({
 }) + chromedriver_jvm_flags
 
 edgedriver_jvm_flags = select({
+    "@selenium//common:use_pinned_linux_edge": [
+        "-Dwebdriver.edge.driver=$(location @linux_edgedriver//:msedgedriver)",
+    ],
     "@selenium//common:use_pinned_macos_edge": [
         "-Dwebdriver.edge.driver=$(location @mac_edgedriver//:msedgedriver)",
     ],
@@ -34,6 +37,9 @@ edgedriver_jvm_flags = select({
 })
 
 edge_jvm_flags = select({
+    "@selenium//common:use_pinned_linux_edge": [
+        "-Dwebdriver.edge.binary=$(location @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
+    ],
     "@selenium//common:use_pinned_macos_edge": [
         "-Dwebdriver.edge.binary=\"$(location @mac_edge//:Edge.app)/Contents/MacOS/Microsoft Edge\"",
     ],
@@ -64,6 +70,24 @@ firefox_jvm_flags = select({
     ],
     "@selenium//common:use_pinned_macos_firefox": [
         "-Dwebdriver.firefox.bin=$(location @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
+    ],
+    "@selenium//common:use_local_geckodriver": [],
+    "//conditions:default": [
+        "-Dselenium.skiptest=false",
+    ],
+}) + select({
+    "@selenium//common:use_headless_browser": [
+        "-Dwebdriver.headless=true",
+    ],
+    "//conditions:default": [],
+}) + geckodriver_jvm_flags
+
+firefox_beta_jvm_flags = select({
+    "@selenium//common:use_pinned_linux_firefox": [
+        "-Dwebdriver.firefox.bin=$(location @linux_beta_firefox//:firefox/firefox)",
+    ],
+    "@selenium//common:use_pinned_macos_firefox": [
+        "-Dwebdriver.firefox.bin=$(location @mac_beta_firefox//:Firefox.app)/Contents/MacOS/firefox",
     ],
     "@selenium//common:use_local_geckodriver": [],
     "//conditions:default": [

@@ -19,7 +19,6 @@ package org.openqa.selenium.chromium;
 
 import static org.openqa.selenium.chromium.ChromiumDriver.IS_CHROMIUM_BROWSER;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import org.openqa.selenium.Capabilities;
@@ -48,20 +47,15 @@ public abstract class AddHasCdp implements AugmenterProvider<HasCdp>, Additional
 
   @Override
   public HasCdp getImplementation(Capabilities capabilities, ExecuteMethod executeMethod) {
-    return new HasCdp() {
-      @Override
-      public Map<String, Object> executeCdpCommand(
-          String commandName, Map<String, Object> parameters) {
-        Require.nonNull("Command name", commandName);
-        Require.nonNull("Parameters", parameters);
+    return (commandName, parameters) -> {
+      Require.nonNull("Command name", commandName);
+      Require.nonNull("Parameters", parameters);
 
-        Map<String, Object> toReturn =
-            (Map<String, Object>)
-                executeMethod.execute(
-                    EXECUTE_CDP, ImmutableMap.of("cmd", commandName, "params", parameters));
+      Map<String, Object> toReturn =
+          (Map<String, Object>)
+              executeMethod.execute(EXECUTE_CDP, Map.of("cmd", commandName, "params", parameters));
 
-        return ImmutableMap.copyOf(toReturn);
-      }
+      return Map.copyOf(toReturn);
     };
   }
 }

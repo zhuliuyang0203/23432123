@@ -17,104 +17,65 @@
 
 package org.openqa.selenium.remote.http;
 
-import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
-import static java.net.HttpURLConnection.HTTP_CLIENT_TIMEOUT;
-import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
-import static org.openqa.selenium.internal.Debug.getDebugLogLevel;
-import static org.openqa.selenium.remote.http.Contents.asJson;
 
-import com.google.common.collect.ImmutableMap;
-import dev.failsafe.Failsafe;
-import dev.failsafe.Fallback;
-import dev.failsafe.RetryPolicy;
 import java.net.ConnectException;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.internal.Debug;
 
 public class RetryRequest implements Filter {
 
   private static final Logger LOG = Logger.getLogger(RetryRequest.class.getName());
-  private static final AtomicReference<HttpResponse> fallBackResponse = new AtomicReference<>();
+  private static final Level LOG_LEVEL = Debug.getDebugLogLevel();
 
-  private static final Fallback<Object> fallback = Fallback.of(fallBackResponse::get);
-
-  // Retry on connection error.
-  private static final RetryPolicy<Object> connectionFailurePolicy =
-      RetryPolicy.builder()
-          .handleIf(failure -> failure.getCause() instanceof ConnectException)
-          .withMaxRetries(3)
-          .onRetry(
-              e ->
-                  LOG.log(
-                      getDebugLogLevel(),
-                      "Connection failure #{0}. Retrying.",
-                      e.getAttemptCount()))
-          .onRetriesExceeded(
-              e ->
-                  fallBackResponse.set(
-                      new HttpResponse()
-                          .setStatus(HTTP_CLIENT_TIMEOUT)
-                          .setContent(
-                              asJson(
-                                  ImmutableMap.of(
-                                      "value", ImmutableMap.of("message", "Connection failure"))))))
-          .build();
-
-  // Retry on read timeout.
-  private static final RetryPolicy<Object> readTimeoutPolicy =
-      RetryPolicy.builder()
-          .handle(TimeoutException.class)
-          .withMaxRetries(3)
-          .onRetry(
-              e -> LOG.log(getDebugLogLevel(), "Read timeout #{0}. Retrying.", e.getAttemptCount()))
-          .onRetriesExceeded(
-              e ->
-                  fallBackResponse.set(
-                      new HttpResponse()
-                          .setStatus(HTTP_GATEWAY_TIMEOUT)
-                          .setContent(
-                              asJson(
-                                  ImmutableMap.of(
-                                      "value", ImmutableMap.of("message", "Read timeout"))))))
-          .build();
-
-  // Retry if server is unavailable or an internal server error occurs without response body.
-  private static final RetryPolicy<Object> serverErrorPolicy =
-      RetryPolicy.builder()
-          .handleResultIf(
-              response ->
-                  ((HttpResponse) response).getStatus() == HTTP_INTERNAL_ERROR
-                      && Integer.parseInt(((HttpResponse) response).getHeader(CONTENT_LENGTH)) == 0)
-          .handleResultIf(response -> ((HttpResponse) response).getStatus() == HTTP_UNAVAILABLE)
-          .withMaxRetries(2)
-          .onRetry(
-              e ->
-                  LOG.log(
-                      getDebugLogLevel(),
-                      "Failure due to server error #{0}. Retrying.",
-                      e.getAttemptCount()))
-          .onRetriesExceeded(
-              e ->
-                  fallBackResponse.set(
-                      new HttpResponse()
-                          .setStatus(((HttpResponse) e.getResult()).getStatus())
-                          .setContent(
-                              asJson(
-                                  ImmutableMap.of(
-                                      "value",
-                                      ImmutableMap.of("message", "Internal server error"))))))
-          .build();
+  private static final int RETRIES_ON_CONNECTION_FAILURE = 3;
+  private static final int RETRIES_ON_SERVER_ERROR = 2;
+  private static final int NEEDED_ATTEMPTS =
+      Math.max(RETRIES_ON_CONNECTION_FAILURE, RETRIES_ON_SERVER_ERROR) + 1;
 
   @Override
   public HttpHandler apply(HttpHandler next) {
-    return req ->
-        Failsafe.with(fallback)
-            .compose(serverErrorPolicy)
-            .compose(readTimeoutPolicy)
-            .compose(connectionFailurePolicy)
-            .get(() -> next.execute(req));
+    return req -> {
+      // start to preform the request in a loop, to allow retries
+      for (int i = 0; i < NEEDED_ATTEMPTS; i++) {
+        HttpResponse response;
+
+        try {
+          response = next.execute(req);
+        } catch (RuntimeException ex) {
+          // detect a connection failure we would like to retry
+          boolean isConnectionFailure = ex.getCause() instanceof ConnectException;
+
+          // must be a connection failure and check whether we have retries left for this
+          if (isConnectionFailure && i < RETRIES_ON_CONNECTION_FAILURE) {
+            LOG.log(LOG_LEVEL, "Retry #" + (i + 1) + " on ConnectException", ex);
+            continue;
+          }
+
+          // not a connection failure or retries exceeded, rethrow and let the caller handle this
+          throw ex;
+        }
+
+        // detect a server error we would like to retry
+        boolean isServerError =
+            (response.getStatus() == HTTP_INTERNAL_ERROR && response.getContent().length() == 0)
+                || response.getStatus() == HTTP_UNAVAILABLE;
+
+        // must be a server error and check whether we have retries left for this
+        if (isServerError && i < RETRIES_ON_SERVER_ERROR) {
+          LOG.log(LOG_LEVEL, "Retry #" + (i + 1) + " on ServerError: " + response.getStatus());
+          continue;
+        }
+
+        // not a server error or retries exceeded, return the result to the caller
+        return response;
+      }
+
+      // This should not be reachable, we either retry or fail before. The only way to get here
+      // is to set the static final int fields above to inconsistent values.
+      throw new IllegalStateException("Effective unreachable code reached, check constants.");
+    };
   }
 }

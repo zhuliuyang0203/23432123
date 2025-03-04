@@ -1,25 +1,27 @@
-// <copyright file="ChromiumDriverService.cs" company="WebDriver Committers">
+// <copyright file="ChromiumDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Globalization;
 using System.Text;
-using OpenQA.Selenium.Internal;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chromium
 {
@@ -30,104 +32,76 @@ namespace OpenQA.Selenium.Chromium
     {
         private const string DefaultChromeDriverServiceExecutableName = "chromedriver";
 
-        private string logPath = string.Empty;
-        private string urlPathPrefix = string.Empty;
-        private string portServerAddress = string.Empty;
-        private string whitelistedIpAddresses = string.Empty;
-        private int adbPort = -1;
-        private bool disableBuildCheck;
-        private bool enableVerboseLogging;
-        private bool enableAppendLog;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromiumDriverService"/> class.
         /// </summary>
         /// <param name="executablePath">The full path to the ChromeDriver executable.</param>
         /// <param name="executableFileName">The file name of the ChromeDriver executable.</param>
         /// <param name="port">The port on which the ChromeDriver executable should listen.</param>
-        /// <param name="downloadUrl">The url that ChromiumDriver should be downloaded from.</param>
-        protected ChromiumDriverService(string executablePath, string executableFileName, int port, Uri downloadUrl)
-            : base(executablePath, port, executableFileName, downloadUrl)
+        protected ChromiumDriverService(string? executablePath, string? executableFileName, int port)
+            : base(executablePath, port, executableFileName)
         {
         }
 
         /// <summary>
-        /// Gets or sets the location of the log file written to by the ChromeDriver executable.
+        /// <para>Gets or sets the location of the log file written to by the ChromeDriver executable.</para>
+        /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no log path.</para>
         /// </summary>
-        public string LogPath
-        {
-            get { return this.logPath; }
-            set { this.logPath = value; }
-        }
+        public string? LogPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the base URL path prefix for commands (e.g., "wd/url").
+        /// <para>Gets or sets the base URL path prefix for commands (e.g., "wd/url").</para>
+        /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no prefix.</para>
         /// </summary>
-        public string UrlPathPrefix
-        {
-            get { return this.urlPathPrefix; }
-            set { this.urlPathPrefix = value; }
-        }
+        public string? UrlPathPrefix { get; set; }
 
         /// <summary>
-        /// Gets or sets the address of a server to contact for reserving a port.
+        /// <para>Gets or sets the address of a server to contact for reserving a port.</para>
+        /// <para><see langword="null"/> or <see cref="string.Empty"/> signify no port server.</para>
         /// </summary>
-        public string PortServerAddress
-        {
-            get { return this.portServerAddress; }
-            set { this.portServerAddress = value; }
-        }
+        public string? PortServerAddress { get; set; }
 
         /// <summary>
-        /// Gets or sets the port on which the Android Debug Bridge is listening for commands.
+        /// <para>Gets or sets the port on which the Android Debug Bridge is listening for commands.</para>
+        /// <para>A value less than or equal to 0, or <see langword="null"/>, indicates no Android Debug Bridge specified.</para>
         /// </summary>
-        public int AndroidDebugBridgePort
-        {
-            get { return this.adbPort; }
-            set { this.adbPort = value; }
-        }
+        public int? AndroidDebugBridgePort { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to skip version compatibility check
         /// between the driver and the browser.
         /// Defaults to <see langword="false"/>.
         /// </summary>
-        public bool DisableBuildCheck
-        {
-            get { return this.disableBuildCheck; }
-            set { this.disableBuildCheck = value; }
-        }
+        public bool DisableBuildCheck { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to enable verbose logging for the ChromeDriver executable.
         /// Defaults to <see langword="false"/>.
         /// </summary>
-        public bool EnableVerboseLogging
-        {
-            get { return this.enableVerboseLogging; }
-            set { this.enableVerboseLogging = value; }
-        }
+        public bool EnableVerboseLogging { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to enable appending to an existing ChromeDriver log file.
         /// Defaults to <see langword="false"/>.
         /// </summary>
-        public bool EnableAppendLog
+        public bool EnableAppendLog { get; set; }
+
+        /// <summary>
+        /// <para>Gets or sets the comma-delimited list of IP addresses that are approved to connect to this instance of the Chrome driver.</para>
+        /// <para>A value of <see langword="null"/> or <see cref="string.Empty"/> means only the local loopback address can connect.</para>
+        /// </summary>
+        [Obsolete($"Use {nameof(AllowedIPAddresses)}")]
+        public string? WhitelistedIPAddresses
         {
-            get { return this.enableAppendLog; }
-            set { this.enableAppendLog = value; }
+            get => this.AllowedIPAddresses;
+            set => this.AllowedIPAddresses = value;
         }
 
         /// <summary>
-        /// Gets or sets the comma-delimited list of IP addresses that are approved to
-        /// connect to this instance of the Chrome driver. Defaults to an empty string,
-        /// which means only the local loopback address can connect.
+        /// <para>Gets or sets the comma-delimited list of IP addresses that are approved to connect to this instance of the Chrome driver.</para>
+        /// <para>A value of <see langword="null"/> or <see cref="string.Empty"/> means only the local loopback address can connect.</para>
         /// </summary>
-        public string WhitelistedIPAddresses
-        {
-            get { return this.whitelistedIpAddresses; }
-            set { this.whitelistedIpAddresses = value; }
-        }
+        public string? AllowedIPAddresses { get; set; }
 
         /// <summary>
         /// Gets the command-line arguments for the driver service.
@@ -137,9 +111,9 @@ namespace OpenQA.Selenium.Chromium
             get
             {
                 StringBuilder argsBuilder = new StringBuilder(base.CommandLineArguments);
-                if (this.adbPort > 0)
+                if (this.AndroidDebugBridgePort is int adb && adb > 0)
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --adb-port={0}", this.adbPort);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --adb-port={0}", adb);
                 }
 
                 if (this.SuppressInitialDiagnosticInformation)
@@ -147,39 +121,39 @@ namespace OpenQA.Selenium.Chromium
                     argsBuilder.Append(" --silent");
                 }
 
-                if (this.disableBuildCheck)
+                if (this.DisableBuildCheck)
                 {
                     argsBuilder.Append(" --disable-build-check");
                 }
 
-                if (this.enableVerboseLogging)
+                if (this.EnableVerboseLogging)
                 {
                     argsBuilder.Append(" --verbose");
                 }
 
-                if (this.enableAppendLog)
+                if (this.EnableAppendLog)
                 {
                     argsBuilder.Append(" --append-log");
                 }
 
-                if (!string.IsNullOrEmpty(this.logPath))
+                if (!string.IsNullOrEmpty(this.LogPath))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --log-path=\"{0}\"", this.logPath);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --log-path=\"{0}\"", this.LogPath);
                 }
 
-                if (!string.IsNullOrEmpty(this.urlPathPrefix))
+                if (!string.IsNullOrEmpty(this.UrlPathPrefix))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --url-base={0}", this.urlPathPrefix);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --url-base={0}", this.UrlPathPrefix);
                 }
 
-                if (!string.IsNullOrEmpty(this.portServerAddress))
+                if (!string.IsNullOrEmpty(this.PortServerAddress))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --port-server={0}", this.portServerAddress);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --port-server={0}", this.PortServerAddress);
                 }
 
-                if (!string.IsNullOrEmpty(this.whitelistedIpAddresses))
+                if (!string.IsNullOrEmpty(this.AllowedIPAddresses))
                 {
-                    argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " -whitelisted-ips={0}", this.whitelistedIpAddresses));
+                    argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " -allowed-ips={0}", this.AllowedIPAddresses));
                 }
 
                 return argsBuilder.ToString();
@@ -197,7 +171,7 @@ namespace OpenQA.Selenium.Chromium
             // straightforward as you might hope.
             // See: http://mono.wikia.com/wiki/Detecting_the_execution_platform
             // and https://msdn.microsoft.com/en-us/library/3a8hyw88(v=vs.110).aspx
-            const int PlatformMonoUnixValue = 128;
+            const PlatformID PlatformIDMonoUnix = (PlatformID)128;
 
             switch (Environment.OSVersion.Platform)
             {
@@ -210,17 +184,14 @@ namespace OpenQA.Selenium.Chromium
 
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:
+                case PlatformIDMonoUnix:
                     break;
 
                 // Don't handle the Xbox case. Let default handle it.
                 // case PlatformID.Xbox:
                 //     break;
-                default:
-                    if ((int)Environment.OSVersion.Platform == PlatformMonoUnixValue)
-                    {
-                        break;
-                    }
 
+                default:
                     throw new WebDriverException("Unsupported platform: " + Environment.OSVersion.Platform);
             }
 

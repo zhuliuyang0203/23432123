@@ -17,7 +17,7 @@ add an entry for version `<N>` to the `SupportedDevToolsVersions` dictionary ini
 6. In [`//dotnet/src/webdriver:WebDriver.csproj.prebuild.cmd`](https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/WebDriver.csproj.prebuild.cmd),
 add the following block (substituting the proper value for `<N>`):
 
-```
+```bash
 if not exist  "%1..\..\..\bazel-bin\dotnet\src\webdriver\cdp\v<N>\DevToolsSessionDomains.cs" (
   echo Generating CDP code for version <N>
   pushd "%1..\..\.."
@@ -29,7 +29,7 @@ if not exist  "%1..\..\..\bazel-bin\dotnet\src\webdriver\cdp\v<N>\DevToolsSessio
 7. In [`//dotnet/src/webdriver:WebDriver.csproj.prebuild.sh`](https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/WebDriver.csproj.prebuild.sh),
 add the following block (substituting the proper value for `<N>`):
 
-```
+```bash
 if [[ ! -f "$1../../../bazel-bin/dotnet/src/webdriver/cdp/v<N>/DevToolsSessionDomains.cs" ]]
 then
   echo "Generating CDP code for version <N>"
@@ -52,9 +52,4 @@ perform the following steps, where `<N>` is the major version of the protocol:
 remove the entry for version `<N>` from the `SupportedDevToolsVersions` dictionary initialization.
 3. Remove the version string (`v<N>`) from the `SUPPORTED_DEVTOOLS_VERSIONS` list in
 [`//dotnet:selenium-dotnet-version.bzl`](https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/selenium-dotnet-version.bzl).
-4. In [`//dotnet/src/webdriver:WebDriver.csproj.prebuild.cmd`](https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/WebDriver.csproj.prebuild.cmd),
-remove the `if not exist` block for version `<N>`.
-5. In [`//dotnet/src/webdriver:WebDriver.csproj.prebuild.sh`](https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/WebDriver.csproj.prebuild.sh),
-remove the `if-fi` block for version `<N>`.
-6. Commit the changes.
-
+4. Commit the changes.

@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.management.Attribute;
@@ -36,6 +37,7 @@ import javax.management.ObjectName;
 
 public class MBean implements DynamicMBean {
 
+  private static final Logger LOG = Logger.getLogger(MBean.class.getName());
   private final Object bean;
   private final MBeanInfo beanInfo;
   private final Map<String, AttributeInfo> attributeMap = new HashMap<>();
@@ -59,7 +61,7 @@ public class MBean implements DynamicMBean {
       try {
         return new MBeanAttributeInfo(name, description, getter, setter);
       } catch (IntrospectionException e) {
-        e.printStackTrace();
+        LOG.severe("Error during execution: " + e.getMessage());
         return null;
       }
     }
@@ -123,7 +125,7 @@ public class MBean implements DynamicMBean {
       String name = "".equals(ma.name()) ? m.getName() : ma.name();
       return new AttributeInfo(name, ma.description(), findGetter(m), findSetter(m));
     } catch (Throwable t) {
-      t.printStackTrace();
+      LOG.severe("Error during execution: " + t.getMessage());
       return null;
     }
   }
@@ -144,7 +146,7 @@ public class MBean implements DynamicMBean {
       }
       return null;
     } catch (NoSuchMethodException e) {
-      e.printStackTrace();
+      LOG.severe("Error during execution: " + e.getMessage());
       return null;
     }
   }
@@ -219,11 +221,13 @@ public class MBean implements DynamicMBean {
         return ((Map<?, ?>) res)
             .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString()));
+      } else if (res instanceof Number) {
+        return res;
       } else {
         return res.toString();
       }
     } catch (IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      LOG.severe("Error during execution: " + e.getMessage());
       return null;
     }
   }
@@ -233,13 +237,23 @@ public class MBean implements DynamicMBean {
     try {
       attributeMap.get(attribute.getName()).setter.invoke(bean, attribute.getValue());
     } catch (IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      LOG.severe("Error during execution: " + e.getMessage());
     }
   }
 
   @Override
   public AttributeList getAttributes(String[] attributes) {
-    return null;
+    AttributeList resultList = new AttributeList();
+
+    // if attributeNames is empty, return an empty result list
+    if (attributes == null || attributes.length == 0) return resultList;
+
+    for (String attribute : attributes) {
+      Object value = getAttribute(attribute);
+      resultList.add(new Attribute(attribute, value));
+    }
+
+    return resultList;
   }
 
   @Override
@@ -252,7 +266,7 @@ public class MBean implements DynamicMBean {
     try {
       return operationMap.get(actionName).method.invoke(bean, params);
     } catch (IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      LOG.severe("Error during execution: " + e.getMessage());
       return null;
     }
   }

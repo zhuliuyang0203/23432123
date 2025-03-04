@@ -27,7 +27,6 @@ import static org.openqa.selenium.By.id;
 import static org.openqa.selenium.testing.drivers.Browser.CHROME;
 import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 import static org.openqa.selenium.testing.drivers.Browser.FIREFOX;
-import static org.openqa.selenium.testing.drivers.Browser.HTMLUNIT;
 import static org.openqa.selenium.testing.drivers.Browser.IE;
 import static org.openqa.selenium.testing.drivers.Browser.SAFARI;
 
@@ -251,7 +250,6 @@ class ExecutingJavascriptTest extends JupiterTestBase {
   @Ignore(IE)
   @NotYetImplemented(SAFARI)
   @Ignore(FIREFOX)
-  @NotYetImplemented(HTMLUNIT)
   public void testShouldThrowAnExceptionWithMessageAndStacktraceWhenTheJavascriptIsBad() {
     driver.get(pages.xhtmlTestPage);
 
@@ -266,7 +264,7 @@ class ExecutingJavascriptTest extends JupiterTestBase {
             t -> {
               Throwable rootCause = getRootCause(t);
               assertThat(rootCause).hasMessageContaining("errormessage");
-              assertThat(Arrays.asList(rootCause.getStackTrace()))
+              assertThat(List.of(rootCause.getStackTrace()))
                   .extracting(StackTraceElement::getMethodName)
                   .contains("functionB");
             });
@@ -409,7 +407,7 @@ class ExecutingJavascriptTest extends JupiterTestBase {
     driver.get(pages.javascriptPage);
 
     Path jqueryFile = InProject.locate("common/src/web/js/jquery-3.5.1.min.js");
-    String jquery = new String(Files.readAllBytes(jqueryFile), US_ASCII);
+    String jquery = Files.readString(jqueryFile, US_ASCII);
     assertThat(jquery.length())
         .describedAs("The javascript code should be at least 50 KB.")
         .isGreaterThan(50000);
@@ -430,9 +428,6 @@ class ExecutingJavascriptTest extends JupiterTestBase {
 
   @NeedsFreshDriver
   @Test
-  @NotYetImplemented(
-      value = HTMLUNIT,
-      reason = "HtmlUnit: can't execute JavaScript before a page is loaded")
   @Ignore(SAFARI)
   public void testShouldBeAbleToExecuteScriptOnNoPage() {
     String text = (String) executeScript("return 'test';");
@@ -496,6 +491,7 @@ class ExecutingJavascriptTest extends JupiterTestBase {
   @Test
   @Ignore(IE)
   @Ignore(value = CHROME, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4395")
+  @Ignore(value = EDGE, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4395")
   public void testShouldBeAbleToReturnADateObject() throws ParseException {
     driver.get(pages.simpleTestPage);
 
@@ -525,7 +521,6 @@ class ExecutingJavascriptTest extends JupiterTestBase {
   @Test
   @Timeout(10)
   @Ignore(value = IE, reason = "returns WebElement")
-  @Ignore(HTMLUNIT)
   public void shouldHandleObjectThatThatHaveToJSONMethod() {
     driver.get(pages.simpleTestPage);
 
@@ -536,7 +531,6 @@ class ExecutingJavascriptTest extends JupiterTestBase {
 
   @Test
   @Timeout(10)
-  @Ignore(HTMLUNIT)
   public void shouldHandleRecursiveStructures() {
     driver.get(pages.simpleTestPage);
 

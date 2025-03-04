@@ -1,9 +1,26 @@
-using System;
+// <copyright file="BasicMouseInterfaceTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Environment;
+using System;
+using System.Drawing;
 
 namespace OpenQA.Selenium.Interactions
 {
@@ -21,11 +38,22 @@ namespace OpenQA.Selenium.Interactions
         }
 
         [Test]
+        public void ShouldSetActivePointer()
+        {
+            Actions actionProvider = new Actions(driver);
+            actionProvider.SetActivePointer(PointerKind.Mouse, "test mouse");
+
+            PointerInputDevice device = actionProvider.GetActivePointer();
+
+            Assert.That(device.DeviceName, Is.EqualTo("test mouse"));
+        }
+
+        [Test]
         public void ShouldAllowDraggingElementWithMouseMovesItToAnotherList()
         {
             PerformDragAndDropWithMouse();
             IWebElement dragInto = driver.FindElement(By.Id("sortable1"));
-            Assert.AreEqual(6, dragInto.FindElements(By.TagName("li")).Count);
+            Assert.That(dragInto.FindElements(By.TagName("li")), Has.Exactly(6).Items);
         }
 
         // This test is very similar to DraggingElementWithMouse. The only
@@ -88,7 +116,7 @@ namespace OpenQA.Selenium.Interactions
             dropInto = driver.FindElement(By.Id("droppable"));
             string text = dropInto.FindElement(By.TagName("p")).Text;
 
-            Assert.AreEqual("Dropped!", text);
+            Assert.That(text, Is.EqualTo("Dropped!"));
         }
 
         [Test]
@@ -102,7 +130,7 @@ namespace OpenQA.Selenium.Interactions
             IAction dblClick = actionProvider.DoubleClick(toDoubleClick).Build();
 
             dblClick.Perform();
-            Assert.AreEqual("DoubleClicked", toDoubleClick.GetAttribute("value"));
+            Assert.That(toDoubleClick.GetAttribute("value"), Is.EqualTo("DoubleClicked"));
         }
 
         [Test]
@@ -116,7 +144,7 @@ namespace OpenQA.Selenium.Interactions
             IAction contextClick = actionProvider.ContextClick(toContextClick).Build();
 
             contextClick.Perform();
-            Assert.AreEqual("ContextClicked", toContextClick.GetAttribute("value"));
+            Assert.That(toContextClick.GetAttribute("value"), Is.EqualTo("ContextClicked"));
         }
 
         [Test]
@@ -131,7 +159,24 @@ namespace OpenQA.Selenium.Interactions
             IAction contextClick = actionProvider.MoveToElement(toClick).Click().Build();
 
             contextClick.Perform();
-            Assert.AreEqual("Clicked", toClick.GetAttribute("value"), "Value should change to Clicked.");
+            Assert.That(toClick.GetAttribute("value"), Is.EqualTo("Clicked"), "Value should change to Clicked.");
+        }
+
+        [Test]
+        [IgnoreBrowser(Browser.Chrome, "Not working properly in RBE, works locally with pinned browsers")]
+        [IgnoreBrowser(Browser.Edge, "Not working properly in RBE, works locally with pinned browsers")]
+        [IgnoreBrowser(Browser.Firefox, "Not working properly in RBE, works locally with pinned browsers")]
+        public void ShouldMoveToLocation()
+        {
+            driver.Url = mouseInteractionPage;
+
+            Actions actionProvider = new Actions(driver);
+            actionProvider.MoveToLocation(100, 200).Build().Perform();
+
+            IWebElement location = driver.FindElement(By.Id("absolute-location"));
+            var coordinates = location.Text.Split(',');
+            Assert.That(coordinates[0].Trim(), Is.EqualTo("100"));
+            Assert.That(coordinates[1].Trim(), Is.EqualTo("200"));
         }
 
         [Test]
@@ -235,20 +280,16 @@ namespace OpenQA.Selenium.Interactions
             driver.Url = javascriptPage;
 
             IWebElement element = driver.FindElement(By.Id("menu1"));
-            if (!Platform.CurrentPlatform.IsPlatformType(PlatformType.Windows))
-            {
-                Assert.Ignore("Skipping test: Simulating hover needs native events");
-            }
 
             IWebElement item = driver.FindElement(By.Id("item1"));
-            Assert.AreEqual("", item.Text);
+            Assert.That(item.Text, Is.EqualTo(""));
 
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.background = 'green'", element);
             Actions actionBuilder = new Actions(driver);
             actionBuilder.MoveToElement(element).Perform();
 
             item = driver.FindElement(By.Id("item1"));
-            Assert.AreEqual("Item 1", item.Text);
+            Assert.That(item.Text, Is.EqualTo("Item 1"));
         }
 
         [Test]
@@ -262,7 +303,7 @@ namespace OpenQA.Selenium.Interactions
             IWebElement element = driver.FindElement(By.Id("menu1"));
 
             IWebElement item = driver.FindElement(By.Id("item1"));
-            Assert.AreEqual(string.Empty, item.Text);
+            Assert.That(item.Text, Is.Empty);
 
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].style.background = 'green'", element);
             new Actions(driver).MoveToElement(element).Perform();
@@ -272,7 +313,7 @@ namespace OpenQA.Selenium.Interactions
 
             WaitFor(ElementTextToNotEqual(item, ""), "Element text was empty after timeout");
 
-            Assert.AreEqual("Item 1", item.Text);
+            Assert.That(item.Text, Is.EqualTo("Item 1"));
         }
 
         [Test]
@@ -417,7 +458,7 @@ namespace OpenQA.Selenium.Interactions
 
             IAction drop = new Actions(driver).Release(dragInto).Build();
 
-            Assert.AreEqual("Nothing happened.", dragReporter.Text);
+            Assert.That(dragReporter.Text, Is.EqualTo("Nothing happened."));
 
             holdItem.Perform();
             moveToSpecificItem.Perform();
@@ -443,6 +484,11 @@ namespace OpenQA.Selenium.Interactions
         private Func<bool> TitleToBe(string desiredTitle)
         {
             return () => driver.Title == desiredTitle;
+        }
+
+        private Func<bool> ValueToBe(IWebElement element, string desiredValue)
+        {
+            return () => element.GetDomProperty("value") == desiredValue;
         }
 
         private Func<bool> ElementTextToEqual(IWebElement element, string text)

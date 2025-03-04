@@ -22,9 +22,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -37,8 +39,10 @@ import org.openqa.selenium.chromium.HasCasting;
 import org.openqa.selenium.chromium.HasCdp;
 import org.openqa.selenium.chromium.HasNetworkConditions;
 import org.openqa.selenium.chromium.HasPermissions;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.RemoteWebDriverBuilder;
 import org.openqa.selenium.remote.http.ClientConfig;
+import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NoDriverBeforeTest;
 import org.openqa.selenium.testing.drivers.WebDriverBuilder;
@@ -93,6 +97,7 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
   }
 
   @Test
+  @Ignore(value = EDGE, reason = "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4350")
   void canSetPermission() {
     HasPermissions permissions = (HasPermissions) driver;
 
@@ -111,20 +116,20 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
   @NoDriverBeforeTest
   public void canSetPermissionHeadless() {
     EdgeOptions options = new EdgeOptions();
-    options.addArguments("--headless=chrome");
+    options.addArguments("--headless=new");
 
     localDriver = new WebDriverBuilder().get(options);
     HasPermissions permissions = (HasPermissions) localDriver;
 
     localDriver.get(pages.clicksPage);
     assertThat(checkPermission(localDriver, CLIPBOARD_READ)).isEqualTo("prompt");
-    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("prompt");
+    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("granted");
 
     permissions.setPermission(CLIPBOARD_READ, "granted");
-    permissions.setPermission(CLIPBOARD_WRITE, "granted");
+    permissions.setPermission(CLIPBOARD_WRITE, "prompt");
 
     assertThat(checkPermission(localDriver, CLIPBOARD_READ)).isEqualTo("granted");
-    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("granted");
+    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("prompt");
   }
 
   public String checkPermission(WebDriver driver, String permission) {
@@ -151,7 +156,7 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
     List<Map<String, String>> castSinks = caster.getCastSinks();
 
     // Can not call these commands if there are no sinks available
-    if (castSinks.size() > 0) {
+    if (!castSinks.isEmpty()) {
       String deviceName = castSinks.get(0).get("name");
 
       caster.startTabMirroring(deviceName);
@@ -189,5 +194,24 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
     cdp.executeCdpCommand("Page.navigate", parameters);
 
     assertThat(driver.getTitle()).isEqualTo("Hello WebDriver");
+  }
+
+  @Test
+  @NoDriverBeforeTest
+  void shouldLaunchSuccessfullyWithArabicDate() {
+    try {
+      Locale arabicLocale = new Locale("ar", "EG");
+      Locale.setDefault(arabicLocale);
+
+      int port = PortProber.findFreePort();
+      EdgeDriverService.Builder builder = new EdgeDriverService.Builder();
+      builder.usingPort(port);
+      builder.build();
+
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      Locale.setDefault(Locale.US);
+    }
   }
 }

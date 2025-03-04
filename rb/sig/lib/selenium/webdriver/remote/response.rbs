@@ -1,0 +1,31 @@
+module Selenium
+  module WebDriver
+    module Remote
+      class Response
+        @code: Integer
+
+        @payload: Hash[untyped, untyped]
+
+        attr_reader code: Integer
+
+        attr_reader payload: Hash[untyped, untyped]
+
+        def initialize: (Integer code, ?Hash[untyped, untyped]? payload) -> void
+
+        def error: () -> Error::WebDriverError?
+
+        def []: (untyped key) -> untyped
+
+        private
+
+        def assert_ok: () -> Error::WebDriverError
+
+        def add_cause: (Error::WebDriverError ex, String error, Array[String] backtrace) -> Error::WebDriverError
+
+        def backtrace_from_remote: -> Array[String]
+
+        def process_error: () -> Array[Hash[untyped, untyped]]
+      end
+    end
+  end
+end

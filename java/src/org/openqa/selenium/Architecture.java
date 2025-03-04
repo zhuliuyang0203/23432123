@@ -17,6 +17,8 @@
 
 package org.openqa.selenium;
 
+import java.util.Locale;
+
 /**
  * Represents the known architectures used in WebDriver. It attempts to smooth over some of Java's
  * rough edges when dealing with microprocessor architectures by, for instance, allowing you to
@@ -98,7 +100,7 @@ public enum Architecture {
 
   @Override
   public String toString() {
-    return name().toLowerCase();
+    return name().toLowerCase(Locale.ENGLISH);
   }
 
   /**
@@ -121,7 +123,7 @@ public enum Architecture {
    */
   public static Architecture extractFromSysProperty(String arch) {
     if (arch != null) {
-      arch = arch.toLowerCase();
+      arch = arch.toLowerCase(Locale.ENGLISH);
     }
 
     // Some architectures are basically the same even though they have different names.  ia32, x86,

@@ -1,25 +1,29 @@
-﻿// <copyright file="Preferences.cs" company="WebDriver Committers">
+// <copyright file="Preferences.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text.Json;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -28,31 +32,27 @@ namespace OpenQA.Selenium.Firefox
     /// </summary>
     internal class Preferences
     {
-        private Dictionary<string, string> preferences = new Dictionary<string, string>();
-        private Dictionary<string, string> immutablePreferences = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> preferences = new Dictionary<string, string>();
+        private readonly HashSet<string> immutablePreferences = new HashSet<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Preferences"/> class.
         /// </summary>
         /// <param name="defaultImmutablePreferences">A set of preferences that cannot be modified once set.</param>
         /// <param name="defaultPreferences">A set of default preferences.</param>
-        public Preferences(Dictionary<string, object> defaultImmutablePreferences, Dictionary<string, object> defaultPreferences)
+        public Preferences(JsonElement defaultImmutablePreferences, JsonElement defaultPreferences)
         {
-            if (defaultImmutablePreferences != null)
+            foreach (JsonProperty pref in defaultImmutablePreferences.EnumerateObject())
             {
-                foreach (KeyValuePair<string, object> pref in defaultImmutablePreferences)
-                {
-                    this.SetPreferenceValue(pref.Key, pref.Value);
-                    this.immutablePreferences.Add(pref.Key, pref.Value.ToString());
-                }
+                this.ThrowIfPreferenceIsImmutable(pref.Name, pref.Value);
+                this.preferences[pref.Name] = pref.Value.GetRawText();
+                this.immutablePreferences.Add(pref.Name);
             }
 
-            if (defaultPreferences != null)
+            foreach (JsonProperty pref in defaultPreferences.EnumerateObject())
             {
-                foreach (KeyValuePair<string, object> pref in defaultPreferences)
-                {
-                    this.SetPreferenceValue(pref.Key, pref.Value);
-                }
+                this.ThrowIfPreferenceIsImmutable(pref.Name, pref.Value);
+                this.preferences[pref.Name] = pref.Value.GetRawText();
             }
         }
 
@@ -63,9 +63,31 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="value">A <see cref="string"/> value give the preference.</param>
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> or <paramref name="value"/> are <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>If <paramref name="value"/> is wrapped with double-quotes.</para>
+        /// <para>-or-</para>
+        /// <para>If the specified preference is immutable.</para>
+        /// </exception>
         internal void SetPreference(string key, string value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (IsWrappedAsString(value))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Preference values must be plain strings: {0}: {1}", key, value));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", value);
         }
 
         /// <summary>
@@ -75,9 +97,17 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="value">A <see cref="int"/> value give the preference.</param>
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified preference is immutable.</exception>
         internal void SetPreference(string key, int value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = value.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -87,9 +117,17 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="value">A <see cref="bool"/> value give the preference.</param>
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified preference is immutable.</exception>
         internal void SetPreference(string key, bool value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = value ? "true" : "false";
         }
 
         /// <summary>
@@ -97,6 +135,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="preferenceName">The name of the preference to retrieve.</param>
         /// <returns>The value of the preference, or an empty string if the preference is not set.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="preferenceName"/> is <see langword="null"/>.</exception>
         internal string GetPreference(string preferenceName)
         {
             if (this.preferences.ContainsKey(preferenceName))
@@ -150,44 +189,18 @@ namespace OpenQA.Selenium.Firefox
             return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase) && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
 
-        private bool IsSettablePreference(string preferenceName)
+        private void ThrowIfPreferenceIsImmutable<TValue>(string preferenceName, TValue value)
         {
-            return !this.immutablePreferences.ContainsKey(preferenceName);
-        }
-
-        private void SetPreferenceValue(string key, object value)
-        {
-            if (!this.IsSettablePreference(key))
+            if (this.immutablePreferences.Contains(preferenceName))
             {
-                string message = string.Format(CultureInfo.InvariantCulture, "Preference {0} may not be overridden: frozen value={1}, requested value={2}", key, this.immutablePreferences[key], value.ToString());
+                string message = string.Format(CultureInfo.InvariantCulture, "Preference {0} may not be overridden: frozen value={1}, requested value={2}", preferenceName, this.preferences[preferenceName], value?.ToString());
                 throw new ArgumentException(message);
             }
+        }
 
-            string stringValue = value as string;
-            if (stringValue != null)
-            {
-                if (IsWrappedAsString(stringValue))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Preference values must be plain strings: {0}: {1}", key, value));
-                }
-
-                this.preferences[key] = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", value);
-                return;
-            }
-
-            if (value is bool)
-            {
-                this.preferences[key] = Convert.ToBoolean(value, CultureInfo.InvariantCulture).ToString().ToLowerInvariant();
-                return;
-            }
-
-            if (value is int || value is long)
-            {
-                this.preferences[key] = Convert.ToInt32(value, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture);
-                return;
-            }
-
-            throw new WebDriverException("Value must be string, int or boolean");
+        private bool IsSettablePreference(string preferenceName)
+        {
+            return !this.immutablePreferences.Contains(preferenceName);
         }
     }
 }

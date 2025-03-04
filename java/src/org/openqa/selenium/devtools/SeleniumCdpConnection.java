@@ -77,7 +77,7 @@ public class SeleniumCdpConnection extends Connection {
       client = reportedUri.map(uri -> CdpEndpointFinder.getHttpClient(clientFactory, uri));
 
       try {
-        cdpUri = client.flatMap(httpClient -> CdpEndpointFinder.getCdpEndPoint(httpClient));
+        cdpUri = client.flatMap(CdpEndpointFinder::getCdpEndPoint);
       } catch (Exception e) {
         try {
           client.ifPresent(HttpClient::close);
@@ -87,7 +87,7 @@ public class SeleniumCdpConnection extends Connection {
         throw e;
       }
 
-      if (!cdpUri.isPresent()) {
+      if (cdpUri.isEmpty()) {
         try {
           client.ifPresent(HttpClient::close);
         } catch (Exception e) {

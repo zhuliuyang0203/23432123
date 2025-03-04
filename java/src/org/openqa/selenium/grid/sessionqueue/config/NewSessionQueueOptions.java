@@ -26,6 +26,7 @@ import org.openqa.selenium.grid.config.ConfigException;
 import org.openqa.selenium.grid.jmx.JMXHelper;
 import org.openqa.selenium.grid.jmx.ManagedAttribute;
 import org.openqa.selenium.grid.jmx.ManagedService;
+import org.openqa.selenium.grid.server.BaseServerOptions;
 import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 
 @ManagedService(
@@ -34,6 +35,7 @@ import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 public class NewSessionQueueOptions {
 
   static final String SESSION_QUEUE_SECTION = "sessionqueue";
+  static final int DEFAULT_MAXIMUM_RESPONSE_DELAY = 8;
   static final int DEFAULT_REQUEST_TIMEOUT = 300;
   static final int DEFAULT_REQUEST_TIMEOUT_PERIOD = 10;
   static final int DEFAULT_RETRY_INTERVAL = 15;
@@ -70,6 +72,8 @@ public class NewSessionQueueOptions {
       return host.get();
     }
 
+    BaseServerOptions serverOptions = new BaseServerOptions(config);
+    String schema = (serverOptions.isSecure() || serverOptions.isSelfSigned()) ? "https" : "http";
     Optional<Integer> port = config.getInt(SESSION_QUEUE_SECTION, "port");
     Optional<String> hostname = config.get(SESSION_QUEUE_SECTION, "hostname");
 
@@ -78,12 +82,21 @@ public class NewSessionQueueOptions {
     }
 
     try {
-      return new URI("http", null, hostname.get(), port.get(), "", null, null);
+      return new URI(schema, null, hostname.get(), port.get(), "", null, null);
     } catch (URISyntaxException e) {
       throw new ConfigException(
           "Session queue server uri configured through host (%s) and port (%d) is not a valid URI",
           hostname.get(), port.get());
     }
+  }
+
+  public Duration getMaximumResponseDelay() {
+    int timeout =
+        config
+            .getInt(SESSION_QUEUE_SECTION, "maximum-response-delay")
+            .orElse(DEFAULT_MAXIMUM_RESPONSE_DELAY);
+
+    return Duration.ofSeconds(timeout);
   }
 
   public Duration getSessionRequestTimeout() {

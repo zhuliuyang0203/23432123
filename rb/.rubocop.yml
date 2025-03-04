@@ -1,12 +1,16 @@
 require:
   - rubocop-performance
+  - rubocop-rake
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
   NewCops: enable
   Exclude:
     - !ruby/regexp /lib\/selenium\/devtools\/v\d+/
+
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
 
 Layout/LineLength:
   AllowedPatterns:
@@ -18,6 +22,8 @@ Layout/SpaceInsideHashLiteralBraces:
 Metrics/AbcSize:
   Max: 30
   Exclude:
+    - 'lib/selenium/webdriver/common/driver_finder.rb'
+    - 'lib/selenium/webdriver/common/options.rb'
     - 'lib/selenium/webdriver/remote/capabilities.rb'
     - 'lib/selenium/webdriver/remote/http/curb.rb'
     - 'lib/selenium/webdriver/support/color.rb'
@@ -27,6 +33,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
     - 'selenium-*.gemspec'
+    - '../Rakefile*'
 
 Metrics/ClassLength:
   CountComments: false
@@ -49,7 +56,9 @@ Metrics/MethodLength:
   Max: 22
   Exclude:
     - 'lib/selenium/server.rb'
+    - 'lib/selenium/webdriver/common/options.rb'
     - 'lib/selenium/webdriver/common/driver.rb'
+    - 'lib/selenium/webdriver/common/driver_finder.rb'
     - 'lib/selenium/webdriver/remote/http/default.rb'
 
 Metrics/ModuleLength:
@@ -65,12 +74,18 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 9
   Exclude:
+    - 'lib/selenium/webdriver/common/options.rb'
     - 'lib/selenium/webdriver/common/local_driver.rb'
     - 'lib/selenium/webdriver/common/logger.rb'
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
 
 Naming/FileName:
   Exclude:
     - 'lib/selenium-webdriver.rb'
+    - 'Rakefile'
+    - '../Rakefile'
 
 Naming/MethodParameterName:
   AllowedNames:
@@ -132,4 +147,13 @@ Style/NumericLiterals:
   Enabled: false
 
 Style/OptionalBooleanParameter:
+  Enabled: false
+
+Lint/Debugger:
+  Enabled: true
+  DebuggerMethods:
+    Capybara:
+      - save_screenshot: ~
+
+Lint/UselessConstantScoping:
   Enabled: false

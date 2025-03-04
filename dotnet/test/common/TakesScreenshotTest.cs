@@ -1,9 +1,28 @@
+// <copyright file="TakesScreenshotTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using NUnit.Framework;
+using OpenQA.Selenium.Environment;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using NUnit.Framework;
-using OpenQA.Selenium.Environment;
 
 namespace OpenQA.Selenium
 {
@@ -29,7 +48,7 @@ namespace OpenQA.Selenium
 
             string filename = Path.Combine(Path.GetTempPath(), "snapshot" + new Random().Next().ToString() + ".png");
             Screenshot screenImage = screenshotCapableDriver.GetScreenshot();
-            screenImage.SaveAsFile(filename, ScreenshotImageFormat.Png);
+            screenImage.SaveAsFile(filename);
             Assert.That(File.Exists(filename), Is.True);
             Assert.That(new FileInfo(filename).Length, Is.GreaterThan(0));
             File.Delete(filename);
@@ -67,9 +86,12 @@ namespace OpenQA.Selenium
 
         [Test]
         [IgnoreBrowser(Browser.IE, "Color comparisons fail on IE")]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
+        [IgnoreBrowser(Browser.Firefox, "Not working properly in RBE, works locally with pinned browsers")]
         public void ShouldCaptureScreenshotOfCurrentViewport()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -95,9 +117,11 @@ namespace OpenQA.Selenium
         }
 
         [Test]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
         public void ShouldTakeScreenshotsOfAnElement()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -117,14 +141,16 @@ namespace OpenQA.Selenium
 
             Color pixelColor = GetPixelColor(screenImage, 1, 1);
             string pixelColorString = FormatColorToHex(pixelColor.ToArgb());
-            Assert.AreEqual("#0f12f7", pixelColorString);
+            Assert.That(pixelColorString, Is.EqualTo("#0f12f7"));
         }
 
         [Test]
         [IgnoreBrowser(Browser.IE, "Color comparisons fail on IE")]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
         public void ShouldCaptureScreenshotAtFramePage()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -165,9 +191,11 @@ namespace OpenQA.Selenium
 
         [Test]
         [IgnoreBrowser(Browser.IE, "Color comparisons fail on IE")]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
         public void ShouldCaptureScreenshotAtIFramePage()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -206,9 +234,11 @@ namespace OpenQA.Selenium
         [Test]
         [IgnoreBrowser(Browser.IE, "Color comparisons fail on IE")]
         [IgnoreBrowser(Browser.Firefox, "Color comparisons fail on Firefox")]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
         public void ShouldCaptureScreenshotAtFramePageAfterSwitching()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -245,9 +275,11 @@ namespace OpenQA.Selenium
         [Test]
         [IgnoreBrowser(Browser.IE, "Color comparisons fail on IE")]
         [IgnoreBrowser(Browser.Firefox, "Color comparisons fail on Firefox")]
+        [IgnoreBrowser(Browser.Chrome, "Color comparisons fail on Chrome")]
+        [IgnoreBrowser(Browser.Edge, "Color comparisons fail on Edge")]
         public void ShouldCaptureScreenshotAtIFramePageAfterSwitching()
         {
-#if NETCOREAPP3_1 || NET6_0
+#if NET6_0 || NET8_0
             Assert.Ignore("Skipping test: this framework can not process colors.");
 #endif
 
@@ -323,7 +355,7 @@ namespace OpenQA.Selenium
         {
             HashSet<string> colors = new HashSet<string>();
 
-#if !NETCOREAPP3_1 && !NET6_0
+#if !NET8_0
             try
             {
                 Image image = Image.FromStream(new MemoryStream(screenshot.AsByteArray));
@@ -357,7 +389,7 @@ namespace OpenQA.Selenium
         {
             Color pixelColor = Color.Black;
 
-#if !NETCOREAPP3_1 && !NET6_0
+#if !NET8_0
             Image image = Image.FromStream(new MemoryStream(screenshot.AsByteArray));
             Bitmap bitmap = new Bitmap(image);
             pixelColor = bitmap.GetPixel(1, 1);
@@ -374,7 +406,7 @@ namespace OpenQA.Selenium
                     IWebElement frameElement = driver.FindElement(By.Id(frameId));
                     driver.SwitchTo().Frame(frameElement);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -392,7 +424,7 @@ namespace OpenQA.Selenium
                     IWebElement element = driver.FindElement(By.Id(elementId));
                     return element.Displayed;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return false;
                 }

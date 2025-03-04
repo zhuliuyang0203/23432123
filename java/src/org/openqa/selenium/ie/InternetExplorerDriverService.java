@@ -28,9 +28,11 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.remote.service.DriverFinder;
 import org.openqa.selenium.remote.service.DriverService;
 
 /** Manages the life and death of an IEDriverServer. */
@@ -104,9 +106,8 @@ public class InternetExplorerDriverService extends DriverService {
   /**
    * Configures and returns a new {@link InternetExplorerDriverService} using the default
    * configuration. In this configuration, the service will use the IEDriverServer executable
-   * identified by the {@link org.openqa.selenium.remote.service.DriverFinder#getPath(DriverService,
-   * Capabilities)}. Each service created by this method will be configured to use a free port on
-   * the current system.
+   * identified by the {@link DriverFinder#getDriverPath()} (DriverService, Capabilities)}. Each
+   * service created by this method will be configured to use a free port on the current system.
    *
    * @return A new InternetExplorerDriverService using the default configuration.
    */
@@ -114,17 +115,8 @@ public class InternetExplorerDriverService extends DriverService {
     return new Builder().build();
   }
 
-  /**
-   * Checks if the IEDriverServer binary is available. Grid uses this method to show the available
-   * browsers and drivers, hence its visibility.
-   *
-   * @return Whether the browser driver path was found.
-   */
-  static boolean isPresent() {
-    return findExePath(IE_DRIVER_NAME, IE_DRIVER_EXE_PROPERTY) != null;
-  }
-
   /** Builder used to configure new {@link InternetExplorerDriverService} instances. */
+  @SuppressWarnings({"rawtypes", "RedundantSuppression"})
   @AutoService(DriverService.Builder.class)
   public static class Builder
       extends DriverService.Builder<
@@ -196,12 +188,7 @@ public class InternetExplorerDriverService extends DriverService {
 
     @Override
     protected void loadSystemProperties() {
-      if (getLogFile() == null) {
-        String logFilePath = System.getProperty(IE_DRIVER_LOGFILE_PROPERTY);
-        if (logFilePath != null) {
-          withLogFile(new File(logFilePath));
-        }
-      }
+      parseLogOutput(IE_DRIVER_LOGFILE_PROPERTY);
       if (logLevel == null) {
         String level = System.getProperty(IE_DRIVER_LOGLEVEL_PROPERTY);
         if (level != null) {
@@ -231,7 +218,7 @@ public class InternetExplorerDriverService extends DriverService {
     @Override
     protected List<String> createArgs() {
       List<String> args = new ArrayList<>();
-      args.add(String.format("--port=%d", getPort()));
+      args.add(String.format(Locale.ROOT, "--port=%d", getPort()));
 
       if (logLevel != null) {
         args.add(String.format("--log-level=%s", logLevel));
@@ -242,7 +229,7 @@ public class InternetExplorerDriverService extends DriverService {
       if (extractPath != null) {
         args.add(String.format("--extract-path=\"%s\"", extractPath.getAbsolutePath()));
       }
-      if (silent != null && silent.equals(Boolean.TRUE)) {
+      if (Boolean.TRUE.equals(silent)) {
         args.add("--silent");
       }
 
@@ -253,10 +240,7 @@ public class InternetExplorerDriverService extends DriverService {
     protected InternetExplorerDriverService createDriverService(
         File exe, int port, Duration timeout, List<String> args, Map<String, String> environment) {
       try {
-        InternetExplorerDriverService service =
-            new InternetExplorerDriverService(exe, port, timeout, args, environment);
-        service.sendOutputTo(getLogOutput(IE_DRIVER_LOGFILE_PROPERTY));
-        return service;
+        return new InternetExplorerDriverService(exe, port, timeout, args, environment);
       } catch (IOException e) {
         throw new WebDriverException(e);
       }

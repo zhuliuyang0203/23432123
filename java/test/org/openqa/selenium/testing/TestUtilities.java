@@ -20,7 +20,6 @@ package org.openqa.selenium.testing;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -30,7 +29,6 @@ import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class TestUtilities {
 
@@ -40,9 +38,6 @@ public class TestUtilities {
     } catch (Throwable e) {
       // Some drivers will only execute JS once a page has been loaded. Since those
       // drivers aren't Firefox or IE, we don't worry about that here.
-      //
-      // Non-javascript-enabled HtmlUnit throws an UnsupportedOperationException here.
-      // Let's just ignore that.
       return "";
     }
   }
@@ -61,7 +56,7 @@ public class TestUtilities {
   }
 
   public static boolean isChrome(WebDriver driver) {
-    return !(driver instanceof HtmlUnitDriver) && getUserAgent(driver).contains("Chrome");
+    return getUserAgent(driver).contains("Chrome");
   }
 
   public static int getChromeVersion(WebDriver driver) {
@@ -179,7 +174,7 @@ public class TestUtilities {
     try {
       File f = File.createTempFile("webdriver", "tmp");
       f.deleteOnExit();
-      Files.write(f.toPath(), content.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(f.toPath(), content);
       return f;
     } catch (IOException e) {
       throw new UncheckedIOException(e);

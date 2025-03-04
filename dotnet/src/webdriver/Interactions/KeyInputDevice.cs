@@ -1,26 +1,27 @@
-// <copyright file="KeyInputDevice.cs" company="WebDriver Committers">
+// <copyright file="KeyInputDevice.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Interactions
 {
@@ -41,6 +42,7 @@ namespace OpenQA.Selenium.Interactions
         /// Initializes a new instance of the <see cref="KeyInputDevice"/> class, given the device's name.
         /// </summary>
         /// <param name="deviceName">The unique name of this input device.</param>
+        /// <exception cref="ArgumentException">If <paramref name="deviceName"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public KeyInputDevice(string deviceName)
             : base(deviceName)
         {
@@ -49,10 +51,7 @@ namespace OpenQA.Selenium.Interactions
         /// <summary>
         /// Gets the type of device for this input device.
         /// </summary>
-        public override InputDeviceKind DeviceKind
-        {
-            get { return InputDeviceKind.Key; }
-        }
+        public override InputDeviceKind DeviceKind => InputDeviceKind.Key;
 
         /// <summary>
         /// Converts this input device into an object suitable for serializing across the wire.
@@ -116,27 +115,23 @@ namespace OpenQA.Selenium.Interactions
 
         private class TypingInteraction : Interaction
         {
-            private string type;
-            private string value;
+            private readonly string type;
 
             public TypingInteraction(InputDevice sourceDevice, string type, char codePoint)
                 : base(sourceDevice)
             {
                 this.type = type;
-                this.value = codePoint.ToString();
+                this.Value = codePoint.ToString();
             }
 
-            protected string Value
-            {
-                get { return this.value; }
-            }
+            protected string Value { get; }
 
             public override Dictionary<string, object> ToDictionary()
             {
                 Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
                 toReturn["type"] = this.type;
-                toReturn["value"] = this.value;
+                toReturn["value"] = this.Value;
 
                 return toReturn;
             }

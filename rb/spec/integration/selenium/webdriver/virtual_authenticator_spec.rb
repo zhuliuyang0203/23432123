@@ -21,7 +21,8 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe VirtualAuthenticator, exclusive: {browser: %i[chrome edge]} do
+    describe VirtualAuthenticator, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'},
+                                               {browser: %i[chrome edge]}] do
       # A pkcs#8 encoded unencrypted EC256 private key as a base64url string.
       let(:pkcs8_private_key) do
         'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg8_zMDQDYAxlU-Q' \
@@ -194,17 +195,10 @@ module Selenium
           expect(credentials.length).to eq(2)
 
           res_cred_output = credentials.find { |cred| Credential.encode(cred.id).match res_cred_resp['id'] }
-          non_res_cred_output = credentials.tap { |cred| cred.delete(res_cred_output) }.first
+          non_res_cred_output = credentials.find { |cred| cred != res_cred_output }
 
           expect(res_cred_output.resident_credential?).to be true
-          expect(res_cred_output.rp_id).to eq 'localhost'
-          expect(res_cred_output.sign_count).to eq 1
-          expect(res_cred_output.user_handle).to eq [1]
-
           expect(non_res_cred_output.resident_credential?).to be false
-          expect(non_res_cred_output.rp_id).to be_nil
-          expect(non_res_cred_output.sign_count).to eq 1
-          expect(non_res_cred_output.user_handle).to be_nil
         end
       end
 

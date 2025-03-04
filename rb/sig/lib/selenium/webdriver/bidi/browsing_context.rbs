@@ -1,0 +1,27 @@
+module Selenium
+  module WebDriver
+    class BiDi
+      class BrowsingContext
+        @bidi: BiDi
+
+        READINESS_STATE: Hash[String, String]
+
+        def initialize: (Remote::Bridge bridge) -> void
+
+        def handle_user_prompt: (String context, bool accept, String text) -> untyped
+
+        def navigate: (String url, String? context_id) -> void
+
+        def set_viewport: (String context_id, Integer width, Integer height, Float device_pixel_ratio) -> Hash[nil, nil]
+
+        def traverse_history: (Integer delta, String? context_id) -> void
+
+        def reload: (String? context_id, ?ignore_cache: bool) -> void
+
+        def close: (String? context_id) -> void
+
+        def create: (?type: Symbol | String | nil, ?context_id: String | nil) -> String
+      end
+    end
+  end
+end

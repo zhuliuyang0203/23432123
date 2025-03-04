@@ -1,3 +1,270 @@
+Selenium 4.29.0
+* Add CDP for Chrome 133 and remove 130
+* [py] Disable strict time stamps in Firefox profile (#15141)
+* [py] Enhance PrintOptions to support default, predefined, and custom page sizes (#15052) (#15064)
+* [py] Remove Firefox CDP (#15200)
+* [py] Handle named `get_cookie` and `delete_cookie` for None and empty strings (#15073)
+* [py] Document cygwin path for `send_keys` (#15275)
+* [py] Fix return type and docstring of get_downloadable_files (#15292)
+
+Selenium 4.28.1
+* [py] Fix installing most of the data from source distributions
+
+Selenium 4.28.0
+* Add CDP for Chrome 132 and remove 129
+* [py] fix packaging (#14823)
+* [py] Typing package import enhancement (#14283)
+* [py] moved all getters in `fedcm/account.py` into descriptor object. (#14858)
+* [py] add execute_cdp_cmd to Remote (#14809)
+* Added more detailed docstrings to find_element() (#14930)
+* [py] Refactored `remote/client_config.py` by moving `properties` into `descriptor` object (#14899)
+* py: Ensure DRIVER_PATH_ENV_KEY defaults to string (#14862)
+* [py] add doc for driver_path_env_key (#14997)
+* [py] Fix WebKitGTK driver name check (#15046)
+* [py] Upgraded WebDriverWait Docstrings (#15054)
+* [py] Added Docstrings to ActionBuilder (#15065)
+* [py] Upgraded WebElement Docstrings (#15056)
+* [py] Upgraded WebDriver Docstrings (#15055)
+* [java][js][py] Add straight relative-by locators (#14482)
+* [py] Added Docstrings to RelativeBy Class and Added Missing Deprecation Warning to with_tag_name() (#15097)
+
+Selenium 4.27.1
+* Fix `pyproject.toml` for installable from sdist (#14806)
+* Revert the Deprecation warnings of WebElement.get_attribute() (#14808)
+
+Selenium 4.27.0
+* Add CDP for Chrome 131 and remove 128
+* Add Firefox CDP deprecation warnings (#14787)
+* Cleaned up Py doc sphinx warnings/errors and added README (#14191)
+* Added Deprecation of WebElement.get_attribute() per #13334 (#14675)
+* Fix TypeError when init Safari webdriver (#14699)
+* Set user_agent and extra_headers via ClientConfig (#14718)
+* Updated Handling for DetachedShadowRoot Exception (#14677)
+* Support FedCM commands (#14710)
+
+Selenium 4.26.1
+* DeprecationWarning raised in default webdriver init (#14690)
+* Remote connection use timeout from ClientConfig (#14692)
+* Add backward compatibility for AppiumConnection (#14696)
+
+Selenium 4.26.0
+* Add CDP for Chrome 130 and remove 127
+* Added more internal logging for CDP (#14668)
+* Set consistent polling across java and python for `WebDriverWait` methods (#14626)
+* webkitgtk: log_path -> log_output (#14618)
+* Implement configurable configuration class for the http client (#13286)
+* Better compatibility with Appium-python (#14587)
+* Avoid waiting indefinitely on a frozen chromedriver process (#14578)
+* Allow logging diagnose in safari driver (#14606)
+* Remote connection throws response status code when data is empty (#14601)
+* Remove deprecated parameter from EdgeService (#14563)
+* Allow driver path to be set using ENV variables (#14528)
+* Remove un-needed print (#14562)
+* Fix a bug in `bidi/session.py` by removing mutable object as default value for function argument (#14286)
+
+Selenium 4.25.0
+* Add CDP for Chrome 129 and remove 126
+* fix type errors for `service.py`, `cdp.py`, `webelement.py` and `remote_connection.py` (#14448)
+* fix type errors for `input_device` and `file_detector` (#14459)
+* fix type errors for `pointer_input.py`, `wheel_input.py` and `firefox/options.py` (#14476)
+* firefox_profile.py: use `with` statement in zipfile as Python 2.x support is dropped (#14489)
+
+Selenium 4.24.0
+* Allow overriding `GLOBAL_DEFAULT_TIMEOUT` (#14354)
+* fix mypy errors for `timeouts.py` and `print_page_options.py` (#14362)
+* fix mypy errors for `input_device.py`, `ie/options.py` and `selenium_manager.py` (#14377)
+* fix type errors for `log.py`, `chromium/options.py`, `websocket_connection.py` and `chrome/options.py` (#14392)
+* Add CDP for Chrome 128 and remove 125
+
+Selenium 4.23.1
+
+* Fix 14278 and match ordering of dependencies (#14297)
+
+Selenium 4.23.0
+
+* Disable strict time stamps in Firefox profile (#14168)
+* Update the py api doc build (#14173)
+* Add websocket-client v.1.8.0 to setup.py (#14187)
+* Remove precompiled binaries from sdist (#14233)
+* Fix RelativeBy#near to take 2 parameters (#13082)
+* Add CDP for Chrome 127 and remove 124
+
+Selenium 4.22.0
+
+* Fix EOFError when calling the Remote WebDriver download_file method (#14031)
+* Add low-level sync API to use DevTools (#13977)
+* Add preference to enable CDP in Firefox by default (#14091)
+* Allow using enable_bidi property on options class
+* Implement script module for BiDi
+* Remove desired capabilities argument for Webkitgtk (#14128)
+* Make webkitgtk.webdriver same as wpewebkit.webdriver
+* Add CDP for Chrome 126 and remove 123
+
+Selenium 4.21.0
+
+* Add CDP for Chrome 125 and remove 122
+* Moving ignore_local_proxy_environment_variables to BaseOptions (#13926)
+
+Selenium 4.20.0
+
+* Add CDP for Chrome 124 and remove 121
+* Add type hints for selenium.webdriver.remote.webdriver.WebDriver.__init__ (#13775)
+* Add types to set_window_position parameters (#13786)
+* Making Selenium Manager a thin wrapper (#13387)
+  * This change has been made to make it easier to maintain and improve, the interface has
+  changed and if users were invoking it, they might experience issues. Selenium Manager is
+  still in beta and these type of changes are expected.
+
+
+Selenium 4.19.0
+
+* Add CDP for Chrome 123 and remove 120
+* Add more network interfaces to detect lan ip (#13663)
+* install_addon() didn't take into account dir paths with trailing slashes (#13694)
+* Explicitly export Select and WebDriverWait from selenium.webdriver.support.ui (#13491)
+* Add return type to webelement.submit (#13490)
+* Add type to parameter of webelement.WebElement.send_keys (#13492)
+
+Selenium 4.18.1
+
+* Add CDP for Chrome 122 and remove 119
+
+Selenium 4.18.0
+
+* Update linting dependencies
+* Setting Python for nightly releases - https://test.pypi.org/project/selenium/
+
+Selenium 4.17.2
+* [py] Correct typing_extension dependency for wheel generation
+
+Selenium 4.17.1
+* Fix typo in setup.py (#13487)
+
+Selenium 4.17.0
+* Add page load strategy enum (#13258)
+* Use correct file name when bumping versions (#13282)
+* Filter which bidi logs are recorded based on event type (#12951)
+* Add python to Selenium Manager input for tracking (see #13288)
+* Sleep depending on the number of attempts to check if the service has started (#13321)
+* Use subprocess.DEVNULL instead of open(os.devnull) to avoid leaking a file handle (#13329)
+* Remove all references to firefox-bin
+* Check if architecture/platform combination is supported for Selenium Manager (#13381)
+* Remove extension connection class and other usages of webdriver.xpi
+* remove deprecated verbose argument from edge service
+* remove deprecated desired_capabilities property from webdriver
+* remove deprecated application cache support
+* truncate large strings when logging requests
+* Update WPEWebKit support code (#13278)
+* [py] Fix WPEWebKit python support code
+* Do not change profile preferences of an existing directory by default (#13477)
+* Deprecate firefox profile methods that are not supported (#13477)
+* deprecate FirefoxBinary class (#13476)
+* Fix type error in mypy (#13482)
+* Add CDP for Chrome 121 and remove 118
+
+Selenium 4.16.0
+* Fix inadvertent code change in mutation_event
+* Fix bug in using SE_MANAGER_PATH
+* Fix bug where downloaded file was not getting unzipped
+* Add more logging to driver startup
+* Fix WebDriverWait type hints for WebElement (#13108)
+* Clean up of usage of executable path in services
+* Don't leak a file descriptor to os.devnull by default (#13162)
+* Allow bsd operating systems to use the linux binary
+* Close trio memory channel sender after the driver is quit (#13151)
+* Remote webdriver cannot match Chromium browser name for remote connection
+* Remove deprecated reuse_service parameter from Safari driver constructor
+* Remove deprecated quiet parameter from Safari service constructor
+* Ensure all drivers stop service during driver quit
+* Update chromium driver constructors for readability
+* Add CDP for Chrome 120 and remove 117
+
+
+Selenium 4.15.2
+* Fix bug for unzipping downloaded files
+
+Selenium 4.15.1
+* Fix bug in using SE_MANAGER_PATH
+* Fix inadvertent code change in mutation_event
+
+Selenium 4.15.0
+* Return a `pathlib.Path` when `SE_MANAGER_PATH` is set. closes #12929
+* Do not set browser binary in selenium manager if it is an empty string (#12738)
+* Add CDP v119 and remove v116
+* Remove selenium manager accommodation for Conda
+* Implement file downloads (#12979)
+* Add some type hints to selenium.webdriver.support (#13070)
+
+Selenium 4.14.0
+* add CDP files for v118 and remove v115
+* use lazy string interpolation for logging calls
+* Fix dangling log_output in Service (#12871)
+
+Selenium 4.13.0
+* add CDP files for v117 and remove v114
+* do not send parameters in payload that are used in endpoint (#12685)
+* close out driver logging on quit (#12637)
+* disable console appearing on windows when running in pythonw (#12715)
+* remove deprecated headless methods
+* fix bug preventing using performance logging in chromium
+* remove deprecation notice from Firefox profiles
+* Allow users to set Selenium Manager path by environment variable (#12752)
+
+Selenium 4.12.0
+* Add CDP files for v116 and remove v113
+* fix bug in ElementScrollBehavior in IE Options (#12462)
+* fix bug preventing sending keys with long strings (#12474)
+* fix typing for action_chains (#12477)
+* fix typing for IE Options (#12464)
+* fix bug in common options (#12499)
+* allow setting http client certifications with REQUESTS_CA_BUNDLE env (#11957)
+* support conda installation of selenium manager (#12536)
+* Drop support for `python3.7`
+* Fixed a bug where `Popen.wait()` calls caught the wrong exceptions when timing out
+
+Selenium 4.11.2
+* better bug fix for #12454
+
+Selenium 4.11.1
+* Delete unusable Safari Options parameters to fix bug preventing Safari execution (#12454)
+
+Selenium 4.11.0
+* Add CDP files for v115 and remove v112
+* removed redundant attributes `capabilities` and `set_capability` in wpewebkit/options.py (#12169)
+* mapped all error codes in `errorhandler.py` to corresponding exception object. (#12190)
+* improve driver logging (#12103) - implement log_output() for flexibility and consistency of driver logging
+* fix property name in Selenium Manager (#12237)
+* used truthy check instead of checking for length in `to_capabilities` method in `ie/options.py` (#12262)
+* remote commands dict is moved outside `RemoteConnection` class in `remote/remote_connection.py` (#12261)
+* moved `ConnectionType` class outside `Mobile` class to avoid nesting of classes (#12256)
+* used `pathlib` module to check if the file exist in `remote/file_detector.py` (#12253)
+* added truthy check in chromium options instead of identity operator (#12274)
+* added pythonic approach of type checking in `firefox/firefox_profile.py` (#12271)
+* let users pass service args to IE driver (#12272)
+* Adding ignore process match for IE Mode across bindings (#12279)
+* moved all ie options to custom descriptors. (#12283)
+* minor ie-options fix to PR 12283 (#12309), fixes #12283
+* added type hints to `SwitchTo` class (#12296)
+* Refactored Proxy object in common/proxy.py using custom descriptor. (#12286)
+* optimized Timeouts class by moving timeouts to descriptor class (#12287)
+* added type hinting support to ActionChains and Alert class (#12290)
+* Moved all `PrintOptions` class attributes to custom descriptor class. (#12297)
+* Use Selenium Manager to locate drivers on PATH (#12356
+* Enable cdp to work for edge
+* Update docstring of wait.py so it can also cover the case of WebElement as 1st arg of WebDriverWait. (#12376)
+* Added type hinting support to `common/actions` libraries. (#12325)
+* Fix type of `ignore_proxy` in `ChromiumRemoteconnection`
+* set exception direct cause when switching frame focus when NSE is raised
+* Raise a more generic `ValueError` when proxy type is not acceptable
+* Add browser output from selenium manager to options (#12404)
+* Add check=False explicitly to subprocess calls; simplify `keys_to_typing`
+* Expose `WPEWebKitService` and `WebKitGTKService` in the public API
+* Remove deprecated `ActionChains.scroll(...)`
+* Removed unused variable `DEFAULT_SAFARI_CAPS` in `safari/webdriver.py` (#12416)
+* Added type checks in `setter` methods of different browser options (#12328)
+* Add creation flag for windows in selenium_manager (#12435)
+* Fix checking window handles for current
+
 Selenium 4.10.0
 * Add CDP files for v114 and remove v111
 * Fix bug preventing proxy from working in Options classes (#12029)

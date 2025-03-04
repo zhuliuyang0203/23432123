@@ -24,13 +24,11 @@ import static org.openqa.selenium.Platform.ANDROID;
 import static org.openqa.selenium.WaitingConditions.elementTextToEqual;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
-import static org.openqa.selenium.testing.drivers.Browser.HTMLUNIT;
 import static org.openqa.selenium.testing.drivers.Browser.SAFARI;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -121,7 +119,6 @@ class UploadTest extends JupiterTestBase {
   }
 
   @Test
-  @Ignore(HTMLUNIT)
   public void testClickFileInput() {
     driver.get(pages.uploadPage);
     WebElement element = driver.findElement(By.id("upload"));
@@ -147,7 +144,6 @@ class UploadTest extends JupiterTestBase {
 
   @Test
   @Ignore(value = SAFARI, reason = "Hangs forever in sendKeys")
-  @Ignore(HTMLUNIT)
   @NeedsFreshDriver
   public void testUploadingWithInvisibleFileInput() {
     driver.get(appServer.whereIs("upload_invisible.html"));
@@ -165,7 +161,6 @@ class UploadTest extends JupiterTestBase {
   }
 
   @Test
-  @Ignore(HTMLUNIT)
   @NoDriverBeforeTest
   @NoDriverAfterTest
   public void testUploadingWithInvisibleFileInputWhenStrictFileInteractabilityIsOn() {
@@ -183,7 +178,7 @@ class UploadTest extends JupiterTestBase {
     try {
       File f = File.createTempFile("webdriver", "tmp");
       f.deleteOnExit();
-      Files.write(f.toPath(), content.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(f.toPath(), content);
       return f;
     } catch (IOException e) {
       throw new UncheckedIOException(e);

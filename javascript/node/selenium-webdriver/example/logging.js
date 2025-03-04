@@ -27,7 +27,7 @@ const edge = require('../edge')
 const { Builder, By, Key, logging, until } = require('..')
 
 logging.installConsoleHandler()
-logging.getLogger('webdriver.http').setLevel(logging.Level.ALL)
+logging.getLogger(`${logging.Type.DRIVER}.http`).setLevel(logging.Level.ALL)
 ;(async function () {
   let driver
   try {
@@ -40,17 +40,11 @@ logging.getLogger('webdriver.http').setLevel(logging.Level.ALL)
       // Configure the service for each browser to enable verbose logging and
       // to inherit the stdio settings from the current process. The builder
       // will only start the service if needed for the selected browser.
-      .setChromeService(
-        new chrome.ServiceBuilder().enableVerboseLogging().setStdio('inherit')
-      )
+      .setChromeService(new chrome.ServiceBuilder().enableVerboseLogging().setStdio('inherit'))
       .setEdgeService(
-        process.platform === 'win32'
-          ? new edge.ServiceBuilder().enableVerboseLogging().setStdio('inherit')
-          : null
+        process.platform === 'win32' ? new edge.ServiceBuilder().enableVerboseLogging().setStdio('inherit') : null,
       )
-      .setFirefoxService(
-        new firefox.ServiceBuilder().enableVerboseLogging().setStdio('inherit')
-      )
+      .setFirefoxService(new firefox.ServiceBuilder().enableVerboseLogging().setStdio('inherit'))
       .build()
 
     await driver.get('http://www.google.com/ncr')

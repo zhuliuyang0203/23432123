@@ -23,21 +23,20 @@
  * [PATH](http://en.wikipedia.org/wiki/PATH_%28variable%29). You must also apply
  * the system configuration outlined on the Selenium project
  * [wiki](https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver)
+ *
+ * @module selenium-webdriver/ie
  */
 
 'use strict'
 
-const fs = require('fs')
 const http = require('./http')
-const io = require('./io')
 const portprober = require('./net/portprober')
 const remote = require('./remote')
 const webdriver = require('./lib/webdriver')
 const { Browser, Capabilities } = require('./lib/capabilities')
 const error = require('./lib/error')
-const { getPath } = require('./common/driverFinder')
+const { getBinaryPaths } = require('./common/driverFinder')
 
-const IEDRIVER_EXE = 'IEDriverServer.exe'
 const OPTIONS_CAPABILITY_KEY = 'se:ieOptions'
 const SCROLL_BEHAVIOUR = {
   BOTTOM: 1,
@@ -83,6 +82,7 @@ const Key = {
   FILE_UPLOAD_DIALOG_TIMEOUT: 'ie.fileUploadDialogTimeout',
   ATTACH_TO_EDGE_CHROMIUM: 'ie.edgechromium',
   EDGE_EXECUTABLE_PATH: 'ie.edgepath',
+  IGNORE_PROCESS_MATCH: 'ie.ignoreprocessmatch',
 }
 
 /**
@@ -225,10 +225,10 @@ class Options extends Capabilities {
 
   addBrowserCommandSwitches(...args) {
     let current = this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] || []
-    if (typeof current == 'string') current = current.split(' ')
-    this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] = current
-      .concat(args)
-      .join(' ')
+    if (typeof current == 'string') {
+      current = current.split(' ')
+    }
+    this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] = current.concat(args).join(' ')
     return this
   }
 
@@ -243,10 +243,10 @@ class Options extends Capabilities {
 
   addArguments(...args) {
     let current = this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] || []
-    if (typeof current == 'string') current = current.split(' ')
-    this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] = current
-      .concat(args)
-      .join(' ')
+    if (typeof current == 'string') {
+      current = current.split(' ')
+    }
+    this.options_[Key.BROWSER_COMMAND_LINE_SWITCHES] = current.concat(args).join(' ')
     return this
   }
 
@@ -366,11 +366,7 @@ class Options extends Capabilities {
    * @return {!Options} A self reference.
    */
   setScrollBehavior(behavior) {
-    if (
-      behavior &&
-      behavior !== SCROLL_BEHAVIOUR.TOP &&
-      behavior !== SCROLL_BEHAVIOUR.BOTTOM
-    ) {
+    if (behavior && behavior !== SCROLL_BEHAVIOUR.TOP && behavior !== SCROLL_BEHAVIOUR.BOTTOM) {
       throw new error.InvalidArgumentError(`Element Scroll Behavior out of range.
       It should be either ${SCROLL_BEHAVIOUR.TOP} or ${SCROLL_BEHAVIOUR.BOTTOM}`)
     }
@@ -379,27 +375,17 @@ class Options extends Capabilities {
   }
 }
 
-/**
- * _Synchronously_ attempts to locate the IE driver executable on the current
- * system.
- *
- * @return {?string} the located executable, or `null`.
- */
-function locateSynchronously() {
-  return process.platform === 'win32' ? io.findInPath(IEDRIVER_EXE, true) : null
-}
-
 function createServiceFromCapabilities(capabilities) {
   if (process.platform !== 'win32') {
     throw Error(
       'The IEDriver may only be used on Windows, but you appear to be on ' +
         process.platform +
         '. Did you mean to run against a remote ' +
-        'WebDriver server?'
+        'WebDriver server?',
     )
   }
 
-  let exe = locateSynchronously()
+  let exe = null // Let Selenium Manager find it
   var args = []
   if (capabilities.has(Key.HOST)) {
     args.push('--host=' + capabilities.get(Key.HOST))
@@ -439,7 +425,7 @@ class ServiceBuilder extends remote.DriverService.Builder {
    *     the builder will attempt to locate the IEDriverServer on the system PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe || IEDRIVER_EXE)
+    super(opt_exe)
     this.setLoopback(true) // Required.
   }
 }
@@ -467,15 +453,13 @@ class Driver extends webdriver.WebDriver {
       service = createServiceFromCapabilities(options)
     }
     if (!service.getExecutable()) {
-      service.setExecutable(getPath(service, options))
+      service.setExecutable(getBinaryPaths(options).driverPath)
     }
 
     let client = service.start().then((url) => new http.HttpClient(url))
     let executor = new http.Executor(client)
 
-    return /** @type {!Driver} */ (
-      super.createSession(executor, options, () => service.kill())
-    )
+    return /** @type {!Driver} */ (super.createSession(executor, options, () => service.kill()))
   }
 
   /**
@@ -495,4 +479,3 @@ exports.ServiceBuilder = ServiceBuilder
 exports.Key = Key
 exports.VENDOR_COMMAND_PREFIX = OPTIONS_CAPABILITY_KEY
 exports.Behavior = SCROLL_BEHAVIOUR
-exports.locateSynchronously = locateSynchronously

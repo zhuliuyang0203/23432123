@@ -1,3 +1,4 @@
+load("@contrib_rules_jvm//java:defs.bzl", "java_library")
 load(
     "@rules_jvm_external//:defs.bzl",
     "javadoc",
@@ -24,7 +25,7 @@ def java_export(
     lib_name = "%s-lib" % name
 
     # Construct the java_library we'll export from here.
-    native.java_library(
+    java_library(
         name = lib_name,
         tags = tags,
         exports = exports,
@@ -90,9 +91,11 @@ def java_export(
         name = "%s.publish" % name,
         coordinates = maven_coordinates,
         pom = "%s-pom" % name,
-        javadocs = "%s-docs" % name,
-        artifact_jar = ":%s-maven-module" % name,
-        source_jar = ":%s-maven-source" % name,
+        artifact = ":%s-maven-module" % name,
+        classifier_artifacts = {
+            ":%s-docs" % name: "javadoc",
+            ":%s-maven-source" % name: "sources",
+        },
         visibility = visibility,
     )
 

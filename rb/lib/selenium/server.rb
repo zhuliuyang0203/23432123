@@ -18,6 +18,7 @@
 # under the License.
 
 require 'selenium/webdriver/common/child_process'
+require 'selenium/webdriver/common/port_prober'
 require 'selenium/webdriver/common/socket_poller'
 require 'net/http'
 
@@ -165,7 +166,7 @@ module Selenium
     # :standalone, #hub, #node
     #
 
-    attr_accessor :role, :port, :timeout, :background, :log
+    attr_accessor :role, :host, :port, :timeout, :background, :log
 
     #
     # @param [String] jar Path to the server jar.
@@ -182,10 +183,11 @@ module Selenium
     def initialize(jar, opts = {})
       raise Errno::ENOENT, jar unless File.exist?(jar)
 
+      @java = opts.fetch(:java, 'java')
       @jar = jar
       @host = '127.0.0.1'
       @role = opts.fetch(:role, 'standalone')
-      @port = opts.fetch(:port, 4444)
+      @port = opts.fetch(:port, WebDriver::PortProber.above(4444))
       @timeout = opts.fetch(:timeout, 30)
       @background = opts.fetch(:background, false)
       @additional_args = opts.fetch(:args, [])
@@ -207,12 +209,6 @@ module Selenium
     end
 
     def stop
-      begin
-        Net::HTTP.get(@host, '/selenium-server/driver/?cmd=shutDownSeleniumServer', @port)
-      rescue Errno::ECONNREFUSED
-        nil
-      end
-
       stop_process if @process
       poll_for_shutdown
 
@@ -234,13 +230,7 @@ module Selenium
     private
 
     def stop_process
-      return unless @process.alive?
-
-      begin
-        @process.poll_for_exit(5)
-      rescue WebDriver::ChildProcess::TimeoutError
-        @process.stop
-      end
+      @process.stop
     rescue Errno::ECHILD
       # already dead
     ensure
@@ -252,9 +242,8 @@ module Selenium
         # extract any additional_args that start with -D as options
         properties = @additional_args.dup - @additional_args.delete_if { |arg| arg[/^-D/] }
         args = ['-jar', @jar, @role, '--port', @port.to_s]
-        server_command = ['java'] + properties + args + @additional_args
+        server_command = [@java] + properties + args + @additional_args
         cp = WebDriver::ChildProcess.build(*server_command)
-        WebDriver.logger.debug("Executing Process #{server_command}", id: :server)
 
         if @log.is_a?(String)
           cp.io = @log

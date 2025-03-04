@@ -1,40 +1,38 @@
-﻿// <copyright file="LoadableComponent{T}.cs" company="WebDriver Committers">
+// <copyright file="LoadableComponent{T}.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
-    /// Represents any abstraction of something that can be loaded. This may be an entire web page, or
-    /// simply a component within that page (such as a login box or menu) or even a service.
-    /// </summary>
-    /// <typeparam name="T">The type to be returned (normally the subclass' type)</typeparam>
-    /// <example>
-    /// The expected usage is:
+    /// <para>Represents any abstraction of something that can be loaded.</para>
+    /// <para>This may be an entire web page, or simply a component within that page (such as a login box or menu) or even a service.</para>
     /// <para>
     /// <code>
-    /// new HypotheticalComponent().Load();
+    /// // Example usage:
+    /// new MyComponent().Load();
     /// </code>
     /// </para>
-    /// </example>
+    /// </summary>
+    /// <typeparam name="T">The type to be returned (normally the subclass' type)</typeparam>
     /// <remarks>
-    /// After the <see cref="LoadableComponent{T}.Load()"/> method is called, the component will be loaded and
-    /// ready for use. Overload the protected Load and IsLoaded members to both load a component and determine
-    /// if the component is already loaded.
+    /// <para>After the <see cref="Load()"/> method is called, the component will be loaded and ready for use.</para>
+    /// <para>Overload the protected Load and IsLoaded members to both load a component and determine if the component is already loaded.</para>
     /// </remarks>
     public abstract class LoadableComponent<T> : ILoadableComponent
         where T : LoadableComponent<T>
@@ -42,11 +40,7 @@ namespace OpenQA.Selenium.Support.UI
         /// <summary>
         /// Gets or sets the message for the exception thrown when a component cannot be loaded
         /// </summary>
-        public virtual string UnableToLoadMessage
-        {
-            get;
-            set;
-        }
+        public virtual string? UnableToLoadMessage { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the component is fully loaded.
@@ -59,17 +53,14 @@ namespace OpenQA.Selenium.Support.UI
         {
             get
             {
-                bool isLoaded = false;
                 try
                 {
-                    isLoaded = this.EvaluateLoadedStatus();
+                    return this.EvaluateLoadedStatus();
                 }
                 catch (WebDriverException)
                 {
                     return false;
                 }
-
-                return isLoaded;
             }
         }
 

@@ -17,6 +17,10 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public enum UnexpectedAlertBehaviour {
   ACCEPT("accept"),
   DISMISS("dismiss"),
@@ -24,7 +28,7 @@ public enum UnexpectedAlertBehaviour {
   DISMISS_AND_NOTIFY("dismiss and notify"),
   IGNORE("ignore");
 
-  private String text;
+  private final String text;
 
   UnexpectedAlertBehaviour(String text) {
     this.text = text;
@@ -35,7 +39,7 @@ public enum UnexpectedAlertBehaviour {
     return String.valueOf(text);
   }
 
-  public static UnexpectedAlertBehaviour fromString(String text) {
+  public static @Nullable UnexpectedAlertBehaviour fromString(@Nullable String text) {
     if (text != null) {
       for (UnexpectedAlertBehaviour b : UnexpectedAlertBehaviour.values()) {
         if (text.equalsIgnoreCase(b.text)) {

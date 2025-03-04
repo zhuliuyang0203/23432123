@@ -25,7 +25,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.Closeable;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Deque;
@@ -97,6 +96,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
   private static final String NAME = "Local New Session Queue";
   private final SlotMatcher slotMatcher;
   private final Duration requestTimeout;
+  private final Duration maximumResponseDelay;
   private final int batchSize;
   private final Map<RequestId, Data> requests;
   private final Map<RequestId, TraceContext> contexts;
@@ -116,6 +116,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
       SlotMatcher slotMatcher,
       Duration requestTimeoutCheck,
       Duration requestTimeout,
+      Duration maximumResponseDelay,
       Secret registrationSecret,
       int batchSize) {
     super(tracer, registrationSecret);
@@ -124,6 +125,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     Require.nonNegative("Retry period", requestTimeoutCheck);
 
     this.requestTimeout = Require.positive("Request timeout", requestTimeout);
+    this.maximumResponseDelay = Require.positive("Maximum response delay", maximumResponseDelay);
 
     this.requests = new ConcurrentHashMap<>();
     this.queue = new ConcurrentLinkedDeque<>();
@@ -153,6 +155,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
         slotMatcher,
         newSessionQueueOptions.getSessionRequestTimeoutPeriod(),
         newSessionQueueOptions.getSessionRequestTimeout(),
+        newSessionQueueOptions.getMaximumResponseDelay(),
         secretOptions.getRegistrationSecret(),
         newSessionQueueOptions.getBatchSize());
   }
@@ -186,6 +189,17 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
   }
 
   @Override
+  public boolean peekEmpty() {
+    Lock readLock = lock.readLock();
+    readLock.lock();
+    try {
+      return requests.isEmpty() && queue.isEmpty();
+    } finally {
+      readLock.unlock();
+    }
+  }
+
+  @Override
   public HttpResponse addToQueue(SessionRequest request) {
     Require.nonNull("New session request", request);
     Require.nonNull("Request id", request.getRequestId());
@@ -203,27 +217,30 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
       try {
 
         boolean sessionCreated = data.latch.await(requestTimeout.toMillis(), MILLISECONDS);
-        if (!(sessionCreated || isRequestInQueue(request.getRequestId()))) {
-          sessionCreated = data.latch.await(5000, MILLISECONDS);
-        }
 
         if (sessionCreated) {
-          result = data.result;
+          result = data.getResult();
         } else {
           result = Either.left(new SessionNotCreatedException("New session request timed out"));
         }
       } catch (InterruptedException e) {
+        // the client will never see the session, ensure the session is disposed
+        data.cancel();
         Thread.currentThread().interrupt();
         result =
             Either.left(new SessionNotCreatedException("Interrupted when creating the session", e));
       } catch (RuntimeException e) {
+        // the client will never see the session, ensure the session is disposed
+        data.cancel();
         result =
             Either.left(
                 new SessionNotCreatedException("An error occurred creating the session", e));
       }
 
       Lock writeLock = this.lock.writeLock();
-      writeLock.lock();
+      if (!writeLock.tryLock()) {
+        writeLock.lock();
+      }
       try {
         requests.remove(request.getRequestId());
         queue.remove(request);
@@ -257,7 +274,9 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     Data data = new Data(request.getEnqueued());
 
     Lock writeLock = lock.writeLock();
-    writeLock.lock();
+    if (!writeLock.tryLock()) {
+      writeLock.lock();
+    }
     try {
       requests.put(request.getRequestId(), data);
       queue.addLast(request);
@@ -277,10 +296,23 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
         contexts.getOrDefault(request.getRequestId(), tracer.getCurrentContext());
     try (Span ignored = context.createSpan("sessionqueue.retry")) {
       Lock writeLock = lock.writeLock();
-      writeLock.lock();
+      if (!writeLock.tryLock()) {
+        writeLock.lock();
+      }
       try {
         if (!requests.containsKey(request.getRequestId())) {
           return false;
+        }
+        Data data = requests.get(request.getRequestId());
+        if (isTimedOut(Instant.now(), data)) {
+          // as we try to re-add a session request that has already expired, force session timeout
+          failDueToTimeout(request.getRequestId());
+          // return true to avoid handleNewSessionRequest to call 'complete' an other time
+          return true;
+        } else if (data.isCanceled()) {
+          failDueToCanceled(request.getRequestId());
+          // return true to avoid handleNewSessionRequest to call 'complete' an other time
+          return true;
         }
 
         if (queue.contains(request)) {
@@ -302,7 +334,9 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     Require.nonNull("Request ID", reqId);
 
     Lock writeLock = lock.writeLock();
-    writeLock.lock();
+    if (!writeLock.tryLock()) {
+      writeLock.lock();
+    }
     try {
       Iterator<SessionRequest> iterator = queue.iterator();
       while (iterator.hasNext()) {
@@ -319,22 +353,32 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     }
   }
 
-  private boolean isRequestInQueue(RequestId requestId) {
-    Lock readLock = lock.readLock();
-    readLock.lock();
-
-    try {
-      Optional<SessionRequest> result =
-          queue.stream().filter(req -> req.getRequestId().equals(requestId)).findAny();
-      return result.isPresent();
-    } finally {
-      readLock.unlock();
-    }
-  }
-
   @Override
   public List<SessionRequest> getNextAvailable(Map<Capabilities, Long> stereotypes) {
     Require.nonNull("Stereotypes", stereotypes);
+
+    // use nano time to avoid issues with a jumping clock e.g. on WSL2 or due to time-sync
+    long started = System.nanoTime();
+    // delay the response to avoid heavy polling via http
+    while (maximumResponseDelay.toNanos() > System.nanoTime() - started) {
+      Lock readLock = lock.readLock();
+      readLock.lock();
+
+      try {
+        if (!queue.isEmpty()) {
+          break;
+        }
+      } finally {
+        readLock.unlock();
+      }
+
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        break;
+      }
+    }
 
     Predicate<Capabilities> matchesStereotype =
         caps ->
@@ -351,7 +395,9 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
                     });
 
     Lock writeLock = lock.writeLock();
-    writeLock.lock();
+    if (!writeLock.tryLock()) {
+      writeLock.lock();
+    }
     try {
       List<SessionRequest> availableRequests =
           queue.stream()
@@ -359,7 +405,18 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
               .limit(batchSize)
               .collect(Collectors.toList());
 
-      availableRequests.forEach(req -> this.remove(req.getRequestId()));
+      availableRequests.removeIf(
+          (req) -> {
+            Data data = this.requests.get(req.getRequestId());
+
+            if (data.isCanceled()) {
+              failDueToCanceled(req.getRequestId());
+              return true;
+            }
+
+            this.remove(req.getRequestId());
+            return false;
+          });
 
       return availableRequests;
     } finally {
@@ -367,44 +424,41 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     }
   }
 
+  /** Returns true if the session is still valid (not timed out and not canceled) */
   @Override
-  public void complete(
+  public boolean complete(
       RequestId reqId, Either<SessionNotCreatedException, CreateSessionResponse> result) {
     Require.nonNull("New session request", reqId);
     Require.nonNull("Result", result);
     TraceContext context = contexts.getOrDefault(reqId, tracer.getCurrentContext());
     try (Span ignored = context.createSpan("sessionqueue.completed")) {
-      Lock readLock = lock.readLock();
-      readLock.lock();
       Data data;
-      try {
-        data = requests.get(reqId);
-      } finally {
-        readLock.unlock();
-      }
-
-      if (data == null) {
-        return;
-      }
-
       Lock writeLock = lock.writeLock();
-      writeLock.lock();
+      if (!writeLock.tryLock()) {
+        writeLock.lock();
+      }
       try {
-        requests.remove(reqId);
+        data = requests.remove(reqId);
         queue.removeIf(req -> reqId.equals(req.getRequestId()));
         contexts.remove(reqId);
       } finally {
         writeLock.unlock();
       }
 
-      data.setResult(result);
+      if (data == null) {
+        return false;
+      }
+
+      return data.setResult(result);
     }
   }
 
   @Override
   public int clearQueue() {
     Lock writeLock = lock.writeLock();
-    writeLock.lock();
+    if (!writeLock.tryLock()) {
+      writeLock.lock();
+    }
 
     try {
       int size = queue.size();
@@ -446,7 +500,7 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     shutdownGracefully(NAME, service);
   }
 
@@ -454,26 +508,45 @@ public class LocalNewSessionQueue extends NewSessionQueue implements Closeable {
     complete(reqId, Either.left(new SessionNotCreatedException("Timed out creating session")));
   }
 
+  private void failDueToCanceled(RequestId reqId) {
+    // this error should never reach the client, as this is a client initiated state
+    complete(reqId, Either.left(new SessionNotCreatedException("Client has gone away")));
+  }
+
   private class Data {
 
     public final Instant endTime;
     private final CountDownLatch latch = new CountDownLatch(1);
-    public Either<SessionNotCreatedException, CreateSessionResponse> result;
+    private Either<SessionNotCreatedException, CreateSessionResponse> result;
     private boolean complete;
+    private boolean canceled;
 
     public Data(Instant enqueued) {
       this.endTime = enqueued.plus(requestTimeout);
       this.result = Either.left(new SessionNotCreatedException("Session not created"));
     }
 
-    public synchronized void setResult(
+    public synchronized Either<SessionNotCreatedException, CreateSessionResponse> getResult() {
+      return result;
+    }
+
+    public synchronized void cancel() {
+      canceled = true;
+    }
+
+    public synchronized boolean isCanceled() {
+      return canceled;
+    }
+
+    public synchronized boolean setResult(
         Either<SessionNotCreatedException, CreateSessionResponse> result) {
-      if (complete) {
-        return;
+      if (complete || canceled) {
+        return false;
       }
       this.result = result;
       complete = true;
       latch.countDown();
+      return true;
     }
   }
 }

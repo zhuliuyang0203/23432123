@@ -22,16 +22,19 @@ import static org.openqa.selenium.remote.CapabilityType.BROWSER_NAME;
 
 import com.google.auto.service.AutoService;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebDriverInfo;
 import org.openqa.selenium.remote.service.DriverFinder;
 
 @AutoService(WebDriverInfo.class)
 public class SafariDriverInfo implements WebDriverInfo {
+
+  private static final Logger LOG = Logger.getLogger(SafariDriverInfo.class.getName());
 
   @Override
   public String getDisplayName() {
@@ -49,10 +52,7 @@ public class SafariDriverInfo implements WebDriverInfo {
       return true;
     }
 
-    return capabilities.asMap().keySet().parallelStream()
-        .map(key -> key.startsWith("safari:"))
-        .reduce(Boolean::logicalOr)
-        .orElse(false);
+    return capabilities.asMap().keySet().stream().anyMatch(key -> key.startsWith("safari:"));
   }
 
   @Override
@@ -67,17 +67,16 @@ public class SafariDriverInfo implements WebDriverInfo {
 
   @Override
   public boolean isAvailable() {
-    try {
-      DriverFinder.getPath(SafariDriverService.createDefaultService(), getCanonicalCapabilities());
-      return true;
-    } catch (IllegalStateException | WebDriverException e) {
-      return false;
-    }
+    return Platform.getCurrent().is(Platform.MAC)
+        && new DriverFinder(SafariDriverService.createDefaultService(), getCanonicalCapabilities())
+            .isAvailable();
   }
 
   @Override
   public boolean isPresent() {
-    return SafariDriverService.isPresent();
+    return Platform.getCurrent().is(Platform.MAC)
+        && new DriverFinder(SafariDriverService.createDefaultService(), getCanonicalCapabilities())
+            .isPresent();
   }
 
   @Override

@@ -419,7 +419,7 @@ class JsonOutputTest {
   @Test
   void shouldConvertDatesToMillisecondsInUtcTime() {
     String jsonStr = convert(new Date(0));
-    assertThat(valueOf(jsonStr).intValue()).isZero();
+    assertThat(valueOf(jsonStr)).isZero();
   }
 
   @Test
@@ -727,7 +727,7 @@ class JsonOutputTest {
 
     Object value = emptyList();
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       jsonOutput.write(value);
 
       value = singletonList(value);
@@ -844,7 +844,7 @@ class JsonOutputTest {
   }
 
   class JsonAware {
-    private String convertedValue;
+    private final String convertedValue;
 
     public JsonAware(String convertedValue) {
       this.convertedValue = convertedValue;
@@ -856,7 +856,7 @@ class JsonOutputTest {
   }
 
   class MappableJsonAware {
-    private String convertedValue;
+    private final String convertedValue;
 
     public MappableJsonAware(String convertedValue) {
       this.convertedValue = convertedValue;
@@ -872,8 +872,8 @@ class JsonOutputTest {
   }
 
   class Mappable1 {
-    private String key;
-    private Object value;
+    private final String key;
+    private final Object value;
 
     public Mappable1(String key, Object value) {
       this.key = key;
@@ -886,8 +886,8 @@ class JsonOutputTest {
   }
 
   class Mappable2 {
-    private String key;
-    private Object value;
+    private final String key;
+    private final Object value;
 
     public Mappable2(String key, Object value) {
       this.key = key;

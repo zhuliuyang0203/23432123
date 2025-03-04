@@ -22,13 +22,19 @@ require_relative 'spec_helper'
 module Selenium
   module WebDriver
     module Support
-      describe Guards, exclusive: {driver: :chrome} do
+      describe Guards, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {driver: :chrome}] do
         describe '#exclude' do
           it 'ignores an unrecognized guard parameter', invalid: {browser: :chrome} do
             # pass
           end
 
           it 'skips without running', exclude: {browser: :chrome} do
+            raise 'This code will not get executed so it will not fail'
+          end
+        end
+
+        describe '#flaky' do
+          it 'skips without running', flaky: {browser: :chrome} do
             raise 'This code will not get executed so it will not fail'
           end
         end

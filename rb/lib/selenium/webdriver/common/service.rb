@@ -69,6 +69,7 @@ module Selenium
       def initialize(path: nil, port: nil, log: nil, args: nil)
         port ||= self.class::DEFAULT_PORT
         args ||= []
+        path ||= env_path
 
         @executable_path = path
         @host = Platform.localhost
@@ -81,13 +82,13 @@ module Selenium
                else
                  log
                end
-
-        @args = args.is_a?(Hash) ? extract_service_args(args) : args
+        @args = args
 
         raise Error::WebDriverError, "invalid port: #{@port}" if @port < 1
       end
 
       def launch
+        @executable_path ||= env_path || find_driver_path
         ServiceManager.new(self).tap(&:start)
       end
 
@@ -95,13 +96,13 @@ module Selenium
         self.class::SHUTDOWN_SUPPORTED
       end
 
-      protected
+      def find_driver_path
+        default_options = WebDriver.const_get("#{self.class.name&.split('::')&.[](2)}::Options").new
+        DriverFinder.new(default_options, self).driver_path
+      end
 
-      def extract_service_args(driver_opts)
-        WebDriver.logger.deprecate('initializing Service class with :args using Hash',
-                                   ':args parameter with an Array of String values',
-                                   id: :driver_opts)
-        driver_opts.key?(:args) ? driver_opts.delete(:args) : []
+      def env_path
+        ENV.fetch(self.class::DRIVER_PATH_ENV_KEY, nil)
       end
     end # Service
   end # WebDriver

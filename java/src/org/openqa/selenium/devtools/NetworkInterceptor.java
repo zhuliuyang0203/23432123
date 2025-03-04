@@ -19,6 +19,7 @@ package org.openqa.selenium.devtools;
 
 import static org.openqa.selenium.remote.http.Contents.utf8String;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import org.openqa.selenium.WebDriver;
@@ -100,13 +101,12 @@ public class NetworkInterceptor implements AutoCloseable {
   @Override
   public void close() {
     tools.getDomains().network().resetNetworkFilter();
-    tools.getDomains().network().markNetworkInterceptorClosed();
   }
 
   protected HttpMethod convertFromCdpHttpMethod(String method) {
     Require.nonNull("HTTP Method", method);
     try {
-      return HttpMethod.valueOf(method.toUpperCase());
+      return HttpMethod.valueOf(method.toUpperCase(Locale.ENGLISH));
     } catch (IllegalArgumentException e) {
       // Spam in a reasonable value
       return HttpMethod.GET;

@@ -21,21 +21,24 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe Driver do
-      it_behaves_like 'driver that can be started concurrently', exclude: {browser: %i[safari safari_preview]}
+    describe Driver, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
+      it_behaves_like 'driver that can be started concurrently', exclude: [
+        {browser: %i[safari safari_preview]},
+        {driver: :remote, rbe: true, reason: 'Cannot start 2+ drivers at once.'}
+      ]
 
-      it 'creates default capabilities' do
+      it 'creates default capabilities', exclude: {browser: %i[safari safari_preview]} do
         reset_driver! do |driver|
           caps = driver.capabilities
           expect(caps.proxy).to be_nil
           expect(caps.browser_version).to match(/^\d\d\d?\./)
           expect(caps.platform_name).not_to be_nil
 
-          expect(caps.accept_insecure_certs).to be == (caps.browser_name == 'firefox')
-          expect(caps.page_load_strategy).to be == 'normal'
+          expect(caps.accept_insecure_certs).to eq(caps.browser_name == 'firefox')
+          expect(caps.page_load_strategy).to eq 'normal'
           expect(caps.implicit_timeout).to be_zero
-          expect(caps.page_load_timeout).to be == 300000
-          expect(caps.script_timeout).to be == 30000
+          expect(caps.page_load_timeout).to eq 300000
+          expect(caps.script_timeout).to eq 30000
         end
       end
 
@@ -112,7 +115,7 @@ module Selenium
           driver.navigate.to url_for('relative_locators.html')
 
           above = driver.find_element(relative: {tag_name: 'td', above: {id: 'center'}})
-          expect(above.attribute('id')).to eq('second')
+          expect(above.attribute('id')).to eq('top')
         end
 
         it 'finds child element' do
@@ -147,7 +150,8 @@ module Selenium
           }.to raise_error(Error::NoSuchElementError, /errors#no-such-element-exception/)
         end
 
-        it 'raises if invalid locator' do
+        it 'raises if invalid locator',
+           exclude: {browser: %i[safari safari_preview], reason: 'Safari TimeoutError'} do
           driver.navigate.to url_for('xhtmlTest.html')
           expect {
             driver.find_element(xpath: '*?//-')
@@ -178,7 +182,7 @@ module Selenium
           driver.navigate.to url_for('relative_locators.html')
 
           above = driver.find_elements(relative: {css: 'td', above: {id: 'center'}})
-          expect(above.map { |e| e.attribute('id') }).to eq(%w[second first third])
+          expect(above.map { |e| e.attribute('id') }).to eq(%w[top topLeft topRight])
         end
 
         it 'finds below element' do
@@ -192,36 +196,36 @@ module Selenium
         it 'finds near another within default distance' do
           driver.navigate.to url_for('relative_locators.html')
 
-          near = driver.find_elements(relative: {tag_name: 'td', near: {id: 'sixth'}})
-          expect(near.map { |e| e.attribute('id') }).to eq(%w[third ninth center second eighth])
+          near = driver.find_elements(relative: {tag_name: 'td', near: {id: 'right'}})
+          expect(near.map { |e| e.attribute('id') }).to eq(%w[topRight bottomRight center top bottom])
         end
 
         it 'finds near another within custom distance', except: {browser: %i[safari safari_preview]} do
           driver.navigate.to url_for('relative_locators.html')
 
-          near = driver.find_elements(relative: {tag_name: 'td', near: {id: 'sixth', distance: 100}})
-          expect(near.map { |e| e.attribute('id') }).to eq(%w[third ninth center second eighth])
+          near = driver.find_elements(relative: {tag_name: 'td', near: {id: 'right', distance: 100}})
+          expect(near.map { |e| e.attribute('id') }).to eq(%w[topRight bottomRight center top bottom])
         end
 
         it 'finds to the left of another' do
           driver.navigate.to url_for('relative_locators.html')
 
           left = driver.find_elements(relative: {tag_name: 'td', left: {id: 'center'}})
-          expect(left.map { |e| e.attribute('id') }).to eq(%w[fourth first seventh])
+          expect(left.map { |e| e.attribute('id') }).to eq(%w[left topLeft bottomLeft])
         end
 
         it 'finds to the right of another' do
           driver.navigate.to url_for('relative_locators.html')
 
           right = driver.find_elements(relative: {tag_name: 'td', right: {id: 'center'}})
-          expect(right.map { |e| e.attribute('id') }).to eq(%w[sixth third ninth])
+          expect(right.map { |e| e.attribute('id') }).to eq(%w[right topRight bottomRight])
         end
 
         it 'finds by combined relative locators' do
           driver.navigate.to url_for('relative_locators.html')
 
-          found = driver.find_elements(relative: {tag_name: 'td', right: {id: 'second'}, above: {id: 'center'}})
-          expect(found.map { |e| e.attribute('id') }).to eq(['third'])
+          found = driver.find_elements(relative: {tag_name: 'td', right: {id: 'top'}, above: {id: 'center'}})
+          expect(found.map { |e| e.attribute('id') }).to eq(['topRight'])
         end
 
         it 'finds all by empty relative locator' do
@@ -240,7 +244,16 @@ module Selenium
         end
       end
 
-      describe 'execute script' do
+      describe '#script' do
+        it 'executes script with deprecation warning' do
+          driver.navigate.to url_for('xhtmlTest.html')
+          expect {
+            expect(driver.script('return document.title;')).to eq('XHTML Test Page')
+          }.to have_deprecated(:driver_script)
+        end
+      end
+
+      describe '#execute_script' do
         it 'returns strings' do
           driver.navigate.to url_for('xhtmlTest.html')
           expect(driver.execute_script('return document.title;')).to eq('XHTML Test Page')

@@ -1,14 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+// <copyright file="DevToolsSecurityTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.DevTools
 {
+    using CurrentCdpVersion = V133;
+
     [TestFixture]
     public class DevToolsSecurityTest : DevToolsTestFixture
     {
@@ -18,17 +36,17 @@ namespace OpenQA.Selenium.DevTools
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
         public async Task LoadInsecureWebsite()
         {
-            var domains = session.GetVersionSpecificDomains<V114.DevToolsSessionDomains>();
+            var domains = session.GetVersionSpecificDomains<CurrentCdpVersion.DevToolsSessionDomains>();
             await domains.Security.Enable();
 
-            await domains.Security.SetIgnoreCertificateErrors(new V114.Security.SetIgnoreCertificateErrorsCommandSettings()
+            await domains.Security.SetIgnoreCertificateErrors(new CurrentCdpVersion.Security.SetIgnoreCertificateErrorsCommandSettings()
             {
                 Ignore = false
             });
 
             string summary = null;
             ManualResetEventSlim sync = new ManualResetEventSlim(false);
-            EventHandler<V114.Security.SecurityStateChangedEventArgs> securityStateChangedHandler = (sender, e) =>
+            EventHandler<CurrentCdpVersion.Security.SecurityStateChangedEventArgs> securityStateChangedHandler = (sender, e) =>
             {
                 summary = e.Summary;
                 sync.Set();
@@ -50,10 +68,10 @@ namespace OpenQA.Selenium.DevTools
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
         public async Task LoadSecureWebsite()
         {
-            var domains = session.GetVersionSpecificDomains<V114.DevToolsSessionDomains>();
+            var domains = session.GetVersionSpecificDomains<CurrentCdpVersion.DevToolsSessionDomains>();
             await domains.Security.Enable();
 
-            await domains.Security.SetIgnoreCertificateErrors(new V114.Security.SetIgnoreCertificateErrorsCommandSettings()
+            await domains.Security.SetIgnoreCertificateErrors(new CurrentCdpVersion.Security.SetIgnoreCertificateErrorsCommandSettings()
             {
                 Ignore = true
             });

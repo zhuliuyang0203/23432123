@@ -38,7 +38,7 @@ closure_js_library(
         "//javascript/atoms:action",
         "//javascript/atoms:inject",
         "//javascript/webdriver/atoms:atoms-lib",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/json",
     ],
 )
 
@@ -68,7 +68,7 @@ closure_js_library(
         "//javascript/atoms:inject",
         "//javascript/atoms:useragent",
         "//javascript/webdriver/atoms:atoms-lib",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/json",
     ],
 )
 
@@ -97,7 +97,7 @@ closure_js_library(
         ":execute-script",
         "//javascript/atoms:inject",
         "//javascript/atoms:locators",
-        "@io_bazel_rules_closure//closure/library",
+        "@io_bazel_rules_closure//closure/library/json",
     ],
 )
 
@@ -389,6 +389,15 @@ closure_fragment(
     function = "webdriver.atoms.inject.action.submit",
     module = "webdriver.atoms.inject.action",
     deps = [":action"],
+)
+
+closure_fragment(
+    name = "type",
+    function = "webdriver.atoms.inject.action.type",
+    module = "webdriver.atoms.inject.action",
+    deps = [
+        ":action",
+    ],
 )
 
 closure_fragment(

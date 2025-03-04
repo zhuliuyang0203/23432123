@@ -23,9 +23,11 @@ import static org.openqa.selenium.remote.Browser.OPERA;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -35,7 +37,9 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Credentials;
 import org.openqa.selenium.HasAuthentication;
 import org.openqa.selenium.ImmutableCapabilities;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.PersistentCapabilities;
+import org.openqa.selenium.ScriptKey;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.bidi.BiDi;
@@ -54,9 +58,9 @@ import org.openqa.selenium.html5.LocationContext;
 import org.openqa.selenium.html5.SessionStorage;
 import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.json.TypeToken;
 import org.openqa.selenium.logging.EventType;
 import org.openqa.selenium.logging.HasLogEvents;
-import org.openqa.selenium.mobile.NetworkConnection;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.FileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -65,7 +69,6 @@ import org.openqa.selenium.remote.html5.RemoteWebStorage;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.ConnectionFailedException;
 import org.openqa.selenium.remote.http.HttpClient;
-import org.openqa.selenium.remote.mobile.RemoteNetworkConnection;
 
 /**
  * A {@link WebDriver} implementation that controls a Chromium browser running on the local machine.
@@ -82,7 +85,6 @@ public class ChromiumDriver extends RemoteWebDriver
         HasNetworkConditions,
         HasPermissions,
         LocationContext,
-        NetworkConnection,
         WebStorage {
 
   public static final Predicate<String> IS_CHROMIUM_BROWSER =
@@ -92,7 +94,6 @@ public class ChromiumDriver extends RemoteWebDriver
   private final Capabilities capabilities;
   private final RemoteLocationContext locationContext;
   private final RemoteWebStorage webStorage;
-  private final RemoteNetworkConnection networkConnection;
   private final HasNetworkConditions networkConditions;
   private final HasPermissions permissions;
   private final HasLaunchApp launch;
@@ -102,6 +103,7 @@ public class ChromiumDriver extends RemoteWebDriver
   private final Optional<BiDi> biDi;
   protected HasCasting casting;
   protected HasCdp cdp;
+  private final Map<Integer, ScriptKey> scriptKeys = new HashMap<>();
 
   protected ChromiumDriver(
       CommandExecutor commandExecutor, Capabilities capabilities, String capabilityKey) {
@@ -109,7 +111,6 @@ public class ChromiumDriver extends RemoteWebDriver
     locationContext = new RemoteLocationContext(getExecuteMethod());
     webStorage = new RemoteWebStorage(getExecuteMethod());
     permissions = new AddHasPermissions().getImplementation(getCapabilities(), getExecuteMethod());
-    networkConnection = new RemoteNetworkConnection(getExecuteMethod());
     networkConditions =
         new AddHasNetworkConditions().getImplementation(getCapabilities(), getExecuteMethod());
     launch = new AddHasLaunchApp().getImplementation(getCapabilities(), getExecuteMethod());
@@ -141,7 +142,7 @@ public class ChromiumDriver extends RemoteWebDriver
 
     try {
       try {
-        cdpUri = client.flatMap(httpClient -> CdpEndpointFinder.getCdpEndPoint(httpClient));
+        cdpUri = client.flatMap(CdpEndpointFinder::getCdpEndPoint);
       } catch (Exception e) {
         try {
           client.ifPresent(HttpClient::close);
@@ -170,7 +171,8 @@ public class ChromiumDriver extends RemoteWebDriver
                               + " where the version (\"v86\") matches the version of the"
                               + " chromium-based browser you're using and the version number of the"
                               + " artifact is the same as Selenium's.",
-                          capabilities.getBrowserVersion(), new BuildInfo().getReleaseLabel()));
+                          originalCapabilities.getBrowserVersion(),
+                          new BuildInfo().getReleaseLabel()));
                   return new NoOpCdpInfo();
                 });
 
@@ -191,6 +193,76 @@ public class ChromiumDriver extends RemoteWebDriver
   @Override
   public Capabilities getCapabilities() {
     return capabilities;
+  }
+
+  @Override
+  public ScriptKey pin(String script) {
+    Require.nonNull("Script to pin", script);
+
+    ScriptKey existingKey = scriptKeys.get(script.hashCode());
+    if (existingKey != null) {
+      return existingKey;
+    }
+
+    // Create the actual script we're going to use.
+    String scriptToUse =
+        String.format(
+            "window.seleniumPinnedScript%s = function(){%s}",
+            Math.abs((long) script.hashCode()), script);
+
+    DevTools devTools = getDevTools();
+    devTools.createSessionIfThereIsNotOne();
+    devTools.send(new org.openqa.selenium.devtools.Command<>("Page.enable", Map.of()));
+    devTools.send(
+        new org.openqa.selenium.devtools.Command<>(
+            "Runtime.evaluate", Map.of("expression", scriptToUse)));
+    Map<String, Object> result =
+        devTools.send(
+            new org.openqa.selenium.devtools.Command<>(
+                "Page.addScriptToEvaluateOnNewDocument",
+                Map.of("source", scriptToUse),
+                new TypeToken<Map<String, Object>>() {}.getType()));
+
+    ScriptKey key = new ScriptKey((String) result.get("identifier"));
+    scriptKeys.put(script.hashCode(), key);
+    return key;
+  }
+
+  @Override
+  public Set<ScriptKey> getPinnedScripts() {
+    return Set.copyOf(scriptKeys.values());
+  }
+
+  @Override
+  public void unpin(ScriptKey key) {
+    int hashCode = getScriptId(key);
+
+    executeScript(String.format("window.seleniumPinnedScript%s = undefined", Math.abs(hashCode)));
+    scriptKeys.remove(hashCode);
+
+    DevTools devTools = getDevTools();
+    devTools.send(
+        new org.openqa.selenium.devtools.Command(
+            "Page.removeScriptToEvaluateOnNewDocument", Map.of("identifier", key.getIdentifier())));
+  }
+
+  @Override
+  public Object executeScript(ScriptKey key, Object... args) {
+    int hashCode = getScriptId(key);
+
+    String scriptToUse =
+        String.format(
+            "return window.seleniumPinnedScript%s.apply(window, arguments)", Math.abs(hashCode));
+
+    return this.executeScript(scriptToUse, args);
+  }
+
+  private int getScriptId(ScriptKey key) {
+    return scriptKeys.entrySet().stream()
+        .filter(entry -> key.equals(entry.getValue()))
+        .map(Map.Entry::getKey)
+        .findAny()
+        .orElseThrow(() -> new JavascriptException("Unable to find script key matching " + key));
   }
 
   @Override
@@ -216,35 +288,28 @@ public class ChromiumDriver extends RemoteWebDriver
   }
 
   @Override
+  @Deprecated
   public LocalStorage getLocalStorage() {
     return webStorage.getLocalStorage();
   }
 
   @Override
+  @Deprecated
   public SessionStorage getSessionStorage() {
     return webStorage.getSessionStorage();
   }
 
   @Override
+  @Deprecated
   public Location location() {
     return locationContext.location();
   }
 
   @Override
+  @Deprecated
   public void setLocation(Location location) {
     Require.nonNull("Location", location);
     locationContext.setLocation(location);
-  }
-
-  @Override
-  public ConnectionType getNetworkConnection() {
-    return networkConnection.getNetworkConnection();
-  }
-
-  @Override
-  public ConnectionType setNetworkConnection(ConnectionType type) {
-    Require.nonNull("Network Connection Type", type);
-    return networkConnection.setNetworkConnection(type);
   }
 
   @Override
@@ -265,13 +330,16 @@ public class ChromiumDriver extends RemoteWebDriver
   }
 
   private Optional<BiDi> createBiDi(Optional<URI> biDiUri) {
-    if (!biDiUri.isPresent()) {
+    if (biDiUri.isEmpty()) {
       return Optional.empty();
     }
 
     URI wsUri =
         biDiUri.orElseThrow(
-            () -> new BiDiException("This version of Chromium driver does not support BiDi"));
+            () ->
+                new BiDiException(
+                    "Check if this browser version supports BiDi and if the 'webSocketUrl: true'"
+                        + " capability is set."));
 
     HttpClient.Factory clientFactory = HttpClient.Factory.createDefault();
     ClientConfig wsConfig = ClientConfig.defaultConfig().baseUri(wsUri);

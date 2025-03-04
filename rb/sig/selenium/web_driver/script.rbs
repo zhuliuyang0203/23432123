@@ -1,0 +1,20 @@
+module Selenium
+  module WebDriver
+    class Script
+      @bidi: BiDi
+      @log_entry_subscribed: bool
+
+      @log_handler: BiDi::LogHandler
+
+      def initialize: (Remote::BiDiBridge bidi) -> void
+
+      def add_console_message_handler: ?{ (untyped) -> untyped } -> Integer
+
+      def add_javascript_error_handler: ?{ (untyped) -> untyped } -> Integer
+
+      def remove_console_message_handler: (Integer id) -> bool?
+
+      alias remove_javascript_error_handler remove_console_message_handler
+    end
+  end
+end

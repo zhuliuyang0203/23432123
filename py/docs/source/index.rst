@@ -24,7 +24,7 @@ Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer), as 
 Supported Python Versions
 =========================
 
-* Python 3.7+
+* Python 3.9+
 
 Installing
 ==========
@@ -33,9 +33,9 @@ If you have `pip <https://pip.pypa.io/>`_ on your system, you can simply install
 
     pip install -U selenium
 
-Alternately, you can download the source distribution from `PyPI <https://pypi.org/project/selenium/#files>`_ (e.g. selenium-4.10.0.tar.gz), unarchive it, and run::
+Alternately, you can download the source distribution from `PyPI <https://pypi.org/project/selenium/#files>`, unarchive it, and run::
 
-    python setup.py install
+    python -m pip install .
 
 Note: You may want to consider using `virtualenv <http://www.virtualenv.org/>`_ to create isolated Python environments.
 
@@ -119,20 +119,15 @@ Selenium WebDriver is often used as a basis for testing web applications.  Here 
     if __name__ == '__main__':
         unittest.main(verbosity=2)
 
-Selenium Server (optional)
+Selenium Grid (optional)
 ==========================
 
-For normal WebDriver scripts (non-Remote), the Java server is not needed.
+For local Selenium scripts, the Java server is not needed.
 
-However, to use Selenium Webdriver Remote , you need to also run the Selenium server. The server requires a Java Runtime Environment (JRE).
+To use Selenium remotely, you need to also run the Selenium grid.
+For information on running Selenium Grid: https://www.selenium.dev/documentation/grid/getting_started/
 
-Download the server separately, from: https://www.selenium.dev/downloads/
-
-Run the server from the command line::
-
-    java -jar selenium-server-4.10.0.jar
-
-Then run your Python client scripts.
+To use Remote WebDriver see: https://www.selenium.dev/documentation/webdriver/drivers/remote_webdriver/?tab=python
 
 Use The Source Luke!
 ====================
@@ -143,23 +138,12 @@ View source code online:
 | Official: | https://github.com/SeleniumHQ/selenium/tree/trunk/py |
 +-----------+------------------------------------------------------+
 
-More Docs
-=============
-
-.. toctree::
-   :maxdepth: 1
-
-   API Docs <../api.rst>
-
-* :ref:`genindex`
-* :ref:`modindex`
-
 Contributing
 =============
 
  - Create a branch for your work
  - Ensure `tox` is installed (using a `virtualenv` is recommended)
- - `python3.7 -m venv .venv && . .venv/bin/activate && pip install tox`
+ - `python3.8 -m venv .venv && . .venv/bin/activate && pip install tox`
  - After making changes, before committing execute `tox -e linting`
  - If tox exits `0`, commit and push otherwise fix the newly introduced breakages.
  - `flake8` requires manual fixes

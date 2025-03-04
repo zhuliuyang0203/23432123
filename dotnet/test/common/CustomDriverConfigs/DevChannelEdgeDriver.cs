@@ -1,17 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+// <copyright file="DevChannelEdgeDriver.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
 
 namespace OpenQA.Selenium.Edge
 {
     public class DevChannelEdgeDriver : EdgeDriver
     {
-        private static string servicePath = string.Empty;
-
         public DevChannelEdgeDriver()
-            : this(DefaultService, DefaultOptions)
+            : base(DefaultOptions)
+        {
+        }
+
+        // Required for dynamic setting with `EnvironmentManager.Instance.CreateDriverInstance(options)`
+        public DevChannelEdgeDriver(EdgeOptions options)
+            : base(options)
         {
         }
 
@@ -22,30 +39,7 @@ namespace OpenQA.Selenium.Edge
 
         public static EdgeOptions DefaultOptions
         {
-            get {
-                // The below path to the Edge Developer Channel executable is obviously hard-coded.
-                // On non-Windows OSes, and for custom install locations, you will need to add a
-                // property to the below options: BinaryLocation = <path to MSEdge.exe>
-                return new EdgeOptions()
-                {
-                    BinaryLocation = @"C:\Program Files (x86)\Microsoft\Edge Dev\Application\msedge.exe"
-                };
-            }
-        }
-
-        public static EdgeDriverService DefaultService
-        {
-            get
-            {
-                EdgeDriverService service = EdgeDriverService.CreateDefaultService(ServicePath);
-                return service;
-            }
-        }
-
-        public static string ServicePath
-        {
-            get { return servicePath; }
-            set { servicePath = value; }
+            get { return new EdgeOptions() { BrowserVersion = "dev" }; }
         }
     }
 }

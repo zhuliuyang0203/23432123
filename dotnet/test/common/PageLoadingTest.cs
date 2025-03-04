@@ -1,6 +1,25 @@
-using System;
+// <copyright file="PageLoadingTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
+using System;
 
 namespace OpenQA.Selenium
 {
@@ -64,7 +83,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Edge, "Edge driver does not support eager page load strategy")]
         public void EagerStrategyShouldNotWaitForResources()
         {
             InitLocalDriver(PageLoadStrategy.Eager);
@@ -85,7 +103,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Edge, "Edge driver does not support eager page load strategy")]
         public void EagerStrategyShouldNotWaitForResourcesOnRefresh()
         {
             InitLocalDriver(PageLoadStrategy.Eager);
@@ -111,7 +128,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Edge, "Edge driver does not support eager page load strategy")]
         public void EagerStrategyShouldWaitForDocumentToBeLoaded()
         {
             InitLocalDriver(PageLoadStrategy.Eager);
@@ -129,7 +145,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
 
-            Assert.AreEqual(driver.Title, "Hello WebDriver");
+            Assert.That(driver.Title, Is.EqualTo("Hello WebDriver"));
         }
 
         [Test]
@@ -137,7 +153,7 @@ namespace OpenQA.Selenium
         public void ShouldFollowRedirectsSentInTheHttpResponseHeaders()
         {
             driver.Url = redirectPage;
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -145,7 +161,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = metaRedirectPage;
             WaitFor(() => { return driver.Title == "We Arrive Here"; }, "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -176,7 +192,7 @@ namespace OpenQA.Selenium
         {
             string url = EnvironmentManager.Instance.UrlBuilder.WhereIs("not_existed_page.html");
             driver.Url = url;
-            Assert.AreEqual(url, driver.Url);
+            Assert.That(driver.Url, Is.EqualTo(url));
         }
 
         [Test]
@@ -186,11 +202,11 @@ namespace OpenQA.Selenium
 
             driver.SwitchTo().Frame(0);
             IWebElement pageNumber = driver.FindElement(By.XPath("//span[@id='pageNumber']"));
-            Assert.AreEqual(pageNumber.Text.Trim(), "1");
+            Assert.That(pageNumber.Text.Trim(), Is.EqualTo("1"));
 
             driver.SwitchTo().DefaultContent().SwitchTo().Frame(1);
             pageNumber = driver.FindElement(By.XPath("//span[@id='pageNumber']"));
-            Assert.AreEqual(pageNumber.Text.Trim(), "2");
+            Assert.That(pageNumber.Text.Trim(), Is.EqualTo("2"));
         }
 
         [Test]
@@ -207,7 +223,7 @@ namespace OpenQA.Selenium
             if (driver.Title == originalTitle)
             {
                 driver.Navigate().Back();
-                Assert.AreEqual(originalTitle, driver.Title);
+                Assert.That(driver.Title, Is.EqualTo(originalTitle));
             }
         }
 
@@ -218,11 +234,11 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Id("imageButton")).Submit();
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
 
             driver.Navigate().Back();
             WaitFor(TitleToBeEqualTo("We Leave From Here"), "Browser title was not 'We Leave From Here'");
-            Assert.AreEqual(driver.Title, "We Leave From Here");
+            Assert.That(driver.Title, Is.EqualTo("We Leave From Here"));
         }
 
         [Test]
@@ -232,11 +248,11 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Name("sameWindow")).Click();
             WaitFor(TitleToBeEqualTo("This page has iframes"), "Browser title was not 'This page has iframes'");
-            Assert.AreEqual(driver.Title, "This page has iframes");
+            Assert.That(driver.Title, Is.EqualTo("This page has iframes"));
 
             driver.Navigate().Back();
             WaitFor(TitleToBeEqualTo("XHTML Test Page"), "Browser title was not 'XHTML Test Page'");
-            Assert.AreEqual(driver.Title, "XHTML Test Page");
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
 
         [Test]
@@ -246,15 +262,15 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Id("imageButton")).Submit();
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
 
             driver.Navigate().Back();
             WaitFor(TitleToBeEqualTo("We Leave From Here"), "Browser title was not 'We Leave From Here'");
-            Assert.AreEqual(driver.Title, "We Leave From Here");
+            Assert.That(driver.Title, Is.EqualTo("We Leave From Here"));
 
             driver.Navigate().Forward();
             WaitFor(TitleToBeEqualTo("We Arrive Here"), "Browser title was not 'We Arrive Here'");
-            Assert.AreEqual(driver.Title, "We Arrive Here");
+            Assert.That(driver.Title, Is.EqualTo("We Arrive Here"));
         }
 
         [Test]
@@ -267,7 +283,7 @@ namespace OpenQA.Selenium
             driver.Url = url;
 
             // This should work
-            Assert.AreEqual(driver.Title, "Hello WebDriver");
+            Assert.That(driver.Title, Is.EqualTo("Hello WebDriver"));
         }
 
         [Test]
@@ -277,7 +293,7 @@ namespace OpenQA.Selenium
 
             driver.Navigate().Refresh();
 
-            Assert.AreEqual(driver.Title, "XHTML Test Page");
+            Assert.That(driver.Title, Is.EqualTo("XHTML Test Page"));
         }
 
         /// <summary>
@@ -425,6 +441,7 @@ namespace OpenQA.Selenium
          * Side effects: 1) {@link #driver} is configured to use given pageLoadTimeout,
          * 2) test HTTP server still didn't serve the page to browser (some browsers may still
          * be waiting for the page to load despite the fact that driver responded with the timeout).
+         * </p>
          */
         private void TestPageLoadTimeoutIsEnforced(long webDriverPageLoadTimeoutInSeconds)
         {

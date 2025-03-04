@@ -15,8 +15,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import React, { useEffect, useState } from 'react'
-import RFB from '@novnc/novnc/core/rfb'
+import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react'
+import RFB from '@novnc/novnc/lib/rfb'
 import PasswordDialog from './PasswordDialog'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
@@ -28,7 +28,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-function LiveView (props) {
+const LiveView = forwardRef((props, ref) => {
   let canvas: any = null
 
   const [open, setOpen] = useState(false)
@@ -49,6 +49,10 @@ function LiveView (props) {
     setRfb(null)
   }
 
+  useImperativeHandle(ref, () => ({
+    disconnect
+  }))
+
   const connect = () => {
     disconnect()
 
@@ -56,12 +60,13 @@ function LiveView (props) {
       return
     }
 
-    const newRfb = new RFB(canvas, props.url, {})
+    const newRfb = new RFB.default(canvas, props.url, {})
     newRfb.scaleViewport = props.scaleViewport
     newRfb.background = 'rgb(247,248,248)'
     newRfb.addEventListener('credentialsrequired', handleCredentials)
     newRfb.addEventListener('securityfailure', securityFailed)
     newRfb.addEventListener('connect', connectedToServer)
+    newRfb.addEventListener('disconnect', disconnect)
     setRfb(newRfb)
   }
 
@@ -109,6 +114,7 @@ function LiveView (props) {
   }
 
   const handlePasswordDialogClose = () => {
+    disconnect()
     props.onClose()
   }
 
@@ -132,6 +138,7 @@ function LiveView (props) {
       return
     }
     setOpenErrorAlert(false)
+    disconnect()
     props.onClose()
   }
 
@@ -176,6 +183,6 @@ function LiveView (props) {
       </Snackbar>
     </div>
   )
-}
+})
 
 export default LiveView

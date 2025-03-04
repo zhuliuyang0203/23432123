@@ -29,7 +29,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.ByteStreams;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,6 +40,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -102,7 +102,7 @@ public class CdpClientGenerator {
               JarEntry entry = new JarEntry(devtoolsDir + relative);
               jos.putNextEntry(entry);
               try (InputStream is = Files.newInputStream(file)) {
-                ByteStreams.copy(is, jos);
+                is.transferTo(jos);
               }
               jos.closeEntry();
               return CONTINUE;
@@ -112,8 +112,8 @@ public class CdpClientGenerator {
   }
 
   private static class Model {
-    private List<Domain> domains = new ArrayList<>();
-    private String basePackage;
+    private final List<Domain> domains = new ArrayList<>();
+    private final String basePackage;
 
     public Model(String basePackage) {
       this.basePackage = basePackage;
@@ -149,7 +149,7 @@ public class CdpClientGenerator {
   }
 
   private static class Parser<T extends BaseSpec> {
-    private Map<String, BiConsumer<T, Object>> processors;
+    private final Map<String, BiConsumer<T, Object>> processors;
 
     public Parser(Map<String, BiConsumer<T, Object>> processors) {
       this.processors = processors;
@@ -247,11 +247,11 @@ public class CdpClientGenerator {
   }
 
   private static class Domain extends BaseSpec {
-    private Model model;
+    private final Model model;
 
-    private List<TypeSpec> types = new ArrayList<>();
-    private List<CommandSpec> commands = new ArrayList<>();
-    private List<EventSpec> events = new ArrayList<>();
+    private final List<TypeSpec> types = new ArrayList<>();
+    private final List<CommandSpec> commands = new ArrayList<>();
+    private final List<EventSpec> events = new ArrayList<>();
 
     public Domain(Model model) {
       this.model = model;
@@ -269,12 +269,12 @@ public class CdpClientGenerator {
       Path domainDir = target.resolve(name.toLowerCase());
       ensureDirectoryExists(domainDir);
       dumpMainClass(domainDir);
-      if (types.size() > 0) {
+      if (!types.isEmpty()) {
         Path typesDir = domainDir.resolve("model");
         ensureDirectoryExists(typesDir);
         types.forEach(type -> type.dumpTo(typesDir));
       }
-      if (events.size() > 0) {
+      if (!events.isEmpty()) {
         Path eventsDir = domainDir.resolve("model");
         ensureDirectoryExists(eventsDir);
         events.forEach(event -> event.dumpTo(eventsDir));
@@ -288,7 +288,8 @@ public class CdpClientGenerator {
       unit.addImport(Command.class);
       unit.addImport(Event.class);
       unit.addImport(ConverterFunctions.class);
-      unit.addImport(ImmutableMap.class);
+      unit.addImport(Map.class);
+      unit.addImport(LinkedHashMap.class);
       unit.addImport(JsonInput.class);
 
       ClassOrInterfaceDeclaration classDecl = unit.addClass(name);
@@ -436,7 +437,8 @@ public class CdpClientGenerator {
               .get()
               .addStatement(
                   String.format(
-                      "return new Event<>(\"%s.%s\", input -> null);", domain.name, name));
+                      "return new Event<>(\"%s.%s\", ConverterFunctions.empty());",
+                      domain.name, name));
         } else if (type instanceof ObjectType) {
           methodDecl
               .getBody()
@@ -445,6 +447,14 @@ public class CdpClientGenerator {
                   String.format(
                       "return new Event<>(\"%s.%s\", input -> %s);",
                       domain.name, name, type.getMapper()));
+        } else if (type instanceof ArrayType) {
+          methodDecl
+              .getBody()
+              .get()
+              .addStatement(
+                  String.format(
+                      "return new Event<>(\"%s.%s\", ConverterFunctions.map(\"%s\", input -> %s));",
+                      domain.name, name, type.getName(), type.getMapper()));
         } else {
           methodDecl
               .getBody()
@@ -476,7 +486,7 @@ public class CdpClientGenerator {
                               parameter.parse(item);
                               parameters.add(parameter);
                             });
-                    if (parameters.size() == 0) {
+                    if (parameters.isEmpty()) {
                       event.type = new VoidType();
                     } else if (parameters.size() == 1) {
                       event.type = parameters.get(0).type;
@@ -641,7 +651,7 @@ public class CdpClientGenerator {
                       String.format(
                           "java.util.Objects.requireNonNull(%s, \"%s is required\");",
                           name, name)));
-      body.addStatement("ImmutableMap.Builder<String, Object> params = ImmutableMap.builder();");
+      body.addStatement("LinkedHashMap<String, Object> params = new LinkedHashMap<>();");
       parameters.forEach(
           parameter -> {
             if (parameter.optional) {
@@ -656,16 +666,23 @@ public class CdpClientGenerator {
 
       if (type instanceof VoidType) {
         body.addStatement(
-            String.format("return new Command<>(\"%s.%s\", params.build());", domain.name, name));
+            String.format(
+                "return new Command<>(\"%s.%s\", Map.copyOf(params));", domain.name, name));
       } else if (type instanceof ObjectType) {
         body.addStatement(
             String.format(
-                "return new Command<>(\"%s.%s\", params.build(), input -> %s);",
+                "return new Command<>(\"%s.%s\", Map.copyOf(params), input -> %s);",
                 domain.name, name, type.getMapper()));
+      } else if (type instanceof ArrayType) {
+        body.addStatement(
+            String.format(
+                "return new Command<>(\"%s.%s\", Map.copyOf(params), ConverterFunctions.map(\"%s\","
+                    + " input -> %s));",
+                domain.name, name, type.getName(), type.getMapper()));
       } else {
         body.addStatement(
             String.format(
-                "return new Command<>(\"%s.%s\", params.build(), ConverterFunctions.map(\"%s\","
+                "return new Command<>(\"%s.%s\", Map.copyOf(params), ConverterFunctions.map(\"%s\","
                     + " %s));",
                 domain.name, name, type.getName(), type.getTypeToken()));
       }
@@ -704,7 +721,7 @@ public class CdpClientGenerator {
                               res.parse(item);
                               returns.add(res);
                             });
-                    if (returns.size() == 0) {
+                    if (returns.isEmpty()) {
                       command.type = new VoidType();
                     } else if (returns.size() == 1) {
                       command.type = returns.get(0).type;
@@ -777,8 +794,8 @@ public class CdpClientGenerator {
   }
 
   private static class SimpleType implements IType {
-    private String name;
-    private String type;
+    private final String name;
+    private final String type;
 
     public SimpleType(String name, String type) {
       this.name = name;
@@ -793,8 +810,7 @@ public class CdpClientGenerator {
     @Override
     public String getTypeToken() {
       if (type.equals("object")) {
-        return "new com.google.common.reflect.TypeToken<java.util.Map<String, Object>>()"
-            + " {}.getType()";
+        return "java.util.Map.class";
       } else {
         return getJavaType() + ".class";
       }
@@ -845,7 +861,7 @@ public class CdpClientGenerator {
       ClassOrInterfaceDeclaration classDecl = new ClassOrInterfaceDeclaration().setName(name);
 
       if (type.equals("object")) {
-        classDecl.addExtendedType("com.google.common.collect.ForwardingMap<String, Object>");
+        classDecl.addExtendedType("java.util.AbstractMap<String, Object>");
       }
 
       String propertyName = decapitalize(name);
@@ -861,6 +877,31 @@ public class CdpClientGenerator {
                   propertyName, propertyName, name));
 
       if (type.equals("object")) {
+        // we only need to implement entrySet and put to have a working map
+        MethodDeclaration entrySet = classDecl.addMethod("entrySet").setPublic(true);
+        entrySet.setType("java.util.Set<java.util.Map.Entry<String, Object>>");
+        entrySet.getBody().get().addStatement(String.format("return %s.entrySet();", propertyName));
+
+        MethodDeclaration put = classDecl.addMethod("put").setPublic(true);
+        put.setType("Object");
+        put.addParameter("String", "key");
+        put.addParameter("Object", "value");
+        put.getBody().get().addStatement(String.format("return %s.put(key, value);", propertyName));
+
+        // containsKey and get are implemented to have better performance
+        MethodDeclaration containsKey = classDecl.addMethod("containsKey").setPublic(true);
+        containsKey.setType("boolean");
+        containsKey.addParameter("String", "key");
+        containsKey
+            .getBody()
+            .get()
+            .addStatement(String.format("return %s.containsKey(key);", propertyName));
+
+        MethodDeclaration get = classDecl.addMethod("get").setPublic(true);
+        get.setType("Object");
+        get.addParameter("String", "key");
+        get.getBody().get().addStatement(String.format("return %s.get(key);", propertyName));
+
         MethodDeclaration delegate = classDecl.addMethod("delegate").setProtected(true);
         delegate.setType("java.util.Map<String, Object>");
         delegate.getBody().get().addStatement(String.format("return %s;", propertyName));
@@ -872,18 +913,23 @@ public class CdpClientGenerator {
       fromJson.getBody().get().addStatement(String.format("return new %s(%s);", name, getMapper()));
 
       MethodDeclaration toJson = classDecl.addMethod("toJson").setPublic(true);
-      if (type.equals("object")) {
-        toJson.setType("java.util.Map<String, Object>");
-        toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
-      } else if (type.equals("number")) {
-        toJson.setType(Number.class);
-        toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
-      } else if (type.equals("integer")) {
-        toJson.setType(Integer.class);
-        toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
-      } else {
-        toJson.setType(String.class);
-        toJson.getBody().get().addStatement(String.format("return %s.toString();", propertyName));
+      switch (type) {
+        case "object":
+          toJson.setType("java.util.Map<String, Object>");
+          toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
+          break;
+        case "number":
+          toJson.setType(Number.class);
+          toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
+          break;
+        case "integer":
+          toJson.setType(Integer.class);
+          toJson.getBody().get().addStatement(String.format("return %s;", propertyName));
+          break;
+        default:
+          toJson.setType(String.class);
+          toJson.getBody().get().addStatement(String.format("return %s.toString();", propertyName));
+          break;
       }
 
       MethodDeclaration toString = classDecl.addMethod("toString").setPublic(true);
@@ -907,8 +953,7 @@ public class CdpClientGenerator {
         case "any":
           return "input.read(Object.class)";
         case "object":
-          return "input.read(new com.google.common.reflect.TypeToken<java.util.Map<String,"
-              + " Object>>() {}.getType())";
+          return "(java.util.Map<String, Object>) input.read(java.util.Map.class)";
         case "array":
           return "input.nextString()";
         default:
@@ -1035,9 +1080,9 @@ public class CdpClientGenerator {
 
   private static class ObjectType implements IType {
 
-    private TypedSpec parent;
-    private String name;
-    private List<VariableSpec> properties;
+    private final TypedSpec parent;
+    private final String name;
+    private final List<VariableSpec> properties;
 
     public ObjectType(TypedSpec parent, String name, List<VariableSpec> properties) {
       this.parent = parent;
@@ -1125,7 +1170,7 @@ public class CdpClientGenerator {
       fromJson.setType(capitalize(name));
       fromJson.addParameter(JsonInput.class, "input");
       BlockStmt body = fromJson.getBody().get();
-      if (properties.size() > 0) {
+      if (!properties.isEmpty()) {
         properties.forEach(
             property -> {
               if (property.optional) {
@@ -1185,7 +1230,7 @@ public class CdpClientGenerator {
 
   private static class ArrayType implements IType {
     private IType itemType;
-    private String name;
+    private final String name;
 
     public ArrayType(String name) {
       this.name = name;
@@ -1193,8 +1238,7 @@ public class CdpClientGenerator {
 
     @Override
     public String getTypeToken() {
-      return String.format(
-          "new com.google.common.reflect.TypeToken<%s>() {}.getType()", getJavaType());
+      return "java.util.List.class";
     }
 
     @Override
@@ -1230,7 +1274,7 @@ public class CdpClientGenerator {
       MethodDeclaration fromJson = classDecl.addMethod("fromJson").setPrivate(true).setStatic(true);
       fromJson.setType(name);
       fromJson.addParameter(JsonInput.class, "input");
-      fromJson.getBody().get().addStatement(String.format("return %s;", getMapper()));
+      fromJson.getBody().get().addStatement(String.format("return new %s(%s);", name, getMapper()));
 
       MethodDeclaration toString = classDecl.addMethod("toString").setPublic(true);
       toString.setType(String.class);
@@ -1241,9 +1285,16 @@ public class CdpClientGenerator {
 
     @Override
     public String getMapper() {
-      return String.format(
-          "input.read(new com.google.common.reflect.TypeToken<java.util.List<%s>>() {}.getType())",
-          itemType.getJavaType());
+      String itemTypeToken = itemType.getTypeToken();
+
+      if (getTypeToken().equals(itemTypeToken)) {
+        // This would end up with a List<List<Map<String, Object>>> instead of the target type of
+        // List<List<T>>. It is unlikely this must ever be supported, fail with an error while
+        // generating the CDP client code for now.
+        throw new UnsupportedOperationException("nested arrays are not supported");
+      }
+
+      return "input.readArray(" + itemTypeToken + ")";
     }
 
     public void parse(Domain domain, Map<String, Object> json) {
@@ -1264,9 +1315,9 @@ public class CdpClientGenerator {
   }
 
   private static class RefType implements IType {
-    private String name;
-    private Domain domain;
-    private String type;
+    private final String name;
+    private final Domain domain;
+    private final String type;
 
     public RefType(String name, Domain domain, String type) {
       this.name = name;

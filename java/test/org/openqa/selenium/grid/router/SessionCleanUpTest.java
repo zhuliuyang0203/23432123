@@ -145,6 +145,7 @@ class SessionCleanUpTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(10),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);
@@ -160,7 +161,9 @@ class SessionCleanUpTest {
             Duration.ofSeconds(1),
             false,
             Duration.ofSeconds(5),
-            Runtime.getRuntime().availableProcessors())) {
+            Runtime.getRuntime().availableProcessors(),
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
       handler.addHandler(distributor);
 
       Router router = new Router(tracer, clientFactory, sessions, queue, distributor);
@@ -260,6 +263,7 @@ class SessionCleanUpTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -288,7 +292,9 @@ class SessionCleanUpTest {
             Duration.ofSeconds(1),
             false,
             Duration.ofSeconds(5),
-            Runtime.getRuntime().availableProcessors())) {
+            Runtime.getRuntime().availableProcessors(),
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
       handler.addHandler(distributor);
       distributor.add(node);
 

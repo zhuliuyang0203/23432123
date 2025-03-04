@@ -1,25 +1,27 @@
-// <copyright file="ActionBuilder.cs" company="WebDriver Committers">
+// <copyright file="ActionBuilder.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Interactions
 {
@@ -29,7 +31,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public class ActionBuilder
     {
-        private Dictionary<InputDevice, ActionSequence> sequences = new Dictionary<InputDevice, ActionSequence>();
+        private readonly Dictionary<InputDevice, ActionSequence> sequences = new Dictionary<InputDevice, ActionSequence>();
 
         /// <summary>
         /// Adds an action to the built set of actions. Adding an action will
@@ -71,7 +73,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         public void ClearSequences()
         {
-            this.sequences = new Dictionary<InputDevice, ActionSequence>();
+            this.sequences.Clear();
         }
 
         /// <summary>
@@ -94,8 +96,7 @@ namespace OpenQA.Selenium.Interactions
             List<InputDevice> usedDevices = new List<InputDevice>();
             foreach (Interaction interaction in interactionsToAdd)
             {
-                InputDevice actionDevice = interaction.SourceDevice;
-                if (usedDevices.Contains(actionDevice))
+                if (usedDevices.Contains(interaction.SourceDevice))
                 {
                     throw new ArgumentException("You can only add one action per device for a single tick.");
                 }
@@ -104,8 +105,9 @@ namespace OpenQA.Selenium.Interactions
             List<InputDevice> unusedDevices = new List<InputDevice>(this.sequences.Keys);
             foreach (Interaction interaction in interactionsToAdd)
             {
-                ActionSequence sequence = this.FindSequence(interaction.SourceDevice);
+                ActionSequence sequence = this.GetOrAddSequence(interaction.SourceDevice);
                 sequence.AddAction(interaction);
+
                 unusedDevices.Remove(interaction.SourceDevice);
             }
 
@@ -116,11 +118,11 @@ namespace OpenQA.Selenium.Interactions
             }
         }
 
-        private ActionSequence FindSequence(InputDevice device)
+        private ActionSequence GetOrAddSequence(InputDevice device)
         {
-            if (this.sequences.ContainsKey(device))
+            if (this.sequences.TryGetValue(device, out ActionSequence? existingSequence))
             {
-                return this.sequences[device];
+                return existingSequence;
             }
 
             int longestSequenceLength = 0;

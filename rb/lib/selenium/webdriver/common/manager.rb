@@ -56,7 +56,7 @@ module Selenium
         opts[:httpOnly] = http_only if http_only
 
         obj = opts.delete(:expires)
-        opts[:expiry] = seconds_from(obj).to_i if obj
+        opts[:expiry] = seconds_from(obj).to_int if obj
 
         @bridge.add_cookie opts
       end
@@ -65,7 +65,7 @@ module Selenium
       # Get the cookie with the given name
       #
       # @param [String] name the name of the cookie
-      # @return [Hash, nil] the cookie, or nil if it wasn't found.
+      # @return [Hash] the cookie, or throws a NoSuchCookieError if it wasn't found.
       #
 
       def cookie_named(name)

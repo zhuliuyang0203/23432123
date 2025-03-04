@@ -16,27 +16,27 @@ headless_args = select({
 chrome_args = select({
     "@selenium//common:use_pinned_linux_chrome": [
         "--driver-binary=$(location @linux_chromedriver//:chromedriver)",
-        "--browser-binary=$(location @linux_chrome//:chrome-linux/chrome)",
+        "--browser-binary=$(location @linux_chrome//:chrome-linux64/chrome)",
         "--browser-args=--disable-dev-shm-usage",
         "--browser-args=--no-sandbox",
     ],
     "@selenium//common:use_pinned_macos_chrome": [
         "--driver-binary=$(location @mac_chromedriver//:chromedriver)",
-        "--browser-binary=$(location @mac_chrome//:Chromium.app)/Contents/MacOS/Chromium",
-    ],
-    "@selenium//common:use_local_chromedriver": [
-        "--driver-binary=$(location @selenium//common:chromedriver)",
+        "--browser-binary=$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
     ],
     "//conditions:default": [],
 }) + headless_args
 
 edge_args = select({
+    "@selenium//common:use_pinned_linux_edge": [
+        "--driver-binary=$(location @linux_edgedriver//:msedgedriver)",
+        "--browser-binary=$(location @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
+        "--browser-args=--disable-dev-shm-usage",
+        "--browser-args=--no-sandbox",
+    ],
     "@selenium//common:use_pinned_macos_edge": [
         "--driver-binary=$(location @mac_edgedriver//:msedgedriver)",
         "--browser-binary='$(location @mac_edge//:Edge.app)/Contents/MacOS/Microsoft Edge'",
-    ],
-    "@selenium//common:use_local_msedgedriver": [
-        "--driver-binary=$(location @selenium//common:msedgedriver)",
     ],
     "//conditions:default": [],
 }) + headless_args
@@ -50,9 +50,6 @@ firefox_args = select({
         "--driver-binary=$(location @mac_geckodriver//:geckodriver)",
         "--browser-binary=$(location @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
     ],
-    "@selenium//common:use_local_geckodriver": [
-        "--driver-binary=$(location @selenium//common:geckodriver)",
-    ],
     "//conditions:default": [],
 }) + headless_args
 
@@ -65,7 +62,7 @@ BROWSERS = {
     "edge": {
         "args": ["--driver=edge"] + edge_args,
         "data": edge_data,
-        "tags": COMMON_TAGS + ["edge", "no-rbe"],
+        "tags": COMMON_TAGS + ["edge"],
     },
     "firefox": {
         "args": ["--driver=firefox"] + firefox_args,
@@ -75,11 +72,11 @@ BROWSERS = {
     "ie": {
         "args": ["--driver=ie"],
         "data": [],
-        "tags": COMMON_TAGS + ["ie", "no-rbe"],
+        "tags": COMMON_TAGS + ["ie", "skip-remote"],
     },
     "safari": {
         "args": ["--driver=safari"],
         "data": [],
-        "tags": COMMON_TAGS + ["safari", "no-rbe"],
+        "tags": COMMON_TAGS + ["safari", "skip-remote"],
     },
 }

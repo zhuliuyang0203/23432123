@@ -18,40 +18,22 @@
 package org.openqa.selenium.bidi.browsingcontext;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.openqa.selenium.testing.Safely.safelyCall;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WindowType;
-import org.openqa.selenium.bidi.BrowsingContextInspector;
-import org.openqa.selenium.environment.webserver.AppServer;
-import org.openqa.selenium.environment.webserver.NettyAppServer;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.testing.drivers.Browser;
+import org.openqa.selenium.bidi.module.BrowsingContextInspector;
+import org.openqa.selenium.testing.JupiterTestBase;
+import org.openqa.selenium.testing.NeedsFreshDriver;
 
-class BrowsingContextInspectorTest {
-
-  private AppServer server;
-  private FirefoxDriver driver;
-
-  @BeforeEach
-  public void setUp() {
-    FirefoxOptions options = (FirefoxOptions) Browser.FIREFOX.getCapabilities();
-    options.setCapability("webSocketUrl", true);
-
-    driver = new FirefoxDriver(options);
-
-    server = new NettyAppServer();
-    server.start();
-  }
+class BrowsingContextInspectorTest extends JupiterTestBase {
 
   @Test
+  @NeedsFreshDriver
   void canListenToWindowBrowsingContextCreatedEvent()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
@@ -72,6 +54,29 @@ class BrowsingContextInspectorTest {
   }
 
   @Test
+  @NeedsFreshDriver
+  void canListenToBrowsingContextDestroyedEvent()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
+      CompletableFuture<BrowsingContextInfo> future = new CompletableFuture<>();
+
+      inspector.onBrowsingContextDestroyed(future::complete);
+
+      String windowHandle = driver.switchTo().newWindow(WindowType.WINDOW).getWindowHandle();
+
+      driver.close();
+
+      BrowsingContextInfo browsingContextInfo = future.get(5, TimeUnit.SECONDS);
+
+      assertThat(browsingContextInfo.getId()).isEqualTo(windowHandle);
+      assertThat("about:blank").isEqualTo(browsingContextInfo.getUrl());
+      assertThat(browsingContextInfo.getChildren()).isEqualTo(null);
+      assertThat(browsingContextInfo.getParentBrowsingContext()).isEqualTo(null);
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
   void canListenToTabBrowsingContextCreatedEvent()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
@@ -91,6 +96,7 @@ class BrowsingContextInspectorTest {
   }
 
   @Test
+  @NeedsFreshDriver
   void canListenToDomContentLoadedEvent()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
@@ -98,7 +104,7 @@ class BrowsingContextInspectorTest {
       inspector.onDomContentLoaded(future::complete);
 
       BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
-      context.navigate(server.whereIs("/bidi/logEntryAdded.html"), ReadinessState.COMPLETE);
+      context.navigate(appServer.whereIs("/bidi/logEntryAdded.html"), ReadinessState.COMPLETE);
 
       NavigationInfo navigationInfo = future.get(5, TimeUnit.SECONDS);
       assertThat(navigationInfo.getBrowsingContextId()).isEqualTo(context.getId());
@@ -107,6 +113,7 @@ class BrowsingContextInspectorTest {
   }
 
   @Test
+  @NeedsFreshDriver
   void canListenToBrowsingContextLoadedEvent()
       throws ExecutionException, InterruptedException, TimeoutException {
     try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
@@ -114,7 +121,7 @@ class BrowsingContextInspectorTest {
       inspector.onBrowsingContextLoaded(future::complete);
 
       BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
-      context.navigate(server.whereIs("/bidi/logEntryAdded.html"), ReadinessState.COMPLETE);
+      context.navigate(appServer.whereIs("/bidi/logEntryAdded.html"), ReadinessState.COMPLETE);
 
       NavigationInfo navigationInfo = future.get(5, TimeUnit.SECONDS);
       assertThat(navigationInfo.getBrowsingContextId()).isEqualTo(context.getId());
@@ -122,11 +129,87 @@ class BrowsingContextInspectorTest {
     }
   }
 
-  @AfterEach
-  public void quitDriver() {
-    if (driver != null) {
-      driver.quit();
+  @Test
+  @NeedsFreshDriver
+  void canListenToNavigationStartedEvent()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
+      CompletableFuture<NavigationInfo> future = new CompletableFuture<>();
+      inspector.onNavigationStarted(future::complete);
+
+      BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+      context.navigate(appServer.whereIs("/bidi/logEntryAdded.html"), ReadinessState.COMPLETE);
+
+      NavigationInfo navigationInfo = future.get(5, TimeUnit.SECONDS);
+      assertThat(navigationInfo.getBrowsingContextId()).isEqualTo(context.getId());
+      assertThat(navigationInfo.getUrl()).contains("/bidi/logEntryAdded.html");
     }
-    safelyCall(server::stop);
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canListenToFragmentNavigatedEvent()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
+      CompletableFuture<NavigationInfo> future = new CompletableFuture<>();
+
+      BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+      context.navigate(appServer.whereIs("/linked_image.html"), ReadinessState.COMPLETE);
+
+      inspector.onFragmentNavigated(future::complete);
+
+      context.navigate(
+          appServer.whereIs("/linked_image.html#linkToAnchorOnThisPage"), ReadinessState.COMPLETE);
+
+      NavigationInfo navigationInfo = future.get(5, TimeUnit.SECONDS);
+      assertThat(navigationInfo.getBrowsingContextId()).isEqualTo(context.getId());
+      assertThat(navigationInfo.getUrl()).contains("linkToAnchorOnThisPage");
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canListenToUserPromptOpenedEvent()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
+      CompletableFuture<UserPromptOpened> future = new CompletableFuture<>();
+
+      BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+      inspector.onUserPromptOpened(future::complete);
+
+      driver.get(appServer.whereIs("/alerts.html"));
+
+      driver.findElement(By.id("alert")).click();
+
+      UserPromptOpened userPromptOpened = future.get(5, TimeUnit.SECONDS);
+      assertThat(userPromptOpened.getBrowsingContextId()).isEqualTo(context.getId());
+      assertThat(userPromptOpened.getType()).isEqualTo(UserPromptType.ALERT);
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  // TODO: This test is flaky for comparing the browsing context id for Chrome and Edge. Fix flaky
+  // test.
+  void canListenToUserPromptClosedEvent()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    try (BrowsingContextInspector inspector = new BrowsingContextInspector(driver)) {
+      CompletableFuture<UserPromptClosed> future = new CompletableFuture<>();
+
+      BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+      inspector.onUserPromptClosed(future::complete);
+
+      driver.get(appServer.whereIs("/alerts.html"));
+
+      driver.findElement(By.id("prompt")).click();
+
+      context.handleUserPrompt(true, "selenium");
+
+      UserPromptClosed userPromptClosed = future.get(5, TimeUnit.SECONDS);
+      assertThat(userPromptClosed.getBrowsingContextId()).isEqualTo(context.getId());
+      assertThat(userPromptClosed.getUserText().isPresent()).isTrue();
+      assertThat(userPromptClosed.getUserText().get()).isEqualTo("selenium");
+      assertThat(userPromptClosed.getAccepted()).isTrue();
+    }
   }
 }

@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import org.openqa.selenium.internal.Debug;
+import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
@@ -55,22 +56,18 @@ class RequestConverter extends SimpleChannelInboundHandler<HttpObject> {
   private static final List<io.netty.handler.codec.http.HttpMethod> SUPPORTED_METHODS =
       Arrays.asList(DELETE, GET, POST, OPTIONS);
   private volatile FileBackedOutputStream buffer;
+  private volatile int length;
   private volatile HttpRequest request;
 
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-    LOG.log(Debug.getDebugLogLevel(), "Incoming message: " + msg);
+    LOG.log(Debug.getDebugLogLevel(), "Incoming message: {0}", msg);
 
     if (msg instanceof io.netty.handler.codec.http.HttpRequest) {
-      LOG.log(Debug.getDebugLogLevel(), "Start of http request: " + msg);
+      LOG.log(Debug.getDebugLogLevel(), "Start of http request: {0}", msg);
 
       io.netty.handler.codec.http.HttpRequest nettyRequest =
           (io.netty.handler.codec.http.HttpRequest) msg;
-
-      if (HttpUtil.is100ContinueExpected(nettyRequest)) {
-        ctx.write(new HttpResponse().setStatus(100));
-        return;
-      }
 
       if (nettyRequest.headers().contains("Sec-WebSocket-Version")
           && "upgrade".equalsIgnoreCase(nettyRequest.headers().get("Connection"))) {
@@ -85,58 +82,68 @@ class RequestConverter extends SimpleChannelInboundHandler<HttpObject> {
         return;
       }
 
+      if (HttpUtil.is100ContinueExpected(nettyRequest)) {
+        ctx.write(new HttpResponse().setStatus(100));
+        return;
+      }
+
       request.setAttribute(
           AttributeKey.HTTP_SCHEME.getKey(), nettyRequest.protocolVersion().protocolName());
       request.setAttribute(
           AttributeKey.HTTP_FLAVOR.getKey(), nettyRequest.protocolVersion().majorVersion());
 
       buffer = null;
+      length = -1;
     }
 
-    if (msg instanceof HttpContent) {
+    if (request != null && msg instanceof HttpContent) {
       ByteBuf buf = ((HttpContent) msg).content().retain();
       int nBytes = buf.readableBytes();
 
       if (nBytes > 0) {
         if (buffer == null) {
           buffer = new FileBackedOutputStream(3 * 1024 * 1024, true);
+          length = 0;
         }
 
         try {
           buf.readBytes(buffer, nBytes);
+          length += nBytes;
         } finally {
           buf.release();
         }
       }
 
       if (msg instanceof LastHttpContent) {
-        LOG.log(Debug.getDebugLogLevel(), "End of http request: " + msg);
+        LOG.log(Debug.getDebugLogLevel(), "End of http request: {0}", msg);
 
         if (buffer != null) {
           ByteSource source = buffer.asByteSource();
+          int len = length;
 
           request.setContent(
-              () -> {
-                try {
-                  return source.openBufferedStream();
-                } catch (IOException e) {
-                  throw new UncheckedIOException(e);
+              new Contents.Supplier() {
+                @Override
+                public InputStream get() {
+                  try {
+                    return source.openBufferedStream();
+                  } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                  }
+                }
+
+                @Override
+                public int length() {
+                  return len;
+                }
+
+                @Override
+                public void close() throws IOException {
+                  buffer.reset();
                 }
               });
         } else {
-          request.setContent(
-              () ->
-                  new InputStream() {
-                    @Override
-                    public int read() throws IOException {
-                      return -1;
-                    }
-
-                    @Override
-                    public int read(byte[] b, int off, int len) throws IOException {
-                      return -1;
-                    }
-                  });
+          request.setContent(Contents.empty());
         }
 
         ctx.fireChannelRead(request);

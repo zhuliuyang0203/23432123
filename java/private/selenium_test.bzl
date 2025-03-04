@@ -1,17 +1,19 @@
-load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
 load(
     "//common:browsers.bzl",
     "COMMON_TAGS",
     "chrome_data",
     "edge_data",
+    "firefox_beta_data",
     "firefox_data",
 )
 load(
     "//java:browsers.bzl",
     "chrome_jvm_flags",
     "edge_jvm_flags",
+    "firefox_beta_jvm_flags",
     "firefox_jvm_flags",
 )
+load(":junit5_test.bzl", "junit5_test")
 
 DEFAULT_BROWSER = "firefox"
 
@@ -34,6 +36,12 @@ BROWSERS = {
         "data": firefox_data,
         "tags": COMMON_TAGS + ["firefox"],
     },
+    "firefox-beta": {
+        "deps": ["//java/src/org/openqa/selenium/firefox"],
+        "jvm_flags": ["-Dselenium.browser=ff"] + firefox_beta_jvm_flags,
+        "data": firefox_beta_data,
+        "tags": COMMON_TAGS + ["firefox", "firefox-beta"],
+    },
     "ie": {
         "deps": ["//java/src/org/openqa/selenium/ie"],
         "jvm_flags": ["-Dselenium.browser=ie"] +
@@ -42,7 +50,7 @@ BROWSERS = {
                          "@selenium//conditions:default": ["-Dselenium.skiptest=true"],
                      }),
         "data": [],
-        "tags": COMMON_TAGS + ["exclusive-if-local", "ie"],
+        "tags": COMMON_TAGS + ["exclusive-if-local", "ie", "skip-remote"],
     },
     "safari": {
         "deps": ["//java/src/org/openqa/selenium/safari"],
@@ -52,7 +60,7 @@ BROWSERS = {
                          "@selenium//conditions:default": ["-Dselenium.skiptest=true"],
                      }),
         "data": [],
-        "tags": COMMON_TAGS + ["exclusive-if-local", "safari"],
+        "tags": COMMON_TAGS + ["exclusive-if-local", "safari", "skip-remote"],
     },
 }
 
@@ -89,7 +97,7 @@ def selenium_test(name, test_class, size = "medium", browsers = DEFAULT_BROWSERS
 
         test = name if browser == default_browser else "%s-%s" % (name, browser)
 
-        java_junit5_test(
+        junit5_test(
             name = test,
             test_class = test_class,
             size = size,
@@ -108,18 +116,17 @@ def selenium_test(name, test_class, size = "medium", browsers = DEFAULT_BROWSERS
         all_tests.append(":%s" % test)
 
         if remote:
-            java_junit5_test(
+            junit5_test(
                 name = "%s-remote" % test,
                 test_class = test_class,
                 size = size,
                 jvm_flags = BROWSERS[browser]["jvm_flags"] + jvm_flags + [
                     "-Dselenium.browser.remote=true",
-                    "-Dselenium.browser.remote.path=$(location @selenium//java/src/org/openqa/selenium/grid:selenium_server_deploy.jar)",
                 ],
                 # No need to lint remote tests as the code for non-remote is the same and they get linted
-                tags = BROWSERS[browser]["tags"] + tags + ["remote", "no-lint"],
+                tags = BROWSERS[browser]["tags"] + tags + ["remote-browser", "no-lint"],
                 data = BROWSERS[browser]["data"] + data + [
-                    "@selenium//java/src/org/openqa/selenium/grid:selenium_server_deploy.jar",
+                    "@selenium//java/src/org/openqa/selenium/grid:selenium_server",
                 ],
                 **stripped_args
             )

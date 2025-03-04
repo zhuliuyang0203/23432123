@@ -1,20 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net48;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <AssemblyName>WebDriver.Common.Tests</AssemblyName>
     <RootNamespace>OpenQA.Selenium</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Settings.StyleCop" />
@@ -23,22 +13,18 @@
   <ItemGroup>
     <PackageReference Include="BenderProxy" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-    <PackageReference Include="Moq" Version="4.13.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="Runfiles" Version="0.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.19.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\webdriver\WebDriver.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,18 +33,14 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
-    <Exec Command="call &quot;$(ProjectDir)WebDriver.Common.Tests.csproj.prebuild.cmd&quot; &quot;$(ProjectDir)&quot;" />
-  </Target>
-
-  <Target Name="PreBuildNonWindows" BeforeTargets="PreBuildEvent" Condition="'$(OS)' != 'Windows_NT'">
-    <Exec Command="$(ProjectDir)WebDriver.Common.Tests.csproj.prebuild.sh $(ProjectDir)" />
+  <Target Name="BuildTestWebServer" AfterTargets="AfterBuild">
+    <Exec Command="bazel build //java/test/org/openqa/selenium/environment:appserver" WorkingDirectory="../../.." />
   </Target>
 
   <!-- It is automatically imported when Selenium.WebDriver consumed via nuget package -->
   <PropertyGroup>
-    <Selenium_Manager_BinariesRootPath>..\..\..\common\manager</Selenium_Manager_BinariesRootPath>
+    <Selenium_Manager_BinariesRootPath>..\..\..\bazel-bin\dotnet\src\webdriver\manager</Selenium_Manager_BinariesRootPath>
   </PropertyGroup>
-  <Import Project="..\..\src\webdriver\build\Selenium.WebDriver.targets" />
+  <Import Project="..\..\src\webdriver\assets\Selenium.WebDriver.targets" />
 
 </Project>

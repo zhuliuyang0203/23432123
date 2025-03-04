@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -56,7 +57,7 @@ public class SessionCapabilitiesMutator implements Function<Capabilities, Capabi
               .setCapability(SE_NO_VNC_PORT, slotStereotype.getCapability(SE_NO_VNC_PORT));
     }
 
-    String browserName = capabilities.getBrowserName().toLowerCase();
+    String browserName = capabilities.getBrowserName().toLowerCase(Locale.ENGLISH);
 
     if ("internet explorer".equalsIgnoreCase(browserName)) {
       return new ImmutableCapabilities(removeUnknownExtensionsForIE(capabilities));
@@ -83,7 +84,7 @@ public class SessionCapabilitiesMutator implements Function<Capabilities, Capabi
       Map<String, Object> toReturn = new HashMap<>(slotStereotype.merge(capabilities).asMap());
 
       // Merge browser specific stereotype and capabilities options
-      switch (browserName.toLowerCase()) {
+      switch (browserName.toLowerCase(Locale.ENGLISH)) {
         case "chrome":
         case "microsoftedge":
         case "msedge":
@@ -171,6 +172,8 @@ public class SessionCapabilitiesMutator implements Function<Capabilities, Capabi
       Map<String, Object> stereotypeOptions, Map<String, Object> capsOptions) {
     Map<String, Object> toReturn = new HashMap<>(stereotypeOptions);
 
+    List<String> handledOptions = List.of("args", "prefs", "profile", "log", "binary");
+
     for (Map.Entry<String, Object> entry : capsOptions.entrySet()) {
       String name = entry.getKey();
       Object value = entry.getValue();
@@ -214,6 +217,14 @@ public class SessionCapabilitiesMutator implements Function<Capabilities, Capabi
         @SuppressWarnings("unchecked")
         Map<String, Object> logLevelMap = (Map<String, Object>) value;
         toReturn.put("log", logLevelMap);
+      }
+
+      if (name.equals("binary") && !stereotypeOptions.containsKey("binary")) {
+        toReturn.put(name, value);
+      }
+
+      if (!handledOptions.contains(name)) {
+        toReturn.put(name, value);
       }
     }
 

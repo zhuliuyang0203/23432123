@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.node.local;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static org.openqa.selenium.concurrent.ExecutorServices.shutdownGracefully;
 import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
@@ -37,6 +38,7 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -57,8 +59,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -95,6 +100,7 @@ import org.openqa.selenium.grid.security.Secret;
 import org.openqa.selenium.internal.Debug;
 import org.openqa.selenium.internal.Either;
 import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.io.Zip;
 import org.openqa.selenium.json.Json;
@@ -104,8 +110,7 @@ import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.tracing.AttributeKey;
-import org.openqa.selenium.remote.tracing.EventAttribute;
-import org.openqa.selenium.remote.tracing.EventAttributeValue;
+import org.openqa.selenium.remote.tracing.AttributeMap;
 import org.openqa.selenium.remote.tracing.Span;
 import org.openqa.selenium.remote.tracing.Status;
 import org.openqa.selenium.remote.tracing.Tracer;
@@ -113,7 +118,7 @@ import org.openqa.selenium.remote.tracing.Tracer;
 @ManagedService(
     objectName = "org.seleniumhq.grid:type=Node,name=LocalNode",
     description = "Node running the webdriver sessions.")
-public class LocalNode extends Node {
+public class LocalNode extends Node implements Closeable {
 
   private static final Json JSON = new Json();
   private static final Logger LOG = Logger.getLogger(LocalNode.class.getName());
@@ -127,9 +132,10 @@ public class LocalNode extends Node {
   private final int configuredSessionCount;
   private final boolean cdpEnabled;
   private final boolean managedDownloadsEnabled;
+  private final int connectionLimitPerSession;
 
   private final boolean bidiEnabled;
-  private final AtomicBoolean drainAfterSessions = new AtomicBoolean();
+  private final boolean drainAfterSessions;
   private final List<SessionSlot> factories;
   private final Cache<SessionId, SessionSlot> currentSessions;
   private final Cache<SessionId, TemporaryFilesystem> uploadsTempFileSystem;
@@ -137,6 +143,8 @@ public class LocalNode extends Node {
   private final Cache<SessionId, UUID> sessionToDownloadsDir;
   private final AtomicInteger pendingSessions = new AtomicInteger();
   private final AtomicInteger sessionCount = new AtomicInteger();
+  private final Runnable shutdown;
+  private final ReadWriteLock drainLock = new ReentrantReadWriteLock();
 
   protected LocalNode(
       Tracer tracer,
@@ -153,8 +161,14 @@ public class LocalNode extends Node {
       Duration heartbeatPeriod,
       List<SessionSlot> factories,
       Secret registrationSecret,
-      boolean managedDownloadsEnabled) {
-    super(tracer, new NodeId(UUID.randomUUID()), uri, registrationSecret);
+      boolean managedDownloadsEnabled,
+      int connectionLimitPerSession) {
+    super(
+        tracer,
+        new NodeId(UUID.randomUUID()),
+        uri,
+        registrationSecret,
+        Require.positive(sessionTimeout));
 
     this.bus = Require.nonNull("Event bus", bus);
 
@@ -166,11 +180,12 @@ public class LocalNode extends Node {
     this.factories = ImmutableList.copyOf(factories);
     Require.nonNull("Registration secret", registrationSecret);
     this.configuredSessionCount = drainAfterSessionCount;
-    this.drainAfterSessions.set(this.configuredSessionCount > 0);
+    this.drainAfterSessions = this.configuredSessionCount > 0;
     this.sessionCount.set(drainAfterSessionCount);
     this.cdpEnabled = cdpEnabled;
     this.bidiEnabled = bidiEnabled;
     this.managedDownloadsEnabled = managedDownloadsEnabled;
+    this.connectionLimitPerSession = connectionLimitPerSession;
 
     this.healthCheck =
         healthCheck == null
@@ -223,7 +238,7 @@ public class LocalNode extends Node {
                           .ifPresent(
                               value -> {
                                 downloadsTempFileSystem.invalidate(value);
-                                LOG.warning(
+                                LOG.fine(
                                     "Removing Downloads folder associated with "
                                         + notification.getKey());
                               });
@@ -231,7 +246,7 @@ public class LocalNode extends Node {
                           .ifPresent(
                               value -> {
                                 uploadsTempFileSystem.invalidate(value);
-                                LOG.warning(
+                                LOG.fine(
                                     "Removing Uploads folder associated with "
                                         + notification.getKey());
                               });
@@ -292,8 +307,36 @@ public class LocalNode extends Node {
         heartbeatPeriod.getSeconds(),
         TimeUnit.SECONDS);
 
-    Runtime.getRuntime().addShutdownHook(new Thread(this::stopAllSessions));
+    shutdown =
+        () -> {
+          if (heartbeatNodeService.isShutdown()) return;
+
+          shutdownGracefully(
+              "Local Node - Session Cleanup " + externalUri, sessionCleanupNodeService);
+          shutdownGracefully(
+              "UploadTempFile Cleanup Node " + externalUri, uploadTempFileCleanupNodeService);
+          shutdownGracefully(
+              "DownloadTempFile Cleanup Node " + externalUri, downloadTempFileCleanupNodeService);
+          shutdownGracefully("HeartBeat Node " + externalUri, heartbeatNodeService);
+
+          // ensure we do not leak running browsers
+          currentSessions.invalidateAll();
+          currentSessions.cleanUp();
+        };
+
+    Runtime.getRuntime()
+        .addShutdownHook(
+            new Thread(
+                () -> {
+                  stopAllSessions();
+                  drain();
+                }));
     new JMXHelper().register(this);
+  }
+
+  @Override
+  public void close() {
+    shutdown.run();
   }
 
   private void stopTimedOutSession(RemovalNotification<SessionId, SessionSlot> notification) {
@@ -311,7 +354,6 @@ public class LocalNode extends Node {
       }
       // Attempt to stop the session
       slot.stop();
-      this.sessionToDownloadsDir.invalidate(id);
       // Decrement pending sessions if Node is draining
       if (this.isDraining()) {
         int done = pendingSessions.decrementAndGet();
@@ -338,8 +380,10 @@ public class LocalNode extends Node {
   @VisibleForTesting
   @ManagedAttribute(name = "CurrentSessions")
   public int getCurrentSessionCount() {
+    // we need the exact size, see javadoc of Cache.size
+    long n = currentSessions.asMap().values().stream().count();
     // It seems wildly unlikely we'll overflow an int
-    return Math.toIntExact(currentSessions.size());
+    return Math.toIntExact(n);
   }
 
   @VisibleForTesting
@@ -402,28 +446,29 @@ public class LocalNode extends Node {
       CreateSessionRequest sessionRequest) {
     Require.nonNull("Session request", sessionRequest);
 
+    Lock lock = drainLock.readLock();
+    lock.lock();
+
     try (Span span = tracer.getCurrentContext().createSpan("node.new_session")) {
-      Map<String, EventAttributeValue> attributeMap = new HashMap<>();
+      AttributeMap attributeMap = tracer.createAttributeMap();
+      attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
       attributeMap.put(
-          AttributeKey.LOGGER_CLASS.getKey(), EventAttribute.setValue(getClass().getName()));
+          "session.request.capabilities", sessionRequest.getDesiredCapabilities().toString());
       attributeMap.put(
-          "session.request.capabilities",
-          EventAttribute.setValue(sessionRequest.getDesiredCapabilities().toString()));
-      attributeMap.put(
-          "session.request.downstreamdialect",
-          EventAttribute.setValue(sessionRequest.getDownstreamDialects().toString()));
+          "session.request.downstreamdialect", sessionRequest.getDownstreamDialects().toString());
 
       int currentSessionCount = getCurrentSessionCount();
       span.setAttribute("current.session.count", currentSessionCount);
-      attributeMap.put("current.session.count", EventAttribute.setValue(currentSessionCount));
+      attributeMap.put("current.session.count", currentSessionCount);
 
-      if (getCurrentSessionCount() >= maxSessionCount) {
+      if (currentSessionCount >= maxSessionCount) {
         span.setAttribute(AttributeKey.ERROR.getKey(), true);
         span.setStatus(Status.RESOURCE_EXHAUSTED);
-        attributeMap.put("max.session.count", EventAttribute.setValue(maxSessionCount));
+        attributeMap.put("max.session.count", maxSessionCount);
         span.addEvent("Max session count reached", attributeMap);
         return Either.left(new RetrySessionRequestException("Max session count reached."));
       }
+
       if (isDraining()) {
         span.setStatus(
             Status.UNAVAILABLE.withDescription(
@@ -454,6 +499,15 @@ public class LocalNode extends Node {
             new RetrySessionRequestException("No slot matched the requested capabilities."));
       }
 
+      if (!decrementSessionCount()) {
+        slotToUse.release();
+        span.setAttribute(AttributeKey.ERROR.getKey(), true);
+        span.setStatus(Status.RESOURCE_EXHAUSTED);
+        attributeMap.put("drain.after.session.count", configuredSessionCount);
+        span.addEvent("Drain after session count reached", attributeMap);
+        return Either.left(new RetrySessionRequestException("Drain after session count reached."));
+      }
+
       UUID uuidForSessionDownloads = UUID.randomUUID();
       Capabilities desiredCapabilities = sessionRequest.getDesiredCapabilities();
       if (managedDownloadsRequested(desiredCapabilities)) {
@@ -470,8 +524,6 @@ public class LocalNode extends Node {
         ActiveSession session = possibleSession.right();
         sessionToDownloadsDir.put(session.getId(), uuidForSessionDownloads);
         currentSessions.put(session.getId(), slotToUse);
-
-        checkSessionCount();
 
         SessionId sessionId = session.getId();
         Capabilities caps = session.getCapabilities();
@@ -511,6 +563,9 @@ public class LocalNode extends Node {
         span.addEvent("Unable to create session with the driver", attributeMap);
         return Either.left(possibleSession.left());
       }
+    } finally {
+      lock.unlock();
+      checkSessionCount();
     }
   }
 
@@ -554,9 +609,12 @@ public class LocalNode extends Node {
   @SuppressWarnings("unchecked")
   private Capabilities appendPrefs(
       Capabilities caps, String optionsKey, Map<String, Serializable> map) {
-    Map<String, Object> currentOptions =
-        (Map<String, Object>)
-            Optional.ofNullable(caps.getCapability(optionsKey)).orElse(new HashMap<>());
+    if (caps.getCapability(optionsKey) == null) {
+      MutableCapabilities mutableCaps = new MutableCapabilities();
+      mutableCaps.setCapability(optionsKey, new HashMap<>());
+      caps = caps.merge(mutableCaps);
+    }
+    Map<String, Object> currentOptions = (Map<String, Object>) caps.getCapability(optionsKey);
 
     ((Map<String, Serializable>) currentOptions.computeIfAbsent("prefs", k -> new HashMap<>()))
         .putAll(map);
@@ -567,6 +625,48 @@ public class LocalNode extends Node {
   public boolean isSessionOwner(SessionId id) {
     Require.nonNull("Session ID", id);
     return currentSessions.getIfPresent(id) != null;
+  }
+
+  @Override
+  public boolean tryAcquireConnection(SessionId id) throws NoSuchSessionException {
+    SessionSlot slot = currentSessions.getIfPresent(id);
+
+    if (slot == null) {
+      return false;
+    }
+
+    if (connectionLimitPerSession == -1) {
+      // no limit
+      return true;
+    }
+
+    AtomicLong counter = slot.getConnectionCounter();
+
+    if (connectionLimitPerSession > counter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    counter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    SessionSlot slot = currentSessions.getIfPresent(id);
+
+    if (slot == null) {
+      return;
+    }
+
+    if (connectionLimitPerSession == -1) {
+      // no limit
+      return;
+    }
+
+    AtomicLong counter = slot.getConnectionCounter();
+
+    counter.decrementAndGet();
   }
 
   @Override
@@ -652,7 +752,11 @@ public class LocalNode extends Node {
     }
     TemporaryFilesystem tempFS = downloadsTempFileSystem.getIfPresent(uuid);
     if (tempFS == null) {
-      throw new WebDriverException("Cannot find downloads file system for session id: " + id);
+      String msg =
+          "Cannot find downloads file system for session id: "
+              + id
+              + " — ensure downloads are enabled in the options class when requesting a session.";
+      throw new WebDriverException(msg);
     }
     File downloadsDirectory =
         Optional.ofNullable(tempFS.getBaseDir().listFiles()).orElse(new File[] {})[0];
@@ -665,6 +769,15 @@ public class LocalNode extends Node {
       ImmutableMap<String, Object> data = ImmutableMap.of("names", collected);
       ImmutableMap<String, Map<String, Object>> result = ImmutableMap.of("value", data);
       return new HttpResponse().setContent(asJson(result));
+    }
+    if (req.getMethod().equals(HttpMethod.DELETE)) {
+      File[] files = Optional.ofNullable(downloadsDirectory.listFiles()).orElse(new File[] {});
+      for (File file : files) {
+        FileHandler.delete(file);
+      }
+      Map<String, Object> toReturn = new HashMap<>();
+      toReturn.put("value", null);
+      return new HttpResponse().setContent(asJson(toReturn));
     }
     String raw = string(req);
     if (raw.isEmpty()) {
@@ -747,6 +860,10 @@ public class LocalNode extends Node {
   public void stop(SessionId id) throws NoSuchSessionException {
     Require.nonNull("Session ID", id);
 
+    if (sessionToDownloadsDir.getIfPresent(id) != null) {
+      sessionToDownloadsDir.invalidate(id);
+    }
+
     SessionSlot slot = currentSessions.getIfPresent(id);
     if (slot == null) {
       throw new NoSuchSessionException("Cannot find session with id: " + id);
@@ -791,18 +908,35 @@ public class LocalNode extends Node {
       toUse = new PersistentCapabilities(cdpFiltered).setCapability("se:cdpEnabled", false);
     }
 
-    // Add se:bidi if necessary to send the bidi url back
-    if ((isSupportingBiDi || toUse.getCapability("se:bidi") != null) && bidiEnabled) {
+    // Check if the user wants to use BiDi
+    // This will be null if the user has not set the capability.
+    Object webSocketUrl = toUse.getCapability("webSocketUrl");
+
+    // In case of Firefox versions that do not support webSocketUrl, it returns the capability as it
+    // is i.e. boolean value. So need to check if it is a string.
+    // Check if the Node supports BiDi and if the client wants to use BiDi.
+    boolean bidiSupported = isSupportingBiDi && (webSocketUrl instanceof String);
+    if (bidiSupported && bidiEnabled) {
+      String biDiUrl = (String) other.getCapabilities().getCapability("webSocketUrl");
+      URI uri;
+      try {
+        uri = new URI(biDiUrl);
+      } catch (URISyntaxException e) {
+        throw new IllegalArgumentException("Unable to create URI from " + biDiUrl);
+      }
       String bidiPath = String.format("/session/%s/se/bidi", other.getId());
-      toUse = new PersistentCapabilities(toUse).setCapability("se:bidi", rewrite(bidiPath));
+      toUse =
+          new PersistentCapabilities(toUse)
+              .setCapability("se:gridWebSocketUrl", uri)
+              .setCapability("webSocketUrl", rewrite(bidiPath));
     } else {
-      // Remove any se:bidi* from the response, BiDi is not supported nor enabled
+      // Remove any "webSocketUrl" from the response, BiDi is not supported nor enabled
       MutableCapabilities bidiFiltered = new MutableCapabilities();
       toUse
           .asMap()
           .forEach(
               (key, value) -> {
-                if (!key.startsWith("se:bidi")) {
+                if (!key.startsWith("webSocketUrl")) {
                   bidiFiltered.setCapability(key, value);
                 }
               });
@@ -822,6 +956,7 @@ public class LocalNode extends Node {
   private URI rewrite(String path) {
     try {
       String scheme = "https".equals(gridUri.getScheme()) ? "wss" : "ws";
+      path = NodeOptions.normalizeSubPath(gridUri.getPath()) + path;
       return new URI(
           scheme, gridUri.getUserInfo(), gridUri.getHost(), gridUri.getPort(), path, null, null);
     } catch (URISyntaxException e) {
@@ -875,6 +1010,7 @@ public class LocalNode extends Node {
         slots,
         availability,
         heartbeatPeriod,
+        getSessionTimeout(),
         getNodeVersion(),
         getOsInfo());
   }
@@ -888,6 +1024,9 @@ public class LocalNode extends Node {
   public void drain() {
     bus.fire(new NodeDrainStarted(getId()));
     draining = true;
+    // Ensure the pendingSessions counter will not be decremented by timed out sessions not included
+    // in the currentSessionCount and the NodeDrainComplete will be raised to early.
+    currentSessions.cleanUp();
     int currentSessionCount = getCurrentSessionCount();
     if (currentSessionCount == 0) {
       LOG.info("Firing node drain complete message");
@@ -898,19 +1037,40 @@ public class LocalNode extends Node {
   }
 
   private void checkSessionCount() {
-    if (this.drainAfterSessions.get()) {
+    if (this.drainAfterSessions) {
+      Lock lock = drainLock.writeLock();
+      if (!lock.tryLock()) {
+        // in case we can't get a write lock another thread does hold a read lock and will call
+        // checkSessionCount as soon as he releases the read lock. So we do not need to wait here
+        // for the other session to start and release the lock, just continue and let the other
+        // session start to drain the node.
+        return;
+      }
+      try {
+        int remainingSessions = this.sessionCount.get();
+        if (remainingSessions <= 0) {
+          LOG.info(
+              String.format(
+                  "Draining Node, configured sessions value (%s) has been reached.",
+                  this.configuredSessionCount));
+          drain();
+        }
+      } finally {
+        lock.unlock();
+      }
+    }
+  }
+
+  private boolean decrementSessionCount() {
+    if (this.drainAfterSessions) {
       int remainingSessions = this.sessionCount.decrementAndGet();
       LOG.log(
           Debug.getDebugLogLevel(),
-          String.format("%s remaining sessions before draining Node", remainingSessions));
-      if (remainingSessions <= 0) {
-        LOG.info(
-            String.format(
-                "Draining Node, configured sessions value (%s) has been reached.",
-                this.configuredSessionCount));
-        drain();
-      }
+          "{0} remaining sessions before draining Node",
+          remainingSessions);
+      return remainingSessions >= 0;
     }
+    return true;
   }
 
   private Map<String, Object> toJson() {
@@ -940,6 +1100,7 @@ public class LocalNode extends Node {
     private HealthCheck healthCheck;
     private Duration heartbeatPeriod = Duration.ofSeconds(NodeOptions.DEFAULT_HEARTBEAT_PERIOD);
     private boolean managedDownloadsEnabled = false;
+    private int connectionLimitPerSession = -1;
 
     private Builder(Tracer tracer, EventBus bus, URI uri, URI gridUri, Secret registrationSecret) {
       this.tracer = Require.nonNull("Tracer", tracer);
@@ -994,6 +1155,11 @@ public class LocalNode extends Node {
       return this;
     }
 
+    public Builder connectionLimitPerSession(int connectionLimitPerSession) {
+      this.connectionLimitPerSession = connectionLimitPerSession;
+      return this;
+    }
+
     public LocalNode build() {
       return new LocalNode(
           tracer,
@@ -1010,7 +1176,8 @@ public class LocalNode extends Node {
           heartbeatPeriod,
           factories.build(),
           registrationSecret,
-          managedDownloadsEnabled);
+          managedDownloadsEnabled,
+          connectionLimitPerSession);
     }
 
     public Advanced advanced() {

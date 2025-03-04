@@ -17,8 +17,6 @@
 
 package org.openqa.selenium.support.ui;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -68,15 +66,15 @@ public class FluentWait<T> implements Wait<T> {
 
   private static final Duration DEFAULT_WAIT_DURATION = Duration.ofMillis(DEFAULT_SLEEP_TIMEOUT);
 
-  private final T input;
-  private final java.time.Clock clock;
-  private final Sleeper sleeper;
+  protected final T input;
+  protected final java.time.Clock clock;
+  protected final Sleeper sleeper;
 
-  private Duration timeout = DEFAULT_WAIT_DURATION;
-  private Duration interval = DEFAULT_WAIT_DURATION;
-  private Supplier<String> messageSupplier = () -> null;
+  protected Duration timeout = DEFAULT_WAIT_DURATION;
+  protected Duration interval = DEFAULT_WAIT_DURATION;
+  protected Supplier<String> messageSupplier = () -> null;
 
-  private List<Class<? extends Throwable>> ignoredExceptions = new ArrayList<>();
+  protected final List<Class<? extends Throwable>> ignoredExceptions = new ArrayList<>();
 
   /**
    * @param input The input value to pass to the evaluated conditions.
@@ -91,7 +89,7 @@ public class FluentWait<T> implements Wait<T> {
    * @param sleeper Used to put the thread to sleep between evaluation loops.
    */
   public FluentWait(T input, java.time.Clock clock, Sleeper sleeper) {
-    this.input = Require.nonNull("Input", input);
+    this.input = input;
     this.clock = Require.nonNull("Clock", clock);
     this.sleeper = Require.nonNull("Sleeper", sleeper);
   }
@@ -163,7 +161,7 @@ public class FluentWait<T> implements Wait<T> {
    * @see #ignoreAll(Collection)
    */
   public FluentWait<T> ignoring(Class<? extends Throwable> exceptionType) {
-    return this.ignoreAll(ImmutableList.<Class<? extends Throwable>>of(exceptionType));
+    return this.ignoreAll(List.<Class<? extends Throwable>>of(exceptionType));
   }
 
   /**
@@ -175,7 +173,7 @@ public class FluentWait<T> implements Wait<T> {
   public FluentWait<T> ignoring(
       Class<? extends Throwable> firstType, Class<? extends Throwable> secondType) {
 
-    return this.ignoreAll(ImmutableList.of(firstType, secondType));
+    return this.ignoreAll(List.of(firstType, secondType));
   }
 
   /**
@@ -245,7 +243,12 @@ public class FluentWait<T> implements Wait<T> {
         return e;
       }
     }
-    Throwables.throwIfUnchecked(e);
+    if (e instanceof Error) {
+      throw (Error) e;
+    }
+    if (e instanceof RuntimeException) {
+      throw (RuntimeException) e;
+    }
     throw new RuntimeException(e);
   }
 

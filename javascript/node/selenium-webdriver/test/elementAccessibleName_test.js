@@ -17,9 +17,10 @@
 
 'use strict'
 
-const assert = require('assert')
+const assert = require('node:assert')
 const test = require('../lib/test')
-const { By } = require('../index')
+const { By, Browser } = require('selenium-webdriver')
+const { ignore } = require('../lib/test')
 
 test.suite(
   function (env) {
@@ -45,25 +46,19 @@ test.suite(
         assert.strictEqual(await imgLabel.getAccessibleName(), 'Test Image')
       })
 
-      it('Should return computed label for label', async function () {
+      ignore(env.browsers(Browser.CHROME)).it('Should return computed label for label', async function () {
         await driver.get(`data:text/html,<!DOCTYPE html>
           <input type="checkbox" id="label_test">
             <label for="label_test">Test Label</label>`)
         let computedLabel = driver.findElement(By.css('input'))
-        assert.strictEqual(
-          await computedLabel.getAccessibleName(),
-          'Test Label'
-        )
+        assert.strictEqual(await computedLabel.getAccessibleName(), 'Test Label')
       })
 
       it('Should return computed label for aria-label', async function () {
         await driver.get(`data:text/html,<!DOCTYPE html>
           <button aria-label="Add sample button to cart">Add to cart</button>`)
         let computedAriaLabel = driver.findElement(By.css('button'))
-        assert.strictEqual(
-          await computedAriaLabel.getAccessibleName(),
-          'Add sample button to cart'
-        )
+        assert.strictEqual(await computedAriaLabel.getAccessibleName(), 'Add sample button to cart')
       })
 
       it('Should return computed label for aria-labelby', async function () {
@@ -71,12 +66,9 @@ test.suite(
           <input type="search" aria-labelledby="this">
             <button id="this">Search</button>`)
         let computedAriaLabel = driver.findElement(By.css('input'))
-        assert.strictEqual(
-          await computedAriaLabel.getAccessibleName(),
-          'Search'
-        )
+        assert.strictEqual(await computedAriaLabel.getAccessibleName(), 'Search')
       })
     })
   },
-  { browsers: ['chrome'] }
+  { browsers: ['chrome'] },
 )

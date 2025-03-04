@@ -21,12 +21,15 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Set;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.data.NodeStatus;
+import org.openqa.selenium.grid.data.SemanticVersionComparator;
 import org.openqa.selenium.grid.data.Slot;
 import org.openqa.selenium.grid.data.SlotId;
+import org.openqa.selenium.grid.data.SlotMatcher;
 
 public class DefaultSlotSelector implements SlotSelector {
 
@@ -35,7 +38,8 @@ public class DefaultSlotSelector implements SlotSelector {
   }
 
   @Override
-  public Set<SlotId> selectSlot(Capabilities capabilities, Set<NodeStatus> nodes) {
+  public Set<SlotId> selectSlot(
+      Capabilities capabilities, Set<NodeStatus> nodes, SlotMatcher slotMatcher) {
     // First, filter the Nodes that support the required capabilities. Then, the filtered Nodes
     // get ordered in ascendant order by the number of browsers they support.
     // With this, Nodes with diverse configurations (supporting many browsers, e.g. Chrome,
@@ -44,20 +48,25 @@ public class DefaultSlotSelector implements SlotSelector {
     // Nodes).
     // After that, Nodes are ordered by their load, last session creation, and their id.
     return nodes.stream()
-        .filter(node -> node.hasCapacity(capabilities))
+        .filter(node -> node.hasCapacity(capabilities, slotMatcher))
         .sorted(
             Comparator.comparingLong(this::getNumberOfSupportedBrowsers)
                 // Now sort by node which has the lowest load (natural ordering)
                 .thenComparingDouble(NodeStatus::getLoad)
                 // Then last session created (oldest first), so natural ordering again
                 .thenComparingLong(NodeStatus::getLastSessionCreated)
+                // Then sort by stereotype browserVersion (descending order). SemVer comparison with
+                // considering empty value at first.
+                .thenComparing(
+                    Comparator.comparing(
+                        NodeStatus::getBrowserVersion, new SemanticVersionComparator().reversed()))
                 // And use the node id as a tie-breaker.
                 .thenComparing(NodeStatus::getNodeId))
         .flatMap(
             node ->
                 node.getSlots().stream()
                     .filter(slot -> slot.getSession() == null)
-                    .filter(slot -> slot.isSupporting(capabilities))
+                    .filter(slot -> slot.isSupporting(capabilities, slotMatcher))
                     .map(Slot::getId))
         .collect(toImmutableSet());
   }
@@ -65,7 +74,7 @@ public class DefaultSlotSelector implements SlotSelector {
   @VisibleForTesting
   long getNumberOfSupportedBrowsers(NodeStatus nodeStatus) {
     return nodeStatus.getSlots().stream()
-        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase())
+        .map(slot -> slot.getStereotype().getBrowserName().toLowerCase(Locale.ENGLISH))
         .distinct()
         .count();
   }

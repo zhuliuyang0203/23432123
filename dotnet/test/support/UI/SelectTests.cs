@@ -1,9 +1,28 @@
+// <copyright file="SelectTests.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using Moq;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using NUnit.Framework;
 using System.Reflection;
-using System;
-using Moq;
 
 namespace OpenQA.Selenium.Support.UI
 {
@@ -22,7 +41,9 @@ namespace OpenQA.Selenium.Support.UI
         public void ThrowUnexpectedTagNameExceptionWhenNotSelectTag()
         {
             webElement.SetupGet<string>(_ => _.TagName).Returns("form");
-            Assert.Throws<UnexpectedTagNameException>(() => new SelectElement(webElement.Object));
+            Assert.That(
+                () => new SelectElement(webElement.Object),
+                Throws.TypeOf<UnexpectedTagNameException>());
         }
 
         [Test]
@@ -31,7 +52,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
 
-            Assert.IsFalse(new SelectElement(webElement.Object).IsMultiple);
+            Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.False);
         }
 
         [Test]
@@ -40,7 +61,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
 
-            Assert.IsTrue(new SelectElement(webElement.Object).IsMultiple);
+            Assert.That(new SelectElement(webElement.Object).IsMultiple, Is.True);
         }
 
         [Test]
@@ -51,7 +72,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options));
 
-            Assert.AreEqual(options, new SelectElement(webElement.Object).Options);
+            Assert.That(new SelectElement(webElement.Object).Options, Is.EqualTo(options));
         }
 
         [Test]
@@ -70,7 +91,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             IWebElement option = new SelectElement(webElement.Object).SelectedOption;
-            Assert.AreEqual(selected.Object, option);
+            Assert.That(option, Is.EqualTo(selected.Object));
             notSelected.Verify(_ => _.Selected, Times.Once);
             selected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify();
@@ -92,8 +113,8 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             IList<IWebElement> returnedOption = new SelectElement(webElement.Object).AllSelectedOptions;
-            Assert.That(returnedOption.Count == 1);
-            Assert.AreEqual(selected.Object, returnedOption[0]);
+            Assert.That(returnedOption, Has.Count.EqualTo(1));
+            Assert.That(returnedOption[0], Is.EqualTo(selected.Object));
             notSelected.Verify(_ => _.Selected, Times.Once);
             selected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify();
@@ -109,6 +130,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
@@ -128,6 +150,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
@@ -148,6 +171,7 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns((string)null);
             option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
@@ -170,8 +194,10 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             option2.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option2.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option2.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
@@ -195,8 +221,10 @@ namespace OpenQA.Selenium.Support.UI
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             option2.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option2.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option2.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
@@ -219,17 +247,19 @@ namespace OpenQA.Selenium.Support.UI
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
-            option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
+            option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("1");
             option1.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option1.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option1.Setup(_ => _.Click());
             option2.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
             option2.SetupGet<bool>(_ => _.Selected).Returns(false);
+            option2.SetupGet<bool>(_ => _.Enabled).Returns(true);
             option2.Setup(_ => _.Click());
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             new SelectElement(webElement.Object).SelectByIndex(2);
-            option1.Verify(_ => _.Selected, Times.Once);
-            option1.Verify(_ => _.Click(), Times.Once);
+            option1.Verify(_ => _.Selected, Times.Never);
+            option1.Verify(_ => _.Click(), Times.Never);
             option1.Verify(_ => _.GetAttribute(It.IsAny<string>()), Times.Once);
             option2.Verify(_ => _.Selected, Times.Once);
             option2.Verify(_ => _.Click(), Times.Once);
@@ -352,7 +382,7 @@ namespace OpenQA.Selenium.Support.UI
 
             webElement.SetupGet<string>(_ => _.TagName).Returns("select");
             webElement.Setup(_ => _.GetAttribute(It.Is<string>(x => x == "multiple"))).Returns("true");
-            option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
+            option1.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("1");
             option1.SetupGet<bool>(_ => _.Selected).Returns(true);
             option1.Setup(_ => _.Click());
             option2.Setup<string>(_ => _.GetAttribute(It.IsAny<string>())).Returns("2");
@@ -362,8 +392,8 @@ namespace OpenQA.Selenium.Support.UI
 
             new SelectElement(webElement.Object).DeselectByIndex(2);
             option1.Verify(_ => _.GetAttribute(It.IsAny<string>()), Times.Once);
-            option1.Verify(_ => _.Selected, Times.Once);
-            option1.Verify(_ => _.Click(), Times.Once);
+            option1.Verify(_ => _.Selected, Times.Never);
+            option1.Verify(_ => _.Click(), Times.Never);
             option2.Verify(_ => _.GetAttribute(It.IsAny<string>()), Times.Once);
             option2.Verify(_ => _.Selected, Times.Once);
             option2.Verify(_ => _.Click(), Times.Once);
@@ -384,7 +414,10 @@ namespace OpenQA.Selenium.Support.UI
             webElement.Setup(_ => _.FindElements(It.IsAny<By>())).Returns(new ReadOnlyCollection<IWebElement>(options)).Verifiable();
 
             SelectElement element = new SelectElement(webElement.Object);
-            Assert.Throws<NoSuchElementException>(() => { IWebElement selectedOption = element.SelectedOption; });
+            Assert.That(
+                () => element.SelectedOption,
+                Throws.TypeOf<NoSuchElementException>());
+
             notSelected.Verify(_ => _.Selected, Times.Once);
             webElement.Verify(_ => _.FindElements(It.IsAny<By>()), Times.Once);
         }
@@ -394,7 +427,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("foo");
 
-            Assert.AreEqual("\"foo\"", result);
+            Assert.That(result, Is.EqualTo("\"foo\""));
         }
 
         [Test]
@@ -402,7 +435,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f'oo");
 
-            Assert.AreEqual("\"f'oo\"", result);
+            Assert.That(result, Is.EqualTo("\"f'oo\""));
         }
 
         [Test]
@@ -410,7 +443,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f\"oo");
 
-            Assert.AreEqual("'f\"oo'", result);
+            Assert.That(result, Is.EqualTo("'f\"oo'"));
         }
 
         [Test]
@@ -418,7 +451,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("f\"o'o");
 
-            Assert.AreEqual("concat(\"f\", '\"', \"o'o\")", result);
+            Assert.That(result, Is.EqualTo("concat(\"f\", '\"', \"o'o\")"));
         }
 
         /**
@@ -430,7 +463,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             string result = EscapeQuotes("Bar \"Rock'n'Roll\"");
 
-            Assert.AreEqual("concat(\"Bar \", '\"', \"Rock'n'Roll\", '\"')", result);
+            Assert.That(result, Is.EqualTo("concat(\"Bar \", '\"', \"Rock'n'Roll\", '\"')"));
         }
 
         private string EscapeQuotes(string toEscape)

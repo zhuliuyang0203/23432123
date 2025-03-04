@@ -28,6 +28,7 @@ import org.openqa.selenium.remote.ExecuteMethod;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.HttpClient;
 
+@SuppressWarnings({"rawtypes", "RedundantSuppression"})
 @AutoService(AugmenterProvider.class)
 public class BiDiProvider implements AugmenterProvider<HasBiDi> {
 
@@ -55,14 +56,8 @@ public class BiDiProvider implements AugmenterProvider<HasBiDi> {
   }
 
   private Optional<URI> getBiDiUrl(Capabilities caps) {
-    Object bidiCapability;
-    if (caps.asMap().containsKey("se:bidi")) {
-      // Session is created remotely
-      bidiCapability = caps.getCapability("se:bidi");
-    } else {
-      bidiCapability = caps.getCapability("webSocketUrl");
-    }
-    Optional<String> webSocketUrl = Optional.ofNullable((String) bidiCapability);
+    Object biDiCapability = caps.getCapability("webSocketUrl");
+    Optional<String> webSocketUrl = Optional.ofNullable((String) biDiCapability);
 
     return webSocketUrl.map(
         uri -> {

@@ -30,6 +30,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -50,6 +51,7 @@ import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.logging.HasLogEvents;
 import org.openqa.selenium.remote.html5.AddWebStorage;
+import org.openqa.selenium.support.decorators.Decorated;
 
 /**
  * Enhance the interfaces implemented by an instance of the {@link org.openqa.selenium.WebDriver}
@@ -58,6 +60,8 @@ import org.openqa.selenium.remote.html5.AddWebStorage;
  */
 @Beta
 public class Augmenter {
+
+  private static final Logger LOG = Logger.getLogger(Augmenter.class.getName());
   private final Set<Augmentation<?>> augmentations;
 
   public Augmenter() {
@@ -134,7 +138,7 @@ public class Augmenter {
   }
 
   /**
-   * Enhance the interfaces implemented by this instance of WebDriver iff that instance is a {@link
+   * Enhance the interfaces implemented by this instance of WebDriver if that instance is a {@link
    * org.openqa.selenium.remote.RemoteWebDriver}. The WebDriver that is returned may well be a
    * dynamic proxy. You cannot rely on the concrete implementing class to remain constant.
    *
@@ -145,6 +149,19 @@ public class Augmenter {
     Require.nonNull("WebDriver", driver);
     Require.precondition(
         driver instanceof HasCapabilities, "Driver must have capabilities", driver);
+
+    if (driver instanceof Decorated<?>) {
+      LOG.warning(
+          "Warning: In future versions, passing a decorated driver will no longer be allowed.\n"
+              + " Instead, augment the driver first and then use it to created a decorated"
+              + " driver.\n"
+              + " Explanation: Decorated drivers are not aware of the augmentations applied to"
+              + " them. It can lead to expected behavior.\n"
+              + " For example, augmenting HasDevTools interface to a decorated driver. \n"
+              + " The decorated driver is not aware that after augmentation it is an instance of"
+              + " HasDevTools. So it does not invoke the close() method of the underlying"
+              + " websocket, potentially causing a memory leak. ");
+    }
 
     Capabilities caps = ImmutableCapabilities.copyOf(((HasCapabilities) driver).getCapabilities());
 
@@ -249,6 +266,10 @@ public class Augmenter {
 
     if (driver instanceof RemoteWebDriver) {
       return (RemoteWebDriver) driver;
+    }
+
+    if (driver instanceof Decorated) {
+      return extractRemoteWebDriver((WebDriver) ((Decorated<?>) driver).getOriginal());
     }
 
     if (driver instanceof WrapsDriver) {

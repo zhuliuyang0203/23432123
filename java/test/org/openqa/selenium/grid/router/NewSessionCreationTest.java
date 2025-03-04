@@ -101,6 +101,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(60),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -116,7 +117,9 @@ class NewSessionCreationTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     Routable router =
         new Router(tracer, clientFactory, sessions, queue, distributor)
@@ -188,6 +191,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(10),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);
@@ -225,7 +229,9 @@ class NewSessionCreationTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     handler.addHandler(distributor);
 
     distributor.add(localNode);
@@ -262,6 +268,7 @@ class NewSessionCreationTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(5),
             Duration.ofSeconds(60),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     handler.addHandler(queue);
@@ -289,7 +296,9 @@ class NewSessionCreationTest {
             Duration.ofMinutes(5),
             true,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     handler.addHandler(distributor);
 
     distributor.add(localNode);

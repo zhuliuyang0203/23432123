@@ -14,10 +14,11 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
-import warnings
+from io import IOBase
+from typing import List
+from typing import Mapping
+from typing import Optional
 
-from selenium.common import InvalidArgumentException
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service
 
@@ -29,45 +30,40 @@ class ChromiumService(service.Service):
     :param executable_path: install path of the executable.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
-    :param log_path: (Optional) String to be passed to the executable as `--log-path`.
+    :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
-    :param start_error_message: (Optional) Error message that forms part of the error when problems occur
-    launching the subprocess.
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
         self,
-        executable_path: str,
+        executable_path: str = None,
         port: int = 0,
-        service_args: typing.Optional[typing.List[str]] = None,
-        log_path: typing.Optional[str] = None,
+        service_args: Optional[List[str]] = None,
         log_output: SubprocessStdAlias = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
-        start_error_message: typing.Optional[str] = None,
+        env: Optional[Mapping[str, str]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []
-        self.log_output = log_output
-        if log_path is not None:
-            warnings.warn("log_path has been deprecated, please use log_output", DeprecationWarning, stacklevel=2)
-            self.log_output = log_path
+        driver_path_env_key = driver_path_env_key or "SE_CHROMEDRIVER"
 
-        if "--append-log" in self.service_args or "--readable-timestamp" in self.service_args:
-            if isinstance(self.log_output, str):
-                self.service_args.append(f"--log-path={self.log_output}")
-                self.log_output = None
-            else:
-                msg = "Appending logs and readable timestamps require log output to be a string representing file path"
-                raise InvalidArgumentException(msg)
+        if isinstance(log_output, str):
+            self.service_args.append(f"--log-path={log_output}")
+            self.log_output: Optional[IOBase] = None
+        elif isinstance(log_output, IOBase):
+            self.log_output = log_output
+        else:
+            self.log_output = log_output
 
         super().__init__(
-            executable=executable_path,
+            executable_path=executable_path,
             port=port,
             env=env,
             log_output=self.log_output,
-            start_error_message=start_error_message,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         return [f"--port={self.port}"] + self.service_args

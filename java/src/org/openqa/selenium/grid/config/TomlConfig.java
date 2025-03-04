@@ -19,31 +19,39 @@ package org.openqa.selenium.grid.config;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
-import io.ous.jtoml.JToml;
-import io.ous.jtoml.ParseException;
-import io.ous.jtoml.Toml;
-import io.ous.jtoml.TomlTable;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.openqa.selenium.internal.Require;
+import org.tomlj.Toml;
+import org.tomlj.TomlArray;
+import org.tomlj.TomlParseError;
+import org.tomlj.TomlParseResult;
+import org.tomlj.TomlTable;
 
 public class TomlConfig implements Config {
 
-  private final Toml toml;
+  private final TomlParseResult toml;
 
   public TomlConfig(Reader reader) {
     try {
-      toml = JToml.parse(reader);
+      toml = Toml.parse(reader);
+
+      if (toml.hasErrors()) {
+        String error =
+            toml.errors().stream().map(TomlParseError::toString).collect(Collectors.joining("\n"));
+
+        throw new ConfigException(error);
+      }
     } catch (IOException e) {
       throw new ConfigException("Unable to read TOML.", e);
-    } catch (ParseException e) {
+    } catch (TomlParseError e) {
       throw new ConfigException(
           e.getCause()
               + "\n Validate the config using https://www.toml-lint.com/. "
@@ -66,7 +74,7 @@ public class TomlConfig implements Config {
     Require.nonNull("Section to read", section);
     Require.nonNull("Option to read", option);
 
-    if (!toml.containsKey(section)) {
+    if (!toml.contains(section)) {
       return Optional.empty();
     }
 
@@ -75,39 +83,46 @@ public class TomlConfig implements Config {
       throw new ConfigException(String.format("Section %s is not a section! %s", section, raw));
     }
 
-    TomlTable table = toml.getTomlTable(section);
+    TomlTable table = toml.getTable(section);
+    Object value = null;
+    if (table != null) {
+      value = table.get(option);
+    }
 
-    Object value = table.getOrDefault(option, null);
     if (value == null) {
       return Optional.empty();
+    }
+
+    if (value instanceof TomlArray) {
+      value = ((TomlArray) value).toList();
     }
 
     if (value instanceof Collection) {
       Collection<?> collection = (Collection<?>) value;
       // Case when an array of tables is used as config
       // https://toml.io/en/v1.0.0-rc.3#array-of-tables
-      if (collection.stream().anyMatch(item -> item instanceof TomlTable)) {
-        List<String> toReturn = new ArrayList<>();
-        collection.stream()
-            .map(item -> (TomlTable) item)
-            .forEach(
-                tomlTable ->
-                    tomlTable.toMap().entrySet().stream()
-                        .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
-                        .sorted()
-                        .forEach(toReturn::add));
-        return Optional.of(toReturn);
+      if (collection.stream().anyMatch(TomlTable.class::isInstance)) {
+        return Optional.of(
+            collection.stream()
+                .map(TomlTable.class::cast)
+                .map(TomlTable::toMap)
+                .map(this::toEntryList)
+                .flatMap(Collection::stream)
+                .collect(ImmutableList.toImmutableList()));
       }
-      List<String> values =
+
+      return Optional.of(
           collection.stream()
               .filter(item -> (!(item instanceof Collection)))
               .map(String::valueOf)
-              .collect(ImmutableList.toImmutableList());
-
-      return Optional.of(values);
+              .collect(ImmutableList.toImmutableList()));
     }
 
-    return Optional.of(ImmutableList.of(String.valueOf(value)));
+    if (value instanceof TomlTable) {
+      return Optional.of(toEntryList(((TomlTable) value).toMap()));
+    }
+
+    return Optional.of(List.of(String.valueOf(value)));
   }
 
   @Override

@@ -16,30 +16,31 @@
 // under the License.
 package org.openqa.selenium.manager;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.MAC;
+import static org.openqa.selenium.Platform.UNIX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-import com.google.common.io.CharStreams;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.Beta;
-import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.json.Json;
+import org.openqa.selenium.json.JsonException;
+import org.openqa.selenium.manager.SeleniumManagerOutput.Result;
+import org.openqa.selenium.os.ExternalProcess;
 
 /**
  * This implementation is still in beta, and may change.
@@ -58,37 +59,54 @@ public class SeleniumManager {
   private static final Logger LOG = Logger.getLogger(SeleniumManager.class.getName());
 
   private static final String SELENIUM_MANAGER = "selenium-manager";
+  private static final String DEFAULT_CACHE_PATH = "~/.cache/selenium";
+  private static final String BINARY_PATH_FORMAT = "/manager/%s/%s";
+  private static final String HOME = "~";
+  private static final String CACHE_PATH_ENV = "SE_CACHE_PATH";
+  private static final String BETA_PREFIX = "0.";
   private static final String EXE = ".exe";
-  private static final String INFO = "INFO";
-  private static final String WARN = "WARN";
-  private static final String DEBUG = "DEBUG";
+  private static final String SE_ENV_PREFIX = "SE_";
 
-  private static SeleniumManager manager;
-
-  private File binary;
+  private static volatile SeleniumManager manager;
+  private final String managerPath = System.getenv("SE_MANAGER_PATH");
+  private Path binary = managerPath == null ? null : Paths.get(managerPath);
+  private final String seleniumManagerVersion;
+  private boolean binaryInTemporalFolder = false;
 
   /** Wrapper for the Selenium Manager binary. */
   private SeleniumManager() {
-    Runtime.getRuntime()
-        .addShutdownHook(
-            new Thread(
-                () -> {
-                  if (binary != null && binary.exists()) {
-                    try {
-                      Files.delete(binary.toPath());
-                    } catch (IOException e) {
-                      LOG.warning(
-                          String.format(
-                              "%s deleting temporal file: %s",
-                              e.getClass().getSimpleName(), e.getMessage()));
+    BuildInfo info = new BuildInfo();
+    String releaseLabel = info.getReleaseLabel();
+    int lastDot = releaseLabel.lastIndexOf(".");
+    seleniumManagerVersion = BETA_PREFIX + releaseLabel.substring(0, lastDot);
+    if (managerPath == null) {
+      Runtime.getRuntime()
+          .addShutdownHook(
+              new Thread(
+                  () -> {
+                    if (binaryInTemporalFolder && binary != null && Files.exists(binary)) {
+                      try {
+                        Files.delete(binary);
+                      } catch (IOException e) {
+                        LOG.warning(
+                            String.format(
+                                "%s deleting temporal file: %s",
+                                e.getClass().getSimpleName(), e.getMessage()));
+                      }
                     }
-                  }
-                }));
+                  }));
+    } else {
+      LOG.fine(String.format("Selenium Manager set by env 'SE_MANAGER_PATH': %s", managerPath));
+    }
   }
 
   public static SeleniumManager getInstance() {
     if (manager == null) {
-      manager = new SeleniumManager();
+      synchronized (SeleniumManager.class) {
+        if (manager == null) {
+          manager = new SeleniumManager();
+        }
+      }
     }
     return manager;
   }
@@ -96,51 +114,70 @@ public class SeleniumManager {
   /**
    * Executes a process with the given arguments.
    *
-   * @param command the file and arguments to execute.
+   * @param arguments the file and arguments to execute.
    * @return the standard output of the execution.
    */
-  private static String runCommand(String... command) {
-    LOG.fine(String.format("Executing Process: %s", Arrays.toString(command)));
-    String output = "";
-    int code = 0;
+  private static Result runCommand(Path binary, List<String> arguments) {
+    LOG.fine(String.format("Executing Process: %s", arguments));
+
+    String output;
+    int code;
     try {
-      Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
-      process.waitFor();
+      ExternalProcess.Builder processBuilder =
+          ExternalProcess.builder()
+              // keep all output of the process to avoid JSON syntax errors while parsing
+              .bufferSize(-1);
+
+      Properties properties = System.getProperties();
+      for (String name : properties.stringPropertyNames()) {
+        if (name.startsWith(SE_ENV_PREFIX)) {
+          // read property with 'default' value due to concurrency
+          String value = properties.getProperty(name, "");
+          if (!value.isEmpty()) {
+            processBuilder.environment(name, value);
+          }
+        }
+      }
+      ExternalProcess process =
+          processBuilder.command(binary.toAbsolutePath().toString(), arguments).start();
+
+      if (!process.waitFor(Duration.ofHours(1))) {
+        LOG.warning("Selenium Manager did not exit, shutting it down");
+        process.shutdown();
+      }
       code = process.exitValue();
-      output =
-          CharStreams.toString(
-              new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-    } catch (InterruptedException e) {
-      LOG.warning(
-          String.format(
-              "Interrupted exception running command %s: %s",
-              Arrays.toString(command), e.getMessage()));
-      Thread.currentThread().interrupt();
+      output = process.getOutput(StandardCharsets.UTF_8);
     } catch (Exception e) {
-      LOG.warning(
-          String.format(
-              "%s running command %s: %s",
-              e.getClass().getSimpleName(), Arrays.toString(command), e.getMessage()));
+      throw new WebDriverException("Failed to run command: " + arguments, e);
     }
-    SeleniumManagerJsonOutput jsonOutput =
-        new Json().toType(output, SeleniumManagerJsonOutput.class);
-    if (code > 0) {
+    SeleniumManagerOutput jsonOutput = null;
+    JsonException failedToParse = null;
+    String dump = output;
+    if (!output.isEmpty()) {
+      try {
+        jsonOutput = new Json().toType(output, SeleniumManagerOutput.class);
+        jsonOutput
+            .getLogs()
+            .forEach(
+                logged -> {
+                  Level currentLevel =
+                      logged.getLevel() == Level.INFO ? Level.FINE : logged.getLevel();
+                  LOG.log(currentLevel, logged.getMessage());
+                });
+        dump = jsonOutput.getResult().getMessage();
+      } catch (JsonException e) {
+        failedToParse = e;
+      }
+    }
+    if (code != 0) {
       throw new WebDriverException(
-          "Unsuccessful command executed: "
-              + Arrays.toString(command)
-              + "\n"
-              + jsonOutput.result.message);
+          "Command failed with code: " + code + ", executed: " + arguments + "\n" + dump,
+          failedToParse);
+    } else if (failedToParse != null || jsonOutput == null) {
+      throw new WebDriverException(
+          "Failed to parse json output, executed: " + arguments + "\n" + dump, failedToParse);
     }
-    jsonOutput.logs.forEach(
-        logged -> {
-          if (logged.level.equalsIgnoreCase(WARN)) {
-            LOG.warning(logged.message);
-          }
-          if (logged.level.equalsIgnoreCase(DEBUG) || logged.level.equalsIgnoreCase(INFO)) {
-            LOG.fine(logged.message);
-          }
-        });
-    return jsonOutput.result.message;
+    return jsonOutput.getResult();
   }
 
   /**
@@ -148,109 +185,73 @@ public class SeleniumManager {
    *
    * @return the path to the Selenium Manager binary.
    */
-  private synchronized File getBinary() {
+  private synchronized Path getBinary() {
     if (binary == null) {
       try {
         Platform current = Platform.getCurrent();
-        String folder = "linux";
+        String folder = "";
         String extension = "";
         if (current.is(WINDOWS)) {
           extension = EXE;
           folder = "windows";
         } else if (current.is(MAC)) {
           folder = "macos";
+        } else if (current.is(LINUX)) {
+          if (System.getProperty("os.arch").contains("arm")) {
+            throw new WebDriverException("Linux ARM is not supported by Selenium Manager");
+          } else {
+            folder = "linux";
+          }
+        } else if (current.is(UNIX)) {
+          LOG.warning(
+              String.format(
+                  "Selenium Manager binary may not be compatible with %s; verify settings",
+                  current));
+          folder = "linux";
+        } else {
+          throw new WebDriverException("Unsupported platform: " + current);
         }
-        String binaryPath = String.format("%s/%s%s", folder, SELENIUM_MANAGER, extension);
-        try (InputStream inputStream = this.getClass().getResourceAsStream(binaryPath)) {
-          Path tmpPath = Files.createTempDirectory(SELENIUM_MANAGER + System.nanoTime());
-          File tmpFolder = tmpPath.toFile();
-          tmpFolder.deleteOnExit();
-          binary = new File(tmpFolder, SELENIUM_MANAGER + extension);
-          Files.copy(inputStream, binary.toPath(), REPLACE_EXISTING);
+
+        binary = getBinaryInCache(SELENIUM_MANAGER + extension);
+        if (!binary.toFile().exists()) {
+          String binaryPathInJar = String.format("%s/%s%s", folder, SELENIUM_MANAGER, extension);
+          try (InputStream inputStream = this.getClass().getResourceAsStream(binaryPathInJar)) {
+            Files.createDirectories(binary.getParent());
+            Files.copy(inputStream, binary);
+          }
         }
-        binary.setExecutable(true);
       } catch (Exception e) {
         throw new WebDriverException("Unable to obtain Selenium Manager Binary", e);
       }
+    } else if (!Files.exists(binary)) {
+      throw new WebDriverException(
+          String.format("Unable to obtain Selenium Manager Binary at: %s", binary));
     }
+    binary.toFile().setExecutable(true);
+
+    LOG.fine(String.format("Selenium Manager binary found at: %s", binary));
     return binary;
   }
 
   /**
-   * Returns the browser binary path when present in the vendor options
+   * Executes Selenium Manager to get the locations of the requested assets
    *
-   * @param options browser options used to start the session
-   * @return the browser binary path when present, only Chrome/Firefox/Edge
+   * @param arguments List of command line arguments to send to Selenium Manager binary
+   * @return the locations of the assets from Selenium Manager execution
    */
-  private String getBrowserBinary(Capabilities options) {
-    List<String> vendorOptionsCapabilities =
-        Arrays.asList("moz:firefoxOptions", "goog:chromeOptions", "ms:edgeOptions");
-    for (String vendorOptionsCapability : vendorOptionsCapabilities) {
-      if (options.asMap().containsKey(vendorOptionsCapability)) {
-        try {
-          @SuppressWarnings("unchecked")
-          Map<String, Object> vendorOptions =
-              (Map<String, Object>) options.getCapability(vendorOptionsCapability);
-          return (String) vendorOptions.get("binary");
-        } catch (Exception e) {
-          LOG.warning(
-              String.format(
-                  "Exception while retrieving the browser binary path. %s: %s",
-                  options, e.getMessage()));
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Determines the location of the correct driver.
-   *
-   * @param options Browser Options instance.
-   * @return the location of the driver.
-   */
-  public String getDriverPath(Capabilities options) {
-    LOG.fine("Applicable driver not found; attempting to install with Selenium Manager (Beta)");
-    File binaryFile = getBinary();
-    if (binaryFile == null) {
-      return null;
-    }
-    List<String> commandList = new ArrayList<>();
-    commandList.add(binaryFile.getAbsolutePath());
-    commandList.add("--browser");
-    commandList.add(options.getBrowserName());
-    commandList.add("--output");
-    commandList.add("json");
-
-    if (!options.getBrowserVersion().isEmpty()) {
-      commandList.add("--browser-version");
-      commandList.add(options.getBrowserVersion());
-    }
-
-    String browserBinary = getBrowserBinary(options);
-    if (browserBinary != null && !browserBinary.isEmpty()) {
-      commandList.add("--browser-path");
-      commandList.add(browserBinary);
-    }
+  public Result getBinaryPaths(List<String> arguments) {
+    List<String> args = new ArrayList<>(arguments.size() + 5);
+    args.addAll(arguments);
+    args.add("--language-binding");
+    args.add("java");
+    args.add("--output");
+    args.add("json");
 
     if (getLogLevel().intValue() <= Level.FINE.intValue()) {
-      commandList.add("--debug");
+      args.add("--debug");
     }
 
-    Proxy proxy = (Proxy) options.getCapability("proxy");
-    if (proxy != null) {
-      if (proxy.getSslProxy() != null) {
-        commandList.add("--proxy");
-        commandList.add(proxy.getSslProxy());
-      } else if (proxy.getHttpProxy() != null) {
-        commandList.add("--proxy");
-        commandList.add(proxy.getHttpProxy());
-      }
-    }
-
-    String path = runCommand(commandList.toArray(new String[0]));
-    LOG.fine(String.format("Using driver at location: %s", path));
-    return path;
+    return runCommand(getBinary(), args);
   }
 
   private Level getLogLevel() {
@@ -262,5 +263,26 @@ public class SeleniumManager {
       return Level.INFO;
     }
     return level;
+  }
+
+  private Path getBinaryInCache(String binaryName) throws IOException {
+
+    // Look for cache path as system property or env
+    String cachePath = System.getProperty(CACHE_PATH_ENV, "");
+    if (cachePath.isEmpty()) cachePath = System.getenv(CACHE_PATH_ENV);
+    if (cachePath == null) cachePath = DEFAULT_CACHE_PATH;
+
+    cachePath = cachePath.replace(HOME, System.getProperty("user.home"));
+
+    // If cache path is not writable, SM will be extracted to a temporal folder
+    Path cacheParent = Paths.get(cachePath);
+    if (!Files.isWritable(cacheParent)) {
+      cacheParent = Files.createTempDirectory(SELENIUM_MANAGER);
+      binaryInTemporalFolder = true;
+    }
+
+    return Paths.get(
+        cacheParent.toString(),
+        String.format(BINARY_PATH_FORMAT, seleniumManagerVersion, binaryName));
   }
 }

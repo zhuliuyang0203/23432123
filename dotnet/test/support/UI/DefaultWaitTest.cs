@@ -1,7 +1,26 @@
+// <copyright file="DefaultWaitTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Runtime.CompilerServices;
-using NUnit.Framework;
-using Moq;
 
 namespace OpenQA.Selenium.Support.UI
 {
@@ -36,7 +55,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.AreEqual(defaultReturnValue, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(defaultReturnValue));
         }
 
         [Test]
@@ -52,7 +71,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.IsTrue(wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.True);
         }
 
         [Test]
@@ -83,7 +102,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.PollingInterval = TimeSpan.FromSeconds(2);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
-            Assert.AreEqual(defaultReturnValue, wait.Until(condition));
+            Assert.That(wait.Until(condition), Is.EqualTo(defaultReturnValue));
         }
 
         [Test]
@@ -100,10 +119,10 @@ namespace OpenQA.Selenium.Support.UI
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(NoSuchFrameException));
 
             var caughtException = Assert.Throws<NoSuchWindowException>(() => wait.Until(condition));
-            Assert.AreSame(ex, caughtException);
+            Assert.That(caughtException, Is.SameAs(ex));
 
             // Regression test for issue #6343
-            StringAssert.Contains("NonInlineableThrow", caughtException.StackTrace, "the stack trace must include the call to NonInlineableThrow()");
+            Assert.That(caughtException.StackTrace, Does.Contain("NonInlineableThrow"), "the stack trace must include the call to NonInlineableThrow()");
         }
 
         [Test]
@@ -120,7 +139,7 @@ namespace OpenQA.Selenium.Support.UI
             wait.IgnoreExceptionTypes(typeof(NoSuchWindowException));
 
             var caughtException = Assert.Throws<WebDriverTimeoutException>(() => wait.Until(condition));
-            Assert.AreSame(ex, caughtException.InnerException);
+            Assert.That(caughtException.InnerException, Is.SameAs(ex));
         }
 
         [Test]

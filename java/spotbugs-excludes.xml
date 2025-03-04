@@ -55,6 +55,11 @@
   </Match>
 
   <Match>
+    <Class name="~org.openqa.selenium.firefox.AddHasExtensions.*"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.firefox.Executable"/>
     <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
   </Match>
@@ -134,20 +139,35 @@
     <Class name="org.openqa.selenium.json.JsonInputIterator"/>
     <Bug pattern="IT_NO_SUCH_ELEMENT"/>
   </Match>
-
-  <Match>
-    <Class name="org.openqa.selenium.mobile.NetworkConnection$ConnectionType"/>
-    <Bug pattern="IM_BAD_CHECK_FOR_ODD"/>
-  </Match>
-
+  
   <Match>
     <Class name="org.openqa.selenium.net.NetworkUtils"/>
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
 
   <Match>
+    <Class name="org.openqa.selenium.remote.http.jdk.JdkHttpClient"/>
+    <Bug pattern="SF_SWITCH_FALLTHROUGH"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.safari.SafariDriverService"/>
     <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.safari.SafariTechPreviewDriverService"/>
+    <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.support.locators.RelativeLocator$RelativeBy" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.json.JsonOutputTest$1PrivatelyMappable" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
   </Match>
 
   <Match>
@@ -166,6 +186,11 @@
   </Match>
 
   <Match>
+    <Class name="org.openqa.selenium.json.JsonOutputTest"/>
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.testing.JupiterTestBase"/>
     <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
   </Match>
@@ -174,4 +199,45 @@
     <Class name="org.openqa.selenium.testing.StaticResources"/>
     <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
   </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.remote.WebElementToJsonConverter" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_INTERFACE" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.remote.internal.WebElementToJsonConverter" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.chrome.AddHasCasting" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.chrome.AddHasCdp" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.edge.AddHasCdp" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.edge.AddHasCasting" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
+    <Class name="~org.openqa.selenium.devtools.v[0-9]+\.v\w+" />
+    <Bug pattern="NM_CLASS_NAMING_CONVENTION"/>
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.manager.SeleniumManager"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE,IS2_INCONSISTENT_SYNC"/>
+  </Match>
+
 </FindBugsFilter>

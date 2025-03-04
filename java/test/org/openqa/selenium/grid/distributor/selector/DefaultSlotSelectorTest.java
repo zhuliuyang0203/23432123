@@ -42,6 +42,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.events.local.GuavaEventBus;
+import org.openqa.selenium.grid.data.DefaultSlotMatcher;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.Session;
@@ -87,6 +88,43 @@ class DefaultSlotSelectorTest {
   }
 
   @Test
+  void nodesAreOrderedNodesByBrowserVersion() {
+    Capabilities caps = new ImmutableCapabilities("browserName", "chrome");
+
+    NodeStatus node1 =
+        createNodeWithStereotypes(
+            Arrays.asList(
+                ImmutableMap.of("browserName", "chrome", "browserVersion", "131.0"),
+                ImmutableMap.of("browserName", "chrome", "browserVersion", "132.0")));
+    NodeStatus node2 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "131.0")));
+    NodeStatus node3 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "")));
+    NodeStatus node4 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "131.1")));
+    NodeStatus node5 =
+        createNodeWithStereotypes(
+            Arrays.asList(ImmutableMap.of("browserName", "chrome", "browserVersion", "beta")));
+    Set<NodeStatus> nodes = ImmutableSet.of(node1, node2, node3, node4, node5);
+
+    Set<SlotId> slots = selector.selectSlot(caps, nodes, new DefaultSlotMatcher());
+
+    ImmutableSet<NodeId> nodeIds =
+        slots.stream().map(SlotId::getOwningNodeId).distinct().collect(toImmutableSet());
+
+    assertThat(nodeIds)
+        .containsSequence(
+            node3.getNodeId(),
+            node1.getNodeId(),
+            node4.getNodeId(),
+            node2.getNodeId(),
+            node5.getNodeId());
+  }
+
+  @Test
   void nodesAreOrderedNodesByNumberOfSupportedBrowsers() {
     Set<NodeStatus> nodes = new HashSet<>();
 
@@ -99,7 +137,7 @@ class DefaultSlotSelectorTest {
     nodes.add(twoBrowsers);
     nodes.add(oneBrowser);
 
-    Set<SlotId> slots = selector.selectSlot(caps, nodes);
+    Set<SlotId> slots = selector.selectSlot(caps, nodes, new DefaultSlotMatcher());
 
     ImmutableSet<NodeId> nodeIds =
         slots.stream().map(SlotId::getOwningNodeId).distinct().collect(toImmutableSet());
@@ -123,7 +161,9 @@ class DefaultSlotSelectorTest {
     NodeStatus heavy = createNode(Collections.singletonList(caps), 10, 6);
     NodeStatus massive = createNode(Collections.singletonList(caps), 10, 8);
 
-    Set<SlotId> ids = selector.selectSlot(caps, ImmutableSet.of(heavy, medium, lightest, massive));
+    Set<SlotId> ids =
+        selector.selectSlot(
+            caps, ImmutableSet.of(heavy, medium, lightest, massive), new DefaultSlotMatcher());
     SlotId expected = ids.iterator().next();
 
     assertThat(lightest.getSlots().stream()).anyMatch(slot -> expected.equals(slot.getId()));
@@ -138,7 +178,8 @@ class DefaultSlotSelectorTest {
     NodeStatus maximumLoad = createNode(ImmutableList.of(chrome), 12, 12);
 
     Set<SlotId> ids =
-        selector.selectSlot(chrome, ImmutableSet.of(maximumLoad, mediumLoad, lightLoad));
+        selector.selectSlot(
+            chrome, ImmutableSet.of(maximumLoad, mediumLoad, lightLoad), new DefaultSlotMatcher());
     SlotId expected = ids.iterator().next();
 
     // The slot should belong to the Node with light load
@@ -172,7 +213,8 @@ class DefaultSlotSelectorTest {
                 lightLoadAndThreeBrowsers,
                 mediumLoadAndTwoBrowsers,
                 mediumLoadAndOtherTwoBrowsers,
-                highLoadAndOneBrowser));
+                highLoadAndOneBrowser),
+            new DefaultSlotMatcher());
 
     // The slot should belong to the Node with high load because it only supports Chrome, leaving
     // the other Nodes with more availability for other browsers
@@ -224,6 +266,7 @@ class DefaultSlotSelectorTest {
         ImmutableSet.copyOf(slots),
         UP,
         Duration.ofSeconds(10),
+        Duration.ofSeconds(300),
         "4.0.0",
         ImmutableMap.of(
             "name", "Max OS X",
@@ -244,6 +287,20 @@ class DefaultSlotSelectorTest {
               nodeBuilder.add(caps, new TestSessionFactory((id, c) -> new Handler(c)));
             });
 
+    Node myNode = nodeBuilder.build();
+    return myNode.getStatus();
+  }
+
+  private NodeStatus createNodeWithStereotypes(List<ImmutableMap> stereotypes) {
+    URI uri = createUri();
+    LocalNode.Builder nodeBuilder =
+        LocalNode.builder(tracer, bus, uri, uri, new Secret("cornish yarg"));
+    nodeBuilder.maximumConcurrentSessions(stereotypes.size());
+    stereotypes.forEach(
+        stereotype -> {
+          Capabilities caps = new ImmutableCapabilities(stereotype);
+          nodeBuilder.add(caps, new TestSessionFactory((id, c) -> new Handler(c)));
+        });
     Node myNode = nodeBuilder.build();
     return myNode.getStatus();
   }

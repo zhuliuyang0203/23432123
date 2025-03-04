@@ -15,13 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
-import typing
-import warnings
+
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
-
-DEFAULT_EXECUTABLE_PATH: str = "/usr/bin/safaridriver"
 
 
 class Service(service.Service):
@@ -30,44 +29,39 @@ class Service(service.Service):
 
     :param executable_path: install path of the safaridriver executable, defaults to `/usr/bin/safaridriver`.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
-    :param quiet: (Deprecated) Suppress driver stdout & stderr, redirects to os.devnull if enabled.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
+    :param enable_logging: (Optional) Enable logging of the service. Logs can be located at `~/Library/Logs/com.apple.WebDriver/`
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
         self,
-        executable_path: str = DEFAULT_EXECUTABLE_PATH,
+        executable_path: str = None,
         port: int = 0,
-        quiet: bool = None,
-        service_args: typing.Optional[typing.List[str]] = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        service_args: Optional[List[str]] = None,
+        env: Optional[Mapping[str, str]] = None,
         reuse_service=False,
+        enable_logging: bool = False,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
-        self._check_executable(executable_path)
         self.service_args = service_args or []
-        if quiet is not None:
-            warnings.warn("quiet is no longer needed to supress output", DeprecationWarning, stacklevel=2)
+        driver_path_env_key = driver_path_env_key or "SE_SAFARIDRIVER"
 
-        self._reuse_service = reuse_service
+        if enable_logging:
+            self.service_args.append("--diagnose")
+
+        self.reuse_service = reuse_service
         super().__init__(
-            executable=executable_path,
+            executable_path=executable_path,
             port=port,
             env=env,
+            driver_path_env_key=driver_path_env_key,
             **kwargs,
         )
 
-    @staticmethod
-    def _check_executable(executable_path) -> None:
-        if not os.path.exists(executable_path):
-            if "Safari Technology Preview" in executable_path:
-                message = "Safari Technology Preview does not seem to be installed. You can download it at https://developer.apple.com/safari/download/."
-            else:
-                message = "SafariDriver was not found; are you running Safari 10 or later? You can download Safari at https://developer.apple.com/safari/download/."
-            raise Exception(message)
-
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         return ["-p", f"{self.port}"] + self.service_args
 
     @property
@@ -81,4 +75,6 @@ class Service(service.Service):
 
     @reuse_service.setter
     def reuse_service(self, reuse: bool) -> None:
+        if not isinstance(reuse, bool):
+            raise TypeError("reuse must be a boolean")
         self._reuse_service = reuse

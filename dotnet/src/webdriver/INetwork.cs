@@ -1,26 +1,27 @@
-// <copyright file="INetwork.cs" company="WebDriver Committers">
+// <copyright file="INetwork.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -32,16 +33,16 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a browser sends a network request.
         /// </summary>
-        event EventHandler<NetworkRequestSentEventArgs> NetworkRequestSent;
+        event EventHandler<NetworkRequestSentEventArgs>? NetworkRequestSent;
 
         /// <summary>
         /// Occurs when a browser receives a network response.
         /// </summary>
-        event EventHandler<NetworkResponseReceivedEventArgs> NetworkResponseReceived;
+        event EventHandler<NetworkResponseReceivedEventArgs>? NetworkResponseReceived;
 
         /// <summary>
         /// Adds a <see cref="NetworkRequestHandler"/> to examine incoming network requests,
-        /// and optionally modify the request or provide a response. 
+        /// and optionally modify the request or provide a response.
         /// </summary>
         /// <param name="handler">The <see cref="NetworkRequestHandler"/> to add.</param>
         void AddRequestHandler(NetworkRequestHandler handler);
@@ -65,7 +66,7 @@ namespace OpenQA.Selenium
 
         /// <summary>
         /// Adds a <see cref="NetworkResponseHandler"/> to examine received network responses,
-        /// and optionally modify the response. 
+        /// and optionally modify the response.
         /// </summary>
         /// <param name="handler">The <see cref="NetworkResponseHandler"/> to add.</param>
         void AddResponseHandler(NetworkResponseHandler handler);
@@ -79,12 +80,16 @@ namespace OpenQA.Selenium
         /// Asynchronously starts monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         Task StartMonitoring();
 
         /// <summary>
         /// Asynchronously stops monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         Task StopMonitoring();
     }
 }

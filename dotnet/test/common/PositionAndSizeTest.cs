@@ -1,6 +1,26 @@
-using System.Drawing;
+// <copyright file="PositionAndSizeTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
+using System;
+using System.Drawing;
 
 namespace OpenQA.Selenium
 {
@@ -23,40 +43,40 @@ namespace OpenQA.Selenium
         public void ShouldGetCoordinatesOfAnElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/simple_page.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAnEmptyElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_empty_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfATransparentElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_transparent_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAHiddenElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_hidden_element.html");
-            Assert.AreEqual(new Point(10, 10), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
         public void ShouldGetCoordinatesOfAnInvisibleElement()
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/page_with_invisible_element.html");
-            Assert.AreEqual(new Point(0, 0), GetLocationInViewPort(By.Id("box")));
-            Assert.AreEqual(new Point(0, 0), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(0, 0)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(0, 0)));
         }
 
         [Test]
@@ -79,8 +99,8 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_frame.html");
             driver.SwitchTo().Frame("ifr");
             IWebElement box = driver.FindElement(By.Id("box"));
-            Assert.AreEqual(new Point(10, 10), box.Location);
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(box.Location, Is.EqualTo(new Point(10, 10)));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
         }
 
         [Test]
@@ -88,10 +108,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_frame.html");
             driver.SwitchTo().Frame("ifr");
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
-            // Assert.AreEqual(new Point(25, 25), GetLocationInViewPort(By.Id("box")));
+            // Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(25, 25)));
         }
 
         [Test]
@@ -100,10 +120,10 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("coordinates_tests/element_in_nested_frame.html");
             driver.SwitchTo().Frame("ifr");
             driver.SwitchTo().Frame("ifr");
-            Assert.AreEqual(new Point(10, 10), GetLocationOnPage(By.Id("box")));
+            Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
-            // Assert.AreEqual(new Point(40, 40), GetLocationInViewPort(By.Id("box")));
+            // Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(40, 40)));
         }
 
         [Test]
@@ -136,15 +156,15 @@ namespace OpenQA.Selenium
 
             IWebElement r2 = driver.FindElement(By.Id("r2"));
             string left = r2.GetCssValue("left");
-            Assert.That(left, Does.StartWith("10.9"));
+            Assert.That(Math.Round(Convert.ToDecimal(left.Replace("px", "")), 1), Is.EqualTo(10.9));
             string top = r2.GetCssValue("top");
-            Assert.That(top, Does.StartWith("10.1"));
-            Assert.AreEqual(new Point(11, 10), r2.Location);
+            Assert.That(Math.Round(Convert.ToDecimal(top.Replace("px", "")), 1), Is.EqualTo(10.1));
+            Assert.That(r2.Location, Is.EqualTo(new Point(11, 10)));
             string width = r2.GetCssValue("width");
-            Assert.That(width, Does.StartWith("48.6"));
+            Assert.That(Math.Round(Convert.ToDecimal(width.Replace("px", "")), 1), Is.EqualTo(48.7));
             string height = r2.GetCssValue("height");
-            Assert.That(height, Does.StartWith("49.3"));
-            Assert.AreEqual(r2.Size, new Size(49, 49));
+            Assert.That(Math.Round(Convert.ToDecimal(height.Replace("px", "")), 1), Is.EqualTo(49.3));
+            Assert.That(r2.Size, Is.EqualTo(new Size(49, 49)));
         }
 
         //------------------------------------------------------------------

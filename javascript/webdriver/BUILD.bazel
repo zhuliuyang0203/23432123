@@ -20,7 +20,6 @@ closure_js_library(
     visibility = ["//javascript/remote:__pkg__"],
     deps = [
         "//javascript/atoms:errors",
-        "@io_bazel_rules_closure//closure/library",
     ],
 )
 
@@ -41,7 +40,7 @@ closure_js_library(
         "JSC_USE_OF_GOOG_PROVIDE",
     ],
     visibility = ["//javascript:__pkg__"],
-    deps = ["@io_bazel_rules_closure//closure/library"],
+    deps = [],
 )
 
 filegroup(

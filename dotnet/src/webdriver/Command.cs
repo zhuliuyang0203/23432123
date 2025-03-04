@@ -1,25 +1,30 @@
-// <copyright file="Command.cs" company="WebDriver Committers">
+// <copyright file="Command.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json;
 using OpenQA.Selenium.Internal;
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -28,9 +33,11 @@ namespace OpenQA.Selenium
     /// </summary>
     public class Command
     {
-        private SessionId commandSessionId;
-        private string commandName;
-        private Dictionary<string, object> commandParameters = new Dictionary<string, object>();
+        private readonly static JsonSerializerOptions s_jsonSerializerOptions = new()
+        {
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(CommandJsonSerializerContext.Default, new DefaultJsonTypeInfoResolver()),
+            Converters = { new ResponseValueJsonConverter() }
+        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command"/> class using a command name and a JSON-encoded string for the parameters.
@@ -48,43 +55,31 @@ namespace OpenQA.Selenium
         /// <param name="sessionId">Session ID the driver is using</param>
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
-        public Command(SessionId sessionId, string name, Dictionary<string, object> parameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
+        public Command(SessionId? sessionId, string name, Dictionary<string, object?>? parameters)
         {
-            this.commandSessionId = sessionId;
-            if (parameters != null)
-            {
-                this.commandParameters = parameters;
-            }
-
-            this.commandName = name;
+            this.SessionId = sessionId;
+            this.Parameters = parameters ?? new Dictionary<string, object?>();
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>
         /// Gets the SessionID of the command
         /// </summary>
-        [JsonProperty("sessionId")]
-        public SessionId SessionId
-        {
-            get { return this.commandSessionId; }
-        }
+        [JsonPropertyName("sessionId")]
+        public SessionId? SessionId { get; }
 
         /// <summary>
         /// Gets the command name
         /// </summary>
-        [JsonProperty("name")]
-        public string Name
-        {
-            get { return this.commandName; }
-        }
+        [JsonPropertyName("name")]
+        public string Name { get; }
 
         /// <summary>
         /// Gets the parameters of the command
         /// </summary>
-        [JsonProperty("parameters")]
-        public Dictionary<string, object> Parameters
-        {
-            get { return this.commandParameters; }
-        }
+        [JsonPropertyName("parameters")]
+        public Dictionary<string, object?> Parameters { get; }
 
         /// <summary>
         /// Gets the parameters of the command as a JSON-encoded string.
@@ -93,13 +88,12 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string parametersString = string.Empty;
-                if (this.commandParameters != null && this.commandParameters.Count > 0)
+                string parametersString;
+                if (this.Parameters != null && this.Parameters.Count > 0)
                 {
-                    parametersString = JsonConvert.SerializeObject(this.commandParameters);
+                    parametersString = JsonSerializer.Serialize(this.Parameters, s_jsonSerializerOptions);
                 }
-
-                if (string.IsNullOrEmpty(parametersString))
+                else
                 {
                     parametersString = "{}";
                 }
@@ -122,10 +116,58 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="value">The JSON-encoded string representing the command parameters.</param>
         /// <returns>A <see cref="Dictionary{K, V}"/> with a string keys, and an object value. </returns>
-        private static Dictionary<string, object> ConvertParametersFromJson(string value)
+        /// <exception cref="JsonException">If <paramref name="value"/> is not a JSON object.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
+        private static Dictionary<string, object?>? ConvertParametersFromJson(string value)
         {
-            Dictionary<string, object> parameters = JsonConvert.DeserializeObject<Dictionary<string, object>>(value, new ResponseValueJsonConverter());
+            Dictionary<string, object?>? parameters = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, s_jsonSerializerOptions);
             return parameters;
         }
     }
+
+    // Built-in types
+    [JsonSerializable(typeof(bool))]
+    [JsonSerializable(typeof(byte))]
+    [JsonSerializable(typeof(sbyte))]
+    [JsonSerializable(typeof(char))]
+    [JsonSerializable(typeof(decimal))]
+    [JsonSerializable(typeof(double))]
+    [JsonSerializable(typeof(float))]
+    [JsonSerializable(typeof(int))]
+    [JsonSerializable(typeof(uint))]
+    [JsonSerializable(typeof(nint))]
+    [JsonSerializable(typeof(nuint))]
+    [JsonSerializable(typeof(long))]
+    [JsonSerializable(typeof(ulong))]
+    [JsonSerializable(typeof(short))]
+    [JsonSerializable(typeof(ushort))]
+    [JsonSerializable(typeof(string))]
+
+    // Selenium WebDriver types
+    [JsonSerializable(typeof(char[]))]
+    [JsonSerializable(typeof(byte[]))]
+    [JsonSerializable(typeof(Chromium.ChromiumNetworkConditions))]
+    [JsonSerializable(typeof(Cookie))]
+    [JsonSerializable(typeof(ReturnedCookie))]
+    [JsonSerializable(typeof(Proxy))]
+
+    // Selenium Dictionaries, primarily used in Capabilities
+    [JsonSerializable(typeof(Dictionary<string, object>))]
+    [JsonSerializable(typeof(Dictionary<string, bool>))]
+    [JsonSerializable(typeof(Dictionary<string, byte>))]
+    [JsonSerializable(typeof(Dictionary<string, sbyte>))]
+    [JsonSerializable(typeof(Dictionary<string, char>))]
+    [JsonSerializable(typeof(Dictionary<string, decimal>))]
+    [JsonSerializable(typeof(Dictionary<string, double>))]
+    [JsonSerializable(typeof(Dictionary<string, float>))]
+    [JsonSerializable(typeof(Dictionary<string, int>))]
+    [JsonSerializable(typeof(Dictionary<string, uint>))]
+    [JsonSerializable(typeof(Dictionary<string, nint>))]
+    [JsonSerializable(typeof(Dictionary<string, nuint>))]
+    [JsonSerializable(typeof(Dictionary<string, long>))]
+    [JsonSerializable(typeof(Dictionary<string, ulong>))]
+    [JsonSerializable(typeof(Dictionary<string, short>))]
+    [JsonSerializable(typeof(Dictionary<string, ushort>))]
+    [JsonSerializable(typeof(Dictionary<string, string>))]
+    internal partial class CommandJsonSerializerContext : JsonSerializerContext;
 }

@@ -21,7 +21,7 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe TakesScreenshot do
+    describe TakesScreenshot, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
       before do
         driver.navigate.to url_for('xhtmlTest.html')
       end
@@ -80,9 +80,7 @@ module Selenium
           driver.navigate.to url_for('printPage.html')
         end
 
-        after do
-          FileUtils.rm_rf(path)
-        end
+        after { FileUtils.rm_rf(path) }
 
         it 'takes viewport screenshot by default' do
           viewport_width = driver.execute_script('return window.innerWidth;')
@@ -95,11 +93,9 @@ module Selenium
           expect(height).to be <= viewport_height
         end
 
-        it 'takes full page screenshot', except: [{ci: :github,
-                                                   platform: :windows,
+        it 'takes full page screenshot', except: [{platform: :windows,
                                                    reason: 'Some issues with resolution?'},
                                                   {platform: :macosx,
-                                                   headless: true,
                                                    reason: 'showing half resolution of what expected'}],
                                          exclusive: {browser: :firefox} do
           viewport_width = driver.execute_script('return window.innerWidth;')
@@ -112,7 +108,8 @@ module Selenium
           expect(height).to be > viewport_height
         end
 
-        it 'does not take full page screenshot', except: {browser: :firefox} do
+        it 'does not take full page screenshot', only: {browser: %i[chrome edge safari safari_preview],
+                                                        reason: 'these browsers do not implement this feature'} do
           expect {
             driver.save_screenshot path, full_page: true
           }.to raise_exception(Error::UnsupportedOperationError, /Full Page Screenshots are not supported/)

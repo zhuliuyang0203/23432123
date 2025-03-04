@@ -164,7 +164,7 @@ public enum DeploymentTypes {
             "relax-checks = true",
             "",
             "[server]",
-            "",
+            "hostname = \"localhost\"",
             "registration-secret = \"colby\"",
             "",
             "[sessionqueue]",

@@ -19,12 +19,12 @@ package org.openqa.selenium.remote.http.jdk;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -72,19 +72,19 @@ class JdkHttpMessages {
 
     switch (method) {
       case DELETE:
-        builder = builder.DELETE();
+        builder.DELETE();
         break;
 
       case GET:
-        builder = builder.GET();
+        builder.GET();
         break;
 
       case POST:
-        builder = builder.POST(notChunkingBodyPublisher(req));
+        builder.POST(notChunkingBodyPublisher(req));
         break;
 
       case PUT:
-        builder = builder.PUT(notChunkingBodyPublisher(req));
+        builder.PUT(notChunkingBodyPublisher(req));
         break;
 
       default:
@@ -92,18 +92,17 @@ class JdkHttpMessages {
             String.format("Unsupported request method %s: %s", req.getMethod(), req));
     }
 
-    for (String name : req.getHeaderNames()) {
-      // This prevents the IllegalArgumentException that states 'restricted header name: ...'
-      if (IGNORE_HEADERS.contains(name.toLowerCase())) {
-        continue;
-      }
-      for (String value : req.getHeaders(name)) {
-        builder = builder.header(name, value);
-      }
-    }
+    req.forEachHeader(
+        (name, value) -> {
+          // This prevents the IllegalArgumentException that states 'restricted header name: ...'
+          if (IGNORE_HEADERS.contains(name.toLowerCase(Locale.ENGLISH))) {
+            return;
+          }
+          builder.header(name, value);
+        });
 
     if (req.getHeader("User-Agent") == null) {
-      builder = builder.header("User-Agent", AddSeleniumUserAgent.USER_AGENT);
+      builder.header("User-Agent", AddSeleniumUserAgent.USER_AGENT);
     }
 
     builder.timeout(config.readTimeout());
@@ -113,28 +112,22 @@ class JdkHttpMessages {
 
   /**
    * Some drivers do not support chunked transport, we ensure the http client is not using chunked
-   * transport. This is done by using a BodyPublisher with a known size, in best case without
-   * wasting memory by buffering the request.
+   * transport. This is done by using a BodyPublisher with a known size.
    *
    * @return a BodyPublisher with a known size
    */
   private BodyPublisher notChunkingBodyPublisher(HttpRequest req) {
-    String length = req.getHeader("content-length");
+    Contents.Supplier content = req.getContent();
 
-    if (length == null) {
-      // read the data into a byte array to know the length
-      byte[] bytes = Contents.bytes(req.getContent());
-      if (bytes.length == 0) {
-        // Looks like we were given a request with no payload.
-        return BodyPublishers.noBody();
-      }
-      return BodyPublishers.ofByteArray(bytes);
+    // Check if the content length is greater than 0
+    if (content.length() > 0) {
+      // we know the length of the request and use it
+      BodyPublisher chunking = BodyPublishers.ofInputStream(content);
+      return BodyPublishers.fromPublisher(chunking, content.length());
+    } else {
+      // If the content length is 0, return a BodyPublisher without body
+      return BodyPublishers.noBody();
     }
-
-    // we know the length of the request and use it
-    BodyPublisher chunking = BodyPublishers.ofInputStream(req.getContent());
-
-    return BodyPublishers.fromPublisher(chunking, Long.parseLong(length));
   }
 
   public URI getRawUri(HttpRequest req) {
@@ -148,7 +141,12 @@ class JdkHttpMessages {
         || uri.startsWith("https://")) {
       rawUrl = uri;
     } else {
-      rawUrl = baseUrl.toString().replaceAll("/$", "") + uri;
+      String base = baseUrl.toString();
+      if (base.endsWith("/")) {
+        rawUrl = base.substring(0, base.length() - 1) + uri;
+      } else {
+        rawUrl = base + uri;
+      }
     }
 
     return URI.create(rawUrl);
@@ -167,7 +165,7 @@ class JdkHttpMessages {
                     .forEach(value -> res.addHeader(name, value)));
     byte[] responseBody = response.body();
     if (responseBody != null) {
-      res.setContent(() -> new ByteArrayInputStream(responseBody));
+      res.setContent(Contents.bytes(responseBody));
     }
 
     return res;

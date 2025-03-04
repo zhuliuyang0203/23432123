@@ -19,9 +19,8 @@
 
 const test = require('../lib/test')
 const { Pages } = require('../lib/test')
-const { Browser } = require('../')
-const chrome = require('../chrome')
-const assert = require('assert')
+const { Browser } = require('selenium-webdriver')
+const assert = require('node:assert')
 
 let startIndex = 0
 let endIndex = 5
@@ -93,37 +92,5 @@ test.suite(
       assert.strictEqual(base64Code, pdfMagicNumber)
     })
   },
-  { browsers: [Browser.FIREFOX] }
-)
-
-// in chrome printPdf supports in headless mode
-test.suite(
-  function (env) {
-    let driver
-
-    let options = new chrome.Options()
-    options.headless()
-
-    afterEach(function () {
-      return driver.quit()
-    })
-
-    it('Should Print pdf with 2 pages', async function () {
-      driver = env.builder().setChromeOptions(options).build()
-
-      await driver.get(Pages.printPage)
-      base64Code = await driver.printPage({ pageRanges: ['1-2'] })
-      base64Code = base64Code.slice(startIndex, endIndex)
-      assert.strictEqual(base64Code, pdfMagicNumber)
-    })
-
-    it('Should Print pdf with total pages', async function () {
-      driver = env.builder().setChromeOptions(options).build()
-      await driver.get(Pages.printPage)
-      base64Code = await driver.printPage()
-      base64Code = base64Code.slice(startIndex, endIndex)
-      assert.strictEqual(base64Code, pdfMagicNumber)
-    })
-  },
-  { browsers: [Browser.CHROME] }
+  { browsers: [Browser.FIREFOX, Browser.CHROME] },
 )

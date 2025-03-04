@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.node.config;
 
 import static org.openqa.selenium.grid.config.StandardGridRoles.NODE_ROLE;
+import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_CONNECTION_LIMIT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_DETECT_DRIVERS;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_DRAIN_AFTER_SESSION_COUNT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_ENABLE_BIDI;
@@ -30,7 +31,7 @@ import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_REGISTER_
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_REGISTER_PERIOD;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_SESSION_TIMEOUT;
 import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_USE_SELENIUM_MANAGER;
-import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_VNC_ENV_VAR;
+import static org.openqa.selenium.grid.node.config.NodeOptions.DEFAULT_VNC_ENV_VARS;
 import static org.openqa.selenium.grid.node.config.NodeOptions.NODE_SECTION;
 import static org.openqa.selenium.grid.node.config.NodeOptions.OVERRIDE_MAX_SESSIONS;
 
@@ -76,6 +77,14 @@ public class NodeFlags implements HasRoles {
               + "This will release the slot for other tests.")
   @ConfigValue(section = NODE_SECTION, name = "session-timeout", example = "60")
   public int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
+
+  @Parameter(
+      names = {"--connection-limit-per-session"},
+      description =
+          "Let X be the maximum number of concurrent websocket connections per session. This will"
+              + " ensure one session is not able to exhaust the connection limit of the host")
+  @ConfigValue(section = NODE_SECTION, name = "connection-limit-per-session", example = "8")
+  public int connectionLimitPerSession = DEFAULT_CONNECTION_LIMIT;
 
   @Parameter(
       names = {"--detect-drivers"},
@@ -149,11 +158,12 @@ public class NodeFlags implements HasRoles {
           "List of configured drivers a Node supports. "
               + "It is recommended to provide this type of configuration through a toml config "
               + "file to improve readability. Command line example: "
-              + "--drivers-configuration display-name=\"Firefox Nightly\" max-sessions=2 "
+              + "--driver-configuration display-name=\"Firefox Nightly\" max-sessions=2 "
               + "webdriver-path=\"/usr/local/bin/geckodriver\" "
-              + "stereotype='{\"browserName\": \"firefox\", \"browserVersion\": \"86\", "
-              + "\"moz:firefoxOptions\": "
-              + "{\"binary\":\"/Applications/Firefox Nightly.app/Contents/MacOS/firefox-bin\"}}'",
+              + "stereotype=\"{\\\"browserName\\\": \\\"firefox\\\", "
+              + "\\\"browserVersion\\\": \\\"86\\\", "
+              + "\\\"moz:firefoxOptions\\\": "
+              + "{\\\"binary\":\"/Applications/Firefox Nightly.app/Contents/MacOS/firefox\\\"}}\"",
       arity = 4,
       variableArity = true,
       splitter = NonSplittingSplitter.class)
@@ -168,7 +178,7 @@ public class NodeFlags implements HasRoles {
               + "max-sessions = 2\n"
               + "stereotype = \"{\\\"browserName\\\": \\\"firefox\\\", \\\"browserVersion\\\":"
               + " \\\"86\\\", \\\"moz:firefoxOptions\\\": {\\\"binary\\\":\\\"/Applications/Firefox"
-              + " Nightly.app/Contents/MacOS/firefox-bin\\\"}}\"")
+              + " Nightly.app/Contents/MacOS/firefox\\\"}}\"")
   public List<String> driverConfiguration;
 
   @Parameter(
@@ -189,6 +199,15 @@ public class NodeFlags implements HasRoles {
   public int registerPeriod = DEFAULT_REGISTER_PERIOD;
 
   @Parameter(
+      names = "--register-shutdown-on-failure",
+      description =
+          "If this flag is enabled, the Node will shut down after the register period is completed."
+              + " This is useful for container environments to restart and register again. If"
+              + " restarted multiple times, the Node container status will be CrashLoopBackOff.")
+  @ConfigValue(section = NODE_SECTION, name = "register-shutdown-on-failure", example = "false")
+  public boolean registerShutdownOnFailure = false;
+
+  @Parameter(
       names = "--heartbeat-period",
       description =
           "How often, in seconds, will the Node send heartbeat events to the Distributor "
@@ -201,8 +220,11 @@ public class NodeFlags implements HasRoles {
       description =
           "Environment variable to check in order to determine if a vnc stream is "
               + "available or not.")
-  @ConfigValue(section = NODE_SECTION, name = "vnc-env-var", example = "SE_START_XVFB")
-  public String vncEnvVar = DEFAULT_VNC_ENV_VAR;
+  @ConfigValue(
+      section = NODE_SECTION,
+      name = "vnc-env-var",
+      example = "[\"SE_START_XVFB\", \"SE_START_VNC\", \"SE_START_NO_VNC\"]")
+  public List<String> vncEnvVar = DEFAULT_VNC_ENV_VARS;
 
   @Parameter(
       names = "--no-vnc-port",

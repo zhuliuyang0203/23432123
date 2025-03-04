@@ -109,6 +109,7 @@ class AddingNodesTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -141,7 +142,9 @@ class AddingNodesTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize);
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor =
         new RemoteDistributor(
@@ -152,7 +155,7 @@ class AddingNodesTest {
     wait.until(obj -> distributor.getStatus().hasCapacity());
 
     NodeStatus status = getOnlyElement(distributor.getStatus().getNodes());
-    assertEquals(1, getStereotypes(status).get(CAPS).intValue());
+    assertEquals(1, getStereotypes(status).get(CAPS));
   }
 
   @Test
@@ -163,6 +166,7 @@ class AddingNodesTest {
             bus,
             new NodeId(UUID.randomUUID()),
             externalUrl.toURI(),
+            Duration.ofSeconds(300),
             c ->
                 new Session(
                     new SessionId(UUID.randomUUID()), sessionUri, stereotype, c, Instant.now()));
@@ -179,7 +183,9 @@ class AddingNodesTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize)) {
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -190,7 +196,8 @@ class AddingNodesTest {
       wait.until(obj -> distributor.getStatus().hasCapacity());
 
       NodeStatus status = getOnlyElement(distributor.getStatus().getNodes());
-      assertEquals(1, getStereotypes(status).get(CAPS).intValue());
+      assertEquals(1, getStereotypes(status).get(CAPS));
+      assertEquals(Duration.ofSeconds(300), status.getSessionTimeout());
     }
   }
 
@@ -217,7 +224,9 @@ class AddingNodesTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize)) {
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -228,7 +237,7 @@ class AddingNodesTest {
       wait.until(obj -> distributor.getStatus().hasCapacity());
 
       NodeStatus status = getOnlyElement(distributor.getStatus().getNodes());
-      assertEquals(1, getStereotypes(status).get(CAPS).intValue());
+      assertEquals(1, getStereotypes(status).get(CAPS));
     }
   }
 
@@ -265,7 +274,9 @@ class AddingNodesTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize)) {
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -306,7 +317,9 @@ class AddingNodesTest {
             Duration.ofMinutes(5),
             false,
             Duration.ofSeconds(5),
-            newSessionThreadPoolSize)) {
+            newSessionThreadPoolSize,
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -318,7 +331,7 @@ class AddingNodesTest {
       wait.until(obj -> distributor.getStatus().hasCapacity());
 
       NodeStatus nodeStatus = getOnlyElement(distributor.getStatus().getNodes());
-      assertEquals(1, getStereotypes(nodeStatus).get(CAPS).intValue());
+      assertEquals(1, getStereotypes(nodeStatus).get(CAPS));
 
       // Craft a status that makes it look like the node is busy, and post it on the bus.
       NodeStatus status = node.getStatus();
@@ -340,6 +353,7 @@ class AddingNodesTest {
                           Instant.now()))),
               UP,
               Duration.ofSeconds(10),
+              status.getSessionTimeout(),
               status.getVersion(),
               status.getOsInfo());
 
@@ -369,8 +383,12 @@ class AddingNodesTest {
     private Session running;
 
     protected CustomNode(
-        EventBus bus, NodeId nodeId, URI uri, Function<Capabilities, Session> factory) {
-      super(DefaultTestTracer.createTracer(), nodeId, uri, registrationSecret);
+        EventBus bus,
+        NodeId nodeId,
+        URI uri,
+        Duration sessionTimeout,
+        Function<Capabilities, Session> factory) {
+      super(DefaultTestTracer.createTracer(), nodeId, uri, registrationSecret, sessionTimeout);
 
       this.bus = bus;
       this.factory = Objects.requireNonNull(factory);
@@ -434,6 +452,14 @@ class AddingNodesTest {
     }
 
     @Override
+    public boolean tryAcquireConnection(SessionId id) {
+      return false;
+    }
+
+    @Override
+    public void releaseConnection(SessionId id) {}
+
+    @Override
     public boolean isSupporting(Capabilities capabilities) {
       return Objects.equals("cake", capabilities.getCapability("cheese"));
     }
@@ -463,6 +489,7 @@ class AddingNodesTest {
               new Slot(new SlotId(getId(), UUID.randomUUID()), CAPS, Instant.now(), sess)),
           UP,
           Duration.ofSeconds(10),
+          getSessionTimeout(),
           getNodeVersion(),
           getOsInfo());
     }

@@ -23,20 +23,14 @@ from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.service import Service
 
 
-def test_log_path_deprecated() -> None:
-    log_path = "geckodriver.log"
-    msg = "log_path has been deprecated, please use log_output"
-
-    with pytest.warns(match=msg, expected_warning=DeprecationWarning):
-        Service(log_path=log_path)
-
-
 def test_log_output_as_filename() -> None:
     log_file = "geckodriver.log"
     service = Service(log_output=log_file)
     try:
-        driver = Firefox(service=service)
-        with open(log_file, "r") as fp:
+        with pytest.warns(None) as record:
+            driver = Firefox(service=service)
+        assert len(record) == 0
+        with open(log_file) as fp:
             assert "geckodriver\tINFO\tListening" in fp.readline()
     finally:
         driver.quit()
@@ -49,7 +43,7 @@ def test_log_output_as_file() -> None:
     service = Service(log_output=log_file)
     try:
         driver = Firefox(service=service)
-        with open(log_name, "r") as fp:
+        with open(log_name) as fp:
             assert "geckodriver\tINFO\tListening" in fp.readline()
     finally:
         driver.quit()
@@ -66,15 +60,27 @@ def test_log_output_as_stdout(capfd) -> None:
     driver.quit()
 
 
-def test_log_output_default_deprecated() -> None:
-    log_name = "geckodriver.log"
-    msg = "Firefox will soon stop logging to geckodriver.log by default; Specify desired logs with log_output"
+@pytest.fixture
+def service():
+    return Service()
 
-    try:
-        with pytest.warns(match=msg, expected_warning=DeprecationWarning):
-            driver = Firefox()
-        with open(log_name, "r") as fp:
-            assert "geckodriver\tINFO\tListening" in fp.readline()
-    finally:
-        driver.quit()
-        os.remove(log_name)
+
+@pytest.mark.usefixtures("service")
+class TestGeckoDriverService:
+    service_path = "/path/to/geckodriver"
+
+    @pytest.fixture(autouse=True)
+    def setup_and_teardown(self):
+        os.environ["SE_GECKODRIVER"] = self.service_path
+        yield
+        os.environ.pop("SE_GECKODRIVER", None)
+
+    def test_uses_path_from_env_variable(self, service):
+        assert "geckodriver" in service.path
+
+    def test_updates_path_after_setting_env_variable(self, service):
+        new_path = "/foo/bar"
+        os.environ["SE_GECKODRIVER"] = new_path
+        service.executable_path = self.service_path  # Simulating the update
+
+        assert "geckodriver" in service.executable_path

@@ -1,30 +1,33 @@
-// <copyright file="DriverService.cs" company="WebDriver Committers">
+// <copyright file="DriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
+using OpenQA.Selenium.Remote;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using OpenQA.Selenium.Internal;
-using OpenQA.Selenium.Remote;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -33,15 +36,8 @@ namespace OpenQA.Selenium
     /// </summary>
     public abstract class DriverService : ICommandServer
     {
-        private string driverServicePath;
-        private string driverServiceExecutableName;
-        private string driverServiceHostName = "localhost";
-        private int driverServicePort;
-        private bool silent;
-        private bool hideCommandPromptWindow;
         private bool isDisposed;
-        private Process driverServiceProcess;
-        private TimeSpan initializationTimeout = TimeSpan.FromSeconds(20);
+        private Process? driverServiceProcess;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DriverService"/> class.
@@ -49,36 +45,39 @@ namespace OpenQA.Selenium
         /// <param name="servicePath">The full path to the directory containing the executable providing the service to drive the browser.</param>
         /// <param name="port">The port on which the driver executable should listen.</param>
         /// <param name="driverServiceExecutableName">The file name of the driver service executable.</param>
-        /// <param name="driverServiceDownloadUrl">A URL at which the driver service executable may be downloaded.</param>
         /// <exception cref="ArgumentException">
         /// If the path specified is <see langword="null"/> or an empty string.
         /// </exception>
         /// <exception cref="DriverServiceNotFoundException">
         /// If the specified driver service executable does not exist in the specified directory.
         /// </exception>
-        protected DriverService(string servicePath, int port, string driverServiceExecutableName, Uri driverServiceDownloadUrl)
+        protected DriverService(string? servicePath, int port, string? driverServiceExecutableName)
         {
-            this.driverServicePath = servicePath;
-            this.driverServiceExecutableName = driverServiceExecutableName;
-            this.driverServicePort = port;
+            this.DriverServicePath = servicePath;
+            this.DriverServiceExecutableName = driverServiceExecutableName;
+            this.Port = port;
         }
 
         /// <summary>
         /// Occurs when the driver process is starting.
         /// </summary>
-        public event EventHandler<DriverProcessStartingEventArgs> DriverProcessStarting;
+        public event EventHandler<DriverProcessStartingEventArgs>? DriverProcessStarting;
 
         /// <summary>
         /// Occurs when the driver process has completely started.
         /// </summary>
-        public event EventHandler<DriverProcessStartedEventArgs> DriverProcessStarted;
+        public event EventHandler<DriverProcessStartedEventArgs>? DriverProcessStarted;
 
         /// <summary>
         /// Gets the Uri of the service.
         /// </summary>
         public Uri ServiceUrl
         {
-            get { return new Uri(string.Format(CultureInfo.InvariantCulture, "http://{0}:{1}", this.driverServiceHostName, this.driverServicePort)); }
+            get
+            {
+                string url = string.Format(CultureInfo.InvariantCulture, "http://{0}:{1}", this.HostName, this.Port);
+                return new Uri(url);
+            }
         }
 
         /// <summary>
@@ -89,48 +88,30 @@ namespace OpenQA.Selenium
         /// (non-local) machines. This property can be used as a workaround so
         /// that an IP address (like "127.0.0.1" or "::1") can be used instead.
         /// </remarks>
-        public string HostName
-        {
-            get { return this.driverServiceHostName; }
-            set { this.driverServiceHostName = value; }
-        }
+        public string HostName { get; set; } = "localhost";
 
         /// <summary>
         /// Gets or sets the port of the service.
         /// </summary>
-        public int Port
-        {
-            get { return this.driverServicePort; }
-            set { this.driverServicePort = value; }
-        }
+        public int Port { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the initial diagnostic information is suppressed
         /// when starting the driver server executable. Defaults to <see langword="false"/>, meaning
         /// diagnostic information should be shown by the driver server executable.
         /// </summary>
-        public bool SuppressInitialDiagnosticInformation
-        {
-            get { return this.silent; }
-            set { this.silent = value; }
-        }
+        public bool SuppressInitialDiagnosticInformation { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the service is running.
         /// </summary>
-        public bool IsRunning
-        {
-            get { return this.driverServiceProcess != null && !this.driverServiceProcess.HasExited; }
-        }
+        [MemberNotNullWhen(true, nameof(driverServiceProcess))]
+        public bool IsRunning => this.driverServiceProcess != null && !this.driverServiceProcess.HasExited;
 
         /// <summary>
         /// Gets or sets a value indicating whether the command prompt window of the service should be hidden.
         /// </summary>
-        public bool HideCommandPromptWindow
-        {
-            get { return this.hideCommandPromptWindow; }
-            set { this.hideCommandPromptWindow = value; }
-        }
+        public bool HideCommandPromptWindow { get; set; }
 
         /// <summary>
         /// Gets the process ID of the running driver service executable. Returns 0 if the process is not running.
@@ -160,54 +141,33 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets a value indicating the time to wait for an initial connection before timing out.
         /// </summary>
-        public TimeSpan InitializationTimeout
-        {
-            get { return this.initializationTimeout; }
-            set { this.initializationTimeout = value; }
-        }
+        public TimeSpan InitializationTimeout { get; set; } = TimeSpan.FromSeconds(20);
 
         /// <summary>
         /// Gets or sets the executable file name of the driver service.
         /// </summary>
-        public string DriverServiceExecutableName
-        {
-            get { return this.driverServiceExecutableName; }
-            set { this.driverServiceExecutableName = value; }
-        }
+        public string? DriverServiceExecutableName { get; set; }
 
         /// <summary>
         /// Gets or sets the path of the driver service.
         /// </summary>
-        public string DriverServicePath
-        {
-            get { return this.driverServicePath; }
-            set { this.driverServicePath = value; }
-        }
+        public string? DriverServicePath { get; set; }
 
         /// <summary>
         /// Gets the command-line arguments for the driver service.
         /// </summary>
-        protected virtual string CommandLineArguments
-        {
-            get { return string.Format(CultureInfo.InvariantCulture, "--port={0}", this.driverServicePort); }
-        }
+        protected virtual string CommandLineArguments => string.Format(CultureInfo.InvariantCulture, "--port={0}", this.Port);
 
         /// <summary>
         /// Gets a value indicating the time to wait for the service to terminate before forcing it to terminate.
         /// </summary>
-        protected virtual TimeSpan TerminationTimeout
-        {
-            get { return TimeSpan.FromSeconds(10); }
-        }
+        protected virtual TimeSpan TerminationTimeout => TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Gets a value indicating whether the service has a shutdown API that can be called to terminate
         /// it gracefully before forcing a termination.
         /// </summary>
-        protected virtual bool HasShutdown
-        {
-            get { return true; }
-        }
+        protected virtual bool HasShutdown => true;
 
         /// <summary>
         /// Gets a value indicating whether the service is responding to HTTP requests.
@@ -217,6 +177,7 @@ namespace OpenQA.Selenium
             get
             {
                 bool isInitialized = false;
+
                 try
                 {
                     using (var httpClient = new HttpClient())
@@ -231,13 +192,13 @@ namespace OpenQA.Selenium
                             // that the HTTP status returned is a 200 status, and that the resposne has the correct
                             // Content-Type header. A more sophisticated check would parse the JSON response and
                             // validate its values. At the moment we do not do this more sophisticated check.
-                            isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType.MediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
+                            isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType is { MediaType: string mediaType } && mediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
                         }
                     }
                 }
                 catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
                 {
-                    Console.WriteLine(ex.Message);
+                    // Do nothing. The exception is expected, meaning driver service is not initialized.
                 }
 
                 return isInitialized;
@@ -256,6 +217,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Starts the DriverService if it is not already running.
         /// </summary>
+        [MemberNotNull(nameof(driverServiceProcess))]
         public void Start()
         {
             if (this.driverServiceProcess != null)
@@ -264,10 +226,24 @@ namespace OpenQA.Selenium
             }
 
             this.driverServiceProcess = new Process();
-            this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.driverServicePath, this.driverServiceExecutableName);
+
+            if (this.DriverServicePath != null)
+            {
+                if (this.DriverServiceExecutableName is null)
+                {
+                    throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                }
+
+                this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+            }
+            else
+            {
+                this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+            }
+
             this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
             this.driverServiceProcess.StartInfo.UseShellExecute = false;
-            this.driverServiceProcess.StartInfo.CreateNoWindow = this.hideCommandPromptWindow;
+            this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
 
             DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
             this.OnDriverProcessStarting(eventArgs);
@@ -279,24 +255,15 @@ namespace OpenQA.Selenium
 
             if (!serviceAvailable)
             {
-                string msg = "Cannot start the driver service on " + this.ServiceUrl;
-                throw new WebDriverException(msg);
+                throw new WebDriverException($"Cannot start the driver service on {this.ServiceUrl}");
             }
         }
 
         /// <summary>
-        /// Finds the specified driver service executable.
+        /// The browser options instance that corresponds to the driver service
         /// </summary>
-        /// <param name="executableName">The file name of the executable to find.</param>
-        /// <param name="downloadUrl">A URL at which the driver service executable may be downloaded.</param>
-        /// <returns>The directory containing the driver service executable.</returns>
-        /// <exception cref="DriverServiceNotFoundException">
-        /// If the specified driver service executable does not exist in the current directory or in a directory on the system path.
-        /// </exception>
-        protected static string FindDriverServiceExecutable(string executableName, Uri downloadUrl)
-        {
-            return FileUtilities.FindFile(executableName);
-        }
+        /// <returns></returns>
+        protected abstract DriverOptions GetDefaultDriverOptions();
 
         /// <summary>
         /// Releases all resources associated with this <see cref="DriverService"/>.
@@ -326,10 +293,7 @@ namespace OpenQA.Selenium
                 throw new ArgumentNullException(nameof(eventArgs), "eventArgs must not be null");
             }
 
-            if (this.DriverProcessStarting != null)
-            {
-                this.DriverProcessStarting(this, eventArgs);
-            }
+            this.DriverProcessStarting?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -343,10 +307,7 @@ namespace OpenQA.Selenium
                 throw new ArgumentNullException(nameof(eventArgs), "eventArgs must not be null");
             }
 
-            if (this.DriverProcessStarted != null)
-            {
-                this.DriverProcessStarted(this, eventArgs);
-            }
+            this.DriverProcessStarted?.Invoke(this, eventArgs);
         }
 
         /// <summary>

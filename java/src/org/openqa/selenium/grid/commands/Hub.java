@@ -42,7 +42,6 @@ import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.grid.TemplateGridServerCommand;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.config.Role;
-import org.openqa.selenium.grid.distributor.Distributor;
 import org.openqa.selenium.grid.distributor.config.DistributorOptions;
 import org.openqa.selenium.grid.distributor.local.LocalDistributor;
 import org.openqa.selenium.grid.graphql.GraphqlHandler;
@@ -57,9 +56,7 @@ import org.openqa.selenium.grid.server.BaseServerOptions;
 import org.openqa.selenium.grid.server.EventBusOptions;
 import org.openqa.selenium.grid.server.NetworkOptions;
 import org.openqa.selenium.grid.server.Server;
-import org.openqa.selenium.grid.sessionmap.SessionMap;
 import org.openqa.selenium.grid.sessionmap.local.LocalSessionMap;
-import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 import org.openqa.selenium.grid.sessionqueue.config.NewSessionQueueOptions;
 import org.openqa.selenium.grid.sessionqueue.local.LocalNewSessionQueue;
 import org.openqa.selenium.grid.web.CombinedHandler;
@@ -120,7 +117,7 @@ public class Hub extends TemplateGridServerCommand {
 
     CombinedHandler handler = new CombinedHandler();
 
-    SessionMap sessions = new LocalSessionMap(tracer, bus);
+    LocalSessionMap sessions = new LocalSessionMap(tracer, bus);
     handler.addHandler(sessions);
 
     BaseServerOptions serverOptions = new BaseServerOptions(config);
@@ -141,17 +138,18 @@ public class Hub extends TemplateGridServerCommand {
 
     DistributorOptions distributorOptions = new DistributorOptions(config);
     NewSessionQueueOptions newSessionRequestOptions = new NewSessionQueueOptions(config);
-    NewSessionQueue queue =
+    LocalNewSessionQueue queue =
         new LocalNewSessionQueue(
             tracer,
             distributorOptions.getSlotMatcher(),
             newSessionRequestOptions.getSessionRequestTimeoutPeriod(),
             newSessionRequestOptions.getSessionRequestTimeout(),
+            newSessionRequestOptions.getMaximumResponseDelay(),
             secret,
             newSessionRequestOptions.getBatchSize());
     handler.addHandler(queue);
 
-    Distributor distributor =
+    LocalDistributor distributor =
         new LocalDistributor(
             tracer,
             bus,
@@ -163,7 +161,9 @@ public class Hub extends TemplateGridServerCommand {
             distributorOptions.getHealthCheckInterval(),
             distributorOptions.shouldRejectUnsupportedCaps(),
             newSessionRequestOptions.getSessionRequestRetryInterval(),
-            distributorOptions.getNewSessionThreadPoolSize());
+            distributorOptions.getNewSessionThreadPoolSize(),
+            distributorOptions.getSlotMatcher(),
+            distributorOptions.getPurgeNodesInterval());
     handler.addHandler(distributor);
 
     Router router = new Router(tracer, clientFactory, sessions, queue, distributor);
@@ -181,20 +181,25 @@ public class Hub extends TemplateGridServerCommand {
 
     Routable routerWithSpecChecks = router.with(networkOptions.getSpecComplianceChecks());
 
-    String subPath = new RouterOptions(config).subPath();
-    Routable ui = new GridUiRoute(subPath);
+    RouterOptions routerOptions = new RouterOptions(config);
+    String subPath = routerOptions.subPath();
 
     Routable appendRoute =
         Stream.of(
-                routerWithSpecChecks,
+                baseRoute(subPath, combine(routerWithSpecChecks)),
                 hubRoute(subPath, combine(routerWithSpecChecks)),
                 graphqlRoute(subPath, () -> graphqlHandler))
             .reduce(Route::combine)
             .get();
-    if (!subPath.isEmpty()) {
-      appendRoute = Route.combine(appendRoute, baseRoute(subPath, combine(routerWithSpecChecks)));
+
+    Routable httpHandler;
+    if (routerOptions.disableUi()) {
+      LOG.info("Grid UI has been disabled.");
+      httpHandler = appendRoute;
+    } else {
+      Routable ui = new GridUiRoute(subPath);
+      httpHandler = combine(ui, appendRoute);
     }
-    Routable httpHandler = combine(ui, appendRoute);
 
     UsernameAndPassword uap = secretOptions.getServerAuthentication();
     if (uap != null) {
@@ -206,7 +211,15 @@ public class Hub extends TemplateGridServerCommand {
     // these checks
     httpHandler = combine(httpHandler, Route.get("/readyz").to(() -> readinessCheck));
 
-    return new Handlers(httpHandler, new ProxyWebsocketsIntoGrid(clientFactory, sessions));
+    return new Handlers(httpHandler, new ProxyWebsocketsIntoGrid(clientFactory, sessions)) {
+      @Override
+      public void close() {
+        router.close();
+        distributor.close();
+        queue.close();
+        bus.close();
+      }
+    };
   }
 
   @Override

@@ -1,10 +1,28 @@
+// <copyright file="EventFiringWebDriverTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using System.Collections.ObjectModel;
-using OpenQA.Selenium.Internal;
-using Moq;
+using System.Text;
 
 namespace OpenQA.Selenium.Support.Events
 {
@@ -22,8 +40,14 @@ namespace OpenQA.Selenium.Support.Events
         public void Setup()
         {
             mockDriver = new Mock<IWebDriver>();
-            mockElement = new Mock<IWebElement>();
-            mockShadowRoot = new Mock<ISearchContext>();
+            mockElement = new Mock<IWebElement>()
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+            mockShadowRoot = new Mock<ISearchContext>()
+            {
+                DefaultValue = DefaultValue.Mock
+            };
             mockNavigation = new Mock<INavigation>();
             log = new StringBuilder();
         }
@@ -59,12 +83,15 @@ Navigated back
 Navigating forward
 Navigated forward
 ";
+            string normalizedExpectedLog = expectedLog.Replace("\r\n", "\n").Replace("\r", "\n");
             mockDriver.VerifySet(x => x.Url = "http://www.get.com", Times.Once);
             mockDriver.Verify(x => x.Navigate(), Times.Exactly(3));
-            mockNavigation.Verify(x => x.GoToUrl("http://www.navigate-to.com"), Times.Once);
-            mockNavigation.Verify(x => x.Back(), Times.Once);
-            mockNavigation.Verify(x => x.Forward(), Times.Once);
-            Assert.AreEqual(expectedLog, log.ToString());
+            mockNavigation.Verify(x => x.GoToUrlAsync("http://www.navigate-to.com"), Times.Once);
+            mockNavigation.Verify(x => x.BackAsync(), Times.Once);
+            mockNavigation.Verify(x => x.ForwardAsync(), Times.Once);
+
+            string normalizedActualLog = log.ToString().Replace("\r\n", "\n").Replace("\r", "\n");
+            Assert.That(normalizedActualLog, Is.EqualTo(normalizedExpectedLog));
         }
 
         [Test]
@@ -82,7 +109,7 @@ Navigated forward
             string expectedLog = @"Clicking
 Clicked
 ";
-            Assert.AreEqual(expectedLog, log.ToString());
+            Assert.That(log.ToString(), Is.EqualTo(expectedLog));
         }
 
         [Test]
@@ -105,7 +132,7 @@ ValueChanged ''
 ValueChanging 'Dummy Text'
 ValueChanged 'Dummy Text'
 ";
-            Assert.AreEqual(expectedLog, log.ToString());
+            Assert.That(log.ToString(), Is.EqualTo(expectedLog));
         }
 
         [Test]
@@ -117,7 +144,7 @@ ValueChanged 'Dummy Text'
             var element1 = firingDriver.FindElement(By.Id("foo"));
             var element2 = firingDriver.FindElement(By.Id("foo"));
 
-            Assert.AreEqual(element1, element2);
+            Assert.That(element2, Is.EqualTo(element1));
         }
 
         [Test]
@@ -151,7 +178,7 @@ FindingElement from IWebDriver By.XPath: //link[@type = 'text/css']
 FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
 ";
 
-            Assert.AreEqual(expectedLog, log.ToString());
+            Assert.That(log.ToString(), Is.EqualTo(expectedLog));
         }
 
         [Test]
@@ -163,17 +190,11 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             EventFiringWebDriver firingDriver = new EventFiringWebDriver(mockDriver.Object);
             firingDriver.ExceptionThrown += new EventHandler<WebDriverExceptionEventArgs>(firingDriver_ExceptionThrown);
 
-            try
-            {
-                firingDriver.FindElement(By.Id("foo"));
-                Assert.Fail("Expected exception to be propogated");
-            }
-            catch (NoSuchElementException)
-            {
-                // Fine
-            }
+            Assert.That(
+                () => firingDriver.FindElement(By.Id("foo")),
+                Throws.InstanceOf<NoSuchElementException>());
 
-            Assert.IsTrue(log.ToString().Contains(exception.Message));
+            Assert.That(log.ToString(), Does.Contain(exception.Message));
         }
 
         [Test]
@@ -190,10 +211,10 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             {
                 testedDriver.ExecuteScript("foo", element);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // This is the error we're trying to fix
-                throw e;
+                throw;
             }
         }
 
@@ -210,7 +231,7 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             stubDriver = new StubDriver();
             EventFiringWebDriver testDriver = new EventFiringWebDriver(stubDriver);
             StubDriver wrapped = ((IWrapsDriver)testDriver).WrappedDriver as StubDriver;
-            Assert.AreEqual(stubDriver, wrapped);
+            Assert.That(wrapped, Is.EqualTo(stubDriver));
             testDriver.Navigating += new EventHandler<WebDriverNavigationEventArgs>(testDriver_Navigating);
 
             testDriver.Url = "http://example.org";
@@ -232,13 +253,13 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             // act
             abcElement.GetShadowRoot();
 
-            Assert.IsNotNull(gettingShadowRootArgs);
-            Assert.AreEqual(mockDriver.Object, gettingShadowRootArgs.Driver);
-            Assert.AreEqual(mockElement.Object, gettingShadowRootArgs.SearchContext);
+            Assert.That(gettingShadowRootArgs, Is.Not.Null);
+            Assert.That(gettingShadowRootArgs.Driver, Is.EqualTo(mockDriver.Object));
+            Assert.That(gettingShadowRootArgs.SearchContext, Is.EqualTo(mockElement.Object));
 
-            Assert.IsNotNull(getShadowRootCompletedArgs);
-            Assert.AreEqual(mockDriver.Object, getShadowRootCompletedArgs.Driver);
-            Assert.AreEqual(mockElement.Object, getShadowRootCompletedArgs.SearchContext);
+            Assert.That(getShadowRootCompletedArgs, Is.Not.Null);
+            Assert.That(getShadowRootCompletedArgs.Driver, Is.EqualTo(mockDriver.Object));
+            Assert.That(getShadowRootCompletedArgs.SearchContext, Is.EqualTo(mockElement.Object));
         }
 
         [Test]
@@ -260,18 +281,18 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             // act
             var element = shadowRoot.FindElement(By.CssSelector(".abc"));
 
-            Assert.IsNotNull(findingElementArgs);
-            Assert.AreEqual(mockDriver.Object, findingElementArgs.Driver);
-            Assert.AreEqual(null, findingElementArgs.Element);
+            Assert.That(findingElementArgs, Is.Not.Null);
+            Assert.That(findingElementArgs.Driver, Is.EqualTo(mockDriver.Object));
+            Assert.That(findingElementArgs.Element, Is.Null);
 
-            Assert.IsNotNull(findElementCompletedArgs);
-            Assert.AreEqual(mockDriver.Object, findElementCompletedArgs.Driver);
-            Assert.AreEqual(null, findElementCompletedArgs.Element);
+            Assert.That(findElementCompletedArgs, Is.Not.Null);
+            Assert.That(findElementCompletedArgs.Driver, Is.EqualTo(mockDriver.Object));
+            Assert.That(findElementCompletedArgs.Element, Is.Null);
         }
 
         void testDriver_Navigating(object sender, WebDriverNavigationEventArgs e)
         {
-            Assert.AreEqual(e.Driver, stubDriver);
+            Assert.That(stubDriver, Is.EqualTo(e.Driver));
         }
 
         void firingDriver_ExceptionThrown(object sender, WebDriverExceptionEventArgs e)

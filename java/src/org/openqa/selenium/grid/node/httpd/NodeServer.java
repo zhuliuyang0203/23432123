@@ -17,7 +17,7 @@
 
 package org.openqa.selenium.grid.node.httpd;
 
-import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAVAILABLE;
 import static org.openqa.selenium.grid.config.StandardGridRoles.EVENT_BUS_ROLE;
 import static org.openqa.selenium.grid.config.StandardGridRoles.HTTPD_ROLE;
@@ -30,8 +30,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.net.MediaType;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -127,13 +131,16 @@ public class NodeServer extends TemplateGridServerCommand {
     HttpHandler readinessCheck =
         req -> {
           if (node.getStatus().hasCapacity()) {
-            return new HttpResponse().setStatus(HTTP_NO_CONTENT);
+            return new HttpResponse()
+                .setStatus(HTTP_OK)
+                .setHeader("Content-Type", MediaType.PLAIN_TEXT_UTF_8.toString())
+                .setContent(Contents.utf8String("Node has capacity available"));
           }
 
           return new HttpResponse()
               .setStatus(HTTP_UNAVAILABLE)
               .setHeader("Content-Type", MediaType.PLAIN_TEXT_UTF_8.toString())
-              .setContent(Contents.utf8String("No capacity available"));
+              .setContent(Contents.utf8String("Node has no capacity available"));
         };
 
     bus.addListener(
@@ -170,7 +177,19 @@ public class NodeServer extends TemplateGridServerCommand {
 
     Route httpHandler = Route.combine(node, get("/readyz").to(() -> readinessCheck));
 
-    return new Handlers(httpHandler, new ProxyNodeWebsockets(clientFactory, node));
+    return new Handlers(
+        httpHandler, new ProxyNodeWebsockets(clientFactory, node, nodeOptions.getGridSubPath())) {
+      @Override
+      public void close() {
+        if (node instanceof Closeable) {
+          try {
+            ((Closeable) node).close();
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        }
+      }
+    };
   }
 
   @Override
@@ -197,30 +216,52 @@ public class NodeServer extends TemplateGridServerCommand {
                 .withMaxDuration(nodeOptions.getRegisterPeriod())
                 .withDelay(nodeOptions.getRegisterCycle())
                 .handleResultIf(result -> true)
+                .onFailure(
+                    event -> {
+                      LOG.severe(
+                          String.format(
+                              "Registration event failed after period of %s seconds. Node will not"
+                                  + " attempt to register again",
+                              nodeOptions.getRegisterPeriod().getSeconds()));
+                      if (nodeOptions.getRegisterShutdownOnFailure()) {
+                        LOG.severe("Shutting down");
+                        System.exit(1);
+                      }
+                    })
                 .build();
 
         LOG.info("Starting registration process for Node " + node.getUri());
-        Executors.newSingleThreadExecutor()
-            .submit(
-                () -> {
-                  Failsafe.with(registrationPolicy)
-                      .run(
-                          () -> {
-                            if (nodeRegistered.get()) {
-                              throw new InterruptedException("Stopping registration thread.");
-                            }
-                            HealthCheck.Result check = node.getHealthCheck().check();
-                            if (DOWN.equals(check.getAvailability())) {
-                              LOG.severe("Node is not alive: " + check.getMessage());
-                              // Throw an exception to force another check sooner.
-                              throw new UnsupportedOperationException("Node cannot be registered");
-                            }
-                            bus.fire(new NodeStatusEvent(node.getStatus()));
-                            LOG.info("Sending registration event...");
-                          });
-                });
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(
+            () -> {
+              Failsafe.with(registrationPolicy)
+                  .run(
+                      () -> {
+                        if (nodeRegistered.get()) {
+                          throw new InterruptedException("Stopping registration thread.");
+                        }
+                        HealthCheck.Result check = node.getHealthCheck().check();
+                        if (DOWN.equals(check.getAvailability())) {
+                          LOG.severe("Node is not alive: " + check.getMessage());
+                          // Throw an exception to force another check sooner.
+                          throw new UnsupportedOperationException("Node cannot be registered");
+                        }
+                        bus.fire(new NodeStatusEvent(node.getStatus()));
+                        LOG.info("Sending registration event...");
+                      });
+            });
+        executor.shutdown();
 
         return this;
+      }
+
+      @Override
+      public void stop() {
+        try {
+          handler.close();
+        } finally {
+          super.stop();
+        }
       }
     };
   }

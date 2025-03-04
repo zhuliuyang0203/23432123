@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,13 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.ExecutableFinder;
 
+/**
+ * A wrapper around Firefox's binary. This allows us to locate the binary in a portable way.
+ *
+ * @deprecated Use {@link FirefoxOptions#setBinary(Path)} or {@link
+ *     FirefoxOptions#setBinary(String)} instead.
+ */
+@Deprecated
 public class FirefoxBinary {
 
   /** Enumerates Firefox channels, according to https://wiki.mozilla.org/RapidRelease */
@@ -45,10 +53,10 @@ public class FirefoxBinary {
     ESR("esr"),
     RELEASE("release"),
     BETA("beta"),
-    AURORA("aurora"),
+    DEV("dev"),
     NIGHTLY("nightly");
 
-    private String name;
+    private final String name;
 
     Channel(String name) {
       this.name = name;
@@ -65,7 +73,7 @@ public class FirefoxBinary {
      * @return the Channel enum value matching the parameter
      */
     public static Channel fromString(String name) {
-      final String lcName = name.toLowerCase();
+      final String lcName = name.toLowerCase(Locale.ENGLISH);
       return stream(Channel.values())
           .filter(ch -> ch.name.equals(lcName))
           .findFirst()
@@ -178,7 +186,7 @@ public class FirefoxBinary {
       if (!binaryName.endsWith(".app")) {
         binaryName += ".app";
       }
-      binaryName += "/Contents/MacOS/firefox-bin";
+      binaryName += "/Contents/MacOS/firefox";
     }
 
     binary = new File(binaryName);
@@ -210,7 +218,7 @@ public class FirefoxBinary {
 
     } else if (current.is(MAC)) {
       // system
-      File binary = new File("/Applications/Firefox.app/Contents/MacOS/firefox-bin");
+      File binary = new File("/Applications/Firefox.app/Contents/MacOS/firefox");
       if (binary.exists()) {
         executables.add(new Executable(binary));
       }
@@ -222,7 +230,7 @@ public class FirefoxBinary {
       }
 
     } else if (current.is(UNIX)) {
-      String systemFirefoxBin = new ExecutableFinder().find("firefox-bin");
+      String systemFirefoxBin = new ExecutableFinder().find("firefox");
       if (systemFirefoxBin != null) {
         executables.add(new Executable(new File(systemFirefoxBin)));
       }
@@ -234,14 +242,9 @@ public class FirefoxBinary {
       if (Files.isSymbolicLink(firefoxPath)) {
         try {
           Path realPath = firefoxPath.toRealPath();
-          File attempt1 = realPath.getParent().resolve("firefox").toFile();
-          if (attempt1.exists()) {
-            executables.add(new Executable(attempt1));
-          } else {
-            File attempt2 = realPath.getParent().resolve("firefox-bin").toFile();
-            if (attempt2.exists()) {
-              executables.add(new Executable(attempt2));
-            }
+          File file = realPath.getParent().resolve("firefox").toFile();
+          if (file.exists()) {
+            executables.add(new Executable(file));
           }
         } catch (IOException e) {
           // ignore this path

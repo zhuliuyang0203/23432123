@@ -181,6 +181,21 @@ const Name = {
 
   ACTIONS: 'actions',
   CLEAR_ACTIONS: 'clearActions',
+
+  GET_DOWNLOADABLE_FILES: 'getDownloadableFiles',
+  DOWNLOAD_FILE: 'downloadFile',
+  DELETE_DOWNLOADABLE_FILES: 'deleteDownloadableFiles',
+
+  // Federated Credential Management API
+  // https://www.w3.org/TR/fedcm/#automation
+  CANCEL_DIALOG: 'cancelDialog',
+  SELECT_ACCOUNT: 'selectAccount',
+  GET_ACCOUNTS: 'getAccounts',
+  GET_FEDCM_TITLE: 'getFedCmTitle',
+  GET_FEDCM_DIALOG_TYPE: 'getFedCmDialogType',
+  SET_DELAY_ENABLED: 'setDelayEnabled',
+  RESET_COOLDOWN: 'resetCooldown',
+  CLICK_DIALOG_BUTTON: 'clickdialogbutton',
 }
 
 /**

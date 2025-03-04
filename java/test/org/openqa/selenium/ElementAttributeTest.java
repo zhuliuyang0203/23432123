@@ -23,11 +23,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.openqa.selenium.testing.drivers.Browser.CHROME;
 import static org.openqa.selenium.testing.drivers.Browser.EDGE;
 import static org.openqa.selenium.testing.drivers.Browser.FIREFOX;
-import static org.openqa.selenium.testing.drivers.Browser.HTMLUNIT;
 import static org.openqa.selenium.testing.drivers.Browser.IE;
 import static org.openqa.selenium.testing.drivers.Browser.SAFARI;
 
 import java.util.List;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.environment.webserver.Page;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -35,6 +35,8 @@ import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NotYetImplemented;
 
 class ElementAttributeTest extends JupiterTestBase {
+
+  private static final Logger LOG = Logger.getLogger(ElementAttributeTest.class.getName());
 
   @Test
   void testShouldReturnNullWhenGettingTheValueOfAnAttributeThatIsNotListed() {
@@ -266,7 +268,7 @@ class ElementAttributeTest extends JupiterTestBase {
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      LOG.severe("Error during execution: " + e.getMessage());
     }
 
     WebElement th1 = driver.findElement(By.id("th1"));
@@ -409,7 +411,6 @@ class ElementAttributeTest extends JupiterTestBase {
   @NotYetImplemented(CHROME)
   @NotYetImplemented(EDGE)
   @NotYetImplemented(FIREFOX)
-  @NotYetImplemented(HTMLUNIT)
   @NotYetImplemented(SAFARI)
   public void shouldTreatDraggableAsEnumeratedButNotBoolean() {
     checkEnumeratedAttribute("draggable", "true", "false", "yes", "no", "", "blabla");

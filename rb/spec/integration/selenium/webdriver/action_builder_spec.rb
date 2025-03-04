@@ -21,7 +21,7 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe ActionBuilder do
+    describe ActionBuilder, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
       after { driver.action.clear_all_actions }
 
       describe '#send_keys' do
@@ -163,7 +163,7 @@ module Selenium
           expect(element.attribute(:value)).to eq('DoubleClicked')
         end
 
-        it 'executes with equivalent pointer methods' do
+        it 'executes with equivalent pointer methods', except: {browser: %i[safari safari_preview]} do
           driver.navigate.to url_for('javascriptPage.html')
           element = driver.find_element(id: 'doubleClickField')
 
@@ -202,10 +202,7 @@ module Selenium
           expect(element.attribute(:value)).to eq('Clicked')
         end
 
-        it 'moves to element with offset', except: {browser: :firefox,
-                                                    ci: :github,
-                                                    platform: :windows,
-                                                    reason: 'Some issues with resolution?'} do
+        it 'moves to element with offset' do
           driver.navigate.to url_for('javascriptPage.html')
           origin = driver.find_element(id: 'keyUpArea')
           destination = driver.find_element(id: 'clickField')
@@ -263,7 +260,8 @@ module Selenium
         end
       end
 
-      describe 'pen stylus', except: {browser: :firefox, reason: 'Unknown pointerType'} do
+      describe 'pen stylus', except: [{browser: :firefox, reason: 'Unknown pointerType'},
+                                      {browser: :safari,  reason: 'Some issues with resolution?'}] do
         it 'sets pointer event properties' do
           driver.navigate.to url_for('pointerActionsPage.html')
           pointer_area = driver.find_element(id: 'pointerArea')
@@ -318,11 +316,8 @@ module Selenium
         end
       end
 
-      describe '#scroll_by', only: {browser: %i[chrome edge firefox]} do
-        it 'scrolls by given amount', except: {browser: :firefox,
-                                               platform: :macosx,
-                                               headless: false,
-                                               reason: 'scrolls insufficient number of pixels'} do
+      describe '#scroll_by' do
+        it 'scrolls by given amount', except: {browser: :firefox, reason: 'returns false on firefox'} do
           driver.navigate.to url_for('scrolling_tests/frame_with_nested_scrolling_frame_out_of_view.html')
           footer = driver.find_element(tag_name: 'footer')
           delta_y = footer.rect.y.round
@@ -334,9 +329,9 @@ module Selenium
         end
       end
 
-      describe '#scroll_from', only: {browser: %i[chrome edge firefox]} do
+      describe '#scroll_from' do
         it 'scrolls from element by given amount',
-           except: {browser: :firefox, reason: 'incorrect MoveTargetOutOfBoundsError'} do
+           except: {browser: %i[firefox safari], reason: 'incorrect MoveTargetOutOfBoundsError'} do
           driver.navigate.to url_for('scrolling_tests/frame_with_nested_scrolling_frame_out_of_view.html')
           iframe = driver.find_element(tag_name: 'iframe')
           scroll_origin = WheelActions::ScrollOrigin.element(iframe)
@@ -350,7 +345,7 @@ module Selenium
         end
 
         it 'scrolls from element by given amount with offset',
-           except: {browser: :firefox, reason: 'incorrect MoveTargetOutOfBoundsError'} do
+           except: {browser: %i[firefox safari], reason: 'incorrect MoveTargetOutOfBoundsError'} do
           driver.navigate.to url_for('scrolling_tests/frame_with_nested_scrolling_frame_out_of_view.html')
           footer = driver.find_element(tag_name: 'footer')
           scroll_origin = WheelActions::ScrollOrigin.element(footer, 0, -50)
@@ -383,11 +378,14 @@ module Selenium
           iframe = driver.find_element(tag_name: 'iframe')
           driver.switch_to.frame(iframe)
           checkbox = driver.find_element(name: 'scroll_checkbox')
-          sleep 0.5
-          expect(in_viewport?(checkbox)).to be true
+
+          expect {
+            wait.until { in_viewport?(checkbox) }
+          }.not_to raise_error
         end
 
-        it 'raises MoveTargetOutOfBoundsError when origin offset is out of viewport' do
+        it 'raises MoveTargetOutOfBoundsError when origin offset is out of viewport',
+           only: {browser: %i[chrome edge firefox]} do
           driver.navigate.to url_for('scrolling_tests/frame_with_nested_scrolling_frame.html')
           scroll_origin = WheelActions::ScrollOrigin.viewport(-10, -10)
 

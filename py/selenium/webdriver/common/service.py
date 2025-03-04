@@ -18,14 +18,19 @@ import errno
 import logging
 import os
 import subprocess
-import typing
-import warnings
 from abc import ABC
 from abc import abstractmethod
+from io import IOBase
 from platform import system
-from subprocess import DEVNULL
 from subprocess import PIPE
 from time import sleep
+from typing import IO
+from typing import Any
+from typing import List
+from typing import Mapping
+from typing import Optional
+from typing import Union
+from typing import cast
 from urllib import request
 from urllib.error import URLError
 
@@ -43,41 +48,36 @@ class Service(ABC):
 
     :param executable: install path of the executable.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
-    :param log_file: (Optional) file descriptor (pos int) or file object with a valid file descriptor.
-        subprocess.PIPE & subprocess.DEVNULL are also valid values.
+    :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
         self,
-        executable: str,
+        executable_path: str = None,
         port: int = 0,
-        log_file: SubprocessStdAlias = None,
         log_output: SubprocessStdAlias = None,
-        env: typing.Optional[typing.Mapping[typing.Any, typing.Any]] = None,
-        start_error_message: typing.Optional[str] = None,
+        env: Optional[Mapping[Any, Any]] = None,
+        driver_path_env_key: str = None,
         **kwargs,
     ) -> None:
         if isinstance(log_output, str):
-            self.log_output = open(log_output, "a+", encoding="utf-8")
-        elif log_output is subprocess.STDOUT:
-            self.log_output = None
-        elif log_output is None or log_output is subprocess.DEVNULL:
-            self.log_output = open(os.devnull, "wb")
+            self.log_output = cast(IOBase, open(log_output, "a+", encoding="utf-8"))
+        elif log_output == subprocess.STDOUT:
+            self.log_output = cast(Optional[Union[int, IOBase]], None)
+        elif log_output is None or log_output == subprocess.DEVNULL:
+            self.log_output = cast(Optional[Union[int, IOBase]], subprocess.DEVNULL)
         else:
             self.log_output = log_output
 
-        if log_file is not None:
-            warnings.warn("log_file has been deprecated, please use log_output", DeprecationWarning, stacklevel=2)
-            self.log_output = open(log_file, "a+", encoding="utf-8")
-
-        self._path = executable
         self.port = port or utils.free_port()
-        self.start_error_message = start_error_message or ""
         # Default value for every python subprocess: subprocess.Popen(..., creationflags=0)
         self.popen_kw = kwargs.pop("popen_kw", {})
         self.creation_flags = self.popen_kw.pop("creation_flags", 0)
         self.env = env or os.environ
+        self.DRIVER_PATH_ENV_KEY = driver_path_env_key
+        self._path = self.env_path() or executable_path
 
     @property
     def service_url(self) -> str:
@@ -85,13 +85,13 @@ class Service(ABC):
         return f"http://{utils.join_host_port('localhost', self.port)}"
 
     @abstractmethod
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         """A List of program arguments (excluding the executable)."""
         raise NotImplementedError("This method needs to be implemented in a sub class")
 
     @property
     def path(self) -> str:
-        return self._path
+        return self._path or ""
 
     @path.setter
     def path(self, value: str) -> None:
@@ -104,6 +104,8 @@ class Service(ABC):
          - WebDriverException : Raised either when it can't start the service
            or when it can't connect to the service
         """
+        if self._path is None:
+            raise WebDriverException("Service path cannot be None.")
         self._start_process(self._path)
 
         count = 0
@@ -111,10 +113,10 @@ class Service(ABC):
             self.assert_process_still_running()
             if self.is_connectable():
                 break
-
+            # sleep increasing: 0.01, 0.06, 0.11, 0.16, 0.21, 0.26, 0.31, 0.36, 0.41, 0.46, 0.5
+            sleep(min(0.01 + 0.05 * count, 0.5))
             count += 1
-            sleep(0.5)
-            if count == 60:
+            if count == 70:
                 raise WebDriverException(f"Can not connect to the Service {self._path}")
 
     def assert_process_still_running(self) -> None:
@@ -143,13 +145,12 @@ class Service(ABC):
 
     def stop(self) -> None:
         """Stops the service."""
-        if self.log_output != PIPE and not (self.log_output == DEVNULL):
-            try:
-                # Todo: Be explicit in what we are catching here.
-                if hasattr(self.log_output, "close"):
-                    self.log_file.close()  # type: ignore
-            except Exception:
-                pass
+
+        if self.log_output not in {PIPE, subprocess.DEVNULL}:
+            if isinstance(self.log_output, IOBase):
+                self.log_output.close()
+            elif isinstance(self.log_output, int):
+                os.close(self.log_output)
 
         if self.process is not None:
             try:
@@ -167,7 +168,11 @@ class Service(ABC):
         silently ignores errors here.
         """
         try:
-            stdin, stdout, stderr = self.process.stdin, self.process.stdout, self.process.stderr
+            stdin, stdout, stderr = (
+                self.process.stdin,
+                self.process.stdout,
+                self.process.stderr,
+            )
             for stream in stdin, stdout, stderr:
                 try:
                     stream.close()  # type: ignore
@@ -176,7 +181,7 @@ class Service(ABC):
             self.process.terminate()
             try:
                 self.process.wait(60)
-            except subprocess.TimeoutError:
+            except subprocess.TimeoutExpired:
                 logger.error(
                     "Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.",
                     exc_info=True,
@@ -205,30 +210,42 @@ class Service(ABC):
         cmd.extend(self.command_line_args())
         close_file_descriptors = self.popen_kw.pop("close_fds", system() != "Windows")
         try:
+            start_info = None
+            if system() == "Windows":
+                start_info = subprocess.STARTUPINFO()  # type: ignore[attr-defined]
+                start_info.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW  # type: ignore[attr-defined]
+                start_info.wShowWindow = subprocess.SW_HIDE  # type: ignore[attr-defined]
+
             self.process = subprocess.Popen(
                 cmd,
                 env=self.env,
                 close_fds=close_file_descriptors,
-                stdout=self.log_output,
-                stderr=self.log_output,
+                stdout=cast(Optional[Union[int, IO[Any]]], self.log_output),
+                stderr=cast(Optional[Union[int, IO[Any]]], self.log_output),
                 stdin=PIPE,
                 creationflags=self.creation_flags,
+                startupinfo=start_info,
                 **self.popen_kw,
             )
-            logger.debug(f"Started executable: `{self._path}` in a child process with pid: {self.process.pid}")
+            logger.debug(
+                "Started executable: `%s` in a child process with pid: %s using %s to output %s",
+                self._path,
+                self.process.pid,
+                self.creation_flags,
+                self.log_output,
+            )
         except TypeError:
             raise
         except OSError as err:
-            if err.errno == errno.ENOENT:
-                raise WebDriverException(
-                    f"'{os.path.basename(self._path)}' executable needs to be in PATH. {self.start_error_message}"
-                )
             if err.errno == errno.EACCES:
+                if self._path is None:
+                    raise WebDriverException("Service path cannot be None.")
                 raise WebDriverException(
-                    f"'{os.path.basename(self._path)}' executable may have wrong permissions. {self.start_error_message}"
-                )
+                    f"'{os.path.basename(self._path)}' executable may have wrong permissions."
+                ) from err
             raise
-        except Exception as e:
-            raise WebDriverException(
-                f"The executable {os.path.basename(self._path)} needs to be available in the path. {self.start_error_message}\n{str(e)}"
-            )
+
+    def env_path(self) -> Optional[str]:
+        if self.DRIVER_PATH_ENV_KEY:
+            return os.getenv(self.DRIVER_PATH_ENV_KEY, None)
+        return None

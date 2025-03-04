@@ -25,7 +25,7 @@
 
 'use strict'
 
-const path = require('path')
+const path = require('node:path')
 const cmd = require('./command')
 const error = require('./error')
 const logging = require('./logging')
@@ -34,18 +34,11 @@ const { Session } = require('./session')
 const webElement = require('./webelement')
 const { isObject } = require('./util')
 
-const getAttribute = requireAtom(
-  'get-attribute.js',
-  '//javascript/node/selenium-webdriver/lib/atoms:get-attribute.js'
-)
-const isDisplayed = requireAtom(
-  'is-displayed.js',
-  '//javascript/node/selenium-webdriver/lib/atoms:is-displayed.js'
-)
-const findElements = requireAtom(
-  'find-elements.js',
-  '//javascript/node/selenium-webdriver/lib/atoms:find-elements.js'
-)
+const log_ = logging.getLogger(`${logging.Type.DRIVER}.http`)
+
+const getAttribute = requireAtom('get-attribute.js', '//javascript/node/selenium-webdriver/lib/atoms:get-attribute.js')
+const isDisplayed = requireAtom('is-displayed.js', '//javascript/node/selenium-webdriver/lib/atoms:is-displayed.js')
+const findElements = requireAtom('find-elements.js', '//javascript/node/selenium-webdriver/lib/atoms:find-elements.js')
 
 /**
  * @param {string} module
@@ -58,14 +51,14 @@ function requireAtom(module, bazelTarget) {
   } catch (ex) {
     try {
       const file = bazelTarget.slice(2).replace(':', '/')
-      console.log(`../../../bazel-bin/${file}`)
+      log_.log(`../../../bazel-bin/${file}`)
       return require(path.resolve(`../../../bazel-bin/${file}`))
     } catch (ex2) {
-      console.log(ex2)
+      log_.severe(ex2)
       throw Error(
         `Failed to import atoms module ${module}. If running in dev mode, you` +
           ` need to run \`bazel build ${bazelTarget}\` from the project` +
-          `root: ${ex}`
+          `root: ${ex}`,
       )
     }
   }
@@ -100,9 +93,7 @@ class Request {
     this.method = /** string */ method
     this.path = /** string */ path
     this.data = /** Object */ opt_data
-    this.headers = /** !Map<string, string> */ new Map([
-      ['Accept', 'application/json; charset=utf-8'],
-    ])
+    this.headers = /** !Map<string, string> */ new Map([['Accept', 'application/json; charset=utf-8']])
   }
 
   /** @override */
@@ -153,26 +144,27 @@ const Atom = {
   FIND_ELEMENTS: findElements,
 }
 
-const LOG = logging.getLogger('webdriver.http')
-
 function post(path) {
   return resource('POST', path)
 }
+
 function del(path) {
   return resource('DELETE', path)
 }
+
 function get(path) {
   return resource('GET', path)
 }
+
 function resource(method, path) {
   return { method: method, path: path }
 }
 
 /** @typedef {{method: string, path: string}} */
-var CommandSpec // eslint-disable-line
+var CommandSpec
 
 /** @typedef {function(!cmd.Command): !cmd.Command} */
-var CommandTransformer // eslint-disable-line
+var CommandTransformer
 
 class InternalTypeError extends TypeError {}
 
@@ -189,13 +181,10 @@ function toExecuteAtomCommand(command, atom, name, ...params) {
 
   return new cmd.Command(cmd.Name.EXECUTE_SCRIPT)
     .setParameter('sessionId', command.getParameter('sessionId'))
-    .setParameter(
-      'script',
-      `/* ${name} */return (${atom}).apply(null, arguments)`
-    )
+    .setParameter('script', `/* ${name} */return (${atom}).apply(null, arguments)`)
     .setParameter(
       'args',
-      params.map((param) => command.getParameter(param))
+      params.map((param) => command.getParameter(param)),
     )
 }
 
@@ -255,69 +244,31 @@ const W3C_COMMAND_MAP = new Map([
   [
     cmd.Name.FIND_ELEMENTS_RELATIVE,
     (cmd) => {
-      return toExecuteAtomCommand(
-        cmd,
-        Atom.FIND_ELEMENTS,
-        'findElements',
-        'args'
-      )
+      return toExecuteAtomCommand(cmd, Atom.FIND_ELEMENTS, 'findElements', 'args')
     },
   ],
-  [
-    cmd.Name.FIND_CHILD_ELEMENT,
-    post('/session/:sessionId/element/:id/element'),
-  ],
-  [
-    cmd.Name.FIND_CHILD_ELEMENTS,
-    post('/session/:sessionId/element/:id/elements'),
-  ],
+  [cmd.Name.FIND_CHILD_ELEMENT, post('/session/:sessionId/element/:id/element')],
+  [cmd.Name.FIND_CHILD_ELEMENTS, post('/session/:sessionId/element/:id/elements')],
   // Element interaction.
   [cmd.Name.GET_ELEMENT_TAG_NAME, get('/session/:sessionId/element/:id/name')],
-  [
-    cmd.Name.GET_DOM_ATTRIBUTE,
-    get('/session/:sessionId/element/:id/attribute/:name'),
-  ],
+  [cmd.Name.GET_DOM_ATTRIBUTE, get('/session/:sessionId/element/:id/attribute/:name')],
   [
     cmd.Name.GET_ELEMENT_ATTRIBUTE,
     (cmd) => {
-      return toExecuteAtomCommand(
-        cmd,
-        Atom.GET_ATTRIBUTE,
-        'getAttribute',
-        'id',
-        'name'
-      )
+      return toExecuteAtomCommand(cmd, Atom.GET_ATTRIBUTE, 'getAttribute', 'id', 'name')
     },
   ],
-  [
-    cmd.Name.GET_ELEMENT_PROPERTY,
-    get('/session/:sessionId/element/:id/property/:name'),
-  ],
-  [
-    cmd.Name.GET_ELEMENT_VALUE_OF_CSS_PROPERTY,
-    get('/session/:sessionId/element/:id/css/:propertyName'),
-  ],
+  [cmd.Name.GET_ELEMENT_PROPERTY, get('/session/:sessionId/element/:id/property/:name')],
+  [cmd.Name.GET_ELEMENT_VALUE_OF_CSS_PROPERTY, get('/session/:sessionId/element/:id/css/:propertyName')],
   [cmd.Name.GET_ELEMENT_RECT, get('/session/:sessionId/element/:id/rect')],
   [cmd.Name.CLEAR_ELEMENT, post('/session/:sessionId/element/:id/clear')],
   [cmd.Name.CLICK_ELEMENT, post('/session/:sessionId/element/:id/click')],
-  [
-    cmd.Name.SEND_KEYS_TO_ELEMENT,
-    post('/session/:sessionId/element/:id/value'),
-  ],
+  [cmd.Name.SEND_KEYS_TO_ELEMENT, post('/session/:sessionId/element/:id/value')],
   [cmd.Name.GET_ELEMENT_TEXT, get('/session/:sessionId/element/:id/text')],
-  [
-    cmd.Name.GET_COMPUTED_ROLE,
-    get('/session/:sessionId/element/:id/computedrole'),
-  ],
-  [
-    cmd.Name.GET_COMPUTED_LABEL,
-    get('/session/:sessionId/element/:id/computedlabel'),
-  ],
+  [cmd.Name.GET_COMPUTED_ROLE, get('/session/:sessionId/element/:id/computedrole')],
+  [cmd.Name.GET_COMPUTED_LABEL, get('/session/:sessionId/element/:id/computedlabel')],
   [cmd.Name.IS_ELEMENT_ENABLED, get('/session/:sessionId/element/:id/enabled')],
-  [
-    cmd.Name.IS_ELEMENT_SELECTED,
-    get('/session/:sessionId/element/:id/selected'),
-  ],
+  [cmd.Name.IS_ELEMENT_SELECTED, get('/session/:sessionId/element/:id/selected')],
 
   [
     cmd.Name.IS_ELEMENT_DISPLAYED,
@@ -341,21 +292,12 @@ const W3C_COMMAND_MAP = new Map([
 
   // Screenshots.
   [cmd.Name.SCREENSHOT, get('/session/:sessionId/screenshot')],
-  [
-    cmd.Name.TAKE_ELEMENT_SCREENSHOT,
-    get('/session/:sessionId/element/:id/screenshot'),
-  ],
+  [cmd.Name.TAKE_ELEMENT_SCREENSHOT, get('/session/:sessionId/element/:id/screenshot')],
 
   // Shadow Root
   [cmd.Name.GET_SHADOW_ROOT, get('/session/:sessionId/element/:id/shadow')],
-  [
-    cmd.Name.FIND_ELEMENT_FROM_SHADOWROOT,
-    post('/session/:sessionId/shadow/:id/element'),
-  ],
-  [
-    cmd.Name.FIND_ELEMENTS_FROM_SHADOWROOT,
-    post('/session/:sessionId/shadow/:id/elements'),
-  ],
+  [cmd.Name.FIND_ELEMENT_FROM_SHADOWROOT, post('/session/:sessionId/shadow/:id/element')],
+  [cmd.Name.FIND_ELEMENTS_FROM_SHADOWROOT, post('/session/:sessionId/shadow/:id/elements')],
   // Log extensions.
   [cmd.Name.GET_LOG, post('/session/:sessionId/se/log')],
   [cmd.Name.GET_AVAILABLE_LOG_TYPES, get('/session/:sessionId/se/log/types')],
@@ -364,42 +306,30 @@ const W3C_COMMAND_MAP = new Map([
   [cmd.Name.UPLOAD_FILE, post('/session/:sessionId/se/file')],
 
   // Virtual Authenticator
-  [
-    cmd.Name.ADD_VIRTUAL_AUTHENTICATOR,
-    post('/session/:sessionId/webauthn/authenticator'),
-  ],
-  [
-    cmd.Name.REMOVE_VIRTUAL_AUTHENTICATOR,
-    del('/session/:sessionId/webauthn/authenticator/:authenticatorId'),
-  ],
-  [
-    cmd.Name.ADD_CREDENTIAL,
-    post(
-      '/session/:sessionId/webauthn/authenticator/:authenticatorId/credential'
-    ),
-  ],
-  [
-    cmd.Name.GET_CREDENTIALS,
-    get(
-      '/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials'
-    ),
-  ],
+  [cmd.Name.ADD_VIRTUAL_AUTHENTICATOR, post('/session/:sessionId/webauthn/authenticator')],
+  [cmd.Name.REMOVE_VIRTUAL_AUTHENTICATOR, del('/session/:sessionId/webauthn/authenticator/:authenticatorId')],
+  [cmd.Name.ADD_CREDENTIAL, post('/session/:sessionId/webauthn/authenticator/:authenticatorId/credential')],
+  [cmd.Name.GET_CREDENTIALS, get('/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials')],
   [
     cmd.Name.REMOVE_CREDENTIAL,
-    del(
-      '/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials/:credentialId'
-    ),
+    del('/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials/:credentialId'),
   ],
-  [
-    cmd.Name.REMOVE_ALL_CREDENTIALS,
-    del(
-      '/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials'
-    ),
-  ],
-  [
-    cmd.Name.SET_USER_VERIFIED,
-    post('/session/:sessionId/webauthn/authenticator/:authenticatorId/uv'),
-  ],
+  [cmd.Name.REMOVE_ALL_CREDENTIALS, del('/session/:sessionId/webauthn/authenticator/:authenticatorId/credentials')],
+  [cmd.Name.SET_USER_VERIFIED, post('/session/:sessionId/webauthn/authenticator/:authenticatorId/uv')],
+
+  [cmd.Name.GET_DOWNLOADABLE_FILES, get('/session/:sessionId/se/files')],
+  [cmd.Name.DOWNLOAD_FILE, post(`/session/:sessionId/se/files`)],
+  [cmd.Name.DELETE_DOWNLOADABLE_FILES, del(`/session/:sessionId/se/files`)],
+
+  // Federated Credential Management Command
+  [cmd.Name.CANCEL_DIALOG, post(`/session/:sessionId/fedcm/canceldialog`)],
+  [cmd.Name.SELECT_ACCOUNT, post(`/session/:sessionId/fedcm/selectaccount`)],
+  [cmd.Name.GET_FEDCM_TITLE, get(`/session/:sessionId/fedcm/gettitle`)],
+  [cmd.Name.GET_FEDCM_DIALOG_TYPE, get('/session/:sessionId/fedcm/getdialogtype')],
+  [cmd.Name.SET_DELAY_ENABLED, post(`/session/:sessionId/fedcm/setdelayenabled`)],
+  [cmd.Name.RESET_COOLDOWN, post(`/session/:sessionId/fedcm/resetcooldown`)],
+  [cmd.Name.CLICK_DIALOG_BUTTON, post(`/session/:sessionId/fedcm/clickdialogbutton`)],
+  [cmd.Name.GET_ACCOUNTS, get(`/session/:sessionId/fedcm/accountlist`)],
 ])
 
 /**
@@ -417,7 +347,7 @@ class Client {
    * @return {!Promise<Response>} A promise that will be fulfilled with the
    *     server's response.
    */
-  send(httpRequest) {} // eslint-disable-line
+  send(httpRequest) {}
 }
 
 /**
@@ -428,7 +358,7 @@ class Client {
  *     command to execute.
  */
 function buildRequest(customCommands, command) {
-  LOG.finest(() => `Translating command: ${command.getName()}`)
+  log_.finest(() => `Translating command: ${command.getName()}`)
   let spec = customCommands && customCommands.get(command.getName())
   if (spec) {
     return toHttpRequest(spec)
@@ -436,30 +366,27 @@ function buildRequest(customCommands, command) {
 
   spec = W3C_COMMAND_MAP.get(command.getName())
   if (typeof spec === 'function') {
-    LOG.finest(() => `Transforming command for W3C: ${command.getName()}`)
+    log_.finest(() => `Transforming command for W3C: ${command.getName()}`)
     let newCommand = spec(command)
     return buildRequest(customCommands, newCommand)
   } else if (spec) {
     return toHttpRequest(spec)
   }
-  throw new error.UnknownCommandError(
-    'Unrecognized command: ' + command.getName()
-  )
+  throw new error.UnknownCommandError('Unrecognized command: ' + command.getName())
 
   /**
    * @param {CommandSpec} resource
    * @return {!Request}
    */
   function toHttpRequest(resource) {
-    LOG.finest(() => `Building HTTP request: ${JSON.stringify(resource)}`)
+    log_.finest(() => `Building HTTP request: ${JSON.stringify(resource)}`)
     let parameters = command.getParameters()
     let path = buildPath(resource.path, parameters)
     return new Request(resource.method, path, parameters)
   }
 }
 
-const CLIENTS =
-  /** !WeakMap<!Executor, !(Client|IThenable<!Client>)> */ new WeakMap()
+const CLIENTS = /** !WeakMap<!Executor, !(Client|IThenable<!Client>)> */ new WeakMap()
 
 /**
  * A command executor that communicates with the server using JSON over HTTP.
@@ -487,7 +414,7 @@ class Executor {
     this.customCommands_ = null
 
     /** @private {!logging.Logger} */
-    this.log_ = logging.getLogger('webdriver.http.Executor')
+    this.log_ = logging.getLogger(`${logging.Type.DRIVER}.http.Executor`)
   }
 
   /**
@@ -530,9 +457,7 @@ class Executor {
 
     if (command.getName() === cmd.Name.NEW_SESSION) {
       if (!value || !value.sessionId) {
-        throw new error.WebDriverError(
-          `Unable to parse new session response: ${response.body}`
-        )
+        throw new error.WebDriverError(`Unable to parse new session response: ${response.body}`)
       }
 
       // The remote end is a W3C compliant server if there is no `status`
@@ -543,10 +468,7 @@ class Executor {
 
       // No implementations use the `capabilities` key yet...
       let capabilities = value.capabilities || value.value
-      return new Session(
-        /** @type {{sessionId: string}} */ (value).sessionId,
-        capabilities
-      )
+      return new Session(/** @type {{sessionId: string}} */ (value).sessionId, capabilities)
     }
 
     return typeof value === 'undefined' ? null : value
@@ -560,6 +482,7 @@ class Executor {
 function tryParse(str) {
   try {
     return JSON.parse(str)
+    /*eslint no-unused-vars: "off"*/
   } catch (ignored) {
     // Do nothing.
   }
@@ -645,9 +568,7 @@ function buildPath(path, parameters) {
         path = path.replace(pathParameters[i], '/' + value)
         delete parameters[key]
       } else {
-        throw new error.InvalidArgumentError(
-          'Missing required parameter: ' + key
-        )
+        throw new error.InvalidArgumentError('Missing required parameter: ' + key)
       }
     }
   }

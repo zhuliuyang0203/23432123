@@ -20,14 +20,12 @@ import static org.openqa.selenium.edge.EdgeOptions.WEBVIEW2_BROWSER_NAME;
 import static org.openqa.selenium.remote.Browser.EDGE;
 
 import com.google.auto.service.AutoService;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebDriverInfo;
 import org.openqa.selenium.chromium.ChromiumDriverInfo;
 import org.openqa.selenium.remote.CapabilityType;
@@ -35,6 +33,7 @@ import org.openqa.selenium.remote.service.DriverFinder;
 
 @AutoService(WebDriverInfo.class)
 public class EdgeDriverInfo extends ChromiumDriverInfo {
+  private static final Logger LOG = Logger.getLogger(EdgeDriverInfo.class.getName());
 
   @Override
   public String getDisplayName() {
@@ -43,17 +42,6 @@ public class EdgeDriverInfo extends ChromiumDriverInfo {
 
   @Override
   public Capabilities getCanonicalCapabilities() {
-    if (!"jdk-http-client".equalsIgnoreCase(System.getProperty("webdriver.http.factory", ""))) {
-      // Allowing any origin "*" through remote-allow-origins might sound risky but an attacker
-      // would need to know the port used to start DevTools to establish a connection. Given
-      // these sessions are relatively short-lived, the risk is reduced. Only set when the Java
-      // 11 client is not used.
-      return new ImmutableCapabilities(
-          CapabilityType.BROWSER_NAME,
-          EDGE.browserName(),
-          EdgeOptions.CAPABILITY,
-          ImmutableMap.of("args", ImmutableList.of("--remote-allow-origins=*")));
-    }
     return new ImmutableCapabilities(CapabilityType.BROWSER_NAME, EDGE.browserName());
   }
 
@@ -72,27 +60,19 @@ public class EdgeDriverInfo extends ChromiumDriverInfo {
 
   @Override
   public boolean isSupportingBiDi() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isAvailable() {
-    try {
-      DriverFinder.getPath(EdgeDriverService.createDefaultService(), getCanonicalCapabilities());
-      return true;
-    } catch (IllegalStateException | WebDriverException e) {
-      return false;
-    }
+    return new DriverFinder(EdgeDriverService.createDefaultService(), getCanonicalCapabilities())
+        .isAvailable();
   }
 
   @Override
   public boolean isPresent() {
-    return EdgeDriverService.isPresent();
-  }
-
-  @Override
-  public int getMaximumSimultaneousSessions() {
-    return Runtime.getRuntime().availableProcessors();
+    return new DriverFinder(EdgeDriverService.createDefaultService(), getCanonicalCapabilities())
+        .isPresent();
   }
 
   @Override

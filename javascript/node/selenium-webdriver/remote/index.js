@@ -17,8 +17,7 @@
 
 'use strict'
 
-const fs = require('fs')
-const url = require('url')
+const url = require('node:url')
 
 const httpUtil = require('../http/util')
 const io = require('../io')
@@ -121,7 +120,7 @@ class DriverService {
    */
   constructor(executable, options) {
     /** @private @const */
-    this.log_ = logging.getLogger('webdriver.DriverService')
+    this.log_ = logging.getLogger(`${logging.Type.DRIVER}.DriverService`)
     /** @private {string} */
     this.executable_ = executable
 
@@ -243,9 +242,7 @@ class DriverService {
 
             let hostname = self.hostname_
             if (!hostname) {
-              hostname =
-                (!self.loopbackOnly_ && net.getAddress()) ||
-                net.getLoopbackAddress()
+              hostname = (!self.loopbackOnly_ && net.getAddress()) || net.getLoopbackAddress()
             }
 
             const serverUrl = url.format({
@@ -256,9 +253,7 @@ class DriverService {
             })
 
             return new Promise((fulfill, reject) => {
-              let cancelToken = earlyTermination.catch((e) =>
-                reject(Error(e.message))
-              )
+              let cancelToken = earlyTermination.catch((e) => reject(Error(e.message)))
 
               httpUtil.waitForServer(serverUrl, timeout, cancelToken).then(
                 (_) => fulfill(serverUrl),
@@ -268,11 +263,11 @@ class DriverService {
                   } else {
                     reject(err)
                   }
-                }
+                },
               )
             })
           })
-        })
+        }),
       )
     })
 
@@ -303,9 +298,7 @@ class DriverService {
  */
 function resolveCommandLineFlags(args) {
   // Resolve the outer array, then the individual flags.
-  return Promise.resolve(args).then(
-    /** !Array<CommandLineFlag> */ (args) => Promise.all(args)
-  )
+  return Promise.resolve(args).then(/** !Array<CommandLineFlag> */ (args) => Promise.all(args))
 }
 
 /**
@@ -479,18 +472,12 @@ class SeleniumServer extends DriverService {
     }
 
     let port = options.port || portprober.findFreePort()
-    let args = Promise.all([
-      port,
-      options.jvmArgs || [],
-      options.args || [],
-    ]).then((resolved) => {
+    let args = Promise.all([port, options.jvmArgs || [], options.args || []]).then((resolved) => {
       let port = resolved[0]
       let jvmArgs = resolved[1]
       let args = resolved[2]
 
-      const fullArgsList = jvmArgs
-        .concat('-jar', jar, '-port', port)
-        .concat(args)
+      const fullArgsList = jvmArgs.concat('-jar', jar, '-port', port).concat(args)
 
       return formatSpawnArgs(jar, fullArgsList)
     })
@@ -609,10 +596,7 @@ class FileDetector extends input.FileDetector {
           .then(() => zip.toBuffer())
           .then((buf) => buf.toString('base64'))
           .then((encodedZip) => {
-            let command = new cmd.Command(cmd.Name.UPLOAD_FILE).setParameter(
-              'file',
-              encodedZip
-            )
+            let command = new cmd.Command(cmd.Name.UPLOAD_FILE).setParameter('file', encodedZip)
             return driver.execute(command)
           })
       },
@@ -621,7 +605,7 @@ class FileDetector extends input.FileDetector {
           return file // Not a file; return original input.
         }
         throw err
-      }
+      },
     )
   }
 }

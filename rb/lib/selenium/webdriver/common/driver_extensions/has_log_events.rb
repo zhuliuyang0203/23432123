@@ -57,6 +57,13 @@ module Selenium
         #
 
         def on_log_event(kind, &block)
+          if browser == :firefox
+            WebDriver.logger.deprecate(
+              'Driver#on_log_event on Firefox',
+              'the script.add_console_message_handler or the script.add_javascript_error_handler methods',
+              id: :on_log_event
+            )
+          end
           raise Error::WebDriverError, "Don't know how to handle #{kind} events" unless KINDS.include?(kind)
 
           enabled = log_listeners[kind].any?
@@ -64,7 +71,7 @@ module Selenium
           return if enabled
 
           devtools.runtime.enable
-          __send__("log_#{kind}_events")
+          __send__(:"log_#{kind}_events")
         end
 
         private

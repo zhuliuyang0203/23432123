@@ -19,8 +19,8 @@
 
 //const build = require('./build')
 const fileserver = require('./fileserver')
-const logging = require('../../lib/logging')
-const testing = require('../../testing')
+const logging = require('selenium-webdriver/lib/logging')
+const testing = require('selenium-webdriver/testing')
 
 //const NO_BUILD = /^1|true$/i.test(process.env['SELENIUM_NO_BUILD'])
 
@@ -55,7 +55,7 @@ process.on('unhandledRejection', (reason) => {
 
 if (/^1|true$/i.test(process.env['SELENIUM_VERBOSE'])) {
   logging.installConsoleHandler()
-  logging.getLogger('webdriver.http').setLevel(logging.Level.ALL)
+  logging.getLogger(`${logging.Type.DRIVER}.http`).setLevel(logging.Level.ALL)
 }
 
 testing.init()

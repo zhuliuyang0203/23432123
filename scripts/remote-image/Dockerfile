@@ -1,5 +1,5 @@
 # Our images must be for Linux x86_64
-FROM --platform=linux/amd64 ubuntu:focal@sha256:3626dff0d616e8ee7065a9ac8c7117e904a4178725385910eeecd7f1872fc12d
+FROM --platform=linux/amd64 ubuntu:focal@sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
 
 ENV DEBIAN_FRONTEND=noninteractive
 

@@ -17,7 +17,6 @@
 
 package org.openqa.selenium.remote.tracing.opentelemetry;
 
-import com.google.common.collect.ImmutableSet;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.StatusCode;
@@ -32,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.json.Json;
@@ -41,9 +41,11 @@ import org.openqa.selenium.remote.tracing.Span;
 public class SeleniumSpanExporter {
 
   private static final Logger LOG = Logger.getLogger(SeleniumSpanExporter.class.getName());
-  private static final ImmutableSet<String> EXCEPTION_ATTRIBUTES =
-      ImmutableSet.of("exception.message", "exception.stacktrace");
+  private static final Set<String> EXCEPTION_ATTRIBUTES =
+      Set.of("exception.message", "exception.stacktrace");
   private static final boolean httpLogs = OpenTelemetryTracer.getHttpLogs();
+  private static final AttributeKey<String> KEY_SPAN_KIND =
+      AttributeKey.stringKey(org.openqa.selenium.remote.tracing.AttributeKey.SPAN_KIND.getKey());
 
   private static String getJsonString(Map<String, Object> map) {
     StringBuilder text = new StringBuilder();
@@ -61,13 +63,18 @@ public class SeleniumSpanExporter {
           public CompletableResultCode export(Collection<SpanData> spans) {
             spans.forEach(
                 span -> {
-                  LOG.fine(String.valueOf(span));
-
-                  String traceId = span.getTraceId();
-                  List<EventData> eventList = span.getEvents();
+                  if (LOG.isLoggable(Level.FINE)) {
+                    LOG.fine(String.valueOf(span));
+                  }
 
                   Level logLevel = getLogLevel(span);
 
+                  if (!LOG.isLoggable(logLevel)) {
+                    return;
+                  }
+
+                  String traceId = span.getTraceId();
+                  List<EventData> eventList = span.getEvents();
                   eventList.forEach(
                       event -> {
                         Map<String, Object> map = new HashMap<>();
@@ -111,17 +118,12 @@ public class SeleniumSpanExporter {
   private static Level getLogLevel(SpanData span) {
     Level level = Level.FINE;
 
-    Optional<String> kind =
-        Optional.ofNullable(
-            span.getAttributes()
-                .get(
-                    AttributeKey.stringKey(
-                        org.openqa.selenium.remote.tracing.AttributeKey.SPAN_KIND.getKey())));
-
     if (span.getStatus().getStatusCode() == StatusCode.ERROR) {
       level = Level.WARNING;
-    } else {
-      if (httpLogs && kind.isPresent()) {
+    } else if (httpLogs) {
+      Optional<String> kind = Optional.ofNullable(span.getAttributes().get(KEY_SPAN_KIND));
+
+      if (kind.isPresent()) {
         String kindValue = kind.get();
         if (Span.Kind.SERVER.name().equalsIgnoreCase(kindValue)
             || Span.Kind.CLIENT.name().equalsIgnoreCase(kindValue)) {

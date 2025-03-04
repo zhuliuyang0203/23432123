@@ -52,6 +52,18 @@ module Selenium
         @callbacks ||= Hash.new { |callbacks, event| callbacks[event] = [] }
       end
 
+      def add_callback(event, &block)
+        callbacks[event] << block
+        block.object_id
+      end
+
+      def remove_callback(event, id)
+        return if callbacks[event].reject! { |callback| callback.object_id == id }
+
+        ids = callbacks[event]&.map(&:object_id)
+        raise Error::WebDriverError, "Callback with ID #{id} does not exist for event #{event}: #{ids}"
+      end
+
       def send_cmd(**payload)
         id = next_id
         data = payload.merge(id: id)
@@ -129,7 +141,7 @@ module Selenium
           Thread.current.report_on_exception = true
 
           yield params
-        rescue *CONNECTION_ERRORS
+        rescue Error::WebDriverError, *CONNECTION_ERRORS
           Thread.stop
         end
       end

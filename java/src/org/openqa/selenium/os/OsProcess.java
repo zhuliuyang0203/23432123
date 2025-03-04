@@ -44,6 +44,7 @@ import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.io.CircularOutputStream;
 import org.openqa.selenium.io.MultiOutputStream;
 
+@Deprecated
 class OsProcess {
   private static final Logger LOG = Logger.getLogger(OsProcess.class.getName());
 
@@ -53,7 +54,8 @@ class OsProcess {
   private final Executor executor = new DaemonExecutor();
 
   private volatile OutputStream drainTo;
-  private SeleniumWatchDog executeWatchdog = new SeleniumWatchDog(ExecuteWatchdog.INFINITE_TIMEOUT);
+  private final SeleniumWatchDog executeWatchdog =
+      new SeleniumWatchDog(ExecuteWatchdog.INFINITE_TIMEOUT);
   private PumpStreamHandler streamHandler;
 
   private final org.apache.commons.exec.CommandLine cl;

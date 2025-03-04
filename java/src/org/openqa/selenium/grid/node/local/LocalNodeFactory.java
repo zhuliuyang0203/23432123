@@ -25,9 +25,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
-import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.grid.config.Config;
-import org.openqa.selenium.grid.data.DefaultSlotMatcher;
 import org.openqa.selenium.grid.data.SlotMatcher;
 import org.openqa.selenium.grid.log.LoggingOptions;
 import org.openqa.selenium.grid.node.Node;
@@ -71,14 +70,22 @@ public class LocalNodeFactory {
             .enableCdp(nodeOptions.isCdpEnabled())
             .enableBiDi(nodeOptions.isBiDiEnabled())
             .enableManagedDownloads(nodeOptions.isManagedDownloadsEnabled())
-            .heartbeatPeriod(nodeOptions.getHeartbeatPeriod());
+            .heartbeatPeriod(nodeOptions.getHeartbeatPeriod())
+            .connectionLimitPerSession(nodeOptions.getConnectionLimitPerSession());
 
     List<DriverService.Builder<?, ?>> builders = new ArrayList<>();
     ServiceLoader.load(DriverService.Builder.class).forEach(builders::add);
 
     nodeOptions
         .getSessionFactories(
-            caps -> createSessionFactory(tracer, clientFactory, sessionTimeout, builders, caps))
+            caps ->
+                createSessionFactory(
+                    tracer,
+                    clientFactory,
+                    sessionTimeout,
+                    builders,
+                    caps,
+                    nodeOptions.getSlotMatcher()))
         .forEach((caps, factories) -> factories.forEach(factory -> builder.add(caps, factory)));
 
     if (config.getAll("docker", "configs").isPresent()) {
@@ -101,9 +108,9 @@ public class LocalNodeFactory {
       HttpClient.Factory clientFactory,
       Duration sessionTimeout,
       List<DriverService.Builder<?, ?>> builders,
-      Capabilities stereotype) {
+      ImmutableCapabilities stereotype,
+      SlotMatcher slotMatcher) {
     ImmutableList.Builder<SessionFactory> toReturn = ImmutableList.builder();
-    SlotMatcher slotMatcher = new DefaultSlotMatcher();
     String webDriverExecutablePath =
         String.valueOf(stereotype.asMap().getOrDefault("se:webDriverExecutable", ""));
 

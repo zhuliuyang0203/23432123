@@ -1,5 +1,5 @@
+load("//java:defs.bzl", "artifact", "java_dist_zip", "java_export", "java_import", "javadoc")
 load("//java:version.bzl", "SE_VERSION")
-load("//java:defs.bzl", "java_dist_zip", "java_export", "java_import", "javadoc")
 load("//java/src/org/openqa/selenium/devtools:versions.bzl", "CDP_DEPS")
 
 filegroup(
@@ -12,11 +12,11 @@ java_export(
     name = "core",
     srcs = glob([
         "*.java",
+        "federatedcredentialmanagement/*.java",
         "html5/*.java",
         "internal/*.java",
         "interactions/**/*.java",
         "logging/**/*.java",
-        "mobile/*.java",
         "net/*.java",
         "virtualauthenticator/*.java",
         "print/*.java",
@@ -26,13 +26,16 @@ java_export(
     ],
     maven_coordinates = "org.seleniumhq.selenium:selenium-api:%s" % SE_VERSION,
     opens_to = [
-        "org.openqa.selenium.json",
+        "org.seleniumhq.selenium.json",
     ],
     pom_template = ":template-pom",
+    tags = [
+        "release-artifact",
+    ],
     visibility = ["//visibility:public"],
     deps = [
-        # Nothing from third party
         ":manifest",
+        artifact("org.jspecify:jspecify"),
     ],
 )
 
@@ -40,6 +43,9 @@ java_export(
     name = "client-combined",
     maven_coordinates = "org.seleniumhq.selenium:selenium-java:" + SE_VERSION,
     pom_template = ":template-pom",
+    tags = [
+        "release-artifact",
+    ],
     visibility = [
         "//visibility:public",
     ],
@@ -73,7 +79,7 @@ java_dist_zip(
 javadoc(
     name = "client-javadoc",
     third_party_prefixes = [
-        "@maven//",
+        "@",
         "//third_party",
     ] + CDP_DEPS,
     transitive = True,

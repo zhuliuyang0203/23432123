@@ -103,7 +103,7 @@ module Selenium
       #
       # @param [Array, Symbol] ids
       #
-      def allow(ids)
+      def allow(*ids)
         @allowed += Array(ids).flatten
       end
 
@@ -112,7 +112,7 @@ module Selenium
       # Overrides default #debug to skip ignored messages by provided id
       #
       # @param [String] message
-      # @param [Symbol, Array<Sybmol>] id
+      # @param [Symbol, Array<Symbol>] id
       # @yield see #deprecate
       #
       def debug(message, id: [], &block)
@@ -123,7 +123,7 @@ module Selenium
       # Used to supply information of general interest
       #
       # @param [String] message
-      # @param [Symbol, Array<Sybmol>] id
+      # @param [Symbol, Array<Symbol>] id
       # @yield see #deprecate
       #
       def info(message, id: [], &block)
@@ -134,7 +134,7 @@ module Selenium
       # Used to supply information that suggests an error occurred
       #
       # @param [String] message
-      # @param [Symbol, Array<Sybmol>] id
+      # @param [Symbol, Array<Symbol>] id
       # @yield see #deprecate
       #
       def error(message, id: [], &block)
@@ -145,7 +145,7 @@ module Selenium
       # Used to supply information that suggests action be taken by user
       #
       # @param [String] message
-      # @param [Symbol, Array<Sybmol>] id
+      # @param [Symbol, Array<Symbol>] id
       # @yield see #deprecate
       #
       def warn(message, id: [], &block)
@@ -167,7 +167,7 @@ module Selenium
 
         id << :deprecations if @allowed.include?(:deprecations)
 
-        message = +"[DEPRECATION] #{old} is deprecated"
+        message = "[DEPRECATION] #{old} is deprecated"
         message << if new
                      ". Use #{new} instead."
                    else
@@ -181,11 +181,11 @@ module Selenium
       private
 
       def create_logger(name, level:)
-        logger = ::Logger.new($stdout)
+        logger = ::Logger.new($stderr)
         logger.progname = name
         logger.level = level
         logger.formatter = proc do |severity, time, progname, msg|
-          "#{time.strftime('%F %T')} #{severity} #{progname} #{msg}\n"
+          "#{time.strftime('%F %T')} #{severity} #{progname} #{msg}\n".force_encoding('UTF-8')
         end
 
         logger
@@ -193,8 +193,8 @@ module Selenium
 
       def discard_or_log(level, message, id)
         id = Array(id)
-        return if (@ignored & id).any?
-        return if @allowed.any? && (@allowed & id).none?
+        return if @ignored.intersect?(id)
+        return if @allowed.any? && !@allowed.intersect?(id)
 
         return if ::Logger::Severity.const_get(level.upcase) < @logger.level
 

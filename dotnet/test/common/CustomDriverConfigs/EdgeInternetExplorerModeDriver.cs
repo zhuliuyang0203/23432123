@@ -1,4 +1,21 @@
-using OpenQA.Selenium.Remote;
+// <copyright file="EdgeInternetExplorerModeDriver.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
 
 namespace OpenQA.Selenium.IE
 {
@@ -6,10 +23,15 @@ namespace OpenQA.Selenium.IE
     // uses the enables RequireWindowFocus as the default input simplation.
     public class EdgeInternetExplorerModeDriver : InternetExplorerDriver
     {
-        private static string servicePath = string.Empty;
 
-        public EdgeInternetExplorerModeDriver(InternetExplorerDriverService service)
-            : this(service, DefaultOptions)
+        public EdgeInternetExplorerModeDriver()
+            : base(DefaultOptions)
+        {
+        }
+
+        // Required for dynamic setting with `EnvironmentManager.Instance.CreateDriverInstance(options)`
+        public EdgeInternetExplorerModeDriver(InternetExplorerOptions options)
+            : base(options)
         {
         }
 
@@ -18,38 +40,9 @@ namespace OpenQA.Selenium.IE
         {
         }
 
-        public static string ServicePath
-        {
-            get { return servicePath; }
-            set { servicePath = value; }
-        }
-
-        public static InternetExplorerDriverService DefaultService
-        {
-            get
-            {
-                InternetExplorerDriverService service;
-                if (string.IsNullOrEmpty(servicePath))
-                {
-                   service = InternetExplorerDriverService.CreateDefaultService();
-                }
-                else
-                {
-                    service = InternetExplorerDriverService.CreateDefaultService(servicePath);
-                }
-
-                // For debugging purposes, one can uncomment the following lines
-                // to generate a log from the driver executable. Please do not
-                // commit changes to this file with these lines uncommented.
-                // service.LogFile = @"iedriver.log";
-                // service.LoggingLevel = InternetExplorerDriverLogLevel.Debug;
-                return service;
-            }
-        }
-
         public static InternetExplorerOptions DefaultOptions
         {
-            get { return new InternetExplorerOptions() { RequireWindowFocus = true, UsePerProcessProxy = true, AttachToEdgeChrome = true, EdgeExecutablePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" }; }
+            get { return new InternetExplorerOptions() { RequireWindowFocus = true, UsePerProcessProxy = true, AttachToEdgeChrome = true }; }
         }
     }
 }

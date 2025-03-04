@@ -25,10 +25,7 @@ if os.name != "nt":
 
     def get_interface_ip(ifname):
         def _bytes(value, encoding):
-            try:
-                return bytes(value, encoding)  # Python 3
-            except TypeError:
-                return value  # Python 2
+            return bytes(value, encoding)
 
         sckt = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         return socket.inet_ntoa(
@@ -54,6 +51,11 @@ def get_lan_ip():
             "en2",
             "en3",
             "en4",
+            "eno0",
+            "eno1",
+            "eno2",
+            "eno3",
+            "eno4",
             "wlan0",
             "wlan1",
             "wifi0",

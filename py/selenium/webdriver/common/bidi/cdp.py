@@ -30,18 +30,23 @@ import itertools
 import json
 import logging
 import pathlib
-import typing
 from collections import defaultdict
 from contextlib import asynccontextmanager
 from contextlib import contextmanager
 from dataclasses import dataclass
+from typing import Any
+from typing import AsyncGenerator
+from typing import AsyncIterator
+from typing import Generator
+from typing import Type
+from typing import TypeVar
 
 import trio
 from trio_websocket import ConnectionClosed as WsConnectionClosed
 from trio_websocket import connect_websocket_url
 
 logger = logging.getLogger("trio_cdp")
-T = typing.TypeVar("T")
+T = TypeVar("T")
 MAX_WS_MESSAGE_SIZE = 2**24
 
 devtools = None
@@ -65,7 +70,7 @@ def import_devtools(ver):
         versions = tuple(f.name for f in devtools_path.iterdir() if f.is_dir())
         latest = max(int(x[1:]) for x in versions)
         selenium_logger = logging.getLogger(__name__)
-        selenium_logger.debug(f"Falling back to loading `devtools`: v{latest}")
+        selenium_logger.debug("Falling back to loading `devtools`: v%s", latest)
         devtools = importlib.import_module(f"{base}{latest}")
         return devtools
 
@@ -184,7 +189,7 @@ class CmEventProxy:
     value set that contains the returned event.
     """
 
-    value: typing.Any = None
+    value: Any = None
 
 
 class CdpBase:
@@ -197,7 +202,7 @@ class CdpBase:
         self.inflight_cmd = {}
         self.inflight_result = {}
 
-    async def execute(self, cmd: typing.Generator[dict, T, typing.Any]) -> T:
+    async def execute(self, cmd: Generator[dict, T, Any]) -> T:
         """Execute a command on the server and wait for the result.
 
         :param cmd: any CDP command
@@ -211,13 +216,19 @@ class CdpBase:
         if self.session_id:
             request["sessionId"] = self.session_id
         request_str = json.dumps(request)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Sending CDP message: {cmd_id} {cmd_event}: {request_str}")
         try:
             await self.ws.send_message(request_str)
         except WsConnectionClosed as wcc:
             raise CdpConnectionClosed(wcc.reason) from None
         await cmd_event.wait()
         response = self.inflight_result.pop(cmd_id)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Received CDP message: {response}")
         if isinstance(response, Exception):
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"Exception raised by {cmd_event} message: {type(response).__name__}")
             raise response
         return response
 
@@ -230,13 +241,15 @@ class CdpBase:
         return receiver
 
     @asynccontextmanager
-    async def wait_for(self, event_type: typing.Type[T], buffer_size=10) -> typing.AsyncGenerator[CmEventProxy, None]:
+    async def wait_for(self, event_type: Type[T], buffer_size=10) -> AsyncGenerator[CmEventProxy, None]:
         """Wait for an event of the given type and return it.
 
         This is an async context manager, so you should open it inside
         an async with block. The block will not exit until the indicated
         event is received.
         """
+        sender: trio.MemorySendChannel
+        receiver: trio.MemoryReceiveChannel
         sender, receiver = trio.open_memory_channel(buffer_size)
         self.channels[event_type].add(sender)
         proxy = CmEventProxy()
@@ -265,7 +278,7 @@ class CdpBase:
         try:
             cmd, event = self.inflight_cmd.pop(cmd_id)
         except KeyError:
-            logger.warning(f"Got a message with a command ID that does not exist: {data}")
+            logger.warning("Got a message with a command ID that does not exist: %s", data)
             return
         if "error" in data:
             # If the server reported an error, convert it to an exception and do
@@ -275,8 +288,8 @@ class CdpBase:
             # Otherwise, continue the generator to parse the JSON result
             # into a CDP object.
             try:
-                response = cmd.send(data["result"])
-                raise InternalError("The command's generator function " "did not exit when expected!")
+                _ = cmd.send(data["result"])
+                raise InternalError("The command's generator function did not exit when expected!")
             except StopIteration as exit:
                 return_ = exit.value
             self.inflight_result[cmd_id] = return_
@@ -398,7 +411,7 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
         await self.ws.aclose()
 
     @asynccontextmanager
-    async def open_session(self, target_id) -> typing.AsyncIterator[CdpSession]:
+    async def open_session(self, target_id) -> AsyncIterator[CdpSession]:
         """This context manager opens a session and enables the "simple" style
         of calling CDP APIs.
 
@@ -453,9 +466,14 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
             else:
                 self._handle_data(data)
 
+        for _, session in self.sessions.items():
+            for _, senders in session.channels.items():
+                for sender in senders:
+                    sender.close()
+
 
 @asynccontextmanager
-async def open_cdp(url) -> typing.AsyncIterator[CdpConnection]:
+async def open_cdp(url) -> AsyncIterator[CdpConnection]:
     """This async context manager opens a connection to the browser specified
     by ``url`` before entering the block, then closes the connection when the
     block exits.

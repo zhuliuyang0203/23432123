@@ -1,26 +1,34 @@
-// <copyright file="RemoteWebDriver.cs" company="WebDriver Committers">
+// <copyright file="RemoteWebDriver.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
+using OpenQA.Selenium.Internal.Logging;
+using OpenQA.Selenium.DevTools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OpenQA.Selenium.DevTools;
-using OpenQA.Selenium.Internal;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Remote
 {
@@ -37,7 +45,7 @@ namespace OpenQA.Selenium.Remote
     ///     [SetUp]
     ///     public void SetUp()
     ///     {
-    ///         driver = new RemoteWebDriver(new Uri("http://127.0.0.1:4444/wd/hub"),DesiredCapabilities.InternetExplorer());
+    ///         driver = new RemoteWebDriver(new Uri("http://127.0.0.1:4444/wd/hub"),new FirefoxOptions());
     ///     }
     ///     <para></para>
     ///     [Test]
@@ -57,14 +65,23 @@ namespace OpenQA.Selenium.Remote
     /// }
     /// </code>
     /// </example>
-    public class RemoteWebDriver : WebDriver, IDevTools
+    public class RemoteWebDriver : WebDriver, IDevTools, IHasDownloads
     {
+        private static readonly ILogger _logger = OpenQA.Selenium.Internal.Logging.Log.GetLogger(typeof(RemoteWebDriver));
+
+        /// <summary>
+        /// The name of the Selenium grid remote DevTools end point capability.
+        /// </summary>
         public readonly string RemoteDevToolsEndPointCapabilityName = "se:cdp";
+
+        /// <summary>
+        /// The name of the Selenium remote DevTools version capability.
+        /// </summary>
         public readonly string RemoteDevToolsVersionCapabilityName = "se:cdpVersion";
 
         private const string DefaultRemoteServerUrl = "http://127.0.0.1:4444/wd/hub";
 
-        private DevToolsSession devToolsSession;
+        private DevToolsSession? devToolsSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class. This constructor defaults proxy to http://127.0.0.1:4444/wd/hub
@@ -78,9 +95,9 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class. This constructor defaults proxy to http://127.0.0.1:4444/wd/hub
         /// </summary>
-        /// <param name="desiredCapabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
-        public RemoteWebDriver(ICapabilities desiredCapabilities)
-            : this(new Uri(DefaultRemoteServerUrl), desiredCapabilities)
+        /// <param name="capabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
+        public RemoteWebDriver(ICapabilities capabilities)
+            : this(new Uri(DefaultRemoteServerUrl), capabilities)
         {
         }
 
@@ -98,9 +115,9 @@ namespace OpenQA.Selenium.Remote
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class
         /// </summary>
         /// <param name="remoteAddress">URI containing the address of the WebDriver remote server (e.g. http://127.0.0.1:4444/wd/hub).</param>
-        /// <param name="desiredCapabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
-        public RemoteWebDriver(Uri remoteAddress, ICapabilities desiredCapabilities)
-            : this(remoteAddress, desiredCapabilities, RemoteWebDriver.DefaultCommandTimeout)
+        /// <param name="capabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
+        public RemoteWebDriver(Uri remoteAddress, ICapabilities capabilities)
+            : this(remoteAddress, capabilities, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -108,10 +125,10 @@ namespace OpenQA.Selenium.Remote
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class using the specified remote address, desired capabilities, and command timeout.
         /// </summary>
         /// <param name="remoteAddress">URI containing the address of the WebDriver remote server (e.g. http://127.0.0.1:4444/wd/hub).</param>
-        /// <param name="desiredCapabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
+        /// <param name="capabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
-        public RemoteWebDriver(Uri remoteAddress, ICapabilities desiredCapabilities, TimeSpan commandTimeout)
-            : this(new HttpCommandExecutor(remoteAddress, commandTimeout), desiredCapabilities)
+        public RemoteWebDriver(Uri remoteAddress, ICapabilities capabilities, TimeSpan commandTimeout)
+            : this(new HttpCommandExecutor(remoteAddress, commandTimeout), capabilities)
         {
         }
 
@@ -119,19 +136,17 @@ namespace OpenQA.Selenium.Remote
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class
         /// </summary>
         /// <param name="commandExecutor">An <see cref="ICommandExecutor"/> object which executes commands for the driver.</param>
-        /// <param name="desiredCapabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
-        public RemoteWebDriver(ICommandExecutor commandExecutor, ICapabilities desiredCapabilities)
-            :base(commandExecutor, desiredCapabilities)
+        /// <param name="capabilities">An <see cref="ICapabilities"/> object containing the desired capabilities of the browser.</param>
+        public RemoteWebDriver(ICommandExecutor commandExecutor, ICapabilities capabilities)
+            : base(commandExecutor, capabilities)
         {
         }
 
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
-        public bool HasActiveDevToolsSession
-        {
-            get { return this.devToolsSession != null; }
-        }
+        [MemberNotNullWhen(true, nameof(devToolsSession))]
+        public bool HasActiveDevToolsSession => this.devToolsSession != null;
 
         /// <summary>
         /// Finds the first element in the page that matches the ID supplied
@@ -140,7 +155,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact with that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementById("id")
         /// </code>
         /// </example>
@@ -156,7 +171,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollection of Elements that match the object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsById("id")
         /// </code>
         /// </example>
@@ -182,7 +197,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementByClassName("classname")
         /// </code>
         /// </example>
@@ -194,7 +209,7 @@ namespace OpenQA.Selenium.Remote
                 // Finding elements by class name with whitespace is not allowed.
                 // However, converting the single class name to a valid CSS selector
                 // by prepending a '.' may result in a still-valid, but incorrect
-                // selector. Thus, we short-ciruit that behavior here.
+                // selector. Thus, we short-circuit that behavior here.
                 throw new InvalidSelectorException("Compound class names not allowed. Cannot have whitespace in class name. Use CSS selectors instead.");
             }
 
@@ -208,7 +223,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollection of IWebElement object so that you can interact with those objects</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByClassName("classname")
         /// </code>
         /// </example>
@@ -220,7 +235,7 @@ namespace OpenQA.Selenium.Remote
                 // Finding elements by class name with whitespace is not allowed.
                 // However, converting the single class name to a valid CSS selector
                 // by prepending a '.' may result in a still-valid, but incorrect
-                // selector. Thus, we short-ciruit that behavior here.
+                // selector. Thus, we short-circuit that behavior here.
                 throw new InvalidSelectorException("Compound class names not allowed. Cannot have whitespace in class name. Use CSS selectors instead.");
             }
 
@@ -234,7 +249,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementsByLinkText("linktext")
         /// </code>
         /// </example>
@@ -250,7 +265,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollection<![CDATA[<IWebElement>]]> object so that you can interact with those objects</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByClassName("classname")
         /// </code>
         /// </example>
@@ -266,7 +281,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementsByPartialLinkText("partOfLink")
         /// </code>
         /// </example>
@@ -282,7 +297,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollection<![CDATA[<IWebElement>]]> objects so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByPartialLinkText("partOfTheLink")
         /// </code>
         /// </example>
@@ -298,7 +313,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// elem = driver.FindElementsByName("name")
         /// </code>
         /// </example>
@@ -314,7 +329,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollect of IWebElement objects so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByName("name")
         /// </code>
         /// </example>
@@ -330,7 +345,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementsByTagName("tag")
         /// </code>
         /// </example>
@@ -346,7 +361,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByTagName("tag")
         /// </code>
         /// </example>
@@ -362,7 +377,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>IWebElement object so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// IWebElement elem = driver.FindElementsByXPath("//table/tbody/tr/td/a");
         /// </code>
         /// </example>
@@ -378,7 +393,7 @@ namespace OpenQA.Selenium.Remote
         /// <returns>ReadOnlyCollection of IWebElement objects so that you can interact that object</returns>
         /// <example>
         /// <code>
-        /// IWebDriver driver = new RemoteWebDriver(DesiredCapabilities.Firefox());
+        /// IWebDriver driver = new RemoteWebDriver(new FirefoxOptions());
         /// ReadOnlyCollection<![CDATA[<IWebElement>]]> elem = driver.FindElementsByXpath("//tr/td/a")
         /// </code>
         /// </example>
@@ -408,38 +423,70 @@ namespace OpenQA.Selenium.Remote
             return this.FindElements("css selector", cssSelector);
         }
 
+        /// <summary>
+        /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
+        /// </summary>
+        /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession()
         {
-            return GetDevToolsSession(DevToolsSession.AutoDetectDevToolsProtocolVersion);
+            if (this.Capabilities.GetCapability(CapabilityType.BrowserName) is "firefox")
+            {
+                if (_logger.IsEnabled(LogEventLevel.Warn))
+                {
+                    _logger.Warn("CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.");
+                }
+            }
+
+            return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = DevToolsSession.AutoDetectDevToolsProtocolVersion });
         }
 
-        public DevToolsSession GetDevToolsSession(int protocolVersion)
+        /// <summary>
+        /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
+        /// </summary>
+        /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        public DevToolsSession GetDevToolsSession(DevToolsOptions options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             if (this.devToolsSession == null)
             {
-                if (!this.Capabilities.HasCapability(RemoteDevToolsEndPointCapabilityName))
+                object? debuggerAddressObject = this.Capabilities.GetCapability(RemoteDevToolsEndPointCapabilityName);
+                if (debuggerAddressObject is null)
                 {
                     throw new WebDriverException("Cannot find " + RemoteDevToolsEndPointCapabilityName + " capability for driver");
                 }
 
-                if (!this.Capabilities.HasCapability(RemoteDevToolsVersionCapabilityName))
-                {
-                    throw new WebDriverException("Cannot find " + RemoteDevToolsVersionCapabilityName + " capability for driver");
-                }
+                string debuggerAddress = debuggerAddressObject.ToString()!;
 
-                string debuggerAddress = this.Capabilities.GetCapability(RemoteDevToolsEndPointCapabilityName).ToString();
-                string version = this.Capabilities.GetCapability(RemoteDevToolsVersionCapabilityName).ToString();
-
-                bool versionParsed = int.TryParse(version.Substring(0, version.IndexOf(".")), out int devToolsProtocolVersion);
-                if (!versionParsed)
+                if (!options.ProtocolVersion.HasValue || options.ProtocolVersion == DevToolsSession.AutoDetectDevToolsProtocolVersion)
                 {
-                    throw new WebDriverException("Cannot parse protocol version from reported version string: " + version);
+                    object? versionObject = this.Capabilities.GetCapability(RemoteDevToolsVersionCapabilityName);
+                    if (versionObject is null)
+                    {
+                        throw new WebDriverException("Cannot find " + RemoteDevToolsVersionCapabilityName + " capability for driver");
+                    }
+
+                    string version = versionObject.ToString()!;
+
+                    if (!int.TryParse(version.Substring(0, version.IndexOf(".")), out int devToolsProtocolVersion))
+                    {
+                        throw new WebDriverException("Cannot parse protocol version from reported version string: " + version);
+                    }
+
+                    options.ProtocolVersion = devToolsProtocolVersion;
                 }
 
                 try
                 {
-                    DevToolsSession session = new DevToolsSession(debuggerAddress);
-                    session.StartSession(devToolsProtocolVersion).ConfigureAwait(false).GetAwaiter().GetResult();
+                    DevToolsSession session = new DevToolsSession(debuggerAddress, options);
+                    Task.Run(async () => await session.StartSession()).GetAwaiter().GetResult();
                     this.devToolsSession = session;
                 }
                 catch (Exception e)
@@ -452,16 +499,116 @@ namespace OpenQA.Selenium.Remote
         }
 
         /// <summary>
+        /// Creates a session to communicate with a browser using a specific version of the Developer Tools debugging protocol.
+        /// </summary>
+        /// <param name="protocolVersion">The specific version of the Developer Tools debugging protocol to use.</param>
+        /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+        [Obsolete("Use GetDevToolsSession(DevToolsOptions options)")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        public DevToolsSession GetDevToolsSession(int protocolVersion)
+        {
+            return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = protocolVersion });
+        }
+
+        /// <summary>
+        /// Retrieves the downloadable files.
+        /// </summary>
+        /// <returns>A read-only list of file names available for download.</returns>
+        public IReadOnlyList<string> GetDownloadableFiles()
+        {
+            var enableDownloads = this.Capabilities.GetCapability(CapabilityType.EnableDownloads);
+            if (enableDownloads == null || !(bool)enableDownloads)
+            {
+                throw new WebDriverException("You must enable downloads in order to work with downloadable files.");
+            }
+
+            Response commandResponse = this.Execute(DriverCommand.GetDownloadableFiles, null);
+
+            if (commandResponse.Value is not Dictionary<string, object?> value)
+            {
+                throw new WebDriverException("GetDownloadableFiles returned successfully, but response content was not an object: " + commandResponse.Value);
+            }
+
+            object?[] namesArray = (object?[])value["names"]!;
+            return namesArray.Select(obj => obj!.ToString()!).ToList();
+        }
+
+        /// <summary>
+        /// Downloads a file with the specified file name.
+        /// </summary>
+        /// <param name="fileName">The name of the file to be downloaded.</param>
+        /// <param name="targetDirectory">The target directory where the file should be downloaded to.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="targetDirectory"/> is null.</exception>
+        public void DownloadFile(string fileName, string targetDirectory)
+        {
+            var enableDownloads = this.Capabilities.GetCapability(CapabilityType.EnableDownloads);
+            if (enableDownloads == null || !(bool)enableDownloads)
+            {
+                throw new WebDriverException("You must enable downloads in order to work with downloadable files.");
+            }
+
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "name", fileName }
+            };
+
+            Response commandResponse = this.Execute(DriverCommand.DownloadFile, parameters);
+            if (commandResponse.Value is not Dictionary<string, object?> value)
+            {
+                throw new WebDriverException("DownloadFile returned successfully, but response content was not an object: " + commandResponse.Value);
+            }
+
+            string contents = value["contents"]!.ToString()!;
+            byte[] fileData = Convert.FromBase64String(contents);
+
+            Directory.CreateDirectory(targetDirectory);
+
+            using (var memoryReader = new MemoryStream(fileData))
+            {
+                using (var zipArchive = new ZipArchive(memoryReader, ZipArchiveMode.Read))
+                {
+                    foreach (ZipArchiveEntry entry in zipArchive.Entries)
+                    {
+                        string destinationPath = Path.Combine(targetDirectory, entry.FullName);
+
+                        entry.ExtractToFile(destinationPath);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes all downloadable files.
+        /// </summary>
+        public void DeleteDownloadableFiles()
+        {
+            var enableDownloads = this.Capabilities.GetCapability(CapabilityType.EnableDownloads);
+            if (enableDownloads == null || !(bool)enableDownloads)
+            {
+                throw new WebDriverException("You must enable downloads in order to work with downloadable files.");
+            }
+
+            this.Execute(DriverCommand.DeleteDownloadableFiles, null);
+        }
+
+        /// <summary>
         /// Closes a DevTools session.
         /// </summary>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public void CloseDevToolsSession()
         {
             if (this.devToolsSession != null)
             {
-                this.devToolsSession.StopSession(true).ConfigureAwait(false).GetAwaiter().GetResult();
+                Task.Run(async () => await this.devToolsSession.StopSession(true)).GetAwaiter().GetResult();
             }
         }
 
+        /// <summary>
+        /// Releases all resources associated with this <see cref="RemoteWebDriver"/>.
+        /// </summary>
+        /// <param name="disposing"><see langword="true"/> if the Dispose method was explicitly called; otherwise, <see langword="false"/>.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

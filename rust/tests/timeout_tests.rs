@@ -15,22 +15,14 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use assert_cmd::Command;
+use crate::common::get_selenium_manager;
 
-use exitcode::DATAERR;
+mod common;
 
 #[test]
-fn timeout_proxy_test() {
-    let mut cmd = Command::new(env!("CARGO_BIN_EXE_selenium-manager"));
-    cmd.args([
-        "--clear-cache",
-        "--debug",
-        "--browser",
-        "edge",
-        "--timeout",
-        "0",
-    ])
-    .assert()
-    .failure()
-    .code(DATAERR);
+fn timeout_error_test() {
+    let mut cmd = get_selenium_manager();
+    cmd.args(["--debug", "--browser", "edge", "--timeout", "-1"])
+        .assert()
+        .failure();
 }

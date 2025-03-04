@@ -17,6 +17,7 @@
 
 package org.openqa.selenium.grid;
 
+import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +48,17 @@ public abstract class TemplateGridServerCommand extends TemplateGridCommand {
     Handlers handler = createHandlers(config);
 
     return new NettyServer(
-        new BaseServerOptions(config), handler.httpHandler, handler.websocketHandler);
+        new BaseServerOptions(config), handler.httpHandler, handler.websocketHandler) {
+
+      @Override
+      public void stop() {
+        try {
+          handler.close();
+        } finally {
+          super.stop();
+        }
+      }
+    };
   }
 
   private static final String GRAPHQL = "/graphql";
@@ -69,12 +80,15 @@ public abstract class TemplateGridServerCommand extends TemplateGridCommand {
   }
 
   protected static Routable baseRoute(String prefix, Route route) {
-    return Route.prefix(prefix).to(route);
+    if (prefix.isEmpty()) {
+      return route;
+    }
+    return Route.combine(route, Route.prefix(prefix).to(route));
   }
 
   protected abstract Handlers createHandlers(Config config);
 
-  public static class Handlers {
+  public abstract static class Handlers implements Closeable {
     public final HttpHandler httpHandler;
     public final BiFunction<String, Consumer<Message>, Optional<Consumer<Message>>>
         websocketHandler;
@@ -86,5 +100,8 @@ public abstract class TemplateGridServerCommand extends TemplateGridCommand {
       this.websocketHandler =
           websocketHandler == null ? (str, sink) -> Optional.empty() : websocketHandler;
     }
+
+    @Override
+    public abstract void close();
   }
 }

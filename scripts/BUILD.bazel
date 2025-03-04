@@ -5,8 +5,31 @@ py_binary(
     name = "pinned_browsers",
     srcs = ["pinned_browsers.py"],
     deps = [
+        requirement("packaging"),
         requirement("urllib3"),
     ],
+)
+
+py_binary(
+    name = "selenium_manager",
+    srcs = ["selenium_manager.py"],
+    deps = [
+        requirement("urllib3"),
+    ],
+)
+
+py_binary(
+    name = "update_cdp",
+    srcs = ["update_cdp.py"],
+    deps = [
+        requirement("packaging"),
+        requirement("urllib3"),
+    ],
+)
+
+py_binary(
+    name = "update_copyright",
+    srcs = ["update_copyright.py"],
 )
 
 java_binary(

@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.devtools.CdpEndpointFinder;
 import org.openqa.selenium.grid.data.Session;
+import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.BinaryMessage;
 import org.openqa.selenium.remote.http.ClientConfig;
@@ -56,36 +57,47 @@ public class ProxyNodeWebsockets
       ImmutableSet.of("goog:chromeOptions", "moz:debuggerAddress", "ms:edgeOptions");
   private final HttpClient.Factory clientFactory;
   private final Node node;
+  private final String gridSubPath;
 
-  public ProxyNodeWebsockets(HttpClient.Factory clientFactory, Node node) {
+  public ProxyNodeWebsockets(HttpClient.Factory clientFactory, Node node, String gridSubPath) {
     this.clientFactory = Objects.requireNonNull(clientFactory);
     this.node = Objects.requireNonNull(node);
+    this.gridSubPath = gridSubPath;
   }
 
   @Override
   public Optional<Consumer<Message>> apply(String uri, Consumer<Message> downstream) {
-    UrlTemplate.Match fwdMatch = FWD_TEMPLATE.match(uri);
-    UrlTemplate.Match cdpMatch = CDP_TEMPLATE.match(uri);
-    UrlTemplate.Match bidiMatch = BIDI_TEMPLATE.match(uri);
-    UrlTemplate.Match vncMatch = VNC_TEMPLATE.match(uri);
+    UrlTemplate.Match fwdMatch = FWD_TEMPLATE.match(uri, gridSubPath);
+    UrlTemplate.Match cdpMatch = CDP_TEMPLATE.match(uri, gridSubPath);
+    UrlTemplate.Match bidiMatch = BIDI_TEMPLATE.match(uri, gridSubPath);
+    UrlTemplate.Match vncMatch = VNC_TEMPLATE.match(uri, gridSubPath);
 
     if (bidiMatch == null && cdpMatch == null && vncMatch == null && fwdMatch == null) {
       return Optional.empty();
     }
 
-    String sessionId =
-        Stream.of(fwdMatch, cdpMatch, bidiMatch, vncMatch)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .get()
-            .getParameters()
-            .get("sessionId");
+    Optional<UrlTemplate.Match> firstMatch =
+        Stream.of(fwdMatch, cdpMatch, bidiMatch, vncMatch).filter(Objects::nonNull).findFirst();
+
+    if (firstMatch.isEmpty()) {
+      LOG.warning("No session id found in uri " + uri);
+      return Optional.empty();
+    }
+
+    String sessionId = firstMatch.get().getParameters().get("sessionId");
 
     LOG.fine("Matching websockets for session id: " + sessionId);
     SessionId id = new SessionId(sessionId);
 
     if (!node.isSessionOwner(id)) {
-      LOG.info("Not owner of " + id);
+      LOG.warning("Not owner of " + id);
+      return Optional.empty();
+    }
+
+    // ensure one session does not open to many connections, this might have a negative impact on
+    // the grid health
+    if (!node.tryAcquireConnection(id)) {
+      LOG.warning("Too many websocket connections initiated by " + id);
       return Optional.empty();
     }
 
@@ -93,29 +105,38 @@ public class ProxyNodeWebsockets
     Capabilities caps = session.getCapabilities();
     LOG.fine("Scanning for endpoint: " + caps);
 
+    // Used by the ForwardingListener to notify the node that the session is still active
+    Consumer<SessionId> sessionConsumer = node::isSessionOwner;
+
     if (bidiMatch != null) {
-      return findBiDiEndpoint(downstream, caps);
+      return findBiDiEndpoint(downstream, caps, sessionConsumer, id);
     }
 
     if (vncMatch != null) {
-      return findVncEndpoint(downstream, caps);
+      // Passing a fake consumer to the ForwardingListener to avoid sending a session notification
+      // when VNC is used.
+      sessionConsumer = fakeConsumer -> {};
+      return findVncEndpoint(downstream, caps, sessionConsumer, id);
     }
 
     // This match happens when a user wants to do CDP over Dynamic Grid
     if (fwdMatch != null) {
       LOG.info("Matched endpoint where CDP connection is being forwarded");
-      return findCdpEndpoint(downstream, caps);
+      return findCdpEndpoint(downstream, caps, sessionConsumer, id);
     }
     if (caps.getCapabilityNames().contains("se:forwardCdp")) {
       LOG.info("Found endpoint where CDP connection needs to be forwarded");
-      return findForwardCdpEndpoint(downstream, caps);
+      return findForwardCdpEndpoint(downstream, caps, sessionConsumer, id);
     }
-    return findCdpEndpoint(downstream, caps);
+    return findCdpEndpoint(downstream, caps, sessionConsumer, id);
   }
 
   private Optional<Consumer<Message>> findCdpEndpoint(
-      Consumer<Message> downstream, Capabilities caps) {
-    // Using strings here to avoid Node depending upon specific drivers.
+      Consumer<Message> downstream,
+      Capabilities caps,
+      Consumer<SessionId> sessionConsumer,
+      SessionId sessionId) {
+
     for (String cdpEndpointCap : CDP_ENDPOINT_CAPS) {
       Optional<URI> reportedUri = CdpEndpointFinder.getReportedUri(cdpEndpointCap, caps);
       Optional<HttpClient> client =
@@ -123,7 +144,7 @@ public class ProxyNodeWebsockets
       Optional<URI> cdpUri;
 
       try {
-        cdpUri = client.flatMap(httpClient -> CdpEndpointFinder.getCdpEndPoint(httpClient));
+        cdpUri = client.flatMap(CdpEndpointFinder::getCdpEndPoint);
       } catch (Exception e) {
         try {
           client.ifPresent(HttpClient::close);
@@ -135,7 +156,7 @@ public class ProxyNodeWebsockets
 
       if (cdpUri.isPresent()) {
         LOG.log(getDebugLogLevel(), String.format("Endpoint found in %s", cdpEndpointCap));
-        return cdpUri.map(cdp -> createWsEndPoint(cdp, downstream));
+        return cdpUri.map(cdp -> createWsEndPoint(cdp, downstream, sessionConsumer, sessionId));
       } else {
         try {
           client.ifPresent(HttpClient::close);
@@ -152,10 +173,14 @@ public class ProxyNodeWebsockets
   }
 
   private Optional<Consumer<Message>> findBiDiEndpoint(
-      Consumer<Message> downstream, Capabilities caps) {
+      Consumer<Message> downstream,
+      Capabilities caps,
+      Consumer<SessionId> sessionConsumer,
+      SessionId sessionId) {
     try {
-      URI uri = new URI(String.valueOf(caps.getCapability("webSocketUrl")));
-      return Optional.of(uri).map(bidi -> createWsEndPoint(bidi, downstream));
+      URI uri = new URI(String.valueOf(caps.getCapability("se:gridWebSocketUrl")));
+      return Optional.of(uri)
+          .map(bidi -> createWsEndPoint(bidi, downstream, sessionConsumer, sessionId));
     } catch (URISyntaxException e) {
       LOG.warning("Unable to create URI from: " + caps.getCapability("webSocketUrl"));
       return Optional.empty();
@@ -163,11 +188,15 @@ public class ProxyNodeWebsockets
   }
 
   private Optional<Consumer<Message>> findForwardCdpEndpoint(
-      Consumer<Message> downstream, Capabilities caps) {
+      Consumer<Message> downstream,
+      Capabilities caps,
+      Consumer<SessionId> sessionConsumer,
+      SessionId sessionId) {
     // When using Dynamic Grid, we need to connect to a container before using the debuggerAddress
     try {
       URI uri = new URI(String.valueOf(caps.getCapability("se:forwardCdp")));
-      return Optional.of(uri).map(cdp -> createWsEndPoint(cdp, downstream));
+      return Optional.of(uri)
+          .map(cdp -> createWsEndPoint(cdp, downstream, sessionConsumer, sessionId));
     } catch (URISyntaxException e) {
       LOG.warning("Unable to create URI from: " + caps.getCapability("se:forwardCdp"));
       return Optional.empty();
@@ -175,7 +204,10 @@ public class ProxyNodeWebsockets
   }
 
   private Optional<Consumer<Message>> findVncEndpoint(
-      Consumer<Message> downstream, Capabilities caps) {
+      Consumer<Message> downstream,
+      Capabilities caps,
+      Consumer<SessionId> sessionConsumer,
+      SessionId sessionId) {
     String vncLocalAddress = (String) caps.getCapability("se:vncLocalAddress");
     Optional<URI> vncUri;
     try {
@@ -185,40 +217,81 @@ public class ProxyNodeWebsockets
       return Optional.empty();
     }
     LOG.log(getDebugLogLevel(), String.format("Endpoint found in %s", "se:vncLocalAddress"));
-    return vncUri.map(vnc -> createWsEndPoint(vnc, downstream));
+    return vncUri.map(vnc -> createWsEndPoint(vnc, downstream, sessionConsumer, sessionId));
   }
 
-  private Consumer<Message> createWsEndPoint(URI uri, Consumer<Message> downstream) {
-    Objects.requireNonNull(uri);
+  private Consumer<Message> createWsEndPoint(
+      URI uri,
+      Consumer<Message> downstream,
+      Consumer<SessionId> sessionConsumer,
+      SessionId sessionId) {
+    Require.nonNull("downstream", downstream);
+    Require.nonNull("uri", uri);
+    Require.nonNull("sessionConsumer", sessionConsumer);
+    Require.nonNull("sessionId", sessionId);
 
     LOG.info("Establishing connection to " + uri);
 
     HttpClient client = clientFactory.createClient(ClientConfig.defaultConfig().baseUri(uri));
-    WebSocket upstream =
-        client.openSocket(new HttpRequest(GET, uri.toString()), new ForwardingListener(downstream));
-    return upstream::send;
+    try {
+      WebSocket upstream =
+          client.openSocket(
+              new HttpRequest(GET, uri.toString()),
+              new ForwardingListener(node, downstream, sessionConsumer, sessionId));
+
+      return (msg) -> {
+        try {
+          upstream.send(msg);
+        } finally {
+          if (msg instanceof CloseMessage) {
+            try {
+              client.close();
+            } catch (Exception e) {
+              LOG.log(Level.WARNING, "Failed to shutdown the client of " + uri, e);
+            }
+          }
+        }
+      };
+    } catch (Exception e) {
+      LOG.log(Level.WARNING, "Connecting to upstream websocket failed", e);
+      client.close();
+      throw e;
+    }
   }
 
   private static class ForwardingListener implements WebSocket.Listener {
+    private final Node node;
     private final Consumer<Message> downstream;
+    private final Consumer<SessionId> sessionConsumer;
+    private final SessionId sessionId;
 
-    public ForwardingListener(Consumer<Message> downstream) {
+    public ForwardingListener(
+        Node node,
+        Consumer<Message> downstream,
+        Consumer<SessionId> sessionConsumer,
+        SessionId sessionId) {
+      this.node = node;
       this.downstream = Objects.requireNonNull(downstream);
+      this.sessionConsumer = Objects.requireNonNull(sessionConsumer);
+      this.sessionId = Objects.requireNonNull(sessionId);
     }
 
     @Override
     public void onBinary(byte[] data) {
       downstream.accept(new BinaryMessage(data));
+      sessionConsumer.accept(sessionId);
     }
 
     @Override
     public void onClose(int code, String reason) {
       downstream.accept(new CloseMessage(code, reason));
+      node.releaseConnection(sessionId);
     }
 
     @Override
     public void onText(CharSequence data) {
       downstream.accept(new TextMessage(data));
+      sessionConsumer.accept(sessionId);
     }
 
     @Override

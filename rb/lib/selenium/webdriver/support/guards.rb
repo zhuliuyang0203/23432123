@@ -24,7 +24,7 @@ module Selenium
   module WebDriver
     module Support
       class Guards
-        GUARD_TYPES = %i[except only exclude exclusive].freeze
+        GUARD_TYPES = %i[except only exclude exclusive flaky].freeze
 
         attr_reader :messages
         attr_accessor :bug_tracker
@@ -37,8 +37,8 @@ module Selenium
           @messages = {}
         end
 
-        def add_condition(name, condition = nil, &blk)
-          @guard_conditions << GuardCondition.new(name, condition, &blk)
+        def add_condition(name, condition = nil, &block)
+          @guard_conditions << GuardCondition.new(name, condition, &block)
         end
 
         def add_message(name, message)

@@ -17,8 +17,9 @@
 
 package org.openqa.selenium.chrome;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.openqa.selenium.Beta;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -68,7 +69,7 @@ public class ChromeDriver extends ChromiumDriver {
    * @see #ChromeDriver(ChromeDriverService, ChromeOptions)
    */
   public ChromeDriver(ChromeOptions options) {
-    this(ChromeDriverService.createServiceWithConfig(options), options);
+    this(ChromeDriverService.createDefaultService(), options);
   }
 
   /**
@@ -94,9 +95,11 @@ public class ChromeDriver extends ChromiumDriver {
     Require.nonNull("Driver service", service);
     Require.nonNull("Driver options", options);
     Require.nonNull("Driver clientConfig", clientConfig);
-    if (service.getExecutable() == null) {
-      String path = DriverFinder.getPath(service, options);
-      service.setExecutable(path);
+    DriverFinder finder = new DriverFinder(service, options);
+    service.setExecutable(finder.getDriverPath());
+    if (finder.hasBrowserPath()) {
+      options.setBinary(finder.getBrowserPath());
+      options.setCapability("browserVersion", (Object) null);
     }
     return new ChromeDriverCommandExecutor(service, clientConfig);
   }
@@ -112,10 +115,10 @@ public class ChromeDriver extends ChromiumDriver {
     }
 
     private static Map<String, CommandInfo> getExtraCommands() {
-      return ImmutableMap.<String, CommandInfo>builder()
-          .putAll(new AddHasCasting().getAdditionalCommands())
-          .putAll(new AddHasCdp().getAdditionalCommands())
-          .build();
+      return Stream.of(
+              new AddHasCasting().getAdditionalCommands(), new AddHasCdp().getAdditionalCommands())
+          .flatMap((m) -> m.entrySet().stream())
+          .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
   }
 }

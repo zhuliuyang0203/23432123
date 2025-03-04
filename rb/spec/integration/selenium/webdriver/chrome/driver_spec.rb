@@ -22,7 +22,7 @@ require_relative '../spec_helper'
 module Selenium
   module WebDriver
     module Chrome
-      describe Driver, exclusive: {browser: :chrome} do
+      describe Driver, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {browser: :chrome}] do
         it 'gets and sets network conditions' do
           driver.network_conditions = {offline: false, latency: 56, throughput: 789}
           expect(driver.network_conditions).to eq(
@@ -52,10 +52,8 @@ module Selenium
         end
 
         describe 'PrintsPage' do
-          before(:all) do
-            @headless = ENV.delete('HEADLESS')
-            reset_driver!(args: ['--headless'])
-          end
+          before(:all) { @headless = ENV.delete('HEADLESS') }
+          before { reset_driver!(args: ['--headless']) }
 
           after(:all) do
             quit_driver
@@ -136,6 +134,9 @@ module Selenium
 
           error = /network conditions must be set before it can be retrieved/
           expect { driver.network_conditions }.to raise_error(Error::UnknownError, error)
+
+          # Need to reset because https://bugs.chromium.org/p/chromedriver/issues/detail?id=4790
+          reset_driver!
         end
 
         # This requires cast sinks to run

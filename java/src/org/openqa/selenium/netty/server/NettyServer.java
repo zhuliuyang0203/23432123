@@ -27,6 +27,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.netty.util.concurrent.Future;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import io.netty.util.internal.logging.JdkLoggerFactory;
 import java.io.IOException;
@@ -127,8 +128,11 @@ public class NettyServer implements Server<NettyServer> {
   @Override
   public void stop() {
     try {
-      bossGroup.shutdownGracefully().sync();
-      workerGroup.shutdownGracefully().sync();
+      Future<?> bossShutdown = bossGroup.shutdownGracefully();
+      Future<?> workerShutdown = workerGroup.shutdownGracefully();
+
+      bossShutdown.sync();
+      workerShutdown.sync();
 
       channel.closeFuture().sync();
     } catch (InterruptedException e) {

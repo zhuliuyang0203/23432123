@@ -63,7 +63,6 @@ import org.openqa.selenium.grid.server.NetworkOptions;
 import org.openqa.selenium.grid.server.Server;
 import org.openqa.selenium.grid.sessionmap.SessionMap;
 import org.openqa.selenium.grid.sessionmap.local.LocalSessionMap;
-import org.openqa.selenium.grid.sessionqueue.NewSessionQueue;
 import org.openqa.selenium.grid.sessionqueue.config.NewSessionQueueOptions;
 import org.openqa.selenium.grid.sessionqueue.local.LocalNewSessionQueue;
 import org.openqa.selenium.grid.web.CombinedHandler;
@@ -145,17 +144,18 @@ public class Standalone extends TemplateGridServerCommand {
 
     DistributorOptions distributorOptions = new DistributorOptions(config);
     NewSessionQueueOptions newSessionRequestOptions = new NewSessionQueueOptions(config);
-    NewSessionQueue queue =
+    LocalNewSessionQueue queue =
         new LocalNewSessionQueue(
             tracer,
             distributorOptions.getSlotMatcher(),
             newSessionRequestOptions.getSessionRequestTimeoutPeriod(),
             newSessionRequestOptions.getSessionRequestTimeout(),
+            newSessionRequestOptions.getMaximumResponseDelay(),
             registrationSecret,
             newSessionRequestOptions.getBatchSize());
     combinedHandler.addHandler(queue);
 
-    Distributor distributor =
+    LocalDistributor distributor =
         new LocalDistributor(
             tracer,
             bus,
@@ -167,12 +167,13 @@ public class Standalone extends TemplateGridServerCommand {
             distributorOptions.getHealthCheckInterval(),
             distributorOptions.shouldRejectUnsupportedCaps(),
             newSessionRequestOptions.getSessionRequestRetryInterval(),
-            distributorOptions.getNewSessionThreadPoolSize());
+            distributorOptions.getNewSessionThreadPoolSize(),
+            distributorOptions.getSlotMatcher(),
+            distributorOptions.getPurgeNodesInterval());
     combinedHandler.addHandler(distributor);
 
-    Routable router =
-        new Router(tracer, clientFactory, sessions, queue, distributor)
-            .with(networkOptions.getSpecComplianceChecks());
+    Router router = new Router(tracer, clientFactory, sessions, queue, distributor);
+    Routable routerWithSpecChecks = router.with(networkOptions.getSpecComplianceChecks());
 
     HttpHandler readinessCheck =
         req -> {
@@ -186,22 +187,25 @@ public class Standalone extends TemplateGridServerCommand {
         new GraphqlHandler(
             tracer, distributor, queue, serverOptions.getExternalUri(), getFormattedVersion());
 
-    String subPath = new RouterOptions(config).subPath();
-    Routable ui = new GridUiRoute(subPath);
+    RouterOptions routerOptions = new RouterOptions(config);
+    String subPath = routerOptions.subPath();
 
     Routable appendRoute =
         Stream.of(
-                router,
-                hubRoute(subPath, combine(router)),
+                baseRoute(subPath, combine(routerWithSpecChecks)),
+                hubRoute(subPath, combine(routerWithSpecChecks)),
                 graphqlRoute(subPath, () -> graphqlHandler))
             .reduce(Route::combine)
             .get();
 
-    if (!subPath.isEmpty()) {
-      appendRoute = Route.combine(appendRoute, baseRoute(subPath, combine(router)));
+    Routable httpHandler;
+    if (routerOptions.disableUi()) {
+      LOG.info("Grid UI has been disabled.");
+      httpHandler = appendRoute;
+    } else {
+      Routable ui = new GridUiRoute(subPath);
+      httpHandler = combine(ui, appendRoute);
     }
-
-    Routable httpHandler = combine(ui, appendRoute);
 
     UsernameAndPassword uap = secretOptions.getServerAuthentication();
     if (uap != null) {
@@ -212,35 +216,16 @@ public class Standalone extends TemplateGridServerCommand {
     // Allow the liveness endpoint to be reached, since k8s doesn't make it easy to authenticate
     // these checks
     httpHandler = combine(httpHandler, Route.get("/readyz").to(() -> readinessCheck));
+    Node node = createNode(config, bus, distributor, combinedHandler);
 
-    Node node = new NodeOptions(config).getNode();
-    combinedHandler.addHandler(node);
-    distributor.add(node);
-
-    bus.addListener(
-        NodeDrainComplete.listener(
-            nodeId -> {
-              if (!node.getId().equals(nodeId)) {
-                return;
-              }
-
-              // Wait a beat before shutting down so the final response from the
-              // node can escape.
-              new Thread(
-                      () -> {
-                        try {
-                          Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                          // Swallow, the next thing we're doing is shutting down
-                        }
-                        LOG.info("Shutting down");
-                        System.exit(0);
-                      },
-                      "Standalone shutdown: " + nodeId)
-                  .start();
-            }));
-
-    return new Handlers(httpHandler, new ProxyNodeWebsockets(clientFactory, node));
+    return new Handlers(httpHandler, new ProxyNodeWebsockets(clientFactory, node, subPath)) {
+      @Override
+      public void close() {
+        router.close();
+        distributor.close();
+        queue.close();
+      }
+    };
   }
 
   @Override
@@ -268,5 +253,36 @@ public class Standalone extends TemplateGridServerCommand {
   private String getFormattedVersion() {
     BuildInfo info = new BuildInfo();
     return String.format("%s (revision %s)", info.getReleaseLabel(), info.getBuildRevision());
+  }
+
+  private Node createNode(
+      Config config, EventBus bus, Distributor distributor, CombinedHandler combinedHandler) {
+    Node node = new NodeOptions(config).getNode();
+    combinedHandler.addHandler(node);
+    distributor.add(node);
+
+    bus.addListener(
+        NodeDrainComplete.listener(
+            nodeId -> {
+              if (!node.getId().equals(nodeId)) {
+                return;
+              }
+
+              // Wait a beat before shutting down so the final response from the
+              // node can escape.
+              new Thread(
+                      () -> {
+                        try {
+                          Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                          // Swallow, the next thing we're doing is shutting down
+                        }
+                        LOG.info("Shutting down");
+                        System.exit(0);
+                      },
+                      "Standalone shutdown: " + nodeId)
+                  .start();
+            }));
+    return node;
   }
 }

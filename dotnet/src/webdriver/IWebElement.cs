@@ -1,23 +1,26 @@
-// <copyright file="IWebElement.cs" company="WebDriver Committers">
+// <copyright file="IWebElement.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Drawing;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -103,7 +106,6 @@ namespace OpenQA.Selenium
         /// <see cref="Keys"/>.</remarks>
         /// <seealso cref="Keys"/>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void SendKeys(string text);
 
@@ -133,7 +135,6 @@ namespace OpenQA.Selenium
         /// simulate a users to accidentally missing the target when clicking.
         /// </para>
         /// </remarks>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void Click();
 
@@ -171,7 +172,7 @@ namespace OpenQA.Selenium
         /// </list>
         /// </remarks>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        string GetAttribute(string attributeName);
+        string? GetAttribute(string attributeName);
 
         /// <summary>
         /// Gets the value of a declared HTML attribute of this element.
@@ -186,7 +187,7 @@ namespace OpenQA.Selenium
         /// of an IDL property of the element, either use the <see cref="GetAttribute(string)"/>
         /// method or the <see cref="GetDomProperty(string)"/> method.
         /// </remarks>
-        string GetDomAttribute(string attributeName);
+        string? GetDomAttribute(string attributeName);
 
         /// <summary>
         /// Gets the value of a JavaScript property of this element.
@@ -195,7 +196,7 @@ namespace OpenQA.Selenium
         /// <returns>The JavaScript property's current value. Returns a <see langword="null"/> if the
         /// value is not set or the property does not exist.</returns>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        string GetDomProperty(string propertyName);
+        string? GetDomProperty(string propertyName);
 
         /// <summary>
         /// Gets the value of a CSS property of this element.

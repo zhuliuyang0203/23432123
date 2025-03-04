@@ -17,15 +17,8 @@
 
 package org.openqa.selenium.remote.http;
 
-import static java.util.stream.Collectors.joining;
-
-import com.google.common.annotations.VisibleForTesting;
-import java.io.InputStream;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.StreamSupport;
-import org.openqa.selenium.internal.Debug;
 import org.openqa.selenium.internal.Require;
 
 public class DumpHttpExchangeFilter implements Filter {
@@ -34,7 +27,7 @@ public class DumpHttpExchangeFilter implements Filter {
   private final Level logLevel;
 
   public DumpHttpExchangeFilter() {
-    this(Debug.getDebugLogLevel());
+    this(Level.FINER);
   }
 
   public DumpHttpExchangeFilter(Level logLevel) {
@@ -56,38 +49,22 @@ public class DumpHttpExchangeFilter implements Filter {
   }
 
   private void expandHeadersAndContent(StringBuilder builder, HttpMessage<?> message) {
-    message
-        .getHeaderNames()
-        .forEach(
-            name -> {
-              builder.append("  ").append(name).append(": ");
-              builder.append(
-                  StreamSupport.stream(message.getHeaders(name).spliterator(), false)
-                      .collect(joining(", ")));
-              builder.append("\n");
-            });
+    message.forEachHeader(
+        (name, value) -> builder.append("  ").append(name).append(": ").append(value).append("\n"));
     builder.append("\n");
     builder.append(Contents.string(message));
   }
 
-  @VisibleForTesting
+  /** visible for testing only */
   String requestLogMessage(HttpRequest req) {
-    // There's no requirement that requests or responses can be read more than once. Protect
-    // ourselves.
-    Supplier<InputStream> memoized = Contents.memoize(req.getContent());
-    req.setContent(memoized);
-
     StringBuilder reqInfo = new StringBuilder();
     reqInfo.append("HTTP Request: ").append(req).append("\n");
     expandHeadersAndContent(reqInfo, req);
     return reqInfo.toString();
   }
 
-  @VisibleForTesting
+  /** visible for testing only */
   String responseLogMessage(HttpResponse res) {
-    Supplier<InputStream> resContents = Contents.memoize(res.getContent());
-    res.setContent(resContents);
-
     StringBuilder resInfo = new StringBuilder("HTTP Response: ");
     resInfo.append("Status code: ").append(res.getStatus()).append("\n");
     expandHeadersAndContent(resInfo, res);

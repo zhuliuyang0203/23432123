@@ -27,7 +27,7 @@ module Selenium
         #
 
         class Guard
-          attr_reader :guarded, :type, :messages, :reason
+          attr_reader :guarded, :type, :messages, :reason, :tracker
 
           def initialize(guarded, type, guards = nil)
             @guarded = guarded
@@ -36,24 +36,25 @@ module Selenium
             @messages[:unknown] = 'TODO: Investigate why this is failing and file a bug report'
             @type = type
 
-            @reason = @guarded.delete(:reason)
+            @reason = @guarded[:reason] || 'No reason given'
+            @guarded[:reason] = @reason
           end
 
           def message
-            details = case @reason
+            details = case reason
                       when Integer
-                        "Bug Filed: #{@tracker}/#{@reason}"
+                        "Bug Filed: #{tracker}/#{reason}"
                       when Symbol
-                        @messages[@reason]
-                      when String
-                        @reason
+                        messages[reason]
                       else
-                        'no reason given'
+                        "Guarded by #{guarded};"
                       end
 
-            case @type
+            case type
             when :exclude
-              "Test not guarded because it breaks test run; #{details}"
+              "Test skipped because it breaks test run; #{details}"
+            when :flaky
+              "Test skipped because it is unreliable in this configuration; #{details}"
             when :exclusive
               "Test does not apply to this configuration; #{details}"
             else
@@ -71,9 +72,10 @@ module Selenium
             @type == :only
           end
 
-          # Bug is present on all configurations specified, but test can not be run because it breaks other tests
+          # Bug is present on all configurations specified, but test can not be run because it breaks other tests,
+          # or it is flaky and unreliable
           def exclude?
-            @type == :exclude
+            @type == :exclude || @type == :flaky
           end
 
           # Test only applies to configurations specified

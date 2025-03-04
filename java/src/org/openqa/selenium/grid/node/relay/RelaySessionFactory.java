@@ -26,7 +26,6 @@ import static org.openqa.selenium.remote.tracing.AttributeKey.EXCEPTION_EVENT;
 import static org.openqa.selenium.remote.tracing.AttributeKey.EXCEPTION_MESSAGE;
 import static org.openqa.selenium.remote.tracing.AttributeKey.LOGGER_CLASS;
 import static org.openqa.selenium.remote.tracing.AttributeKey.UPSTREAM_DIALECT;
-import static org.openqa.selenium.remote.tracing.EventAttribute.setValue;
 import static org.openqa.selenium.remote.tracing.Tags.EXCEPTION;
 
 import java.net.MalformedURLException;
@@ -34,7 +33,6 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,6 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.grid.data.CreateSessionRequest;
@@ -51,6 +50,7 @@ import org.openqa.selenium.grid.node.SessionFactory;
 import org.openqa.selenium.internal.Debug;
 import org.openqa.selenium.internal.Either;
 import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.Command;
 import org.openqa.selenium.remote.Dialect;
 import org.openqa.selenium.remote.DriverCommand;
@@ -64,7 +64,7 @@ import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.tracing.AttributeKey;
-import org.openqa.selenium.remote.tracing.EventAttributeValue;
+import org.openqa.selenium.remote.tracing.AttributeMap;
 import org.openqa.selenium.remote.tracing.Span;
 import org.openqa.selenium.remote.tracing.Status;
 import org.openqa.selenium.remote.tracing.Tracer;
@@ -78,6 +78,7 @@ public class RelaySessionFactory implements SessionFactory {
   private final Duration sessionTimeout;
   private final URL serviceUrl;
   private final URL serviceStatusUrl;
+  private final String serviceProtocolVersion;
   private final Capabilities stereotype;
 
   public RelaySessionFactory(
@@ -86,12 +87,15 @@ public class RelaySessionFactory implements SessionFactory {
       Duration sessionTimeout,
       URI serviceUri,
       URI serviceStatusUri,
+      String serviceProtocolVersion,
       Capabilities stereotype) {
     this.tracer = Require.nonNull("Tracer", tracer);
     this.clientFactory = Require.nonNull("HTTP client", clientFactory);
     this.sessionTimeout = Require.nonNull("Session timeout", sessionTimeout);
     this.serviceUrl = createUrlFromUri(Require.nonNull("Service URL", serviceUri));
     this.serviceStatusUrl = createUrlFromUri(serviceStatusUri);
+    this.serviceProtocolVersion =
+        Require.nonNull("Service protocol version", serviceProtocolVersion);
     this.stereotype = ImmutableCapabilities.copyOf(Require.nonNull("Stereotype", stereotype));
   }
 
@@ -145,18 +149,30 @@ public class RelaySessionFactory implements SessionFactory {
               "New session request capabilities do not " + "match the stereotype."));
     }
 
+    // remove browserName capability if 'appium:app' is present as it breaks appium tests when app
+    // is provided
+    // they are mutually exclusive
+    MutableCapabilities filteredStereotype = new MutableCapabilities(stereotype);
+    if (capabilities.getCapability("appium:app") != null) {
+      filteredStereotype.setCapability(CapabilityType.BROWSER_NAME, (String) null);
+    }
+
+    capabilities = capabilities.merge(filteredStereotype);
     LOG.info("Starting session for " + capabilities);
 
     try (Span span = tracer.getCurrentContext().createSpan("relay_session_factory.apply")) {
 
-      Map<String, EventAttributeValue> attributeMap = new HashMap<>();
+      AttributeMap attributeMap = tracer.createAttributeMap();
       CAPABILITIES.accept(span, capabilities);
       CAPABILITIES_EVENT.accept(attributeMap, capabilities);
-      attributeMap.put(LOGGER_CLASS.getKey(), setValue(this.getClass().getName()));
-      attributeMap.put(DRIVER_URL.getKey(), setValue(serviceUrl.toString()));
+      attributeMap.put(LOGGER_CLASS.getKey(), this.getClass().getName());
+      attributeMap.put(DRIVER_URL.getKey(), serviceUrl.toString());
 
       ClientConfig clientConfig =
           ClientConfig.defaultConfig().readTimeout(sessionTimeout).baseUrl(serviceUrl);
+      if (!serviceProtocolVersion.isEmpty()) {
+        clientConfig = clientConfig.version(serviceProtocolVersion);
+      }
       HttpClient client = clientFactory.createClient(clientConfig);
 
       Command command = new Command(null, DriverCommand.NEW_SESSION(capabilities));
@@ -170,9 +186,9 @@ public class RelaySessionFactory implements SessionFactory {
                 : downstreamDialects.iterator().next();
 
         Response response = result.createResponse();
-        attributeMap.put(UPSTREAM_DIALECT.getKey(), setValue(upstream.toString()));
-        attributeMap.put(DOWNSTREAM_DIALECT.getKey(), setValue(downstream.toString()));
-        attributeMap.put(DRIVER_RESPONSE.getKey(), setValue(response.toString()));
+        attributeMap.put(UPSTREAM_DIALECT.getKey(), upstream.toString());
+        attributeMap.put(DOWNSTREAM_DIALECT.getKey(), downstream.toString());
+        attributeMap.put(DRIVER_RESPONSE.getKey(), response.toString());
 
         Capabilities responseCaps = new ImmutableCapabilities((Map<?, ?>) response.getValue());
         Capabilities mergedCapabilities = capabilities.merge(responseCaps);
@@ -189,12 +205,7 @@ public class RelaySessionFactory implements SessionFactory {
                 upstream,
                 stereotype,
                 mergedCapabilities,
-                Instant.now()) {
-              @Override
-              public void stop() {
-                // no-op
-              }
-            });
+                Instant.now()) {});
       } catch (Exception e) {
         span.setAttribute(AttributeKey.ERROR.getKey(), true);
         span.setStatus(Status.CANCELLED);
@@ -202,8 +213,9 @@ public class RelaySessionFactory implements SessionFactory {
         String errorMessage =
             String.format(
                 "Error while creating session with the service %s. %s", serviceUrl, e.getMessage());
-        attributeMap.put(EXCEPTION_MESSAGE.getKey(), setValue(errorMessage));
+        attributeMap.put(EXCEPTION_MESSAGE.getKey(), errorMessage);
         span.addEvent(EXCEPTION_EVENT.getKey(), attributeMap);
+        client.close();
         return Either.left(new SessionNotCreatedException(errorMessage));
       }
     } catch (Exception e) {
@@ -216,11 +228,15 @@ public class RelaySessionFactory implements SessionFactory {
       // If no status endpoint was configured, we assume the server is up.
       return true;
     }
-    try {
-      HttpClient client = clientFactory.createClient(serviceStatusUrl);
+
+    ClientConfig clientConfig = ClientConfig.defaultConfig().baseUrl(serviceStatusUrl);
+    if (!serviceProtocolVersion.isEmpty()) {
+      clientConfig = clientConfig.version(serviceProtocolVersion);
+    }
+    try (HttpClient client = clientFactory.createClient(clientConfig)) {
       HttpResponse response =
           client.execute(new HttpRequest(HttpMethod.GET, serviceStatusUrl.toString()));
-      LOG.log(Debug.getDebugLogLevel(), Contents.string(response));
+      LOG.log(Debug.getDebugLogLevel(), () -> Contents.string(response));
       return response.getStatus() == 200;
     } catch (Exception e) {
       LOG.log(

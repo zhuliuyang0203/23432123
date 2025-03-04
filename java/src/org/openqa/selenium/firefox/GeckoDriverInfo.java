@@ -22,16 +22,17 @@ import static org.openqa.selenium.remote.CapabilityType.BROWSER_NAME;
 
 import com.google.auto.service.AutoService;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebDriverInfo;
 import org.openqa.selenium.remote.service.DriverFinder;
 
 @AutoService(WebDriverInfo.class)
 public class GeckoDriverInfo implements WebDriverInfo {
+  private static final Logger LOG = Logger.getLogger(GeckoDriverInfo.class.getName());
 
   @Override
   public String getDisplayName() {
@@ -49,10 +50,7 @@ public class GeckoDriverInfo implements WebDriverInfo {
       return true;
     }
 
-    return capabilities.asMap().keySet().stream()
-        .map(key -> key.startsWith("moz:"))
-        .reduce(Boolean::logicalOr)
-        .orElse(false);
+    return capabilities.asMap().keySet().stream().anyMatch(key -> key.startsWith("moz:"));
   }
 
   @Override
@@ -67,17 +65,14 @@ public class GeckoDriverInfo implements WebDriverInfo {
 
   @Override
   public boolean isAvailable() {
-    try {
-      DriverFinder.getPath(GeckoDriverService.createDefaultService(), getCanonicalCapabilities());
-      return true;
-    } catch (IllegalStateException | WebDriverException e) {
-      return false;
-    }
+    return new DriverFinder(GeckoDriverService.createDefaultService(), getCanonicalCapabilities())
+        .isAvailable();
   }
 
   @Override
   public boolean isPresent() {
-    return GeckoDriverService.isPresent();
+    return new DriverFinder(GeckoDriverService.createDefaultService(), getCanonicalCapabilities())
+        .isPresent();
   }
 
   @Override

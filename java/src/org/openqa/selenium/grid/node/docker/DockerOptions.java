@@ -61,7 +61,7 @@ public class DockerOptions {
   static final String DOCKER_SECTION = "docker";
   static final String DEFAULT_ASSETS_PATH = "/opt/selenium/assets";
   static final String DEFAULT_DOCKER_URL = "unix:/var/run/docker.sock";
-  static final String DEFAULT_VIDEO_IMAGE = "selenium/video:latest";
+  static final String DEFAULT_VIDEO_IMAGE = "false";
   static final int DEFAULT_MAX_SESSIONS = Runtime.getRuntime().availableProcessors();
   private static final String DEFAULT_DOCKER_NETWORK = "bridge";
   private static final Logger LOG = Logger.getLogger(DockerOptions.class.getName());
@@ -129,6 +129,9 @@ public class DockerOptions {
             .getAll(DOCKER_SECTION, "configs")
             .orElseThrow(() -> new DockerException("Unable to find docker configs"));
 
+    List<String> hostConfigKeys =
+        config.getAll(DOCKER_SECTION, "host-config-keys").orElseGet(Collections::emptyList);
+
     Multimap<String, Capabilities> kinds = HashMultimap.create();
     for (int i = 0; i < allConfigs.size(); i++) {
       String imageName = allConfigs.get(i);
@@ -152,10 +155,13 @@ public class DockerOptions {
 
     DockerAssetsPath assetsPath = getAssetsPath(info);
     String networkName = getDockerNetworkName(info);
+    Map<String, Object> hostConfig = getDockerHostConfig(info);
 
     loadImages(docker, kinds.keySet().toArray(new String[0]));
     Image videoImage = getVideoImage(docker);
-    loadImages(docker, videoImage.getName());
+    if (videoImage != null) {
+      loadImages(docker, videoImage.getName());
+    }
 
     // Hard coding the config section value "node" to avoid an extra dependency
     int maxContainerCount =
@@ -181,7 +187,10 @@ public class DockerOptions {
                     videoImage,
                     assetsPath,
                     networkName,
-                    info.isPresent()));
+                    info.isPresent(),
+                    capabilities -> options.getSlotMatcher().matches(caps, capabilities),
+                    hostConfig,
+                    hostConfigKeys));
           }
           LOG.info(
               String.format(
@@ -200,8 +209,8 @@ public class DockerOptions {
         config.getAll(DOCKER_SECTION, "devices").orElseGet(Collections::emptyList);
 
     List<Device> deviceMapping = new ArrayList<>();
-    for (int i = 0; i < devices.size(); i++) {
-      String deviceMappingDefined = devices.get(i).trim();
+    for (String device : devices) {
+      String deviceMappingDefined = device.trim();
       Matcher matcher =
           linuxDeviceMappingWithDefaultPermissionsPattern.matcher(deviceMappingDefined);
 
@@ -217,6 +226,9 @@ public class DockerOptions {
 
   private Image getVideoImage(Docker docker) {
     String videoImage = config.get(DOCKER_SECTION, "video-image").orElse(DEFAULT_VIDEO_IMAGE);
+    if (videoImage.equalsIgnoreCase("false")) {
+      return null;
+    }
     return docker.getImage(videoImage);
   }
 
@@ -226,6 +238,11 @@ public class DockerOptions {
       return info.get().getNetworkName();
     }
     return DEFAULT_DOCKER_NETWORK;
+  }
+
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+  private Map<String, Object> getDockerHostConfig(Optional<ContainerInfo> info) {
+    return info.map(ContainerInfo::getHostConfig).orElse(Collections.emptyMap());
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

@@ -1,8 +1,27 @@
-using System;
+// <copyright file="VisibilityTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
-using System.Drawing;
 using OpenQA.Selenium.Environment;
+using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 
 namespace OpenQA.Selenium
 {
@@ -92,8 +111,8 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("zero"));
             Size size = element.Size;
 
-            Assert.AreEqual(0, size.Width, "Should have 0 width");
-            Assert.AreEqual(0, size.Height, "Should have 0 height");
+            Assert.That(size.Width, Is.Zero, "Should have 0 width");
+            Assert.That(size.Height, Is.Zero, "Should have 0 height");
             Assert.That(element.Displayed, Is.True);
         }
 
@@ -249,9 +268,9 @@ namespace OpenQA.Selenium
 
             driver.Url = clickJackerPage;
             IWebElement element = driver.FindElement(By.Id("clickJacker"));
-            Assert.AreEqual("0", element.GetCssValue("opacity"), "Precondition failed: clickJacker should be transparent");
+            Assert.That(element.GetCssValue("opacity"), Is.EqualTo("0"), "Precondition failed: clickJacker should be transparent");
             element.Click();
-            Assert.AreEqual("1", element.GetCssValue("opacity"));
+            Assert.That(element.GetCssValue("opacity"), Is.EqualTo("1"));
         }
 
         [Test]

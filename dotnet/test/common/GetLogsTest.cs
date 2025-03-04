@@ -1,17 +1,33 @@
-using System.Collections.Generic;
+// <copyright file="GetLogsTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
-using System.Collections.ObjectModel;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Environment;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace OpenQA.Selenium
 {
     [TestFixture]
     [IgnoreBrowser(Browser.Firefox, "Firefox driver (when using Marionette/Geckodriver) does not support logs API")]
     [IgnoreBrowser(Browser.IE, "IE driver does not support logs API")]
-	[IgnoreBrowser(Browser.Safari, "Edge driver does not support logs API")]
+    [IgnoreBrowser(Browser.Safari, "Edge driver does not support logs API")]
     public class GetLogsTest : DriverTestFixture
     {
         private IWebDriver localDriver;
@@ -73,7 +89,7 @@ namespace OpenQA.Selenium
             {
                 CreateWebDriverWithLogging(logType, LogLevel.Off);
                 ReadOnlyCollection<LogEntry> entries = localDriver.Manage().Logs.GetLog(logType);
-                Assert.AreEqual(0, entries.Count, string.Format("There should be no log entries for log type {0} when logging is turned off.", logType));
+                Assert.That(entries, Is.Empty, string.Format("There should be no log entries for log type {0} when logging is turned off.", logType));
                 QuitDriver();
             }
         }
@@ -82,10 +98,9 @@ namespace OpenQA.Selenium
         {
             if (TestUtilities.IsChrome(driver))
             {
-                ChromeDriverService service = ChromeDriverService.CreateDefaultService(EnvironmentManager.Instance.DriverServiceDirectory);
                 ChromeOptions options = new ChromeOptions();
                 options.SetLoggingPreference(logType, logLevel);
-                localDriver = new ChromeDriver(service, options);
+                localDriver = new ChromeDriver(options);
             }
 
             localDriver.Url = simpleTestPage;

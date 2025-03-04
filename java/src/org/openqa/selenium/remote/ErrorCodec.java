@@ -17,12 +17,11 @@
 
 package org.openqa.selenium.remote;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.openqa.selenium.DetachedShadowRootException;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.ElementNotInteractableException;
@@ -56,39 +55,40 @@ public class ErrorCodec {
   private static final W3CError DEFAULT_ERROR =
       new W3CError("unknown error", WebDriverException.class, 500);
 
-  private static final Set<W3CError> ERRORS =
-      ImmutableSet.<W3CError>builder()
-          .add(new W3CError("script timeout", ScriptTimeoutException.class, 500))
-          .add(new W3CError("detached shadow root", DetachedShadowRootException.class, 404))
-          .add(
-              new W3CError(
-                  "element click intercepted", ElementClickInterceptedException.class, 400))
-          .add(new W3CError("element not interactable", ElementNotInteractableException.class, 400))
-          .add(new W3CError("invalid argument", InvalidArgumentException.class, 400))
-          .add(new W3CError("invalid cookie domain", InvalidCookieDomainException.class, 400))
-          .add(new W3CError("invalid element state", InvalidElementStateException.class, 400))
-          .add(new W3CError("invalid selector", InvalidSelectorException.class, 400))
-          .add(new W3CError("invalid session id", NoSuchSessionException.class, 404))
-          .add(new W3CError("insecure certificate", InsecureCertificateException.class, 400))
-          .add(new W3CError("javascript error", JavascriptException.class, 500))
-          .add(new W3CError("move target out of bounds", MoveTargetOutOfBoundsException.class, 500))
-          .add(new W3CError("no such alert", NoAlertPresentException.class, 404))
-          .add(new W3CError("no such cookie", NoSuchCookieException.class, 404))
-          .add(new W3CError("no such element", NoSuchElementException.class, 404))
-          .add(new W3CError("no such frame", NoSuchFrameException.class, 404))
-          .add(new W3CError("no such shadow root", NoSuchShadowRootException.class, 404))
-          .add(new W3CError("no such window", NoSuchWindowException.class, 404))
-          .add(new W3CError("session not created", SessionNotCreatedException.class, 500))
-          .add(new W3CError("stale element reference", StaleElementReferenceException.class, 404))
-          .add(new W3CError("timeout", TimeoutException.class, 500))
-          .add(new W3CError("unable to capture screen", ScreenshotException.class, 500))
-          .add(new W3CError("unable to set cookie", UnableToSetCookieException.class, 500))
-          .add(new W3CError("unexpected alert open", UnhandledAlertException.class, 500))
-          .add(new W3CError("unknown error", WebDriverException.class, 500))
-          .add(new W3CError("unknown command", UnsupportedCommandException.class, 404))
-          .add(new W3CError("unknown method", UnsupportedCommandException.class, 405))
-          .add(new W3CError("unsupported operation", UnsupportedCommandException.class, 404))
-          .build();
+  // note: this is a set from a logical point of view, but the implementation does rely on the order
+  // of the elements.
+  // there is no guarantee a Set will keep the order (and we have no .equals / .hashCode
+  // implementation too).
+  private static final List<W3CError> ERRORS =
+      List.of(
+          new W3CError("script timeout", ScriptTimeoutException.class, 500),
+          new W3CError("detached shadow root", DetachedShadowRootException.class, 404),
+          new W3CError("element click intercepted", ElementClickInterceptedException.class, 400),
+          new W3CError("element not interactable", ElementNotInteractableException.class, 400),
+          new W3CError("invalid argument", InvalidArgumentException.class, 400),
+          new W3CError("invalid cookie domain", InvalidCookieDomainException.class, 400),
+          new W3CError("invalid element state", InvalidElementStateException.class, 400),
+          new W3CError("invalid selector", InvalidSelectorException.class, 400),
+          new W3CError("invalid session id", NoSuchSessionException.class, 404),
+          new W3CError("insecure certificate", InsecureCertificateException.class, 400),
+          new W3CError("javascript error", JavascriptException.class, 500),
+          new W3CError("move target out of bounds", MoveTargetOutOfBoundsException.class, 500),
+          new W3CError("no such alert", NoAlertPresentException.class, 404),
+          new W3CError("no such cookie", NoSuchCookieException.class, 404),
+          new W3CError("no such element", NoSuchElementException.class, 404),
+          new W3CError("no such frame", NoSuchFrameException.class, 404),
+          new W3CError("no such shadow root", NoSuchShadowRootException.class, 404),
+          new W3CError("no such window", NoSuchWindowException.class, 404),
+          new W3CError("session not created", SessionNotCreatedException.class, 500),
+          new W3CError("stale element reference", StaleElementReferenceException.class, 404),
+          new W3CError("timeout", TimeoutException.class, 500),
+          new W3CError("unable to capture screen", ScreenshotException.class, 500),
+          new W3CError("unable to set cookie", UnableToSetCookieException.class, 500),
+          new W3CError("unexpected alert open", UnhandledAlertException.class, 500),
+          new W3CError("unsupported operation", UnsupportedCommandException.class, 500),
+          new W3CError("unknown command", UnsupportedCommandException.class, 404),
+          new W3CError("unknown method", UnsupportedCommandException.class, 405),
+          new W3CError("unknown error", WebDriverException.class, 500));
 
   private ErrorCodec() {
     // This will switch to being an interface at some point. Use `createDefault`
@@ -108,15 +108,32 @@ public class ErrorCodec {
             ? "<no message present in throwable>"
             : throwable.getMessage();
 
-    return ImmutableMap.of(
+    StringWriter stacktrace = new StringWriter();
+    try (PrintWriter printWriter = new PrintWriter(stacktrace)) {
+      throwable.printStackTrace(printWriter);
+    }
+
+    if (throwable instanceof UnhandledAlertException) {
+      String text = ((UnhandledAlertException) throwable).getAlertText();
+      if (text != null) {
+        return Map.of(
+            "value",
+            Map.of(
+                "error",
+                err.w3cErrorString,
+                "message",
+                message,
+                "stacktrace",
+                stacktrace.toString(),
+                "data",
+                Map.of("text", text)));
+      }
+    }
+
+    return Map.of(
         "value",
-        ImmutableMap.of(
-            "error",
-            err.w3cErrorString,
-            "message",
-            message,
-            "stacktrace",
-            Throwables.getStackTraceAsString(throwable)));
+        Map.of(
+            "error", err.w3cErrorString, "message", message, "stacktrace", stacktrace.toString()));
   }
 
   public int getHttpStatusCode(Throwable throwable) {
@@ -127,12 +144,12 @@ public class ErrorCodec {
 
   public WebDriverException decode(Map<String, Object> response) {
     if (!(response.get("value") instanceof Map)) {
-      throw new IllegalArgumentException("Unable to find mapping for " + response.toString());
+      throw new IllegalArgumentException("Unable to find mapping for " + response);
     }
 
     Map<?, ?> value = (Map<?, ?>) response.get("value");
     if (!(value.get("error") instanceof String)) {
-      throw new IllegalArgumentException("Unable to find mapping for " + response.toString());
+      throw new IllegalArgumentException("Unable to find mapping for " + response);
     }
 
     String error = (String) value.get("error");
@@ -155,7 +172,7 @@ public class ErrorCodec {
 
   private W3CError fromThrowable(Throwable throwable) {
     return ERRORS.stream()
-        .filter(err -> throwable.getClass().isAssignableFrom(err.exception))
+        .filter(err -> err.exception.isAssignableFrom(throwable.getClass()))
         .findFirst()
         .orElse(DEFAULT_ERROR);
   }

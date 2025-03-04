@@ -36,17 +36,12 @@
  *     a unique browser session with a clean user profile (unless otherwise
  *     configured through the {@link Options} class).
  *
- * __Headless Chrome__ <a id="headless"></a>
- *
- * To start Chrome in headless mode, simply call
- * {@linkplain Options#headless Options.headless()}.
- *
  *     let chrome = require('selenium-webdriver/chrome');
  *     let {Builder} = require('selenium-webdriver');
  *
  *     let driver = new Builder()
  *         .forBrowser('chrome')
- *         .setChromeOptions(new chrome.Options().headless())
+ *         .setChromeOptions(new chrome.Options())
  *         .build();
  *
  * __Customizing the ChromeDriver Server__ <a id="custom-server"></a>
@@ -123,21 +118,15 @@
  * [PATH]: http://en.wikipedia.org/wiki/PATH_%28variable%29
  * [android]: https://chromedriver.chromium.org/getting-started/getting-started---android
  * [webview]: https://developer.chrome.com/multidevice/webview/overview
+ *
+ * @module selenium-webdriver/chrome
  */
 
 'use strict'
 
-const io = require('./io')
 const { Browser } = require('./lib/capabilities')
 const chromium = require('./chromium')
-
-/**
- * Name of the ChromeDriver executable.
- * @type {string}
- * @const
- */
-const CHROMEDRIVER_EXE =
-  process.platform === 'win32' ? 'chromedriver.exe' : 'chromedriver'
+const CHROME_CAPABILITY_KEY = 'goog:chromeOptions'
 
 /** @type {remote.DriverService} */
 
@@ -156,8 +145,7 @@ class ServiceBuilder extends chromium.ServiceBuilder {
    *     cannot be found on the PATH.
    */
   constructor(opt_exe) {
-    let exe = opt_exe || locateSynchronously()
-    super(exe)
+    super(opt_exe)
   }
 }
 
@@ -228,9 +216,7 @@ class Driver extends chromium.Driver {
    */
   static createSession(opt_config, opt_serviceExecutor) {
     let caps = opt_config || new Options()
-    return /** @type {!Driver} */ (
-      super.createSession(caps, opt_serviceExecutor)
-    )
+    return /** @type {!Driver} */ (super.createSession(caps, opt_serviceExecutor, 'goog', CHROME_CAPABILITY_KEY))
   }
 
   /**
@@ -242,24 +228,12 @@ class Driver extends chromium.Driver {
   }
 }
 
-/**
- * _Synchronously_ attempts to locate the chromedriver executable on the current
- * system.
- *
- * @return {?string} the located executable, or `null`.
- */
-function locateSynchronously() {
-  return io.findInPath(CHROMEDRIVER_EXE, true)
-}
-
-Options.prototype.CAPABILITY_KEY = 'goog:chromeOptions'
+Options.prototype.CAPABILITY_KEY = CHROME_CAPABILITY_KEY
 Options.prototype.BROWSER_NAME_VALUE = Browser.CHROME
-Driver.prototype.VENDOR_COMMAND_PREFIX = 'goog'
 
 // PUBLIC API
 module.exports = {
-  Driver: Driver,
+  Driver,
   Options,
   ServiceBuilder,
-  locateSynchronously,
 }
