@@ -53,10 +53,7 @@ impl Lock {
 
         log.debug(format!("Acquiring lock: {}", path.display()));
         file.lock_exclusive().unwrap_or_default();
-
-        LOCK_PATH.with(|option| {
-            *option.borrow_mut() = Some(lock_folder.to_path_buf());
-        });
+        set_lock_path(Some(path.to_path_buf()));
 
         Ok(Self { file, path })
     }
@@ -64,10 +61,7 @@ impl Lock {
     pub fn release(&mut self) {
         fs::remove_file(&self.path).unwrap_or_default();
         self.file.unlock().unwrap_or_default();
-
-        LOCK_PATH.with(|option| {
-            *option.borrow_mut() = None;
-        });
+        set_lock_path(None);
     }
 
     pub fn exists(&mut self) -> bool {
@@ -76,14 +70,21 @@ impl Lock {
 }
 
 pub fn clear_lock_if_required() {
-    let mut lock_path: Option<PathBuf> = None;
-    LOCK_PATH.with(|option| {
-        let optional_path = &*option.borrow();
-        if optional_path.is_some() {
-            lock_path = Some(optional_path.as_ref().unwrap().to_path_buf());
-        }
-    });
+    let lock_path = get_lock_path();
     if lock_path.is_some() {
-        fs::remove_dir_all(lock_path.unwrap()).unwrap_or_default();
+        let lock = lock_path.unwrap();
+        if lock.exists() {
+            fs::remove_dir_all(lock.parent().unwrap()).unwrap_or_default();
+        }
     }
+}
+
+fn set_lock_path(path: Option<PathBuf>) {
+    LOCK_PATH.with(|lock_path| {
+        *lock_path.borrow_mut() = path;
+    });
+}
+
+fn get_lock_path() -> Option<PathBuf> {
+    LOCK_PATH.with(|lock_path| lock_path.borrow().clone())
 }
