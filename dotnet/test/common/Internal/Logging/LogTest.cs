@@ -31,7 +31,7 @@ namespace OpenQA.Selenium.Internal.Logging
         private void ResetGlobalLog()
         {
             Log.SetLevel(LogEventLevel.Info);
-            Log.Handlers.Clear().Handlers.Add(new ConsoleLogHandler());
+            Log.Handlers.Clear().Handlers.Add(new TextWriterHandler(Console.Error));
         }
 
         [SetUp]

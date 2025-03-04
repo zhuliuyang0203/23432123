@@ -73,6 +73,48 @@ module Selenium
           expect(handles).to include(window1)
           expect(handles).not_to include(window2)
         end
+
+        it 'sets the viewport' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = described_class.new(driver)
+            browsing_context.set_viewport(width: 800, height: 600, device_pixel_ratio: 2.0)
+            expect(driver.execute_script('return [window.innerWidth, window.innerHeight]')).to eq([800, 600])
+            expect(driver.execute_script('return window.devicePixelRatio')).to eq(2.0)
+          end
+        end
+
+        it 'accepts users prompts without text' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = described_class.new(driver)
+            window = browsing_context.create
+
+            browsing_context.handle_user_prompt(window, accept: true)
+
+            expect(driver.page_source).to include('hello')
+          end
+        end
+
+        it 'accepts users prompts with text' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = described_class.new(driver)
+            window = browsing_context.create
+
+            browsing_context.handle_user_prompt(window, accept: true, text: 'Hello, world!')
+
+            expect(driver.page_source).to include('hello')
+          end
+        end
+
+        it 'rejects users prompts' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = described_class.new(driver)
+            window = browsing_context.create
+
+            browsing_context.handle_user_prompt(window, accept: false)
+
+            expect(driver.page_source).to include('goodbye')
+          end
+        end
       end
     end # BiDi
   end # WebDriver

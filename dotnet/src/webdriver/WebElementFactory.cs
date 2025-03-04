@@ -49,6 +49,9 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="elementDictionary">The dictionary containing the element reference.</param>
         /// <returns>A <see cref="WebElement"/> containing the information from the specified dictionary.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="elementDictionary"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the dictionary does not contain the element reference property name.</exception>
+        /// <exception cref="InvalidOperationException">If the element property is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public virtual WebElement CreateElement(Dictionary<string, object?> elementDictionary)
         {
             string elementId = this.GetElementId(elementDictionary);

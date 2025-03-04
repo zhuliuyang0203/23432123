@@ -1,4 +1,4 @@
-// <copyright file="IHasSessionId.cs" company="Selenium Committers">
+// <copyright file="TextWriterHandler.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,18 +17,27 @@
 // under the License.
 // </copyright>
 
+using System.IO;
+
 #nullable enable
 
-namespace OpenQA.Selenium
+namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
-    /// Interface indicating the driver has a Session ID.
+    /// Represents a log handler that writes log events to the given text writer.
     /// </summary>
-    public interface IHasSessionId
+    public class TextWriterHandler(TextWriter writer) : ILogHandler
     {
+        // performance trick to avoid expensive Enum.ToString() with fixed length
+        private static readonly string[] _levels = { "TRACE", "DEBUG", " INFO", " WARN", "ERROR" };
+
         /// <summary>
-        /// Gets the session ID of the current session.
+        /// Handles a log event by writing it to the text writer.
         /// </summary>
-        SessionId SessionId { get; }
+        /// <param name="logEvent">The log event to handle.</param>
+        public void Handle(LogEvent logEvent)
+        {
+            writer.WriteLine($"{logEvent.Timestamp:HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
+        }
     }
 }

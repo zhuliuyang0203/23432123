@@ -57,10 +57,10 @@ namespace OpenQA.Selenium
         public string AttributeOriginalValue { get; internal set; } = null!;
 
         /// <summary>
-        /// Stores the element associated with the target ID
+        /// Stores the element associated with the target ID, if any.
         /// </summary>
         [JsonIgnore]
-        public IWebElement Element { get; internal set; } = null!; // Set internally
+        public IWebElement? Element { get; internal set; }
 
         /// <summary>
         /// Returns a string that represents the current object.

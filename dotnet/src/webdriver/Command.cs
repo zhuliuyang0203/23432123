@@ -56,10 +56,10 @@ namespace OpenQA.Selenium
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
-        public Command(SessionId? sessionId, string name, Dictionary<string, object>? parameters)
+        public Command(SessionId? sessionId, string name, Dictionary<string, object?>? parameters)
         {
             this.SessionId = sessionId;
-            this.Parameters = parameters ?? new Dictionary<string, object>();
+            this.Parameters = parameters ?? new Dictionary<string, object?>();
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
@@ -79,7 +79,7 @@ namespace OpenQA.Selenium
         /// Gets the parameters of the command
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object> Parameters { get; }
+        public Dictionary<string, object?> Parameters { get; }
 
         /// <summary>
         /// Gets the parameters of the command as a JSON-encoded string.
@@ -118,9 +118,9 @@ namespace OpenQA.Selenium
         /// <returns>A <see cref="Dictionary{K, V}"/> with a string keys, and an object value. </returns>
         /// <exception cref="JsonException">If <paramref name="value"/> is not a JSON object.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
-        private static Dictionary<string, object>? ConvertParametersFromJson(string value)
+        private static Dictionary<string, object?>? ConvertParametersFromJson(string value)
         {
-            Dictionary<string, object>? parameters = JsonSerializer.Deserialize<Dictionary<string, object>>(value, s_jsonSerializerOptions);
+            Dictionary<string, object?>? parameters = JsonSerializer.Deserialize<Dictionary<string, object?>>(value, s_jsonSerializerOptions);
             return parameters;
         }
     }

@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -32,10 +34,10 @@ namespace OpenQA.Selenium
         private const string FirstMatchCapabilityName = "firstMatch";
         private const string AlwaysMatchCapabilityName = "alwaysMatch";
 
-        private readonly List<string> reservedSettingNames = new List<string>() { FirstMatchCapabilityName, AlwaysMatchCapabilityName };
-        private DriverOptions mustMatchDriverOptions;
-        private List<DriverOptions> firstMatchOptions = new List<DriverOptions>();
-        private Dictionary<string, object> remoteMetadataSettings = new Dictionary<string, object>();
+        private readonly HashSet<string> reservedSettingNames = new HashSet<string>() { FirstMatchCapabilityName, AlwaysMatchCapabilityName };
+        private DriverOptions? mustMatchDriverOptions;
+        private readonly List<DriverOptions> firstMatchOptions = new List<DriverOptions>();
+        private readonly Dictionary<string, object> remoteMetadataSettings = new Dictionary<string, object>();
 
         /// <summary>
         /// Creates a new instance of the <see cref="RemoteSessionSettings"/> class.
@@ -69,7 +71,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets a value indicating the options that must be matched by the remote end to create a session.
         /// </summary>
-        internal DriverOptions MustMatchDriverOptions => this.mustMatchDriverOptions;
+        internal DriverOptions? MustMatchDriverOptions => this.mustMatchDriverOptions;
 
         /// <summary>
         /// Gets a value indicating the number of options that may be matched by the remote end to create a session.
@@ -91,7 +93,8 @@ namespace OpenQA.Selenium
             {
                 if (capabilityName == AlwaysMatchCapabilityName)
                 {
-                    return this.GetAlwaysMatchOptionsAsSerializableDictionary();
+                    return this.GetAlwaysMatchOptionsAsSerializableDictionary()
+                        ?? throw new ArgumentException("The \"alwaysMatch\" value has not been set", nameof(capabilityName));
                 }
 
                 if (capabilityName == FirstMatchCapabilityName)
@@ -203,7 +206,7 @@ namespace OpenQA.Selenium
         /// <param name="capability">The capability to get.</param>
         /// <returns>An object associated with the capability, or <see langword="null"/>
         /// if the capability is not set in this set of capabilities.</returns>
-        public object GetCapability(string capability)
+        public object? GetCapability(string capability)
         {
             if (capability == AlwaysMatchCapabilityName)
             {
@@ -227,9 +230,9 @@ namespace OpenQA.Selenium
         /// Return a dictionary representation of this <see cref="RemoteSessionSettings"/>.
         /// </summary>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> representation of this <see cref="RemoteSessionSettings"/>.</returns>
-        public Dictionary<string, object> ToDictionary()
+        public Dictionary<string, object?> ToDictionary()
         {
-            Dictionary<string, object> capabilitiesDictionary = new Dictionary<string, object>();
+            Dictionary<string, object?> capabilitiesDictionary = new Dictionary<string, object?>();
 
             foreach (KeyValuePair<string, object> remoteMetadataSetting in this.remoteMetadataSettings)
             {
@@ -243,7 +246,7 @@ namespace OpenQA.Selenium
 
             if (this.firstMatchOptions.Count > 0)
             {
-                List<object> optionsMatches = GetFirstMatchOptionsAsSerializableList();
+                List<object?> optionsMatches = GetFirstMatchOptionsAsSerializableList();
 
                 capabilitiesDictionary["firstMatch"] = optionsMatches;
             }
@@ -261,14 +264,14 @@ namespace OpenQA.Selenium
             return this.firstMatchOptions[firstMatchIndex];
         }
 
-        private IDictionary<string, object> GetAlwaysMatchOptionsAsSerializableDictionary()
+        private IDictionary<string, object>? GetAlwaysMatchOptionsAsSerializableDictionary()
         {
-            return this.mustMatchDriverOptions.ToDictionary();
+            return this.mustMatchDriverOptions?.ToDictionary();
         }
 
-        private List<object> GetFirstMatchOptionsAsSerializableList()
+        private List<object?> GetFirstMatchOptionsAsSerializableList()
         {
-            List<object> optionsMatches = new List<object>(this.firstMatchOptions.Count);
+            List<object?> optionsMatches = new List<object?>(this.firstMatchOptions.Count);
             foreach (DriverOptions options in this.firstMatchOptions)
             {
                 optionsMatches.Add(options.ToDictionary());

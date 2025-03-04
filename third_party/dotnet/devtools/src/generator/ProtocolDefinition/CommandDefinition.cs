@@ -20,5 +20,8 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
 
         [JsonIgnore]
         public bool NoParameters => Parameters == null || Parameters.Count == 0;
+
+        [JsonIgnore]
+        public bool NoReturn => Returns == null || Returns.Count == 0;
     }
 }

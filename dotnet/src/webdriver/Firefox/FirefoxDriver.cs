@@ -221,9 +221,9 @@ namespace OpenQA.Selenium.Firefox
                 string fullServicePath = finder.GetDriverPath();
                 service.DriverServicePath = Path.GetDirectoryName(fullServicePath);
                 service.DriverServiceExecutableName = Path.GetFileName(fullServicePath);
-                if (finder.HasBrowserPath())
+                if (finder.TryGetBrowserPath(out string? browserPath))
                 {
-                    options.BinaryLocation = finder.GetBrowserPath();
+                    options.BinaryLocation = browserPath;
                     options.BrowserVersion = null;
                 }
             }
