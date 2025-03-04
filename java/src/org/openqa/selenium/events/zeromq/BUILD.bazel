@@ -12,6 +12,7 @@ java_library(
     ],
     deps = [
         "//java/src/org/openqa/selenium:core",
+        "//java/src/org/openqa/selenium/concurrent",
         "//java/src/org/openqa/selenium/events",
         "//java/src/org/openqa/selenium/grid/config",
         "//java/src/org/openqa/selenium/grid/security",

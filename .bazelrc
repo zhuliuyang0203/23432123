@@ -8,7 +8,11 @@ try-import %workspace%/.bazelrc.windows.local
 # https://github.com/bazelbuild/bazel/issues/20369
 # https://github.com/bazelbuild/bazel/issues/21491
 
-common --enable_bzlmod --lockfile_mode=off
+common --lockfile_mode=off
+
+# Prepare for Bazel 8. These become the default in 8.0.0
+common --incompatible_disallow_empty_glob
+common --incompatible_use_plus_in_repo_names
 
 # Ensure Windows support is accurate.
 
@@ -30,9 +34,11 @@ build --tool_java_runtime_version=remotejdk_17
 build --javacopt="--release 11"
 
 # Require java dependencies to be used and first-order
-
 build --experimental_strict_java_deps=strict
 build --explicit_java_test_deps
+
+# Avoid ErrorProne getting annoyed about "impossible null checks"
+build --javacopt="-Xep:ImpossibleNullComparison:OFF"
 
 # Allow spaces in runfile paths
 build --nobuild_runfile_links
@@ -54,6 +60,11 @@ query --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # Ensure builds are unpolluted by the user env
 
 build --incompatible_strict_action_env
+
+# Required to get `protobuf` compiling, which is required for `rules_closure`
+build --incompatible_enable_cc_toolchain_resolution
+build --cxxopt=-std=c++14
+build --host_cxxopt=-std=c++14
 
 # For build stamping
 
@@ -94,6 +105,7 @@ test --test_env=JRUBY_OPTS="--dev"
 
 test:windows --test_env=PATH
 test:windows --test_env=LOCALAPPDATA
+test:windows --test_env=PROCESSOR_ARCHITECTURE
 test:windows --test_env=PROGRAMFILES="C:\\Program Files"
 test:windows --test_env=PROGRAMFILES(X86)="C:\\Program Files (x86)"
 

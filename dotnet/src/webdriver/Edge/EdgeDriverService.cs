@@ -1,25 +1,28 @@
-// <copyright file="EdgeDriverService.cs" company="WebDriver Committers">
+// <copyright file="EdgeDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Chromium;
 using OpenQA.Selenium.Internal;
 using System;
 using System.IO;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Edge
 {
@@ -36,7 +39,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="executablePath">The full path to the EdgeDriver executable.</param>
         /// <param name="executableFileName">The file name of the EdgeDriver executable.</param>
         /// <param name="port">The port on which the EdgeDriver executable should listen.</param>
-        private EdgeDriverService(string executablePath, string executableFileName, int port)
+        private EdgeDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, executableFileName, port)
         {
         }
@@ -53,8 +56,8 @@ namespace OpenQA.Selenium.Edge
         [Obsolete("Use EnableVerboseLogging")]
         public bool UseVerboseLogging
         {
-            get { return this.EnableVerboseLogging; }
-            set { this.EnableVerboseLogging = value; }
+            get => this.EnableVerboseLogging;
+            set => this.EnableVerboseLogging = value;
         }
 
         /// <summary>
@@ -69,22 +72,24 @@ namespace OpenQA.Selenium.Edge
         /// <summary>
         /// Creates a default instance of the EdgeDriverService using a specified path to the EdgeDriver executable.
         /// </summary>
-        /// <param name="driverPath">The directory containing the EdgeDriver executable.</param>
+        /// <param name="driverPath">The path to the executable or the directory containing the EdgeDriver executable.</param>
         /// <returns>An EdgeDriverService using a random port.</returns>
-        public static EdgeDriverService CreateDefaultService(string driverPath)
+        public static EdgeDriverService CreateDefaultService(string? driverPath)
         {
-            string fileName;
             if (File.Exists(driverPath))
             {
-                fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
             }
             else
             {
-                fileName = ChromiumDriverServiceFileName(MSEdgeDriverServiceFileName);
-            }
+                string fileName = ChromiumDriverServiceFileName(MSEdgeDriverServiceFileName);
+                string? driverFolder = driverPath;
 
-            return CreateDefaultService(driverPath, fileName);
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -93,7 +98,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="driverPath">The directory containing the EdgeDriver executable.</param>
         /// <param name="driverExecutableFileName">The name of the EdgeDriver executable file.</param>
         /// <returns>A EdgeDriverService using a random port.</returns>
-        public static EdgeDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static EdgeDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new EdgeDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }

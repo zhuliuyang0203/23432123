@@ -70,7 +70,7 @@ on:
 jobs:
   bazel:
     name: ${{ inputs.name }}
-    runs-on: ${{ inputs.os == 'macos' && 'macos-13' || format('{0}-latest', inputs.os) }}
+    runs-on: ${{ contains(inputs.os, '-') && inputs.os || format('{0}-latest', inputs.os) }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SEL_M2_USER: ${{ secrets.SEL_M2_USER }}
@@ -82,6 +82,12 @@ jobs:
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
+      - name: Pull latest changes from head ref for PRs
+        if: contains(github.head_ref, 'renovate/')
+        run: git pull origin ${{ github.head_ref }}
+      - name: Pull latest changes from ref for branch pushes
+        if: contains(github.ref, 'renovate/')
+        run: git pull origin ${{ github.ref }}
       - name: Free space
         if: inputs.os != 'windows'
         run: ./scripts/github-actions/free-disk-space.sh
@@ -116,7 +122,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
       - name: Setup Bazel with caching
         if: inputs.caching
-        uses: bazel-contrib/setup-bazel@0.8.5
+        uses: bazel-contrib/setup-bazel@0.13.0
         with:
           bazelisk-cache: true
           bazelrc: common --color=yes
@@ -126,11 +132,11 @@ jobs:
             name: ${{ inputs.cache-key }}
             manifest:
               crates: rust/Cargo.Bazel.lock
-              rules_ruby~~ruby~ruby: ${{ inputs.os == 'windows' && 'false' || 'rb/.ruby-version' }}
+              rules_ruby++ruby+ruby: ${{ inputs.os == 'windows' && 'false' || 'rb/.ruby-version' }}
           repository-cache: true
       - name: Setup Bazel without caching
         if: inputs.caching == false
-        uses: bazel-contrib/setup-bazel@0.8.5
+        uses: bazel-contrib/setup-bazel@0.13.0
         with:
           bazelrc: common --color=yes
       - name: Setup Fluxbox and Xvfb

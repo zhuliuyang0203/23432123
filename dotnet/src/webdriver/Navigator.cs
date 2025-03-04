@@ -1,41 +1,45 @@
-// <copyright file="Navigator.cs" company="WebDriver Committers">
+// <copyright file="Navigator.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium
 {
     /// <summary>
     /// Provides a mechanism for Navigating with the driver.
     /// </summary>
-    internal class Navigator : INavigation
+    internal sealed class Navigator : INavigation
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Navigator"/> class
         /// </summary>
         /// <param name="driver">Driver in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is null.</exception>
         public Navigator(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -82,6 +86,7 @@ namespace OpenQA.Selenium
         /// Navigate to a url.
         /// </summary>
         /// <param name="url">String of where you want the browser to go to</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public void GoToUrl(string url)
         {
             Task.Run(async delegate
@@ -95,6 +100,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">String of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public async Task GoToUrlAsync(string url)
         {
             if (url == null)
@@ -113,6 +119,7 @@ namespace OpenQA.Selenium
         /// Navigate to a url.
         /// </summary>
         /// <param name="url">Uri object of where you want the browser to go.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public void GoToUrl(Uri url)
         {
             Task.Run(async delegate
@@ -126,6 +133,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">Uri object of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public async Task GoToUrlAsync(Uri url)
         {
             if (url == null)

@@ -22,6 +22,7 @@ import warnings
 from base64 import b64encode
 from typing import Optional
 from urllib import parse
+from urllib.parse import urlparse
 
 import urllib3
 
@@ -125,6 +126,15 @@ remote_commands = {
     Command.GET_DOWNLOADABLE_FILES: ("GET", "/session/$sessionId/se/files"),
     Command.DOWNLOAD_FILE: ("POST", "/session/$sessionId/se/files"),
     Command.DELETE_DOWNLOADABLE_FILES: ("DELETE", "/session/$sessionId/se/files"),
+    # Federated Credential Management (FedCM)
+    Command.GET_FEDCM_TITLE: ("GET", "/session/$sessionId/fedcm/gettitle"),
+    Command.GET_FEDCM_DIALOG_TYPE: ("GET", "/session/$sessionId/fedcm/getdialogtype"),
+    Command.GET_FEDCM_ACCOUNT_LIST: ("GET", "/session/$sessionId/fedcm/accountlist"),
+    Command.CLICK_FEDCM_DIALOG_BUTTON: ("POST", "/session/$sessionId/fedcm/clickdialogbutton"),
+    Command.CANCEL_FEDCM_DIALOG: ("POST", "/session/$sessionId/fedcm/canceldialog"),
+    Command.SELECT_FEDCM_ACCOUNT: ("POST", "/session/$sessionId/fedcm/selectaccount"),
+    Command.SET_FEDCM_DELAY: ("POST", "/session/$sessionId/fedcm/setdelayenabled"),
+    Command.RESET_FEDCM_COOLDOWN: ("POST", "/session/$sessionId/fedcm/resetcooldown"),
 }
 
 
@@ -243,6 +253,9 @@ class RemoteConnection:
         }
 
         if parsed_url.username:
+            warnings.warn(
+                "Embedding username and password in URL could be insecure, use ClientConfig instead", stacklevel=2
+            )
             base64string = b64encode(f"{parsed_url.username}:{parsed_url.password}".encode())
             headers.update({"Authorization": f"Basic {base64string.decode()}"})
 
@@ -255,16 +268,14 @@ class RemoteConnection:
         return headers
 
     def _identify_http_proxy_auth(self):
-        url = self._proxy_url
-        url = url[url.find(":") + 3 :]
-        return "@" in url and len(url[: url.find("@")]) > 0
+        parsed_url = urlparse(self._proxy_url)
+        if parsed_url.username and parsed_url.password:
+            return True
 
     def _separate_http_proxy_auth(self):
-        url = self._proxy_url
-        protocol = url[: url.find(":") + 3]
-        no_protocol = url[len(protocol) :]
-        auth = no_protocol[: no_protocol.find("@")]
-        proxy_without_auth = protocol + no_protocol[len(auth) + 1 :]
+        parsed_url = urlparse(self._proxy_url)
+        proxy_without_auth = f"{parsed_url.scheme}://{parsed_url.hostname}:{parsed_url.port}"
+        auth = f"{parsed_url.username}:{parsed_url.password}"
         return proxy_without_auth, auth
 
     def _get_connection_manager(self):
@@ -312,6 +323,8 @@ class RemoteConnection:
         RemoteConnection._timeout = self._client_config.timeout
         RemoteConnection._ca_certs = self._client_config.ca_certs
         RemoteConnection._client_config = self._client_config
+        RemoteConnection.extra_headers = self._client_config.extra_headers or RemoteConnection.extra_headers
+        RemoteConnection.user_agent = self._client_config.user_agent or RemoteConnection.user_agent
 
         if remote_server_addr:
             warnings.warn(

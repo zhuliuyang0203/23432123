@@ -138,11 +138,7 @@ class Storage {
         Object.prototype.hasOwnProperty.call(response.result.partitionKey, 'userContext') &&
         Object.prototype.hasOwnProperty.call(response.result.partitionKey, 'sourceOrigin')
       ) {
-        let partitionKey = new PartitionKey(
-          response.result.partitionKey.userContext,
-          response.result.partitionKey.sourceOrigin,
-        )
-        return partitionKey
+        return new PartitionKey(response.result.partitionKey.userContext, response.result.partitionKey.sourceOrigin)
       }
     }
   }
@@ -182,11 +178,7 @@ class Storage {
         Object.prototype.hasOwnProperty.call(response.result.partitionKey, 'userContext') &&
         Object.prototype.hasOwnProperty.call(response.result.partitionKey, 'sourceOrigin')
       ) {
-        let partitionKey = new PartitionKey(
-          response.result.partitionKey.userContext,
-          response.result.partitionKey.sourceOrigin,
-        )
-        return partitionKey
+        return new PartitionKey(response.result.partitionKey.userContext, response.result.partitionKey.sourceOrigin)
       }
     }
   }

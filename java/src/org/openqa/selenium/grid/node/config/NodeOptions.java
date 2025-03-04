@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -202,6 +203,10 @@ public class NodeOptions {
         Math.max(config.getInt(NODE_SECTION, "register-period").orElse(DEFAULT_REGISTER_PERIOD), 1);
 
     return Duration.ofSeconds(seconds);
+  }
+
+  public boolean getRegisterShutdownOnFailure() {
+    return config.getBool(NODE_SECTION, "register-shutdown-on-failure").orElse(false);
   }
 
   public Duration getHeartbeatPeriod() {
@@ -582,7 +587,9 @@ public class NodeOptions {
 
     Optional<Map.Entry<WebDriverInfo, Collection<SessionFactory>>> first =
         allDrivers.entrySet().stream()
-            .filter(entry -> drivers.contains(entry.getKey().getDisplayName().toLowerCase()))
+            .filter(
+                entry ->
+                    drivers.contains(entry.getKey().getDisplayName().toLowerCase(Locale.ENGLISH)))
             .findFirst();
 
     if (first.isEmpty()) {
@@ -590,8 +597,11 @@ public class NodeOptions {
     }
 
     allDrivers.entrySet().stream()
-        .filter(entry -> drivers.contains(entry.getKey().getDisplayName().toLowerCase()))
-        .sorted(Comparator.comparing(entry -> entry.getKey().getDisplayName().toLowerCase()))
+        .filter(
+            entry -> drivers.contains(entry.getKey().getDisplayName().toLowerCase(Locale.ENGLISH)))
+        .sorted(
+            Comparator.comparing(
+                entry -> entry.getKey().getDisplayName().toLowerCase(Locale.ENGLISH)))
         .peek(this::report)
         .forEach(
             entry -> {
@@ -614,7 +624,8 @@ public class NodeOptions {
       List<WebDriverInfo> driversSM =
           StreamSupport.stream(ServiceLoader.load(WebDriverInfo.class).spliterator(), false)
               .filter(WebDriverInfo::isAvailable)
-              .sorted(Comparator.comparing(info -> info.getDisplayName().toLowerCase()))
+              .sorted(
+                  Comparator.comparing(info -> info.getDisplayName().toLowerCase(Locale.ENGLISH)))
               .collect(Collectors.toList());
       infos.addAll(driversSM);
     } else {
@@ -625,7 +636,8 @@ public class NodeOptions {
       List<WebDriverInfo> localDrivers =
           StreamSupport.stream(ServiceLoader.load(WebDriverInfo.class).spliterator(), false)
               .filter(WebDriverInfo::isPresent)
-              .sorted(Comparator.comparing(info -> info.getDisplayName().toLowerCase()))
+              .sorted(
+                  Comparator.comparing(info -> info.getDisplayName().toLowerCase(Locale.ENGLISH)))
               .collect(Collectors.toList());
       infos.addAll(localDrivers);
     }
@@ -708,7 +720,7 @@ public class NodeOptions {
   private int getDriverMaxSessions(WebDriverInfo info, int desiredMaxSessions) {
     // Safari and Safari Technology Preview
     if (info.getMaximumSimultaneousSessions() == 1
-        && SINGLE_SESSION_DRIVERS.contains(info.getDisplayName().toLowerCase())) {
+        && SINGLE_SESSION_DRIVERS.contains(info.getDisplayName().toLowerCase(Locale.ENGLISH))) {
       return info.getMaximumSimultaneousSessions();
     }
     boolean overrideMaxSessions =

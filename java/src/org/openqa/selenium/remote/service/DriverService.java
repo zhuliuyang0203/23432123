@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -137,7 +138,7 @@ public class DriverService implements Closeable {
   }
 
   protected URL getUrl(int port) throws IOException {
-    return new URL(String.format("http://localhost:%d", port));
+    return new URL(String.format(Locale.ROOT, "http://localhost:%d", port));
   }
 
   protected Capabilities getDefaultDriverOptions() {
@@ -242,8 +243,10 @@ public class DriverService implements Closeable {
             processFinished.cancel(true);
             break;
           case PROCESS_DIED:
+            int exitValue = process.exitValue();
             process = null;
-            throw new WebDriverException("Driver server process died prematurely.");
+            throw new WebDriverException(
+                "Driver server process died prematurely, exit value: " + exitValue);
           case PROCESS_IS_ACTIVE:
             process.shutdown();
             throw new WebDriverException("Timed out waiting for driver server to bind the port.");

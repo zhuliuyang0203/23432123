@@ -1,24 +1,27 @@
-// <copyright file="Keys.cs" company="WebDriver Committers">
+// <copyright file="Keys.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -351,13 +354,14 @@ namespace OpenQA.Selenium
         /// </summary>
         public static readonly string ZenkakuHankaku = Convert.ToString(Convert.ToChar(0xE040, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-        private static Dictionary<string, string> descriptions;
+        private static Dictionary<string, string>? descriptions;
 
         /// <summary>
         /// Gets the description of a specific key.
         /// </summary>
         /// <param name="value">The key value for which to get the description.</param>
         /// <returns>The description of the key.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <see langword="null"/>.</exception>
         internal static object GetDescription(string value)
         {
             if (descriptions == null)
@@ -422,9 +426,9 @@ namespace OpenQA.Selenium
                 descriptions.Add(ZenkakuHankaku, "Zenkaku Hankaku");
             }
 
-            if (descriptions.ContainsKey(value))
+            if (descriptions.TryGetValue(value, out string? description))
             {
-                return descriptions[value];
+                return description;
             }
 
             return value;

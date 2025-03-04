@@ -1,19 +1,20 @@
-// <copyright file="V85Network.cs" company="WebDriver Committers">
+// <copyright file="V85Network.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.DevTools.V85.Fetch;
@@ -22,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools.V85
 {
@@ -38,10 +41,11 @@ namespace OpenQA.Selenium.DevTools.V85
         /// </summary>
         /// <param name="network">The adapter for the Network domain.</param>
         /// <param name="fetch">The adapter for the Fetch domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="network"/> or <paramref name="fetch"/> are <see langword="null"/>.</exception>
         public V85Network(NetworkAdapter network, FetchAdapter fetch)
         {
-            this.network = network;
-            this.fetch = fetch;
+            this.network = network ?? throw new ArgumentNullException(nameof(network));
+            this.fetch = fetch ?? throw new ArgumentNullException(nameof(fetch));
             fetch.AuthRequired += OnFetchAuthRequired;
             fetch.RequestPaused += OnFetchRequestPaused;
         }
@@ -65,7 +69,7 @@ namespace OpenQA.Selenium.DevTools.V85
         }
 
         /// <summary>
-        /// Asynchronously ensables the Network domain..
+        /// Asynchronously enables the Network domain..
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public override async Task EnableNetwork()
@@ -100,7 +104,7 @@ namespace OpenQA.Selenium.DevTools.V85
         }
 
         /// <summary>
-        /// Asynchronously diables the fetch domain.
+        /// Asynchronously disables the fetch domain.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public override async Task DisableFetch()
@@ -113,8 +117,14 @@ namespace OpenQA.Selenium.DevTools.V85
         /// </summary>
         /// <param name="userAgent">A <see cref="UserAgent"/> object containing the user agent values to override.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="userAgent"/> is null.</exception>
         public override async Task SetUserAgentOverride(UserAgent userAgent)
         {
+            if (userAgent is null)
+            {
+                throw new ArgumentNullException(nameof(userAgent));
+            }
+
             await network.SetUserAgentOverride(new SetUserAgentOverrideCommandSettings()
             {
                 UserAgent = userAgent.UserAgentString,
@@ -128,8 +138,14 @@ namespace OpenQA.Selenium.DevTools.V85
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueRequest(HttpRequestData requestData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
             var commandSettings = new ContinueRequestCommandSettings()
             {
                 RequestId = requestData.RequestId,
@@ -137,7 +153,7 @@ namespace OpenQA.Selenium.DevTools.V85
                 Url = requestData.Url,
             };
 
-            if (requestData.Headers.Count > 0)
+            if (requestData.Headers?.Count > 0)
             {
                 List<HeaderEntry> headers = new List<HeaderEntry>();
                 foreach (KeyValuePair<string, string> headerPair in requestData.Headers)
@@ -162,8 +178,19 @@ namespace OpenQA.Selenium.DevTools.V85
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the request.</param>
         /// <param name="responseData">The <see cref="HttpResponseData"/> with which to respond to the request</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> or <paramref name="responseData"/> are <see langword="null"/>.</exception>
         public override async Task ContinueRequestWithResponse(HttpRequestData requestData, HttpResponseData responseData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             var commandSettings = new FulfillRequestCommandSettings()
             {
                 RequestId = requestData.RequestId,
@@ -195,12 +222,18 @@ namespace OpenQA.Selenium.DevTools.V85
         }
 
         /// <summary>
-        /// Asynchronously contines an intercepted network call without modification.
+        /// Asynchronously continues an intercepted network call without modification.
         /// </summary>
         /// <param name="requestData">The <see cref="HttpRequestData"/> of the network call.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="requestData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueRequestWithoutModification(HttpRequestData requestData)
         {
+            if (requestData is null)
+            {
+                throw new ArgumentNullException(nameof(requestData));
+            }
+
             await fetch.ContinueRequest(new ContinueRequestCommandSettings() { RequestId = requestData.RequestId }).ConfigureAwait(false);
         }
 
@@ -211,7 +244,7 @@ namespace OpenQA.Selenium.DevTools.V85
         /// <param name="userName">The user name with which to authenticate.</param>
         /// <param name="password">The password with which to authenticate.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public override async Task ContinueWithAuth(string requestId, string userName, string password)
+        public override async Task ContinueWithAuth(string requestId, string? userName, string? password)
         {
             await fetch.ContinueWithAuth(new ContinueWithAuthCommandSettings()
             {
@@ -247,8 +280,14 @@ namespace OpenQA.Selenium.DevTools.V85
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> object to which to add the response body.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public override async Task AddResponseBody(HttpResponseData responseData)
         {
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             // If the response is a redirect, retrieving the body will throw an error in CDP.
             if (responseData.StatusCode < 300 || responseData.StatusCode > 399)
             {
@@ -265,32 +304,37 @@ namespace OpenQA.Selenium.DevTools.V85
         }
 
         /// <summary>
-        /// Asynchronously contines an intercepted network response without modification.
+        /// Asynchronously contiunes an intercepted network response without modification.
         /// </summary>
         /// <param name="responseData">The <see cref="HttpResponseData"/> of the network response.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="responseData"/> is <see langword="null"/>.</exception>
         public override async Task ContinueResponseWithoutModification(HttpResponseData responseData)
         {
+            if (responseData is null)
+            {
+                throw new ArgumentNullException(nameof(responseData));
+            }
+
             await fetch.ContinueRequest(new ContinueRequestCommandSettings() { RequestId = responseData.RequestId }).ConfigureAwait(false);
         }
 
-        private void OnFetchAuthRequired(object sender, Fetch.AuthRequiredEventArgs e)
+        private void OnFetchAuthRequired(object? sender, Fetch.AuthRequiredEventArgs e)
         {
-            AuthRequiredEventArgs wrapped = new AuthRequiredEventArgs()
-            {
-                RequestId = e.RequestId,
-                Uri = e.Request.Url
-            };
+            AuthRequiredEventArgs wrapped = new AuthRequiredEventArgs
+            (
+                requestId: e.RequestId,
+                uri: e.Request.Url
+            );
 
             this.OnAuthRequired(wrapped);
         }
 
-        private void OnFetchRequestPaused(object sender, Fetch.RequestPausedEventArgs e)
+        private void OnFetchRequestPaused(object? sender, Fetch.RequestPausedEventArgs e)
         {
             if (e.ResponseErrorReason == null && e.ResponseStatusCode == null)
             {
-                RequestPausedEventArgs wrapped = new RequestPausedEventArgs();
-                wrapped.RequestData = new HttpRequestData()
+                var requestData = new HttpRequestData
                 {
                     RequestId = e.RequestId,
                     Method = e.Request.Method,
@@ -299,47 +343,43 @@ namespace OpenQA.Selenium.DevTools.V85
                     Headers = new Dictionary<string, string>(e.Request.Headers)
                 };
 
+                RequestPausedEventArgs wrapped = new RequestPausedEventArgs(null, requestData);
                 this.OnRequestPaused(wrapped);
             }
             else
             {
-                ResponsePausedEventArgs wrappedResponse = new ResponsePausedEventArgs();
-                wrappedResponse.ResponseData = new HttpResponseData()
+                var responseData = new HttpResponseData
                 {
                     RequestId = e.RequestId,
                     Url = e.Request.Url,
-                    ResourceType = e.ResourceType.ToString()
+                    ResourceType = e.ResourceType.ToString(),
+                    StatusCode = e.ResponseStatusCode.GetValueOrDefault(),
+                    ErrorReason = e.ResponseErrorReason?.ToString()
                 };
-
-                if (e.ResponseStatusCode.HasValue)
-                {
-                    wrappedResponse.ResponseData.StatusCode = e.ResponseStatusCode.Value;
-                }
 
                 if (e.ResponseHeaders != null)
                 {
                     foreach (var header in e.ResponseHeaders)
                     {
-                        if (header.Name.ToLowerInvariant() == "set-cookie")
+                        if (header.Name.Equals("set-cookie", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            wrappedResponse.ResponseData.CookieHeaders.Add(header.Value);
+                            responseData.CookieHeaders.Add(header.Value);
                         }
                         else
                         {
-                            if (wrappedResponse.ResponseData.Headers.ContainsKey(header.Name))
+                            if (responseData.Headers.TryGetValue(header.Name, out string? currentHeaderValue))
                             {
-                                string currentHeaderValue = wrappedResponse.ResponseData.Headers[header.Name];
-                                wrappedResponse.ResponseData.Headers[header.Name] = currentHeaderValue + ", " + header.Value;
+                                responseData.Headers[header.Name] = currentHeaderValue + ", " + header.Value;
                             }
                             else
                             {
-                                wrappedResponse.ResponseData.Headers.Add(header.Name, header.Value);
+                                responseData.Headers.Add(header.Name, header.Value);
                             }
                         }
                     }
                 }
 
-                this.OnResponsePaused(wrappedResponse);
+                this.OnResponsePaused(new ResponsePausedEventArgs(responseData));
             }
         }
     }

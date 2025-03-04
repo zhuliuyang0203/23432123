@@ -1,19 +1,20 @@
-// <copyright file="FirefoxDriverService.cs" company="WebDriver Committers">
+// <copyright file="FirefoxDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Internal;
@@ -21,6 +22,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Firefox
 {
@@ -31,21 +34,13 @@ namespace OpenQA.Selenium.Firefox
     {
         private const string DefaultFirefoxDriverServiceFileName = "geckodriver";
 
-        private bool connectToRunningBrowser;
-        private bool openBrowserToolbox;
-        private int browserCommunicationPort = -1;
-        private string browserBinaryPath = string.Empty;
-        private string host = string.Empty;
-        private string browserCommunicationHost = string.Empty;
-        private FirefoxDriverLogLevel loggingLevel = FirefoxDriverLogLevel.Default;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriverService"/> class.
         /// </summary>
         /// <param name="executablePath">The full path to the Firefox driver executable.</param>
         /// <param name="executableFileName">The file name of the Firefox driver executable.</param>
         /// <param name="port">The port on which the Firefox driver executable should listen.</param>
-        private FirefoxDriverService(string executablePath, string executableFileName, int port)
+        private FirefoxDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, port, executableFileName)
         {
         }
@@ -59,60 +54,40 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets or sets the location of the Firefox binary executable.
         /// </summary>
-        public string FirefoxBinaryPath
-        {
-            get { return this.browserBinaryPath; }
-            set { this.browserBinaryPath = value; }
-        }
+        /// <remarks> A <see langword="null"/> or <see cref="string.Empty"/> value indicates no binary executable path to specify.</remarks>
+        public string? FirefoxBinaryPath { get; set; }
 
         /// <summary>
         /// Gets or sets the port used by the driver executable to communicate with the browser.
         /// </summary>
-        public int BrowserCommunicationPort
-        {
-            get { return this.browserCommunicationPort; }
-            set { this.browserCommunicationPort = value; }
-        }
+        /// <remarks>A negative or zero value indicates no port value to specify.</remarks>
+        public int BrowserCommunicationPort { get; set; } = -1;
 
         /// <summary>
         /// Gets or sets the value of the IP address of the host adapter used by the driver
         /// executable to communicate with the browser.
         /// </summary>
-        public string BrowserCommunicationHost
-        {
-            get { return this.browserCommunicationHost; }
-            set { this.browserCommunicationHost = value; }
-        }
+        /// <remarks> A <see langword="null"/> or <see cref="string.Empty"/> value indicates no marionette host adapter to specify.</remarks>
+        public string? BrowserCommunicationHost { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the IP address of the host adapter on which the
         /// service should listen for connections.
         /// </summary>
-        public string Host
-        {
-            get { return this.host; }
-            set { this.host = value; }
-        }
+        /// <remarks> A <see langword="null"/> or <see cref="string.Empty"/> value indicates no host to specify.</remarks>
+        public string? Host { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to connect to an already-running
         /// instance of Firefox.
         /// </summary>
-        public bool ConnectToRunningBrowser
-        {
-            get { return this.connectToRunningBrowser; }
-            set { this.connectToRunningBrowser = value; }
-        }
+        public bool ConnectToRunningBrowser { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to open the Firefox Browser Toolbox
         /// when Firefox is launched.
         /// </summary>
-        public bool OpenBrowserToolbox
-        {
-            get { return this.openBrowserToolbox; }
-            set { this.openBrowserToolbox = value; }
-        }
+        public bool OpenBrowserToolbox { get; set; }
 
         /// <summary>
         /// Gets or sets the level at which log output is displayed.
@@ -123,11 +98,7 @@ namespace OpenQA.Selenium.Firefox
         /// when the browser is launched, meaning that initial driver logging before
         /// initiation of a session can be controlled.
         /// </remarks>
-        public FirefoxDriverLogLevel LogLevel
-        {
-            get { return this.loggingLevel; }
-            set { this.loggingLevel = value; }
-        }
+        public FirefoxDriverLogLevel LogLevel { get; set; } = FirefoxDriverLogLevel.Default;
 
         /// <summary>
         /// Gets a value indicating the time to wait for the service to terminate before forcing it to terminate.
@@ -138,7 +109,7 @@ namespace OpenQA.Selenium.Firefox
             // because the executable does not have a clean shutdown command,
             // which means we have to kill the process. Using a short timeout
             // gets us to the termination point much faster.
-            get { return TimeSpan.FromMilliseconds(100); }
+            get => TimeSpan.FromMilliseconds(100);
         }
 
         /// <summary>
@@ -149,7 +120,7 @@ namespace OpenQA.Selenium.Firefox
         {
             // The Firefox driver executable does not have a clean shutdown command,
             // which means we have to kill the process.
-            get { return false; }
+            get => false;
         }
 
         /// <summary>
@@ -160,7 +131,7 @@ namespace OpenQA.Selenium.Firefox
             get
             {
                 StringBuilder argsBuilder = new StringBuilder();
-                if (this.connectToRunningBrowser)
+                if (this.ConnectToRunningBrowser)
                 {
                     argsBuilder.Append(" --connect-existing");
                 }
@@ -169,14 +140,14 @@ namespace OpenQA.Selenium.Firefox
                     argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --websocket-port {0}", PortUtilities.FindFreePort()));
                 }
 
-                if (this.browserCommunicationPort > 0)
+                if (this.BrowserCommunicationPort > 0)
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-port {0}", this.browserCommunicationPort);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-port {0}", this.BrowserCommunicationPort);
                 }
 
-                if (!string.IsNullOrEmpty(this.browserCommunicationHost))
+                if (!string.IsNullOrEmpty(this.BrowserCommunicationHost))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-host \"{0}\"", this.host);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-host \"{0}\"", this.BrowserCommunicationHost);
                 }
 
                 if (this.Port > 0)
@@ -184,22 +155,22 @@ namespace OpenQA.Selenium.Firefox
                     argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --port {0}", this.Port);
                 }
 
-                if (!string.IsNullOrEmpty(this.browserBinaryPath))
+                if (!string.IsNullOrEmpty(this.FirefoxBinaryPath))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --binary \"{0}\"", this.browserBinaryPath);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --binary \"{0}\"", this.FirefoxBinaryPath);
                 }
 
-                if (!string.IsNullOrEmpty(this.host))
+                if (!string.IsNullOrEmpty(this.Host))
                 {
-                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --host \"{0}\"", this.host);
+                    argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --host \"{0}\"", this.Host);
                 }
 
-                if (this.loggingLevel != FirefoxDriverLogLevel.Default)
+                if (this.LogLevel != FirefoxDriverLogLevel.Default)
                 {
-                    argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --log {0}", this.loggingLevel.ToString().ToLowerInvariant()));
+                    argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --log {0}", this.LogLevel.ToString().ToLowerInvariant()));
                 }
 
-                if (this.openBrowserToolbox)
+                if (this.OpenBrowserToolbox)
                 {
                     argsBuilder.Append(" --jsdebugger");
                 }
@@ -223,20 +194,22 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="driverPath">The path to the executable or the directory containing the Firefox driver executable.</param>
         /// <returns>A FirefoxDriverService using a random port.</returns>
-        public static FirefoxDriverService CreateDefaultService(string driverPath)
+        public static FirefoxDriverService CreateDefaultService(string? driverPath)
         {
-            string fileName;
             if (File.Exists(driverPath))
             {
-                fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
             }
             else
             {
-                fileName = FirefoxDriverServiceFileName();
-            }
+                string fileName = FirefoxDriverServiceFileName();
+                string? driverFolder = driverPath;
 
-            return CreateDefaultService(driverPath, fileName);
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -245,7 +218,7 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="driverPath">The directory containing the Firefox driver executable.</param>
         /// <param name="driverExecutableFileName">The name of the Firefox driver executable file.</param>
         /// <returns>A FirefoxDriverService using a random port.</returns>
-        public static FirefoxDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static FirefoxDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new FirefoxDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }
@@ -262,7 +235,7 @@ namespace OpenQA.Selenium.Firefox
             // straightforward as you might hope.
             // See: http://mono.wikia.com/wiki/Detecting_the_execution_platform
             // and https://msdn.microsoft.com/en-us/library/3a8hyw88(v=vs.110).aspx
-            const int PlatformMonoUnixValue = 128;
+            const PlatformID PlatformIDMonoUnix = (PlatformID)128;
 
             switch (Environment.OSVersion.Platform)
             {
@@ -275,17 +248,13 @@ namespace OpenQA.Selenium.Firefox
 
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:
+                case PlatformIDMonoUnix:
                     break;
 
                 // Don't handle the Xbox case. Let default handle it.
                 // case PlatformID.Xbox:
                 //     break;
                 default:
-                    if ((int)Environment.OSVersion.Platform == PlatformMonoUnixValue)
-                    {
-                        break;
-                    }
-
                     throw new WebDriverException("Unsupported platform: " + Environment.OSVersion.Platform);
             }
 

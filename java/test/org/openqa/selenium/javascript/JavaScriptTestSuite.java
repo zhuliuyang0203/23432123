@@ -61,7 +61,8 @@ class JavaScriptTestSuite {
 
   @BeforeEach
   public void setup() {
-    testEnvironment = GlobalTestEnvironment.getOrCreate(InProcessTestEnvironment::new);
+    // this field is actually in use, javascript test do access it
+    testEnvironment = GlobalTestEnvironment.getOrCreate(() -> new InProcessTestEnvironment(true));
   }
 
   @AfterEach

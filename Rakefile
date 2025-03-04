@@ -97,9 +97,9 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v128:v128.publish
-  //java/src/org/openqa/selenium/devtools/v129:v129.publish
-  //java/src/org/openqa/selenium/devtools/v130:v130.publish
+  //java/src/org/openqa/selenium/devtools/v131:v131.publish
+  //java/src/org/openqa/selenium/devtools/v132:v132.publish
+  //java/src/org/openqa/selenium/devtools/v133:v133.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
@@ -471,7 +471,7 @@ namespace :node do
 
   desc 'Update JavaScript changelog'
   task :changelog do
-    header = "## #{node_version}"
+    header = "## #{node_version}\n"
     update_changelog(node_version, 'javascript', 'javascript/node/selenium-webdriver/',
                      'javascript/node/selenium-webdriver/CHANGES.md', header)
   end
@@ -582,10 +582,10 @@ namespace :py do
   desc 'Update Python version'
   task :version, [:version] do |_task, arguments|
     old_version = python_version
-    nightly = ".dev#{Time.now.strftime('%Y%m%d%H%M')}"
+    nightly = ".#{Time.now.strftime('%Y%m%d%H%M')}"
     new_version = updated_version(old_version, arguments[:version], nightly)
 
-    ['py/setup.py',
+    ['py/pyproject.toml',
      'py/BUILD.bazel',
      'py/selenium/__init__.py',
      'py/selenium/webdriver/__init__.py',
@@ -777,10 +777,9 @@ namespace :dotnet do
   task :docs, [:skip_update] do |_task, arguments|
     FileUtils.rm_rf('build/docs/api/dotnet/')
     begin
-      # Pinning to 2.75.3 to avoid breaking changes in newer versions
-      # See https://github.com/dotnet/docfx/issues/9855
+      # Pinning to 2.78.2 to avoid breaking changes in newer versions
       sh 'dotnet tool uninstall --global docfx || true'
-      sh 'dotnet tool install --global --version 2.75.3 docfx'
+      sh 'dotnet tool install --global --version 2.78.2 docfx'
       # sh 'dotnet tool update -g docfx'
     rescue StandardError
       puts 'Please ensure that .NET SDK is installed.'
@@ -791,7 +790,7 @@ namespace :dotnet do
       sh 'docfx dotnet/docs/docfx.json'
     rescue StandardError
       case $CHILD_STATUS.exitstatus
-      when 130
+      when 133
         raise 'Ensure the dotnet/tools directory is added to your PATH environment variable (e.g., `~/.dotnet/tools`)'
       when 255
         puts '.NET documentation build failed, likely because of DevTools namespacing. This is ok; continuing'
@@ -891,7 +890,7 @@ namespace :java do
   task :update do
     # Make sure things are in a good state to start with
     args = ['--action_env=RULES_JVM_EXTERNAL_REPIN=1']
-    Bazel.execute('run', args, '@unpinned_maven//:pin')
+    Bazel.execute('run', args, '@maven//:pin')
 
     file_path = 'MODULE.bazel'
     content = File.read(file_path)
@@ -915,7 +914,7 @@ namespace :java do
     File.write(file_path, content)
 
     args = ['--action_env=RULES_JVM_EXTERNAL_REPIN=1']
-    Bazel.execute('run', args, '@unpinned_maven//:pin')
+    Bazel.execute('run', args, '@maven//:pin')
   end
 
   desc 'Update Java changelog'
@@ -1047,7 +1046,6 @@ namespace :all do
                                            'py/selenium/webdriver/__init__.py',
                                            'py/selenium/__init__.py',
                                            'py/BUILD.bazel',
-                                           'py/setup.py',
                                            'rb/lib/selenium/webdriver/version.rb',
                                            'rb/Gemfile.lock'])
 
@@ -1109,11 +1107,14 @@ namespace :all do
              'py/selenium/webdriver/__init__.py',
              'py/BUILD.bazel',
              'py/CHANGES',
-             'py/setup.py',
              'rb/lib/selenium/webdriver/version.rb',
              'rb/CHANGES',
              'rb/Gemfile.lock',
-             'rust/CHANGELOG.md'])
+             'rust/CHANGELOG.md',
+             'rust/BUILD.bazel',
+             'rust/Cargo.Bazel.lock',
+             'rust/Cargo.toml',
+             'rust/Cargo.lock'])
   end
 
   desc 'Update all versions'
@@ -1125,11 +1126,12 @@ namespace :all do
     Rake::Task['node:version'].invoke(version)
     Rake::Task['py:version'].invoke(version)
     Rake::Task['dotnet:version'].invoke(version)
+    Rake::Task['rust:version'].invoke(version)
   end
 end
 
 at_exit do
-  system 'sh', '.git-fixfiles' if File.exist?('.git') && !SeleniumRake::Checks.windows?
+  system 'sh', '.git-fixfiles' if File.exist?('.git') && SeleniumRake::Checks.linux?
 end
 
 def updated_version(current, desired = nil, nightly = nil)
@@ -1138,7 +1140,7 @@ def updated_version(current, desired = nil, nightly = nil)
     desired.split('.').tap { |v| v << 0 while v.size < 3 }.join('.')
   elsif current.split(/\.|-/).size > 3
     # if current version is already nightly, just need to bump it; this will be noop for some languages
-    pattern = /-?\.?(nightly|SNAPSHOT|dev)\d*$/
+    pattern = /-?\.?(nightly|SNAPSHOT|dev|\d{12})\d*$/
     current.gsub(pattern, nightly)
   elsif current.split(/\.|-/).size == 3
     # if current version is not nightly, need to bump the version and make nightly
@@ -1189,7 +1191,11 @@ end
 
 def update_changelog(version, language, path, changelog, header)
   tag = previous_tag(version, language)
-  log = `git --no-pager log #{tag}...HEAD --pretty=format:"--> %B" --reverse #{path}`
+  log = if language == 'javascript'
+          `git --no-pager log #{tag}...HEAD --pretty=format:"- %s" --reverse #{path}`
+        else
+          `git --no-pager log #{tag}...HEAD --pretty=format:"* %s" --reverse #{path}`
+        end
   commits = log.split('>>>').map { |entry|
     lines = entry.split("\n")
     lines.reject! { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }

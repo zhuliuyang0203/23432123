@@ -47,7 +47,7 @@ class ContinueRequestParameters {
    * Sets the cookies for the request.
    *
    * @param {Header[]} cookieHeaders - An array of cookie headers.
-   * @returns {continueRequestParameters} - The current instance of the ContinueRequestParameters for chaining.
+   * @returns {ContinueRequestParameters} - The current instance of the ContinueRequestParameters for chaining.
    * @throws {Error} - If a cookie header is not an instance of Header.
    */
   cookies(cookieHeaders) {

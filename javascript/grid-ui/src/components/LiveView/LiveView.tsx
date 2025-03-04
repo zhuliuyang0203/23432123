@@ -16,7 +16,7 @@
 // under the License.
 
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react'
-import RFB from '@novnc/novnc/core/rfb'
+import RFB from '@novnc/novnc/lib/rfb'
 import PasswordDialog from './PasswordDialog'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
@@ -60,12 +60,13 @@ const LiveView = forwardRef((props, ref) => {
       return
     }
 
-    const newRfb = new RFB(canvas, props.url, {})
+    const newRfb = new RFB.default(canvas, props.url, {})
     newRfb.scaleViewport = props.scaleViewport
     newRfb.background = 'rgb(247,248,248)'
     newRfb.addEventListener('credentialsrequired', handleCredentials)
     newRfb.addEventListener('securityfailure', securityFailed)
     newRfb.addEventListener('connect', connectedToServer)
+    newRfb.addEventListener('disconnect', disconnect)
     setRfb(newRfb)
   }
 

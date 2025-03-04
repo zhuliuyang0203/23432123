@@ -1,3 +1,22 @@
+// <copyright file="ContentEditableTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -44,7 +63,7 @@ namespace OpenQA.Selenium
             element.SendKeys("Dishy" + Keys.Backspace + Keys.Left + Keys.Left);
             element.SendKeys(Keys.Left + Keys.Left + "F" + Keys.Delete + Keys.End + "ee!");
 
-            Assert.AreEqual("Fishee!", element.Text);
+            Assert.That(element.Text, Is.EqualTo("Fishee!"));
         }
 
         [Test]
@@ -59,8 +78,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Driver prepends text in contentEditable areas")]
-        [IgnoreBrowser(Browser.Edge, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.Firefox, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.Safari, "Driver prepends text to contentEditable areas")]
         public void ShouldBeAbleToTypeIntoContentEditableElementWithExistingValue()
@@ -89,8 +106,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Driver prepends text in contentEditable areas")]
-        [IgnoreBrowser(Browser.Edge, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.Firefox, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.IE, "Prepends text")]
         [IgnoreBrowser(Browser.Safari, "Driver prepends text to contentEditable areas")]
@@ -108,8 +123,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Driver prepends text in contentEditable areas")]
-        [IgnoreBrowser(Browser.Edge, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.Firefox, "Browser does not automatically focus body element in frame")]
         [IgnoreBrowser(Browser.Safari, "Driver prepends text to contentEditable areas")]
         public void AppendsTextToEndOfContentEditableWithMultipleTextNodes()
@@ -118,7 +131,7 @@ namespace OpenQA.Selenium
             IWebElement input = driver.FindElement(By.Id("editable"));
             input.SendKeys(", world!");
             WaitFor(() => input.Text != "Why hello", "Text remained the original text");
-            Assert.AreEqual("Why hello, world!", input.Text);
+            Assert.That(input.Text, Is.EqualTo("Why hello, world!"));
         }
     }
 }

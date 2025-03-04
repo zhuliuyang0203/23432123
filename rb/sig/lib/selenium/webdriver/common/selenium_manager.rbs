@@ -12,7 +12,7 @@ module Selenium
 
       def self.bin_path: () -> String
 
-      def self.binary_paths: (Array[String] arguments) -> Hash[untyped, Array[String]]
+      def self.binary_paths: (*String arguments) -> Hash[untyped, Array[String]]
 
       private
 

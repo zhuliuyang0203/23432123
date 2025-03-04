@@ -1,25 +1,28 @@
-// <copyright file="ActionSequence.cs" company="WebDriver Committers">
+// <copyright file="ActionSequence.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Interactions
 {
@@ -28,8 +31,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public class ActionSequence
     {
-        private List<Interaction> interactions = new List<Interaction>();
-        private InputDevice device;
+        private readonly List<Interaction> interactions = new List<Interaction>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionSequence"/> class.
@@ -47,34 +49,30 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="initialSize">the initial size of the sequence.</param>
         public ActionSequence(InputDevice device, int initialSize)
         {
-            if (device == null)
-            {
-                throw new ArgumentNullException(nameof(device), "Input device cannot be null.");
-            }
-
-            this.device = device;
+            this.InputDevice = device ?? throw new ArgumentNullException(nameof(device), "Input device cannot be null.");
 
             for (int i = 0; i < initialSize; i++)
             {
-                this.AddAction(new PauseInteraction(device, TimeSpan.Zero));
+                this.AddAction(new PauseInteraction(this.InputDevice, TimeSpan.Zero));
             }
         }
 
         /// <summary>
         /// Gets the count of actions in the sequence.
         /// </summary>
-        public int Count
-        {
-            get { return this.interactions.Count; }
-        }
+        public int Count => this.interactions.Count;
 
         /// <summary>
         /// Gets the input device for this Action sequence.
         /// </summary>
-        public InputDevice inputDevice
-        {
-            get { return this.inputDevice; }
-        }
+        [Obsolete("This property has been renamed to InputDevice and will be removed in a future version")]
+        [CLSCompliant(false)]
+        public InputDevice inputDevice => InputDevice;
+
+        /// <summary>
+        /// Gets the input device for this Action sequence.
+        /// </summary>
+        public InputDevice InputDevice { get; }
 
         /// <summary>
         /// Adds an action to the sequence.
@@ -88,9 +86,9 @@ namespace OpenQA.Selenium.Interactions
                 throw new ArgumentNullException(nameof(interactionToAdd), "Interaction to add to sequence must not be null");
             }
 
-            if (!interactionToAdd.IsValidFor(this.device.DeviceKind))
+            if (!interactionToAdd.IsValidFor(this.InputDevice.DeviceKind))
             {
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Interaction {0} is invalid for device type {1}.", interactionToAdd.GetType(), this.device.DeviceKind), nameof(interactionToAdd));
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Interaction {0} is invalid for device type {1}.", interactionToAdd.GetType(), this.InputDevice.DeviceKind), nameof(interactionToAdd));
             }
 
             this.interactions.Add(interactionToAdd);
@@ -103,7 +101,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> containing the actions in this sequence.</returns>
         public Dictionary<string, object> ToDictionary()
         {
-            Dictionary<string, object> toReturn = this.device.ToDictionary();
+            Dictionary<string, object> toReturn = this.InputDevice.ToDictionary();
 
             List<object> encodedActions = new List<object>();
             foreach (Interaction action in this.interactions)
@@ -122,7 +120,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A string that represents the current <see cref="ActionSequence"/>.</returns>
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder("Action sequence - ").Append(this.device.ToString());
+            StringBuilder builder = new StringBuilder("Action sequence - ").Append(this.InputDevice.ToString());
             foreach (Interaction action in this.interactions)
             {
                 builder.AppendLine();

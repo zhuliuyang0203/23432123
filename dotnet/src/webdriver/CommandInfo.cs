@@ -1,22 +1,25 @@
-// <copyright file="CommandInfo.cs" company="WebDriver Committers">
+// <copyright file="CommandInfo.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -44,7 +47,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="obj">The <see cref="CommandInfo"/> to compare to this instance.</param>
         /// <returns><see langword="true"/> if <paramref name="obj"/> is a <see cref="CommandInfo"/> and its value is the same as this instance; otherwise, <see langword="false"/>. If <paramref name="obj"/> is <see langword="null"/>, the method returns <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this.Equals(obj as CommandInfo);
         }
@@ -54,7 +57,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="other">The <see cref="CommandInfo"/> to compare to this instance.</param>
         /// <returns><see langword="true"/> if the value of the <paramref name="other"/> parameter is the same as this instance; otherwise, <see langword="false"/>. If <paramref name="other"/> is <see langword="null"/>, the method returns <see langword="false"/>.</returns>
-        public bool Equals(CommandInfo other)
+        public bool Equals(CommandInfo? other)
         {
             if (other is null)
             {
@@ -62,7 +65,7 @@ namespace OpenQA.Selenium
             }
 
             // Optimization for a common success case.
-            if (Object.ReferenceEquals(this, other))
+            if (object.ReferenceEquals(this, other))
             {
                 return true;
             }
@@ -85,7 +88,7 @@ namespace OpenQA.Selenium
         /// <param name="left">The first <see cref="CommandInfo"/> object to compare.</param>
         /// <param name="right">The second <see cref="CommandInfo"/> object to compare.</param>
         /// <returns><see langword="true"/> if the value of <paramref name="left"/> is the same as the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(CommandInfo left, CommandInfo right)
+        public static bool operator ==(CommandInfo? left, CommandInfo? right)
         {
             if (left is null)
             {
@@ -106,7 +109,7 @@ namespace OpenQA.Selenium
         /// <param name="left">The first <see cref="CommandInfo"/> object to compare.</param>
         /// <param name="right">The second <see cref="CommandInfo"/> object to compare.</param>
         /// <returns><see langword="true"/> if the value of <paramref name="left"/> is different from the value of <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(CommandInfo left, CommandInfo right)
+        public static bool operator !=(CommandInfo? left, CommandInfo? right)
         {
             return !(left == right);
         }

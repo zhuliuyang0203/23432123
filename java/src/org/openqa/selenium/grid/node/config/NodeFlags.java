@@ -81,8 +81,8 @@ public class NodeFlags implements HasRoles {
   @Parameter(
       names = {"--connection-limit-per-session"},
       description =
-          "Let X be the maximum number of websocket connections per session.This will ensure one"
-              + " session is not able to exhaust the connection limit of the host")
+          "Let X be the maximum number of concurrent websocket connections per session. This will"
+              + " ensure one session is not able to exhaust the connection limit of the host")
   @ConfigValue(section = NODE_SECTION, name = "connection-limit-per-session", example = "8")
   public int connectionLimitPerSession = DEFAULT_CONNECTION_LIMIT;
 
@@ -197,6 +197,15 @@ public class NodeFlags implements HasRoles {
               + "to register again.")
   @ConfigValue(section = NODE_SECTION, name = "register-period", example = "120")
   public int registerPeriod = DEFAULT_REGISTER_PERIOD;
+
+  @Parameter(
+      names = "--register-shutdown-on-failure",
+      description =
+          "If this flag is enabled, the Node will shut down after the register period is completed."
+              + " This is useful for container environments to restart and register again. If"
+              + " restarted multiple times, the Node container status will be CrashLoopBackOff.")
+  @ConfigValue(section = NODE_SECTION, name = "register-shutdown-on-failure", example = "false")
+  public boolean registerShutdownOnFailure = false;
 
   @Parameter(
       names = "--heartbeat-period",

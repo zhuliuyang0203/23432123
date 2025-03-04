@@ -118,6 +118,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -133,7 +134,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     DistributorStatus status = distributor.getStatus();
 
@@ -157,6 +159,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -172,7 +175,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
 
     // Check the size
@@ -195,6 +199,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -210,7 +215,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     distributor.add(localNode);
     DistributorStatus status = distributor.getStatus();
@@ -228,6 +234,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -271,7 +278,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -321,6 +329,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -336,7 +345,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
     assertThat(localNode.isDraining()).isFalse();
 
@@ -366,6 +376,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
     Distributor distributor =
@@ -381,7 +392,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
     distributor.add(localNode);
 
     localNode.drain();
@@ -396,6 +408,7 @@ class LocalDistributorTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -412,7 +425,8 @@ class LocalDistributorTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     Capabilities caps = new ImmutableCapabilities("browserName", "cheese");
 

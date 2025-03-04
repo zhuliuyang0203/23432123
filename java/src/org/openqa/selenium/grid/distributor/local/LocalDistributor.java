@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.distributor.local;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static org.openqa.selenium.concurrent.ExecutorServices.shutdownGracefully;
 import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
@@ -26,6 +27,7 @@ import static org.openqa.selenium.remote.RemoteTags.CAPABILITIES;
 import static org.openqa.selenium.remote.RemoteTags.CAPABILITIES_EVENT;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID_EVENT;
+import static org.openqa.selenium.remote.http.HttpMethod.DELETE;
 import static org.openqa.selenium.remote.tracing.AttributeKey.SESSION_URI;
 import static org.openqa.selenium.remote.tracing.Tags.EXCEPTION;
 
@@ -34,6 +36,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
+import java.io.Closeable;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.time.Duration;
@@ -45,7 +48,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -75,9 +77,11 @@ import org.openqa.selenium.grid.data.NodeDrainComplete;
 import org.openqa.selenium.grid.data.NodeHeartBeatEvent;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeRemovedEvent;
+import org.openqa.selenium.grid.data.NodeRestartedEvent;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.NodeStatusEvent;
 import org.openqa.selenium.grid.data.RequestId;
+import org.openqa.selenium.grid.data.Session;
 import org.openqa.selenium.grid.data.SessionRequest;
 import org.openqa.selenium.grid.data.SessionRequestCapability;
 import org.openqa.selenium.grid.data.Slot;
@@ -108,6 +112,7 @@ import org.openqa.selenium.internal.Either;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.HttpClient;
+import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.tracing.AttributeKey;
 import org.openqa.selenium.remote.tracing.AttributeMap;
 import org.openqa.selenium.remote.tracing.Span;
@@ -118,7 +123,7 @@ import org.openqa.selenium.status.HasReadyState;
 @ManagedService(
     objectName = "org.seleniumhq.grid:type=Distributor,name=LocalDistributor",
     description = "Grid 4 node distributor")
-public class LocalDistributor extends Distributor implements AutoCloseable {
+public class LocalDistributor extends Distributor implements Closeable {
 
   private static final Logger LOG = Logger.getLogger(LocalDistributor.class.getName());
 
@@ -137,6 +142,7 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
   private final GridModel model;
   private final Map<NodeId, Node> nodes;
   private final SlotMatcher slotMatcher;
+  private final Duration purgeNodesInterval;
 
   private final ScheduledExecutorService newSessionService =
       Executors.newSingleThreadScheduledExecutor(
@@ -165,7 +171,7 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
             return thread;
           });
 
-  private final Executor sessionCreatorExecutor;
+  private final ExecutorService sessionCreatorExecutor;
 
   private final NewSessionQueue sessionQueue;
 
@@ -183,7 +189,8 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
       boolean rejectUnsupportedCaps,
       Duration sessionRequestRetryInterval,
       int newSessionThreadPoolSize,
-      SlotMatcher slotMatcher) {
+      SlotMatcher slotMatcher,
+      Duration purgeNodesInterval) {
     super(tracer, clientFactory, registrationSecret);
     this.tracer = Require.nonNull("Tracer", tracer);
     this.bus = Require.nonNull("Event bus", bus);
@@ -197,10 +204,13 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
     this.nodes = new ConcurrentHashMap<>();
     this.rejectUnsupportedCaps = rejectUnsupportedCaps;
     this.slotMatcher = slotMatcher;
+    this.purgeNodesInterval = purgeNodesInterval;
     Require.nonNull("Session request interval", sessionRequestRetryInterval);
 
     bus.addListener(NodeStatusEvent.listener(this::register));
     bus.addListener(NodeStatusEvent.listener(model::refresh));
+    bus.addListener(
+        NodeRestartedEvent.listener(previousNodeStatus -> remove(previousNodeStatus.getNodeId())));
     bus.addListener(NodeRemovedEvent.listener(nodeStatus -> remove(nodeStatus.getNodeId())));
     bus.addListener(
         NodeHeartBeatEvent.listener(
@@ -225,8 +235,14 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
     NewSessionRunnable newSessionRunnable = new NewSessionRunnable();
     bus.addListener(NodeDrainComplete.listener(this::remove));
 
-    purgeDeadNodesService.scheduleAtFixedRate(
-        GuardedRunnable.guard(model::purgeDeadNodes), 30, 30, TimeUnit.SECONDS);
+    // Disable purge dead nodes service if interval is set to zero
+    if (!this.purgeNodesInterval.isZero()) {
+      purgeDeadNodesService.scheduleAtFixedRate(
+          GuardedRunnable.guard(model::purgeDeadNodes),
+          this.purgeNodesInterval.getSeconds(),
+          this.purgeNodesInterval.getSeconds(),
+          TimeUnit.SECONDS);
+    }
 
     nodeHealthCheckService.scheduleAtFixedRate(
         runNodeHealthChecks(),
@@ -269,7 +285,8 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
         distributorOptions.shouldRejectUnsupportedCaps(),
         newSessionQueueOptions.getSessionRequestRetryInterval(),
         distributorOptions.getNewSessionThreadPoolSize(),
-        distributorOptions.getSlotMatcher());
+        distributorOptions.getSlotMatcher(),
+        distributorOptions.getPurgeNodesInterval());
   }
 
   @Override
@@ -330,6 +347,7 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
     // An exception occurs if Node heartbeat has started but the server is not ready.
     // Unhandled exception blocks the event-bus thread from processing any event henceforth.
     NodeStatus initialNodeStatus;
+    Runnable healthCheck;
     try {
       initialNodeStatus = node.getStatus();
       if (initialNodeStatus.getAvailability() != UP) {
@@ -338,8 +356,17 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
         // We do not need to add this Node for now.
         return this;
       }
-      model.add(initialNodeStatus);
-      nodes.put(node.getId(), node);
+      // Extract the health check
+      healthCheck = asRunnableHealthCheck(node);
+      Lock writeLock = lock.writeLock();
+      writeLock.lock();
+      try {
+        nodes.put(node.getId(), node);
+        model.add(initialNodeStatus);
+        allChecks.put(node.getId(), healthCheck);
+      } finally {
+        writeLock.unlock();
+      }
     } catch (Exception e) {
       LOG.log(
           Debug.getDebugLogLevel(),
@@ -347,10 +374,6 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
           e);
       return this;
     }
-
-    // Extract the health check
-    Runnable healthCheck = asRunnableHealthCheck(node);
-    allChecks.put(node.getId(), healthCheck);
 
     updateNodeStatus(initialNodeStatus, healthCheck);
 
@@ -390,7 +413,15 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
 
   private Runnable runNodeHealthChecks() {
     return () -> {
-      ImmutableMap<NodeId, Runnable> nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      ImmutableMap<NodeId, Runnable> nodeHealthChecks;
+      Lock readLock = this.lock.readLock();
+      readLock.lock();
+      try {
+        nodeHealthChecks = ImmutableMap.copyOf(allChecks);
+      } finally {
+        readLock.unlock();
+      }
+
       for (Runnable nodeHealthCheck : nodeHealthChecks.values()) {
         GuardedRunnable.guard(nodeHealthCheck).run();
       }
@@ -460,15 +491,13 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
     Lock writeLock = lock.writeLock();
     writeLock.lock();
     try {
-      Node node = nodes.get(nodeId);
+      Node node = nodes.remove(nodeId);
+      model.remove(nodeId);
+      allChecks.remove(nodeId);
 
       if (node instanceof RemoteNode) {
         ((RemoteNode) node).close();
       }
-
-      nodes.remove(nodeId);
-      model.remove(nodeId);
-      allChecks.remove(nodeId);
     } finally {
       writeLock.unlock();
     }
@@ -547,6 +576,11 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
           new SessionNotCreatedException("Unable to create new session");
       for (Capabilities caps : request.getDesiredCapabilities()) {
         if (isNotSupported(caps)) {
+          // e.g. the last node drained, we have to wait for a new to register
+          lastFailure =
+              new SessionNotCreatedException(
+                  "Unable to find a node supporting the desired capabilities");
+          retry = true;
           continue;
         }
 
@@ -752,9 +786,10 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
   @Override
   public void close() {
     LOG.info("Shutting down Distributor executor service");
-    purgeDeadNodesService.shutdown();
-    nodeHealthCheckService.shutdown();
-    newSessionService.shutdown();
+    shutdownGracefully("Local Distributor - Purge Dead Nodes", purgeDeadNodesService);
+    shutdownGracefully("Local Distributor - Node Health Check", nodeHealthCheckService);
+    shutdownGracefully("Local Distributor - New Session Queue", newSessionService);
+    shutdownGracefully("Local Distributor - Session Creation", sessionCreatorExecutor);
   }
 
   private class NewSessionRunnable implements Runnable {
@@ -851,21 +886,34 @@ public class LocalDistributor extends Distributor implements AutoCloseable {
           }
         }
 
-        // 'complete' will return 'true' if the session has not timed out during the creation
-        // process: it's still a valid session as it can be used by the client
         boolean isSessionValid = sessionQueue.complete(reqId, response);
-        // If the session request has timed out, tell the Node to remove the session, so that does
-        // not stall
+        // terminate invalid sessions to avoid stale sessions
         if (!isSessionValid && response.isRight()) {
           LOG.log(
               Level.INFO,
-              "Session for request {0} has been created but it has timed out, stopping it to avoid"
-                  + " stalled browser",
+              "Session for request {0} has been created but it has timed out or the connection"
+                  + " dropped, stopping it to avoid stalled browser",
               reqId.toString());
-          URI nodeURI = response.right().getSession().getUri();
-          Node node = getNodeFromURI(nodeURI);
+          Session session = response.right().getSession();
+          Node node = getNodeFromURI(session.getUri());
           if (node != null) {
-            node.stop(response.right().getSession().getId());
+            boolean deleted;
+            try {
+              // Attempt to stop the session
+              deleted =
+                  node.execute(new HttpRequest(DELETE, "/session/" + session.getId())).getStatus()
+                      == 200;
+            } catch (Exception e) {
+              LOG.log(
+                  Level.WARNING,
+                  String.format("Exception while trying to delete session %s", session.getId()),
+                  e);
+              deleted = false;
+            }
+            if (!deleted) {
+              // Kill the session
+              node.stop(session.getId());
+            }
           }
         }
       }

@@ -1,3 +1,22 @@
+// <copyright file="WebElementTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 
 namespace OpenQA.Selenium
@@ -49,7 +68,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             IWebElement oneliner = driver.FindElement(By.Id("oneline"));
-            Assert.AreEqual("p", oneliner.TagName.ToLower());
+            Assert.That(oneliner.TagName, Is.EqualTo("p").IgnoreCase);
 
         }
 
@@ -59,12 +78,12 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             IWebElement oneliner = driver.FindElement(By.Id("oneline"));
-            Assert.AreEqual("A single line of text", oneliner.Text);
+            Assert.That(oneliner.Text, Is.EqualTo("A single line of text"));
 
             IWebElement twoblocks = driver.FindElement(By.Id("twoblocks"));
-            Assert.AreEqual("Some text" +
+            Assert.That(twoblocks.Text, Is.EqualTo("Some text" +
                 System.Environment.NewLine +
-                "Some more text", twoblocks.Text);
+                "Some more text"));
 
         }
 
@@ -91,7 +110,7 @@ namespace OpenQA.Selenium
             IWebElement textbox = driver.FindElement(By.Id("keyUp"));
             textbox.SendKeys("a@#$ç.ó");
             textbox.Clear();
-            Assert.AreEqual("", textbox.GetAttribute("value"));
+            Assert.That(textbox.GetAttribute("value"), Is.Empty);
         }
 
         [Test]
@@ -102,7 +121,7 @@ namespace OpenQA.Selenium
             IWebElement textbox = driver.FindElement(By.Id("keyUp"));
             textbox.SendKeys("a@#$ç.ó");
             textbox.Clear();
-            Assert.AreEqual("", textbox.GetAttribute("value"));
+            Assert.That(textbox.GetAttribute("value"), Is.Empty);
         }
 
         [Test]
@@ -112,7 +131,7 @@ namespace OpenQA.Selenium
 
             IWebElement textbox = driver.FindElement(By.Id("keyUp"));
             textbox.SendKeys("a@#$ç.ó");
-            Assert.AreEqual("a@#$ç.ó", textbox.GetAttribute("value"));
+            Assert.That(textbox.GetAttribute("value"), Is.EqualTo("a@#$ç.ó"));
         }
 
         [Test]
@@ -133,7 +152,7 @@ namespace OpenQA.Selenium
             IWebElement changedDiv = driver.FindElement(By.Id("dynamo"));
             IWebElement link = driver.FindElement(By.LinkText("Update a div"));
             link.Click();
-            Assert.AreEqual("Fish and chips!", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("Fish and chips!"));
         }
 
         [Test]
@@ -143,8 +162,8 @@ namespace OpenQA.Selenium
 
             IWebElement dynamo = driver.FindElement(By.Id("dynamo"));
             IWebElement mousedown = driver.FindElement(By.Id("mousedown"));
-            Assert.AreEqual("mousedown", mousedown.GetAttribute("id"));
-            Assert.AreEqual("dynamo", dynamo.GetAttribute("id"));
+            Assert.That(mousedown.GetAttribute("id"), Is.EqualTo("mousedown"));
+            Assert.That(dynamo.GetAttribute("id"), Is.EqualTo("dynamo"));
 
         }
     }

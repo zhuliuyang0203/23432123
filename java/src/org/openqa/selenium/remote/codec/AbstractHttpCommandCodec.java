@@ -53,7 +53,6 @@ import static org.openqa.selenium.remote.DriverCommand.GET_ELEMENT_VALUE_OF_CSS_
 import static org.openqa.selenium.remote.DriverCommand.GET_FEDCM_DIALOG_TYPE;
 import static org.openqa.selenium.remote.DriverCommand.GET_FEDCM_TITLE;
 import static org.openqa.selenium.remote.DriverCommand.GET_LOCATION;
-import static org.openqa.selenium.remote.DriverCommand.GET_NETWORK_CONNECTION;
 import static org.openqa.selenium.remote.DriverCommand.GET_TIMEOUTS;
 import static org.openqa.selenium.remote.DriverCommand.GET_TITLE;
 import static org.openqa.selenium.remote.DriverCommand.GO_BACK;
@@ -73,7 +72,6 @@ import static org.openqa.selenium.remote.DriverCommand.SELECT_ACCOUNT;
 import static org.openqa.selenium.remote.DriverCommand.SEND_KEYS_TO_ELEMENT;
 import static org.openqa.selenium.remote.DriverCommand.SET_DELAY_ENABLED;
 import static org.openqa.selenium.remote.DriverCommand.SET_LOCATION;
-import static org.openqa.selenium.remote.DriverCommand.SET_NETWORK_CONNECTION;
 import static org.openqa.selenium.remote.DriverCommand.SET_SCRIPT_TIMEOUT;
 import static org.openqa.selenium.remote.DriverCommand.SET_TIMEOUT;
 import static org.openqa.selenium.remote.DriverCommand.SET_USER_VERIFIED;
@@ -177,14 +175,6 @@ public abstract class AbstractHttpCommandCodec implements CommandCodec<HttpReque
     defineCommand(
         SET_LOCATION, post(sessionId + "/location")); // Not w3c; used in RemoteLocationContext
 
-    // Mobile Spec
-    defineCommand(
-        GET_NETWORK_CONNECTION,
-        get(sessionId + "/network_connection")); // Not w3c; used in RemoteNetworkConnection
-    defineCommand(
-        SET_NETWORK_CONNECTION,
-        post(sessionId + "/network_connection")); // Not w3c; used in RemoteNetworkConnection
-
     // Virtual Authenticator API
     String webauthn = sessionId + "/webauthn/authenticator";
     String webauthnId = webauthn + "/:authenticatorId";
@@ -197,14 +187,15 @@ public abstract class AbstractHttpCommandCodec implements CommandCodec<HttpReque
     defineCommand(SET_USER_VERIFIED, post(webauthnId + "/uv"));
 
     // Federated Credential Management API
-    defineCommand(CANCEL_DIALOG, post("/fedcm/canceldialog"));
-    defineCommand(SELECT_ACCOUNT, post("/fedcm/selectaccount"));
-    defineCommand(CLICK_DIALOG, post("/fedcm/clickdialogbutton"));
-    defineCommand(GET_ACCOUNTS, get("/fedcm/accountlist"));
-    defineCommand(GET_FEDCM_TITLE, get("/fedcm/gettitle"));
-    defineCommand(GET_FEDCM_DIALOG_TYPE, get("/fedcm/getdialogtype"));
-    defineCommand(SET_DELAY_ENABLED, post("/fedcm/setdelayenabled"));
-    defineCommand(RESET_COOLDOWN, post("/fedcm/resetcooldown"));
+    String fedcm = sessionId + "/fedcm";
+    defineCommand(CANCEL_DIALOG, post(fedcm + "/canceldialog"));
+    defineCommand(SELECT_ACCOUNT, post(fedcm + "/selectaccount"));
+    defineCommand(CLICK_DIALOG, post(fedcm + "/clickdialogbutton"));
+    defineCommand(GET_ACCOUNTS, get(fedcm + "/accountlist"));
+    defineCommand(GET_FEDCM_TITLE, get(fedcm + "/gettitle"));
+    defineCommand(GET_FEDCM_DIALOG_TYPE, get(fedcm + "/getdialogtype"));
+    defineCommand(SET_DELAY_ENABLED, post(fedcm + "/setdelayenabled"));
+    defineCommand(RESET_COOLDOWN, post(fedcm + "/resetcooldown"));
 
     defineCommand(GET_DOWNLOADABLE_FILES, get(sessionId + "/se/files"));
     defineCommand(DOWNLOAD_FILE, post(sessionId + "/se/files"));

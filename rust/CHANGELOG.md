@@ -1,3 +1,22 @@
+0.4.29
+======
+
+
+0.4.28
+======
+
+* [rust] xz uncompressor for Firefox Linux nightlies (#14832)
+* [rust] Fix Edge updates API deserialization (#14851)
+* [rust] Use file lock to protect concurrent accesses to cache (fix #13511 and #13686)
+* [rust] Use tax.xz for Firefox package starting in version 135
+
+0.4.27
+======
+* Use endpoint for stable versions first to manage Firefox (#14536) (#14613)
+* Selenium Manager honors full browser version (#13419) (#14619)
+* Selenium Manager honors full browser version (#13419)
+* Minor change related to variable name
+
 0.4.26
 ======
 * Selenium Manager checks invalid browser version (#14511)

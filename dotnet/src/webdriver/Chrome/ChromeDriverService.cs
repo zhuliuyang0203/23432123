@@ -1,24 +1,27 @@
-// <copyright file="ChromeDriverService.cs" company="WebDriver Committers">
+// <copyright file="ChromeDriverService.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Chromium;
 using OpenQA.Selenium.Internal;
 using System.IO;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chrome
 {
@@ -35,7 +38,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="executablePath">The full path to the ChromeDriver executable.</param>
         /// <param name="executableFileName">The file name of the ChromeDriver executable.</param>
         /// <param name="port">The port on which the ChromeDriver executable should listen.</param>
-        private ChromeDriverService(string executablePath, string executableFileName, int port)
+        private ChromeDriverService(string? executablePath, string? executableFileName, int port)
             : base(executablePath, executableFileName, port)
         {
         }
@@ -60,20 +63,22 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="driverPath">The path to the executable or the directory containing the ChromeDriver executable.</param>
         /// <returns>A ChromeDriverService using a random port.</returns>
-        public static ChromeDriverService CreateDefaultService(string driverPath)
+        public static ChromeDriverService CreateDefaultService(string? driverPath)
         {
-            string fileName;
             if (File.Exists(driverPath))
             {
-                fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath);
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
             }
             else
             {
-                fileName = ChromiumDriverServiceFileName(DefaultChromeDriverServiceExecutableName);
-            }
+                string fileName = ChromiumDriverServiceFileName(DefaultChromeDriverServiceExecutableName);
+                string? driverFolder = driverPath;
 
-            return CreateDefaultService(driverPath, fileName);
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -82,7 +87,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="driverPath">The directory containing the ChromeDriver executable.</param>
         /// <param name="driverExecutableFileName">The name of the ChromeDriver executable file.</param>
         /// <returns>A ChromeDriverService using a random port.</returns>
-        public static ChromeDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static ChromeDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new ChromeDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }

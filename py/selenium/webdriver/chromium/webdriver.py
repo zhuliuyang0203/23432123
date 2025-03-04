@@ -77,9 +77,9 @@ class ChromiumDriver(RemoteWebDriver):
     def get_network_conditions(self):
         """Gets Chromium network emulation settings.
 
-        :Returns:     A dict. For example:     {'latency': 4,
-        'download_throughput': 2, 'upload_throughput': 2,     'offline':
-        False}
+        :Returns:
+            A dict.
+            For example:     {'latency': 4, 'download_throughput': 2, 'upload_throughput': 2, 'offline': False}
         """
         return self.execute("getNetworkConditions")["value"]
 
@@ -138,7 +138,7 @@ class ChromiumDriver(RemoteWebDriver):
             For example to getResponseBody:
             {'base64Encoded': False, 'body': 'response body string'}
         """
-        return self.execute("executeCdpCommand", {"cmd": cmd, "params": cmd_args})["value"]
+        return super().execute_cdp_cmd(cmd, cmd_args)
 
     def get_sinks(self) -> list:
         """:Returns: A list of sinks available for Cast."""

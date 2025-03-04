@@ -11,7 +11,7 @@ module Selenium
 
       def add_cookie: (?Hash[Symbol, untyped] opts) -> void
 
-      def cookie_named: (String name) -> Hash[Symbol, untyped]
+      def cookie_named: (String name) -> (Hash[Symbol, untyped] | Error::NoSuchCookieError)
 
       def delete_cookie: (String name) -> String
 
@@ -33,7 +33,7 @@ module Selenium
 
       def strip_port: (String str) -> String?
 
-      def convert_cookie: (Hash[String, untyped] cookie) -> Hash[Symbol, untyped]
+      def convert_cookie: (String) -> (Hash[Symbol, untyped] | Error::NoSuchCookieError)
     end
   end
 end

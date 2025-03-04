@@ -28,12 +28,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import org.openqa.selenium.internal.Require;
 
 abstract class HttpMessage<M extends HttpMessage<M>> {
@@ -92,11 +91,8 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return an iterable view of the values
    */
   public Iterable<String> getHeaders(String name) {
-    return headers.entrySet().stream()
-        .filter(e -> Objects.nonNull(e.getKey()))
-        .filter(e -> e.getKey().equalsIgnoreCase(name.toLowerCase()))
-        .flatMap((e) -> e.getValue().stream())
-        .collect(Collectors.toList());
+    return Collections.unmodifiableCollection(
+        headers.getOrDefault(name.toLowerCase(Locale.ENGLISH), Collections.emptyList()));
   }
 
   /**
@@ -106,12 +102,9 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return the value
    */
   public String getHeader(String name) {
-    return headers.entrySet().stream()
-        .filter(e -> Objects.nonNull(e.getKey()))
-        .filter(e -> e.getKey().equalsIgnoreCase(name.toLowerCase()))
-        .flatMap((e) -> e.getValue().stream())
-        .findFirst()
-        .orElse(null);
+    String lcName = name.toLowerCase(Locale.ENGLISH);
+    List<String> values = headers.getOrDefault(lcName, Collections.emptyList());
+    return !values.isEmpty() ? values.get(0) : null;
   }
 
   /**
@@ -123,7 +116,8 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M setHeader(String name, String value) {
-    return removeHeader(name).addHeader(name, value);
+    String lcName = name.toLowerCase(Locale.ENGLISH);
+    return removeHeader(lcName).addHeader(lcName, value);
   }
 
   /**
@@ -135,7 +129,9 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M addHeader(String name, String value) {
-    headers.computeIfAbsent(name, (n) -> new ArrayList<>()).add(value);
+    String lcName = name.toLowerCase(Locale.ENGLISH);
+    List<String> values = headers.computeIfAbsent(lcName, (n) -> new ArrayList<>());
+    values.add(value);
     return self();
   }
 
@@ -146,17 +142,17 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
    * @return self
    */
   public M removeHeader(String name) {
-    headers.keySet().removeIf(header -> header.equalsIgnoreCase(name));
+    String lcName = name.toLowerCase(Locale.ENGLISH);
+    headers.remove(lcName);
     return self();
   }
 
   public Charset getContentEncoding() {
-    Charset charset = UTF_8;
     try {
       String contentType = getHeader(HttpHeader.ContentType.getName());
       if (contentType != null) {
         return Arrays.stream(contentType.split(";"))
-            .map((e) -> e.trim().toLowerCase())
+            .map((e) -> e.trim().toLowerCase(Locale.ENGLISH))
             .filter((e) -> e.startsWith("charset="))
             .map((e) -> e.substring(e.indexOf('=') + 1))
             .map(Charset::forName)
@@ -166,7 +162,7 @@ abstract class HttpMessage<M extends HttpMessage<M>> {
     } catch (IllegalArgumentException ignored) {
       // Do nothing.
     }
-    return charset;
+    return UTF_8;
   }
 
   @Deprecated

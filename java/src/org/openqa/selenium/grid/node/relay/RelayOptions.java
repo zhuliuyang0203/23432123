@@ -29,6 +29,7 @@ import java.net.http.HttpClient.Version;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -122,7 +123,7 @@ public class RelayOptions {
 
   private String normalizeProtocolVersion(String protocolVersion) {
     // Support input in the form of "http/1.1" or "HTTP/1.1"
-    return protocolVersion.toUpperCase().replaceAll("/", "_").replaceAll("\\.", "_");
+    return protocolVersion.toUpperCase(Locale.ENGLISH).replaceAll("/", "_").replaceAll("\\.", "_");
   }
 
   // Method being used in SessionSlot

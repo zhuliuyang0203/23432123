@@ -1,3 +1,22 @@
+// <copyright file="NavigationTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
@@ -29,10 +48,10 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             navigation.Back();
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             navigation.Forward();
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -52,12 +71,12 @@ namespace OpenQA.Selenium
             navigation = driver.Navigate();
 
             navigation.GoToUrl(macbethPage);
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             // We go to two pages to ensure that the browser wasn't
             // already at the desired page through a previous test.
             navigation.GoToUrl(simpleTestPage);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -69,12 +88,12 @@ namespace OpenQA.Selenium
             navigation = driver.Navigate();
 
             navigation.GoToUrl(macBeth);
-            Assert.AreEqual(driver.Title, macbethTitle);
+            Assert.That(macbethTitle, Is.EqualTo(driver.Title));
 
             // We go to two pages to ensure that the browser wasn't
             // already at the desired page through a previous test.
             navigation.GoToUrl(simpleTest);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -84,21 +103,20 @@ namespace OpenQA.Selenium
             IWebElement changedDiv = driver.FindElement(By.Id("dynamo"));
             driver.FindElement(By.Id("updatediv")).Click();
 
-            Assert.AreEqual("Fish and chips!", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("Fish and chips!"));
             driver.Navigate().Refresh();
 
             changedDiv = driver.FindElement(By.Id("dynamo"));
-            Assert.AreEqual("What's for dinner?", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("What's for dinner?"));
         }
 
         [Test]
         [NeedsFreshDriver(IsCreatedBeforeTest = true)]
-        public Task ShouldNotHaveProblemNavigatingWithNoPagesBrowsedAsync()
+        public void ShouldNotHaveProblemNavigatingWithNoPagesBrowsedAsync()
         {
             var navigation = driver.Navigate();
-            Assert.DoesNotThrowAsync(async () => await navigation.BackAsync());
-            Assert.DoesNotThrowAsync(async () => await navigation.ForwardAsync());
-            return Task.CompletedTask;
+            Assert.That(async () => await navigation.BackAsync(), Throws.Nothing);
+            Assert.That(async () => await navigation.ForwardAsync(), Throws.Nothing);
         }
 
         [Test]
@@ -110,10 +128,10 @@ namespace OpenQA.Selenium
             await navigation.GoToUrlAsync(simpleTestPage);
 
             await navigation.BackAsync();
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             await navigation.ForwardAsync();
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -129,10 +147,10 @@ namespace OpenQA.Selenium
             var navigation = driver.Navigate();
 
             await navigation.GoToUrlAsync(macbethPage);
-            Assert.AreEqual(macbethTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(macbethTitle));
 
             await navigation.GoToUrlAsync(simpleTestPage);
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -141,9 +159,9 @@ namespace OpenQA.Selenium
             var navigation = driver.Navigate();
 
             navigation.GoToUrlAsync(new Uri(macbethPage));
-            Assert.AreEqual(driver.Title, macbethTitle);
+            Assert.That(macbethTitle, Is.EqualTo(driver.Title));
             navigation.GoToUrl(new Uri(simpleTestPage));
-            Assert.AreEqual(simpleTestTitle, driver.Title);
+            Assert.That(driver.Title, Is.EqualTo(simpleTestTitle));
         }
 
         [Test]
@@ -153,11 +171,11 @@ namespace OpenQA.Selenium
             IWebElement changedDiv = driver.FindElement(By.Id("dynamo"));
             driver.FindElement(By.Id("updatediv")).Click();
 
-            Assert.AreEqual("Fish and chips!", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("Fish and chips!"));
             await driver.Navigate().RefreshAsync();
 
             changedDiv = driver.FindElement(By.Id("dynamo"));
-            Assert.AreEqual("What's for dinner?", changedDiv.Text);
+            Assert.That(changedDiv.Text, Is.EqualTo("What's for dinner?"));
         }
     }
 }

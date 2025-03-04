@@ -14,7 +14,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
+
+from typing import List
+from typing import Mapping
+from typing import Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
@@ -29,6 +32,7 @@ class Service(service.ChromiumService):
     :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
+    :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
@@ -36,8 +40,8 @@ class Service(service.ChromiumService):
         executable_path: str = None,
         port: int = 0,
         log_output: SubprocessStdAlias = None,
-        service_args: typing.Optional[typing.List[str]] = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        service_args: Optional[List[str]] = None,
+        env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: str = None,
         **kwargs,
     ) -> None:

@@ -19,8 +19,8 @@ package org.openqa.selenium.grid.node;
 
 import static org.openqa.selenium.remote.http.Contents.asJson;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.UncheckedIOException;
+import java.util.Map;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.remote.http.HttpHandler;
@@ -39,7 +39,6 @@ class TryAcquireConnection implements HttpHandler {
 
   @Override
   public HttpResponse execute(HttpRequest req) throws UncheckedIOException {
-    return new HttpResponse()
-        .setContent(asJson(ImmutableMap.of("value", node.tryAcquireConnection(id))));
+    return new HttpResponse().setContent(asJson(Map.of("value", node.tryAcquireConnection(id))));
   }
 }

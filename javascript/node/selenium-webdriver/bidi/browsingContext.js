@@ -156,8 +156,7 @@ class BrowsingContext {
       method: 'browsingContext.create',
       params: Object.fromEntries(parameters),
     }
-    const res = await this.bidi.send(params)
-    return res
+    return await this.bidi.send(params)
   }
 
   /**
@@ -528,10 +527,15 @@ class BrowsingContext {
       throw Error(`Pass in an array of ReferenceValue objects. Received: ${startNodes}`)
     }
 
+    let startNodesSerialized = undefined
+
     if (startNodes !== undefined && Array.isArray(startNodes)) {
+      startNodesSerialized = []
       startNodes.forEach((node) => {
         if (!(node instanceof ReferenceValue)) {
           throw Error(`Pass in a ReferenceValue object. Received: ${node}`)
+        } else {
+          startNodesSerialized.push(node.asMap())
         }
       })
     }
@@ -544,7 +548,7 @@ class BrowsingContext {
         maxNodeCount: maxNodeCount,
         sandbox: sandbox,
         serializationOptions: serializationOptions,
-        startNodes: startNodes,
+        startNodes: startNodesSerialized,
       },
     }
 

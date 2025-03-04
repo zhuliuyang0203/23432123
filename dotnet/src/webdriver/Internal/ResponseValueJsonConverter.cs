@@ -1,25 +1,28 @@
-// <copyright file="ResponseValueJsonConverter.cs" company="WebDriver Committers">
+// <copyright file="ResponseValueJsonConverter.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Internal
 {
@@ -28,7 +31,7 @@ namespace OpenQA.Selenium.Internal
     /// </summary>
     internal class ResponseValueJsonConverter : JsonConverter<object>
     {
-        public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             return ProcessReadToken(ref reader, options);
         }
@@ -66,19 +69,19 @@ namespace OpenQA.Selenium.Internal
             }
         }
 
-        private static object ProcessReadToken(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        private static object? ProcessReadToken(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             // Recursively processes a token. This is required for elements that next other elements.
-            object processedObject;
+            object? processedObject;
 
             switch (reader.TokenType)
             {
                 case JsonTokenType.StartObject:
                     {
-                        Dictionary<string, object> dictionaryValue = [];
+                        Dictionary<string, object?> dictionaryValue = [];
                         while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
                         {
-                            string elementKey = reader.GetString();
+                            string elementKey = reader.GetString()!;
                             reader.Read();
                             dictionaryValue.Add(elementKey, ProcessReadToken(ref reader, options));
                         }
@@ -89,7 +92,7 @@ namespace OpenQA.Selenium.Internal
 
                 case JsonTokenType.StartArray:
                     {
-                        List<object> arrayValue = [];
+                        List<object?> arrayValue = [];
                         while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                         {
                             arrayValue.Add(ProcessReadToken(ref reader, options));

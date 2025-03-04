@@ -1,19 +1,25 @@
-// <copyright file="V85Domains.cs" company="WebDriver Committers">
+// <copyright file="V85Domains.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
+using System;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools.V85
 {
@@ -22,15 +28,16 @@ namespace OpenQA.Selenium.DevTools.V85
     /// </summary>
     public class V85Domains : DevToolsDomains
     {
-        private DevToolsSessionDomains domains;
+        private readonly DevToolsSessionDomains domains;
 
         /// <summary>
         /// Initializes a new instance of the V85Domains class.
         /// </summary>
         /// <param name="session">The DevToolsSession to use with this set of domains.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="session"/> is <see langword="null"/>.</exception>
         public V85Domains(DevToolsSession session)
         {
-            this.domains = new DevToolsSessionDomains(session);
+            this.domains = new DevToolsSessionDomains(session ?? throw new ArgumentNullException(nameof(session)));
         }
 
         /// <summary>

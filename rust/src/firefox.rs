@@ -478,9 +478,10 @@ impl SeleniumManager for FirefoxManager {
             }
 
             let mut firefox_versions =
-                self.request_versions_from_online(FIREFOX_HISTORY_MAJOR_ENDPOINT)?;
+                self.request_versions_from_online(FIREFOX_HISTORY_ENDPOINT)?;
             if firefox_versions.is_empty() {
-                firefox_versions = self.request_versions_from_online(FIREFOX_HISTORY_ENDPOINT)?;
+                firefox_versions =
+                    self.request_versions_from_online(FIREFOX_HISTORY_MAJOR_ENDPOINT)?;
                 if firefox_versions.is_empty() {
                     firefox_versions =
                         self.request_versions_from_online(FIREFOX_HISTORY_DEV_ENDPOINT)?;
@@ -571,7 +572,11 @@ impl SeleniumManager for FirefoxManager {
         } else {
             // Linux
             artifact_name = "firefox-";
-            artifact_extension = "tar.bz2";
+            if major_browser_version < 135 {
+                artifact_extension = "tar.bz2";
+            } else {
+                artifact_extension = "tar.xz";
+            }
             if X32.is(arch) {
                 platform_label = "linux-i686";
             } else if self.is_nightly(browser_version) {

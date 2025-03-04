@@ -29,7 +29,6 @@ import static org.openqa.selenium.testing.drivers.Browser.SAFARI;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -179,7 +178,7 @@ class UploadTest extends JupiterTestBase {
     try {
       File f = File.createTempFile("webdriver", "tmp");
       f.deleteOnExit();
-      Files.write(f.toPath(), content.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(f.toPath(), content);
       return f;
     } catch (IOException e) {
       throw new UncheckedIOException(e);

@@ -27,6 +27,7 @@ use apple_flat_package::PkgReader;
 use bzip2::read::BzDecoder;
 use directories::BaseDirs;
 use flate2::read::GzDecoder;
+use fs_extra::dir::{move_dir, CopyOptions};
 use regex::Regex;
 use std::fs;
 use std::fs::File;
@@ -35,6 +36,7 @@ use std::io::{BufReader, Cursor, Read};
 use std::path::{Path, PathBuf};
 use tar::Archive;
 use walkdir::{DirEntry, WalkDir};
+use xz2::read::XzDecoder;
 use zip::ZipArchive;
 
 pub const PARSE_ERROR: &str = "Wrong browser/driver version";
@@ -49,6 +51,7 @@ const DMG: &str = "dmg";
 const EXE: &str = "exe";
 const DEB: &str = "deb";
 const MSI: &str = "msi";
+const XZ: &str = "xz";
 const SEVEN_ZIP_HEADER: &[u8; 6] = b"7z\xBC\xAF\x27\x1C";
 const UNCOMPRESS_MACOS_ERR_MSG: &str = "{} files are only supported in macOS";
 
@@ -123,7 +126,17 @@ pub fn uncompress(
     } else if extension.eq_ignore_ascii_case(GZ) {
         untargz(compressed_file, target, log)?
     } else if extension.eq_ignore_ascii_case(BZ2) {
-        uncompress_bz2(compressed_file, target, log)?
+        uncompress_tar(
+            &mut BzDecoder::new(File::open(compressed_file)?),
+            target,
+            log,
+        )?
+    } else if extension.eq_ignore_ascii_case(XZ) {
+        uncompress_tar(
+            &mut XzDecoder::new(File::open(compressed_file)?),
+            target,
+            log,
+        )?
     } else if extension.eq_ignore_ascii_case(PKG) {
         uncompress_pkg(compressed_file, target, log)?
     } else if extension.eq_ignore_ascii_case(DMG) {
@@ -131,7 +144,7 @@ pub fn uncompress(
     } else if extension.eq_ignore_ascii_case(EXE) {
         uncompress_sfx(compressed_file, target, log)?
     } else if extension.eq_ignore_ascii_case(DEB) {
-        uncompress_deb(compressed_file, target, log, os, volume.unwrap_or_default())?
+        uncompress_deb(compressed_file, target, log, volume.unwrap_or_default())?
     } else if extension.eq_ignore_ascii_case(MSI) {
         install_msi(compressed_file, log, os)?
     } else if extension.eq_ignore_ascii_case(XML) || extension.eq_ignore_ascii_case(HTML) {
@@ -146,6 +159,7 @@ pub fn uncompress(
             extension
         )));
     }
+
     Ok(())
 }
 
@@ -164,15 +178,23 @@ pub fn uncompress_sfx(compressed_file: &str, target: &Path, log: &Logger) -> Res
     sevenz_rust::decompress(file_reader, zip_parent).unwrap();
 
     let zip_parent_str = path_to_string(zip_parent);
-    let target_str = path_to_string(target);
     let core_str = format!(r"{}\core", zip_parent_str);
+    move_folder_content(&core_str, &target, &log)?;
+
+    Ok(())
+}
+
+pub fn move_folder_content(source: &str, target: &Path, log: &Logger) -> Result<(), Error> {
     log.trace(format!(
-        "Moving extracted files and folders from {} to {}",
-        core_str, target_str
+        "Moving files and folders from {} to {}",
+        source,
+        target.display()
     ));
     create_parent_path_if_not_exists(target)?;
-    fs::rename(&core_str, &target_str)?;
-
+    let mut options = CopyOptions::new();
+    options.content_only = true;
+    options.skip_exist = true;
+    move_dir(source, target, &options)?;
     Ok(())
 }
 
@@ -249,7 +271,6 @@ pub fn uncompress_deb(
     compressed_file: &str,
     target: &Path,
     log: &Logger,
-    os: &str,
     label: &str,
 ) -> Result<(), Error> {
     let zip_parent = Path::new(compressed_file).parent().unwrap();
@@ -264,20 +285,16 @@ pub fn uncompress_deb(
     deb_pkg.data()?.unpack(zip_parent)?;
 
     let zip_parent_str = path_to_string(zip_parent);
-    let target_str = path_to_string(target);
     let opt_edge_str = format!("{}/opt/microsoft/{}", zip_parent_str, label);
-    let opt_edge_mv = format!("mv {} {}", opt_edge_str, target_str);
-    let command = Command::new_single(opt_edge_mv.clone());
-    log.trace(format!(
-        "Moving extracted files and folders from {} to {}",
-        opt_edge_str, target_str
-    ));
-    create_parent_path_if_not_exists(target)?;
-    run_shell_command_by_os(os, command)?;
-    let target_path = Path::new(target);
-    if target_path.parent().unwrap().read_dir()?.next().is_none() {
-        fs::rename(&opt_edge_str, &target_str)?;
+
+    // Exception due to bad symbolic link in unstable distributions. For example:
+    // microsoft-edge -> /opt/microsoft/msedge-beta/microsoft-edge-beta
+    if !label.eq("msedge") {
+        let link = format!("{}/microsoft-edge", opt_edge_str);
+        fs::remove_file(Path::new(&link)).unwrap_or_default();
     }
+
+    move_folder_content(&opt_edge_str, &target, &log)?;
 
     Ok(())
 }
@@ -317,24 +334,20 @@ pub fn untargz(compressed_file: &str, target: &Path, log: &Logger) -> Result<(),
     Ok(())
 }
 
-pub fn uncompress_bz2(compressed_file: &str, target: &Path, log: &Logger) -> Result<(), Error> {
+pub fn uncompress_tar(decoder: &mut dyn Read, target: &Path, log: &Logger) -> Result<(), Error> {
     log.trace(format!(
-        "Uncompress {} to {}",
-        compressed_file,
+        "Uncompress compressed tarball to {}",
         target.display()
     ));
-    let mut bz_decoder = BzDecoder::new(File::open(compressed_file)?);
     let mut buffer: Vec<u8> = Vec::new();
-    bz_decoder.read_to_end(&mut buffer)?;
+    decoder.read_to_end(&mut buffer)?;
     let mut archive = Archive::new(Cursor::new(buffer));
-    if !target.exists() {
-        for entry in archive.entries()? {
-            let mut entry_decoder = entry?;
-            let entry_path: PathBuf = entry_decoder.path()?.iter().skip(1).collect();
-            let entry_target = target.join(entry_path);
-            fs::create_dir_all(entry_target.parent().unwrap())?;
-            entry_decoder.unpack(entry_target)?;
-        }
+    for entry in archive.entries()? {
+        let mut entry_decoder = entry?;
+        let entry_path: PathBuf = entry_decoder.path()?.iter().skip(1).collect();
+        let entry_target = target.join(entry_path);
+        fs::create_dir_all(entry_target.parent().unwrap())?;
+        entry_decoder.unpack(entry_target)?;
     }
     Ok(())
 }

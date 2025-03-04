@@ -1,19 +1,20 @@
-// <copyright file="ChromeDriver.cs" company="WebDriver Committers">
+// <copyright file="ChromeDriver.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Chromium;
@@ -21,6 +22,8 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chrome
 {
@@ -59,7 +62,7 @@ namespace OpenQA.Selenium.Chrome
     /// </example>
     public class ChromeDriver : ChromiumDriver
     {
-        private static Dictionary<string, CommandInfo> chromeCustomCommands = new Dictionary<string, CommandInfo>()
+        private static readonly Dictionary<string, CommandInfo> chromeCustomCommands = new Dictionary<string, CommandInfo>()
         {
             { ExecuteCdp, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/goog/cdp/execute") },
             { GetCastSinksCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/goog/cast/get_sinks") },
@@ -82,6 +85,7 @@ namespace OpenQA.Selenium.Chrome
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class using the specified options.
         /// </summary>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(ChromeOptions options)
             : this(ChromeDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -91,6 +95,7 @@ namespace OpenQA.Selenium.Chrome
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class using the specified driver service.
         /// </summary>
         /// <param name="service">The <see cref="ChromeDriverService"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service)
             : this(service, new ChromeOptions())
         {
@@ -112,6 +117,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="chromeDriverDirectory">The full path to the directory containing ChromeDriver.exe.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options)
             : this(chromeDriverDirectory, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -124,6 +130,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="chromeDriverDirectory">The full path to the directory containing ChromeDriver.exe.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options, TimeSpan commandTimeout)
             : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout)
         {
@@ -135,6 +142,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options)
             : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -146,6 +154,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
             : base(service, options, commandTimeout)
         {

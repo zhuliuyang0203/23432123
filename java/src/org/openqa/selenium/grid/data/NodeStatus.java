@@ -76,7 +76,7 @@ public class NodeStatus {
     Set<Slot> slots = null;
     Availability availability = null;
     Duration heartbeatPeriod = null;
-    Duration sessionTimeout = null;
+    Duration sessionTimeout = Duration.ofSeconds(300);
     String version = null;
     Map<String, String> osInfo = null;
 
@@ -202,6 +202,14 @@ public class NodeStatus {
         .mapToLong(Instant::toEpochMilli)
         .max()
         .orElse(0);
+  }
+
+  public String getBrowserVersion() {
+    return slots.stream()
+        .map(slot -> slot.getStereotype().getBrowserVersion())
+        .filter(Objects::nonNull)
+        .max(new SemanticVersionComparator())
+        .orElse("");
   }
 
   @Override

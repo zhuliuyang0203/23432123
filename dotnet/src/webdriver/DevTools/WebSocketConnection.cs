@@ -1,19 +1,20 @@
-// <copyright file="WebSocketConnection.cs" company="WebDriver Committers">
+// <copyright file="WebSocketConnection.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
@@ -21,6 +22,8 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools
 {
@@ -33,9 +36,7 @@ namespace OpenQA.Selenium.DevTools
         private readonly CancellationTokenSource clientTokenSource = new CancellationTokenSource();
         private readonly TimeSpan startupTimeout;
         private readonly TimeSpan shutdownTimeout;
-        private readonly int bufferSize = 4096;
-        private Task dataReceiveTask;
-        private bool isActive = false;
+        private Task? dataReceiveTask;
         private ClientWebSocket client = new ClientWebSocket();
         private readonly SemaphoreSlim sendMethodSemaphore = new SemaphoreSlim(1, 1);
 
@@ -70,22 +71,22 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Occurs when data is received from this connection.
         /// </summary>
-        public event EventHandler<WebSocketConnectionDataReceivedEventArgs> DataReceived;
+        public event EventHandler<WebSocketConnectionDataReceivedEventArgs>? DataReceived;
 
         /// <summary>
         /// Occurs when a log message is emitted from this connection.
         /// </summary>
-        public event EventHandler<DevToolsSessionLogMessageEventArgs> LogMessage;
+        public event EventHandler<DevToolsSessionLogMessageEventArgs>? LogMessage;
 
         /// <summary>
         /// Gets a value indicating whether this connection is active.
         /// </summary>
-        public bool IsActive => this.isActive;
+        public bool IsActive { get; private set; } = false;
 
         /// <summary>
         /// Gets the buffer size for communication used by this connection.
         /// </summary>
-        public int BufferSize => this.bufferSize;
+        public int BufferSize { get; } = 4096;
 
         /// <summary>
         /// Asynchronously starts communication with the remote end of this connection.
@@ -95,6 +96,11 @@ namespace OpenQA.Selenium.DevTools
         /// <exception cref="TimeoutException">Thrown when the connection is not established within the startup timeout.</exception>
         public virtual async Task Start(string url)
         {
+            if (url is null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
             this.Log($"Opening connection to URL {url}", DevToolsSessionLogLevel.Trace);
             bool connected = false;
             DateTime timeout = DateTime.Now.Add(this.startupTimeout);
@@ -120,7 +126,7 @@ namespace OpenQA.Selenium.DevTools
             }
 
             this.dataReceiveTask = Task.Run(async () => await this.ReceiveData());
-            this.isActive = true;
+            this.IsActive = true;
             this.Log($"Connection opened", DevToolsSessionLogLevel.Trace);
         }
 
@@ -158,6 +164,11 @@ namespace OpenQA.Selenium.DevTools
         /// <returns>The task object representing the asynchronous operation.</returns>
         public virtual async Task SendData(string data)
         {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             ArraySegment<byte> messageBuffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(data));
             this.Log($"SEND >>> {data}");
 
@@ -235,7 +246,7 @@ namespace OpenQA.Selenium.DevTools
             try
             {
                 StringBuilder messageBuilder = new StringBuilder();
-                ArraySegment<byte> buffer = WebSocket.CreateClientBuffer(this.bufferSize, this.bufferSize);
+                ArraySegment<byte> buffer = WebSocket.CreateClientBuffer(this.BufferSize, this.BufferSize);
                 while (this.client.State != WebSocketState.Closed && !cancellationToken.IsCancellationRequested)
                 {
                     WebSocketReceiveResult receiveResult = await this.client.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
@@ -254,7 +265,7 @@ namespace OpenQA.Selenium.DevTools
                         // Display text or binary data
                         if (this.client.State == WebSocketState.Open && receiveResult.MessageType != WebSocketMessageType.Close)
                         {
-                            messageBuilder.Append(Encoding.UTF8.GetString(buffer.Array, 0, receiveResult.Count));
+                            messageBuilder.Append(Encoding.UTF8.GetString(buffer.Array!, 0, receiveResult.Count));
                             if (receiveResult.EndOfMessage)
                             {
                                 string message = messageBuilder.ToString();
@@ -281,7 +292,7 @@ namespace OpenQA.Selenium.DevTools
             }
             finally
             {
-                this.isActive = false;
+                this.IsActive = false;
             }
         }
 

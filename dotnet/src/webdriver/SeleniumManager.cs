@@ -1,19 +1,20 @@
-// <copyright file="SeleniumManager.cs" company="WebDriver Committers">
+// <copyright file="SeleniumManager.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Internal.Logging;
@@ -37,9 +38,10 @@ namespace OpenQA.Selenium
     /// </summary>
     public static class SeleniumManager
     {
-        private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
+        internal const string DriverPathKey = "driver_path";
+        internal const string BrowserPathKey = "browser_path";
 
-        private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = SeleniumManagerSerializerContext.Default };
+        private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
         private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
         {
@@ -94,14 +96,14 @@ namespace OpenQA.Selenium
             var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
             Dictionary<string, string> binaryPaths = new()
             {
-                { "browser_path", smCommandResult.BrowserPath },
-                { "driver_path", smCommandResult.DriverPath }
+                { BrowserPathKey, smCommandResult.BrowserPath },
+                { DriverPathKey, smCommandResult.DriverPath }
             };
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"Driver path: {binaryPaths["driver_path"]}");
-                _logger.Trace($"Browser path: {binaryPaths["browser_path"]}");
+                _logger.Trace($"Driver path: {binaryPaths[DriverPathKey]}");
+                _logger.Trace($"Browser path: {binaryPaths[BrowserPathKey]}");
             }
 
             return binaryPaths;
@@ -186,7 +188,7 @@ namespace OpenQA.Selenium
 
             try
             {
-                jsonResponse = JsonSerializer.Deserialize<SeleniumManagerResponse>(output, _serializerOptions)!;
+                jsonResponse = JsonSerializer.Deserialize(output, SeleniumManagerSerializerContext.Default.SeleniumManagerResponse)!;
             }
             catch (Exception ex)
             {
@@ -209,19 +211,20 @@ namespace OpenQA.Selenium
         }
     }
 
-    internal record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
+    internal sealed record SeleniumManagerResponse(IReadOnlyList<LogEntryResponse> Logs, ResultResponse Result)
     {
-        public record LogEntryResponse(string Level, string Message);
+        public sealed record LogEntryResponse(string Level, string Message);
 
-        public record ResultResponse
+        public sealed record ResultResponse
         (
-            [property: JsonPropertyName("driver_path")]
+            [property: JsonPropertyName(SeleniumManager.DriverPathKey)]
             string DriverPath,
-            [property: JsonPropertyName("browser_path")]
+            [property: JsonPropertyName(SeleniumManager.BrowserPathKey)]
             string BrowserPath
         );
     }
 
     [JsonSerializable(typeof(SeleniumManagerResponse))]
-    internal partial class SeleniumManagerSerializerContext : JsonSerializerContext;
+    [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
+    internal sealed partial class SeleniumManagerSerializerContext : JsonSerializerContext;
 }

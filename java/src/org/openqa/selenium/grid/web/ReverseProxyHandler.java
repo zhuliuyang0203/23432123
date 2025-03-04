@@ -23,6 +23,7 @@ import static org.openqa.selenium.remote.tracing.Tags.HTTP_RESPONSE;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.UncheckedIOException;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.http.HttpClient;
@@ -78,7 +79,7 @@ public class ReverseProxyHandler implements HttpHandler {
 
       req.forEachHeader(
           (name, value) -> {
-            if (IGNORED_REQ_HEADERS.contains(name.toLowerCase())) {
+            if (IGNORED_REQ_HEADERS.contains(name.toLowerCase(Locale.ENGLISH))) {
               return;
             }
             toUpstream.addHeader(name, value);

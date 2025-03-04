@@ -18,6 +18,7 @@
 package org.openqa.selenium.grid.node.local;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static org.openqa.selenium.concurrent.ExecutorServices.shutdownGracefully;
 import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
@@ -37,6 +38,7 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -57,9 +59,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -114,7 +118,7 @@ import org.openqa.selenium.remote.tracing.Tracer;
 @ManagedService(
     objectName = "org.seleniumhq.grid:type=Node,name=LocalNode",
     description = "Node running the webdriver sessions.")
-public class LocalNode extends Node {
+public class LocalNode extends Node implements Closeable {
 
   private static final Json JSON = new Json();
   private static final Logger LOG = Logger.getLogger(LocalNode.class.getName());
@@ -131,7 +135,7 @@ public class LocalNode extends Node {
   private final int connectionLimitPerSession;
 
   private final boolean bidiEnabled;
-  private final AtomicBoolean drainAfterSessions = new AtomicBoolean();
+  private final boolean drainAfterSessions;
   private final List<SessionSlot> factories;
   private final Cache<SessionId, SessionSlot> currentSessions;
   private final Cache<SessionId, TemporaryFilesystem> uploadsTempFileSystem;
@@ -139,6 +143,8 @@ public class LocalNode extends Node {
   private final Cache<SessionId, UUID> sessionToDownloadsDir;
   private final AtomicInteger pendingSessions = new AtomicInteger();
   private final AtomicInteger sessionCount = new AtomicInteger();
+  private final Runnable shutdown;
+  private final ReadWriteLock drainLock = new ReentrantReadWriteLock();
 
   protected LocalNode(
       Tracer tracer,
@@ -174,7 +180,7 @@ public class LocalNode extends Node {
     this.factories = ImmutableList.copyOf(factories);
     Require.nonNull("Registration secret", registrationSecret);
     this.configuredSessionCount = drainAfterSessionCount;
-    this.drainAfterSessions.set(this.configuredSessionCount > 0);
+    this.drainAfterSessions = this.configuredSessionCount > 0;
     this.sessionCount.set(drainAfterSessionCount);
     this.cdpEnabled = cdpEnabled;
     this.bidiEnabled = bidiEnabled;
@@ -301,6 +307,23 @@ public class LocalNode extends Node {
         heartbeatPeriod.getSeconds(),
         TimeUnit.SECONDS);
 
+    shutdown =
+        () -> {
+          if (heartbeatNodeService.isShutdown()) return;
+
+          shutdownGracefully(
+              "Local Node - Session Cleanup " + externalUri, sessionCleanupNodeService);
+          shutdownGracefully(
+              "UploadTempFile Cleanup Node " + externalUri, uploadTempFileCleanupNodeService);
+          shutdownGracefully(
+              "DownloadTempFile Cleanup Node " + externalUri, downloadTempFileCleanupNodeService);
+          shutdownGracefully("HeartBeat Node " + externalUri, heartbeatNodeService);
+
+          // ensure we do not leak running browsers
+          currentSessions.invalidateAll();
+          currentSessions.cleanUp();
+        };
+
     Runtime.getRuntime()
         .addShutdownHook(
             new Thread(
@@ -309,6 +332,11 @@ public class LocalNode extends Node {
                   drain();
                 }));
     new JMXHelper().register(this);
+  }
+
+  @Override
+  public void close() {
+    shutdown.run();
   }
 
   private void stopTimedOutSession(RemovalNotification<SessionId, SessionSlot> notification) {
@@ -352,8 +380,10 @@ public class LocalNode extends Node {
   @VisibleForTesting
   @ManagedAttribute(name = "CurrentSessions")
   public int getCurrentSessionCount() {
+    // we need the exact size, see javadoc of Cache.size
+    long n = currentSessions.asMap().values().stream().count();
     // It seems wildly unlikely we'll overflow an int
-    return Math.toIntExact(currentSessions.size());
+    return Math.toIntExact(n);
   }
 
   @VisibleForTesting
@@ -416,6 +446,9 @@ public class LocalNode extends Node {
       CreateSessionRequest sessionRequest) {
     Require.nonNull("Session request", sessionRequest);
 
+    Lock lock = drainLock.readLock();
+    lock.lock();
+
     try (Span span = tracer.getCurrentContext().createSpan("node.new_session")) {
       AttributeMap attributeMap = tracer.createAttributeMap();
       attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
@@ -428,13 +461,14 @@ public class LocalNode extends Node {
       span.setAttribute("current.session.count", currentSessionCount);
       attributeMap.put("current.session.count", currentSessionCount);
 
-      if (getCurrentSessionCount() >= maxSessionCount) {
+      if (currentSessionCount >= maxSessionCount) {
         span.setAttribute(AttributeKey.ERROR.getKey(), true);
         span.setStatus(Status.RESOURCE_EXHAUSTED);
         attributeMap.put("max.session.count", maxSessionCount);
         span.addEvent("Max session count reached", attributeMap);
         return Either.left(new RetrySessionRequestException("Max session count reached."));
       }
+
       if (isDraining()) {
         span.setStatus(
             Status.UNAVAILABLE.withDescription(
@@ -463,6 +497,15 @@ public class LocalNode extends Node {
         span.addEvent("No slot matched the requested capabilities. ", attributeMap);
         return Either.left(
             new RetrySessionRequestException("No slot matched the requested capabilities."));
+      }
+
+      if (!decrementSessionCount()) {
+        slotToUse.release();
+        span.setAttribute(AttributeKey.ERROR.getKey(), true);
+        span.setStatus(Status.RESOURCE_EXHAUSTED);
+        attributeMap.put("drain.after.session.count", configuredSessionCount);
+        span.addEvent("Drain after session count reached", attributeMap);
+        return Either.left(new RetrySessionRequestException("Drain after session count reached."));
       }
 
       UUID uuidForSessionDownloads = UUID.randomUUID();
@@ -521,6 +564,7 @@ public class LocalNode extends Node {
         return Either.left(possibleSession.left());
       }
     } finally {
+      lock.unlock();
       checkSessionCount();
     }
   }
@@ -598,7 +642,31 @@ public class LocalNode extends Node {
 
     AtomicLong counter = slot.getConnectionCounter();
 
-    return connectionLimitPerSession > counter.getAndIncrement();
+    if (connectionLimitPerSession > counter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    counter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    SessionSlot slot = currentSessions.getIfPresent(id);
+
+    if (slot == null) {
+      return;
+    }
+
+    if (connectionLimitPerSession == -1) {
+      // no limit
+      return;
+    }
+
+    AtomicLong counter = slot.getConnectionCounter();
+
+    counter.decrementAndGet();
   }
 
   @Override
@@ -850,11 +918,11 @@ public class LocalNode extends Node {
     boolean bidiSupported = isSupportingBiDi && (webSocketUrl instanceof String);
     if (bidiSupported && bidiEnabled) {
       String biDiUrl = (String) other.getCapabilities().getCapability("webSocketUrl");
-      URI uri = null;
+      URI uri;
       try {
         uri = new URI(biDiUrl);
       } catch (URISyntaxException e) {
-        throw new IllegalArgumentException("Unable to create URI from " + uri);
+        throw new IllegalArgumentException("Unable to create URI from " + biDiUrl);
       }
       String bidiPath = String.format("/session/%s/se/bidi", other.getId());
       toUse =
@@ -956,6 +1024,9 @@ public class LocalNode extends Node {
   public void drain() {
     bus.fire(new NodeDrainStarted(getId()));
     draining = true;
+    // Ensure the pendingSessions counter will not be decremented by timed out sessions not included
+    // in the currentSessionCount and the NodeDrainComplete will be raised to early.
+    currentSessions.cleanUp();
     int currentSessionCount = getCurrentSessionCount();
     if (currentSessionCount == 0) {
       LOG.info("Firing node drain complete message");
@@ -966,20 +1037,40 @@ public class LocalNode extends Node {
   }
 
   private void checkSessionCount() {
-    if (this.drainAfterSessions.get()) {
+    if (this.drainAfterSessions) {
+      Lock lock = drainLock.writeLock();
+      if (!lock.tryLock()) {
+        // in case we can't get a write lock another thread does hold a read lock and will call
+        // checkSessionCount as soon as he releases the read lock. So we do not need to wait here
+        // for the other session to start and release the lock, just continue and let the other
+        // session start to drain the node.
+        return;
+      }
+      try {
+        int remainingSessions = this.sessionCount.get();
+        if (remainingSessions <= 0) {
+          LOG.info(
+              String.format(
+                  "Draining Node, configured sessions value (%s) has been reached.",
+                  this.configuredSessionCount));
+          drain();
+        }
+      } finally {
+        lock.unlock();
+      }
+    }
+  }
+
+  private boolean decrementSessionCount() {
+    if (this.drainAfterSessions) {
       int remainingSessions = this.sessionCount.decrementAndGet();
       LOG.log(
           Debug.getDebugLogLevel(),
           "{0} remaining sessions before draining Node",
           remainingSessions);
-      if (remainingSessions <= 0) {
-        LOG.info(
-            String.format(
-                "Draining Node, configured sessions value (%s) has been reached.",
-                this.configuredSessionCount));
-        drain();
-      }
+      return remainingSessions >= 0;
     }
+    return true;
   }
 
   private Map<String, Object> toJson() {

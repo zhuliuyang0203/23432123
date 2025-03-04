@@ -30,6 +30,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -157,7 +158,7 @@ public class OneShotNode extends Node {
             .filter(
                 info ->
                     driverName
-                        .map(name -> name.equals(info.getDisplayName().toLowerCase()))
+                        .map(name -> name.equals(info.getDisplayName().toLowerCase(Locale.ENGLISH)))
                         .orElse(true))
             .findFirst()
             .orElseThrow(
@@ -365,7 +366,24 @@ public class OneShotNode extends Node {
 
   @Override
   public boolean tryAcquireConnection(SessionId id) {
-    return sessionId.equals(id) && connectionLimitPerSession > connectionCounter.getAndIncrement();
+    if (!sessionId.equals(id)) {
+      return false;
+    }
+
+    if (connectionLimitPerSession > connectionCounter.getAndIncrement()) {
+      return true;
+    }
+
+    // ensure a rejected connection will not be counted
+    connectionCounter.getAndDecrement();
+    return false;
+  }
+
+  @Override
+  public void releaseConnection(SessionId id) {
+    if (sessionId.equals(id)) {
+      connectionCounter.getAndDecrement();
+    }
   }
 
   @Override

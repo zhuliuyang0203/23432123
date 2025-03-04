@@ -19,6 +19,7 @@ package org.openqa.selenium.os;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -159,8 +160,8 @@ public class ExternalProcess {
     }
 
     /**
-     * Where to copy the combined stdout and stderr output to, {@code OsProcess#getOutput} is still
-     * working when called.
+     * Where to copy the combined stdout and stderr output to, {@code ExternalProcess#getOutput} is
+     * still working when called.
      *
      * @param stream where to copy the combined output to
      * @return this instance to continue building
@@ -172,9 +173,9 @@ public class ExternalProcess {
     }
 
     /**
-     * The number of bytes to buffer for {@code OsProcess#getOutput} calls.
+     * The number of bytes to buffer for {@code ExternalProcess#getOutput} calls.
      *
-     * @param toKeep the number of bytes, default is 4096
+     * @param toKeep the number of bytes, default is 32768
      * @return this instance to continue building
      */
     public Builder bufferSize(int toKeep) {
@@ -195,13 +196,19 @@ public class ExternalProcess {
       }
 
       try {
-        CircularOutputStream circular = new CircularOutputStream(bufferSize);
+        OutputStream buffer;
+
+        if (bufferSize != -1) {
+          buffer = new CircularOutputStream(bufferSize);
+        } else {
+          buffer = new ByteArrayOutputStream();
+        }
 
         Thread worker =
             new Thread(
                 () -> {
                   // copyOutputTo might be system.out or system.err, do not to close
-                  OutputStream output = new MultiOutputStream(circular, copyOutputTo);
+                  OutputStream output = new MultiOutputStream(buffer, copyOutputTo);
                   // closing the InputStream does somehow disturb the process, do not to close
                   InputStream input = process.getInputStream();
                   // use the CircularOutputStream as mandatory, we know it will never raise a
@@ -221,7 +228,7 @@ public class ExternalProcess {
         worker.setDaemon(true);
         worker.start();
 
-        return new ExternalProcess(process, circular, worker);
+        return new ExternalProcess(process, buffer, worker);
       } catch (Throwable t) {
         // ensure we do not leak a process in case of failures
         try {
@@ -239,10 +246,10 @@ public class ExternalProcess {
   }
 
   private final Process process;
-  private final CircularOutputStream outputStream;
+  private final OutputStream outputStream;
   private final Thread worker;
 
-  public ExternalProcess(Process process, CircularOutputStream outputStream, Thread worker) {
+  public ExternalProcess(Process process, OutputStream outputStream, Thread worker) {
     this.process = process;
     this.outputStream = outputStream;
     this.worker = worker;
@@ -250,7 +257,7 @@ public class ExternalProcess {
 
   /**
    * The last N bytes of the combined stdout and stderr as String, the value of N is set while
-   * building the OsProcess.
+   * building the ExternalProcess.
    *
    * @return stdout and stderr as String in Charset.defaultCharset() encoding
    */
@@ -260,13 +267,20 @@ public class ExternalProcess {
 
   /**
    * The last N bytes of the combined stdout and stderr as String, the value of N is set while
-   * building the OsProcess.
+   * building the ExternalProcess.
    *
    * @param encoding the encoding to decode the stream
    * @return stdout and stderr as String in the given encoding
    */
   public String getOutput(Charset encoding) {
-    return outputStream.toString(encoding);
+    if (outputStream instanceof CircularOutputStream) {
+      return ((CircularOutputStream) outputStream).toString(encoding);
+    } else if (outputStream instanceof ByteArrayOutputStream) {
+      return ((ByteArrayOutputStream) outputStream).toString(encoding);
+    } else {
+      throw new IllegalStateException(
+          "unexpected OutputStream implementation: " + outputStream.getClass().getSimpleName());
+    }
   }
 
   public boolean isAlive() {

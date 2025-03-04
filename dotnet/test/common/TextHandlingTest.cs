@@ -1,3 +1,22 @@
+// <copyright file="TextHandlingTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -15,10 +34,10 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             string selectText = driver.FindElement(By.Id("oneline")).Text;
-            Assert.AreEqual(selectText, "A single line of text");
+            Assert.That(selectText, Is.EqualTo("A single line of text"));
 
             string getText = driver.FindElement(By.Id("oneline")).Text;
-            Assert.AreEqual(getText, "A single line of text");
+            Assert.That(getText, Is.EqualTo("A single line of text"));
         }
 
         [Test]
@@ -39,9 +58,9 @@ namespace OpenQA.Selenium
             IWebElement labelForUsername = driver.FindElement(By.Id("labelforusername"));
             string text = labelForUsername.Text;
 
-            Assert.AreEqual(labelForUsername.FindElements(By.TagName("script")).Count, 1);
+            Assert.That(labelForUsername.FindElements(By.TagName("script")).Count, Is.EqualTo(1));
             Assert.That(text, Does.Not.Contain("document.getElementById"));
-            Assert.AreEqual(text, "Username:");
+            Assert.That(text, Is.EqualTo("Username:"));
         }
 
         [Test]
@@ -61,7 +80,7 @@ namespace OpenQA.Selenium
             driver.Url = (simpleTestPage);
             string text = driver.FindElement(By.Id("lotsofspaces")).Text;
 
-            Assert.AreEqual(text, "This line has lots of spaces.");
+            Assert.That(text, Is.EqualTo("This line has lots of spaces."));
         }
 
         [Test]
@@ -80,7 +99,7 @@ namespace OpenQA.Selenium
             driver.Url = (simpleTestPage);
             string text = driver.FindElement(By.Id("nbsp")).Text;
 
-            Assert.AreEqual(text, "This line has a non-breaking space");
+            Assert.That(text, Is.EqualTo("This line has a non-breaking space"));
         }
 
         [Test]
@@ -90,7 +109,7 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("nbspandspaces"));
             string text = element.Text;
 
-            Assert.AreEqual(text, "This line has a   non-breaking space and spaces");
+            Assert.That(text, Is.EqualTo("This line has a   non-breaking space and spaces"));
         }
 
         [Test]
@@ -128,7 +147,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = (simpleTestPage);
             string text = driver.FindElement(By.Id("inline")).Text;
-            Assert.AreEqual(text, "This line has text within elements that are meant to be displayed inline");
+            Assert.That(text, Is.EqualTo("This line has text within elements that are meant to be displayed inline"));
         }
 
         [Test]
@@ -137,7 +156,7 @@ namespace OpenQA.Selenium
             driver.Url = (simpleTestPage);
             string text = driver.FindElement(By.Id("span")).Text;
 
-            Assert.AreEqual(text, "An inline element");
+            Assert.That(text, Is.EqualTo("An inline element"));
         }
 
         [Test]
@@ -176,7 +195,7 @@ namespace OpenQA.Selenium
             textarea.SendKeys(expectedText);
 
             string seenText = textarea.GetAttribute("value");
-            Assert.AreEqual(expectedText, seenText);
+            Assert.That(seenText, Is.EqualTo(expectedText));
         }
 
         [Test]
@@ -188,7 +207,7 @@ namespace OpenQA.Selenium
             input.SendKeys(expectedValue);
             string seenValue = input.GetAttribute("value");
 
-            Assert.AreEqual(seenValue, expectedValue);
+            Assert.That(expectedValue, Is.EqualTo(seenValue));
         }
 
         [Test]
@@ -197,7 +216,7 @@ namespace OpenQA.Selenium
             driver.Url = (xhtmlTestPage);
 
             string text = driver.FindElement(By.Id("spaces")).Text;
-            Assert.AreEqual(text, string.Empty);
+            Assert.That(text, Is.Empty);
         }
 
         [Test]
@@ -206,7 +225,7 @@ namespace OpenQA.Selenium
             driver.Url = (xhtmlTestPage);
 
             string text = driver.FindElement(By.Id("empty")).Text;
-            Assert.AreEqual(text, string.Empty);
+            Assert.That(text, Is.Empty);
         }
 
         [Test]
@@ -215,7 +234,7 @@ namespace OpenQA.Selenium
             driver.Url = (xhtmlFormPage);
 
             string text = driver.FindElement(By.Id("self-closed")).Text;
-            Assert.AreEqual(text, string.Empty);
+            Assert.That(text, Is.Empty);
         }
 
         [Test]
@@ -224,7 +243,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
 
             string text = driver.FindElement(By.XPath("//table/tbody/tr[1]/td[1]")).Text;
-            Assert.AreEqual("beforeSpace afterSpace", text);
+            Assert.That(text, Is.EqualTo("beforeSpace afterSpace"));
         }
 
         [Test]
@@ -234,7 +253,7 @@ namespace OpenQA.Selenium
 
             string text = driver.FindElement(By.Id("twoblocks")).Text;
 
-            Assert.AreEqual("Some text" + NewLine + "Some more text", text);
+            Assert.That(text, Is.EqualTo("Some text" + NewLine + "Some more text"));
         }
 
         [Test]
@@ -244,8 +263,8 @@ namespace OpenQA.Selenium
 
             string text = driver.FindElement(By.Id("nestedblocks")).Text;
 
-            Assert.AreEqual("Cheese" + NewLine + "Some text" + NewLine + "Some more text" + NewLine
-                                + "and also" + NewLine + "Brie", text);
+            Assert.That(text, Is.EqualTo("Cheese" + NewLine + "Some text" + NewLine + "Some more text" + NewLine
+                                + "and also" + NewLine + "Brie"));
         }
 
         [Test]
@@ -255,7 +274,7 @@ namespace OpenQA.Selenium
 
             string text = driver.FindElement(By.Id("inlinespan")).Text;
 
-            Assert.AreEqual(text, "line has text");
+            Assert.That(text, Is.EqualTo("line has text"));
         }
 
         [Test]
@@ -286,8 +305,8 @@ namespace OpenQA.Selenium
             string empty = driver.FindElement(By.Id("suppressedParagraph")).Text;
             string explicitText = driver.FindElement(By.Id("outer")).Text;
 
-            Assert.AreEqual(string.Empty, empty);
-            Assert.AreEqual("sub-element that is explicitly visible", explicitText);
+            Assert.That(empty, Is.Empty);
+            Assert.That(explicitText, Is.EqualTo("sub-element that is explicitly visible"));
         }
 
         [Test]
@@ -307,7 +326,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement input = driver.FindElement(By.Id("inputWithText"));
-            Assert.AreEqual(string.Empty, input.Text);
+            Assert.That(input.Text, Is.Empty);
         }
 
         [Test]
@@ -315,7 +334,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement area = driver.FindElement(By.Id("withText"));
-            Assert.AreEqual("Example text", area.Text);
+            Assert.That(area.Text, Is.EqualTo("Example text"));
         }
 
         [Test]
@@ -326,7 +345,7 @@ namespace OpenQA.Selenium
             IWebElement area = driver.FindElement(By.Id("withText"));
             string oldText = area.Text;
             area.SendKeys("New Text");
-            Assert.AreEqual(oldText, area.Text);
+            Assert.That(area.Text, Is.EqualTo(oldText));
         }
 
         [Test]
@@ -337,7 +356,7 @@ namespace OpenQA.Selenium
             IWebElement area = driver.FindElement(By.Id("withText"));
             string oldText = area.GetAttribute("value");
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].value = arguments[1]", area, "New Text");
-            Assert.AreEqual(oldText, area.Text);
+            Assert.That(area.Text, Is.EqualTo(oldText));
         }
 
         [Test]
@@ -345,7 +364,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             IWebElement element = driver.FindElement(By.Id("simpleJsonText"));
-            Assert.AreEqual("{a=\"b\", c=1, d=true}", element.Text);
+            Assert.That(element.Text, Is.EqualTo("{a=\"b\", c=1, d=true}"));
             //assertEquals("{a=\"b\", \"c\"=d, e=true, f=\\123\\\\g\\\\\"\"\"\\\'}", element.getText());
         }
 
@@ -354,7 +373,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             IWebElement element = driver.FindElement(By.Id("complexJsonText"));
-            Assert.AreEqual("{a=\"\\\\b\\\\\\\"\'\\\'\"}", element.Text);
+            Assert.That(element.Text, Is.EqualTo("{a=\"\\\\b\\\\\\\"\'\\\'\"}"));
         }
 
         [Test]
@@ -365,11 +384,11 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Id("EH")).FindElement(By.TagName("nobr"));
             string text = element.Text;
             String expected = "Some notes";
-            Assert.AreNotSame(8206, (int)text[0], "RTL mark should not be present");
+            Assert.That((int)text[0], Is.Not.EqualTo(8206), "RTL mark should not be present");
             // Note: If this assertion fails but the content of the strings *looks* the same
             // it may be because of hidden unicode LTR character being included in the string.
             // That's the reason for the previous assert.
-            Assert.Equals(expected, element.Text);
+            Assert.That(element.Text, Is.EqualTo(expected));
         }
 
         [Test]
@@ -379,7 +398,7 @@ namespace OpenQA.Selenium
             driver.Url = simpleTestPage;
             String text = driver.FindElement(By.Id("trimmedSpace")).Text;
 
-            Assert.AreEqual("test", text);
+            Assert.That(text, Is.EqualTo("test"));
         }
 
         [Test]

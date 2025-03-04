@@ -1,24 +1,27 @@
-// <copyright file="ChromiumNetworkConditions.cs" company="WebDriver Committers">
+// <copyright file="ChromiumNetworkConditions.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Chromium
 {
@@ -27,8 +30,6 @@ namespace OpenQA.Selenium.Chromium
     /// </summary>
     public class ChromiumNetworkConditions
     {
-        private bool offline;
-        private TimeSpan latency = TimeSpan.Zero;
         private long downloadThroughput = 0;
         private long uploadThroughput = 0;
 
@@ -36,21 +37,13 @@ namespace OpenQA.Selenium.Chromium
         /// Gets or sets a value indicating whether the network is offline. Defaults to <see langword="false"/>.
         /// </summary>
         [JsonPropertyName("offline")]
-        public bool IsOffline
-        {
-            get { return this.offline; }
-            set { this.offline = value; }
-        }
+        public bool IsOffline { get; set; }
 
         /// <summary>
         /// Gets or sets the simulated latency of the connection. Typically given in milliseconds.
         /// </summary>
         [JsonIgnore]
-        public TimeSpan Latency
-        {
-            get { return this.latency; }
-            set { this.latency = value; }
-        }
+        public TimeSpan Latency { get; set; } = TimeSpan.Zero;
 
         /// <summary>
         /// Gets or sets the throughput of the network connection in bytes/second for downloading.
@@ -58,12 +51,12 @@ namespace OpenQA.Selenium.Chromium
         [JsonPropertyName("download_throughput")]
         public long DownloadThroughput
         {
-            get { return this.downloadThroughput; }
+            get => this.downloadThroughput;
             set
             {
                 if (value < 0)
                 {
-                    throw new WebDriverException("Downlod throughput cannot be negative.");
+                    throw new WebDriverException("Download throughput cannot be negative.");
                 }
 
                 this.downloadThroughput = value;
@@ -76,7 +69,7 @@ namespace OpenQA.Selenium.Chromium
         [JsonPropertyName("upload_throughput")]
         public long UploadThroughput
         {
-            get { return this.uploadThroughput; }
+            get => this.uploadThroughput;
             set
             {
                 if (value < 0)
@@ -91,40 +84,34 @@ namespace OpenQA.Selenium.Chromium
         [JsonPropertyName("latency")]
         [JsonInclude]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        internal long? SerializableLatency
-        {
-            get
-            {
-                return Convert.ToInt64(this.latency.TotalMilliseconds);
-            }
-        }
+        internal long? SerializableLatency => Convert.ToInt64(this.Latency.TotalMilliseconds);
 
         /// <summary>
         /// Creates a ChromiumNetworkConditions object from a dictionary of key-value pairs.
         /// </summary>
         /// <param name="dictionary">The dictionary to use to create the object.</param>
         /// <returns>The ChromiumNetworkConditions object created from the dictionary.</returns>
-        public static ChromiumNetworkConditions FromDictionary(Dictionary<string, object> dictionary)
+        public static ChromiumNetworkConditions FromDictionary(Dictionary<string, object?> dictionary)
         {
             ChromiumNetworkConditions conditions = new ChromiumNetworkConditions();
-            if (dictionary.ContainsKey("offline"))
+            if (dictionary.TryGetValue("offline", out object? offline))
             {
-                conditions.IsOffline = (bool)dictionary["offline"];
+                conditions.IsOffline = (bool)offline!;
             }
 
-            if (dictionary.ContainsKey("latency"))
+            if (dictionary.TryGetValue("latency", out object? latency))
             {
-                conditions.Latency = TimeSpan.FromMilliseconds(Convert.ToDouble(dictionary["latency"]));
+                conditions.Latency = TimeSpan.FromMilliseconds(Convert.ToDouble(latency));
             }
 
-            if (dictionary.ContainsKey("upload_throughput"))
+            if (dictionary.TryGetValue("upload_throughput", out object? uploadThroughput))
             {
-                conditions.UploadThroughput = (long)dictionary["upload_throughput"];
+                conditions.UploadThroughput = (long)uploadThroughput!;
             }
 
-            if (dictionary.ContainsKey("download_throughput"))
+            if (dictionary.TryGetValue("download_throughput", out object? downloadThroughput))
             {
-                conditions.DownloadThroughput = (long)dictionary["download_throughput"];
+                conditions.DownloadThroughput = (long)downloadThroughput!;
             }
 
             return conditions;
@@ -134,11 +121,12 @@ namespace OpenQA.Selenium.Chromium
         /// Sets the upload and download throughput properties to the same value.
         /// </summary>
         /// <param name="throughput">The throughput of the network connection in bytes/second for both upload and download.</param>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="throughput"/> is negative.</exception>
         public void SetBidirectionalThroughput(long throughput)
         {
             if (throughput < 0)
             {
-                throw new ArgumentException("Throughput values cannot be negative.", nameof(throughput));
+                throw new ArgumentOutOfRangeException(nameof(throughput), "Throughput values cannot be negative.");
             }
 
             this.uploadThroughput = throughput;

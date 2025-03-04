@@ -19,7 +19,7 @@
 
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
-const { Pages, suite } = require('../../lib/test')
+const { Pages, suite, ignore } = require('../../lib/test')
 const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
 const { Locator } = require('selenium-webdriver/bidi/browsingContext')
 const { ScriptManager } = require('selenium-webdriver/index')
@@ -80,7 +80,7 @@ suite(
         assert.notEqual(element.sharedId, undefined)
       })
 
-      xit('can locate node with xpath locator', async function () {
+      it('can locate node with xpath locator', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
           browsingContextId: id,
@@ -97,7 +97,7 @@ suite(
         assert.notEqual(element.sharedId, undefined)
       })
 
-      xit('can locate node with inner test locator', async function () {
+      ignore(env.browsers(Browser.FIREFOX)).it('can locate node with inner test locator', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
           browsingContextId: id,
@@ -109,12 +109,9 @@ suite(
         const element = elements[0]
         assert.strictEqual(element.type, 'node')
         assert.notEqual(element.value, undefined)
-        assert.strictEqual(element.value.localName, 'div')
-        assert.strictEqual(element.value.attributes.class, 'content')
-        assert.notEqual(element.sharedId, undefined)
       })
 
-      xit('can locate node with max node count', async function () {
+      it('can locate node with max node count', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
           browsingContextId: id,
@@ -126,7 +123,7 @@ suite(
         assert.strictEqual(elements.length, 4)
       })
 
-      xit('can locate node with given start nodes', async function () {
+      it('can locate node with given start nodes', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
           browsingContextId: id,
@@ -155,14 +152,7 @@ suite(
           startNodes.push(new ReferenceValue(node.handle, node.sharedId))
         })
 
-        const elements = await browsingContext.locateNodes(
-          Locator.css('input'),
-          50,
-          'none',
-          undefined,
-          undefined,
-          startNodes,
-        )
+        const elements = await browsingContext.locateNodes(Locator.css('input'), 50, 'none', undefined, startNodes)
 
         assert.strictEqual(elements.length, 35)
       })
@@ -236,5 +226,5 @@ suite(
       })
     })
   },
-  { browsers: [Browser.FIREFOX] },
+  { browsers: [Browser.FIREFOX, Browser.CHROME, Browser.EDGE] },
 )

@@ -19,6 +19,7 @@ package org.openqa.selenium.json;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -127,7 +128,7 @@ public class SimplePropertyDescriptor {
   }
 
   private static String uncapitalize(String s) {
-    return s.substring(0, 1).toLowerCase() + s.substring(1);
+    return s.substring(0, 1).toLowerCase(Locale.ENGLISH) + s.substring(1);
   }
 
   private static boolean hasPrefix(String prefix, String methodName) {

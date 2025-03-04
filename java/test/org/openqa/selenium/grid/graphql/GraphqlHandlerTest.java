@@ -121,6 +121,7 @@ class GraphqlHandlerTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -137,7 +138,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
   }
 
   @Test
@@ -321,7 +323,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -370,7 +373,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -447,7 +451,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -522,7 +527,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());
@@ -605,7 +611,8 @@ class GraphqlHandlerTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor.add(node);
     wait.until(obj -> distributor.getStatus().hasCapacity());

@@ -28,7 +28,7 @@ module Selenium
 
       def warn: (String message, ?id: Symbol | Array[Symbol] id) ?{ () -> void } -> void
 
-      def deprecate: (String old, ?String? new, ?id: Symbol | Array[Symbol] id, ?reference: String reference) { () -> void } -> (void)
+      def deprecate: (String old, ?String? new, ?id: Symbol | Array[Symbol] id, ?reference: String reference) ?{ () -> void } -> untyped
 
       def debug?: () -> bool
 
@@ -36,7 +36,7 @@ module Selenium
 
       def create_logger: (String name, level: Symbol level) -> ::Logger
 
-      def discard_or_log: (Symbol level, String message, (Symbol | Array[::Symbol]) | [(Symbol | Array[Symbol])] id) ?{ () -> void } -> (void)
+      def discard_or_log: (Symbol level, String message, (Symbol | Array[::Symbol]) | [(Symbol | Array[Symbol])] id) ?{ () -> void } -> untyped
     end
   end
 end

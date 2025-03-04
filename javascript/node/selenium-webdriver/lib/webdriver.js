@@ -45,6 +45,7 @@ const { PinnedScript } = require('./pinnedScript')
 const JSZip = require('jszip')
 const Script = require('./script')
 const Network = require('./network')
+const Dialog = require('./fedcm/dialog')
 
 // Capability names that are defined in the W3C spec.
 const W3C_CAPABILITY_NAMES = new Set([
@@ -1106,6 +1107,18 @@ class WebDriver {
     return this.execute(new command.Command(command.Name.SCREENSHOT))
   }
 
+  setDelayEnabled(enabled) {
+    return this.execute(new command.Command(command.Name.SET_DELAY_ENABLED).setParameter('enabled', enabled))
+  }
+
+  resetCooldown() {
+    return this.execute(new command.Command(command.Name.RESET_COOLDOWN))
+  }
+
+  getFederalCredentialManagementDialog() {
+    return new Dialog(this)
+  }
+
   /** @override */
   manage() {
     return new Options(this)
@@ -1230,17 +1243,17 @@ class WebDriver {
 
     const caps = await this.getCapabilities()
 
+    if (caps['map_'].get('browserName') === 'firefox') {
+      throw new Error('CDP support for Firefox is removed. Please switch to WebDriver BiDi.')
+    }
+
     if (process.env.SELENIUM_REMOTE_URL) {
       const host = new URL(process.env.SELENIUM_REMOTE_URL).host
       const sessionId = await this.getSession().then((session) => session.getId())
       debuggerUrl = `ws://${host}/session/${sessionId}/se/cdp`
     } else {
       const seCdp = caps['map_'].get('se:cdp')
-      const vendorInfo =
-        caps['map_'].get('goog:chromeOptions') ||
-        caps['map_'].get('ms:edgeOptions') ||
-        caps['map_'].get('moz:debuggerAddress') ||
-        new Map()
+      const vendorInfo = caps['map_'].get('goog:chromeOptions') || caps['map_'].get('ms:edgeOptions') || new Map()
       debuggerUrl = seCdp || vendorInfo['debuggerAddress'] || vendorInfo
     }
     this._wsUrl = await this.getWsUrl(debuggerUrl, target, caps)
@@ -1918,6 +1931,11 @@ class Options {
    *     when the cookie has been deleted.
    */
   deleteCookie(name) {
+    // Validate the cookie name is non-empty and properly trimmed.
+    if (!name?.trim()) {
+      throw new error.InvalidArgumentError('Cookie name cannot be empty')
+    }
+
     return this.driver_.execute(new command.Command(command.Name.DELETE_COOKIE).setParameter('name', name))
   }
 
@@ -1938,24 +1956,23 @@ class Options {
    * WebDriver wire protocol.
    *
    * @param {string} name The name of the cookie to retrieve.
+   * @throws {InvalidArgumentError} - If the cookie name is empty or invalid.
    * @return {!Promise<?Options.Cookie>} A promise that will be resolved
    *     with the named cookie
    * @throws {error.NoSuchCookieError} if there is no such cookie.
    */
   async getCookie(name) {
+    // Validate the cookie name is non-empty and properly trimmed.
+    if (!name?.trim()) {
+      throw new error.InvalidArgumentError('Cookie name cannot be empty')
+    }
+
     try {
       const cookie = await this.driver_.execute(new command.Command(command.Name.GET_COOKIE).setParameter('name', name))
       return cookie
     } catch (err) {
       if (!(err instanceof error.UnknownCommandError) && !(err instanceof error.UnsupportedOperationError)) {
         throw err
-      }
-
-      const cookies = await this.getCookies()
-      for (let cookie of cookies) {
-        if (cookie && cookie['name'] === name) {
-          return cookie
-        }
       }
       return null
     }

@@ -1,3 +1,22 @@
+// <copyright file="SlowLoadableComponentTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using System;
 
@@ -24,9 +43,9 @@ namespace OpenQA.Selenium.Support.UI
         public void TestShouldCauseTheLoadMethodToBeCalledIfTheComponentIsNotAlreadyLoaded()
         {
             int numberOfTimesThroughLoop = 1;
-            SlowLoading slowLoading = new SlowLoading(TimeSpan.FromSeconds(1), new SystemClock(), numberOfTimesThroughLoop).Load();
+            SlowLoading slowLoading = new SlowLoading(TimeSpan.FromSeconds(1), SystemClock.Instance, numberOfTimesThroughLoop).Load();
 
-            Assert.AreEqual(numberOfTimesThroughLoop, slowLoading.GetLoopCount());
+            Assert.That(slowLoading.GetLoopCount(), Is.EqualTo(numberOfTimesThroughLoop));
         }
 
         [Test]
@@ -34,7 +53,7 @@ namespace OpenQA.Selenium.Support.UI
         {
             try
             {
-                new OnlyOneLoad(TimeSpan.FromSeconds(5), new SystemClock(), 5).Load();
+                new OnlyOneLoad(TimeSpan.FromSeconds(5), SystemClock.Instance, 5).Load();
             }
             catch (Exception)
             {
@@ -45,16 +64,11 @@ namespace OpenQA.Selenium.Support.UI
         [Test]
         public void TestShouldThrowAnErrorIfCallingLoadDoesNotCauseTheComponentToLoadBeforeTimeout()
         {
-            FakeClock clock = new FakeClock();
-            try
-            {
-                new BasicSlowLoader(TimeSpan.FromSeconds(2), clock).Load();
-                Assert.Fail();
-            }
-            catch (WebDriverTimeoutException)
-            {
-                // We expect to time out
-            }
+            HandCrankClock clock = new HandCrankClock();
+
+            Assert.That(
+                () => new BasicSlowLoader(TimeSpan.FromSeconds(2), clock).Load(),
+                Throws.InstanceOf<WebDriverTimeoutException>());
         }
 
         [Test]
@@ -62,22 +76,16 @@ namespace OpenQA.Selenium.Support.UI
         {
             HasError error = new HasError();
 
-            try
-            {
-                error.Load();
-                Assert.Fail();
-            }
-            catch (CustomException)
-            {
-                // This is expected
-            }
+            Assert.That(
+               () => error.Load(),
+               Throws.InstanceOf<CustomException>());
         }
 
 
         private class DetonatingSlowLoader : SlowLoadableComponent<DetonatingSlowLoader>
         {
 
-            public DetonatingSlowLoader() : base(TimeSpan.FromSeconds(1), new SystemClock()) { }
+            public DetonatingSlowLoader() : base(TimeSpan.FromSeconds(1), SystemClock.Instance) { }
 
             protected override void ExecuteLoad()
             {
@@ -144,11 +152,11 @@ namespace OpenQA.Selenium.Support.UI
         private class BasicSlowLoader : SlowLoadableComponent<BasicSlowLoader>
         {
 
-            private readonly FakeClock clock;
-            public BasicSlowLoader(TimeSpan timeOut, FakeClock clock)
+            private readonly HandCrankClock handCrankClock;
+            public BasicSlowLoader(TimeSpan timeOut, HandCrankClock clock)
                 : base(timeOut, clock)
             {
-                this.clock = clock;
+                this.handCrankClock = clock;
             }
 
             protected override void ExecuteLoad()
@@ -160,7 +168,7 @@ namespace OpenQA.Selenium.Support.UI
             {
                 // Cheat and increment the clock here, because otherwise it's hard to
                 // get to.
-                clock.TimePasses(TimeSpan.FromSeconds(1));
+                handCrankClock.MoveTime(TimeSpan.FromSeconds(1));
                 return false; // Never loads
             }
         }
@@ -168,7 +176,7 @@ namespace OpenQA.Selenium.Support.UI
         private class HasError : SlowLoadableComponent<HasError>
         {
 
-            public HasError() : base(TimeSpan.FromSeconds(1000), new FakeClock()) { }
+            public HasError() : base(TimeSpan.FromSeconds(1000), new HandCrankClock()) { }
 
             protected override void ExecuteLoad()
             {
@@ -186,10 +194,6 @@ namespace OpenQA.Selenium.Support.UI
             }
         }
 
-        private class CustomException : Exception
-        {
-
-        }
+        private class CustomException : Exception;
     }
-
 }

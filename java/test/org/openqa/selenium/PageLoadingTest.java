@@ -36,10 +36,12 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NeedsFreshDriver;
+import org.openqa.selenium.testing.NeedsSecureServer;
 import org.openqa.selenium.testing.NoDriverAfterTest;
 import org.openqa.selenium.testing.NotYetImplemented;
 import org.openqa.selenium.testing.SwitchToTopAfterTest;
 
+@NeedsSecureServer
 class PageLoadingTest extends JupiterTestBase {
 
   @Test

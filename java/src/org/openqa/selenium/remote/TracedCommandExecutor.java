@@ -37,7 +37,7 @@ public class TracedCommandExecutor implements CommandExecutor, NeedsLocalLogs {
 
   @Override
   public Response execute(Command command) throws IOException {
-    try (Span commandSpan = tracer.getCurrentContext().createSpan("command")) {
+    try (Span commandSpan = tracer.getCurrentContext().createSpan(command.getName())) {
       SessionId sessionId = command.getSessionId();
       if (sessionId != null) {
         commandSpan.setAttribute("sessionId", sessionId.toString());

@@ -1,19 +1,20 @@
-// <copyright file="WebDriver.cs" company="WebDriver Committers">
+// <copyright file="WebDriver.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.Interactions;
@@ -23,8 +24,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -37,24 +41,20 @@ namespace OpenQA.Selenium
         /// The default command timeout for HTTP requests in a RemoteWebDriver instance.
         /// </summary>
         protected static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromSeconds(60);
-
-        private ICommandExecutor executor;
-        private ICapabilities capabilities;
         private IFileDetector fileDetector = new DefaultFileDetector();
-        private NetworkManager network;
+        private readonly NetworkManager network;
         private WebElementFactory elementFactory;
-        private SessionId sessionId;
-        private String authenticatorId;
-        private List<string> registeredCommands = new List<string>();
+
+        private readonly List<string> registeredCommands = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDriver"/> class.
         /// </summary>
         /// <param name="executor">The <see cref="ICommandExecutor"/> object used to execute commands.</param>
-        /// <param name="capabilities">The <see cref="ICapabilities"/> object used to configuer the driver session.</param>
+        /// <param name="capabilities">The <see cref="ICapabilities"/> object used to configure the driver session.</param>
         protected WebDriver(ICommandExecutor executor, ICapabilities capabilities)
         {
-            this.executor = executor;
+            this.CommandExecutor = executor;
 
             try
             {
@@ -78,7 +78,7 @@ namespace OpenQA.Selenium
             this.network = new NetworkManager(this);
             this.registeredCommands.AddRange(DriverCommand.KnownCommands);
 
-            if ((this as ISupportsLogs) != null)
+            if (this is ISupportsLogs)
             {
                 // Only add the legacy log commands if the driver supports
                 // retrieving the logs via the extension end points.
@@ -90,18 +90,12 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the <see cref="ICommandExecutor"/> which executes commands for this driver.
         /// </summary>
-        public ICommandExecutor CommandExecutor
-        {
-            get { return this.executor; }
-        }
+        public ICommandExecutor CommandExecutor { get; }
 
         /// <summary>
         /// Gets the <see cref="ICapabilities"/> that the driver session was created with, which may be different from those requested.
         /// </summary>
-        public ICapabilities Capabilities
-        {
-            get { return this.capabilities; }
-        }
+        public ICapabilities Capabilities { get; private set; }
 
         /// <summary>
         /// Gets or sets the URL the browser is currently displaying.
@@ -114,7 +108,9 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetCurrentUrl, null);
-                return commandResponse.Value.ToString();
+
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
 
             set => new Navigator(this).GoToUrl(value);
@@ -128,11 +124,10 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetTitle, null);
-                object returnedTitle = commandResponse != null ? commandResponse.Value : string.Empty;
-                return returnedTitle.ToString();
+
+                return commandResponse.Value?.ToString() ?? string.Empty;
             }
         }
-
 
         /// <summary>
         /// Gets the source of the page last loaded by the browser.
@@ -141,10 +136,10 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string pageSource = string.Empty;
                 Response commandResponse = this.Execute(DriverCommand.GetPageSource, null);
-                pageSource = commandResponse.Value.ToString();
-                return pageSource;
+
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -157,7 +152,9 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetCurrentWindowHandle, null);
-                return commandResponse.Value.ToString();
+
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -169,11 +166,13 @@ namespace OpenQA.Selenium
             get
             {
                 Response commandResponse = this.Execute(DriverCommand.GetWindowHandles, null);
-                object[] handles = (object[])commandResponse.Value;
-                List<string> handleList = new List<string>();
-                foreach (object handle in handles)
+
+                commandResponse.EnsureValueIsNotNull();
+                object?[] handles = (object?[])commandResponse.Value;
+                List<string> handleList = new List<string>(handles.Length);
+                foreach (object? handle in handles)
                 {
-                    handleList.Add(handle.ToString());
+                    handleList.Add(handle!.ToString()!);
                 }
 
                 return handleList.AsReadOnly();
@@ -183,54 +182,35 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets a value indicating whether this object is a valid action executor.
         /// </summary>
-        public bool IsActionExecutor
-        {
-            get { return true; }
-        }
+        public bool IsActionExecutor => true;
 
         /// <summary>
-        /// Gets the <see cref="SessionId"/> for the current session of this driver.
+        /// Gets the <see cref="Selenium.SessionId"/> for the current session of this driver.
         /// </summary>
-        public SessionId SessionId
-        {
-            get { return this.sessionId; }
-        }
+        public SessionId SessionId { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
         /// sequences of keystrokes representing file paths and names.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If value is set to <see langword="null"/>.</exception>
         public virtual IFileDetector FileDetector
         {
-            get
-            {
-                return this.fileDetector;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value), "FileDetector cannot be null");
-                }
-
-                this.fileDetector = value;
-            }
+            get => this.fileDetector;
+            set => this.fileDetector = value ?? throw new ArgumentNullException(nameof(value), "FileDetector cannot be null");
         }
 
-        internal INetwork Network
-        {
-            get { return this.network; }
-        }
+        internal INetwork Network => this.network;
 
         /// <summary>
         /// Gets or sets the factory object used to create instances of <see cref="WebElement"/>
         /// or its subclasses.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If value is set to <see langword="null"/>.</exception>
         protected WebElementFactory ElementFactory
         {
-            get { return this.elementFactory; }
-            set { this.elementFactory = value; }
+            get => this.elementFactory;
+            set => this.elementFactory = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>
@@ -257,7 +237,7 @@ namespace OpenQA.Selenium
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        public object ExecuteAsyncScript(string script, params object[] args)
+        public object? ExecuteAsyncScript(string script, params object?[]? args)
         {
             return this.ExecuteScriptCommand(script, DriverCommand.ExecuteAsyncScript, args);
         }
@@ -268,7 +248,7 @@ namespace OpenQA.Selenium
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        public object ExecuteScript(string script, params object[] args)
+        public object? ExecuteScript(string script, params object?[]? args)
         {
             return this.ExecuteScriptCommand(script, DriverCommand.ExecuteScript, args);
         }
@@ -279,9 +259,15 @@ namespace OpenQA.Selenium
         /// <param name="script">A <see cref="PinnedScript"/> object containing the JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        public object ExecuteScript(PinnedScript script, params object[] args)
+        /// <exception cref="ArgumentNullException">If <paramref name="script" /> is <see langword="null"/>.</exception>
+        public object? ExecuteScript(PinnedScript script, params object?[]? args)
         {
-            return this.ExecuteScript(script.ExecutionScript, args);
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            return this.ExecuteScript(script.MakeExecutionScript(), args);
         }
 
         /// <summary>
@@ -289,6 +275,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">By mechanism to find the object</param>
         /// <returns>IWebElement object so that you can interact with that object</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by" /> is <see langword="null"/>.</exception>
         /// <example>
         /// <code>
         /// IWebDriver driver = new InternetExplorerDriver();
@@ -316,8 +303,10 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("using", mechanism);
             parameters.Add("value", value);
+
             Response commandResponse = this.Execute(DriverCommand.FindElement, parameters);
-            return this.GetElementFromResponse(commandResponse);
+
+            return this.GetElementFromResponse(commandResponse)!;
         }
 
         /// <summary>
@@ -352,7 +341,9 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("using", mechanism);
             parameters.Add("value", value);
+
             Response commandResponse = this.Execute(DriverCommand.FindElements, parameters);
+
             return this.GetElementsFromResponse(commandResponse);
         }
 
@@ -363,7 +354,9 @@ namespace OpenQA.Selenium
         public Screenshot GetScreenshot()
         {
             Response screenshotResponse = this.Execute(DriverCommand.Screenshot, null);
-            string base64 = screenshotResponse.Value.ToString();
+
+            screenshotResponse.EnsureValueIsNotNull();
+            string base64 = screenshotResponse.Value.ToString()!;
             return new Screenshot(base64);
         }
 
@@ -372,10 +365,18 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="printOptions">A <see cref="PrintOptions"/> object describing the options of the printed document.</param>
         /// <returns>The <see cref="PrintDocument"/> object containing the PDF-formatted print representation of the page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="printOptions"/> is <see langword="null"/>.</exception>
         public PrintDocument Print(PrintOptions printOptions)
         {
+            if (printOptions is null)
+            {
+                throw new ArgumentNullException(nameof(printOptions));
+            }
+
             Response commandResponse = this.Execute(DriverCommand.Print, printOptions.ToDictionary());
-            string base64 = commandResponse.Value.ToString();
+
+            commandResponse.EnsureValueIsNotNull();
+            string base64 = commandResponse.Value.ToString()!;
             return new PrintDocument(base64);
         }
 
@@ -398,6 +399,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters["actions"] = objectList;
+
             this.Execute(DriverCommand.Actions, parameters);
         }
 
@@ -458,7 +460,8 @@ namespace OpenQA.Selenium
         /// <param name="driverCommandToExecute">The name of the command to execute. The command name must be registered with the command executor, and must not be a command name known to this driver type.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
-        public object ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object> parameters)
+        /// <exception cref="WebDriverException">The command returned an exceptional value.</exception>
+        public object? ExecuteCustomDriverCommand(string driverCommandToExecute, Dictionary<string, object> parameters)
         {
             if (this.registeredCommands.Contains(driverCommandToExecute))
             {
@@ -486,7 +489,7 @@ namespace OpenQA.Selenium
         /// <param name="commandName">The unique name of the command to register.</param>
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        public bool RegisterCustomDriverCommand(string commandName, CommandInfo commandInfo)
+        public bool RegisterCustomDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo)
         {
             return this.RegisterDriverCommand(commandName, commandInfo, false);
         }
@@ -498,37 +501,34 @@ namespace OpenQA.Selenium
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <param name="isInternalCommand"><see langword="true"/> if the registered command is internal to the driver; otherwise <see langword="false"/>.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        internal bool RegisterDriverCommand(string commandName, CommandInfo commandInfo, bool isInternalCommand)
+        internal bool RegisterDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo, bool isInternalCommand)
         {
-            bool commandAdded = this.CommandExecutor.TryAddCommand(commandName, commandInfo);
-            if (commandAdded && isInternalCommand)
+            if (this.CommandExecutor.TryAddCommand(commandName, commandInfo))
             {
-                this.registeredCommands.Add(commandName);
+                if (isInternalCommand)
+                {
+                    this.registeredCommands.Add(commandName);
+                }
+
+                return true;
             }
 
-            return commandAdded;
+            return false;
         }
 
         /// <summary>
         /// Find the element in the response
         /// </summary>
         /// <param name="response">Response from the browser</param>
-        /// <returns>Element from the page</returns>
-        internal IWebElement GetElementFromResponse(Response response)
+        /// <returns>Element from the page, or <see langword="null"/> if the response does not contain a dictionary.</returns>
+        internal IWebElement? GetElementFromResponse(Response response)
         {
-            if (response == null)
+            if (response.Value is Dictionary<string, object?> elementDictionary)
             {
-                throw new NoSuchElementException();
+                return this.elementFactory.CreateElement(elementDictionary);
             }
 
-            WebElement element = null;
-            Dictionary<string, object> elementDictionary = response.Value as Dictionary<string, object>;
-            if (elementDictionary != null)
-            {
-                element = this.elementFactory.CreateElement(elementDictionary);
-            }
-
-            return element;
+            return null;
         }
 
         /// <summary>
@@ -539,13 +539,11 @@ namespace OpenQA.Selenium
         internal ReadOnlyCollection<IWebElement> GetElementsFromResponse(Response response)
         {
             List<IWebElement> toReturn = new List<IWebElement>();
-            object[] elements = response.Value as object[];
-            if (elements != null)
+            if (response.Value is object?[] elements)
             {
-                foreach (object elementObject in elements)
+                foreach (object? elementObject in elements)
                 {
-                    Dictionary<string, object> elementDictionary = elementObject as Dictionary<string, object>;
-                    if (elementDictionary != null)
+                    if (elementObject is Dictionary<string, object?> elementDictionary)
                     {
                         WebElement element = this.elementFactory.CreateElement(elementDictionary);
                         toReturn.Add(element);
@@ -562,7 +560,12 @@ namespace OpenQA.Selenium
         /// <param name="driverCommandToExecute">Command that needs executing</param>
         /// <param name="parameters">Parameters needed for the command</param>
         /// <returns>WebDriver Response</returns>
-        internal Response InternalExecute(string driverCommandToExecute, Dictionary<string, object> parameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
+        internal Response InternalExecute(string driverCommandToExecute, Dictionary<string,
+#nullable disable
+            object
+#nullable enable
+            >? parameters)
         {
             return Task.Run(() => this.InternalExecuteAsync(driverCommandToExecute, parameters)).GetAwaiter().GetResult();
         }
@@ -573,8 +576,12 @@ namespace OpenQA.Selenium
         /// <param name="driverCommandToExecute">Command that needs executing</param>
         /// <param name="parameters">Parameters needed for the command</param>
         /// <returns>A task object representing the asynchronous operation</returns>
-        internal Task<Response> InternalExecuteAsync(string driverCommandToExecute,
-            Dictionary<string, object> parameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
+        internal Task<Response> InternalExecuteAsync(string driverCommandToExecute, Dictionary<string,
+#nullable disable
+                object
+#nullable enable
+                >? parameters)
         {
             return this.ExecuteAsync(driverCommandToExecute, parameters);
         }
@@ -585,8 +592,12 @@ namespace OpenQA.Selenium
         /// <param name="driverCommandToExecute">A <see cref="DriverCommand"/> value representing the command to execute.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
-        protected virtual Response Execute(string driverCommandToExecute,
-            Dictionary<string, object> parameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
+        protected virtual Response Execute(string driverCommandToExecute, Dictionary<string,
+#nullable disable
+            object
+#nullable enable
+            >? parameters)
         {
             return Task.Run(() => this.ExecuteAsync(driverCommandToExecute, parameters)).GetAwaiter().GetResult();
         }
@@ -597,24 +608,16 @@ namespace OpenQA.Selenium
         /// <param name="driverCommandToExecute">A <see cref="DriverCommand"/> value representing the command to execute.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
-        protected virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string, object> parameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
+        protected virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string,
+#nullable disable
+            object
+#nullable enable
+            >? parameters)
         {
-            Command commandToExecute = new Command(this.sessionId, driverCommandToExecute, parameters);
+            Command commandToExecute = new Command(SessionId, driverCommandToExecute, parameters);
 
-            Response commandResponse;
-
-            try
-            {
-                commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                commandResponse = new Response
-                {
-                    Status = WebDriverResult.UnhandledError,
-                    Value = e
-                };
-            }
+            Response commandResponse = await this.CommandExecutor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
 
             if (commandResponse.Status != WebDriverResult.Success)
             {
@@ -628,6 +631,8 @@ namespace OpenQA.Selenium
         /// Starts a session with the driver
         /// </summary>
         /// <param name="capabilities">Capabilities of the browser</param>
+        [MemberNotNull(nameof(SessionId))]
+        [MemberNotNull(nameof(Capabilities))]
         protected void StartSession(ICapabilities capabilities)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -637,8 +642,7 @@ namespace OpenQA.Selenium
             // and end nodes are compliant with the W3C WebDriver Specification,
             // and therefore will already contain all of the appropriate values
             // for establishing a session.
-            RemoteSessionSettings remoteSettings = capabilities as RemoteSessionSettings;
-            if (remoteSettings == null)
+            if (capabilities is not RemoteSessionSettings remoteSettings)
             {
                 Dictionary<string, object> matchCapabilities = this.GetCapabilitiesDictionary(capabilities);
 
@@ -657,16 +661,17 @@ namespace OpenQA.Selenium
 
             Response response = this.Execute(DriverCommand.NewSession, parameters);
 
-            Dictionary<string, object> rawCapabilities = response.Value as Dictionary<string, object>;
-            if (rawCapabilities == null)
+            response.EnsureValueIsNotNull();
+            if (response.Value is not Dictionary<string, object> rawCapabilities)
             {
                 string errorMessage = string.Format(CultureInfo.InvariantCulture, "The new session command returned a value ('{0}') that is not a valid JSON object.", response.Value);
                 throw new WebDriverException(errorMessage);
             }
 
-            ReturnedCapabilities returnedCapabilities = new ReturnedCapabilities(rawCapabilities);
-            this.capabilities = returnedCapabilities;
-            this.sessionId = new SessionId(response.SessionId);
+            this.Capabilities = new ReturnedCapabilities(rawCapabilities);
+
+            string sessionId = response.SessionId ?? throw new WebDriverException($"The remote end did not respond with ID of a session when it was required. {response.Value}");
+            this.SessionId = new SessionId(sessionId);
         }
 
         /// <summary>
@@ -676,11 +681,17 @@ namespace OpenQA.Selenium
         /// <returns>A Dictionary consisting of the capabilities requested.</returns>
         /// <remarks>This method is only transitional. Do not rely on it. It will be removed
         /// once browser driver capability formats stabilize.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="capabilitiesToConvert"/> is <see langword="null"/>.</exception>
         protected virtual Dictionary<string, object> GetCapabilitiesDictionary(ICapabilities capabilitiesToConvert)
         {
+            if (capabilitiesToConvert is null)
+            {
+                throw new ArgumentNullException(nameof(capabilitiesToConvert));
+            }
+
             Dictionary<string, object> capabilitiesDictionary = new Dictionary<string, object>();
-            IHasCapabilitiesDictionary capabilitiesObject = capabilitiesToConvert as IHasCapabilitiesDictionary;
-            foreach (KeyValuePair<string, object> entry in capabilitiesObject.CapabilitiesDictionary)
+
+            foreach (KeyValuePair<string, object> entry in ((IHasCapabilitiesDictionary)capabilitiesToConvert).CapabilitiesDictionary)
             {
                 if (CapabilityType.IsSpecCompliantCapabilityName(entry.Key))
                 {
@@ -697,7 +708,7 @@ namespace OpenQA.Selenium
         /// <param name="commandName">The unique name of the command to register.</param>
         /// <param name="commandInfo">The <see cref="CommandInfo"/> object describing the command.</param>
         /// <returns><see langword="true"/> if the command was registered; otherwise, <see langword="false"/>.</returns>
-        protected bool RegisterInternalDriverCommand(string commandName, CommandInfo commandInfo)
+        protected bool RegisterInternalDriverCommand(string commandName, [NotNullWhen(true)] CommandInfo? commandInfo)
         {
             return this.RegisterDriverCommand(commandName, commandInfo, true);
         }
@@ -710,7 +721,7 @@ namespace OpenQA.Selenium
         {
             try
             {
-                if (this.sessionId is not null)
+                if (this.SessionId is not null)
                 {
                     this.Execute(DriverCommand.Quit, null);
                 }
@@ -726,9 +737,10 @@ namespace OpenQA.Selenium
             }
             finally
             {
-                this.sessionId = null;
+                this.SessionId = null!;
             }
-            this.executor.Dispose();
+
+            this.CommandExecutor.Dispose();
         }
 
         private static void UnpackAndThrowOnError(Response errorResponse, string commandToExecute)
@@ -736,8 +748,7 @@ namespace OpenQA.Selenium
             // Check the status code of the error, and only handle if not success.
             if (errorResponse.Status != WebDriverResult.Success)
             {
-                Dictionary<string, object> errorAsDictionary = errorResponse.Value as Dictionary<string, object>;
-                if (errorAsDictionary != null)
+                if (errorResponse.Value is Dictionary<string, object?> errorAsDictionary)
                 {
                     ErrorResponse errorResponseObject = new ErrorResponse(errorAsDictionary);
                     string errorMessage = errorResponseObject.Message;
@@ -761,18 +772,8 @@ namespace OpenQA.Selenium
                         case WebDriverResult.ElementNotInteractable:
                             throw new ElementNotInteractableException(errorMessage);
 
-                        case WebDriverResult.ElementNotDisplayed:
-                            throw new ElementNotVisibleException(errorMessage);
-
                         case WebDriverResult.InvalidElementState:
-                        case WebDriverResult.ElementNotSelectable:
                             throw new InvalidElementStateException(errorMessage);
-
-                        case WebDriverResult.UnhandledError:
-                            throw new WebDriverException(errorMessage);
-
-                        case WebDriverResult.NoSuchDocument:
-                            throw new NoSuchElementException(errorMessage);
 
                         case WebDriverResult.Timeout:
                             throw new WebDriverTimeoutException(errorMessage);
@@ -793,25 +794,25 @@ namespace OpenQA.Selenium
                             // TODO(JimEvans): Handle the case where the unexpected alert setting
                             // has been set to "ignore", so there is still a valid alert to be
                             // handled.
-                            string alertText = string.Empty;
-                            if (errorAsDictionary.ContainsKey("alert"))
+                            string? alertText = null;
+                            if (errorAsDictionary.TryGetValue("alert", out object? alert))
                             {
-                                Dictionary<string, object> alertDescription = errorAsDictionary["alert"] as Dictionary<string, object>;
-                                if (alertDescription != null && alertDescription.ContainsKey("text"))
+                                if (alert is Dictionary<string, object?> alertDescription
+                                    && alertDescription.TryGetValue("text", out object? text))
                                 {
-                                    alertText = alertDescription["text"].ToString();
+                                    alertText = text?.ToString();
                                 }
                             }
-                            else if (errorAsDictionary.ContainsKey("data"))
+                            else if (errorAsDictionary.TryGetValue("data", out object? data))
                             {
-                                Dictionary<string, object> alertData = errorAsDictionary["data"] as Dictionary<string, object>;
-                                if (alertData != null && alertData.ContainsKey("text"))
+                                if (data is Dictionary<string, object?> alertData
+                                    && alertData.TryGetValue("text", out object? dataText))
                                 {
-                                    alertText = alertData["text"].ToString();
+                                    alertText = dataText?.ToString();
                                 }
                             }
 
-                            throw new UnhandledAlertException(errorMessage, alertText);
+                            throw new UnhandledAlertException(errorMessage, alertText ?? string.Empty);
 
                         case WebDriverResult.NoAlertPresent:
                             throw new NoAlertPresentException(errorMessage);
@@ -840,14 +841,24 @@ namespace OpenQA.Selenium
                         case WebDriverResult.InsecureCertificate:
                             throw new InsecureCertificateException(errorMessage);
 
+                        case WebDriverResult.UnknownError:
+                            throw new UnknownErrorException(errorMessage);
+
+                        case WebDriverResult.UnknownMethod:
+                            throw new UnknownMethodException(errorMessage);
+
+                        case WebDriverResult.UnsupportedOperation:
+                            throw new UnsupportedOperationException(errorMessage);
+
+                        case WebDriverResult.NoSuchCookie:
+                            throw new NoSuchCookieException(errorMessage);
+
                         default:
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));
                     }
                 }
-                else
-                {
-                    throw new WebDriverException("The " + commandToExecute + " command returned an unexpected error. " + errorResponse.Value.ToString());
-                }
+
+                throw new WebDriverException($"The {commandToExecute} command returned an unexpected error. {errorResponse.Value}");
             }
         }
 
@@ -858,9 +869,9 @@ namespace OpenQA.Selenium
         /// <param name="commandName">The name of the command to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        protected object ExecuteScriptCommand(string script, string commandName, params object[] args)
+        protected object? ExecuteScriptCommand(string script, string commandName, params object?[]? args)
         {
-            object[] convertedArgs = ConvertArgumentsToJavaScriptObjects(args);
+            object?[] convertedArgs = ConvertArgumentsToJavaScriptObjects(args);
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("script", script);
@@ -878,19 +889,16 @@ namespace OpenQA.Selenium
             return this.ParseJavaScriptReturnValue(commandResponse.Value);
         }
 
-        private static object ConvertObjectToJavaScriptObject(object arg)
+        private static object? ConvertObjectToJavaScriptObject(object? arg)
         {
-            IWrapsElement argAsWrapsElement = arg as IWrapsElement;
-            IWebDriverObjectReference argAsObjectReference = arg as IWebDriverObjectReference;
-            IEnumerable argAsEnumerable = arg as IEnumerable;
-            IDictionary argAsDictionary = arg as IDictionary;
+            IWebDriverObjectReference? argAsObjectReference = arg as IWebDriverObjectReference;
 
-            if (argAsObjectReference == null && argAsWrapsElement != null)
+            if (argAsObjectReference == null && arg is IWrapsElement argAsWrapsElement)
             {
                 argAsObjectReference = argAsWrapsElement.WrappedElement as IWebDriverObjectReference;
             }
 
-            object converted = null;
+            object? converted;
 
             if (arg is string || arg is float || arg is double || arg is int || arg is long || arg is bool || arg == null)
             {
@@ -901,24 +909,24 @@ namespace OpenQA.Selenium
                 Dictionary<string, object> webDriverObjectReferenceDictionary = argAsObjectReference.ToDictionary();
                 converted = webDriverObjectReferenceDictionary;
             }
-            else if (argAsDictionary != null)
+            else if (arg is IDictionary argAsDictionary)
             {
                 // Note that we must check for the argument being a dictionary before
                 // checking for IEnumerable, since dictionaries also implement IEnumerable.
                 // Additionally, JavaScript objects have property names as strings, so all
                 // keys will be converted to strings.
-                Dictionary<string, object> dictionary = new Dictionary<string, object>();
-                foreach (var key in argAsDictionary.Keys)
+                Dictionary<string, object?> dictionary = new Dictionary<string, object?>();
+                foreach (DictionaryEntry argEntry in argAsDictionary)
                 {
-                    dictionary.Add(key.ToString(), ConvertObjectToJavaScriptObject(argAsDictionary[key]));
+                    dictionary.Add(argEntry.Key.ToString()!, ConvertObjectToJavaScriptObject(argEntry.Value));
                 }
 
                 converted = dictionary;
             }
-            else if (argAsEnumerable != null)
+            else if (arg is IEnumerable argAsEnumerable)
             {
-                List<object> objectList = new List<object>();
-                foreach (object item in argAsEnumerable)
+                List<object?> objectList = new List<object?>();
+                foreach (object? item in argAsEnumerable)
                 {
                     objectList.Add(ConvertObjectToJavaScriptObject(item));
                 }
@@ -927,7 +935,7 @@ namespace OpenQA.Selenium
             }
             else
             {
-                throw new ArgumentException("Argument is of an illegal type" + arg.ToString(), nameof(arg));
+                throw new ArgumentException("Argument is of an illegal type: " + arg.ToString(), nameof(arg));
             }
 
             return converted;
@@ -938,11 +946,11 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>The list of the arguments converted to JavaScript objects.</returns>
-        private static object[] ConvertArgumentsToJavaScriptObjects(object[] args)
+        private static object?[] ConvertArgumentsToJavaScriptObjects(object?[]? args)
         {
             if (args == null)
             {
-                return new object[] { null };
+                return new object?[] { null };
             }
 
             for (int i = 0; i < args.Length; i++)
@@ -953,22 +961,19 @@ namespace OpenQA.Selenium
             return args;
         }
 
-        private object ParseJavaScriptReturnValue(object responseValue)
+        private object? ParseJavaScriptReturnValue(object? responseValue)
         {
-            object returnValue = null;
+            object? returnValue;
 
-            Dictionary<string, object> resultAsDictionary = responseValue as Dictionary<string, object>;
-            object[] resultAsArray = responseValue as object[];
-
-            if (resultAsDictionary != null)
+            if (responseValue is Dictionary<string, object?> resultAsDictionary)
             {
                 if (this.elementFactory.ContainsElementReference(resultAsDictionary))
                 {
                     returnValue = this.elementFactory.CreateElement(resultAsDictionary);
                 }
-                else if (ShadowRoot.ContainsShadowRootReference(resultAsDictionary))
+                else if (ShadowRoot.TryCreate(this, resultAsDictionary, out ShadowRoot? shadowRoot))
                 {
-                    returnValue = ShadowRoot.FromDictionary(this, resultAsDictionary);
+                    returnValue = shadowRoot;
                 }
                 else
                 {
@@ -983,15 +988,14 @@ namespace OpenQA.Selenium
                     returnValue = resultAsDictionary;
                 }
             }
-            else if (resultAsArray != null)
+            else if (responseValue is object?[] resultAsArray)
             {
                 bool allElementsAreWebElements = true;
-                List<object> toReturn = new List<object>();
-                foreach (object item in resultAsArray)
+                List<object?> toReturn = new List<object?>(resultAsArray.Length);
+                foreach (object? item in resultAsArray)
                 {
-                    object parsedItem = this.ParseJavaScriptReturnValue(item);
-                    IWebElement parsedItemAsElement = parsedItem as IWebElement;
-                    if (parsedItemAsElement == null)
+                    object? parsedItem = this.ParseJavaScriptReturnValue(item);
+                    if (parsedItem is not IWebElement)
                     {
                         allElementsAreWebElements = false;
                     }
@@ -1001,11 +1005,10 @@ namespace OpenQA.Selenium
 
                 if (toReturn.Count > 0 && allElementsAreWebElements)
                 {
-                    List<IWebElement> elementList = new List<IWebElement>();
-                    foreach (object listItem in toReturn)
+                    List<IWebElement> elementList = new List<IWebElement>(resultAsArray.Length);
+                    foreach (object? listItem in toReturn)
                     {
-                        IWebElement itemAsElement = listItem as IWebElement;
-                        elementList.Add(itemAsElement);
+                        elementList.Add((IWebElement)listItem!);
                     }
 
                     returnValue = elementList.AsReadOnly();
@@ -1026,41 +1029,65 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Creates a Virtual Authenticator.
         /// </summary>
-        /// <param name="options"> VirtualAuthenticator Options (https://w3c.github.io/webauthn/#sctn-automation-virtual-authenticators)</param>
+        /// <param name="options"><see href="https://w3c.github.io/webauthn/#sctn-automation-virtual-authenticators">Virtual Authenticator Options</see>.</param>
         /// <returns> Authenticator id as string </returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public string AddVirtualAuthenticator(VirtualAuthenticatorOptions options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             Response commandResponse = this.Execute(DriverCommand.AddVirtualAuthenticator, options.ToDictionary());
-            string id = commandResponse.Value.ToString();
-            this.authenticatorId = id;
-            return this.authenticatorId;
+
+            commandResponse.EnsureValueIsNotNull();
+            string id = (string)commandResponse.Value;
+            this.AuthenticatorId = id;
+            return id;
         }
 
         /// <summary>
         /// Removes the Virtual Authenticator
         /// </summary>
-        /// <param name="authenticatorId"> Id as string that uniquely identifies a Virtual Authenticator</param>
+        /// <param name="authenticatorId">Id as string that uniquely identifies a Virtual Authenticator.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="authenticatorId"/> is <see langword="null"/>.</exception>
         public void RemoveVirtualAuthenticator(string authenticatorId)
         {
+            if (authenticatorId is null)
+            {
+                throw new ArgumentNullException(nameof(authenticatorId));
+            }
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
+
             this.Execute(DriverCommand.RemoveVirtualAuthenticator, parameters);
-            this.authenticatorId = null;
+            this.AuthenticatorId = null;
         }
 
         /// <summary>
-        /// Gets the virtual authenticator ID for this WebDriver instance.
+        /// Gets the cached virtual authenticator ID, or <see langword="null"/> if no authenticator ID is set.
         /// </summary>
-        public string AuthenticatorId { get; }
+        public string? AuthenticatorId { get; private set; }
 
         /// <summary>
         /// Add a credential to the Virtual Authenticator/
         /// </summary>
         /// <param name="credential"> The credential to be stored in the Virtual Authenticator</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credential"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void AddCredential(Credential credential)
         {
+            if (credential is null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>(credential.ToDictionary());
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.AddCredential, parameters);
         }
@@ -1069,18 +1096,26 @@ namespace OpenQA.Selenium
         /// Retrieves all the credentials stored in the Virtual Authenticator
         /// </summary>
         /// <returns> List of credentials </returns>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public List<Credential> GetCredentials()
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
-            object[] commandResponse = (object[])this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters).Value;
+            Response getCredentialsResponse = this.Execute(driverCommandToExecute: DriverCommand.GetCredentials, parameters);
 
-            List<Credential> credentials = new List<Credential>();
-
-            foreach (object dictionary in commandResponse)
+            getCredentialsResponse.EnsureValueIsNotNull();
+            if (getCredentialsResponse.Value is not object?[] credentialsList)
             {
-                Credential credential = Credential.FromDictionary((Dictionary<string, object>)dictionary);
+                throw new WebDriverException($"Get credentials call succeeded, but the response was not a list of credentials: {getCredentialsResponse.Value}");
+            }
+
+            List<Credential> credentials = new List<Credential>(credentialsList.Length);
+            foreach (object? dictionary in credentialsList)
+            {
+                Credential credential = Credential.FromDictionary((Dictionary<string, object>)dictionary!);
                 credentials.Add(credential);
             }
 
@@ -1091,6 +1126,8 @@ namespace OpenQA.Selenium
         /// Removes the credential identified by the credentialId from the Virtual Authenticator.
         /// </summary>
         /// <param name="credentialId"> The id as byte array that uniquely identifies a credential </param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credentialId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveCredential(byte[] credentialId)
         {
             RemoveCredential(Base64UrlEncoder.Encode(credentialId));
@@ -1100,10 +1137,19 @@ namespace OpenQA.Selenium
         /// Removes the credential identified by the credentialId from the Virtual Authenticator.
         /// </summary>
         /// <param name="credentialId"> The id as string that uniquely identifies a credential </param>
+        /// <exception cref="ArgumentNullException">If <paramref name="credentialId"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveCredential(string credentialId)
         {
+            if (credentialId is null)
+            {
+                throw new ArgumentNullException(nameof(credentialId));
+            }
+
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
             parameters.Add("credentialId", credentialId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveCredential, parameters);
@@ -1112,10 +1158,13 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Removes all the credentials stored in the Virtual Authenticator.
         /// </summary>
+        /// <exception cref="InvalidOperationException">If a Virtual Authenticator has not been added yet.</exception>
         public void RemoveAllCredentials()
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
 
             this.Execute(driverCommandToExecute: DriverCommand.RemoveAllCredentials, parameters);
         }
@@ -1126,8 +1175,10 @@ namespace OpenQA.Selenium
         /// <param name="verified">The boolean value representing value to be set </param>
         public void SetUserVerified(bool verified)
         {
+            string authenticatorId = this.AuthenticatorId ?? throw new InvalidOperationException("Virtual Authenticator needs to be added before it can perform operations");
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("authenticatorId", this.authenticatorId);
+            parameters.Add("authenticatorId", authenticatorId);
             parameters.Add("isUserVerified", verified);
 
             this.Execute(driverCommandToExecute: DriverCommand.SetUserVerified, parameters);

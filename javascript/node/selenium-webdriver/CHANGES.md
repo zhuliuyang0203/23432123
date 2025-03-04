@@ -1,3 +1,33 @@
+## 4.29.0
+
+- Add CDP for Chrome 133 and remove 130
+- [js] Remove Firefox CDP (#15200)
+- [js][bidi] Implement bidi `setCacheBehavior` command (#15136)
+- [js][bidi] Implement bidi getClientWindows command in browser module (#15248)
+
+## 4.28.1
+
+- [JS] specify min required node versiton to 18.20.5
+
+## 4.28.0
+
+- Add CDP for Chrome 132 and remove 129
+- [js] Add Federated Credential Management support (#15008)
+- [JS] Specify Node.js engine version as 22.x LTS in package.json (#15058)
+- [JS] Add detailed error message for invalid cookie name validation in getCookie method
+- [JS] Add err message for invalid cookie name in deleteCookie method
+- [JS] Enables diagnostic logging for Safari
+- [java][JS][py] Add straight relative-by locators (#14482)
+
+## 4.27.0
+
+- Add CDP for Chrome 131 and remove 128
+- Add Firefox CDP deprecation warnings
+- Update supported versions for Chrome DevTools
+- [bidi] Allow passing in uri for authentication handlers (#14386)
+- [bidi] Enable locate node tests for Chrome and Edge
+- [bidi] Ensure start nodes are serialized
+
 ## 4.26.0
 
 - Add CDP for Chrome 130 and remove 127

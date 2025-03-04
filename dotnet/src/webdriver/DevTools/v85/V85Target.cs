@@ -1,19 +1,20 @@
-// <copyright file="V85Target.cs" company="WebDriver Committers">
+// <copyright file="V85Target.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
-// or more contributor license agreements. See the NOTICE file
+// or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The SFC licenses this file
-// to you under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 // </copyright>
 
 using OpenQA.Selenium.DevTools.V85.Target;
@@ -22,6 +23,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools.V85
 {
     /// <summary>
@@ -29,15 +32,16 @@ namespace OpenQA.Selenium.DevTools.V85
     /// </summary>
     public class V85Target : DevTools.Target
     {
-        private TargetAdapter adapter;
+        private readonly TargetAdapter adapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="V85Target"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Target domain.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="adapter"/> is <see langword="null"/>.</exception>
         public V85Target(TargetAdapter adapter)
         {
-            this.adapter = adapter;
+            this.adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
             adapter.DetachedFromTarget += OnDetachedFromTarget;
             adapter.AttachedToTarget += OnAttachedToTarget;
         }
@@ -50,23 +54,24 @@ namespace OpenQA.Selenium.DevTools.V85
         /// contains the list of <see cref="TargetInfo"/> objects describing the
         /// targets available for this session.
         /// </returns>
-        public override async Task<ReadOnlyCollection<TargetInfo>> GetTargets(Object settings = null)
+        public override async Task<ReadOnlyCollection<TargetInfo>> GetTargets(object? settings = null)
         {
-            List<TargetInfo> targets = new List<TargetInfo>();
             var response = await adapter.GetTargets().ConfigureAwait(false);
+
+            List<TargetInfo> targets = new List<TargetInfo>(response.TargetInfos.Length);
             for (int i = 0; i < response.TargetInfos.Length; i++)
             {
                 var targetInfo = response.TargetInfos[i];
-                var mapped = new TargetInfo()
-                {
-                    TargetId = targetInfo.TargetId,
-                    Title = targetInfo.Title,
-                    Type = targetInfo.Type,
-                    Url = targetInfo.Url,
-                    OpenerId = targetInfo.OpenerId,
-                    BrowserContextId = targetInfo.BrowserContextId,
-                    IsAttached = targetInfo.Attached
-                };
+                var mapped = new TargetInfo
+                (
+                    targetId: targetInfo.TargetId,
+                    title: targetInfo.Title,
+                    type: targetInfo.Type,
+                    url: targetInfo.Url,
+                    openerId: targetInfo.OpenerId,
+                    browserContextId: targetInfo.BrowserContextId,
+                    isAttached: targetInfo.Attached
+                );
                 targets.Add(mapped);
             }
 
@@ -93,7 +98,7 @@ namespace OpenQA.Selenium.DevTools.V85
         /// <param name="sessionId">The ID of the session of the target from which to detach.</param>
         /// <param name="targetId">The ID of the target from which to detach.</param>
         /// <returns>A task representing the asynchronous detach operation.</returns>
-        public override async Task DetachFromTarget(string sessionId = null, string targetId = null)
+        public override async Task DetachFromTarget(string? sessionId = null, string? targetId = null)
         {
             await adapter.DetachFromTarget(new DetachFromTargetCommandSettings()
             {
@@ -111,28 +116,30 @@ namespace OpenQA.Selenium.DevTools.V85
             await adapter.SetAutoAttach(new SetAutoAttachCommandSettings() { AutoAttach = true, WaitForDebuggerOnStart = false, Flatten = true }).ConfigureAwait(false);
         }
 
-        private void OnDetachedFromTarget(object sender, DetachedFromTargetEventArgs e)
+        private void OnDetachedFromTarget(object? sender, DetachedFromTargetEventArgs e)
         {
-            this.OnTargetDetached(new TargetDetachedEventArgs() { SessionId = e.SessionId, TargetId = e.TargetId });
+            this.OnTargetDetached(new TargetDetachedEventArgs(e.SessionId, e.TargetId));
         }
 
-        private void OnAttachedToTarget(object sender, AttachedToTargetEventArgs e)
+        private void OnAttachedToTarget(object? sender, AttachedToTargetEventArgs e)
         {
-            this.OnTargetAttached(new TargetAttachedEventArgs()
-            {
-                SessionId = e.SessionId,
-                TargetInfo = e.TargetInfo == null ? null : new TargetInfo
-                {
-                    BrowserContextId = e.TargetInfo.BrowserContextId,
-                    IsAttached = e.TargetInfo.Attached,
-                    OpenerId = e.TargetInfo.OpenerId,
-                    TargetId = e.TargetInfo.TargetId,
-                    Title = e.TargetInfo.Title,
-                    Type = e.TargetInfo.Type,
-                    Url = e.TargetInfo.Url
-                },
-                WaitingForDebugger = e.WaitingForDebugger
-            });
+            var targetInfo = e.TargetInfo == null ? null : new TargetInfo
+            (
+                browserContextId: e.TargetInfo.BrowserContextId,
+                isAttached: e.TargetInfo.Attached,
+                openerId: e.TargetInfo.OpenerId,
+                targetId: e.TargetInfo.TargetId,
+                title: e.TargetInfo.Title,
+                type: e.TargetInfo.Type,
+                url: e.TargetInfo.Url
+            );
+
+            this.OnTargetAttached(new TargetAttachedEventArgs
+            (
+                sessionId: e.SessionId,
+                targetInfo: targetInfo,
+                waitingForDebugger: e.WaitingForDebugger
+            ));
         }
 
         internal override ICommand CreateSetAutoAttachCommand(bool waitForDebuggerOnStart)

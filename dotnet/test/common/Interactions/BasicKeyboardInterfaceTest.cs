@@ -1,3 +1,22 @@
+// <copyright file="BasicKeyboardInterfaceTest.cs" company="Selenium Committers">
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+// </copyright>
+
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System;
@@ -39,7 +58,7 @@ namespace OpenQA.Selenium.Interactions
 
             KeyInputDevice device = actionProvider.GetActiveKeyboard();
 
-            Assert.AreEqual("test keyboard", device.DeviceName);
+            Assert.That(device.DeviceName, Is.EqualTo("test keyboard"));
         }
 
         [Test]
@@ -58,7 +77,7 @@ namespace OpenQA.Selenium.Interactions
 
             sendLowercase.Perform();
 
-            Assert.AreEqual("abc def", keyReporter.GetAttribute("value"));
+            Assert.That(keyReporter.GetAttribute("value"), Is.EqualTo("abc def"));
 
         }
 
@@ -135,7 +154,7 @@ namespace OpenQA.Selenium.Interactions
 
             AssertThatFormEventsFiredAreExactly("focus keydown keydown keypress keyup keydown keypress keyup keyup");
 
-            Assert.AreEqual("AB", keysEventInput.GetAttribute("value"));
+            Assert.That(keysEventInput.GetAttribute("value"), Is.EqualTo("AB"));
         }
 
         [Test]
@@ -314,12 +333,12 @@ namespace OpenQA.Selenium.Interactions
 
             AssertThatFormEventsFiredAreExactly("focus keydown keydown keypress keyup keydown keypress keyup keyup");
 
-            Assert.AreEqual("AB", keysEventInput.GetAttribute("value"));
+            Assert.That(keysEventInput.GetAttribute("value"), Is.EqualTo("AB"));
         }
 
         private void AssertThatFormEventsFiredAreExactly(string message, string expected)
         {
-            Assert.AreEqual(expected, driver.FindElement(By.Id("result")).Text.Trim(), message);
+            Assert.That(driver.FindElement(By.Id("result")).Text.Trim(), Is.EqualTo(expected), message);
         }
 
         private void AssertThatFormEventsFiredAreExactly(string expected)
@@ -329,7 +348,7 @@ namespace OpenQA.Selenium.Interactions
 
         private void AssertThatBodyEventsFiredAreExactly(string expected)
         {
-            Assert.AreEqual(expected, driver.FindElement(By.Id("body_result")).Text.Trim());
+            Assert.That(driver.FindElement(By.Id("body_result")).Text.Trim(), Is.EqualTo(expected));
         }
 
         private Func<bool> BackgroundColorToChangeFrom(IWebElement element, Color currentColor)

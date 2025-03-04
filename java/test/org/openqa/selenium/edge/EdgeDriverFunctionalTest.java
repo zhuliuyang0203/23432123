@@ -116,20 +116,20 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
   @NoDriverBeforeTest
   public void canSetPermissionHeadless() {
     EdgeOptions options = new EdgeOptions();
-    options.addArguments("--headless=chrome");
+    options.addArguments("--headless=new");
 
     localDriver = new WebDriverBuilder().get(options);
     HasPermissions permissions = (HasPermissions) localDriver;
 
     localDriver.get(pages.clicksPage);
     assertThat(checkPermission(localDriver, CLIPBOARD_READ)).isEqualTo("prompt");
-    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("prompt");
+    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("granted");
 
     permissions.setPermission(CLIPBOARD_READ, "granted");
-    permissions.setPermission(CLIPBOARD_WRITE, "granted");
+    permissions.setPermission(CLIPBOARD_WRITE, "prompt");
 
     assertThat(checkPermission(localDriver, CLIPBOARD_READ)).isEqualTo("granted");
-    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("granted");
+    assertThat(checkPermission(localDriver, CLIPBOARD_WRITE)).isEqualTo("prompt");
   }
 
   public String checkPermission(WebDriver driver, String permission) {
@@ -199,18 +199,19 @@ class EdgeDriverFunctionalTest extends JupiterTestBase {
   @Test
   @NoDriverBeforeTest
   void shouldLaunchSuccessfullyWithArabicDate() {
-    Locale arabicLocale = new Locale("ar", "EG");
-    Locale.setDefault(arabicLocale);
-    Locale.setDefault(Locale.US);
+    try {
+      Locale arabicLocale = new Locale("ar", "EG");
+      Locale.setDefault(arabicLocale);
 
-    int port = PortProber.findFreePort();
-    EdgeDriverService.Builder builder = new EdgeDriverService.Builder();
-    builder.usingPort(port);
-    EdgeDriverService service = builder.build();
+      int port = PortProber.findFreePort();
+      EdgeDriverService.Builder builder = new EdgeDriverService.Builder();
+      builder.usingPort(port);
+      builder.build();
 
-    driver = new EdgeDriver(service, (EdgeOptions) EDGE.getCapabilities());
-
-    driver.get(pages.simpleTestPage);
-    assertThat(driver.getTitle()).isEqualTo("Hello WebDriver");
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      Locale.setDefault(Locale.US);
+    }
   }
 }

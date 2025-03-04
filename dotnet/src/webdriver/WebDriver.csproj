@@ -42,6 +42,11 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <!--TODO when AOT is ready https://github.com/SeleniumHQ/selenium/issues/14480-->
+  <!--<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>-->
+
   <ItemGroup>
     <InternalsVisibleTo Include="WebDriver.Common.Tests" />
   </ItemGroup>
@@ -52,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -70,7 +75,7 @@
     <None Include="$(BaseSeleniumManagerPath)\windows\selenium-manager.exe" Pack="true" PackagePath="manager\windows" Visible="false" />
   </ItemGroup>
 
-  <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="PrepareForBuild">
+  <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="BeforeBuild">
     <Exec Command="bazel build //dotnet/src/webdriver:manager-linux //dotnet/src/webdriver:manager-windows //dotnet/src/webdriver:manager-macos" WorkingDirectory="../../.." />
 
     <PropertyGroup>
@@ -78,7 +83,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="GenerateAtoms" BeforeTargets="PrepareForBuild">
+  <Target Name="GenerateAtoms" BeforeTargets="BeforeBuild">
     <Exec Command="bazel build //javascript/webdriver/atoms:get-attribute.js //javascript/atoms/fragments:is-displayed.js //javascript/atoms/fragments:find-elements.js" WorkingDirectory="../../.." />
 
     <ItemGroup>

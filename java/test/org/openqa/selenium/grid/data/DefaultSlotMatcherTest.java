@@ -28,6 +28,29 @@ import org.openqa.selenium.remote.CapabilityType;
 class DefaultSlotMatcherTest {
 
   private final DefaultSlotMatcher slotMatcher = new DefaultSlotMatcher();
+  private final SemanticVersionComparator comparator = new SemanticVersionComparator();
+
+  @Test
+  void testBrowserVersionMatch() {
+    assertThat(comparator.compare("", "")).isEqualTo(0);
+    assertThat(comparator.compare("", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("131.0.6778.85", "131")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0.6778")).isEqualTo(0);
+    assertThat(comparator.compare("131.0.6778.85", "131.0.6778.95")).isEqualTo(-1);
+    assertThat(comparator.compare("130.0", "130.0")).isEqualTo(0);
+    assertThat(comparator.compare("130.0", "130")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130.0.1")).isEqualTo(0);
+    assertThat(comparator.compare("133.0a1", "133")).isEqualTo(0);
+    assertThat(comparator.compare("133", "133.0a1")).isEqualTo(1);
+    assertThat(comparator.compare("dev", "Dev")).isEqualTo(0);
+    assertThat(comparator.compare("Beta", "beta")).isEqualTo(0);
+    assertThat(comparator.compare("130.0.1", "130.0.2")).isEqualTo(-1);
+    assertThat(comparator.compare("130.1", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("131.0", "130.0")).isEqualTo(1);
+    assertThat(comparator.compare("130.0", "131")).isEqualTo(-1);
+  }
 
   @Test
   void fullMatch() {
@@ -42,6 +65,99 @@ class DefaultSlotMatcherTest {
             CapabilityType.BROWSER_VERSION, "80",
             CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
     assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void fullMatchExtensionCaps() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "firefox",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "se:downloadsEnabled",
+            true,
+            "moz:debuggerAddress",
+            "127.0.0.1:34959");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "firefox",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "se:downloadsEnabled",
+            true,
+            "moz:debuggerAddress",
+            true);
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void fullMatchWithTestMetadata() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME, "chrome", CapabilityType.PLATFORM_NAME, Platform.LINUX);
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:name",
+            "testName");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void fullMatchWithVideoRecording() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:noVncPort",
+            7900,
+            "se:vncEnabled",
+            true,
+            "se:containerName",
+            "my-container");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:recordVideo",
+            true,
+            "se:screenResolution",
+            "1920x1080");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void notMatchWithTestMetadata() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "myApp:version",
+            "beta");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.LINUX,
+            "se:recordVideo",
+            true,
+            "se:name",
+            "testName",
+            "myApp:version",
+            "stable");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isFalse();
   }
 
   @Test

@@ -17,6 +17,7 @@
 
 package org.openqa.selenium.support;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -302,7 +303,7 @@ public class Color {
   private static class NamedColorConverter extends Converter {
     @Override
     public Color getColor(String value) {
-      return Colors.valueOf(value.toUpperCase()).getColorValue();
+      return Colors.valueOf(value.toUpperCase(Locale.ENGLISH)).getColorValue();
     }
 
     @Override
