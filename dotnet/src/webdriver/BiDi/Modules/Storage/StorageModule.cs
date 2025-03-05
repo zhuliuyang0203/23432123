@@ -28,39 +28,22 @@ public class StorageModule(Broker broker) : Module(broker)
 {
     public async Task<GetCookiesResult> GetCookiesAsync(GetCookiesOptions? options = null)
     {
-        var @params = new GetCookiesCommandParameters();
+        var @params = new GetCookiesCommandParameters(options?.Filter, options?.Partition);
 
-        if (options is not null)
-        {
-            @params.Filter = options.Filter;
-            @params.Partition = options.Partition;
-        }
-
-        return await Broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetCookiesCommand, GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<DeleteCookiesResult> DeleteCookiesAsync(DeleteCookiesOptions? options = null)
     {
-        var @params = new DeleteCookiesCommandParameters();
+        var @params = new DeleteCookiesCommandParameters(options?.Filter, options?.Partition);
 
-        if (options is not null)
-        {
-            @params.Filter = options.Filter;
-            @params.Partition = options.Partition;
-        }
-
-        return await Broker.ExecuteCommandAsync<DeleteCookiesResult>(new DeleteCookiesCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<DeleteCookiesCommand, DeleteCookiesResult>(new DeleteCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<SetCookieResult> SetCookieAsync(PartialCookie cookie, SetCookieOptions? options = null)
     {
-        var @params = new SetCookieCommandParameters(cookie);
+        var @params = new SetCookieCommandParameters(cookie, options?.Partition);
 
-        if (options is not null)
-        {
-            @params.Partition = options.Partition;
-        }
-
-        return await Broker.ExecuteCommandAsync<SetCookieResult>(new SetCookieCommand(@params), options).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<SetCookieCommand, SetCookieResult>(new SetCookieCommand(@params), options).ConfigureAwait(false);
     }
 }

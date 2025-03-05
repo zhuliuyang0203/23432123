@@ -17,7 +17,7 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
+using System;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -28,21 +28,19 @@ public static class WebDriverExtensions
 {
     public static async Task<BiDi> AsBiDiAsync(this IWebDriver webDriver)
     {
-        var webSocketUrl = ((IHasCapabilities)webDriver).Capabilities.GetCapability("webSocketUrl");
+        if (webDriver is null) throw new ArgumentNullException(nameof(webDriver));
 
-        if (webSocketUrl is null) throw new System.Exception("The driver is not compatible with bidirectional protocol or it is not enabled in driver options.");
+        string? webSocketUrl = null;
 
-        var bidi = await BiDi.ConnectAsync(webSocketUrl.ToString()!).ConfigureAwait(false);
+        if (webDriver is IHasCapabilities hasCapabilities)
+        {
+            webSocketUrl = hasCapabilities.Capabilities.GetCapability("webSocketUrl")?.ToString();
+        }
+
+        if (webSocketUrl is null) throw new BiDiException("The driver is not compatible with bidirectional protocol or \"webSocketUrl\" not enabled in driver options.");
+
+        var bidi = await BiDi.ConnectAsync(webSocketUrl).ConfigureAwait(false);
 
         return bidi;
-    }
-
-    public static async Task<BrowsingContext> AsBiDiContextAsync(this IWebDriver webDriver)
-    {
-        var bidi = await webDriver.AsBiDiAsync();
-
-        var currentBrowsingContext = new BrowsingContext(bidi, webDriver.CurrentWindowHandle);
-
-        return currentBrowsingContext;
     }
 }

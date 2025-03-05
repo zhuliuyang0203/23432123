@@ -24,9 +24,12 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class CallFunctionCommand(CallFunctionCommandParameters @params) : Command<CallFunctionCommandParameters>(@params);
+internal class CallFunctionCommand(CallFunctionCommandParameters @params)
+    : Command<CallFunctionCommandParameters>(@params, "script.callFunction");
 
-internal record CallFunctionCommandParameters(string FunctionDeclaration, bool AwaitPromise, Target Target) : CommandParameters
+internal record CallFunctionCommandParameters(string FunctionDeclaration, bool AwaitPromise, Target Target, IEnumerable<LocalValue>? Arguments, ResultOwnership? ResultOwnership, SerializationOptions? SerializationOptions, LocalValue? This, bool? UserActivation) : CommandParameters;
+
+public record CallFunctionOptions : CommandOptions
 {
     public IEnumerable<LocalValue>? Arguments { get; set; }
 
@@ -35,19 +38,6 @@ internal record CallFunctionCommandParameters(string FunctionDeclaration, bool A
     public SerializationOptions? SerializationOptions { get; set; }
 
     public LocalValue? This { get; set; }
-
-    public bool? UserActivation { get; set; }
-}
-
-public record CallFunctionOptions : CommandOptions
-{
-    public IEnumerable<object?>? Arguments { get; set; }
-
-    public ResultOwnership? ResultOwnership { get; set; }
-
-    public SerializationOptions? SerializationOptions { get; set; }
-
-    public object? This { get; set; }
 
     public bool? UserActivation { get; set; }
 }

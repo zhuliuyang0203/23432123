@@ -27,7 +27,6 @@ js_library(
 
 SRCS = glob(
     [
-        "public/**/*",
         "src/**/*",
     ],
     exclude = [

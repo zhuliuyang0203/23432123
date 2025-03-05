@@ -21,6 +21,8 @@ using OpenQA.Selenium.Chromium;
 using System;
 using System.Globalization;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Chrome
 {
     /// <summary>
@@ -64,19 +66,13 @@ namespace OpenQA.Selenium.Chrome
         /// <summary>
         /// Gets the vendor prefix to apply to Chromium-specific capability names.
         /// </summary>
-        protected override string VendorPrefix
-        {
-            get { return "goog"; }
-        }
+        protected override string VendorPrefix => "goog";
 
         /// <summary>
         /// Gets the name of the capability used to store Chromium options in
         /// an <see cref="ICapabilities"/> object.
         /// </summary>
-        public override string CapabilityName
-        {
-            get { return string.Format(CultureInfo.InvariantCulture, "{0}:{1}", this.VendorPrefix, ChromeOptionsCapabilityName); }
-        }
+        public override string CapabilityName => string.Format(CultureInfo.InvariantCulture, "{0}:{1}", this.VendorPrefix, ChromeOptionsCapabilityName);
 
         /// <summary>
         /// Provides a means to add additional capabilities not yet added as type safe options
@@ -92,7 +88,7 @@ namespace OpenQA.Selenium.Chrome
         /// where <paramref name="optionName"/> has already been added will overwrite the
         /// existing value with the new value in <paramref name="optionValue"/>.
         /// Calling this method adds capabilities to the Chrome-specific options object passed to
-        /// webdriver executable (property name 'goog:chromeOptions').</remarks>
+        /// WebDriver executable (property name 'goog:chromeOptions').</remarks>
         public void AddAdditionalChromeOption(string optionName, object optionValue)
         {
             this.AddAdditionalChromiumOption(optionName, optionValue);

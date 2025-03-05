@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -31,10 +33,11 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         /// <param name="eventArgsType">The type of the event args for the event to be raised.</param>
         /// <param name="invoker">The method that will be used to invoke the event.</param>
-        public DevToolsEventData(Type eventArgsType, Action<object> invoker)
+        /// <exception cref="ArgumentNullException">If<paramref name="eventArgsType"/> or <paramref name="invoker"/> is <see langword="null"/>.</exception>
+        public DevToolsEventData(Type eventArgsType, Action<object?> invoker)
         {
-            EventArgsType = eventArgsType;
-            EventInvoker = invoker;
+            EventArgsType = eventArgsType ?? throw new ArgumentNullException(nameof(eventArgsType));
+            EventInvoker = invoker ?? throw new ArgumentNullException(nameof(invoker));
         }
 
         /// <summary>
@@ -45,6 +48,6 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// The method to called to raise the event.
         /// </summary>
-        public Action<object> EventInvoker { get; }
+        public Action<object?> EventInvoker { get; }
     }
 }

@@ -77,9 +77,9 @@ public abstract record LocalValue
 
     }
 
-    public record Number(long Value) : PrimitiveProtocolLocalValue
+    public record Number(double Value) : PrimitiveProtocolLocalValue
     {
-        public static explicit operator Number(int n) => new Number(n);
+        public static explicit operator Number(double n) => new Number(n);
     }
 
     public record String(string Value) : PrimitiveProtocolLocalValue;

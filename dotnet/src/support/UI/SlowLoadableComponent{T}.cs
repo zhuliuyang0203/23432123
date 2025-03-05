@@ -43,7 +43,7 @@ namespace OpenQA.Selenium.Support.UI
         /// </summary>
         /// <param name="timeout">The <see cref="TimeSpan"/> within which the component should be loaded.</param>
         protected SlowLoadableComponent(TimeSpan timeout)
-            : this(timeout, new SystemClock())
+            : this(timeout, SystemClock.Instance)
         {
         }
 

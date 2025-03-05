@@ -216,6 +216,18 @@ public class NodeServer extends TemplateGridServerCommand {
                 .withMaxDuration(nodeOptions.getRegisterPeriod())
                 .withDelay(nodeOptions.getRegisterCycle())
                 .handleResultIf(result -> true)
+                .onFailure(
+                    event -> {
+                      LOG.severe(
+                          String.format(
+                              "Registration event failed after period of %s seconds. Node will not"
+                                  + " attempt to register again",
+                              nodeOptions.getRegisterPeriod().getSeconds()));
+                      if (nodeOptions.getRegisterShutdownOnFailure()) {
+                        LOG.severe("Shutting down");
+                        System.exit(1);
+                      }
+                    })
                 .build();
 
         LOG.info("Starting registration process for Node " + node.getUri());

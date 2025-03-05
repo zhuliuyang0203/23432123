@@ -19,6 +19,8 @@
 
 using System;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -27,18 +29,31 @@ namespace OpenQA.Selenium.DevTools
     public class BindingCalledEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="BindingCalledEventArgs"/> type.
+        /// </summary>
+        /// <param name="executionContextId">The execution ID of the call to the binding.</param>
+        /// <param name="name">The name of the call to the binding.</param>
+        /// <param name="payload">The payload of the call to the binding.</param>
+        public BindingCalledEventArgs(long executionContextId, string name, string payload)
+        {
+            this.ExecutionContextId = executionContextId;
+            this.Name = name;
+            this.Payload = payload;
+        }
+
+        /// <summary>
         /// Gets the execution context ID of the call to the binding.
         /// </summary>
-        public long ExecutionContextId { get; internal set; }
+        public long ExecutionContextId { get; }
 
         /// <summary>
         /// Gets the name of the call to the binding.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the payload of the call to the binding.
         /// </summary>
-        public string Payload { get; internal set; }
+        public string Payload { get; }
     }
 }

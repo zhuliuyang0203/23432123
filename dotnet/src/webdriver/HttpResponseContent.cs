@@ -17,7 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -34,7 +37,7 @@ namespace OpenQA.Selenium
         /// <param name="content">The byte array representing the content of the response.</param>
         public HttpResponseContent(byte[] content)
         {
-            this.content = content;
+            this.content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
         /// <summary>

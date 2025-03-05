@@ -480,7 +480,7 @@ namespace OpenQA.Selenium
         [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
         public async Task ShouldBeAbleToPinJavascriptCodeAndExecuteRepeatedly()
         {
-            IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
+            using IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
 
             driver.Url = xhtmlTestPage;
 
@@ -498,6 +498,107 @@ namespace OpenQA.Selenium
             Assert.That(
                 () => ((IJavaScriptExecutor)driver).ExecuteScript(script),
                 Throws.TypeOf<JavaScriptException>());
+        }
+
+        [Test]
+        [NeedsFreshDriver(IsCreatedAfterTest = true)]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
+        public async Task ShouldBeAbleToAddInitializationScriptAndExecuteOnNewDocument()
+        {
+            const string ScriptValue = "alert('notice')";
+            const string ScriptName = "AlertScript";
+
+            using IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
+
+            var initScript = await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
+
+            Assert.That(initScript, Is.Not.Null);
+            Assert.That(initScript.ScriptSource, Is.EqualTo(ScriptValue));
+            Assert.That(initScript.ScriptName, Is.EqualTo(ScriptName));
+            Assert.That(initScript.ScriptId, Is.Not.Null);
+
+            await jsEngine.StartEventMonitoring();
+
+            driver.Navigate().Refresh();
+            driver.SwitchTo().Alert().Accept();
+
+            Assert.That(jsEngine.InitializationScripts, Does.Contain(initScript));
+            await jsEngine.RemoveInitializationScript(ScriptName);
+
+            driver.Navigate().Refresh();
+            Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
+
+            Assert.That(jsEngine.InitializationScripts, Does.Not.Contain(initScript));
+
+            await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
+
+            driver.Navigate().Refresh();
+            driver.SwitchTo().Alert().Accept();
+            Assert.That(jsEngine.InitializationScripts, Does.Contain(initScript));
+
+            await jsEngine.ClearInitializationScripts();
+
+            driver.Navigate().Refresh();
+            Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
+            Assert.That(jsEngine.InitializationScripts, Is.Empty);
+
+            await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
+            driver.Navigate().Refresh();
+            driver.SwitchTo().Alert().Accept();
+
+            await jsEngine.ClearAll();
+            driver.Navigate().Refresh();
+            Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
+            Assert.That(jsEngine.InitializationScripts, Is.Empty);
+        }
+
+        [Test]
+        [NeedsFreshDriver(IsCreatedAfterTest = true)]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
+        public async Task ShouldBeAbleToAddAndRemoveScriptCallbackBinding()
+        {
+            const string ScriptValue = "alert('Hello world')";
+            const string ScriptName = "alert";
+
+            using IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
+
+            var executedBindings = new List<string>();
+            jsEngine.JavaScriptCallbackExecuted += AddToList;
+            await jsEngine.AddInitializationScript(ScriptName, ScriptValue);
+            await jsEngine.StartEventMonitoring();
+
+            driver.Navigate().Refresh();
+            driver.SwitchTo().Alert().Accept();
+
+            await jsEngine.AddScriptCallbackBinding(ScriptName);
+
+            driver.Navigate().Refresh();
+            Assert.That(() => driver.SwitchTo().Alert().Accept(), Throws.TypeOf<NoAlertPresentException>());
+
+            Assert.That(executedBindings, Does.Contain(ScriptName));
+            int oldCount = executedBindings.Count;
+            driver.Navigate().Refresh();
+
+            Assert.That(executedBindings, Has.Count.GreaterThan(oldCount));
+            Assert.That(jsEngine.ScriptCallbackBindings, Does.Contain(ScriptName));
+            oldCount = executedBindings.Count;
+
+            await jsEngine.RemoveScriptCallbackBinding(ScriptName);
+            Assert.That(jsEngine.ScriptCallbackBindings, Is.Empty);
+            await jsEngine.AddScriptCallbackBinding(ScriptName);
+            Assert.That(jsEngine.ScriptCallbackBindings, Does.Contain(ScriptName));
+            await jsEngine.ClearScriptCallbackBindings();
+            Assert.That(jsEngine.ScriptCallbackBindings, Is.Empty);
+
+            jsEngine.JavaScriptCallbackExecuted -= AddToList;
+            driver.Navigate().Refresh();
+            Assert.That(executedBindings, Has.Count.EqualTo(oldCount));
+
+            void AddToList(object sender, JavaScriptCallbackExecutedEventArgs e) => executedBindings.Add(e.BindingName);
         }
 
         [Test]

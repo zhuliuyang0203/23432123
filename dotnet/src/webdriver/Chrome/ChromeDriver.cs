@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Chrome
 {
     /// <summary>
@@ -60,7 +62,7 @@ namespace OpenQA.Selenium.Chrome
     /// </example>
     public class ChromeDriver : ChromiumDriver
     {
-        private static Dictionary<string, CommandInfo> chromeCustomCommands = new Dictionary<string, CommandInfo>()
+        private static readonly Dictionary<string, CommandInfo> chromeCustomCommands = new Dictionary<string, CommandInfo>()
         {
             { ExecuteCdp, new HttpCommandInfo(HttpCommandInfo.PostCommand, "/session/{sessionId}/goog/cdp/execute") },
             { GetCastSinksCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/goog/cast/get_sinks") },
@@ -83,6 +85,7 @@ namespace OpenQA.Selenium.Chrome
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class using the specified options.
         /// </summary>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(ChromeOptions options)
             : this(ChromeDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -92,6 +95,7 @@ namespace OpenQA.Selenium.Chrome
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class using the specified driver service.
         /// </summary>
         /// <param name="service">The <see cref="ChromeDriverService"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> is <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service)
             : this(service, new ChromeOptions())
         {
@@ -113,6 +117,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="chromeDriverDirectory">The full path to the directory containing ChromeDriver.exe.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options)
             : this(chromeDriverDirectory, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -125,6 +130,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="chromeDriverDirectory">The full path to the directory containing ChromeDriver.exe.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options, TimeSpan commandTimeout)
             : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout)
         {
@@ -136,6 +142,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> used to initialize the driver.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options)
             : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
@@ -147,6 +154,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="service"/> or <paramref name="options"/> are <see langword="null"/>.</exception>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
             : base(service, options, commandTimeout)
         {

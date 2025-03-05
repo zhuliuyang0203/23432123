@@ -140,7 +140,7 @@ namespace OpenQA.Selenium
             // 5-8. Diagonally close (pythagoras sorting, with top row first
             //    because of DOM insertion order)
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight"  }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight" }));
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace OpenQA.Selenium
             // 5-8. Diagonally close (pythagoras sorting, with top row first
             //    because of DOM insertion order)
             var values = seen.Select(element => element.GetDomAttribute("id"));
-            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight"  }));
+            Assert.That(values, Is.EquivalentTo(new List<string> { "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight" }));
         }
 
         [Test]

@@ -20,6 +20,8 @@
 using System.Net;
 using System.Net.Sockets;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
@@ -42,7 +44,7 @@ namespace OpenQA.Selenium.Internal
             {
                 IPEndPoint socketEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 portSocket.Bind(socketEndPoint);
-                socketEndPoint = (IPEndPoint)portSocket.LocalEndPoint;
+                socketEndPoint = (IPEndPoint)portSocket.LocalEndPoint!;
                 listeningPort = socketEndPoint.Port;
             }
             finally

@@ -29,6 +29,11 @@ const NetworkEvent = {
   FETCH_ERROR: 'network.fetchError',
 }
 
+const CacheBehavior = Object.freeze({
+  DEFAULT: 'default',
+  BYPASS: 'bypass',
+})
+
 /**
  * Represents all commands and events of Network module.
  * Described in https://w3c.github.io/webdriver-bidi/#module-network.
@@ -356,6 +361,40 @@ class Network {
   }
 
   /**
+   * Sets the cache behavior for network requests.
+   *
+   * @param {string} behavior - The cache behavior ("default" or "bypass")
+   * @param {Array<string>} [contexts] - Optional array of browsing context IDs
+   * @returns {Promise<void>} A promise that resolves when the cache behavior is set
+   * @throws {Error} If behavior is invalid or context IDs are invalid
+   */
+  async setCacheBehavior(behavior, contexts = null) {
+    if (!Object.values(CacheBehavior).includes(behavior)) {
+      throw new Error(`Cache behavior must be either "${CacheBehavior.DEFAULT}" or "${CacheBehavior.BYPASS}"`)
+    }
+
+    const command = {
+      method: 'network.setCacheBehavior',
+      params: {
+        cacheBehavior: behavior,
+      },
+    }
+
+    if (contexts !== null) {
+      if (
+        !Array.isArray(contexts) ||
+        contexts.length === 0 ||
+        contexts.some((c) => typeof c !== 'string' || c.trim() === '')
+      ) {
+        throw new Error('Contexts must be an array of non-empty strings')
+      }
+      command.params.contexts = contexts
+    }
+
+    await this.bidi.send(command)
+  }
+
+  /**
    * Unsubscribes from network events for all browsing contexts.
    * @returns {Promise<void>} A promise that resolves when the network connection is closed.
    */
@@ -389,4 +428,4 @@ async function getNetworkInstance(driver, browsingContextIds = null) {
   return instance
 }
 
-module.exports = getNetworkInstance
+module.exports = { Network: getNetworkInstance, CacheBehavior }

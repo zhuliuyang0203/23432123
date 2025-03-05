@@ -17,10 +17,13 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
+
+#nullable enable
 
 namespace OpenQA.Selenium.DevTools
 {
@@ -32,9 +35,10 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Initializes a new instance of the DevToolsCommandData class.
         /// </summary>
-        /// <param name="commandId">The ID of the commmand execution.</param>
+        /// <param name="commandId">The ID of the command execution.</param>
         /// <param name="commandName">The method name of the DevTools command.</param>
         /// <param name="commandParameters">The parameters of the DevTools command.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
         public DevToolsCommandData(long commandId, string commandName, JsonNode commandParameters)
             : this(commandId, null, commandName, commandParameters)
         {
@@ -43,15 +47,16 @@ namespace OpenQA.Selenium.DevTools
         /// <summary>
         /// Initializes a new instance of the DevToolsCommandData class.
         /// </summary>
-        /// <param name="commandId">The ID of the commmand execution.</param>
+        /// <param name="commandId">The ID of the command execution.</param>
         /// <param name="sessionId">The session ID of the current command execution.</param>
         /// <param name="commandName">The method name of the DevTools command.</param>
         /// <param name="commandParameters">The parameters of the DevTools command.</param>
-        public DevToolsCommandData(long commandId, string sessionId, string commandName, JsonNode commandParameters)
+        /// <exception cref="ArgumentNullException">If <paramref name="commandName"/> is <see langword="null"/>.</exception>
+        public DevToolsCommandData(long commandId, string? sessionId, string commandName, JsonNode commandParameters)
         {
             CommandId = commandId;
             SessionId = sessionId;
-            CommandName = commandName;
+            CommandName = commandName ?? throw new ArgumentNullException(nameof(commandName));
             CommandParameters = commandParameters;
             SyncEvent = new ManualResetEventSlim(false);
         }
@@ -61,7 +66,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         [JsonPropertyName("sessionId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string SessionId { get; }
+        public string? SessionId { get; }
 
         /// <summary>
         /// Gets the numeric ID of the command execution.

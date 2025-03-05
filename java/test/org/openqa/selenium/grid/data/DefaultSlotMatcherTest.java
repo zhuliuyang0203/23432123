@@ -68,6 +68,31 @@ class DefaultSlotMatcherTest {
   }
 
   @Test
+  void fullMatchExtensionCaps() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "firefox",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "se:downloadsEnabled",
+            true,
+            "moz:debuggerAddress",
+            "127.0.0.1:34959");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "firefox",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "se:downloadsEnabled",
+            true,
+            "moz:debuggerAddress",
+            true);
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
   void fullMatchWithTestMetadata() {
     Capabilities stereotype =
         new ImmutableCapabilities(
