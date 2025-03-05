@@ -1,4 +1,6 @@
 load("@contrib_rules_jvm//java:defs.bzl", "spotbugs_config")
+load("@rules_java//java:java_library.bzl", "java_library")
+load("@rules_java//java:java_plugin.bzl", "java_plugin")
 load(":defs.bzl", "artifact")
 
 exports_files(
