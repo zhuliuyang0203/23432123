@@ -105,6 +105,7 @@ test --test_env=JRUBY_OPTS="--dev"
 
 test:windows --test_env=PATH
 test:windows --test_env=LOCALAPPDATA
+test:windows --test_env=PROCESSOR_ARCHITECTURE
 test:windows --test_env=PROGRAMFILES="C:\\Program Files"
 test:windows --test_env=PROGRAMFILES(X86)="C:\\Program Files (x86)"
 
