@@ -86,11 +86,11 @@ public class ChromeDriver extends ChromiumDriver {
   public ChromeDriver(
       ChromeDriverService service, ChromeOptions options, ClientConfig clientConfig) {
     super(
-      generateExecutor(service, options, clientConfig),
-      options,
-      ChromeOptions.CAPABILITY,
-      (caps, method) -> new AddHasCasting().getImplementation(caps, method),
-      (caps, method) -> new AddHasCdp().getImplementation(caps, method));
+        generateExecutor(service, options, clientConfig),
+        options,
+        ChromeOptions.CAPABILITY,
+        (caps, method) -> new AddHasCasting().getImplementation(caps, method),
+        (caps, method) -> new AddHasCdp().getImplementation(caps, method));
   }
 
   private static ChromeDriverCommandExecutor generateExecutor(

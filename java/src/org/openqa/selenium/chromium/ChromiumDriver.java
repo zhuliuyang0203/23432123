@@ -108,11 +108,11 @@ public class ChromiumDriver extends RemoteWebDriver
   private final Map<Integer, ScriptKey> scriptKeys = new HashMap<>();
 
   protected ChromiumDriver(
-    CommandExecutor commandExecutor,
-    Capabilities capabilities,
-    String capabilityKey,
-    BiFunction<Capabilities, ExecuteMethod, HasCasting> createCasting,
-    BiFunction<Capabilities, ExecuteMethod, HasCdp> createCdp) {
+      CommandExecutor commandExecutor,
+      Capabilities capabilities,
+      String capabilityKey,
+      BiFunction<Capabilities, ExecuteMethod, HasCasting> createCasting,
+      BiFunction<Capabilities, ExecuteMethod, HasCdp> createCdp) {
     super(commandExecutor, capabilities);
     locationContext = new RemoteLocationContext(getExecuteMethod());
     webStorage = new RemoteWebStorage(getExecuteMethod());

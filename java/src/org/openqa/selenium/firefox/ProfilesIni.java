@@ -139,7 +139,8 @@ public class ProfilesIni {
                   "{0}/Library/Application Support/Firefox", System.getProperty("user.home")));
 
     } else {
-      appData = new File(MessageFormat.format("{0}/.mozilla/firefox", System.getProperty("user.home")));
+      appData =
+          new File(MessageFormat.format("{0}/.mozilla/firefox", System.getProperty("user.home")));
     }
 
     if (!appData.exists()) {
