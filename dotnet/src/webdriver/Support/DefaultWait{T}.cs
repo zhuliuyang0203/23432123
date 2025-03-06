@@ -24,8 +24,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
@@ -44,7 +42,7 @@ namespace OpenQA.Selenium.Support.UI
         /// </summary>
         /// <param name="input">The input value to pass to the evaluated conditions.</param>
         public DefaultWait(T input)
-            : this(input, new SystemClock())
+            : this(input, SystemClock.Instance)
         {
         }
 

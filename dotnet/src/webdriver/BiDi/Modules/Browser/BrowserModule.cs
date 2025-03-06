@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 public sealed class BrowserModule(Broker broker) : Module(broker)
@@ -47,5 +45,10 @@ public sealed class BrowserModule(Broker broker) : Module(broker)
         var @params = new RemoveUserContextCommandParameters(userContext);
 
         await Broker.ExecuteCommandAsync(new RemoveUserContextCommand(@params), options).ConfigureAwait(false);
+    }
+
+    public async Task<GetClientWindowsResult> GetClientWindowsAsync(GetClientWindowsOptions? options = null)
+    {
+        return await Broker.ExecuteCommandAsync<GetClientWindowsCommand, GetClientWindowsResult>(new(), options).ConfigureAwait(false);
     }
 }

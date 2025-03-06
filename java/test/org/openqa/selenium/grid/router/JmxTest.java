@@ -64,7 +64,7 @@ import org.openqa.selenium.remote.tracing.Tracer;
 
 class JmxTest {
 
-  private static final Logger LOG = Logger.getLogger(LocalNode.class.getName());
+  private static final Logger LOG = Logger.getLogger(JmxTest.class.getName());
 
   private final Capabilities CAPS = new ImmutableCapabilities("browserName", "cheese");
   private final MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();

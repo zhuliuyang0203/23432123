@@ -58,7 +58,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 {
                     var primitiveType = typeInfo.TypeName;
 
-                    if (typeDefinition.Optional && typeInfo.ByRef)
+                    if (typeDefinition.Optional)
                     {
                         primitiveType += "?";
                     }
@@ -70,8 +70,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
                     return primitiveType;
                 }
+
                 mappedType = $"{typeInfo.Namespace}.{typeInfo.TypeName}";
-                if (typeDefinition.Optional && typeInfo.ByRef)
+                if (typeDefinition.Optional)
                 {
                     mappedType += "?";
                 }
@@ -79,7 +80,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             else if (knownTypes.TryGetValue($"{domainDefinition.Name}.{type}", out typeInfo))
             {
                 mappedType = typeInfo.TypeName;
-                if (typeInfo.ByRef && typeDefinition.Optional)
+                if (typeDefinition.Optional)
                 {
                     mappedType += "?";
                 }
@@ -89,15 +90,15 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                 switch (type)
                 {
                     case "number":
-                        mappedType = typeDefinition.Optional ? "double?" : "double";
+                        mappedType = "double";
                         break;
 
                     case "integer":
-                        mappedType = typeDefinition.Optional ? "long?" : "long";
+                        mappedType = "long";
                         break;
 
                     case "boolean":
-                        mappedType = typeDefinition.Optional ? "bool?" : "bool";
+                        mappedType = "bool";
                         break;
 
                     case "string":
@@ -115,11 +116,16 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
                     case "array":
                         var items = typeDefinition.Items ?? throw new InvalidOperationException("Type definition was type array but has no Items");
-                        mappedType = GetTypeMappingForType(items, domainDefinition, knownTypes, true);
+                        mappedType = GetTypeMappingForType(items, domainDefinition, knownTypes, isArray: true);
                         break;
 
                     default:
                         throw new InvalidOperationException($"Unmapped data type: {type}");
+                }
+
+                if (typeDefinition.Optional)
+                {
+                    mappedType += "?";
                 }
             }
 

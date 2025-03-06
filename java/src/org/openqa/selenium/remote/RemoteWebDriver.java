@@ -651,9 +651,9 @@ public class RemoteWebDriver
   }
 
   /**
-   * Retrieves the downloadable files as a map of file names and their corresponding URLs.
+   * Retrieves the names of the downloadable files.
    *
-   * @return A map containing file names as keys and URLs as values.
+   * @return A list containing the names of the downloadable files.
    * @throws WebDriverException if capability to enable downloads is not set
    */
   @Override

@@ -26,6 +26,10 @@ module Selenium
 
         def continue_with_auth: (String request_id, String username, String password) -> Hash[nil, nil]
 
+        def provide_response: -> Hash[nil, nil]
+
+        def set_cache_behavior: (String behavior, Array[BrowsingContext]) -> Hash[nil, nil]
+
         def on: (Symbol event) { (?) -> untyped } -> Hash[nil, nil]
       end
     end

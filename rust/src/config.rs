@@ -18,8 +18,8 @@
 use crate::config::OS::{LINUX, MACOS, WINDOWS};
 use crate::shell::run_shell_command_by_os;
 use crate::{
-    default_cache_folder, format_one_arg, path_to_string, Command, REQUEST_TIMEOUT_SEC,
-    UNAME_COMMAND,
+    default_cache_folder, format_one_arg, path_to_string, Command, ENV_PROCESSOR_ARCHITECTURE,
+    REQUEST_TIMEOUT_SEC, UNAME_COMMAND,
 };
 use crate::{ARCH_AMD64, ARCH_ARM64, ARCH_X86, TTL_SEC, WMIC_COMMAND_OS};
 use anyhow::anyhow;
@@ -69,11 +69,14 @@ impl ManagerConfig {
 
         let self_os = OS;
         let self_arch = if WINDOWS.is(self_os) {
-            let wmic_command = Command::new_single(WMIC_COMMAND_OS.to_string());
-            let wmic_output = run_shell_command_by_os(self_os, wmic_command).unwrap_or_default();
-            if wmic_output.contains("32") {
+            let mut architecture = env::var(ENV_PROCESSOR_ARCHITECTURE).unwrap_or_default();
+            if architecture.is_empty() {
+                let get_os_command = Command::new_single(WMIC_COMMAND_OS.to_string());
+                architecture = run_shell_command_by_os(self_os, get_os_command).unwrap_or_default();
+            }
+            if architecture.contains("32") {
                 ARCH_X86.to_string()
-            } else if wmic_output.contains("ARM") {
+            } else if architecture.contains("ARM") {
                 ARCH_ARM64.to_string()
             } else {
                 ARCH_AMD64.to_string()

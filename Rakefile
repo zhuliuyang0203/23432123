@@ -99,7 +99,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v131:v131.publish
   //java/src/org/openqa/selenium/devtools/v132:v132.publish
-  //java/src/org/openqa/selenium/devtools/v130:v130.publish
+  //java/src/org/openqa/selenium/devtools/v133:v133.publish
   //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
@@ -471,7 +471,7 @@ namespace :node do
 
   desc 'Update JavaScript changelog'
   task :changelog do
-    header = "## #{node_version}"
+    header = "## #{node_version}\n"
     update_changelog(node_version, 'javascript', 'javascript/node/selenium-webdriver/',
                      'javascript/node/selenium-webdriver/CHANGES.md', header)
   end
@@ -790,7 +790,7 @@ namespace :dotnet do
       sh 'docfx dotnet/docs/docfx.json'
     rescue StandardError
       case $CHILD_STATUS.exitstatus
-      when 130
+      when 133
         raise 'Ensure the dotnet/tools directory is added to your PATH environment variable (e.g., `~/.dotnet/tools`)'
       when 255
         puts '.NET documentation build failed, likely because of DevTools namespacing. This is ok; continuing'
@@ -1110,7 +1110,11 @@ namespace :all do
              'rb/lib/selenium/webdriver/version.rb',
              'rb/CHANGES',
              'rb/Gemfile.lock',
-             'rust/CHANGELOG.md'])
+             'rust/CHANGELOG.md',
+             'rust/BUILD.bazel',
+             'rust/Cargo.Bazel.lock',
+             'rust/Cargo.toml',
+             'rust/Cargo.lock'])
   end
 
   desc 'Update all versions'
@@ -1122,6 +1126,7 @@ namespace :all do
     Rake::Task['node:version'].invoke(version)
     Rake::Task['py:version'].invoke(version)
     Rake::Task['dotnet:version'].invoke(version)
+    Rake::Task['rust:version'].invoke(version)
   end
 end
 
@@ -1186,7 +1191,11 @@ end
 
 def update_changelog(version, language, path, changelog, header)
   tag = previous_tag(version, language)
-  log = `git --no-pager log #{tag}...HEAD --pretty=format:"--> %B" --reverse #{path}`
+  log = if language == 'javascript'
+          `git --no-pager log #{tag}...HEAD --pretty=format:"- %s" --reverse #{path}`
+        else
+          `git --no-pager log #{tag}...HEAD --pretty=format:"* %s" --reverse #{path}`
+        end
   commits = log.split('>>>').map { |entry|
     lines = entry.split("\n")
     lines.reject! { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }

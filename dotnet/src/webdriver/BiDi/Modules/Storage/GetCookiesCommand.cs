@@ -23,19 +23,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
 internal class GetCookiesCommand(GetCookiesCommandParameters @params)
     : Command<GetCookiesCommandParameters>(@params, "storage.getCookies");
 
-internal record GetCookiesCommandParameters : CommandParameters
-{
-    public CookieFilter? Filter { get; set; }
-
-    public PartitionDescriptor? Partition { get; set; }
-}
+internal record GetCookiesCommandParameters(CookieFilter? Filter, PartitionDescriptor? Partition) : CommandParameters;
 
 public record GetCookiesOptions : CommandOptions
 {

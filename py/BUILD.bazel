@@ -62,13 +62,13 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.29.0.202501231718"
+SE_VERSION = "4.30.0.202502201302"
 
 BROWSER_VERSIONS = [
     "v85",
     "v131",
     "v132",
-    "v130",
+    "v133",
 ]
 
 TEST_DEPS = [
@@ -520,10 +520,13 @@ py_test_suite(
 py_test_suite(
     name = "test-firefox",
     size = "large",
-    srcs = glob([
-        "test/selenium/webdriver/marionette/**/*.py",
-        "test/selenium/webdriver/firefox/**/*.py",
-    ]),
+    srcs = glob(
+        [
+            "test/selenium/webdriver/marionette/**/*.py",
+            "test/selenium/webdriver/firefox/**/*.py",
+        ],
+        exclude = ["test/selenium/webdriver/common/devtools_tests.py"],
+    ),
     args = [
         "--instafail",
     ] + BROWSERS["firefox"]["args"],

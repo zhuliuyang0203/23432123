@@ -32,7 +32,6 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -245,7 +244,7 @@ public abstract class Node implements HasReadyState, Routable {
     throw new UnsupportedOperationException();
   }
 
-  public TemporaryFilesystem getDownloadsFilesystem(UUID uuid) throws IOException {
+  public TemporaryFilesystem getDownloadsFilesystem(SessionId id) throws IOException {
     throw new UnsupportedOperationException();
   }
 

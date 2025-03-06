@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication;
 
 public abstract class Command

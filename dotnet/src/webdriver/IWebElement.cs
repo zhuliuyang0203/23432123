@@ -104,7 +104,6 @@ namespace OpenQA.Selenium
         /// <see cref="Keys"/>.</remarks>
         /// <seealso cref="Keys"/>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void SendKeys(string text);
 
@@ -134,7 +133,6 @@ namespace OpenQA.Selenium
         /// simulate a users to accidentally missing the target when clicking.
         /// </para>
         /// </remarks>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         void Click();
 
@@ -172,7 +170,7 @@ namespace OpenQA.Selenium
         /// </list>
         /// </remarks>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        string GetAttribute(string attributeName);
+        string? GetAttribute(string attributeName);
 
         /// <summary>
         /// Gets the value of a declared HTML attribute of this element.
@@ -187,7 +185,7 @@ namespace OpenQA.Selenium
         /// of an IDL property of the element, either use the <see cref="GetAttribute(string)"/>
         /// method or the <see cref="GetDomProperty(string)"/> method.
         /// </remarks>
-        string GetDomAttribute(string attributeName);
+        string? GetDomAttribute(string attributeName);
 
         /// <summary>
         /// Gets the value of a JavaScript property of this element.
@@ -196,7 +194,7 @@ namespace OpenQA.Selenium
         /// <returns>The JavaScript property's current value. Returns a <see langword="null"/> if the
         /// value is not set or the property does not exist.</returns>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        string GetDomProperty(string propertyName);
+        string? GetDomProperty(string propertyName);
 
         /// <summary>
         /// Gets the value of a CSS property of this element.

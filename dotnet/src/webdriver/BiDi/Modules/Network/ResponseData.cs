@@ -20,8 +20,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public record ResponseData(string Url,

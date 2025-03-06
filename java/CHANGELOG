@@ -1,3 +1,20 @@
+v4.29.0
+======
+* Add CDP for Chrome 133 and remove 130
+* [java] Ensure purging dead nodes service interval is configurable (#15175)
+* [java] Ensure Selenium logging options are respected if java logging properties are not set (#15197)
+* [java] Do not enable CDP deprecation warning if BiDi enabled (#15170)
+* [java] Remove Firefox CDP (#15200)
+* [java] Close the HttpClient if possible
+* [java] Avoid augmenting CDP for Firefox (#15271)
+* [java] Remove deprecated non-w3c compliant NetworkConnection interface (#15270)
+* [java] Avoid downloading not needed browsers #15261
+* [java] Fix return type and docstring for `getDownloadableFiles` (#15293)
+* [java] Refine logger initialization with correct class literal (#15289)
+* [java][bidi] Implement getClientWindows method (#14869)
+* [grid] Add default sessionTimeout to NodeStatus to increase backward compatibility (#15229)
+* [grid] Node flag `register-shutdown-on-failure` (#15297)
+
 v4.28.1
 ======
 * [java]: Add Locale.ROOT to avoid port formatting issues for all drivers (#15121)

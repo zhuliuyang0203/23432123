@@ -20,7 +20,7 @@
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
 const { suite } = require('../../lib/test')
-const Network = require('selenium-webdriver/bidi/network')
+const { Network } = require('selenium-webdriver/bidi/network')
 const { AddInterceptParameters } = require('selenium-webdriver/bidi/addInterceptParameters')
 const { InterceptPhase } = require('selenium-webdriver/bidi/interceptPhase')
 const { UrlPattern } = require('selenium-webdriver/bidi/urlPattern')

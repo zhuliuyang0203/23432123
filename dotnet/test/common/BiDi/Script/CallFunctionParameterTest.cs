@@ -46,7 +46,7 @@ class CallFunctionParameterTest : BiDiTestFixture
     [Test]
     public async Task CanEvaluateScriptWithUserActivationTrue()
     {
-        await context.Script.EvaluateAsync("window.open();", true, new() { UserActivation = true });
+        await context.Script.EvaluateAsync("window.open();", true);
 
         var res = await context.Script.CallFunctionAsync<bool>("""
             () => navigator.userActivation.isActive && navigator.userActivation.hasBeenActive

@@ -21,8 +21,6 @@ using OpenQA.Selenium.Chromium;
 using System;
 using System.Globalization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Chrome
 {
     /// <summary>

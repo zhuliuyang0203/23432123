@@ -19,8 +19,6 @@
 
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public record UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, UserPromptType Type, string Message)

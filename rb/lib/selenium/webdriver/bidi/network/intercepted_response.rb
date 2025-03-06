@@ -25,11 +25,14 @@ module Selenium
   module WebDriver
     class BiDi
       class InterceptedResponse < InterceptedItem
-        attr_accessor :reason
+        attr_accessor :reason, :status
+        attr_reader :body
 
         def initialize(network, request)
           super
           @reason = nil
+          @status = nil
+          @body = nil
         end
 
         def continue
@@ -38,7 +41,19 @@ module Selenium
             cookies: cookies.as_json,
             headers: headers.as_json,
             credentials: credentials.as_json,
-            reason: reason
+            reason: reason,
+            status: status
+          )
+        end
+
+        def provide_response
+          network.provide_response(
+            id: id,
+            cookies: cookies.as_json,
+            headers: headers.as_json,
+            body: body,
+            reason: reason,
+            status: status
           )
         end
 
@@ -52,6 +67,13 @@ module Selenium
 
         def cookies(cookies = {})
           @cookies ||= Cookies.new(cookies)
+        end
+
+        def body=(value)
+          @body = {
+            type: 'string',
+            value: value.to_json
+          }
         end
       end
     end # BiDi

@@ -20,21 +20,12 @@
 using OpenQA.Selenium.BiDi.Communication;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
     : Command<CaptureScreenshotCommandParameters>(@params, "browsingContext.captureScreenshot");
 
-internal record CaptureScreenshotCommandParameters(BrowsingContext Context) : CommandParameters
-{
-    public Origin? Origin { get; set; }
-
-    public ImageFormat? Format { get; set; }
-
-    public ClipRectangle? Clip { get; set; }
-}
+internal record CaptureScreenshotCommandParameters(BrowsingContext Context, Origin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
 
 public record CaptureScreenshotOptions : CommandOptions
 {

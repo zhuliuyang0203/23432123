@@ -26,17 +26,18 @@ namespace OpenQA.Selenium
     /// <summary>
     /// Provides a mechanism for Navigating with the driver.
     /// </summary>
-    internal class Navigator : INavigation
+    internal sealed class Navigator : INavigation
     {
-        private WebDriver driver;
+        private readonly WebDriver driver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Navigator"/> class
         /// </summary>
         /// <param name="driver">Driver in use</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is null.</exception>
         public Navigator(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace OpenQA.Selenium
         /// Navigate to a url.
         /// </summary>
         /// <param name="url">String of where you want the browser to go to</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public void GoToUrl(string url)
         {
             Task.Run(async delegate
@@ -96,6 +98,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">String of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public async Task GoToUrlAsync(string url)
         {
             if (url == null)
@@ -114,6 +117,7 @@ namespace OpenQA.Selenium
         /// Navigate to a url.
         /// </summary>
         /// <param name="url">Uri object of where you want the browser to go.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public void GoToUrl(Uri url)
         {
             Task.Run(async delegate
@@ -127,6 +131,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="url">Uri object of where you want the browser to go.</param>
         /// <returns>A task object representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="url"/> is <see langword="null"/>.</exception>
         public async Task GoToUrlAsync(Uri url)
         {
             if (url == null)

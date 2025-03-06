@@ -141,24 +141,29 @@ suite(
         },
       )
 
-      it('can listen to fragment navigated event', async function () {
-        let navigationInfo = null
-        const browsingConextInspector = await BrowsingContextInspector(driver)
+      ignore(env.browsers(Browser.EDGE, Browser.CHROME)).it(
+        'can listen to fragment navigated event',
+        async function () {
+          let navigationInfo = null
+          const browsingConextInspector = await BrowsingContextInspector(driver)
 
-        const browsingContext = await BrowsingContext(driver, {
-          browsingContextId: await driver.getWindowHandle(),
-        })
-        await browsingContext.navigate(Pages.linkedImage, 'complete')
+          const browsingContext = await BrowsingContext(driver, {
+            browsingContextId: await driver.getWindowHandle(),
+          })
+          await browsingContext.navigate(Pages.linkedImage, 'complete')
 
-        await browsingConextInspector.onFragmentNavigated((entry) => {
-          navigationInfo = entry
-        })
+          await browsingConextInspector.onFragmentNavigated((entry) => {
+            navigationInfo = entry
+          })
 
-        await browsingContext.navigate(Pages.linkedImage + '#linkToAnchorOnThisPage', 'complete')
+          await browsingContext.navigate(Pages.linkedImage + '#linkToAnchorOnThisPage', 'complete')
 
-        assert.equal(navigationInfo.browsingContextId, browsingContext.id)
-        assert(navigationInfo.url.includes('linkToAnchorOnThisPage'))
-      })
+          // Chrome/Edge do not return the window's browsing context id as per the spec.
+          // This assertion fails.
+          assert.equal(navigationInfo.browsingContextId, browsingContext.id)
+          assert(navigationInfo.url.includes('linkToAnchorOnThisPage'))
+        },
+      )
 
       ignore(env.browsers(Browser.EDGE, Browser.CHROME)).it(
         'can listen to user prompt opened event',

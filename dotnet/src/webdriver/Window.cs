@@ -27,7 +27,7 @@ namespace OpenQA.Selenium
     /// <summary>
     /// Defines the interface through which the user can manipulate the browser window.
     /// </summary>
-    internal class Window : IWindow
+    internal sealed class Window : IWindow
     {
         private WebDriver driver;
 
@@ -37,7 +37,7 @@ namespace OpenQA.Selenium
         /// <param name="driver">Instance of the driver currently in use</param>
         public Window(WebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
         /// <summary>
@@ -48,12 +48,12 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse;
-                commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
+                Response commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
 
-                Dictionary<string, object> rawPosition = (Dictionary<string, object>)commandResponse.Value;
+                Dictionary<string, object?> rawPosition = (Dictionary<string, object?>)commandResponse.Value!;
                 int x = Convert.ToInt32(rawPosition["x"], CultureInfo.InvariantCulture);
                 int y = Convert.ToInt32(rawPosition["y"], CultureInfo.InvariantCulture);
+
                 return new Point(x, y);
             }
 
@@ -74,11 +74,12 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse;
-                commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
-                Dictionary<string, object> rawPosition = (Dictionary<string, object>)commandResponse.Value;
+                Response commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
+
+                Dictionary<string, object?> rawPosition = (Dictionary<string, object?>)commandResponse.Value!;
                 int height = Convert.ToInt32(rawPosition["height"], CultureInfo.InvariantCulture);
                 int width = Convert.ToInt32(rawPosition["width"], CultureInfo.InvariantCulture);
+
                 return new Size(width, height);
             }
 
@@ -96,8 +97,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Maximize()
         {
-            Dictionary<string, object> parameters = null;
-            this.driver.InternalExecute(DriverCommand.MaximizeWindow, parameters);
+            this.driver.InternalExecute(DriverCommand.MaximizeWindow, null);
         }
 
         /// <summary>
@@ -105,8 +105,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Minimize()
         {
-            Dictionary<string, object> parameters = null;
-            this.driver.InternalExecute(DriverCommand.MinimizeWindow, parameters);
+            this.driver.InternalExecute(DriverCommand.MinimizeWindow, null);
         }
 
         /// <summary>
@@ -114,8 +113,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void FullScreen()
         {
-            Dictionary<string, object> parameters = null;
-            this.driver.InternalExecute(DriverCommand.FullScreenWindow, parameters);
+            this.driver.InternalExecute(DriverCommand.FullScreenWindow, null);
         }
     }
 }
