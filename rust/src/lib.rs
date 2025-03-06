@@ -1679,11 +1679,15 @@ fn get_index_version(full_version: &str, index: usize) -> Result<String, Error> 
 // Exported functions
 // ----------------------------------------------------------
 
-// this just an example how to expose function for external usage
-#[no_mangle]
-pub extern "C" fn get_test() -> *mut std::os::raw::c_char {
-    let sm = get_manager_by_browser("chrome".to_string()).unwrap();
+// this is callback function to be called each time when rust wants to send log data
+type LogCallback = extern "C" fn(level: std::ffi::c_int, message: *const std::os::raw::c_char);
 
-    let dp = std::ffi::CString::new(sm.get_driver_path_in_cache().unwrap().display().to_string()).unwrap();
-    dp.into_raw() // Transfer ownership to C
+// this is just an example how to expose function for external usage
+#[no_mangle]
+pub extern "C" fn get_dummy_webdriver_path(driver_name: *const std::ffi::c_char, log: LogCallback) -> *mut std::ffi::c_char {
+    for i in 1..6 {
+        log(i, std::ffi::CString::new("Hello, I am logging message").unwrap().as_ptr());
+    }
+
+    return std::ffi::CString::new("This is dummy driver path").unwrap().into_raw();
 }
