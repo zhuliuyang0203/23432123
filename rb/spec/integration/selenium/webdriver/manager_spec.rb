@@ -253,6 +253,16 @@ module Selenium
           expect { driver.manage.cookie_named('non-existent') }
             .to raise_exception(Error::NoSuchCookieError)
         end
+
+        it 'throws an error when cookie name is an empty string' do
+          expect { driver.manage.delete_cookie('') }
+            .to raise_error(ArgumentError, /Cookie name cannot be null or empty/)
+        end
+
+        it 'throws an error when cookie name is nil' do
+          expect { driver.manage.delete_cookie(nil) }
+            .to raise_error(ArgumentError, /Cookie name cannot be null or empty/)
+        end
       end
     end # Options
   end # WebDriver
