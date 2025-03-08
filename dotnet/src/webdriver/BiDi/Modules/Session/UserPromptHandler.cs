@@ -1,4 +1,4 @@
-// <copyright file="CapabilitiesRequest.cs" company="Selenium Committers">
+// <copyright file="UserPromptHandler.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,13 +17,26 @@
 // under the License.
 // </copyright>
 
-using System.Collections.Generic;
-
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-public record CapabilitiesRequest
+public record UserPromptHandler
 {
-    public CapabilityRequest? AlwaysMatch { get; set; }
+    public UserPromptHandlerType? Alert { get; set; }
 
-    public IEnumerable<CapabilityRequest>? FirstMatch { get; set; }
+    public UserPromptHandlerType? BeforeUnload { get; set; }
+
+    public UserPromptHandlerType? Confirm { get; set; }
+
+    public UserPromptHandlerType? Default { get; set; }
+
+    public UserPromptHandlerType? File { get; set; }
+
+    public UserPromptHandlerType? Prompt { get; set; }
+}
+
+public enum UserPromptHandlerType
+{
+    Accept,
+    Dismiss,
+    Ignore
 }
