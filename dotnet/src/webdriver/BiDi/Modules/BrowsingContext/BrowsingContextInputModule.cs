@@ -34,4 +34,9 @@ public class BrowsingContextInputModule(BrowsingContext context, InputModule inp
     {
         return inputModule.ReleaseActionsAsync(context, options);
     }
+
+    public Task SetFiles(Script.ISharedReference element, IEnumerable<string> files, SetFilesOptions? options = null)
+    {
+        return inputModule.SetFilesAsync(context, element, files, options);
+    }
 }
