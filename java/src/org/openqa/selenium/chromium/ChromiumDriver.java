@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -62,6 +63,7 @@ import org.openqa.selenium.json.TypeToken;
 import org.openqa.selenium.logging.EventType;
 import org.openqa.selenium.logging.HasLogEvents;
 import org.openqa.selenium.remote.CommandExecutor;
+import org.openqa.selenium.remote.ExecuteMethod;
 import org.openqa.selenium.remote.FileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.html5.RemoteLocationContext;
@@ -106,7 +108,11 @@ public class ChromiumDriver extends RemoteWebDriver
   private final Map<Integer, ScriptKey> scriptKeys = new HashMap<>();
 
   protected ChromiumDriver(
-      CommandExecutor commandExecutor, Capabilities capabilities, String capabilityKey) {
+      CommandExecutor commandExecutor,
+      Capabilities capabilities,
+      String capabilityKey,
+      BiFunction<Capabilities, ExecuteMethod, HasCasting> createCasting,
+      BiFunction<Capabilities, ExecuteMethod, HasCdp> createCdp) {
     super(commandExecutor, capabilities);
     locationContext = new RemoteLocationContext(getExecuteMethod());
     webStorage = new RemoteWebStorage(getExecuteMethod());
@@ -114,6 +120,8 @@ public class ChromiumDriver extends RemoteWebDriver
     networkConditions =
         new AddHasNetworkConditions().getImplementation(getCapabilities(), getExecuteMethod());
     launch = new AddHasLaunchApp().getImplementation(getCapabilities(), getExecuteMethod());
+    casting = createCasting.apply(getCapabilities(), getExecuteMethod());
+    cdp = createCdp.apply(getCapabilities(), getExecuteMethod());
 
     HttpClient.Factory factory = HttpClient.Factory.createDefault();
     Capabilities originalCapabilities = super.getCapabilities();
