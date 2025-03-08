@@ -191,7 +191,7 @@ namespace OpenQA.Selenium.DevTools.V133
 
             var commandSettings = new FulfillRequestCommandSettings()
             {
-                RequestId = requestData.RequestId,
+                RequestId = requestData.RequestId!,
                 ResponseCode = responseData.StatusCode,
             };
 
@@ -232,7 +232,7 @@ namespace OpenQA.Selenium.DevTools.V133
                 throw new ArgumentNullException(nameof(requestData));
             }
 
-            await fetch.ContinueRequest(new ContinueRequestCommandSettings() { RequestId = requestData.RequestId }).ConfigureAwait(false);
+            await fetch.ContinueRequest(new ContinueRequestCommandSettings() { RequestId = requestData.RequestId! }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace OpenQA.Selenium.DevTools.V133
             // If the response is a redirect, retrieving the body will throw an error in CDP.
             if (responseData.StatusCode < 300 || responseData.StatusCode > 399)
             {
-                var bodyResponse = await fetch.GetResponseBody(new Fetch.GetResponseBodyCommandSettings() { RequestId = responseData.RequestId }).ConfigureAwait(false);
+                var bodyResponse = await fetch.GetResponseBody(new Fetch.GetResponseBodyCommandSettings() { RequestId = responseData.RequestId! }).ConfigureAwait(false);
                 if (bodyResponse != null)
                 {
                     if (bodyResponse.Base64Encoded)
@@ -317,7 +317,7 @@ namespace OpenQA.Selenium.DevTools.V133
                 throw new ArgumentNullException(nameof(responseData));
             }
 
-            await fetch.ContinueResponse(new ContinueResponseCommandSettings() { RequestId = responseData.RequestId }).ConfigureAwait(false);
+            await fetch.ContinueResponse(new ContinueResponseCommandSettings() { RequestId = responseData.RequestId! }).ConfigureAwait(false);
         }
 
         private void OnFetchAuthRequired(object? sender, Fetch.AuthRequiredEventArgs e)
