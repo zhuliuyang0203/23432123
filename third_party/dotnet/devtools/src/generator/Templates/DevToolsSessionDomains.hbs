@@ -27,10 +27,7 @@ namespace {{rootNamespace}}
         /// <summary>
         /// Gets the adapter for the {{Name}} domain.
         /// </summary>
-        public {{dehumanize Name}}.{{dehumanize Name}}Adapter {{dehumanize Name}}
-        {
-            get { return m_{{dehumanize Name}}.Value; }
-        }
+        public {{dehumanize Name}}.{{dehumanize Name}}Adapter {{dehumanize Name}} => m_{{dehumanize Name}}.Value;
         
 {{/each}}
         /// <summary>
