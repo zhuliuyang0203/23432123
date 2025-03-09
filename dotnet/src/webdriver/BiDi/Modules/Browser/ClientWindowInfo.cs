@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;

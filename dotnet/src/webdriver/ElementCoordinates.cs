@@ -21,8 +21,6 @@ using OpenQA.Selenium.Interactions.Internal;
 using OpenQA.Selenium.Internal;
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

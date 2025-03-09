@@ -28,8 +28,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -42,7 +40,7 @@ namespace OpenQA.Selenium
         /// </summary>
         protected static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromSeconds(60);
         private IFileDetector fileDetector = new DefaultFileDetector();
-        private readonly NetworkManager network;
+        private NetworkManager network;
         private WebElementFactory elementFactory;
 
         private readonly List<string> registeredCommands = new List<string>();
@@ -75,7 +73,6 @@ namespace OpenQA.Selenium
             }
 
             this.elementFactory = new WebElementFactory(this);
-            this.network = new NetworkManager(this);
             this.registeredCommands.AddRange(DriverCommand.KnownCommands);
 
             if (this is ISupportsLogs)
@@ -200,7 +197,7 @@ namespace OpenQA.Selenium
             set => this.fileDetector = value ?? throw new ArgumentNullException(nameof(value), "FileDetector cannot be null");
         }
 
-        internal INetwork Network => this.network;
+        internal INetwork Network => this.network ??= new NetworkManager(this);
 
         /// <summary>
         /// Gets or sets the factory object used to create instances of <see cref="WebElement"/>

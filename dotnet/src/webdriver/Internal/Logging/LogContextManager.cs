@@ -21,8 +21,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal.Logging
 {
     internal class LogContextManager

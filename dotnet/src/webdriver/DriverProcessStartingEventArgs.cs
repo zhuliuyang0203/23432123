@@ -20,8 +20,6 @@
 using System;
 using System.Diagnostics;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

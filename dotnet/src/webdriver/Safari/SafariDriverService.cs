@@ -25,8 +25,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>

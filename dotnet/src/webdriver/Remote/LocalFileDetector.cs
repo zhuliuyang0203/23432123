@@ -20,8 +20,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>

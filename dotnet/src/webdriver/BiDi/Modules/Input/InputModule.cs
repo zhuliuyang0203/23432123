@@ -21,8 +21,6 @@ using OpenQA.Selenium.BiDi.Communication;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 public sealed class InputModule(Broker broker) : Module(broker)
@@ -39,5 +37,12 @@ public sealed class InputModule(Broker broker) : Module(broker)
         var @params = new ReleaseActionsCommandParameters(context);
 
         await Broker.ExecuteCommandAsync(new ReleaseActionsCommand(@params), options).ConfigureAwait(false);
+    }
+
+    public async Task SetFilesAsync(BrowsingContext.BrowsingContext context, Script.ISharedReference element, IEnumerable<string> files, SetFilesOptions? options = null)
+    {
+        var @params = new SetFilesCommandParameters(context, element, files);
+
+        await Broker.ExecuteCommandAsync(new SetFilesCommand(@params), options).ConfigureAwait(false);
     }
 }

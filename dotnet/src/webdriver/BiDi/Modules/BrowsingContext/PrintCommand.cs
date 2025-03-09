@@ -21,8 +21,6 @@ using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class PrintCommand(PrintCommandParameters @params)

@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Firefox
 {
     /// <summary>

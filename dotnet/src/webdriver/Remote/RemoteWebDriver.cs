@@ -28,8 +28,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>

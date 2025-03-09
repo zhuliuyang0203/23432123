@@ -25,8 +25,6 @@ using System.Threading;
 using System.Text;
 using OpenQA.Selenium.Internal.Logging;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication.Transport;
 
 class WebSocketTransport(Uri _uri) : ITransport, IDisposable

@@ -21,8 +21,6 @@ using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

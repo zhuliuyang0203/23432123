@@ -21,8 +21,6 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.IE
 {
     /// <summary>

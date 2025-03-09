@@ -19,8 +19,6 @@
 
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>

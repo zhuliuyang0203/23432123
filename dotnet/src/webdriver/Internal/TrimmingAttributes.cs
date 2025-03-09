@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 // As per guidance in https://devblogs.microsoft.com/dotnet/creating-aot-compatible-libraries/#targetframeworks
 
 #if !NET8_0_OR_GREATER

@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

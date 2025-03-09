@@ -21,8 +21,6 @@ using OpenQA.Selenium.DevTools.V85.Log;
 using System;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools.V85
 {
     /// <summary>

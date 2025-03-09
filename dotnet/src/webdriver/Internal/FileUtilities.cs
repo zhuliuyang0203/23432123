@@ -23,8 +23,6 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>

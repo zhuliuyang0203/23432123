@@ -183,7 +183,7 @@ maven.install(
         "com.graphql-java:graphql-java:22.3",
         "dev.failsafe:failsafe:3.3.2",
         "io.grpc:grpc-context:1.70.0",
-        "io.lettuce:lettuce-core:6.5.3.RELEASE",
+        "io.lettuce:lettuce-core:6.5.4.RELEASE",
         "io.netty:netty-buffer",
         "io.netty:netty-codec-http",
         "io.netty:netty-codec-http2",
@@ -227,7 +227,7 @@ maven.install(
     ],
     boms = [
         "io.opentelemetry:opentelemetry-bom:1.46.0",
-        "io.netty:netty-bom:4.1.117.Final",
+        "io.netty:netty-bom:4.1.118.Final",
         "org.junit:junit-bom:5.11.4",
     ],
     excluded_artifacts = [

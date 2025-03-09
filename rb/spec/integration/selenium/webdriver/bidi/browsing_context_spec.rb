@@ -115,6 +115,17 @@ module Selenium
             expect(driver.page_source).to include('goodbye')
           end
         end
+
+        it 'activates a browser context' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browsing_context = described_class.new(driver)
+            browsing_context.create
+
+            expect(driver.execute_script('return document.hasFocus();')).to be_falsey
+            browsing_context.activate
+            expect(driver.execute_script('return document.hasFocus();')).to be_truthy
+          end
+        end
       end
     end # BiDi
   end # WebDriver

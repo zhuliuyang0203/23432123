@@ -22,8 +22,6 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-#nullable enable
-
 namespace OpenQA.Selenium.IE
 {
     /// <summary>
