@@ -28,6 +28,8 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(Boolean), "boolean")]
+[JsonDerivedType(typeof(BigInt), "bigint")]
 [JsonDerivedType(typeof(Number), "number")]
 [JsonDerivedType(typeof(String), "string")]
 [JsonDerivedType(typeof(Null), "null")]
