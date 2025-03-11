@@ -798,7 +798,9 @@ pub trait SeleniumManager {
         }
 
         // With the discovered browser version, discover the proper driver version using online endpoints
-        if self.get_driver_version().is_empty() {
+        if self.get_driver_version().is_empty()
+            || (self.is_grid() && self.is_nightly(self.get_driver_version()))
+        {
             match self.discover_driver_version() {
                 Ok(driver_version) => {
                     self.set_driver_version(driver_version);
@@ -1030,7 +1032,7 @@ pub trait SeleniumManager {
         }
 
         let mut release_version = driver_version.to_string();
-        if !driver_version.ends_with('0') {
+        if !driver_version.ends_with('0') && !self.is_nightly(driver_version) {
             // E.g.: version 4.8.1 is shipped within release 4.8.0
             let error_message = format!(
                 "Wrong {} version: '{}'",

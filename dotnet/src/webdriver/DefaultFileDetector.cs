@@ -19,8 +19,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

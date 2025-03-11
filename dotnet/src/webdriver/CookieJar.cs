@@ -21,8 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     internal sealed class CookieJar(WebDriver driver) : ICookieJar

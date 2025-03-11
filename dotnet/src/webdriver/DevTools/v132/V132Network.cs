@@ -24,8 +24,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools.V132
 {
     /// <summary>

@@ -19,8 +19,6 @@
 
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 public abstract record Origin

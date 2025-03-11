@@ -19,8 +19,6 @@
 
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools.V133
 {
     /// <summary>

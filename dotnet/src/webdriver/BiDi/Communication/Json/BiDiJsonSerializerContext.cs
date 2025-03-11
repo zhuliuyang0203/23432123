@@ -170,6 +170,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 
 [JsonSerializable(typeof(Modules.Input.PerformActionsCommand))]
 [JsonSerializable(typeof(Modules.Input.ReleaseActionsCommand))]
+[JsonSerializable(typeof(Modules.Input.SetFilesCommand))]
 [JsonSerializable(typeof(Modules.Input.Pointer.Down), TypeInfoPropertyName = "Input_Pointer_Down")]
 [JsonSerializable(typeof(Modules.Input.Pointer.Up), TypeInfoPropertyName = "Input_Pointer_Up")]
 [JsonSerializable(typeof(Modules.Input.Pointer.Move), TypeInfoPropertyName = "Input_Pointer_Move")]

@@ -25,8 +25,6 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Firefox
 {
     /// <summary>

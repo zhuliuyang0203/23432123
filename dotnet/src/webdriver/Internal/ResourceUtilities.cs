@@ -22,8 +22,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>

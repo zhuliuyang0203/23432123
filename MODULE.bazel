@@ -200,7 +200,6 @@ maven.install(
         "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi",
         "io.opentelemetry:opentelemetry-sdk-testing",
         "io.opentelemetry:opentelemetry-sdk-trace",
-        "io.opentelemetry.semconv:opentelemetry-semconv:1.28.0-alpha",
         "it.ozimov:embedded-redis:0.7.3",
         "net.bytebuddy:byte-buddy:1.15.11",
         "org.htmlunit:htmlunit-core-js:4.7.0",

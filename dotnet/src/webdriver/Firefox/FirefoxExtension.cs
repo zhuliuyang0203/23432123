@@ -25,8 +25,6 @@ using System.IO.Compression;
 using System.Text.Json.Nodes;
 using System.Xml;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Firefox
 {
     /// <summary>

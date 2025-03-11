@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContext

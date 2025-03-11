@@ -20,8 +20,6 @@
 using System.Net;
 using System.Net.Sockets;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal
 {
     /// <summary>
