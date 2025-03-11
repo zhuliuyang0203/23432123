@@ -24,7 +24,7 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters
 {
     /// <summary>
-    /// Serializes and deserializes <see cref="Double"/> into a 
+    /// Serializes and deserializes <see cref="double"/> into a
     /// <see href="https://w3c.github.io/webdriver-bidi/#type-script-PrimitiveProtocolValue">BiDi spec-compliant number value</see>.
     /// </summary>
     internal sealed class BiDiDoubleConverter : JsonConverter<double>
