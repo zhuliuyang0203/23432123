@@ -42,12 +42,6 @@ use crate::shell::{
 use crate::stats::{send_stats_to_plausible, Props};
 use anyhow::anyhow;
 use anyhow::Error;
-// Re-export FFI functionality
-pub use ffi::{
-    WebDriverPathResult,
-    get_dummy_webdriver_path,
-    free_webdriver_path_result
-};
 use reqwest::{Client, Proxy};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -63,7 +57,6 @@ pub mod downloads;
 pub mod edge;
 pub mod files;
 pub mod firefox;
-pub mod ffi;
 pub mod grid;
 pub mod iexplorer;
 pub mod lock;
@@ -74,6 +67,8 @@ pub mod safari;
 pub mod safaritp;
 pub mod shell;
 pub mod stats;
+
+mod ffi;
 
 pub const REQUEST_TIMEOUT_SEC: u64 = 300; // The timeout is applied from when the request starts connecting until the response body has finished
 pub const STABLE: &str = "stable";
