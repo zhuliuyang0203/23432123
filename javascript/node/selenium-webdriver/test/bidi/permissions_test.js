@@ -22,15 +22,14 @@ const { Pages, suite } = require('../../lib/test')
 const { Browser } = require('selenium-webdriver')
 const BrowserBiDi = require('selenium-webdriver/bidi/browser')
 const getScriptManager = require('selenium-webdriver/bidi/scriptManager')
-const { ignore } = require('../../lib/test')
 const { getPermissionInstance, PermissionState } = require('selenium-webdriver/bidi/permissions')
 const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
 const { CreateContextParameters } = require('selenium-webdriver/bidi/createContextParameters')
 
 suite(
   function (env) {
-    ignore(env.browsers(Browser.CHROME)).describe('BiDi Permissions', function () {
-      let driver, permission, browser, script
+    describe('BiDi Permissions', function () {
+      let driver, permission, browser, script, browserName
 
       const GET_GEOLOCATION_PERMISSION =
         "async () => { const perm = await navigator.permissions.query({ name: 'geolocation' }); return perm.state; }"
@@ -41,6 +40,7 @@ suite(
         permission = await getPermissionInstance(driver)
         browser = await BrowserBiDi(driver)
         script = await getScriptManager([], driver)
+        browserName = (await driver.getCapabilities()).getBrowserName().toLowerCase()
       })
 
       afterEach(function () {
@@ -57,7 +57,10 @@ suite(
           true,
           [],
         )
-        assert.strictEqual(initialPermission.result.value, 'prompt')
+
+        // Chrome's default permission state is 'denied', while Firefox uses 'prompt'
+        const expectedDefaultState = ['chrome', 'microsoftedge'].includes(browserName) ? 'denied' : 'prompt'
+        assert.strictEqual(initialPermission.result.value, expectedDefaultState)
 
         const origin = await script.callFunctionInBrowsingContext(context.id, GET_ORIGIN, true, [])
         const originValue = origin.result.value
@@ -78,7 +81,9 @@ suite(
           true,
           [],
         )
-        assert.strictEqual(initialPermission.result.value, 'prompt')
+        // Chrome's default permission state is 'denied', while Firefox uses 'prompt'
+        const expectedDefaultState = ['chrome', 'microsoftedge'].includes(browserName) ? 'denied' : 'prompt'
+        assert.strictEqual(initialPermission.result.value, expectedDefaultState)
 
         const origin = await script.callFunctionInBrowsingContext(context.id, GET_ORIGIN, true, [])
 
@@ -119,13 +124,13 @@ suite(
         const origin = await script.callFunctionInBrowsingContext(context1.id, GET_ORIGIN, true, [])
         const originValue = origin.result.value
 
+        // Get the actual permission states from each context
         const originalTabPermission = await script.callFunctionInBrowsingContext(
           context1.id,
           GET_GEOLOCATION_PERMISSION,
           true,
           [],
         )
-        assert.strictEqual(originalTabPermission.result.value, 'prompt')
 
         const newTabPermission = await script.callFunctionInBrowsingContext(
           context2.id,
@@ -133,18 +138,23 @@ suite(
           true,
           [],
         )
-        assert.strictEqual(newTabPermission.result.value, 'prompt')
 
+        const originalTabState = originalTabPermission.result.value
+        const newTabState = newTabPermission.result.value
+
+        // Set permission only for the user context
         await permission.setPermission({ name: 'geolocation' }, PermissionState.GRANTED, originValue, userContext)
 
+        // Check that the original tab's permission state hasn't changed
         const originalTabUpdatedPermission = await script.callFunctionInBrowsingContext(
           context1.id,
           GET_GEOLOCATION_PERMISSION,
           true,
           [],
         )
-        assert.strictEqual(originalTabUpdatedPermission.result.value, 'prompt')
+        assert.strictEqual(originalTabUpdatedPermission.result.value, originalTabState)
 
+        // Check that the new tab's permission state has been updated to GRANTED
         const newTabUpdatedPermission = await script.callFunctionInBrowsingContext(
           context2.id,
           GET_GEOLOCATION_PERMISSION,
