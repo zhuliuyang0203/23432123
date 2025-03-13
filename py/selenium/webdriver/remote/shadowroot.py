@@ -97,7 +97,7 @@ class ShadowRoot:
 
         Example:
         --------
-        element = driver.find_element(By.ID, 'foo')
+        element = driver.find_elements(By.ID, 'foo')
 
         Returns:
         -------
