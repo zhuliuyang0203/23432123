@@ -31,7 +31,6 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return undefined; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Undefined>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Undefined()));
     }
 
     [Test]
@@ -40,8 +39,26 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return null; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Null>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Null()));
     }
+
+    [Test]
+    public async Task CanCallFunctionAndReturnTrue()
+    {
+        var response = await context.Script.CallFunctionAsync("() => { return true; }", false);
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Boolean>());
+        Assert.That(((RemoteValue.Boolean)response.Result).Value, Is.True);
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndReturnFalse()
+    {
+        var response = await context.Script.CallFunctionAsync("() => { return false; }", false);
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Boolean>());
+        Assert.That(((RemoteValue.Boolean)response.Result).Value, Is.False);
+    }
+
 
     [Test]
     public async Task CanCallFunctionAndReturnEmptyString()
@@ -49,7 +66,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return ''; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.String>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.String(string.Empty)));
+        Assert.That(((RemoteValue.String)response.Result).Value, Is.Empty);
     }
 
     [Test]
@@ -58,7 +75,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return 'whoa'; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.String>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.String("whoa")));
+        Assert.That(((RemoteValue.String)response.Result).Value, Is.EqualTo("whoa"));
     }
 
     [Test]
@@ -89,7 +106,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return 5; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(5)));
+        Assert.That(((RemoteValue.Number)response.Result).Value, Is.EqualTo(5));
     }
 
     [Test]
@@ -98,7 +115,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return -5; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(-5)));
+        Assert.That(((RemoteValue.Number)response.Result).Value, Is.EqualTo(-5));
     }
 
     [Test]
@@ -107,7 +124,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         var response = await context.Script.CallFunctionAsync("() => { return 0; }", false);
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
-        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(0)));
+        Assert.That(((RemoteValue.Number)response.Result).Value, Is.Zero);
     }
 
     [Test]
@@ -118,7 +135,7 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
 
         var actualNumberValue = ((RemoteValue.Number)response.Result).Value;
-        Assert.That(actualNumberValue, Is.EqualTo(0));
+        Assert.That(actualNumberValue, Is.Zero);
         Assert.That(double.IsNegative(actualNumberValue), Is.True);
     }
 
