@@ -30,6 +30,4 @@ public class ScriptEvaluateException(EvaluateResult.Exception evaluateResultExce
     public long ColumNumber => _evaluateResultException.ExceptionDetails.ColumnNumber;
 
     public override string Message => $"{Text}{Environment.NewLine}{_evaluateResultException.ExceptionDetails.StackTrace}";
-
-    public override string? StackTrace => base.StackTrace;
 }
