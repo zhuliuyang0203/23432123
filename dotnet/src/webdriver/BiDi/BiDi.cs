@@ -27,7 +27,7 @@ namespace OpenQA.Selenium.BiDi;
 public class BiDi : IAsyncDisposable
 {
     private readonly ITransport _transport;
-    private readonly Broker _broker;
+    protected Broker Broker { get; }
 
     private readonly Lazy<Modules.Session.SessionModule> _sessionModule;
     private readonly Lazy<Modules.BrowsingContext.BrowsingContextModule> _browsingContextModule;
@@ -38,21 +38,21 @@ public class BiDi : IAsyncDisposable
     private readonly Lazy<Modules.Log.LogModule> _logModule;
     private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
-    internal BiDi(string url)
+    protected internal BiDi(string url)
     {
         var uri = new Uri(url);
 
         _transport = new WebSocketTransport(new Uri(url));
-        _broker = new Broker(this, _transport);
+        Broker = new Broker(this, _transport);
 
-        _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
-        _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(_broker));
-        _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
-        _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(_broker));
-        _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
-        _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(_broker));
-        _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(_broker));
-        _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(_broker));
+        _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(Broker));
+        _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(Broker));
+        _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(Broker));
+        _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(Broker));
+        _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(Broker));
+        _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(Broker));
+        _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(Broker));
+        _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(Broker));
     }
 
     internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
@@ -73,7 +73,7 @@ public class BiDi : IAsyncDisposable
     {
         var bidi = new BiDi(url);
 
-        await bidi._broker.ConnectAsync(default).ConfigureAwait(false);
+        await bidi.Broker.ConnectAsync().ConfigureAwait(false);
 
         return bidi;
     }
@@ -83,10 +83,15 @@ public class BiDi : IAsyncDisposable
         return SessionModule.EndAsync(options);
     }
 
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        await Broker.DisposeAsync().ConfigureAwait(false);
+        _transport?.Dispose();
+    }
+
     public async ValueTask DisposeAsync()
     {
-        await _broker.DisposeAsync().ConfigureAwait(false);
-
-        _transport?.Dispose();
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
     }
 }

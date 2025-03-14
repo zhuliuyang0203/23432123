@@ -24,9 +24,11 @@ using OpenQA.Selenium.Internal.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,7 +54,7 @@ public class Broker : IAsyncDisposable
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
-    private readonly BiDiJsonSerializerContext _jsonSerializerContext;
+    private readonly JsonSerializerOptions _jsonSerializerContext;
 
     internal Broker(BiDi bidi, ITransport transport)
     {
@@ -99,13 +101,29 @@ public class Broker : IAsyncDisposable
                 new Json.Converters.Enumerable.GetUserContextsResultConverter(),
                 new Json.Converters.Enumerable.GetClientWindowsResultConverter(),
                 new Json.Converters.Enumerable.GetRealmsResultConverter(),
+            },
+            TypeInfoResolverChain =
+            {
+                BiDiJsonSerializerContext.Default
             }
         };
 
-        _jsonSerializerContext = new BiDiJsonSerializerContext(jsonSerializerOptions);
+        _jsonSerializerContext = jsonSerializerOptions;
     }
 
-    public async Task ConnectAsync(CancellationToken cancellationToken)
+    [RequiresUnreferencedCode("Uses reflection-based JSON serialization")]
+    [RequiresDynamicCode("Uses reflection-based JSON serialization")]
+    public void EnableReflectionBasedJson()
+    {
+        _jsonSerializerContext.TypeInfoResolverChain.Add(new DefaultJsonTypeInfoResolver());
+    }
+
+    public void ProvideCustomSerializationContext(JsonSerializerContext extensionContext)
+    {
+        _jsonSerializerContext.TypeInfoResolverChain.Add(extensionContext);
+    }
+
+    public async Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
@@ -120,7 +138,8 @@ public class Broker : IAsyncDisposable
         {
             var data = await _transport.ReceiveAsync(cancellationToken).ConfigureAwait(false);
 
-            var message = JsonSerializer.Deserialize(new ReadOnlySpan<byte>(data), _jsonSerializerContext.Message);
+            var messageTypeInfo = (JsonTypeInfo<Message>)_jsonSerializerContext.GetTypeInfo(typeof(Message));
+            var message = JsonSerializer.Deserialize(new ReadOnlySpan<byte>(data), messageTypeInfo);
 
             switch (message)
             {
@@ -131,9 +150,9 @@ public class Broker : IAsyncDisposable
                 case MessageEvent messageEvent:
                     _pendingEvents.Add(messageEvent);
                     break;
-                case MessageError mesageError:
-                    _pendingCommands[mesageError.Id].SetException(new BiDiException($"{mesageError.Error}: {mesageError.Message}"));
-                    _pendingCommands.TryRemove(mesageError.Id, out _);
+                case MessageError messageError:
+                    _pendingCommands[messageError.Id].SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
+                    _pendingCommands.TryRemove(messageError.Id, out _);
                     break;
             }
         }
