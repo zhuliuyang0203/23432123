@@ -95,67 +95,19 @@ public abstract record RemoteValue
 
         throw new BiDiException("Cannot convert .....");
     }
-
-    public static RemoteBigIntValue BigInt(BigInteger value)
-    {
-        return new RemoteBigIntValue(value.ToString());
-    }
-
-    public static RemoteNumberValue Number(double value)
-    {
-        return new RemoteNumberValue(value);
-    }
-
-    public static RemoteBooleanValue Boolean(bool value)
-    {
-        return new RemoteBooleanValue(value);
-    }
-
-    public static RemoteValue String(string? value)
-    {
-        return value is null ? RemoteNullValue.Instance : new RemoteStringValue(value);
-    }
-
-    public static RemoteNullValue Null => RemoteNullValue.Instance;
-
-    public static RemoteUndefinedValue Undefined => RemoteUndefinedValue.Instance;
-
-    public static RemoteNumberValue NegativeInfinity => RemoteNumberValue.NegativeInfinity;
-
-    public static RemoteNumberValue PositiveInfinity => RemoteNumberValue.PositiveInfinity;
-
-    public static RemoteNumberValue NaN => RemoteNumberValue.NaN;
-
-    public static RemoteNumberValue NegativeZero => RemoteNumberValue.NegativeZero;
 }
 
 public record RemoteBigIntValue(string Value) : PrimitiveProtocolRemoteValue;
 
-public record RemoteNumberValue(double Value) : PrimitiveProtocolRemoteValue
-{
-    public static RemoteNumberValue NegativeInfinity { get; } = new RemoteNumberValue(double.NegativeInfinity);
-
-    public static RemoteNumberValue PositiveInfinity { get; } = new RemoteNumberValue(double.PositiveInfinity);
-
-    public static RemoteNumberValue NaN { get; } = new RemoteNumberValue(double.NaN);
-
-    public static RemoteNumberValue NegativeZero { get; } = new RemoteNumberValue(-0.0d);
-}
+public record RemoteNumberValue(double Value) : PrimitiveProtocolRemoteValue;
 
 public record RemoteBooleanValue(bool Value) : PrimitiveProtocolRemoteValue;
 
 public record RemoteStringValue(string Value) : PrimitiveProtocolRemoteValue;
 
-public record RemoteNullValue : PrimitiveProtocolRemoteValue
-{
-    public static RemoteNullValue Instance { get; } = new RemoteNullValue();
-}
+public record RemoteNullValue : PrimitiveProtocolRemoteValue;
 
-public record RemoteUndefinedValue : PrimitiveProtocolRemoteValue
-{
-    public static RemoteUndefinedValue Instance { get; } = new RemoteUndefinedValue();
-
-}
+public record RemoteUndefinedValue : PrimitiveProtocolRemoteValue;
 
 public record RemoteSymbolValue : RemoteValue
 {
