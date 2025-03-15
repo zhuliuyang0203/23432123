@@ -38,6 +38,6 @@ internal class GetCookiesResultConverter : JsonConverter<GetCookiesResult>
 
     public override void Write(Utf8JsonWriter writer, GetCookiesResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

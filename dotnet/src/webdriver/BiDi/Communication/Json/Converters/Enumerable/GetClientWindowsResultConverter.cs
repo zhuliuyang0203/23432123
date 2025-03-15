@@ -37,6 +37,6 @@ internal class GetClientWindowsResultConverter : JsonConverter<GetClientWindowsR
 
     public override void Write(Utf8JsonWriter writer, GetClientWindowsResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

@@ -41,6 +41,6 @@ internal class LogEntryConverter : JsonConverter<Modules.Log.Entry>
 
     public override void Write(Utf8JsonWriter writer, Modules.Log.Entry value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

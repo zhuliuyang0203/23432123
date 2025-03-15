@@ -28,7 +28,7 @@ internal class InputOriginConverter : JsonConverter<Origin>
 {
     public override Origin Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 
     public override void Write(Utf8JsonWriter writer, Origin value, JsonSerializerOptions options)

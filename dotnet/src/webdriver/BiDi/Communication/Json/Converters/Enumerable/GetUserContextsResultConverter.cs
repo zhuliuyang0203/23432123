@@ -37,6 +37,6 @@ internal class GetUserContextsResultConverter : JsonConverter<GetUserContextsRes
 
     public override void Write(Utf8JsonWriter writer, GetUserContextsResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

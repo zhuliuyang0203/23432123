@@ -38,6 +38,6 @@ internal class LocateNodesResultConverter : JsonConverter<LocateNodesResult>
 
     public override void Write(Utf8JsonWriter writer, LocateNodesResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

@@ -28,7 +28,7 @@ internal class PrintPageRangeConverter : JsonConverter<PrintPageRange>
 {
     public override PrintPageRange Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 
     public override void Write(Utf8JsonWriter writer, PrintPageRange value, JsonSerializerOptions options)

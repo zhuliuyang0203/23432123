@@ -41,6 +41,6 @@ internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
 
     public override void Write(Utf8JsonWriter writer, EvaluateResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

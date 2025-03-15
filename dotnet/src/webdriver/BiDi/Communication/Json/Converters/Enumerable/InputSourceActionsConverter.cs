@@ -29,7 +29,7 @@ internal class InputSourceActionsConverter : JsonConverter<SourceActions>
 {
     public override SourceActions Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 
     public override void Write(Utf8JsonWriter writer, SourceActions value, JsonSerializerOptions options)

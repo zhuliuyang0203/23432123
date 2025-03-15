@@ -41,6 +41,6 @@ internal class MessageConverter : JsonConverter<Message>
 
     public override void Write(Utf8JsonWriter writer, Message value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

@@ -37,6 +37,6 @@ internal class GetRealmsResultConverter : JsonConverter<GetRealmsResult>
 
     public override void Write(Utf8JsonWriter writer, GetRealmsResult value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }

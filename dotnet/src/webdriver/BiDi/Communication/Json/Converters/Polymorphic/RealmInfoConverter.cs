@@ -47,6 +47,6 @@ internal class RealmInfoConverter : JsonConverter<RealmInfo>
 
     public override void Write(Utf8JsonWriter writer, RealmInfo value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotImplementedException();
     }
 }
