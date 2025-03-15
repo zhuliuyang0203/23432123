@@ -69,6 +69,6 @@ internal class RemoteValueConverter : JsonConverter<RemoteValue>
 
     public override void Write(Utf8JsonWriter writer, RemoteValue value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }
