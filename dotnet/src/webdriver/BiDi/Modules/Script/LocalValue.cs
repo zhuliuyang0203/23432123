@@ -37,7 +37,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 public abstract record LocalValue
 {
     public static implicit operator LocalValue(int value) { return new NumberLocalValue(value); }
-    public static implicit operator LocalValue(string value) { return new StringLocalValue(value); }
+    public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
