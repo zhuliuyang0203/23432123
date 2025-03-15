@@ -64,6 +64,10 @@ public class Broker : IAsyncDisposable
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+
+            // BiDi returns special numbers such as "NaN" as strings
+            // Additionally, -0 is returned as a string "-0"
+            NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals | JsonNumberHandling.AllowReadingFromString,
             Converters =
             {
                 new BrowsingContextConverter(_bidi),
@@ -276,7 +280,13 @@ public class Broker : IAsyncDisposable
         }
     }
 
-    public virtual async ValueTask DisposeAsyncCore()
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore()
     {
         _pendingEvents.CompleteAdding();
 
@@ -288,11 +298,5 @@ public class Broker : IAsyncDisposable
         }
 
         _transport.Dispose();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await DisposeAsyncCore();
-        GC.SuppressFinalize(this);
     }
 }

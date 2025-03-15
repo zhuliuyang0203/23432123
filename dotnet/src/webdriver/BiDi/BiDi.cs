@@ -80,14 +80,14 @@ public class BiDi : IAsyncDisposable
         return SessionModule.EndAsync(options);
     }
 
-    public virtual async ValueTask DisposeAsyncCore()
-    {
-        await _broker.DisposeAsync().ConfigureAwait(false);
-    }
-
     public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore();
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        await _broker.DisposeAsync().ConfigureAwait(false);
     }
 }
