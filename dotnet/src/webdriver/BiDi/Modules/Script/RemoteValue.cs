@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -26,42 +27,46 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 // https://github.com/dotnet/runtime/issues/72604
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-//[JsonDerivedType(typeof(Number), "number")]
-//[JsonDerivedType(typeof(Boolean), "boolean")]
-//[JsonDerivedType(typeof(String), "string")]
-//[JsonDerivedType(typeof(Null), "null")]
-//[JsonDerivedType(typeof(Undefined), "undefined")]
-//[JsonDerivedType(typeof(Symbol), "symbol")]
-//[JsonDerivedType(typeof(Array), "array")]
-//[JsonDerivedType(typeof(Object), "object")]
-//[JsonDerivedType(typeof(Function), "function")]
-//[JsonDerivedType(typeof(RegExp), "regexp")]
-//[JsonDerivedType(typeof(Date), "date")]
-//[JsonDerivedType(typeof(Map), "map")]
-//[JsonDerivedType(typeof(Set), "set")]
-//[JsonDerivedType(typeof(WeakMap), "weakmap")]
-//[JsonDerivedType(typeof(WeakSet), "weakset")]
-//[JsonDerivedType(typeof(Generator), "generator")]
-//[JsonDerivedType(typeof(Error), "error")]
-//[JsonDerivedType(typeof(Proxy), "proxy")]
-//[JsonDerivedType(typeof(Promise), "promise")]
-//[JsonDerivedType(typeof(TypedArray), "typedarray")]
-//[JsonDerivedType(typeof(ArrayBuffer), "arraybuffer")]
-//[JsonDerivedType(typeof(NodeList), "nodelist")]
-//[JsonDerivedType(typeof(HtmlCollection), "htmlcollection")]
-//[JsonDerivedType(typeof(Node), "node")]
-//[JsonDerivedType(typeof(WindowProxy), "window")]
+//[JsonDerivedType(typeof(RemoteNumberValue), "number")]
+//[JsonDerivedType(typeof(RemoteBooleanValue), "boolean")]
+//[JsonDerivedType(typeof(RemoteBigIntValue), "bigint")]
+//[JsonDerivedType(typeof(RemoteStringValue), "string")]
+//[JsonDerivedType(typeof(RemoteNullValue), "null")]
+//[JsonDerivedType(typeof(RemoteUndefinedValue), "undefined")]
+//[JsonDerivedType(typeof(RemoteSymbolValue), "symbol")]
+//[JsonDerivedType(typeof(RemoteArrayValue), "array")]
+//[JsonDerivedType(typeof(RemoteObjectValue), "object")]
+//[JsonDerivedType(typeof(RemoteFunctionValue), "function")]
+//[JsonDerivedType(typeof(RemoteRegExpValue), "regexp")]
+//[JsonDerivedType(typeof(RemoteDateValue), "date")]
+//[JsonDerivedType(typeof(RemoteMapValue), "map")]
+//[JsonDerivedType(typeof(RemoteSetValue), "set")]
+//[JsonDerivedType(typeof(RemoteWeakMapValue), "weakmap")]
+//[JsonDerivedType(typeof(RemoteWeakSetValue), "weakset")]
+//[JsonDerivedType(typeof(RemoteGeneratorValue), "generator")]
+//[JsonDerivedType(typeof(RemoteErrorValue), "error")]
+//[JsonDerivedType(typeof(RemoteProxyValue), "proxy")]
+//[JsonDerivedType(typeof(RemotePromiseValue), "promise")]
+//[JsonDerivedType(typeof(RemoteTypedArrayValue), "typedarray")]
+//[JsonDerivedType(typeof(RemoteArrayBufferValue), "arraybuffer")]
+//[JsonDerivedType(typeof(RemoteNodeListValue), "nodelist")]
+//[JsonDerivedType(typeof(RemoteHtmlCollectionValue), "htmlcollection")]
+//[JsonDerivedType(typeof(RemoteNodeValue), "node")]
+//[JsonDerivedType(typeof(RemoteWindowProxyValue), "window")]
 public abstract record RemoteValue
 {
-    public static implicit operator int(RemoteValue remoteValue) => (int)((Number)remoteValue).Value;
-    public static implicit operator long(RemoteValue remoteValue) => (long)((Number)remoteValue).Value;
+    public static implicit operator double(RemoteValue remoteValue) => (double)((RemoteNumberValue)remoteValue).Value;
+
+    public static implicit operator int(RemoteValue remoteValue) => (int)(double)remoteValue;
+    public static implicit operator long(RemoteValue remoteValue) => (long)(double)remoteValue;
+
     public static implicit operator string?(RemoteValue remoteValue)
     {
         return remoteValue switch
         {
-            String stringValue => stringValue.Value,
-            Null => null,
-            _ => throw new BiDiException($"Cannot convert {remoteValue} to string")
+            RemoteStringValue stringValue => stringValue.Value,
+            RemoteNullValue => null,
+            _ => throw new InvalidCastException($"Cannot convert {remoteValue} to string")
         };
     }
 
@@ -72,15 +77,15 @@ public abstract record RemoteValue
 
         if (type == typeof(bool))
         {
-            return (TResult)(Convert.ToBoolean(((Boolean)this).Value) as object);
+            return (TResult)(Convert.ToBoolean(((RemoteBooleanValue)this).Value) as object);
         }
         if (type == typeof(int))
         {
-            return (TResult)(Convert.ToInt32(((Number)this).Value) as object);
+            return (TResult)(Convert.ToInt32(((RemoteNumberValue)this).Value) as object);
         }
         else if (type == typeof(string))
         {
-            return (TResult)(((String)this).Value as object);
+            return (TResult)(((RemoteStringValue)this).Value as object);
         }
         else if (type is object)
         {
@@ -91,180 +96,230 @@ public abstract record RemoteValue
         throw new BiDiException("Cannot convert .....");
     }
 
-    public record Number(double Value) : PrimitiveProtocolRemoteValue;
-
-    public record Boolean(bool Value) : PrimitiveProtocolRemoteValue;
-
-    public record String(string Value) : PrimitiveProtocolRemoteValue;
-
-    public record Null : PrimitiveProtocolRemoteValue;
-
-    public record Undefined : PrimitiveProtocolRemoteValue;
-
-    public record Symbol : RemoteValue
+    public static RemoteBigIntValue BigInt(BigInteger value)
     {
-        public Handle? Handle { get; set; }
-
-        public InternalId? InternalId { get; set; }
+        return new RemoteBigIntValue(value.ToString());
     }
 
-    public record Array : RemoteValue
+    public static RemoteNumberValue Number(double value)
     {
-        public Handle? Handle { get; set; }
-
-        public InternalId? InternalId { get; set; }
-
-        public IReadOnlyList<RemoteValue>? Value { get; set; }
+        return new RemoteNumberValue(value);
     }
 
-    public record Object : RemoteValue
+    public static RemoteBooleanValue Boolean(bool value)
     {
-        public Handle? Handle { get; set; }
-
-        public InternalId? InternalId { get; set; }
-
-        public IReadOnlyList<IReadOnlyList<RemoteValue>>? Value { get; set; }
+        return new RemoteBooleanValue(value);
     }
 
-    public record Function : RemoteValue
+    public static RemoteValue String(string? value)
     {
-        public Handle? Handle { get; set; }
-
-        public InternalId? InternalId { get; set; }
+        return value is null ? RemoteNullValue.Instance : new RemoteStringValue(value);
     }
 
-    public record RegExp(RegExp.RegExpValue Value) : RemoteValue
+    public static RemoteNullValue Null => RemoteNullValue.Instance;
+
+    public static RemoteUndefinedValue Undefined => RemoteUndefinedValue.Instance;
+
+    public static RemoteNumberValue NegativeInfinity => RemoteNumberValue.NegativeInfinity;
+
+    public static RemoteNumberValue PositiveInfinity => RemoteNumberValue.PositiveInfinity;
+
+    public static RemoteNumberValue NaN => RemoteNumberValue.NaN;
+
+    public static RemoteNumberValue NegativeZero => RemoteNumberValue.NegativeZero;
+}
+
+public record RemoteBigIntValue(string Value) : PrimitiveProtocolRemoteValue;
+
+public record RemoteNumberValue(double Value) : PrimitiveProtocolRemoteValue
+{
+    public static RemoteNumberValue NegativeInfinity { get; } = new RemoteNumberValue(double.NegativeInfinity);
+
+    public static RemoteNumberValue PositiveInfinity { get; } = new RemoteNumberValue(double.PositiveInfinity);
+
+    public static RemoteNumberValue NaN { get; } = new RemoteNumberValue(double.NaN);
+
+    public static RemoteNumberValue NegativeZero { get; } = new RemoteNumberValue(-0.0d);
+}
+
+public record RemoteBooleanValue(bool Value) : PrimitiveProtocolRemoteValue;
+
+public record RemoteStringValue(string Value) : PrimitiveProtocolRemoteValue;
+
+public record RemoteNullValue : PrimitiveProtocolRemoteValue
+{
+    public static RemoteNullValue Instance { get; } = new RemoteNullValue();
+}
+
+public record RemoteUndefinedValue : PrimitiveProtocolRemoteValue
+{
+    public static RemoteUndefinedValue Instance { get; } = new RemoteUndefinedValue();
+
+}
+
+public record RemoteSymbolValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+}
+
+public record RemoteArrayValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
+
+public record RemoteObjectValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public IReadOnlyList<IReadOnlyList<RemoteValue>>? Value { get; set; }
+}
+
+public record RemoteFunctionValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+}
+
+public record RemoteRegExpValue(RemoteRegExpValue.RegExpValue Value) : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public record RegExpValue(string Pattern)
     {
-        public Handle? Handle { get; set; }
-
-        public InternalId? InternalId { get; set; }
-
-        public record RegExpValue(string Pattern)
-        {
-            public string? Flags { get; set; }
-        }
+        public string? Flags { get; set; }
     }
+}
 
-    public record Date(string Value) : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteDateValue(string Value) : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record Map : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteMapValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        public IReadOnlyList<IReadOnlyList<RemoteValue>>? Value { get; set; }
-    }
+    public IReadOnlyList<IReadOnlyList<RemoteValue>>? Value { get; set; }
+}
 
-    public record Set : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteSetValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        public IReadOnlyList<RemoteValue>? Value { get; set; }
-    }
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
 
-    public record WeakMap : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteWeakMapValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record WeakSet : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteWeakSetValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record Generator : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteGeneratorValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record Error : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteErrorValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record Proxy : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteProxyValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record Promise : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemotePromiseValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record TypedArray : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteTypedArrayValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record ArrayBuffer : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteArrayBufferValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
-    }
+    public InternalId? InternalId { get; set; }
+}
 
-    public record NodeList : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteNodeListValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        public IReadOnlyList<RemoteValue>? Value { get; set; }
-    }
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
 
-    public record HtmlCollection : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteHtmlCollectionValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        public IReadOnlyList<RemoteValue>? Value { get; set; }
-    }
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
 
-    public record Node : RemoteValue, ISharedReference
-    {
-        [JsonInclude]
-        public string? SharedId { get; internal set; }
+public record RemoteNodeValue : RemoteValue, ISharedReference
+{
+    [JsonInclude]
+    public string? SharedId { get; internal set; }
 
-        public Handle? Handle { get; set; }
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        [JsonInclude]
-        public NodeProperties? Value { get; internal set; }
-    }
+    [JsonInclude]
+    public NodeProperties? Value { get; internal set; }
+}
 
-    public record WindowProxy(WindowProxy.Properties Value) : RemoteValue
-    {
-        public Handle? Handle { get; set; }
+public record RemoteWindowProxyValue(RemoteWindowProxyValue.Properties Value) : RemoteValue
+{
+    public Handle? Handle { get; set; }
 
-        public InternalId? InternalId { get; set; }
+    public InternalId? InternalId { get; set; }
 
-        public record Properties(BrowsingContext.BrowsingContext Context);
-    }
+    public record Properties(BrowsingContext.BrowsingContext Context);
 }
 
 public abstract record PrimitiveProtocolRemoteValue : RemoteValue;
