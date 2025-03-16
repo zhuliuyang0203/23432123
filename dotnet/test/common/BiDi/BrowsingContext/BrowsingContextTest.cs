@@ -260,7 +260,7 @@ class BrowsingContextTest : BiDiTestFixture
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
             Origin = Origin.Document,
-            Clip = new ClipRectangle.Box(5, 5, 10, 10)
+            Clip = new BoxClipRectangle(5, 5, 10, 10)
         });
 
         Assert.That(screenshot, Is.Not.Null);
@@ -273,7 +273,7 @@ class BrowsingContextTest : BiDiTestFixture
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
             Origin = Origin.Viewport,
-            Clip = new ClipRectangle.Box(5, 5, 10, 10)
+            Clip = new BoxClipRectangle(5, 5, 10, 10)
         });
 
         Assert.That(screenshot, Is.Not.Null);
@@ -289,7 +289,7 @@ class BrowsingContextTest : BiDiTestFixture
 
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
-            Clip = new ClipRectangle.Element(nodes[0])
+            Clip = new ElementClipRectangle(nodes[0])
         });
 
         Assert.That(screenshot, Is.Not.Null);
