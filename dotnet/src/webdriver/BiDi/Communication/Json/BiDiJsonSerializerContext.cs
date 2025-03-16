@@ -66,8 +66,8 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RealmInfo.AudioWorklet))]
 [JsonSerializable(typeof(Modules.Script.RealmInfo.Worklet))]
 
-[JsonSerializable(typeof(Modules.Log.Entry.Console))]
-[JsonSerializable(typeof(Modules.Log.Entry.Javascript))]
+[JsonSerializable(typeof(Modules.Log.ConsoleLogEntry))]
+[JsonSerializable(typeof(Modules.Log.JavascriptLogEntry))]
 #endregion
 
 [JsonSerializable(typeof(Command))]
@@ -157,7 +157,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RealmDestroyedEventArgs))]
 [JsonSerializable(typeof(IReadOnlyList<Modules.Script.RealmInfo>))]
 
-[JsonSerializable(typeof(Modules.Log.Entry))]
+[JsonSerializable(typeof(Modules.Log.LogEntry))]
 
 [JsonSerializable(typeof(Modules.Storage.GetCookiesCommand))]
 [JsonSerializable(typeof(Modules.Storage.GetCookiesResult))]
