@@ -14,7 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
+import logging
 import os
 import platform
 import socket
@@ -139,6 +139,9 @@ def driver(request):
 
     driver_path = request.config.option.executable
     options = None
+
+    if os.environ.get("DEBUG"):
+        logging.getLogger("selenium").setLevel(logging.DEBUG)
 
     global driver_instance
     if driver_instance is None:
