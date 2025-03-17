@@ -22,13 +22,13 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(String), "string")]
-[JsonDerivedType(typeof(Base64), "base64")]
+[JsonDerivedType(typeof(StringBytesValue), "string")]
+[JsonDerivedType(typeof(Base64BytesValue), "base64")]
 public abstract record BytesValue
 {
-    public static implicit operator BytesValue(string value) => new String(value);
-
-    public record String(string Value) : BytesValue;
-
-    public record Base64(string Value) : BytesValue;
+    public static implicit operator BytesValue(string value) => new StringBytesValue(value);
 }
+
+public record StringBytesValue(string Value) : BytesValue;
+
+public record Base64BytesValue(string Value) : BytesValue;

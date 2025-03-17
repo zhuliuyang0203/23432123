@@ -44,8 +44,8 @@ public record SourceActions<T> : SourceActions, IEnumerable<ISourceAction> where
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(Pause), "pause")]
-[JsonDerivedType(typeof(Key.Down), "keyDown")]
-[JsonDerivedType(typeof(Key.Up), "keyUp")]
+[JsonDerivedType(typeof(DownKey), "keyDown")]
+[JsonDerivedType(typeof(UpKey), "keyUp")]
 public interface IKeySourceAction : ISourceAction;
 
 public record KeyActions : SourceActions<IKeySourceAction>
@@ -54,8 +54,8 @@ public record KeyActions : SourceActions<IKeySourceAction>
     {
         foreach (var character in text)
         {
-            Add(new Key.Down(character));
-            Add(new Key.Up(character));
+            Add(new DownKey(character));
+            Add(new UpKey(character));
         }
 
         return this;
@@ -64,9 +64,9 @@ public record KeyActions : SourceActions<IKeySourceAction>
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(Pause), "pause")]
-[JsonDerivedType(typeof(Pointer.Down), "pointerDown")]
-[JsonDerivedType(typeof(Pointer.Up), "pointerUp")]
-[JsonDerivedType(typeof(Pointer.Move), "pointerMove")]
+[JsonDerivedType(typeof(DownPointer), "pointerDown")]
+[JsonDerivedType(typeof(UpPointer), "pointerUp")]
+[JsonDerivedType(typeof(MovePointer), "pointerMove")]
 public interface IPointerSourceAction : ISourceAction;
 
 public record PointerActions : SourceActions<IPointerSourceAction>
@@ -76,7 +76,7 @@ public record PointerActions : SourceActions<IPointerSourceAction>
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(Pause), "pause")]
-[JsonDerivedType(typeof(Wheel.Scroll), "scroll")]
+[JsonDerivedType(typeof(ScrollWheel), "scroll")]
 public interface IWheelSourceAction : ISourceAction;
 
 public record WheelActions : SourceActions<IWheelSourceAction>;
@@ -87,52 +87,49 @@ public interface INoneSourceAction : ISourceAction;
 
 public record NoneActions : SourceActions<None>;
 
-public abstract partial record Key : IKeySourceAction
-{
-    public record Down(char Value) : Key;
+public abstract record Key : IKeySourceAction;
 
-    public record Up(char Value) : Key;
+public record DownKey(char Value) : Key;
+
+public record UpKey(char Value) : Key;
+
+public abstract record Pointer : IPointerSourceAction;
+
+public record DownPointer(int Button) : Pointer, IPointerCommonProperties
+{
+    public int? Width { get; set; }
+    public int? Height { get; set; }
+    public double? Pressure { get; set; }
+    public double? TangentialPressure { get; set; }
+    public int? Twist { get; set; }
+    public double? AltitudeAngle { get; set; }
+    public double? AzimuthAngle { get; set; }
 }
 
-public abstract record Pointer : IPointerSourceAction
+public record UpPointer(int Button) : Pointer;
+
+public record MovePointer(int X, int Y) : Pointer, IPointerCommonProperties
 {
-    public record Down(int Button) : Pointer, IPointerCommonProperties
-    {
-        public int? Width { get; set; }
-        public int? Height { get; set; }
-        public double? Pressure { get; set; }
-        public double? TangentialPressure { get; set; }
-        public int? Twist { get; set; }
-        public double? AltitudeAngle { get; set; }
-        public double? AzimuthAngle { get; set; }
-    }
+    public int? Duration { get; set; }
 
-    public record Up(int Button) : Pointer;
+    public Origin? Origin { get; set; }
 
-    public record Move(int X, int Y) : Pointer, IPointerCommonProperties
-    {
-        public int? Duration { get; set; }
-
-        public Origin? Origin { get; set; }
-
-        public int? Width { get; set; }
-        public int? Height { get; set; }
-        public double? Pressure { get; set; }
-        public double? TangentialPressure { get; set; }
-        public int? Twist { get; set; }
-        public double? AltitudeAngle { get; set; }
-        public double? AzimuthAngle { get; set; }
-    }
+    public int? Width { get; set; }
+    public int? Height { get; set; }
+    public double? Pressure { get; set; }
+    public double? TangentialPressure { get; set; }
+    public int? Twist { get; set; }
+    public double? AltitudeAngle { get; set; }
+    public double? AzimuthAngle { get; set; }
 }
 
-public abstract record Wheel : IWheelSourceAction
-{
-    public record Scroll(int X, int Y, int DeltaX, int DeltaY) : Wheel
-    {
-        public int? Duration { get; set; }
+public abstract record Wheel : IWheelSourceAction;
 
-        public Origin? Origin { get; set; }
-    }
+public record ScrollWheel(int X, int Y, int DeltaX, int DeltaY) : Wheel
+{
+    public int? Duration { get; set; }
+
+    public Origin? Origin { get; set; }
 }
 
 public abstract record None : INoneSourceAction;

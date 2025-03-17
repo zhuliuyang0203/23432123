@@ -111,7 +111,7 @@ jobs:
       browser: ${{ matrix.browser }}
       cache-key: rb-remote-${{ matrix.browser }}-${{ matrix.os }}-test
       os: ${{ matrix.os }}
-      java-version: 11
+      java-version: 17
       run: >
         bazel test
         --keep_going

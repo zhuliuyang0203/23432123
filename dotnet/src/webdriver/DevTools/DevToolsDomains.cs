@@ -38,16 +38,14 @@ namespace OpenQA.Selenium.DevTools
         [
             133,
             132,
-            131,
-            85
+            134,
         ];
 
         private static DevToolsDomains? CreateDevToolsDomain(int protocolVersion, DevToolsSession session) => protocolVersion switch
         {
             133 => new V133.V133Domains(session),
             132 => new V132.V132Domains(session),
-            131 => new V131.V131Domains(session),
-            85 => new V85.V85Domains(session),
+            134 => new V134.V134Domains(session),
             _ => null
         };
 

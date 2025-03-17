@@ -25,21 +25,21 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
     : Command<CaptureScreenshotCommandParameters>(@params, "browsingContext.captureScreenshot");
 
-internal record CaptureScreenshotCommandParameters(BrowsingContext Context, Origin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
+internal record CaptureScreenshotCommandParameters(BrowsingContext Context, CaptureScreenshotOptions.ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
 
 public record CaptureScreenshotOptions : CommandOptions
 {
-    public Origin? Origin { get; set; }
+    public ScreenshotOrigin? Origin { get; set; }
 
     public ImageFormat? Format { get; set; }
 
     public ClipRectangle? Clip { get; set; }
-}
 
-public enum Origin
-{
-    Viewport,
-    Document
+    public enum ScreenshotOrigin
+    {
+        Viewport,
+        Document
+    }
 }
 
 public record struct ImageFormat(string Type)
@@ -48,14 +48,13 @@ public record struct ImageFormat(string Type)
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Box), "box")]
-[JsonDerivedType(typeof(Element), "element")]
-public abstract record ClipRectangle
-{
-    public record Box(double X, double Y, double Width, double Height) : ClipRectangle;
+[JsonDerivedType(typeof(BoxClipRectangle), "box")]
+[JsonDerivedType(typeof(ElementClipRectangle), "element")]
+public abstract record ClipRectangle;
 
-    public record Element([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : ClipRectangle;
-}
+public record BoxClipRectangle(double X, double Y, double Width, double Height) : ClipRectangle;
+
+public record ElementClipRectangle([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : ClipRectangle;
 
 public record CaptureScreenshotResult(string Data)
 {

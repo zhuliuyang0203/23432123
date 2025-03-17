@@ -25,21 +25,21 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 
 // https://github.com/dotnet/runtime/issues/72604
-internal class LogEntryConverter : JsonConverter<Modules.Log.Entry>
+internal class LogEntryConverter : JsonConverter<Modules.Log.LogEntry>
 {
-    public override Modules.Log.Entry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override Modules.Log.LogEntry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var jsonDocument = JsonDocument.ParseValue(ref reader);
 
         return jsonDocument.RootElement.GetProperty("type").ToString() switch
         {
-            "console" => jsonDocument.Deserialize<Modules.Log.Entry.Console>(options),
-            "javascript" => jsonDocument.Deserialize<Modules.Log.Entry.Javascript>(options),
+            "console" => jsonDocument.Deserialize<ConsoleLogEntry>(options),
+            "javascript" => jsonDocument.Deserialize<JavascriptLogEntry>(options),
             _ => null,
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, Modules.Log.Entry value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, Modules.Log.LogEntry value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }

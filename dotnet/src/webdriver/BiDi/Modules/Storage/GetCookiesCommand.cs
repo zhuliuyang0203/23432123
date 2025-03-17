@@ -80,16 +80,15 @@ public class CookieFilter
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Context), "context")]
-[JsonDerivedType(typeof(StorageKey), "storageKey")]
-public abstract record PartitionDescriptor
+[JsonDerivedType(typeof(ContextPartitionDescriptor), "context")]
+[JsonDerivedType(typeof(StorageKeyPartitionDescriptor), "storageKey")]
+public abstract record PartitionDescriptor;
+
+public record ContextPartitionDescriptor(BrowsingContext.BrowsingContext Context) : PartitionDescriptor;
+
+public record StorageKeyPartitionDescriptor : PartitionDescriptor
 {
-    public record Context([property: JsonPropertyName("context")] BrowsingContext.BrowsingContext Descriptor) : PartitionDescriptor;
+    public string? UserContext { get; set; }
 
-    public record StorageKey : PartitionDescriptor
-    {
-        public string? UserContext { get; set; }
-
-        public string? SourceOrigin { get; set; }
-    }
+    public string? SourceOrigin { get; set; }
 }

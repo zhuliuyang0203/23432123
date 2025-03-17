@@ -27,8 +27,7 @@ module Selenium
 
       class Driver < WebDriver::Driver
         EXTENSIONS = [DriverExtensions::HasDebugger,
-                      DriverExtensions::HasApplePermissions,
-                      DriverExtensions::HasWebStorage].freeze
+                      DriverExtensions::HasApplePermissions].freeze
 
         include LocalDriver
 
