@@ -68,7 +68,11 @@ suite(
 
         assert.equal(contextInfo.id, windowHandle)
         assert.equal(contextInfo.url, 'about:blank')
-        assert.equal(contextInfo.children, null)
+
+        assert(
+          Array.isArray(contextInfo.children) && contextInfo.children.length === 0,
+          'children should be an empty array',
+        )
         assert.equal(contextInfo.parentBrowsingContext, null)
       })
 

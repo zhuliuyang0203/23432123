@@ -188,7 +188,7 @@ module Selenium
         bridge.quit
       ensure
         @service_manager&.stop
-        @devtools&.close
+        @devtools&.each_value(&:close)
       end
 
       #

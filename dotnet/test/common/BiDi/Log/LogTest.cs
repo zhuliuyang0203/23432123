@@ -52,7 +52,7 @@ class LogTest : BiDiTestFixture
 
         Assert.That(consoleLogEntry.Args, Is.Not.Null);
         Assert.That(consoleLogEntry.Args, Has.Count.EqualTo(1));
-        Assert.That(consoleLogEntry.Args[0], Is.AssignableFrom<Modules.Script.RemoteValue.String>());
+        Assert.That(consoleLogEntry.Args[0], Is.AssignableFrom<Modules.Script.StringRemoteValue>());
     }
 
     [Test]

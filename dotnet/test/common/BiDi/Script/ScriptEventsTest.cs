@@ -35,7 +35,7 @@ class ScriptEventsTest : BiDiTestFixture
 
         await context.Script.CallFunctionAsync("(channel) => channel('foo')", false, new()
         {
-            Arguments = [new LocalValue.Channel(new(new("channel_name")))]
+            Arguments = [new ChannelLocalValue(new(new("channel_name")))]
         });
 
         var message = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));

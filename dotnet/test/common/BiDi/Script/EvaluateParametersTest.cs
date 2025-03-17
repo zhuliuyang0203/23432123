@@ -32,7 +32,7 @@ class EvaluateParametersTest : BiDiTestFixture
 
         Assert.That(res, Is.Not.Null);
         Assert.That(res.Realm, Is.Not.Null);
-        Assert.That((res.Result as RemoteValue.Number).Value, Is.EqualTo(3));
+        Assert.That((res.Result as NumberRemoteValue).Value, Is.EqualTo(3));
     }
 
     [Test]
@@ -84,9 +84,9 @@ class EvaluateParametersTest : BiDiTestFixture
         });
 
         Assert.That(res, Is.Not.Null);
-        Assert.That((res.Result as RemoteValue.Object).Handle, Is.Not.Null);
-        Assert.That((string)(res.Result as RemoteValue.Object).Value[0][0], Is.EqualTo("a"));
-        Assert.That((int)(res.Result as RemoteValue.Object).Value[0][1], Is.EqualTo(1));
+        Assert.That((res.Result as ObjectRemoteValue).Handle, Is.Not.Null);
+        Assert.That((string)(res.Result as ObjectRemoteValue).Value[0][0], Is.EqualTo("a"));
+        Assert.That((int)(res.Result as ObjectRemoteValue).Value[0][1], Is.EqualTo(1));
     }
 
     [Test]
@@ -97,7 +97,7 @@ class EvaluateParametersTest : BiDiTestFixture
 
         var res = await context.Script.EvaluateAsync("window.foo", true, targetOptions: new() { Sandbox = "sandbox" });
 
-        Assert.That(res.Result, Is.AssignableFrom<RemoteValue.Undefined>());
+        Assert.That(res.Result, Is.AssignableFrom<UndefinedRemoteValue>());
 
         // Make changes in the sandbox
         await context.Script.EvaluateAsync("window.foo = 2", true, targetOptions: new() { Sandbox = "sandbox" });
@@ -105,8 +105,8 @@ class EvaluateParametersTest : BiDiTestFixture
         // Check if the changes are present in the sandbox
         res = await context.Script.EvaluateAsync("window.foo", true, targetOptions: new() { Sandbox = "sandbox" });
 
-        Assert.That(res.Result, Is.AssignableFrom<RemoteValue.Number>());
-        Assert.That((res.Result as RemoteValue.Number).Value, Is.EqualTo(2));
+        Assert.That(res.Result, Is.AssignableFrom<NumberRemoteValue>());
+        Assert.That((res.Result as NumberRemoteValue).Value, Is.EqualTo(2));
     }
 
     [Test]

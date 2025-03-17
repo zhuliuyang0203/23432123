@@ -180,6 +180,10 @@ pub trait SeleniumManager {
 
     fn set_download_browser(&mut self, download_browser: bool);
 
+    fn is_snap(&self, browser_path: &str) -> bool;
+
+    fn get_snap_path(&self) -> Option<PathBuf>;
+
     // ----------------------------------------------------------
     // Shared functions
     // ----------------------------------------------------------
@@ -605,6 +609,18 @@ pub trait SeleniumManager {
             if let Some(path) = browser_path {
                 self.get_logger()
                     .debug(format!("Found {} in PATH: {}", browser_name, &path));
+                if self.is_snap(&path) {
+                    if let Some(snap_path) = self.get_snap_path() {
+                        if snap_path.exists() {
+                            self.get_logger().debug(format!(
+                                "Using {} snap: {}",
+                                browser_name,
+                                path_to_string(snap_path.as_path())
+                            ));
+                            return Some(snap_path);
+                        }
+                    }
+                }
                 return Some(Path::new(&path).to_path_buf());
             }
         }
@@ -825,6 +841,7 @@ pub trait SeleniumManager {
 
                 // Display warning if the discovered driver version is not the same as the driver in PATH
                 if !self.get_driver_version().is_empty()
+                    && !self.is_snap(self.get_browser_path())
                     && (self.is_firefox() && !version.eq(self.get_driver_version()))
                     || (!self.is_firefox() && !major_version.eq(&self.get_major_browser_version()))
                 {
