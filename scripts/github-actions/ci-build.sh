@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
 set -eufo pipefail
-# We want to see what's going on
-set -x
+
+# Only enable command tracing if DEBUG is set
+if [ -n "${DEBUG:-}" ]; then
+  set -x
+fi
 
 run_bazel_tests() {
   # shellcheck disable=SC2046
