@@ -166,9 +166,13 @@ module Selenium
         def create_driver!(listener: nil, **opts, &block)
           check_for_previous_error
 
-          chrome_beta(opts) if driver == :chrome_beta
+          if driver == :chrome_beta
+            opts[:browser_version] = 'beta'
+            method = :chrome_driver
+          else
+            method = driver
+          end
 
-          method = :"#{driver}_driver"
           instance = if private_methods.include?(method)
                        send(method, listener: listener, options: build_options(**opts))
                      else
@@ -197,7 +201,8 @@ module Selenium
           if private_methods.include?(options_method)
             send(options_method, **opts)
           else
-            WebDriver::Options.send(browser, **opts)
+            parsed_browser = browser == :chrome_beta ? :chrome : browser
+            WebDriver::Options.send(parsed_browser, **opts)
           end
         end
 
@@ -314,11 +319,6 @@ module Selenium
           sock.local_address.ip_port
         ensure
           sock.close
-        end
-
-        def chrome_beta(opts = {})
-          @driver = :chrome
-          opts[:browser_version] = 'beta'
         end
       end
     end # SpecSupport
