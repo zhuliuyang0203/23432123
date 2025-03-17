@@ -66,8 +66,8 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RealmInfo.AudioWorklet))]
 [JsonSerializable(typeof(Modules.Script.RealmInfo.Worklet))]
 
-[JsonSerializable(typeof(Modules.Log.Entry.Console))]
-[JsonSerializable(typeof(Modules.Log.Entry.Javascript))]
+[JsonSerializable(typeof(Modules.Log.ConsoleLogEntry))]
+[JsonSerializable(typeof(Modules.Log.JavascriptLogEntry))]
 #endregion
 
 [JsonSerializable(typeof(Command))]
@@ -121,7 +121,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.BrowsingContext.UserPromptClosedEventArgs))]
 [JsonSerializable(typeof(Modules.BrowsingContext.Origin), TypeInfoPropertyName = "BrowsingContext_Origin")]
 
-[JsonSerializable(typeof(Modules.Network.UrlPattern.String), TypeInfoPropertyName = "Network_UrlPattern_String")]
 [JsonSerializable(typeof(Modules.Network.ContinueWithAuthParameters.Default), TypeInfoPropertyName = "Network_ContinueWithAuthParameters_Default")]
 [JsonSerializable(typeof(Modules.Network.AddInterceptCommand))]
 [JsonSerializable(typeof(Modules.Network.AddInterceptResult))]
@@ -139,9 +138,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
 [JsonSerializable(typeof(Modules.Network.AuthRequiredEventArgs))]
 
-[JsonSerializable(typeof(Modules.Script.Target.Realm), TypeInfoPropertyName = "Script_Target_Realm")]
-[JsonSerializable(typeof(Modules.Script.Target.Context), TypeInfoPropertyName = "Script_Target_Context")]
-
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptCommand))]
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
 [JsonSerializable(typeof(Modules.Script.DisownCommand))]
@@ -156,7 +152,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RealmDestroyedEventArgs))]
 [JsonSerializable(typeof(IReadOnlyList<Modules.Script.RealmInfo>))]
 
-[JsonSerializable(typeof(Modules.Log.Entry))]
+[JsonSerializable(typeof(Modules.Log.LogEntry))]
 
 [JsonSerializable(typeof(Modules.Storage.GetCookiesCommand))]
 [JsonSerializable(typeof(Modules.Storage.GetCookiesResult))]

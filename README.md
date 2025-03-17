@@ -210,15 +210,46 @@ To automatically update and pin new dependencies, run:
 
 ### Python
 
-You can run Python code locally by updating generated files in the python directory using:
+#### Linting
+
+We follow the [PEP8 Style Guide for Python Code](https://peps.python.org/pep-0008) (except we use a 120 character line length).
+This is checked and enforced with several linting tools, including
+[black](https://pypi.org/project/black),
+[docformatter](https://pypi.org/project/docformatter),
+[flake8](https://flake8.pycqa.org),
+and [isort](https://pycqa.github.io/isort).
+
+To run all of the linting tools:
 ```shell
-./go py:update
+./go py:lint
 ```
 
-To install Selenium locally based on a specific commit, you can use:
+You need `tox` installed to run the linting tools (`pip install tox`).
+
+#### Local Installation
+
+To run Python code locally without building/installing the package, you must first install the dependencies:
+```shell
+pip install -r py/requirements.txt
+```
+
+Then, build the generated files and copy them into your local source tree:
+```shell
+./go py:local_dev
+```
+
+After that, you can import the selenium package directly from source from the `py` directory.
+
+Instead of running from source, you can build and install the selenium package (wheel) locally:
 ```shell
 ./go py:install
 ```
+
+This will attempt to install into the global Python `site-packages` directory,
+which might not be writable. To avoid this, you should create and activate a
+[virtual environment](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-virtual-environments)
+before installing.
+
 
 ### Ruby
 
