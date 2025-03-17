@@ -32,7 +32,6 @@ module Selenium
                       DriverExtensions::HasBiDi,
                       DriverExtensions::HasLogEvents,
                       DriverExtensions::HasNetworkInterception,
-                      DriverExtensions::HasWebStorage,
                       DriverExtensions::PrintsPage].freeze
 
         include LocalDriver

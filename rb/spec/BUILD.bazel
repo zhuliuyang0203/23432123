@@ -29,7 +29,6 @@ rb_library(
         "//rb/spec/integration/selenium/webdriver:select",
         "//rb/spec/integration/selenium/webdriver:shadow_root",
         "//rb/spec/integration/selenium/webdriver:spec_helper",
-        "//rb/spec/integration/selenium/webdriver:storage",
         "//rb/spec/integration/selenium/webdriver:takes_screenshot",
         "//rb/spec/integration/selenium/webdriver:target_locator",
         "//rb/spec/integration/selenium/webdriver:timeout",

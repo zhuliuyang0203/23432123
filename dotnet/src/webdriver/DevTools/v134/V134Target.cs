@@ -1,4 +1,4 @@
-// <copyright file="V85Target.cs" company="Selenium Committers">
+// <copyright file="V134Target.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,27 +17,27 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V85.Target;
+using OpenQA.Selenium.DevTools.V134.Target;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V85
+namespace OpenQA.Selenium.DevTools.V134
 {
     /// <summary>
-    /// Class providing functionality for manipulating targets for version 85 of the DevTools Protocol
+    /// Class providing functionality for manipulating targets for version 134 of the DevTools Protocol
     /// </summary>
-    public class V85Target : DevTools.Target
+    public class V134Target : DevTools.Target
     {
         private readonly TargetAdapter adapter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V85Target"/> class.
+        /// Initializes a new instance of the <see cref="V134Target"/> class.
         /// </summary>
         /// <param name="adapter">The adapter for the Target domain.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="adapter"/> is <see langword="null"/>.</exception>
-        public V85Target(TargetAdapter adapter)
+        public V134Target(TargetAdapter adapter)
         {
             this.adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
             adapter.DetachedFromTarget += OnDetachedFromTarget;
@@ -54,7 +54,9 @@ namespace OpenQA.Selenium.DevTools.V85
         /// </returns>
         public override async Task<ReadOnlyCollection<TargetInfo>> GetTargets(object? settings = null)
         {
-            var response = await adapter.GetTargets().ConfigureAwait(false);
+            settings ??= new GetTargetsCommandSettings();
+
+            var response = await adapter.GetTargets((GetTargetsCommandSettings)settings).ConfigureAwait(false);
 
             List<TargetInfo> targets = new List<TargetInfo>(response.TargetInfos.Length);
             for (int i = 0; i < response.TargetInfos.Length; i++)

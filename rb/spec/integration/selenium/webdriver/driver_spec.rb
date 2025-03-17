@@ -244,15 +244,6 @@ module Selenium
         end
       end
 
-      describe '#script' do
-        it 'executes script with deprecation warning' do
-          driver.navigate.to url_for('xhtmlTest.html')
-          expect {
-            expect(driver.script('return document.title;')).to eq('XHTML Test Page')
-          }.to have_deprecated(:driver_script)
-        end
-      end
-
       describe '#execute_script' do
         it 'returns strings' do
           driver.navigate.to url_for('xhtmlTest.html')

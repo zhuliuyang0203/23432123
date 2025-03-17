@@ -314,6 +314,9 @@ Tests can also be filtered by tag like:
 bazel test //<language>/... --test_tag_filters=this,-not-this
 ```
 
+If there are multiple `--test_tag_filters`, only the last one is considered,
+so be careful if also using an inherited config
+
 ### Java
 
 <details>

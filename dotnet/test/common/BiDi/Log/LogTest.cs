@@ -29,7 +29,7 @@ class LogTest : BiDiTestFixture
     [Test]
     public async Task CanListenToConsoleLog()
     {
-        TaskCompletionSource<Entry> tcs = new();
+        TaskCompletionSource<Modules.Log.LogEntry> tcs = new();
 
         await using var subscription = await context.Log.OnEntryAddedAsync(tcs.SetResult);
 
@@ -44,9 +44,9 @@ class LogTest : BiDiTestFixture
         Assert.That(logEntry.Source.Realm, Is.Not.Null);
         Assert.That(logEntry.Text, Is.EqualTo("Hello, world!"));
         Assert.That(logEntry.Level, Is.EqualTo(Level.Info));
-        Assert.That(logEntry, Is.AssignableFrom<Entry.Console>());
+        Assert.That(logEntry, Is.AssignableFrom<ConsoleLogEntry>());
 
-        var consoleLogEntry = logEntry as Entry.Console;
+        var consoleLogEntry = logEntry as ConsoleLogEntry;
 
         Assert.That(consoleLogEntry.Method, Is.EqualTo("log"));
 
@@ -58,7 +58,7 @@ class LogTest : BiDiTestFixture
     [Test]
     public async Task CanListenToJavascriptLog()
     {
-        TaskCompletionSource<Entry> tcs = new();
+        TaskCompletionSource<Modules.Log.LogEntry> tcs = new();
 
         await using var subscription = await context.Log.OnEntryAddedAsync(tcs.SetResult);
 
@@ -73,13 +73,13 @@ class LogTest : BiDiTestFixture
         Assert.That(logEntry.Source.Realm, Is.Not.Null);
         Assert.That(logEntry.Text, Is.EqualTo("Error: Not working"));
         Assert.That(logEntry.Level, Is.EqualTo(Level.Error));
-        Assert.That(logEntry, Is.AssignableFrom<Entry.Javascript>());
+        Assert.That(logEntry, Is.AssignableFrom<JavascriptLogEntry>());
     }
 
     [Test]
     public async Task CanRetrieveStacktrace()
     {
-        TaskCompletionSource<Entry> tcs = new();
+        TaskCompletionSource<Modules.Log.LogEntry> tcs = new();
 
         await using var subscription = await bidi.Log.OnEntryAddedAsync(tcs.SetResult);
 
