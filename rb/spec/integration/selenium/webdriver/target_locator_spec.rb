@@ -89,9 +89,6 @@ module Selenium
             expect {
               driver.switch_to.new_window(:unknown)
             }.to raise_error(ArgumentError)
-          ensure
-            # https://issues.chromium.org/issues/400087471
-            reset_driver! if GlobalTestEnv.browser == :chrome && GlobalTestEnv.rbe?
           end
 
           it 'switches to the new window then close it when given a block' do

@@ -21,8 +21,14 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe ActionBuilder, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
-      after { driver.action.clear_all_actions }
+    describe ActionBuilder, exclusive: { bidi: false, reason: 'Not yet implemented with BiDi' } do
+      after do
+        if GlobalTestEnv.rbe? && GlobalTestEnv.browser == :chrome
+          reset_driver!
+        else
+          driver.action.clear_all_actions
+        end
+      end
 
       describe '#send_keys' do
         it 'sends keys to the active element', except: {browser: %i[safari safari_preview]} do
@@ -172,9 +178,6 @@ module Selenium
                 .pointer_down(:left).pointer_up(:left)
                 .perform
           expect(element.property(:value)).to eq('DoubleClicked')
-        ensure
-          # https://issues.chromium.org/issues/400087471
-          reset_driver! if GlobalTestEnv.browser == :chrome && GlobalTestEnv.rbe?
         end
       end
 

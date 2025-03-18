@@ -25,10 +25,12 @@ module Selenium
       it_behaves_like 'driver that can be started concurrently', exclude: [
         {browser: %i[safari safari_preview]},
         {browser: :firefox, rbe: true, reason: 'https://github.com/mozilla/geckodriver/issues/2219'},
-        {driver: :remote, rbe: true, reason: 'Cannot start 2+ drivers at once.'}
+        {driver: :remote, rbe: true, reason: 'Cannot start 2+ drivers at once.' }
       ]
 
-      it 'creates default capabilities', exclude: {browser: %i[safari safari_preview]} do
+      after { reset_driver! if GlobalTestEnv.rbe? && GlobalTestEnv.browser == :chrome }
+
+      it 'creates default capabilities', exclude: { browser: %i[safari safari_preview] } do
         reset_driver! do |driver|
           caps = driver.capabilities
           expect(caps.proxy).to be_nil
@@ -60,8 +62,7 @@ module Selenium
 
       it 'refreshes the page' do
         driver.navigate.to url_for('javascriptPage.html')
-        sleep 1 # javascript takes too long to load
-        driver.find_element(id: 'updatediv').click
+        short_wait { driver.find_element(id: 'updatediv') }.click
         expect(driver.find_element(id: 'dynamo').text).to eq('Fish and chips!')
         driver.navigate.refresh
         wait_for_element(id: 'dynamo')
