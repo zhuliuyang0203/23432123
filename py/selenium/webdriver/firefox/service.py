@@ -58,9 +58,8 @@ class Service(service.Service):
         )
 
         # Set a port for CDP
-        if "--connect-existing" not in self.service_args:
-            self.service_args.append("--websocket-port")
-            self.service_args.append(f"{utils.free_port()}")
+        self.service_args.append("--websocket-port")
+        self.service_args.append(f"{utils.free_port()}")
 
     def command_line_args(self) -> List[str]:
         return ["--port", f"{self.port}"] + self.service_args
