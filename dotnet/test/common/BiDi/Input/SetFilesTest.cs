@@ -45,7 +45,7 @@ class SetFilesTest : BiDiTestFixture
     {
         driver.Url = UrlBuilder.WhereIs("formPage.html");
 
-        var nodes = await context.LocateNodesAsync(new Locator.Css("[id='upload']"));
+        var nodes = await context.LocateNodesAsync(new CssLocator("[id='upload']"));
 
         await context.Input.SetFilesAsync(nodes[0], [_tempFile]);
 

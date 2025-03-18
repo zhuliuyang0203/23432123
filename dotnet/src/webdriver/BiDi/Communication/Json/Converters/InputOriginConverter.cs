@@ -33,20 +33,20 @@ internal class InputOriginConverter : JsonConverter<Origin>
 
     public override void Write(Utf8JsonWriter writer, Origin value, JsonSerializerOptions options)
     {
-        if (value is Origin.Viewport)
+        if (value is ViewportOrigin)
         {
             writer.WriteStringValue("viewport");
         }
-        else if (value is Origin.Pointer)
+        else if (value is PointerOrigin)
         {
             writer.WriteStringValue("pointer");
         }
-        else if (value is Origin.Element element)
+        else if (value is ElementOrigin element)
         {
             writer.WriteStartObject();
             writer.WriteString("type", "element");
             writer.WritePropertyName("element");
-            JsonSerializer.Serialize(writer, element.SharedReference, options);
+            JsonSerializer.Serialize(writer, element.Element, options);
             writer.WriteEndObject();
         }
     }

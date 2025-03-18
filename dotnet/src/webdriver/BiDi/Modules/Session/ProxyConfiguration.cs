@@ -22,31 +22,30 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "proxyType")]
-[JsonDerivedType(typeof(AutoDetect), "autodetect")]
-[JsonDerivedType(typeof(Direct), "direct")]
-[JsonDerivedType(typeof(Manual), "manual")]
-[JsonDerivedType(typeof(Pac), "pac")]
-[JsonDerivedType(typeof(System), "system")]
-public abstract record ProxyConfiguration
+[JsonDerivedType(typeof(AutoDetectProxyConfiguration), "autodetect")]
+[JsonDerivedType(typeof(DirectProxyConfiguration), "direct")]
+[JsonDerivedType(typeof(ManualProxyConfiguration), "manual")]
+[JsonDerivedType(typeof(PacProxyConfiguration), "pac")]
+[JsonDerivedType(typeof(SystemProxyConfiguration), "system")]
+public abstract record ProxyConfiguration;
+
+public record AutoDetectProxyConfiguration : ProxyConfiguration;
+
+public record DirectProxyConfiguration : ProxyConfiguration;
+
+public record ManualProxyConfiguration : ProxyConfiguration
 {
-    public record AutoDetect : ProxyConfiguration;
+    public string? FtpProxy { get; set; }
 
-    public record Direct : ProxyConfiguration;
+    public string? HttpProxy { get; set; }
 
-    public record Manual : ProxyConfiguration
-    {
-        public string? FtpProxy { get; set; }
+    public string? SslProxy { get; set; }
 
-        public string? HttpProxy { get; set; }
+    public string? SocksProxy { get; set; }
 
-        public string? SslProxy { get; set; }
-
-        public string? SocksProxy { get; set; }
-
-        public long? SocksVersion { get; set; }
-    }
-
-    public record Pac(string ProxyAutoConfigUrl) : ProxyConfiguration;
-
-    public record System : ProxyConfiguration;
+    public long? SocksVersion { get; set; }
 }
+
+public record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
+
+public record SystemProxyConfiguration : ProxyConfiguration;

@@ -24,6 +24,7 @@ module Selenium
     describe Driver, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
       it_behaves_like 'driver that can be started concurrently', exclude: [
         {browser: %i[safari safari_preview]},
+        {browser: :firefox, rbe: true, reason: 'https://github.com/mozilla/geckodriver/issues/2219'},
         {driver: :remote, rbe: true, reason: 'Cannot start 2+ drivers at once.'}
       ]
 
@@ -241,15 +242,6 @@ module Selenium
           element = driver.find_element(name: 'form2')
           children = element.find_elements(name: 'selectomatic')
           expect(children.size).to eq(2)
-        end
-      end
-
-      describe '#script' do
-        it 'executes script with deprecation warning' do
-          driver.navigate.to url_for('xhtmlTest.html')
-          expect {
-            expect(driver.script('return document.title;')).to eq('XHTML Test Page')
-          }.to have_deprecated(:driver_script)
         end
       end
 

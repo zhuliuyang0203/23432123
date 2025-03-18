@@ -8,7 +8,6 @@ set -x
 # so this should be fine
 # shellcheck disable=SC2046
 bazel test --config=remote-ci --build_tests_only \
-  --test_tag_filters=-exclusive-if-local,-skip-remote \
   --keep_going --flaky_test_attempts=2 \
   //... -- $(cat .skipped-tests | tr '\n' ' ')
 
