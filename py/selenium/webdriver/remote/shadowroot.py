@@ -101,7 +101,7 @@ class ShadowRoot:
 
         Returns:
         -------
-        WebElement
+        List[WebElement]
             list of `WebElements` matching locator strategy found on the page.
         """
         if by == By.ID:

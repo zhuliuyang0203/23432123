@@ -623,7 +623,7 @@ class WebElement(BaseWebElement):
 
         Returns:
         -------
-        WebElement
+        List[WebElement]
             list of `WebElements` matching locator strategy found on the page.
         """
         by, value = self._parent.locator_converter.convert(by, value)

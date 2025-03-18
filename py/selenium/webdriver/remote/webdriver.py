@@ -920,7 +920,7 @@ class WebDriver(BaseWebDriver):
 
         Returns:
         -------
-        WebElement
+        List[WebElement]
             list of `WebElements` matching locator strategy found on the page.
         """
         by, value = self.locator_converter.convert(by, value)
