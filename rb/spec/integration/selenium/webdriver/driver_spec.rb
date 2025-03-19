@@ -22,9 +22,11 @@ require_relative 'spec_helper'
 module Selenium
   module WebDriver
     describe Driver, exclusive: {bidi: false, reason: 'Not yet implemented with BiDi'} do
+      after { reset_driver! if GlobalTestEnv.rbe? && GlobalTestEnv.browser == :chrome }
+
       it_behaves_like 'driver that can be started concurrently', exclude: [
         {browser: %i[safari safari_preview]},
-        {browser: :firefox, rbe: true, reason: 'https://github.com/mozilla/geckodriver/issues/2219'},
+        {browser: :firefox, reason: 'https://github.com/SeleniumHQ/selenium/issues/15451'},
         {driver: :remote, rbe: true, reason: 'Cannot start 2+ drivers at once.'}
       ]
 
@@ -60,8 +62,7 @@ module Selenium
 
       it 'refreshes the page' do
         driver.navigate.to url_for('javascriptPage.html')
-        sleep 1 # javascript takes too long to load
-        driver.find_element(id: 'updatediv').click
+        short_wait { driver.find_element(id: 'updatediv') }.click
         expect(driver.find_element(id: 'dynamo').text).to eq('Fish and chips!')
         driver.navigate.refresh
         wait_for_element(id: 'dynamo')
