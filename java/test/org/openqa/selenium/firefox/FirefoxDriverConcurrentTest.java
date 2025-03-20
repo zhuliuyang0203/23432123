@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.ParallelTestRunner;
 import org.openqa.selenium.ParallelTestRunner.Worker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.drivers.WebDriverBuilder;
 
