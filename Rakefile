@@ -129,7 +129,7 @@ def verify_java_release_targets
   current_targets = []
 
   Bazel.execute('query', [], query) do |output|
-    current_targets = output.lines.map(&:strip).reject(&:empty?)
+    current_targets = output.lines.map(&:strip).reject(&:empty?).select { |line| line.start_with?('//') }
   end
 
   missing_targets = current_targets - JAVA_RELEASE_TARGETS
@@ -1110,7 +1110,7 @@ namespace :all do
     commit!('Update selenium manager version', ['common/selenium_manager.bzl'])
 
     Rake::Task['java:update'].invoke
-    commit!('Update Maven Dependencies', ['java/maven_deps.bzl', 'java/maven_install.json'])
+    commit!('Update Maven Dependencies', ['MODULE.bazel', 'java/maven_install.json'])
 
     Rake::Task['authors'].invoke
     commit!('Update authors file', ['AUTHORS'])
@@ -1118,26 +1118,30 @@ namespace :all do
     # Note that this does not include Rust version changes that are handled in separate rake:version task
     # TODO: These files are all defined in other tasks; remove duplication
     Rake::Task['all:version'].invoke(version)
-    commit!("FIX CHANGELOGS BEFORE MERGING!\n\nUpdate versions and change logs to release Selenium #{java_version}",
-            ['dotnet/CHANGELOG',
-             'dotnet/selenium-dotnet-version.bzl',
-             'java/CHANGELOG',
+    commit!("Update Version in all bindings to #{java_version}",
+            ['dotnet/selenium-dotnet-version.bzl',
              'java/version.bzl',
-             'javascript/node/selenium-webdriver/CHANGES.md',
+             'javascript/node/selenium-webdriver/BUILD.bazel',
              'javascript/node/selenium-webdriver/package.json',
              'py/docs/source/conf.py',
+             'py/pyproject.toml',
              'py/selenium/__init__.py',
              'py/selenium/webdriver/__init__.py',
              'py/BUILD.bazel',
-             'py/CHANGES',
              'rb/lib/selenium/webdriver/version.rb',
-             'rb/CHANGES',
              'rb/Gemfile.lock',
-             'rust/CHANGELOG.md',
              'rust/BUILD.bazel',
              'rust/Cargo.Bazel.lock',
              'rust/Cargo.toml',
              'rust/Cargo.lock'])
+
+    commit!("FIX CHANGELOGS BEFORE MERGING! #{java_version}",
+            ['dotnet/CHANGELOG',
+             'java/CHANGELOG',
+             'javascript/node/selenium-webdriver/CHANGES.md',
+             'py/CHANGES',
+             'rb/CHANGES',
+             'rust/CHANGELOG.md'])
   end
 
   desc 'Update all versions'
@@ -1214,16 +1218,25 @@ end
 
 def update_changelog(version, language, path, changelog, header)
   tag = previous_tag(version, language)
-  log = if language == 'javascript'
-          `git --no-pager log #{tag}...HEAD --pretty=format:"- %s" --reverse #{path}`
-        else
-          `git --no-pager log #{tag}...HEAD --pretty=format:"* %s" --reverse #{path}`
-        end
-  commits = log.split('>>>').map { |entry|
-    lines = entry.split("\n")
-    lines.reject! { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }
-    lines.join("\n")
-  }.join("\n>>>")
+  bullet = language == 'javascript' ? '- ' : '* '
+  commit_delimiter = '===DELIM==='
+  tags_to_remove = /\[(dotnet|rb|py|java|js|rust)\]:?\s?/
+
+  command = "git --no-pager log #{tag}...HEAD --pretty=format:\"%s%n%b#{commit_delimiter}\" --reverse #{path}"
+  puts "Executing git command: #{command}"
+
+  log = `#{command}`
+
+  commits = log.split(commit_delimiter).map { |commit|
+    lines = commit.gsub(tags_to_remove, '').strip.lines.map(&:chomp)
+    subject = "#{bullet}#{lines[0]}"
+
+    body = lines[1..]
+           .reject { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }
+           .map { |line| "    > #{line}" }
+           .join("\n")
+    body.empty? ? subject : "#{subject}\n#{body}"
+  }.join("\n")
 
   File.open(changelog, 'r+') do |file|
     new_content = "#{header}\n#{commits}\n\n#{file.read}"

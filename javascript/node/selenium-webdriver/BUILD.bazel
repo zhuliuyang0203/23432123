@@ -38,6 +38,7 @@ js_library(
         "devtools/*.js",
         "common/*.js",
         "bidi/*.js",
+        "bidi/external/*.js",
     ]),
     deps = [
         ":node_modules/@bazel/runfiles",

@@ -201,7 +201,7 @@ for Maven to use locally by deploying to your local maven repository (`~/.m2/rep
 
 #### Updating Dependencies
 
-Dependencies are defined in the file [maven_deps.bzl](https://github.com/SeleniumHQ/selenium/blob/trunk/java/maven_deps.bzl).
+Dependencies are defined in the file [MODULE.bazel](https://github.com/SeleniumHQ/selenium/blob/trunk/MODULE.bazel).
 To automatically update and pin new dependencies, run:
 
 ```shell
