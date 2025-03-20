@@ -20,7 +20,9 @@ import platform
 import string
 import warnings
 from base64 import b64encode
+from typing import Any
 from typing import Optional
+from typing import TypeVar
 from urllib import parse
 from urllib.parse import urlparse
 
@@ -34,6 +36,11 @@ from .command import Command
 from .errorhandler import ErrorCode
 
 LOGGER = logging.getLogger(__name__)
+
+# TODO: Replace with 'Self' when Python 3.11+ is supported.
+# from typing import Self
+
+RemoteConnectionType = TypeVar("RemoteConnectionType", bound="RemoteConnection")
 
 remote_commands = {
     Command.NEW_SESSION: ("POST", "/session"),
@@ -154,7 +161,7 @@ class RemoteConnection:
 
     _timeout = socket.getdefaulttimeout()
     _ca_certs = os.getenv("REQUESTS_CA_BUNDLE") if "REQUESTS_CA_BUNDLE" in os.environ else certifi.where()
-    _client_config: ClientConfig = None
+    _client_config: ClientConfig | None = None
 
     system = platform.system().lower()
     if system == "darwin":
@@ -169,7 +176,7 @@ class RemoteConnection:
         return self._client_config
 
     @classmethod
-    def get_timeout(cls):
+    def get_timeout(cls) -> float | int | None:
         """:Returns:
 
         Timeout value in seconds for all http requests made to the
@@ -183,7 +190,7 @@ class RemoteConnection:
         return cls._client_config.timeout
 
     @classmethod
-    def set_timeout(cls, timeout):
+    def set_timeout(cls, timeout: int | float):
         """Override the default timeout.
 
         :Args:
@@ -207,7 +214,7 @@ class RemoteConnection:
         cls._client_config.reset_timeout()
 
     @classmethod
-    def get_certificate_bundle_path(cls):
+    def get_certificate_bundle_path(cls) -> str:
         """:Returns:
 
         Paths of the .pem encoded certificate to verify connection to
@@ -222,7 +229,7 @@ class RemoteConnection:
         return cls._client_config.ca_certs
 
     @classmethod
-    def set_certificate_bundle_path(cls, path):
+    def set_certificate_bundle_path(cls, path: str):
         """Set the path to the certificate bundle to verify connection to
         command executor. Can also be set to None to disable certificate
         validation.
@@ -238,7 +245,7 @@ class RemoteConnection:
         cls._client_config.ca_certs = path
 
     @classmethod
-    def get_remote_connection_headers(cls, parsed_url, keep_alive=False):
+    def get_remote_connection_headers(cls, parsed_url: str, keep_alive: bool = False) -> dict[str, Any]:
         """Get headers for remote request.
 
         :Args:
@@ -309,7 +316,7 @@ class RemoteConnection:
         keep_alive: Optional[bool] = True,
         ignore_proxy: Optional[bool] = False,
         ignore_certificates: Optional[bool] = False,
-        init_args_for_pool_manager: Optional[dict] = None,
+        init_args_for_pool_manager: Optional[dict[Any, Any]] = None,
         client_config: Optional[ClientConfig] = None,
     ):
         self._client_config = client_config or ClientConfig(
@@ -370,7 +377,7 @@ class RemoteConnection:
 
     extra_commands = {}
 
-    def add_command(self, name, method, url):
+    def add_command(self, name: str, method: str, url: str):
         """Register a new command."""
         self._commands[name] = (method, url)
 
@@ -378,7 +385,7 @@ class RemoteConnection:
         """Retrieve a command if it exists."""
         return self._commands.get(name)
 
-    def execute(self, command, params):
+    def execute(self, command: str, params: dict[Any, Any]) -> dict[str, Any]:
         """Send a command to the remote server.
 
         Any path substitutions required for the URL mapped to the command should be
@@ -403,7 +410,7 @@ class RemoteConnection:
         LOGGER.debug("%s %s %s", command_info[0], url, str(trimmed))
         return self._request(command_info[0], url, body=data)
 
-    def _request(self, method, url, body=None):
+    def _request(self, method: str, url: str, body: str | None = None) -> dict[Any, Any]:
         """Send an HTTP request to the remote server.
 
         :Args:
@@ -470,7 +477,7 @@ class RemoteConnection:
         if hasattr(self, "_conn"):
             self._conn.clear()
 
-    def _trim_large_entries(self, input_dict, max_length=100):
+    def _trim_large_entries(self, input_dict: dict[Any, Any], max_length: int = 100) -> dict[str, str]:
         """Truncate string values in a dictionary if they exceed max_length.
 
         :param dict: Dictionary with potentially large values
