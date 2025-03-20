@@ -430,7 +430,7 @@ class BaseOptions(metaclass=ABCMeta):
 
     Parameters:
     -----------
-    `value`: `bool`
+    `value`: `str`
 
     Returns:
     --------
