@@ -284,28 +284,6 @@ class BaseOptions(metaclass=ABCMeta):
         - `None`
     """
 
-    web_socket_url = _BaseOptionsDescriptor("webSocketUrl")
-    """Gets and Sets WebSocket URL.
-
-    Usage:
-    ------
-    - Get
-        - `self.web_socket_url`
-    - Set
-        - `self.web_socket_url` = `value`
-
-    Parameters:
-    -----------
-    `value`: `str`
-
-    Returns:
-    --------
-    - Get
-        - `str` or `None`
-    - Set
-        - `None`
-    """
-
     page_load_strategy = _PageLoadStrategyDescriptor("pageLoadStrategy")
     """:Gets and Sets page load strategy, the default is "normal".
 
