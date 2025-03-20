@@ -21,8 +21,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Remote
 {
     /// <summary>

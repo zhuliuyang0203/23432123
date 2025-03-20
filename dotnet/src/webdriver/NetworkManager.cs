@@ -20,6 +20,7 @@
 using OpenQA.Selenium.DevTools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
@@ -29,15 +30,17 @@ namespace OpenQA.Selenium
     /// </summary>
     public class NetworkManager : INetwork
     {
-        private Lazy<DevToolsSession> session;
-        private List<NetworkRequestHandler> requestHandlers = new List<NetworkRequestHandler>();
-        private List<NetworkResponseHandler> responseHandlers = new List<NetworkResponseHandler>();
-        private List<NetworkAuthenticationHandler> authenticationHandlers = new List<NetworkAuthenticationHandler>();
+        private readonly Lazy<DevToolsSession> session;
+        private readonly List<NetworkRequestHandler> requestHandlers = new List<NetworkRequestHandler>();
+        private readonly List<NetworkResponseHandler> responseHandlers = new List<NetworkResponseHandler>();
+        private readonly List<NetworkAuthenticationHandler> authenticationHandlers = new List<NetworkAuthenticationHandler>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkManager"/> class.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver"/> instance on which the network should be monitored.</param>
+        [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Warnings are added to StartMonitoring and StopMonitoring")]
+        [UnconditionalSuppressMessage("Trimming", "IL3050", Justification = "Warnings are added to StartMonitoring and StopMonitoring")]
         public NetworkManager(IWebDriver driver)
         {
             // Use of Lazy<T> means this exception won't be thrown until the user first
@@ -45,8 +48,7 @@ namespace OpenQA.Selenium
             // StartMonitoring().
             this.session = new Lazy<DevToolsSession>(() =>
             {
-                IDevTools devToolsDriver = driver as IDevTools;
-                if (devToolsDriver == null)
+                if (driver is not IDevTools devToolsDriver)
                 {
                     throw new WebDriverException("Driver must implement IDevTools to use these features");
                 }
@@ -58,17 +60,19 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a browser sends a network request.
         /// </summary>
-        public event EventHandler<NetworkRequestSentEventArgs> NetworkRequestSent;
+        public event EventHandler<NetworkRequestSentEventArgs>? NetworkRequestSent;
 
         /// <summary>
         /// Occurs when a browser receives a network response.
         /// </summary>
-        public event EventHandler<NetworkResponseReceivedEventArgs> NetworkResponseReceived;
+        public event EventHandler<NetworkResponseReceivedEventArgs>? NetworkResponseReceived;
 
         /// <summary>
         /// Asynchronously starts monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("NetworkManager is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("NetworkManager is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         public async Task StartMonitoring()
         {
             this.session.Value.Domains.Network.RequestPaused += OnRequestPaused;
@@ -83,6 +87,8 @@ namespace OpenQA.Selenium
         /// Asynchronously stops monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         public async Task StopMonitoring()
         {
             this.session.Value.Domains.Network.ResponsePaused -= OnResponsePaused;
@@ -96,6 +102,7 @@ namespace OpenQA.Selenium
         /// and optionally modify the request or provide a response.
         /// </summary>
         /// <param name="handler">The <see cref="NetworkRequestHandler"/> to add.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="handler"/> is <see langword="null"/>.</exception>
         public void AddRequestHandler(NetworkRequestHandler handler)
         {
             if (handler == null)
@@ -146,8 +153,7 @@ namespace OpenQA.Selenium
                 throw new ArgumentException("Credentials to use for authentication cannot be null", nameof(handler));
             }
 
-            var passwordCredentials = handler.Credentials as PasswordCredentials;
-            if (passwordCredentials == null)
+            if (handler.Credentials is not PasswordCredentials)
             {
                 throw new ArgumentException("Credentials must contain user name and password (PasswordCredentials)", nameof(handler));
             }
@@ -198,9 +204,9 @@ namespace OpenQA.Selenium
             bool successfullyAuthenticated = false;
             foreach (var authenticationHandler in this.authenticationHandlers)
             {
-                if (authenticationHandler.UriMatcher.Invoke(uri))
+                if (authenticationHandler.UriMatcher!.Invoke(uri))
                 {
-                    PasswordCredentials credentials = (PasswordCredentials)authenticationHandler.Credentials;
+                    PasswordCredentials credentials = (PasswordCredentials)authenticationHandler.Credentials!;
                     await this.session.Value.Domains.Network.ContinueWithAuth(e.RequestId, credentials.UserName, credentials.Password).ConfigureAwait(false);
                     successfullyAuthenticated = true;
                     break;
@@ -222,7 +228,7 @@ namespace OpenQA.Selenium
 
             foreach (var handler in this.requestHandlers)
             {
-                if (handler.RequestMatcher.Invoke(e.RequestData))
+                if (handler.RequestMatcher!.Invoke(e.RequestData))
                 {
                     if (handler.RequestTransformer != null)
                     {
@@ -256,14 +262,14 @@ namespace OpenQA.Selenium
 
             foreach (var handler in this.responseHandlers)
             {
-                if (handler.ResponseMatcher.Invoke(e.ResponseData))
+                if (handler.ResponseMatcher!.Invoke(e.ResponseData))
                 {
                     // NOTE: We create a dummy HttpRequestData object here, because the ContinueRequestWithResponse
                     // method demands one; however, the only property used by that method is the RequestId property.
                     // It might be better to refactor that method signature to simply pass the request ID, or
                     // alternatively, just pass the response data, which should also contain the request ID anyway.
                     HttpRequestData requestData = new HttpRequestData { RequestId = e.ResponseData.RequestId };
-                    await this.session.Value.Domains.Network.ContinueRequestWithResponse(requestData, handler.ResponseTransformer(e.ResponseData)).ConfigureAwait(false);
+                    await this.session.Value.Domains.Network.ContinueRequestWithResponse(requestData, handler.ResponseTransformer!(e.ResponseData)).ConfigureAwait(false);
                     return;
                 }
             }

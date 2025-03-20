@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 public sealed class Subscription

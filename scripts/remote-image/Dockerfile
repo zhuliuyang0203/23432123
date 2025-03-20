@@ -1,5 +1,5 @@
 # Our images must be for Linux x86_64
-FROM --platform=linux/amd64 ubuntu:focal@sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+FROM --platform=linux/amd64 ubuntu:jammy@sha256:ed1544e454989078f5dec1bfdabd8c5cc9c48e0705d07b678ab6ae3fb61952d2
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -11,7 +11,7 @@ RUN apt-get -qqy update && \
       libnet1 \
       libzip-dev \
       linux-libc-dev \
-      python3.9 \
+      python3.10 \
       python-is-python3 \
       zip \
       zlib1g && \

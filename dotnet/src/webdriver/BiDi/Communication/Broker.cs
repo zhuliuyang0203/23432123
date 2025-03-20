@@ -30,8 +30,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication;
 
 public class Broker : IAsyncDisposable
@@ -56,16 +54,20 @@ public class Broker : IAsyncDisposable
 
     private readonly BiDiJsonSerializerContext _jsonSerializerContext;
 
-    internal Broker(BiDi bidi, ITransport transport)
+    internal Broker(BiDi bidi, Uri url)
     {
         _bidi = bidi;
-        _transport = transport;
+        _transport = new WebSocketTransport(url);
 
         var jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+
+            // BiDi returns special numbers such as "NaN" as strings
+            // Additionally, -0 is returned as a string "-0"
+            NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals | JsonNumberHandling.AllowReadingFromString,
             Converters =
             {
                 new BrowsingContextConverter(_bidi),
@@ -302,6 +304,12 @@ public class Broker : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
         _pendingEvents.CompleteAdding();
 
         _receiveMessagesCancellationTokenSource?.Cancel();
@@ -310,5 +318,7 @@ public class Broker : IAsyncDisposable
         {
             await _eventEmitterTask.ConfigureAwait(false);
         }
+
+        _transport.Dispose();
     }
 }

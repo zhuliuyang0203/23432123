@@ -20,8 +20,6 @@
 using System.Collections.Generic;
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class SetCacheBehaviorCommand(SetCacheBehaviorCommandParameters @params)

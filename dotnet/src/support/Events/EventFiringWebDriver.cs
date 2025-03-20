@@ -442,14 +442,14 @@ namespace OpenQA.Selenium.Support.Events
         /// variable, as if the function were called via "Function.apply"
         /// </para>
         /// </remarks>
-        public object ExecuteScript(string script, params object?[] args)
+        public object? ExecuteScript(string script, params object?[] args)
         {
             if (this.WrappedDriver is not IJavaScriptExecutor javascriptDriver)
             {
                 throw new NotSupportedException("Underlying driver instance does not support executing JavaScript");
             }
 
-            object scriptResult;
+            object? scriptResult;
             try
             {
                 object?[] unwrappedArgs = UnwrapElementArguments(args);
@@ -505,7 +505,7 @@ namespace OpenQA.Selenium.Support.Events
         /// variable, as if the function were called via "Function.apply"
         /// </para>
         /// </remarks>
-        public object ExecuteScript(PinnedScript script, params object?[] args)
+        public object? ExecuteScript(PinnedScript script, params object?[] args)
         {
             if (script == null)
             {
@@ -517,7 +517,7 @@ namespace OpenQA.Selenium.Support.Events
                 throw new NotSupportedException("Underlying driver instance does not support executing JavaScript");
             }
 
-            object scriptResult;
+            object? scriptResult;
             try
             {
                 object?[] unwrappedArgs = UnwrapElementArguments(args);
@@ -542,14 +542,14 @@ namespace OpenQA.Selenium.Support.Events
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        public object ExecuteAsyncScript(string script, params object?[] args)
+        public object? ExecuteAsyncScript(string script, params object?[] args)
         {
             if (this.WrappedDriver is not IJavaScriptExecutor javascriptDriver)
             {
                 throw new NotSupportedException("Underlying driver instance does not support executing JavaScript");
             }
 
-            object scriptResult;
+            object? scriptResult;
             try
             {
                 object?[] unwrappedArgs = UnwrapElementArguments(args);
@@ -1589,20 +1589,17 @@ namespace OpenQA.Selenium.Support.Events
             /// </summary>
             /// <param name="attributeName">Attribute you wish to get details of</param>
             /// <returns>The attribute's current value or null if the value is not set.</returns>
-            public string GetAttribute(string attributeName)
+            public string? GetAttribute(string attributeName)
             {
-                string attribute;
                 try
                 {
-                    attribute = this.WrappedElement.GetAttribute(attributeName);
+                    return this.WrappedElement.GetAttribute(attributeName);
                 }
                 catch (Exception ex)
                 {
                     this.parentDriver.OnException(new WebDriverExceptionEventArgs(this.parentDriver, ex));
                     throw;
                 }
-
-                return attribute;
             }
 
             /// <summary>
@@ -1617,20 +1614,17 @@ namespace OpenQA.Selenium.Support.Events
             /// of an IDL property of the element, either use the <see cref="GetAttribute(string)"/>
             /// method or the <see cref="GetDomProperty(string)"/> method.
             /// </remarks>
-            public string GetDomAttribute(string attributeName)
+            public string? GetDomAttribute(string attributeName)
             {
-                string attribute;
                 try
                 {
-                    attribute = this.WrappedElement.GetDomAttribute(attributeName);
+                    return this.WrappedElement.GetDomAttribute(attributeName);
                 }
                 catch (Exception ex)
                 {
                     this.parentDriver.OnException(new WebDriverExceptionEventArgs(this.parentDriver, ex));
                     throw;
                 }
-
-                return attribute;
             }
 
             /// <summary>
@@ -1639,20 +1633,17 @@ namespace OpenQA.Selenium.Support.Events
             /// <param name="propertyName">The name of the JavaScript property to get the value of.</param>
             /// <returns>The JavaScript property's current value. Returns a <see langword="null"/> if the
             /// value is not set or the property does not exist.</returns>
-            public string GetDomProperty(string propertyName)
+            public string? GetDomProperty(string propertyName)
             {
-                string elementProperty;
                 try
                 {
-                    elementProperty = this.WrappedElement.GetDomProperty(propertyName);
+                    return this.WrappedElement.GetDomProperty(propertyName);
                 }
                 catch (Exception ex)
                 {
                     this.parentDriver.OnException(new WebDriverExceptionEventArgs(this.parentDriver, ex));
                     throw;
                 }
-
-                return elementProperty;
             }
 
             /// <summary>
@@ -1683,22 +1674,19 @@ namespace OpenQA.Selenium.Support.Events
             /// <returns>A shadow root representation.</returns>
             public ISearchContext GetShadowRoot()
             {
-                ISearchContext shadowRoot;
                 try
                 {
                     GetShadowRootEventArgs e = new GetShadowRootEventArgs(this.parentDriver.WrappedDriver, this.WrappedElement);
                     this.parentDriver.OnGettingShadowRoot(e);
-                    shadowRoot = this.WrappedElement.GetShadowRoot();
+                    ISearchContext shadowRoot = this.WrappedElement.GetShadowRoot();
                     this.parentDriver.OnGetShadowRootCompleted(e);
-                    shadowRoot = new EventFiringShadowRoot(this.parentDriver, shadowRoot);
+                    return new EventFiringShadowRoot(this.parentDriver, shadowRoot);
                 }
                 catch (Exception ex)
                 {
                     this.parentDriver.OnException(new WebDriverExceptionEventArgs(this.parentDriver, ex));
                     throw;
                 }
-
-                return shadowRoot;
             }
 
             /// <summary>

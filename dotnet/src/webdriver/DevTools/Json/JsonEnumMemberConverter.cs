@@ -19,16 +19,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools.Json
 {
-    internal sealed class JsonEnumMemberConverter<TEnum> : JsonConverter<TEnum>
+    internal sealed class JsonEnumMemberConverter<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields)] TEnum> : JsonConverter<TEnum>
         where TEnum : struct, Enum
     {
         private readonly Dictionary<TEnum, string> _enumToString = new Dictionary<TEnum, string>();

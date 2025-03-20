@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 using System;
 
 namespace OpenQA.Selenium.DevTools

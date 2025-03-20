@@ -92,15 +92,13 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
   '//java/test/org/openqa/selenium/environment:webserver'
 ]
 
-# Java targets required for release. These should all be java_export targets.
-# Generated from: bazel query 'kind(maven_publish, set(//java/... //third_party/...))' | sort
+# use #java_release_targets to access this list
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v131:v131.publish
+  //java/src/org/openqa/selenium/devtools/v134:v134.publish
   //java/src/org/openqa/selenium/devtools/v132:v132.publish
   //java/src/org/openqa/selenium/devtools/v133:v133.publish
-  //java/src/org/openqa/selenium/devtools/v85:v85.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
   //java/src/org/openqa/selenium/grid/sessionmap/jdbc:jdbc.publish
@@ -119,6 +117,34 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium:client-combined.publish
   //java/src/org/openqa/selenium:core.publish
 ].freeze
+
+def java_release_targets
+  @targets_verified ||= verify_java_release_targets
+
+  JAVA_RELEASE_TARGETS
+end
+
+def verify_java_release_targets
+  query = 'kind(maven_publish, set(//java/... //third_party/...))'
+  current_targets = []
+
+  Bazel.execute('query', [], query) do |output|
+    current_targets = output.lines.map(&:strip).reject(&:empty?).select { |line| line.start_with?('//') }
+  end
+
+  missing_targets = current_targets - JAVA_RELEASE_TARGETS
+  extra_targets = JAVA_RELEASE_TARGETS - current_targets
+
+  return if missing_targets.empty? && extra_targets.empty?
+
+  error_message = 'Java release targets are out of sync with Bazel query results.'
+
+  error_message += "\nMissing targets: #{missing_targets.join(', ')}" unless missing_targets.empty?
+
+  error_message += "\nObsolete targets: #{extra_targets.join(', ')}" unless extra_targets.empty?
+
+  raise error_message
+end
 
 # Notice that because we're using rake, anything you can do in a normal rake
 # build can also be done here. For example, here we set the default task
@@ -364,7 +390,7 @@ end
 
 desc 'Install jars to local m2 directory'
 task :'maven-install' do
-  JAVA_RELEASE_TARGETS.each do |p|
+  java_release_targets.each do |p|
     Bazel.execute('run',
                   ['--stamp',
                    '--define',
@@ -826,7 +852,7 @@ namespace :java do
   desc 'Build Java Client Jars'
   task :build do |_task, arguments|
     args = arguments.to_a.compact
-    JAVA_RELEASE_TARGETS.each { |target| Bazel.execute('build', args, target) }
+    java_release_targets.each { |target| Bazel.execute('build', args, target) }
   end
 
   desc 'Build Grid Server'
@@ -873,7 +899,7 @@ namespace :java do
     Rake::Task['java:package'].invoke('--config=release')
     Rake::Task['java:build'].invoke('--config=release')
     # Because we want to `run` things, we can't use the `release` config
-    JAVA_RELEASE_TARGETS.each { |target| Bazel.execute('run', ['--config=release'], target) }
+    java_release_targets.each { |target| Bazel.execute('run', ['--config=release'], target) }
   end
 
   desc 'Install jars to local m2 directory'
@@ -894,22 +920,19 @@ namespace :java do
 
     file_path = 'MODULE.bazel'
     content = File.read(file_path)
-    # For some reason ./go wrapper is not outputting from Open3, so cannot use Bazel class directly
-    output = `bazel run @maven//:outdated`
-
-    output.scan(/\S+ \[\S+-alpha\]/).each do |match|
-      puts "WARNING — Cannot automatically update alpha version of: #{match}"
+    output = nil
+    Bazel.execute('run', [], '@maven//:outdated') do |out|
+      output = out
     end
 
     versions = output.scan(/(\S+) \[\S+ -> (\S+)\]/).to_h
     versions.each do |artifact, version|
       if artifact.match?('graphql')
+        # https://github.com/graphql-java/graphql-java/discussions/3187
         puts 'WARNING — Cannot automatically update graphql'
         next
       end
-
-      replacement = artifact.include?('googlejavaformat') ? "#{artifact}:jar:#{version}" : "#{artifact}:#{version}"
-      content.gsub!(/#{artifact}:(jar:)?\d+\.\d+[^\\"]+/, replacement)
+      content.sub!(/#{Regexp.escape(artifact)}:([\d.-]+(?:[-.]?[A-Za-z0-9]+)*)/, "#{artifact}:#{version}")
     end
     File.write(file_path, content)
 
@@ -1087,7 +1110,7 @@ namespace :all do
     commit!('Update selenium manager version', ['common/selenium_manager.bzl'])
 
     Rake::Task['java:update'].invoke
-    commit!('Update Maven Dependencies', ['java/maven_deps.bzl', 'java/maven_install.json'])
+    commit!('Update Maven Dependencies', ['MODULE.bazel', 'java/maven_install.json'])
 
     Rake::Task['authors'].invoke
     commit!('Update authors file', ['AUTHORS'])
@@ -1095,26 +1118,30 @@ namespace :all do
     # Note that this does not include Rust version changes that are handled in separate rake:version task
     # TODO: These files are all defined in other tasks; remove duplication
     Rake::Task['all:version'].invoke(version)
-    commit!("FIX CHANGELOGS BEFORE MERGING!\n\nUpdate versions and change logs to release Selenium #{java_version}",
-            ['dotnet/CHANGELOG',
-             'dotnet/selenium-dotnet-version.bzl',
-             'java/CHANGELOG',
+    commit!("Update Version in all bindings to #{java_version}",
+            ['dotnet/selenium-dotnet-version.bzl',
              'java/version.bzl',
-             'javascript/node/selenium-webdriver/CHANGES.md',
+             'javascript/node/selenium-webdriver/BUILD.bazel',
              'javascript/node/selenium-webdriver/package.json',
              'py/docs/source/conf.py',
+             'py/pyproject.toml',
              'py/selenium/__init__.py',
              'py/selenium/webdriver/__init__.py',
              'py/BUILD.bazel',
-             'py/CHANGES',
              'rb/lib/selenium/webdriver/version.rb',
-             'rb/CHANGES',
              'rb/Gemfile.lock',
-             'rust/CHANGELOG.md',
              'rust/BUILD.bazel',
              'rust/Cargo.Bazel.lock',
              'rust/Cargo.toml',
              'rust/Cargo.lock'])
+
+    commit!("FIX CHANGELOGS BEFORE MERGING! #{java_version}",
+            ['dotnet/CHANGELOG',
+             'java/CHANGELOG',
+             'javascript/node/selenium-webdriver/CHANGES.md',
+             'py/CHANGES',
+             'rb/CHANGES',
+             'rust/CHANGELOG.md'])
   end
 
   desc 'Update all versions'
@@ -1191,16 +1218,25 @@ end
 
 def update_changelog(version, language, path, changelog, header)
   tag = previous_tag(version, language)
-  log = if language == 'javascript'
-          `git --no-pager log #{tag}...HEAD --pretty=format:"- %s" --reverse #{path}`
-        else
-          `git --no-pager log #{tag}...HEAD --pretty=format:"* %s" --reverse #{path}`
-        end
-  commits = log.split('>>>').map { |entry|
-    lines = entry.split("\n")
-    lines.reject! { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }
-    lines.join("\n")
-  }.join("\n>>>")
+  bullet = language == 'javascript' ? '- ' : '* '
+  commit_delimiter = '===DELIM==='
+  tags_to_remove = /\[(dotnet|rb|py|java|js|rust)\]:?\s?/
+
+  command = "git --no-pager log #{tag}...HEAD --pretty=format:\"%s%n%b#{commit_delimiter}\" --reverse #{path}"
+  puts "Executing git command: #{command}"
+
+  log = `#{command}`
+
+  commits = log.split(commit_delimiter).map { |commit|
+    lines = commit.gsub(tags_to_remove, '').strip.lines.map(&:chomp)
+    subject = "#{bullet}#{lines[0]}"
+
+    body = lines[1..]
+           .reject { |line| line.match?(/^(----|Co-authored|Signed-off)/) || line.empty? }
+           .map { |line| "    > #{line}" }
+           .join("\n")
+    body.empty? ? subject : "#{subject}\n#{body}"
+  }.join("\n")
 
   File.open(changelog, 'r+') do |file|
     new_content = "#{header}\n#{commits}\n\n#{file.read}"

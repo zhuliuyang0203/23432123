@@ -25,8 +25,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Safari
 {
     /// <summary>
@@ -103,20 +101,22 @@ namespace OpenQA.Selenium.Safari
         /// </summary>
         /// <param name="driverPath">The path to the executable or the directory containing the SafariDriver executable.</param>
         /// <returns>A SafariDriverService using a random port.</returns>
-        public static SafariDriverService CreateDefaultService(string driverPath)
+        public static SafariDriverService CreateDefaultService(string? driverPath)
         {
-            string fileName;
             if (File.Exists(driverPath))
             {
-                fileName = Path.GetFileName(driverPath);
-                driverPath = Path.GetDirectoryName(driverPath)!;
+                string fileName = Path.GetFileName(driverPath);
+                string driverFolder = Path.GetDirectoryName(driverPath)!;
+
+                return CreateDefaultService(driverFolder, fileName);
             }
             else
             {
-                fileName = DefaultSafariDriverServiceExecutableName;
-            }
+                string fileName = DefaultSafariDriverServiceExecutableName;
+                string? driverFolder = driverPath;
 
-            return CreateDefaultService(driverPath, fileName);
+                return CreateDefaultService(driverFolder, fileName);
+            }
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace OpenQA.Selenium.Safari
         /// <param name="driverPath">The directory containing the SafariDriver executable.</param>
         /// <param name="driverExecutableFileName">The name of the SafariDriver executable file.</param>
         /// <returns>A SafariDriverService using a random port.</returns>
-        public static SafariDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)
+        public static SafariDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)
         {
             return new SafariDriverService(driverPath, driverExecutableFileName, PortUtilities.FindFreePort());
         }

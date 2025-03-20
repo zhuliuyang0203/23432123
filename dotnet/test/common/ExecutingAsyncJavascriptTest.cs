@@ -137,7 +137,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "https://bugs.chromium.org/p/chromedriver/issues/detail?id=4525")]
         public void ShouldBeAbleToReturnArraysOfWebElementsFromAsyncScripts()
         {
             driver.Url = ajaxyPage;

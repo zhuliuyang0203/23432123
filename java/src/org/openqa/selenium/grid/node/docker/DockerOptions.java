@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,6 +64,7 @@ public class DockerOptions {
   static final String DEFAULT_DOCKER_URL = "unix:/var/run/docker.sock";
   static final String DEFAULT_VIDEO_IMAGE = "false";
   static final int DEFAULT_MAX_SESSIONS = Runtime.getRuntime().availableProcessors();
+  static final int DEFAULT_SERVER_START_TIMEOUT = 60;
   private static final String DEFAULT_DOCKER_NETWORK = "bridge";
   private static final Logger LOG = Logger.getLogger(DockerOptions.class.getName());
   private static final Json JSON = new Json();
@@ -102,6 +104,11 @@ public class DockerOptions {
     } catch (URISyntaxException e) {
       throw new ConfigException("Unable to determine docker url", e);
     }
+  }
+
+  private Duration getServerStartTimeout() {
+    return Duration.ofSeconds(
+        config.getInt(DOCKER_SECTION, "server-start-timeout").orElse(DEFAULT_SERVER_START_TIMEOUT));
   }
 
   private boolean isEnabled(Docker docker) {
@@ -179,6 +186,7 @@ public class DockerOptions {
                     tracer,
                     clientFactory,
                     options.getSessionTimeout(),
+                    getServerStartTimeout(),
                     docker,
                     getDockerUri(),
                     image,

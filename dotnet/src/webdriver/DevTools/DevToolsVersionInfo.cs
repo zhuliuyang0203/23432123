@@ -21,8 +21,6 @@ using System;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

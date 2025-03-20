@@ -34,8 +34,6 @@ import static org.openqa.selenium.remote.tracing.Tags.EXCEPTION;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import dev.failsafe.Failsafe;
-import dev.failsafe.RetryPolicy;
 import java.io.Closeable;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -375,7 +373,10 @@ public class LocalDistributor extends Distributor implements Closeable {
       return this;
     }
 
-    updateNodeStatus(initialNodeStatus, healthCheck);
+    updateNodeAvailability(
+        initialNodeStatus.getExternalUri(),
+        initialNodeStatus.getNodeId(),
+        initialNodeStatus.getAvailability());
 
     LOG.info(
         String.format(
@@ -385,30 +386,6 @@ public class LocalDistributor extends Distributor implements Closeable {
     bus.fire(new NodeAddedEvent(node.getId()));
 
     return this;
-  }
-
-  private void updateNodeStatus(NodeStatus status, Runnable healthCheck) {
-    // Setting the Node as available if the initial call to status was successful.
-    // Otherwise, retry to have it available as soon as possible.
-    if (status.getAvailability() == UP) {
-      updateNodeAvailability(status.getExternalUri(), status.getNodeId(), status.getAvailability());
-    } else {
-      // Running the health check right after the Node registers itself. We retry the
-      // execution because the Node might on a complex network topology. For example,
-      // Kubernetes pods with IPs that take a while before they are reachable.
-      RetryPolicy<Object> initialHealthCheckPolicy =
-          RetryPolicy.builder()
-              .withMaxAttempts(-1)
-              .withMaxDuration(Duration.ofSeconds(90))
-              .withDelay(Duration.ofSeconds(15))
-              .abortIf(result -> true)
-              .build();
-
-      LOG.log(getDebugLogLevel(), "Running health check for Node " + status.getExternalUri());
-      ExecutorService executor = Executors.newSingleThreadExecutor();
-      executor.submit(() -> Failsafe.with(initialHealthCheckPolicy).run(healthCheck::run));
-      executor.shutdown();
-    }
   }
 
   private Runnable runNodeHealthChecks() {

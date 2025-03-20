@@ -20,8 +20,6 @@
 using System;
 using System.Text;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

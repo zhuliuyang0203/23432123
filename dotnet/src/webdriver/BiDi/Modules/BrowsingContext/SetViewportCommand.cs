@@ -19,8 +19,6 @@
 
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class SetViewportCommand(SetViewportCommandParameters @params)

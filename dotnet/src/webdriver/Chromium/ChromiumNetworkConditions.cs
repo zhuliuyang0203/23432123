@@ -21,8 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Chromium
 {
     /// <summary>

@@ -20,8 +20,6 @@
 using System;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

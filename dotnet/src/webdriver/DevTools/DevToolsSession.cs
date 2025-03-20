@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal.Logging;
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Http;
 using System.Text.Json;
@@ -27,16 +28,18 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
     /// Represents a WebSocket connection to a running DevTools instance that can be used to send
     /// commands and receive events.
     ///</summary>
+    [RequiresUnreferencedCode(CDP_AOTIncompatibilityMessage)]
+    [RequiresDynamicCode(CDP_AOTIncompatibilityMessage)]
     public class DevToolsSession : IDevToolsSession
     {
+        internal const string CDP_AOTIncompatibilityMessage = "CDP is not compatible with trimming or AOT.";
+
         /// <summary>
         /// A value indicating that the version of the DevTools protocol in use
         /// by the browser should be automatically detected.
@@ -496,7 +499,7 @@ namespace OpenQA.Selenium.DevTools
             LogTrace("Creating WebSocket");
             this.connection = new WebSocketConnection(this.openConnectionWaitTimeSpan, this.closeConnectionWaitTimeSpan);
             connection.DataReceived += OnConnectionDataReceived;
-            await connection.Start(this.EndpointAddress).ConfigureAwait(false);
+            await connection.Start(this.EndpointAddress!).ConfigureAwait(false);
             LogTrace("WebSocket created");
         }
 

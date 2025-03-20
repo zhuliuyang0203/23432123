@@ -21,8 +21,6 @@ using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public sealed class ScriptModule(Broker broker) : Module(broker)

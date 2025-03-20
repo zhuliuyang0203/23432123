@@ -19,8 +19,6 @@
 
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public class ScriptEvaluateException(EvaluateResult.Exception evaluateResultException) : Exception

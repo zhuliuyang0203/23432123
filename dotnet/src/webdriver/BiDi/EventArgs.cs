@@ -20,8 +20,6 @@
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi;
 
 public abstract record EventArgs(BiDi BiDi)
