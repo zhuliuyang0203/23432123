@@ -121,6 +121,7 @@ const zip = require('./io/zip')
 const { Browser, Capabilities, Capability } = require('./lib/capabilities')
 const { Zip } = require('./io/zip')
 const { getBinaryPaths } = require('./common/driverFinder')
+const portprober = require("./net/portprober");
 const FIREFOX_CAPABILITY_KEY = 'moz:firefoxOptions'
 
 /**
@@ -492,6 +493,10 @@ class ServiceBuilder extends remote.DriverService.Builder {
    */
   constructor(opt_exe) {
     super(opt_exe)
+    if (!self.args.includes('--connect-existing')) {
+        self.args.append('--websocket-port')
+        self.args.append(`${portprober.findFreePort()}`)
+    }
     this.setLoopback(true) // Required.
   }
 
