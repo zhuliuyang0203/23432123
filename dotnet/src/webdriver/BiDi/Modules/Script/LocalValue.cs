@@ -148,7 +148,7 @@ public abstract record PrimitiveProtocolLocalValue : LocalValue;
 
 public record NumberLocalValue(double Value) : PrimitiveProtocolLocalValue
 {
-    public static implicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
+    public static explicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
 }
 
 public record StringLocalValue(string Value) : PrimitiveProtocolLocalValue;
