@@ -69,6 +69,9 @@ public abstract record LocalValue
             case double d:
                 return new NumberLocalValue(d);
 
+            case BigInteger bigInt:
+                return new BigIntLocalValue(bigInt.ToString());
+
             case string str:
                 return new StringLocalValue(str);
 
