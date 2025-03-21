@@ -484,12 +484,15 @@ namespace :node do
 
   desc 'Generate Node documentation'
   task :docs, [:skip_update] do |_task, arguments|
+    abort('Aborting documentation update: nightly versions should not update docs.') if node_version.include?('nightly')
+
+    puts 'Generating Node documentation'
     FileUtils.rm_rf('build/docs/api/javascript/')
     begin
-      sh 'npm run generate-docs --prefix javascript/node/selenium-webdriver || true', verbose: true
-    rescue StandardError
-      puts 'Ensure that npm is installed on your system'
-      raise
+      sh 'npm install --prefix javascript/node/selenium-webdriver', verbose: true
+      sh 'npm run generate-docs --prefix javascript/node/selenium-webdriver', verbose: true
+    rescue StandardError => e
+      puts "Node documentation generation contains errors; continuing... #{e.message}"
     end
 
     update_gh_pages unless arguments[:skip_update]
@@ -576,6 +579,11 @@ namespace :py do
 
   desc 'Generate Python documentation'
   task :docs, [:skip_update] do |_task, arguments|
+    if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/)
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
+    puts 'Generating Python documentation'
+
     FileUtils.rm_rf('build/docs/api/py/')
     FileUtils.rm_rf('build/docs/doctrees/')
     begin
@@ -714,6 +722,9 @@ namespace :rb do
 
   desc 'Generate Ruby documentation'
   task :docs, [:skip_update] do |_task, arguments|
+    abort('Aborting documentation update: nightly versions should not update docs.') if ruby_version.include?('nightly')
+    puts 'Generating Ruby documentation'
+
     FileUtils.rm_rf('build/docs/api/rb/')
     Bazel.execute('run', [], '//rb:docs')
     FileUtils.mkdir_p('build/docs/api')
@@ -801,6 +812,11 @@ namespace :dotnet do
 
   desc 'Generate .NET documentation'
   task :docs, [:skip_update] do |_task, arguments|
+    if dotnet_version.include?('nightly')
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
+
+    puts 'Generating .NET documentation'
     FileUtils.rm_rf('build/docs/api/dotnet/')
     begin
       # Pinning to 2.78.2 to avoid breaking changes in newer versions
@@ -907,6 +923,11 @@ namespace :java do
 
   desc 'Generate Java documentation'
   task :docs, [:skip_update] do |_task, arguments|
+    if java_version.include?('SNAPSHOT')
+      abort('Aborting documentation update: snapshot versions should not update docs.')
+    end
+
+    puts 'Generating Java documentation'
     Rake::Task['javadocs'].invoke
 
     update_gh_pages unless arguments[:skip_update]
@@ -1175,26 +1196,34 @@ def updated_version(current, desired = nil, nightly = nil)
   end
 end
 
-def update_gh_pages
-  @git.fetch('origin', {ref: 'gh-pages'})
-  @git.checkout('gh-pages', force: true)
+def update_gh_pages(force: true)
+  puts 'Switching to gh-pages branch...'
+  @git.fetch('https://github.com/seleniumhq/selenium.git', {ref: 'gh-pages'})
+
+  unless force
+    puts 'Stashing current changes before checkout...'
+    Git::Stash.new(@git, 'stash wip')
+  end
+
+  @git.checkout('gh-pages', force: force)
+
+  updated = false
 
   %w[java rb py dotnet javascript].each do |language|
-    next unless Dir.exist?("build/docs/api/#{language}") && !Dir.empty?("build/docs/api/#{language}")
+    source = "build/docs/api/#{language}"
+    destination = "docs/api/#{language}"
 
-    FileUtils.rm_rf("docs/api/#{language}")
-    FileUtils.mv("build/docs/api/#{language}", "docs/api/#{language}")
+    next unless Dir.exist?(source) && !Dir.empty?(source)
 
-    commit!("updating #{language} API docs", ["docs/api/#{language}/"])
+    puts "Updating documentation for #{language}..."
+    FileUtils.rm_rf(destination)
+    FileUtils.mv(source, destination)
+
+    @git.add(destination)
+    updated = true
   end
-end
 
-def restore_git(origin_reference)
-  puts 'Stashing docs changes for gh-pages'
-  Git::Stash.new(@git, 'docs changes for gh-pages')
-  puts "Checking out originating branch/tag — #{origin_reference}"
-  @git.checkout(origin_reference)
-  false
+  puts(updated ? 'Documentation staged. Ready for commit.' : 'No documentation changes found.')
 end
 
 def previous_tag(current_version, language = nil)
