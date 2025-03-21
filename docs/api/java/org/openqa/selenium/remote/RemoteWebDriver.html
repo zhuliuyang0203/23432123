@@ -257,7 +257,7 @@ implements <a href="../WebDriver.html" title="interface in org.openqa.selenium">
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDownloadableFiles()" class="member-name-link">getDownloadableFiles</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Retrieves the downloadable files as a map of file names and their corresponding URLs.</div>
+<div class="block">Retrieves the names of the downloadable files.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="JsonToWebElementConverter.html" title="class in org.openqa.selenium.remote">JsonToWebElementConverter</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getElementConverter()" class="member-name-link">getElementConverter</a>()</code></div>
@@ -1128,12 +1128,12 @@ implements <a href="../WebDriver.html" title="interface in org.openqa.selenium">
 <section class="detail" id="getDownloadableFiles()">
 <h3>getDownloadableFiles</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getDownloadableFiles</span>()</div>
-<div class="block">Retrieves the downloadable files as a map of file names and their corresponding URLs.</div>
+<div class="block">Retrieves the names of the downloadable files.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../HasDownloads.html#getDownloadableFiles()">getDownloadableFiles</a></code>&nbsp;in interface&nbsp;<code><a href="../HasDownloads.html" title="interface in org.openqa.selenium">HasDownloads</a></code></dd>
 <dt>Returns:</dt>
-<dd>A map containing file names as keys and URLs as values.</dd>
+<dd>A list containing the names of the downloadable files.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../WebDriverException.html" title="class in org.openqa.selenium">WebDriverException</a></code> - if capability to enable downloads is not set</dd>
 </dl>

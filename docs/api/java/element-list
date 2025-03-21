@@ -1,9 +1,11 @@
 org.openqa.selenium
 org.openqa.selenium.bidi
+org.openqa.selenium.bidi.browser
 org.openqa.selenium.bidi.browsingcontext
 org.openqa.selenium.bidi.log
 org.openqa.selenium.bidi.module
 org.openqa.selenium.bidi.network
+org.openqa.selenium.bidi.permissions
 org.openqa.selenium.bidi.script
 org.openqa.selenium.bidi.storage
 org.openqa.selenium.chrome
@@ -75,7 +77,6 @@ org.openqa.selenium.json
 org.openqa.selenium.logging
 org.openqa.selenium.logging.profiler
 org.openqa.selenium.manager
-org.openqa.selenium.mobile
 org.openqa.selenium.net
 org.openqa.selenium.netty.server
 org.openqa.selenium.os
@@ -88,7 +89,6 @@ org.openqa.selenium.remote.http
 org.openqa.selenium.remote.http.jdk
 org.openqa.selenium.remote.internal
 org.openqa.selenium.remote.locators
-org.openqa.selenium.remote.mobile
 org.openqa.selenium.remote.service
 org.openqa.selenium.remote.tracing
 org.openqa.selenium.remote.tracing.empty
