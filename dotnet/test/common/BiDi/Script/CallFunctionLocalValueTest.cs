@@ -27,7 +27,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentUndefined()
     {
-        var arg = LocalValue.Undefined;
+        var arg = new UndefinedLocalValue();
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -43,7 +43,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNull()
     {
-        var arg = LocalValue.Null;
+        var arg = new NullLocalValue();
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -59,7 +59,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentTrue()
     {
-        var arg = LocalValue.True;
+        var arg = new BooleanLocalValue(true);
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -75,7 +75,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentFalse()
     {
-        var arg = LocalValue.False;
+        var arg = new BooleanLocalValue(false);
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -91,7 +91,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentBigInt()
     {
-        var arg = LocalValue.BigInt(12345);
+        var arg = new BigIntLocalValue("12345");
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -107,7 +107,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentEmptyString()
     {
-        var arg = LocalValue.String(string.Empty);
+        var arg = new StringLocalValue(string.Empty);
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -123,7 +123,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNonEmptyString()
     {
-        var arg = LocalValue.String("whoa");
+        var arg = new StringLocalValue("whoa");
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -177,7 +177,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberFive()
     {
-        var arg = LocalValue.Number(5);
+        var arg = new NumberLocalValue(5);
 
         Assert.That(async () =>
         {
@@ -194,7 +194,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberNegativeFive()
     {
-        var arg = LocalValue.Number(-5);
+        var arg = new NumberLocalValue(-5);
 
         Assert.That(async () =>
         {
@@ -211,7 +211,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberZero()
     {
-        var arg = LocalValue.Number(0);
+        var arg = new NumberLocalValue(0);
 
         Assert.That(async () =>
         {
@@ -230,7 +230,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [IgnoreBrowser(Selenium.Browser.Chrome, "Chromium can't handle -0 argument as a number: https://github.com/w3c/webdriver-bidi/issues/887")]
     public void CanCallFunctionWithArgumentNumberNegativeZero()
     {
-        var arg = LocalValue.Number(double.NegativeZero);
+        var arg = new NumberLocalValue(double.NegativeZero);
 
         Assert.That(async () =>
         {
@@ -247,7 +247,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberPositiveInfinity()
     {
-        var arg = LocalValue.Number(double.PositiveInfinity);
+        var arg = new NumberLocalValue(double.PositiveInfinity);
 
         Assert.That(async () =>
         {
@@ -264,7 +264,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberNegativeInfinity()
     {
-        var arg = LocalValue.Number(double.NegativeInfinity);
+        var arg = new NumberLocalValue(double.NegativeInfinity);
 
         Assert.That(async () =>
         {
@@ -281,7 +281,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentNumberNaN()
     {
-        var arg = LocalValue.Number(double.NaN);
+        var arg = new NumberLocalValue(double.NaN);
         Assert.That(async () =>
         {
             await context.Script.CallFunctionAsync($$"""
@@ -314,7 +314,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentArray()
     {
-        var arg = LocalValue.Array(["hi"]);
+        var arg = new ArrayLocalValue(["hi"]);
 
         Assert.That(async () =>
         {
@@ -331,7 +331,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentObject()
     {
-        var arg = LocalValue.Object([["objKey", "objValue"]]);
+        var arg = new ObjectLocalValue([["objKey", "objValue"]]);
 
         Assert.That(async () =>
         {
@@ -348,7 +348,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentMap()
     {
-        var arg = LocalValue.Map([["mapKey", "mapValue"]]);
+        var arg = new MapLocalValue([["mapKey", "mapValue"]]);
 
         Assert.That(async () =>
         {
@@ -365,7 +365,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentSet()
     {
-        var arg = LocalValue.Set(["setKey"]);
+        var arg = new SetLocalValue(["setKey"]);
 
         Assert.That(async () =>
         {

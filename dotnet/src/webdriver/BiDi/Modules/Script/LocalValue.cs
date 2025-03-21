@@ -44,10 +44,10 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 [JsonDerivedType(typeof(SetLocalValue), "set")]
 public abstract record LocalValue
 {
-    public static implicit operator LocalValue(bool? value) { return value is bool b ? (b ? True : False) : Null; }
-    public static implicit operator LocalValue(int? value) { return value is int i ? Number(i) : Null; }
-    public static implicit operator LocalValue(double? value) { return value is double d ? Number(d) : Null; }
-    public static implicit operator LocalValue(string? value) { return value is null ? Null : String(value); }
+    public static implicit operator LocalValue(bool? value) { return value is bool b ? new BooleanLocalValue(b) : new NullLocalValue(); }
+    public static implicit operator LocalValue(int? value) { return value is int i ? new NumberLocalValue(i) : new NullLocalValue(); }
+    public static implicit operator LocalValue(double? value) { return value is double d ? new NumberLocalValue(d) : new NullLocalValue(); }
+    public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
@@ -58,22 +58,22 @@ public abstract record LocalValue
                 return localValue;
 
             case null:
-                return Null;
+                return new NullLocalValue();
 
             case bool b:
-                return b ? True : False;
+                return new BooleanLocalValue(b);
 
             case int i:
-                return Number(i);
+                return new NumberLocalValue(i);
 
             case double d:
-                return Number(d);
+                return new NumberLocalValue(d);
 
             case string str:
-                return String(str);
+                return new StringLocalValue(str);
 
             case IEnumerable<object?> list:
-                return Array(list.Select(ConvertFrom).ToList());
+                return new ArrayLocalValue(list.Select(ConvertFrom).ToList());
 
             case object:
                 {
@@ -88,7 +88,7 @@ public abstract record LocalValue
                         values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
                     }
 
-                    return Object(values);
+                    return new ObjectLocalValue(values);
                 }
         }
     }
@@ -100,22 +100,22 @@ public abstract record LocalValue
     {
         if (node is null)
         {
-            return Null;
+            return new NullLocalValue();
         }
 
         switch (node.GetValueKind())
         {
             case System.Text.Json.JsonValueKind.Null:
-                return Null;
+                return new NullLocalValue();
 
             case System.Text.Json.JsonValueKind.True:
-                return True;
+                return new BooleanLocalValue(true);
 
             case System.Text.Json.JsonValueKind.False:
-                return False;
+                return new BooleanLocalValue(false);
 
             case System.Text.Json.JsonValueKind.String:
-                return String(node.ToString());
+                return new StringLocalValue(node.ToString());
 
             case System.Text.Json.JsonValueKind.Number:
                 {
@@ -125,179 +125,22 @@ public abstract record LocalValue
 
                     if (bigNumber > MaxDouble || bigNumber < MinDouble)
                     {
-                        return BigInt(bigNumber);
+                        return new BigIntLocalValue(numberString);
                     }
 
-                    return Number(double.Parse(numberString));
+                    return new NumberLocalValue(double.Parse(numberString));
                 }
 
             case System.Text.Json.JsonValueKind.Array:
-                return Array(node.AsArray().Select(ConvertFrom));
+                return new ArrayLocalValue(node.AsArray().Select(ConvertFrom));
 
             case System.Text.Json.JsonValueKind.Object:
-                var convertedToListForm = node.AsObject().Select(property => new LocalValue[] { String(property.Key), ConvertFrom(property.Value) }).ToList();
-                return Object(convertedToListForm);
+                var convertedToListForm = node.AsObject().Select(property => new LocalValue[] { new StringLocalValue(property.Key), ConvertFrom(property.Value) }).ToList();
+                return new ObjectLocalValue(convertedToListForm);
 
             default:
                 throw new InvalidOperationException("Invalid JSON node");
         }
-    }
-
-    public static ChannelLocalValue Channel(ChannelLocalValue.ChannelProperties options)
-    {
-        return new ChannelLocalValue(options);
-    }
-
-    public static ArrayLocalValue Array(IEnumerable<LocalValue> values)
-    {
-        return new ArrayLocalValue(values);
-    }
-
-    public static SetLocalValue Set(HashSet<LocalValue> values)
-    {
-        return new SetLocalValue(values);
-    }
-
-    public static ObjectLocalValue Object(IEnumerable<IEnumerable<LocalValue>> values)
-    {
-        return new ObjectLocalValue(values);
-    }
-
-    public static ObjectLocalValue Object(IDictionary<string, LocalValue> values)
-    {
-        var convertedValues = values.Select(PairToList).ToList();
-        return new ObjectLocalValue(convertedValues);
-    }
-
-    public static MapLocalValue Map(IEnumerable<IEnumerable<LocalValue>> values)
-    {
-        return new MapLocalValue(values);
-    }
-
-    public static MapLocalValue Map(IDictionary<LocalValue, LocalValue> values)
-    {
-        var convertedValues = values.Select(PairToList).ToList();
-        return new MapLocalValue(convertedValues);
-    }
-
-    private static LocalValue[] PairToList(KeyValuePair<string, LocalValue> pair)
-    {
-        return [String(pair.Key), pair.Value];
-    }
-
-    private static LocalValue[] PairToList(KeyValuePair<LocalValue, LocalValue> pair)
-    {
-        return [pair.Key, pair.Value];
-    }
-
-    public static BigIntLocalValue BigInt(BigInteger value)
-    {
-        return new BigIntLocalValue(value.ToString());
-    }
-
-    public static DateLocalValue Date(DateTime value)
-    {
-        return new DateLocalValue(value.ToString("o"));
-    }
-
-    public static LocalValue String(string? value)
-    {
-        if (value is null)
-        {
-            return Null;
-        }
-
-        return new StringLocalValue(value);
-    }
-
-    public static NumberLocalValue Number(double value)
-    {
-        return new NumberLocalValue(value);
-    }
-
-    public static BooleanLocalValue True { get; } = new BooleanLocalValue(true);
-
-    public static BooleanLocalValue False { get; } = new BooleanLocalValue(false);
-
-    public static NullLocalValue Null { get; } = new NullLocalValue();
-
-    public static UndefinedLocalValue Undefined { get; } = new UndefinedLocalValue();
-    public static RegExpLocalValue Regex(string pattern, string? flags = null)
-    {
-        if (pattern is null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
-
-        return new RegExpLocalValue(new RegExpValue(pattern) { Flags = flags });
-    }
-
-    /// <summary>
-    /// Converts a .NET Regex into a BiDi Regex
-    /// </summary>
-    /// <param name="regex">A .NET Regex.</param>
-    /// <returns>A BiDi Regex.</returns>
-    /// <remarks>
-    /// Note that the .NET regular expression engine does not work the same as the JavaScript engine.
-    /// To minimize the differences between the two engines, it is recommended to enabled the <see cref="RegexOptions.ECMAScript"/> option.
-    /// </remarks>
-    public static RegExpLocalValue Regex(Regex regex)
-    {
-        if (regex is null)
-        {
-            throw new ArgumentNullException(nameof(regex));
-        }
-
-        RegexOptions options = regex.Options;
-
-        if (options == RegexOptions.None)
-        {
-            return new RegExpLocalValue(new RegExpValue(regex.ToString()));
-        }
-
-        string flags = string.Empty;
-
-        const RegexOptions NonBacktracking = (RegexOptions)1024;
-#if NET8_0_OR_GREATER
-        Debug.Assert(NonBacktracking == RegexOptions.NonBacktracking);
-#endif
-
-        const RegexOptions NonApplicableOptions = RegexOptions.Compiled | NonBacktracking;
-
-        const RegexOptions UnsupportedOptions =
-            RegexOptions.ExplicitCapture |
-            RegexOptions.IgnorePatternWhitespace |
-            RegexOptions.RightToLeft |
-            RegexOptions.CultureInvariant;
-
-        options &= ~NonApplicableOptions;
-
-        if ((options & UnsupportedOptions) != 0)
-        {
-            throw new NotSupportedException($"The selected RegEx options are not supported in BiDi: {options & UnsupportedOptions}");
-        }
-
-        if ((options & RegexOptions.IgnoreCase) != 0)
-        {
-            flags += "i";
-            options = options & ~RegexOptions.IgnoreCase;
-        }
-
-        if ((options & RegexOptions.Multiline) != 0)
-        {
-            options = options & ~RegexOptions.Multiline;
-            flags += "m";
-        }
-
-        if ((options & RegexOptions.Singleline) != 0)
-        {
-            options = options & ~RegexOptions.Singleline;
-            flags += "s";
-        }
-
-        Debug.Assert(options == RegexOptions.None);
-
-        return new RegExpLocalValue(new RegExpValue(regex.ToString()) { Flags = flags });
     }
 }
 
@@ -305,7 +148,7 @@ public abstract record PrimitiveProtocolLocalValue : LocalValue;
 
 public record NumberLocalValue(double Value) : PrimitiveProtocolLocalValue
 {
-    public static explicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
+    public static implicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
 }
 
 public record StringLocalValue(string Value) : PrimitiveProtocolLocalValue;
