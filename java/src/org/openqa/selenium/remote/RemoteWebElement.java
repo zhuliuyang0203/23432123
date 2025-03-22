@@ -145,6 +145,11 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
   }
 
   @Override
+  public String getValue() {
+    return getDomProperty("value");
+  }
+
+  @Override
   public String getAttribute(String name) {
     return stringValueOf(execute(DriverCommand.GET_ELEMENT_ATTRIBUTE(id, name)).getValue());
   }
