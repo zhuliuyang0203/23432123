@@ -153,6 +153,46 @@ Class RequestPausedEventArgs  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_DevTools_RequestPausedEventArgs__ctor_" data-uid="OpenQA.Selenium.DevTools.RequestPausedEventArgs.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_RequestPausedEventArgs__ctor_System_String_OpenQA_Selenium_HttpRequestData_" data-uid="OpenQA.Selenium.DevTools.RequestPausedEventArgs.#ctor(System.String,OpenQA.Selenium.HttpRequestData)">
+  RequestPausedEventArgs(string?, HttpRequestData)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/RequestPausedEventArgs.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.RequestPausedEventArgs.html">RequestPausedEventArgs</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RequestPausedEventArgs(string? requestId, HttpRequestData requestData)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>requestId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The request ID.</p>
+</dd>
+    <dt><code>requestData</code> <a class="xref" href="OpenQA.Selenium.HttpRequestData.html">HttpRequestData</a></dt>
+    <dd><p>The <a class="xref" href="OpenQA.Selenium.HttpRequestData.html">HttpRequestData</a> object for this request.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -161,7 +201,7 @@ Class RequestPausedEventArgs  <a class="header-action link-secondary" title="Vie
 
   <h3 id="OpenQA_Selenium_DevTools_RequestPausedEventArgs_RequestData" data-uid="OpenQA.Selenium.DevTools.RequestPausedEventArgs.RequestData">
   RequestData
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/RequestPausedEventArgs.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/RequestPausedEventArgs.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the <a class="xref" href="OpenQA.Selenium.HttpRequestData.html">HttpRequestData</a> object for this request.</p>
@@ -193,7 +233,7 @@ Class RequestPausedEventArgs  <a class="header-action link-secondary" title="Vie
 
   <h3 id="OpenQA_Selenium_DevTools_RequestPausedEventArgs_RequestId" data-uid="OpenQA.Selenium.DevTools.RequestPausedEventArgs.RequestId">
   RequestId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/RequestPausedEventArgs.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/RequestPausedEventArgs.cs/#L43"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the request ID.</p>
@@ -201,7 +241,7 @@ Class RequestPausedEventArgs  <a class="header-action link-secondary" title="Vie
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string RequestId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? RequestId { get; }</code></pre>
   </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Storage_PartitionDescriptor" data-uid="OpenQA.Selenium.BiDi.Modules.Storage.PartitionDescriptor" class="text-break">
-Class PartitionDescriptor  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Storage/GetCookiesCommand.cs/#L88"><i class="bi bi-code-slash"></i></a>
+Class PartitionDescriptor  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Storage/GetCookiesCommand.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,8 +102,8 @@ Class PartitionDescriptor  <a class="header-action link-secondary" title="View s
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;type&quot;)]
-[JsonDerivedType(typeof(PartitionDescriptor.Context), &quot;context&quot;)]
-[JsonDerivedType(typeof(PartitionDescriptor.StorageKey), &quot;storageKey&quot;)]
+[JsonDerivedType(typeof(ContextPartitionDescriptor), &quot;context&quot;)]
+[JsonDerivedType(typeof(StorageKeyPartitionDescriptor), &quot;storageKey&quot;)]
 public abstract record PartitionDescriptor : IEquatable&lt;PartitionDescriptor&gt;</code></pre>
   </div>
 
@@ -128,8 +128,8 @@ public abstract record PartitionDescriptor : IEquatable&lt;PartitionDescriptor&g
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.PartitionDescriptor.Context.html">PartitionDescriptor.Context</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.PartitionDescriptor.StorageKey.html">PartitionDescriptor.StorageKey</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.ContextPartitionDescriptor.html">ContextPartitionDescriptor</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.StorageKeyPartitionDescriptor.html">StorageKeyPartitionDescriptor</a></div>
     </dd>
   </dl>
 
@@ -168,7 +168,7 @@ public abstract record PartitionDescriptor : IEquatable&lt;PartitionDescriptor&g
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Storage/GetCookiesCommand.cs/#L88" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Storage/GetCookiesCommand.cs/#L82" class="edit-link">Edit this page</a>
         </div>
 
 

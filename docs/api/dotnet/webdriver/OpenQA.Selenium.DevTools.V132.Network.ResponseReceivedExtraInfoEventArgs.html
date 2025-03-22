@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs" class="text-break">
-Class ResponseReceivedExtraInfoEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L10"><i class="bi bi-code-slash"></i></a>
+Class ResponseReceivedExtraInfoEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -191,7 +191,7 @@ public BlockedSetCookieWithReason[] BlockedCookies { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_CookiePartitionKey" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.CookiePartitionKey">
   CookiePartitionKey
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the cookiePartitionKey</p>
@@ -201,7 +201,7 @@ public BlockedSetCookieWithReason[] BlockedCookies { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;cookiePartitionKey&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public CookiePartitionKey CookiePartitionKey { get; set; }</code></pre>
+public CookiePartitionKey? CookiePartitionKey { get; set; }</code></pre>
   </div>
 
 
@@ -225,7 +225,7 @@ public CookiePartitionKey CookiePartitionKey { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_CookiePartitionKeyOpaque" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.CookiePartitionKeyOpaque">
   CookiePartitionKeyOpaque
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the cookiePartitionKeyOpaque</p>
@@ -259,7 +259,7 @@ public bool? CookiePartitionKeyOpaque { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_ExemptedCookies" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.ExemptedCookies">
   ExemptedCookies
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the exemptedCookies</p>
@@ -269,7 +269,7 @@ public bool? CookiePartitionKeyOpaque { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;exemptedCookies&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public ExemptedSetCookieWithReason[] ExemptedCookies { get; set; }</code></pre>
+public ExemptedSetCookieWithReason[]? ExemptedCookies { get; set; }</code></pre>
   </div>
 
 
@@ -293,7 +293,7 @@ public ExemptedSetCookieWithReason[] ExemptedCookies { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_Headers" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.Headers">
   Headers
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the headers</p>
@@ -326,7 +326,7 @@ public Headers Headers { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_HeadersText" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.HeadersText">
   HeadersText
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the headersText</p>
@@ -336,7 +336,7 @@ public Headers Headers { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;headersText&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string HeadersText { get; set; }</code></pre>
+public string? HeadersText { get; set; }</code></pre>
   </div>
 
 
@@ -360,7 +360,7 @@ public string HeadersText { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_RequestId" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.RequestId">
   RequestId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the requestId</p>
@@ -393,7 +393,7 @@ public string RequestId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_ResourceIPAddressSpace" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.ResourceIPAddressSpace">
   ResourceIPAddressSpace
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the resourceIPAddressSpace</p>
@@ -426,7 +426,7 @@ public IPAddressSpace ResourceIPAddressSpace { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ResponseReceivedExtraInfoEventArgs_StatusCode" data-uid="OpenQA.Selenium.DevTools.V132.Network.ResponseReceivedExtraInfoEventArgs.StatusCode">
   StatusCode
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the statusCode</p>
@@ -459,7 +459,7 @@ public long StatusCode { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L10" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ResponseReceivedExtraInfoEventArgs.cs/#L13" class="edit-link">Edit this page</a>
         </div>
 
 

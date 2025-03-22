@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry" class="text-break">
-Class LogEntry  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class LogEntry  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class LogEntry  <a class="header-action link-secondary" title="View source" href
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Args" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Args">
   Args
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>args</p>
@@ -164,7 +164,7 @@ Class LogEntry  <a class="header-action link-secondary" title="View source" href
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;args&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RemoteObject[] Args { get; set; }</code></pre>
+public RemoteObject[]? Args { get; set; }</code></pre>
   </div>
 
 
@@ -188,7 +188,7 @@ public RemoteObject[] Args { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Category" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Category">
   Category
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>category</p>
@@ -255,7 +255,7 @@ public LogEntryLevelValues Level { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_LineNumber" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.LineNumber">
   LineNumber
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>lineNumber</p>
@@ -289,7 +289,7 @@ public long? LineNumber { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_NetworkRequestId" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.NetworkRequestId">
   NetworkRequestId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>networkRequestId</p>
@@ -299,7 +299,7 @@ public long? LineNumber { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;networkRequestId&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string NetworkRequestId { get; set; }</code></pre>
+public string? NetworkRequestId { get; set; }</code></pre>
   </div>
 
 
@@ -323,7 +323,7 @@ public string NetworkRequestId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Source" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Source">
   Source
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>source</p>
@@ -356,7 +356,7 @@ public LogEntrySourceValues Source { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_StackTrace" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.StackTrace">
   StackTrace
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stackTrace</p>
@@ -366,7 +366,7 @@ public LogEntrySourceValues Source { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;stackTrace&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public StackTrace StackTrace { get; set; }</code></pre>
+public StackTrace? StackTrace { get; set; }</code></pre>
   </div>
 
 
@@ -390,7 +390,7 @@ public StackTrace StackTrace { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Text" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Text">
   Text
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>text</p>
@@ -423,7 +423,7 @@ public string Text { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Timestamp" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Timestamp">
   Timestamp
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>timestamp</p>
@@ -456,7 +456,7 @@ public double Timestamp { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_Url" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>url</p>
@@ -466,7 +466,7 @@ public double Timestamp { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;url&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Url { get; set; }</code></pre>
+public string? Url { get; set; }</code></pre>
   </div>
 
 
@@ -490,7 +490,7 @@ public string Url { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Log_LogEntry_WorkerId" data-uid="OpenQA.Selenium.DevTools.V132.Log.LogEntry.WorkerId">
   WorkerId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>workerId</p>
@@ -500,7 +500,7 @@ public string Url { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;workerId&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string WorkerId { get; set; }</code></pre>
+public string? WorkerId { get; set; }</code></pre>
   </div>
 
 
@@ -524,7 +524,7 @@ public string WorkerId { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Log/LogEntry.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

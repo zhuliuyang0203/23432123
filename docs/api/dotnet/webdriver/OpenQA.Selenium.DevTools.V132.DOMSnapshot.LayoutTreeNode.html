@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode" class="text-break">
-Class LayoutTreeNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class LayoutTreeNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -187,7 +187,7 @@ public Rect BoundingBox { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_DomNodeIndex" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.DomNodeIndex">
   DomNodeIndex
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>domNodeIndex</p>
@@ -220,7 +220,7 @@ public long DomNodeIndex { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_InlineTextNodes" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.InlineTextNodes">
   InlineTextNodes
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>inlineTextNodes</p>
@@ -230,7 +230,7 @@ public long DomNodeIndex { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;inlineTextNodes&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public InlineTextBox[] InlineTextNodes { get; set; }</code></pre>
+public InlineTextBox[]? InlineTextNodes { get; set; }</code></pre>
   </div>
 
 
@@ -254,7 +254,7 @@ public InlineTextBox[] InlineTextNodes { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_IsStackingContext" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.IsStackingContext">
   IsStackingContext
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>isStackingContext</p>
@@ -288,7 +288,7 @@ public bool? IsStackingContext { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_LayoutText" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.LayoutText">
   LayoutText
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>layoutText</p>
@@ -298,7 +298,7 @@ public bool? IsStackingContext { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;layoutText&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string LayoutText { get; set; }</code></pre>
+public string? LayoutText { get; set; }</code></pre>
   </div>
 
 
@@ -322,7 +322,7 @@ public string LayoutText { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_PaintOrder" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.PaintOrder">
   PaintOrder
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>paintOrder</p>
@@ -356,7 +356,7 @@ public long? PaintOrder { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMSnapshot_LayoutTreeNode_StyleIndex" data-uid="OpenQA.Selenium.DevTools.V132.DOMSnapshot.LayoutTreeNode.StyleIndex">
   StyleIndex
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>styleIndex</p>
@@ -390,7 +390,7 @@ public long? StyleIndex { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMSnapshot/LayoutTreeNode.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

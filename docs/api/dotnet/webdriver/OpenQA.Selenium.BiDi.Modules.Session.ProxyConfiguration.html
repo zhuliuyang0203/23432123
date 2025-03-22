@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Session_ProxyConfiguration" data-uid="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration" class="text-break">
-Class ProxyConfiguration  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/ProxyConfiguration.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class ProxyConfiguration  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/ProxyConfiguration.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,11 +102,11 @@ Class ProxyConfiguration  <a class="header-action link-secondary" title="View so
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;proxyType&quot;)]
-[JsonDerivedType(typeof(ProxyConfiguration.AutoDetect), &quot;autodetect&quot;)]
-[JsonDerivedType(typeof(ProxyConfiguration.Direct), &quot;direct&quot;)]
-[JsonDerivedType(typeof(ProxyConfiguration.Manual), &quot;manual&quot;)]
-[JsonDerivedType(typeof(ProxyConfiguration.Pac), &quot;pac&quot;)]
-[JsonDerivedType(typeof(ProxyConfiguration.System), &quot;system&quot;)]
+[JsonDerivedType(typeof(AutoDetectProxyConfiguration), &quot;autodetect&quot;)]
+[JsonDerivedType(typeof(DirectProxyConfiguration), &quot;direct&quot;)]
+[JsonDerivedType(typeof(ManualProxyConfiguration), &quot;manual&quot;)]
+[JsonDerivedType(typeof(PacProxyConfiguration), &quot;pac&quot;)]
+[JsonDerivedType(typeof(SystemProxyConfiguration), &quot;system&quot;)]
 public abstract record ProxyConfiguration : IEquatable&lt;ProxyConfiguration&gt;</code></pre>
   </div>
 
@@ -131,11 +131,11 @@ public abstract record ProxyConfiguration : IEquatable&lt;ProxyConfiguration&gt;
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration.AutoDetect.html">ProxyConfiguration.AutoDetect</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration.Direct.html">ProxyConfiguration.Direct</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration.Manual.html">ProxyConfiguration.Manual</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration.Pac.html">ProxyConfiguration.Pac</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ProxyConfiguration.System.html">ProxyConfiguration.System</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.AutoDetectProxyConfiguration.html">AutoDetectProxyConfiguration</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.DirectProxyConfiguration.html">DirectProxyConfiguration</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.ManualProxyConfiguration.html">ManualProxyConfiguration</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.PacProxyConfiguration.html">PacProxyConfiguration</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.SystemProxyConfiguration.html">SystemProxyConfiguration</a></div>
     </dd>
   </dl>
 
@@ -174,7 +174,7 @@ public abstract record ProxyConfiguration : IEquatable&lt;ProxyConfiguration&gt;
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/ProxyConfiguration.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/ProxyConfiguration.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

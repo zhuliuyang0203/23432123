@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode" class="text-break">
-Class ProfileNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class ProfileNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -187,7 +187,7 @@ public CallFrame CallFrame { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode_Children" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode.Children">
   Children
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>children</p>
@@ -197,7 +197,7 @@ public CallFrame CallFrame { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;children&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public long[] Children { get; set; }</code></pre>
+public long[]? Children { get; set; }</code></pre>
   </div>
 
 
@@ -221,7 +221,7 @@ public long[] Children { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode_DeoptReason" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode.DeoptReason">
   DeoptReason
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>deoptReason</p>
@@ -231,7 +231,7 @@ public long[] Children { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;deoptReason&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string DeoptReason { get; set; }</code></pre>
+public string? DeoptReason { get; set; }</code></pre>
   </div>
 
 
@@ -255,7 +255,7 @@ public string DeoptReason { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode_HitCount" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode.HitCount">
   HitCount
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>hitCount</p>
@@ -289,7 +289,7 @@ public long? HitCount { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode_Id" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode.Id">
   Id
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>id</p>
@@ -322,7 +322,7 @@ public long Id { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfileNode_PositionTicks" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfileNode.PositionTicks">
   PositionTicks
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>positionTicks</p>
@@ -332,7 +332,7 @@ public long Id { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;positionTicks&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public PositionTickInfo[] PositionTicks { get; set; }</code></pre>
+public PositionTickInfo[]? PositionTicks { get; set; }</code></pre>
   </div>
 
 
@@ -356,7 +356,7 @@ public PositionTickInfo[] PositionTicks { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfileNode.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

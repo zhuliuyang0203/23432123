@@ -153,6 +153,46 @@ Class TargetDetachedEventArgs  <a class="header-action link-secondary" title="Vi
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_DevTools_TargetDetachedEventArgs__ctor_" data-uid="OpenQA.Selenium.DevTools.TargetDetachedEventArgs.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_TargetDetachedEventArgs__ctor_System_String_System_String_" data-uid="OpenQA.Selenium.DevTools.TargetDetachedEventArgs.#ctor(System.String,System.String)">
+  TargetDetachedEventArgs(string, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetDetachedEventArgs.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.TargetDetachedEventArgs.html">TargetDetachedEventArgs</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetDetachedEventArgs(string sessionId, string? targetId)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sessionId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ID of the session of the target detached.</p>
+</dd>
+    <dt><code>targetId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ID of the target detached.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -161,7 +201,7 @@ Class TargetDetachedEventArgs  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_TargetDetachedEventArgs_SessionId" data-uid="OpenQA.Selenium.DevTools.TargetDetachedEventArgs.SessionId">
   SessionId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetDetachedEventArgs.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetDetachedEventArgs.cs/#L43"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ID of the session of the target detached.</p>
@@ -193,7 +233,7 @@ Class TargetDetachedEventArgs  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_TargetDetachedEventArgs_TargetId" data-uid="OpenQA.Selenium.DevTools.TargetDetachedEventArgs.TargetId">
   TargetId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetDetachedEventArgs.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetDetachedEventArgs.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ID of the target detached.</p>
@@ -201,7 +241,7 @@ Class TargetDetachedEventArgs  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string TargetId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? TargetId { get; }</code></pre>
   </div>
 
 

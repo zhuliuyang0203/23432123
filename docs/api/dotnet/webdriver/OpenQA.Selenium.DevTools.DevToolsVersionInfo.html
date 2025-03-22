@@ -167,7 +167,7 @@ Class DevToolsVersionInfo  <a class="header-action link-secondary" title="View s
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;Browser&quot;)]
 [JsonInclude]
-public string Browser { get; }</code></pre>
+public string? Browser { get; }</code></pre>
   </div>
 
 
@@ -191,7 +191,7 @@ public string Browser { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_BrowserMajorVersion" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.BrowserMajorVersion">
   BrowserMajorVersion
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the browser major version number without the preceding browser name.</p>
@@ -257,7 +257,7 @@ public string BrowserVersion { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_ProtocolVersion" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.ProtocolVersion">
   ProtocolVersion
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L75"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the version of the Developer Tools Protocol.</p>
@@ -267,7 +267,7 @@ public string BrowserVersion { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;Protocol-Version&quot;)]
 [JsonInclude]
-public string ProtocolVersion { get; }</code></pre>
+public string? ProtocolVersion { get; }</code></pre>
   </div>
 
 
@@ -291,7 +291,7 @@ public string ProtocolVersion { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_UserAgent" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.UserAgent">
   UserAgent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the user agent string.</p>
@@ -301,7 +301,7 @@ public string ProtocolVersion { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;User-Agent&quot;)]
 [JsonInclude]
-public string UserAgent { get; }</code></pre>
+public string? UserAgent { get; }</code></pre>
   </div>
 
 
@@ -325,7 +325,7 @@ public string UserAgent { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_V8Version" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.V8Version">
   V8Version
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the version string for the V8 script engine in use by this version of the browser.</p>
@@ -335,7 +335,7 @@ public string UserAgent { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;V8-Version&quot;)]
 [JsonInclude]
-public string V8Version { get; }</code></pre>
+public string? V8Version { get; }</code></pre>
   </div>
 
 
@@ -359,7 +359,7 @@ public string V8Version { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_V8VersionNumber" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.V8VersionNumber">
   V8VersionNumber
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L103"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the version number of the V8 script engine, stripping values other than the version number.</p>
@@ -392,7 +392,7 @@ public string V8VersionNumber { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_WebKitVersion" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.WebKitVersion">
   WebKitVersion
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the version string for the version of WebKit used to build this version of the browser.</p>
@@ -402,7 +402,7 @@ public string V8VersionNumber { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;WebKit-Version&quot;)]
 [JsonInclude]
-public string WebKitVersion { get; }</code></pre>
+public string? WebKitVersion { get; }</code></pre>
   </div>
 
 
@@ -426,7 +426,7 @@ public string WebKitVersion { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_WebKitVersionHash" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.WebKitVersionHash">
   WebKitVersionHash
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L112"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L129"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the hash of the version of WebKit, stripping values other than the hash.</p>
@@ -459,7 +459,7 @@ public string WebKitVersionHash { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_DevToolsVersionInfo_WebSocketDebuggerUrl" data-uid="OpenQA.Selenium.DevTools.DevToolsVersionInfo.WebSocketDebuggerUrl">
   WebSocketDebuggerUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L78"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/DevToolsVersionInfo.cs/#L96"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the URL for the WebSocket connection used for communicating via the DevTools Protocol.</p>
@@ -469,7 +469,7 @@ public string WebKitVersionHash { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;webSocketDebuggerUrl&quot;)]
 [JsonInclude]
-public string WebSocketDebuggerUrl { get; }</code></pre>
+public string? WebSocketDebuggerUrl { get; }</code></pre>
   </div>
 
 

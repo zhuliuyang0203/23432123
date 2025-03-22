@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter" class="text-break">
-Class RuntimeAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class RuntimeAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   RuntimeAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the RuntimeAdapter class.</p>
@@ -183,6 +183,12 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L43"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_AddBinding_OpenQA_Selenium_DevTools_V132_Runtime_AddBindingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.AddBinding(OpenQA.Selenium.DevTools.V132.Runtime.AddBindingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   AddBinding(AddBindingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L221"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L250"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>addBinding</p>
@@ -238,7 +244,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;AddBindingCommandResponse&gt; AddBinding(AddBindingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;AddBindingCommandResponse?&gt; AddBinding(AddBindingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_AwaitPromise_OpenQA_Selenium_DevTools_V132_Runtime_AwaitPromiseCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.AwaitPromise(OpenQA.Selenium.DevTools.V132.Runtime.AwaitPromiseCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   AwaitPromise(AwaitPromiseCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>awaitPromise</p>
@@ -316,7 +322,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_CallFunctionOn_OpenQA_Selenium_DevTools_V132_Runtime_CallFunctionOnCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.CallFunctionOn(OpenQA.Selenium.DevTools.V132.Runtime.CallFunctionOnCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CallFunctionOn(CallFunctionOnCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>callFunctionOn</p>
@@ -359,7 +365,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_CompileScript_OpenQA_Selenium_DevTools_V132_Runtime_CompileScriptCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.CompileScript(OpenQA.Selenium.DevTools.V132.Runtime.CompileScriptCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CompileScript(CompileScriptCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>compileScript</p>
@@ -401,8 +407,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Disable_OpenQA_Selenium_DevTools_V132_Runtime_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Disable(OpenQA.Selenium.DevTools.V132.Runtime.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -410,7 +416,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -444,8 +450,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_DiscardConsoleEntries_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.DiscardConsoleEntries*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_DiscardConsoleEntries_OpenQA_Selenium_DevTools_V132_Runtime_DiscardConsoleEntriesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.DiscardConsoleEntries(OpenQA.Selenium.DevTools.V132.Runtime.DiscardConsoleEntriesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  DiscardConsoleEntries(DiscardConsoleEntriesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  DiscardConsoleEntries(DiscardConsoleEntriesCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>discardConsoleEntries</p>
@@ -453,7 +459,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DiscardConsoleEntriesCommandResponse&gt; DiscardConsoleEntries(DiscardConsoleEntriesCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DiscardConsoleEntriesCommandResponse?&gt; DiscardConsoleEntries(DiscardConsoleEntriesCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -487,8 +493,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Enable_OpenQA_Selenium_DevTools_V132_Runtime_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Enable(OpenQA.Selenium.DevTools.V132.Runtime.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L116"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -496,7 +502,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_Evaluate_OpenQA_Selenium_DevTools_V132_Runtime_EvaluateCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.Evaluate(OpenQA.Selenium.DevTools.V132.Runtime.EvaluateCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   Evaluate(EvaluateCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>evaluate</p>
@@ -574,7 +580,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetExceptionDetails_OpenQA_Selenium_DevTools_V132_Runtime_GetExceptionDetailsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetExceptionDetails(OpenQA.Selenium.DevTools.V132.Runtime.GetExceptionDetailsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetExceptionDetails(GetExceptionDetailsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L235"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L266"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getExceptionDetails</p>
@@ -616,8 +622,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetHeapUsage_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetHeapUsage*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetHeapUsage_OpenQA_Selenium_DevTools_V132_Runtime_GetHeapUsageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetHeapUsage(OpenQA.Selenium.DevTools.V132.Runtime.GetHeapUsageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetHeapUsage(GetHeapUsageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L137"><i class="bi bi-code-slash"></i></a>
+  GetHeapUsage(GetHeapUsageCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L154"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getHeapUsage</p>
@@ -625,7 +631,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetHeapUsageCommandResponse&gt; GetHeapUsage(GetHeapUsageCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetHeapUsageCommandResponse&gt; GetHeapUsage(GetHeapUsageCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -659,8 +665,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetIsolateId_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetIsolateId*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetIsolateId_OpenQA_Selenium_DevTools_V132_Runtime_GetIsolateIdCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetIsolateId(OpenQA.Selenium.DevTools.V132.Runtime.GetIsolateIdCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetIsolateId(GetIsolateIdCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L130"><i class="bi bi-code-slash"></i></a>
+  GetIsolateId(GetIsolateIdCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L146"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getIsolateId</p>
@@ -668,7 +674,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetIsolateIdCommandResponse&gt; GetIsolateId(GetIsolateIdCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetIsolateIdCommandResponse&gt; GetIsolateId(GetIsolateIdCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -703,7 +709,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GetProperties_OpenQA_Selenium_DevTools_V132_Runtime_GetPropertiesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GetProperties(OpenQA.Selenium.DevTools.V132.Runtime.GetPropertiesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetProperties(GetPropertiesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L144"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L162"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getProperties</p>
@@ -746,7 +752,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_GlobalLexicalScopeNames_OpenQA_Selenium_DevTools_V132_Runtime_GlobalLexicalScopeNamesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.GlobalLexicalScopeNames(OpenQA.Selenium.DevTools.V132.Runtime.GlobalLexicalScopeNamesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GlobalLexicalScopeNames(GlobalLexicalScopeNamesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L151"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L170"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>globalLexicalScopeNames</p>
@@ -789,7 +795,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_QueryObjects_OpenQA_Selenium_DevTools_V132_Runtime_QueryObjectsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.QueryObjects(OpenQA.Selenium.DevTools.V132.Runtime.QueryObjectsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   QueryObjects(QueryObjectsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L178"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>queryObjects</p>
@@ -832,7 +838,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ReleaseObject_OpenQA_Selenium_DevTools_V132_Runtime_ReleaseObjectCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ReleaseObject(OpenQA.Selenium.DevTools.V132.Runtime.ReleaseObjectCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ReleaseObject(ReleaseObjectCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L165"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L186"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>releaseObject</p>
@@ -840,7 +846,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseObjectCommandResponse&gt; ReleaseObject(ReleaseObjectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseObjectCommandResponse?&gt; ReleaseObject(ReleaseObjectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -875,7 +881,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ReleaseObjectGroup_OpenQA_Selenium_DevTools_V132_Runtime_ReleaseObjectGroupCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ReleaseObjectGroup(OpenQA.Selenium.DevTools.V132.Runtime.ReleaseObjectGroupCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ReleaseObjectGroup(ReleaseObjectGroupCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L172"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L194"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>releaseObjectGroup</p>
@@ -883,7 +889,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseObjectGroupCommandResponse&gt; ReleaseObjectGroup(ReleaseObjectGroupCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseObjectGroupCommandResponse?&gt; ReleaseObjectGroup(ReleaseObjectGroupCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -918,7 +924,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_RemoveBinding_OpenQA_Selenium_DevTools_V132_Runtime_RemoveBindingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.RemoveBinding(OpenQA.Selenium.DevTools.V132.Runtime.RemoveBindingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RemoveBinding(RemoveBindingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L228"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L258"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>removeBinding</p>
@@ -926,7 +932,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RemoveBindingCommandResponse&gt; RemoveBinding(RemoveBindingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RemoveBindingCommandResponse?&gt; RemoveBinding(RemoveBindingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -960,8 +966,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_RunIfWaitingForDebugger_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.RunIfWaitingForDebugger*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_RunIfWaitingForDebugger_OpenQA_Selenium_DevTools_V132_Runtime_RunIfWaitingForDebuggerCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.RunIfWaitingForDebugger(OpenQA.Selenium.DevTools.V132.Runtime.RunIfWaitingForDebuggerCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  RunIfWaitingForDebugger(RunIfWaitingForDebuggerCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L179"><i class="bi bi-code-slash"></i></a>
+  RunIfWaitingForDebugger(RunIfWaitingForDebuggerCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L202"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>runIfWaitingForDebugger</p>
@@ -969,7 +975,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RunIfWaitingForDebuggerCommandResponse&gt; RunIfWaitingForDebugger(RunIfWaitingForDebuggerCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RunIfWaitingForDebuggerCommandResponse?&gt; RunIfWaitingForDebugger(RunIfWaitingForDebuggerCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1004,7 +1010,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_RunScript_OpenQA_Selenium_DevTools_V132_Runtime_RunScriptCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.RunScript(OpenQA.Selenium.DevTools.V132.Runtime.RunScriptCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RunScript(RunScriptCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L186"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L210"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>runScript</p>
@@ -1047,7 +1053,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_SetAsyncCallStackDepth_OpenQA_Selenium_DevTools_V132_Runtime_SetAsyncCallStackDepthCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.SetAsyncCallStackDepth(OpenQA.Selenium.DevTools.V132.Runtime.SetAsyncCallStackDepthCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetAsyncCallStackDepth(SetAsyncCallStackDepthCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L193"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L218"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setAsyncCallStackDepth</p>
@@ -1055,7 +1061,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetAsyncCallStackDepthCommandResponse&gt; SetAsyncCallStackDepth(SetAsyncCallStackDepthCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetAsyncCallStackDepthCommandResponse?&gt; SetAsyncCallStackDepth(SetAsyncCallStackDepthCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1090,7 +1096,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_SetCustomObjectFormatterEnabled_OpenQA_Selenium_DevTools_V132_Runtime_SetCustomObjectFormatterEnabledCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.SetCustomObjectFormatterEnabled(OpenQA.Selenium.DevTools.V132.Runtime.SetCustomObjectFormatterEnabledCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetCustomObjectFormatterEnabled(SetCustomObjectFormatterEnabledCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L200"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L226"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setCustomObjectFormatterEnabled</p>
@@ -1098,7 +1104,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetCustomObjectFormatterEnabledCommandResponse&gt; SetCustomObjectFormatterEnabled(SetCustomObjectFormatterEnabledCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetCustomObjectFormatterEnabledCommandResponse?&gt; SetCustomObjectFormatterEnabled(SetCustomObjectFormatterEnabledCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1133,7 +1139,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_SetMaxCallStackSizeToCapture_OpenQA_Selenium_DevTools_V132_Runtime_SetMaxCallStackSizeToCaptureCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.SetMaxCallStackSizeToCapture(OpenQA.Selenium.DevTools.V132.Runtime.SetMaxCallStackSizeToCaptureCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetMaxCallStackSizeToCapture(SetMaxCallStackSizeToCaptureCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L207"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L234"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setMaxCallStackSizeToCapture</p>
@@ -1141,7 +1147,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetMaxCallStackSizeToCaptureCommandResponse&gt; SetMaxCallStackSizeToCapture(SetMaxCallStackSizeToCaptureCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetMaxCallStackSizeToCaptureCommandResponse?&gt; SetMaxCallStackSizeToCapture(SetMaxCallStackSizeToCaptureCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1175,8 +1181,8 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_TerminateExecution_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.TerminateExecution*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_TerminateExecution_OpenQA_Selenium_DevTools_V132_Runtime_TerminateExecutionCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.TerminateExecution(OpenQA.Selenium.DevTools.V132.Runtime.TerminateExecutionCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  TerminateExecution(TerminateExecutionCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L214"><i class="bi bi-code-slash"></i></a>
+  TerminateExecution(TerminateExecutionCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L242"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>terminateExecution</p>
@@ -1184,7 +1190,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TerminateExecutionCommandResponse&gt; TerminateExecution(TerminateExecutionCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TerminateExecutionCommandResponse?&gt; TerminateExecution(TerminateExecutionCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1230,7 +1236,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BindingCalledEventArgs&gt; BindingCalled</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BindingCalledEventArgs&gt;? BindingCalled</code></pre>
   </div>
 
 
@@ -1253,7 +1259,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ConsoleAPICalled" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ConsoleAPICalled">
   ConsoleAPICalled
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>consoleAPICalled</p>
@@ -1261,7 +1267,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleAPICalledEventArgs&gt; ConsoleAPICalled</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleAPICalledEventArgs&gt;? ConsoleAPICalled</code></pre>
   </div>
 
 
@@ -1284,7 +1290,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ExceptionRevoked" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ExceptionRevoked">
   ExceptionRevoked
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>exceptionRevoked</p>
@@ -1292,7 +1298,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExceptionRevokedEventArgs&gt; ExceptionRevoked</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExceptionRevokedEventArgs&gt;? ExceptionRevoked</code></pre>
   </div>
 
 
@@ -1315,7 +1321,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ExceptionThrown" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ExceptionThrown">
   ExceptionThrown
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>exceptionThrown</p>
@@ -1323,7 +1329,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExceptionThrownEventArgs&gt; ExceptionThrown</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExceptionThrownEventArgs&gt;? ExceptionThrown</code></pre>
   </div>
 
 
@@ -1346,7 +1352,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ExecutionContextCreated" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ExecutionContextCreated">
   ExecutionContextCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>executionContextCreated</p>
@@ -1354,7 +1360,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextCreatedEventArgs&gt; ExecutionContextCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextCreatedEventArgs&gt;? ExecutionContextCreated</code></pre>
   </div>
 
 
@@ -1377,7 +1383,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ExecutionContextDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ExecutionContextDestroyed">
   ExecutionContextDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>executionContextDestroyed</p>
@@ -1385,7 +1391,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextDestroyedEventArgs&gt; ExecutionContextDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextDestroyedEventArgs&gt;? ExecutionContextDestroyed</code></pre>
   </div>
 
 
@@ -1408,7 +1414,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_ExecutionContextsCleared" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.ExecutionContextsCleared">
   ExecutionContextsCleared
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>executionContextsCleared</p>
@@ -1416,7 +1422,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextsClearedEventArgs&gt; ExecutionContextsCleared</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExecutionContextsClearedEventArgs&gt;? ExecutionContextsCleared</code></pre>
   </div>
 
 
@@ -1439,7 +1445,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Runtime_RuntimeAdapter_InspectRequested" data-uid="OpenQA.Selenium.DevTools.V132.Runtime.RuntimeAdapter.InspectRequested">
   InspectRequested
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L83"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>inspectRequested</p>
@@ -1447,7 +1453,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectRequestedEventArgs&gt; InspectRequested</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectRequestedEventArgs&gt;? InspectRequested</code></pre>
   </div>
 
 
@@ -1471,7 +1477,7 @@ Class RuntimeAdapter  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Runtime/RuntimeAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

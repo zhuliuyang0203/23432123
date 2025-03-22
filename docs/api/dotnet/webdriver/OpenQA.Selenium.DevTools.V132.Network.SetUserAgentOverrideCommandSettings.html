@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Network_SetUserAgentOverrideCommandSettings" data-uid="OpenQA.Selenium.DevTools.V132.Network.SetUserAgentOverrideCommandSettings" class="text-break">
-Class SetUserAgentOverrideCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class SetUserAgentOverrideCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -160,7 +160,7 @@ Class SetUserAgentOverrideCommandSettings  <a class="header-action link-secondar
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_SetUserAgentOverrideCommandSettings_AcceptLanguage" data-uid="OpenQA.Selenium.DevTools.V132.Network.SetUserAgentOverrideCommandSettings.AcceptLanguage">
   AcceptLanguage
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the acceptLanguage</p>
@@ -170,7 +170,7 @@ Class SetUserAgentOverrideCommandSettings  <a class="header-action link-secondar
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;acceptLanguage&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string AcceptLanguage { get; set; }</code></pre>
+public string? AcceptLanguage { get; set; }</code></pre>
   </div>
 
 
@@ -194,7 +194,7 @@ public string AcceptLanguage { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_SetUserAgentOverrideCommandSettings_CommandName" data-uid="OpenQA.Selenium.DevTools.V132.Network.SetUserAgentOverrideCommandSettings.CommandName">
   CommandName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the name of the command.</p>
@@ -227,7 +227,7 @@ public string CommandName { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_SetUserAgentOverrideCommandSettings_Platform" data-uid="OpenQA.Selenium.DevTools.V132.Network.SetUserAgentOverrideCommandSettings.Platform">
   Platform
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the platform</p>
@@ -237,7 +237,7 @@ public string CommandName { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;platform&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Platform { get; set; }</code></pre>
+public string? Platform { get; set; }</code></pre>
   </div>
 
 
@@ -294,7 +294,7 @@ public string UserAgent { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_SetUserAgentOverrideCommandSettings_UserAgentMetadata" data-uid="OpenQA.Selenium.DevTools.V132.Network.SetUserAgentOverrideCommandSettings.UserAgentMetadata">
   UserAgentMetadata
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the userAgentMetadata</p>
@@ -304,7 +304,7 @@ public string UserAgent { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;userAgentMetadata&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public UserAgentMetadata UserAgentMetadata { get; set; }</code></pre>
+public UserAgentMetadata? UserAgentMetadata { get; set; }</code></pre>
   </div>
 
 
@@ -328,7 +328,7 @@ public UserAgentMetadata UserAgentMetadata { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/SetUserAgentOverrideCommand.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings" data-uid="OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings" class="text-break">
-Class CreateBrowserContextCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class CreateBrowserContextCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -160,7 +160,7 @@ Class CreateBrowserContextCommandSettings  <a class="header-action link-secondar
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings_CommandName" data-uid="OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings.CommandName">
   CommandName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the name of the command.</p>
@@ -227,7 +227,7 @@ public bool? DisposeOnDetach { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings_OriginsWithUniversalNetworkAccess" data-uid="OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings.OriginsWithUniversalNetworkAccess">
   OriginsWithUniversalNetworkAccess
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the originsWithUniversalNetworkAccess</p>
@@ -237,7 +237,7 @@ public bool? DisposeOnDetach { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;originsWithUniversalNetworkAccess&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string[] OriginsWithUniversalNetworkAccess { get; set; }</code></pre>
+public string[]? OriginsWithUniversalNetworkAccess { get; set; }</code></pre>
   </div>
 
 
@@ -261,7 +261,7 @@ public string[] OriginsWithUniversalNetworkAccess { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings_ProxyBypassList" data-uid="OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings.ProxyBypassList">
   ProxyBypassList
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the proxyBypassList</p>
@@ -271,7 +271,7 @@ public string[] OriginsWithUniversalNetworkAccess { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;proxyBypassList&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string ProxyBypassList { get; set; }</code></pre>
+public string? ProxyBypassList { get; set; }</code></pre>
   </div>
 
 
@@ -295,7 +295,7 @@ public string ProxyBypassList { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings_ProxyServer" data-uid="OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings.ProxyServer">
   ProxyServer
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the proxyServer</p>
@@ -305,7 +305,7 @@ public string ProxyBypassList { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;proxyServer&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string ProxyServer { get; set; }</code></pre>
+public string? ProxyServer { get; set; }</code></pre>
   </div>
 
 
@@ -329,7 +329,7 @@ public string ProxyServer { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/CreateBrowserContextCommand.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

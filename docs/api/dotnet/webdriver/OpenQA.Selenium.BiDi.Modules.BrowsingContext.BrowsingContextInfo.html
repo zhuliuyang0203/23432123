@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo" class="text-break">
-Class BrowsingContextInfo  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+Class BrowsingContextInfo  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -170,16 +170,16 @@ Class BrowsingContextInfo  <a class="header-action link-secondary" title="View s
 
   <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo__ctor_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.#ctor*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo__ctor_OpenQA_Selenium_BiDi_BiDi_System_Collections_Generic_IReadOnlyList_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo__OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_System_String_OpenQA_Selenium_BiDi_Modules_Browser_UserContext_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.#ctor(OpenQA.Selenium.BiDi.BiDi,System.Collections.Generic.IReadOnlyList{OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo},OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,System.String,OpenQA.Selenium.BiDi.Modules.Browser.UserContext)">
-  BrowsingContextInfo(BiDi, IReadOnlyList&lt;BrowsingContextInfo&gt;, BrowsingContext, BrowsingContext, string, UserContext)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo__ctor_OpenQA_Selenium_BiDi_BiDi_System_Collections_Generic_IReadOnlyList_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo__OpenQA_Selenium_BiDi_Modules_Browser_ClientWindow_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_System_String_OpenQA_Selenium_BiDi_Modules_Browser_UserContext_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.#ctor(OpenQA.Selenium.BiDi.BiDi,System.Collections.Generic.IReadOnlyList{OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo},OpenQA.Selenium.BiDi.Modules.Browser.ClientWindow,OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,System.String,OpenQA.Selenium.BiDi.Modules.Browser.UserContext)">
+  BrowsingContextInfo(BiDi, IReadOnlyList&lt;BrowsingContextInfo&gt;, ClientWindow, BrowsingContext, BrowsingContext, string, UserContext)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BrowsingContextInfo(BiDi BiDi, IReadOnlyList&lt;BrowsingContextInfo&gt; Children, BrowsingContext Context, BrowsingContext OriginalOpener, string Url, UserContext UserContext)</code></pre>
+    <pre><code class="lang-csharp hljs">public BrowsingContextInfo(BiDi BiDi, IReadOnlyList&lt;BrowsingContextInfo&gt; Children, ClientWindow ClientWindow, BrowsingContext Context, BrowsingContext OriginalOpener, string Url, UserContext UserContext)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -187,6 +187,8 @@ Class BrowsingContextInfo  <a class="header-action link-secondary" title="View s
     <dt><code>BiDi</code> <a class="xref" href="OpenQA.Selenium.BiDi.BiDi.html">BiDi</a></dt>
     <dd></dd>
     <dt><code>Children</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.html">BrowsingContextInfo</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>ClientWindow</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.ClientWindow.html">ClientWindow</a></dt>
     <dd></dd>
     <dt><code>Context</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext.html">BrowsingContext</a></dt>
     <dd></dd>
@@ -217,7 +219,7 @@ Class BrowsingContextInfo  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_Children" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.Children">
   Children
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -244,11 +246,42 @@ Class BrowsingContextInfo  <a class="header-action link-secondary" title="View s
 
 
 
+  <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_ClientWindow_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.ClientWindow*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_ClientWindow" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.ClientWindow">
+  ClientWindow
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ClientWindow ClientWindow { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.ClientWindow.html">ClientWindow</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_OriginalOpener_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.OriginalOpener*"></a>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_OriginalOpener" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.OriginalOpener">
   OriginalOpener
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -279,7 +312,7 @@ Class BrowsingContextInfo  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_Parent" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.Parent">
   Parent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -311,7 +344,7 @@ public BrowsingContext? Parent { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_Url" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -342,7 +375,7 @@ public BrowsingContext? Parent { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInfo_UserContext" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInfo.UserContext">
   UserContext
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -373,7 +406,7 @@ public BrowsingContext? Parent { get; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInfo.cs/#L26" class="edit-link">Edit this page</a>
         </div>
 
 

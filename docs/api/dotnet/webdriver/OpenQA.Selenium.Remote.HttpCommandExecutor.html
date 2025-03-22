@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_Remote_HttpCommandExecutor" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor" class="text-break">
-Class HttpCommandExecutor  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L38"><i class="bi bi-code-slash"></i></a>
+Class HttpCommandExecutor  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -164,7 +164,7 @@ Class HttpCommandExecutor  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor__ctor_System_Uri_System_TimeSpan_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.#ctor(System.Uri,System.TimeSpan)">
   HttpCommandExecutor(Uri, TimeSpan)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> class</p>
@@ -193,6 +193,12 @@ Class HttpCommandExecutor  <a class="header-action link-secondary" title="View s
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">addressOfRemoteServer</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -200,7 +206,7 @@ Class HttpCommandExecutor  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor__ctor_System_Uri_System_TimeSpan_System_Boolean_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.#ctor(System.Uri,System.TimeSpan,System.Boolean)">
   HttpCommandExecutor(Uri, TimeSpan, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> class</p>
@@ -250,7 +256,7 @@ with HTTP requests; otherwise, <a href="https://learn.microsoft.com/dotnet/cshar
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_CommandInfoRepository" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.CommandInfoRepository">
   CommandInfoRepository
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L121"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L124"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the repository of objects containing information about commands.</p>
@@ -288,7 +294,7 @@ with HTTP requests; otherwise, <a href="https://learn.microsoft.com/dotnet/cshar
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_IsKeepAliveEnabled" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.IsKeepAliveEnabled">
   IsKeepAliveEnabled
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L111"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets a value indicating whether keep-alive is enabled for HTTP
@@ -322,7 +328,7 @@ remote end WebDriver implementation.</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_Proxy" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.Proxy">
   Proxy
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L104"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.iwebproxy">IWebProxy</a> object to be used to proxy requests
@@ -332,7 +338,7 @@ implementation.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IWebProxy Proxy { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IWebProxy? Proxy { get; set; }</code></pre>
   </div>
 
 
@@ -356,11 +362,11 @@ implementation.</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_UserAgent" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.UserAgent">
   UserAgent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L118"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the user agent string used for HTTP communication
-batween this <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> and the remote end
+between this <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> and the remote end
 WebDriver implementation</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -390,11 +396,79 @@ WebDriver implementation</p>
 </h2>
 
 
+  <a id="OpenQA_Selenium_Remote_HttpCommandExecutor_CreateHttpClient_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.CreateHttpClient*"></a>
+
+  <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_CreateHttpClient" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.CreateHttpClient">
+  CreateHttpClient()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L250"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclient">HttpClient</a> used by making all HTTP calls to remote end.
+Invoked only once when required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual HttpClient CreateHttpClient()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclient">HttpClient</a></dt>
+    <dd><p>An instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclient">HttpClient</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OpenQA_Selenium_Remote_HttpCommandExecutor_CreateHttpClientHandler_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.CreateHttpClientHandler*"></a>
+
+  <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_CreateHttpClientHandler" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.CreateHttpClientHandler">
+  CreateHttpClientHandler()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L227"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler">HttpClientHandler</a> as underlying handler,
+used by <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html#OpenQA_Selenium_Remote_HttpCommandExecutor_CreateHttpClient">CreateHttpClient()</a>. Invoked only once when required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual HttpClientHandler CreateHttpClientHandler()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler">HttpClientHandler</a></dt>
+    <dd><p>An instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler">HttpClientHandler</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="OpenQA_Selenium_Remote_HttpCommandExecutor_Dispose_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.Dispose*"></a>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_Dispose" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L340"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L359"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Releases all resources used by the <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a>.</p>
@@ -421,7 +495,7 @@ WebDriver implementation</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_Dispose_System_Boolean_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.Dispose(System.Boolean)">
   Dispose(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L352"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L371"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Releases the unmanaged resources used by the <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> and
@@ -456,7 +530,7 @@ optionally releases the managed resources.</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_Execute_OpenQA_Selenium_Command_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(OpenQA.Selenium.Command)">
   Execute(Command)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L148"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L152"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes a command.</p>
@@ -488,6 +562,12 @@ optionally releases the managed resources.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">commandToExecute</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -495,7 +575,7 @@ optionally releases the managed resources.</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_ExecuteAsync_OpenQA_Selenium_Command_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.ExecuteAsync(OpenQA.Selenium.Command)">
   ExecuteAsync(Command)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L163"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes a command as an asynchronous task.</p>
@@ -527,6 +607,12 @@ optionally releases the managed resources.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">commandToExecute</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -566,8 +652,8 @@ optionally releases the managed resources.</p>
   <a id="OpenQA_Selenium_Remote_HttpCommandExecutor_TryAddCommand_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.TryAddCommand*"></a>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_TryAddCommand_System_String_OpenQA_Selenium_CommandInfo_" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.TryAddCommand(System.String,OpenQA.Selenium.CommandInfo)">
-  TryAddCommand(string, CommandInfo)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L133"><i class="bi bi-code-slash"></i></a>
+  TryAddCommand(string, CommandInfo?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L136"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Attempts to add a command to the repository of commands known to this executor.</p>
@@ -575,7 +661,7 @@ optionally releases the managed resources.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool TryAddCommand(string commandName, CommandInfo info)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool TryAddCommand(string commandName, CommandInfo? info)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -584,7 +670,7 @@ optionally releases the managed resources.</p>
     <dd><p>The name of the command to attempt to add.</p>
 </dd>
     <dt><code>info</code> <a class="xref" href="OpenQA.Selenium.CommandInfo.html">CommandInfo</a></dt>
-    <dd><p>The <a class="xref" href="OpenQA.Selenium.CommandInfo.html">CommandInfo</a> describing the commnd to add.</p>
+    <dd><p>The <a class="xref" href="OpenQA.Selenium.CommandInfo.html">CommandInfo</a> describing the command to add.</p>
 </dd>
   </dl>
 
@@ -612,7 +698,7 @@ optionally releases the managed resources.</p>
 
   <h3 id="OpenQA_Selenium_Remote_HttpCommandExecutor_SendingRemoteHttpRequest" data-uid="OpenQA.Selenium.Remote.HttpCommandExecutor.SendingRemoteHttpRequest">
   SendingRemoteHttpRequest
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Occurs when the <a class="xref" href="OpenQA.Selenium.Remote.HttpCommandExecutor.html">HttpCommandExecutor</a> is sending an HTTP
@@ -621,7 +707,7 @@ request to the remote end WebDriver implementation.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;SendingRemoteHttpRequestEventArgs&gt; SendingRemoteHttpRequest</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;SendingRemoteHttpRequestEventArgs&gt;? SendingRemoteHttpRequest</code></pre>
   </div>
 
 
@@ -645,7 +731,7 @@ request to the remote end WebDriver implementation.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L38" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/HttpCommandExecutor.cs/#L39" class="edit-link">Edit this page</a>
         </div>
 
 

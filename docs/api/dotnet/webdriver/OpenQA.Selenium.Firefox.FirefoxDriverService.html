@@ -204,7 +204,7 @@ Class FirefoxDriverService  <a class="header-action link-secondary" title="View 
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_BrowserCommunicationHost" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.BrowserCommunicationHost">
   BrowserCommunicationHost
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L69"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the IP address of the host adapter used by the driver
@@ -213,7 +213,7 @@ executable to communicate with the browser.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string BrowserCommunicationHost { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? BrowserCommunicationHost { get; set; }</code></pre>
   </div>
 
 
@@ -229,6 +229,9 @@ executable to communicate with the browser.</p>
 
 
 
+  <h4 class="section" id="OpenQA_Selenium_Firefox_FirefoxDriverService_BrowserCommunicationHost_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>A <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> or <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string.empty">Empty</a> value indicates no marionette host adapter to specify.</p>
+</div>
 
 
 
@@ -237,7 +240,7 @@ executable to communicate with the browser.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_BrowserCommunicationPort" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.BrowserCommunicationPort">
   BrowserCommunicationPort
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the port used by the driver executable to communicate with the browser.</p>
@@ -261,6 +264,9 @@ executable to communicate with the browser.</p>
 
 
 
+  <h4 class="section" id="OpenQA_Selenium_Firefox_FirefoxDriverService_BrowserCommunicationPort_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>A negative or zero value indicates no port value to specify.</p>
+</div>
 
 
 
@@ -269,7 +275,7 @@ executable to communicate with the browser.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_CommandLineArguments" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CommandLineArguments">
   CommandLineArguments
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L159"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L127"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the command-line arguments for the driver service.</p>
@@ -301,7 +307,7 @@ executable to communicate with the browser.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_ConnectToRunningBrowser" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.ConnectToRunningBrowser">
   ConnectToRunningBrowser
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets a value indicating whether to connect to an already-running
@@ -334,7 +340,7 @@ instance of Firefox.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_FirefoxBinaryPath" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.FirefoxBinaryPath">
   FirefoxBinaryPath
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the location of the Firefox binary executable.</p>
@@ -342,7 +348,7 @@ instance of Firefox.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string FirefoxBinaryPath { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? FirefoxBinaryPath { get; set; }</code></pre>
   </div>
 
 
@@ -358,6 +364,9 @@ instance of Firefox.</p>
 
 
 
+  <h4 class="section" id="OpenQA_Selenium_Firefox_FirefoxDriverService_FirefoxBinaryPath_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>A <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> or <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string.empty">Empty</a> value indicates no binary executable path to specify.</p>
+</div>
 
 
 
@@ -366,7 +375,7 @@ instance of Firefox.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_HasShutdown" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.HasShutdown">
   HasShutdown
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L149"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L117"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a value indicating whether the service has a shutdown API that can be called to terminate
@@ -399,7 +408,7 @@ it gracefully before forcing a termination.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_Host" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.Host">
   Host
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the IP address of the host adapter on which the
@@ -408,7 +417,7 @@ service should listen for connections.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Host { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? Host { get; set; }</code></pre>
   </div>
 
 
@@ -424,6 +433,9 @@ service should listen for connections.</p>
 
 
 
+  <h4 class="section" id="OpenQA_Selenium_Firefox_FirefoxDriverService_Host_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>A <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> or <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string.empty">Empty</a> value indicates no host to specify.</p>
+</div>
 
 
 
@@ -432,7 +444,7 @@ service should listen for connections.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_LogLevel" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.LogLevel">
   LogLevel
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L99"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the level at which log output is displayed.</p>
@@ -470,7 +482,7 @@ initiation of a session can be controlled.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_OpenBrowserToolbox" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.OpenBrowserToolbox">
   OpenBrowserToolbox
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L112"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets a value indicating whether to open the Firefox Browser Toolbox
@@ -503,7 +515,7 @@ when Firefox is launched.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_TerminationTimeout" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.TerminationTimeout">
   TerminationTimeout
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L104"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a value indicating the time to wait for the service to terminate before forcing it to terminate.</p>
@@ -539,7 +551,7 @@ when Firefox is launched.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_CreateDefaultService" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CreateDefaultService">
   CreateDefaultService()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L216"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L184"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a default instance of the FirefoxDriverService.</p>
@@ -571,8 +583,8 @@ when Firefox is launched.</p>
   <a id="OpenQA_Selenium_Firefox_FirefoxDriverService_CreateDefaultService_" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CreateDefaultService*"></a>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_CreateDefaultService_System_String_" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CreateDefaultService(System.String)">
-  CreateDefaultService(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L227"><i class="bi bi-code-slash"></i></a>
+  CreateDefaultService(string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L195"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a default instance of the FirefoxDriverService using a specified path to the Firefox driver executable.</p>
@@ -580,7 +592,7 @@ when Firefox is launched.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static FirefoxDriverService CreateDefaultService(string driverPath)</code></pre>
+    <pre><code class="lang-csharp hljs">public static FirefoxDriverService CreateDefaultService(string? driverPath)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -610,8 +622,8 @@ when Firefox is launched.</p>
   <a id="OpenQA_Selenium_Firefox_FirefoxDriverService_CreateDefaultService_" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CreateDefaultService*"></a>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_CreateDefaultService_System_String_System_String_" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.CreateDefaultService(System.String,System.String)">
-  CreateDefaultService(string, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L249"><i class="bi bi-code-slash"></i></a>
+  CreateDefaultService(string?, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L219"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a default instance of the FirefoxDriverService using a specified path to the Firefox driver executable with the given name.</p>
@@ -619,7 +631,7 @@ when Firefox is launched.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static FirefoxDriverService CreateDefaultService(string driverPath, string driverExecutableFileName)</code></pre>
+    <pre><code class="lang-csharp hljs">public static FirefoxDriverService CreateDefaultService(string? driverPath, string? driverExecutableFileName)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -653,7 +665,7 @@ when Firefox is launched.</p>
 
   <h3 id="OpenQA_Selenium_Firefox_FirefoxDriverService_GetDefaultDriverOptions" data-uid="OpenQA.Selenium.Firefox.FirefoxDriverService.GetDefaultDriverOptions">
   GetDefaultDriverOptions()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Firefox/FirefoxDriverService.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The browser options instance that corresponds to the driver service</p>

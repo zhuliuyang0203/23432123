@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_ClipRectangle" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ClipRectangle" class="text-break">
-Class ClipRectangle  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/CaptureScreenshotCommand.cs/#L58"><i class="bi bi-code-slash"></i></a>
+Class ClipRectangle  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/CaptureScreenshotCommand.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,8 +102,8 @@ Class ClipRectangle  <a class="header-action link-secondary" title="View source"
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;type&quot;)]
-[JsonDerivedType(typeof(ClipRectangle.Box), &quot;box&quot;)]
-[JsonDerivedType(typeof(ClipRectangle.Element), &quot;element&quot;)]
+[JsonDerivedType(typeof(BoxClipRectangle), &quot;box&quot;)]
+[JsonDerivedType(typeof(ElementClipRectangle), &quot;element&quot;)]
 public abstract record ClipRectangle : IEquatable&lt;ClipRectangle&gt;</code></pre>
   </div>
 
@@ -128,8 +128,8 @@ public abstract record ClipRectangle : IEquatable&lt;ClipRectangle&gt;</code></p
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ClipRectangle.Box.html">ClipRectangle.Box</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ClipRectangle.Element.html">ClipRectangle.Element</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BoxClipRectangle.html">BoxClipRectangle</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ElementClipRectangle.html">ElementClipRectangle</a></div>
     </dd>
   </dl>
 
@@ -168,7 +168,7 @@ public abstract record ClipRectangle : IEquatable&lt;ClipRectangle&gt;</code></p
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/CaptureScreenshotCommand.cs/#L58" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/CaptureScreenshotCommand.cs/#L50" class="edit-link">Edit this page</a>
         </div>
 
 

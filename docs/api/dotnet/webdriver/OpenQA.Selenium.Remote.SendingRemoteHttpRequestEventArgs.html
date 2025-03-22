@@ -160,8 +160,8 @@ Class SendingRemoteHttpRequestEventArgs  <a class="header-action link-secondary"
   <a id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs__ctor_" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.#ctor*"></a>
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs__ctor_System_String_System_String_System_String_" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.#ctor(System.String,System.String,System.String)">
-  SendingRemoteHttpRequestEventArgs(string, string, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  SendingRemoteHttpRequestEventArgs(string, string, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.html">SendingRemoteHttpRequestEventArgs</a> class.</p>
@@ -169,7 +169,7 @@ Class SendingRemoteHttpRequestEventArgs  <a class="header-action link-secondary"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string requestBody)</code></pre>
+    <pre><code class="lang-csharp hljs">public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, string? requestBody)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -193,6 +193,12 @@ Class SendingRemoteHttpRequestEventArgs  <a class="header-action link-secondary"
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">method</code>, <code class="paramref">fullUrl</code> are null.</p>
+</dd>
+  </dl>
 
 
 
@@ -204,7 +210,7 @@ Class SendingRemoteHttpRequestEventArgs  <a class="header-action link-secondary"
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs_FullUrl" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.FullUrl">
   FullUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the full URL of the HTTP request.</p>
@@ -236,7 +242,7 @@ Class SendingRemoteHttpRequestEventArgs  <a class="header-action link-secondary"
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs_Headers" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.Headers">
   Headers
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a read-only dictionary of the headers of the HTTP request.
@@ -269,7 +275,7 @@ Does not include default headers of the web client making the request.</p>
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs_Method" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.Method">
   Method
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the HTTP method for the HTTP request.</p>
@@ -301,7 +307,7 @@ Does not include default headers of the web client making the request.</p>
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs_RequestBody" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.RequestBody">
   RequestBody
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the body of the HTTP request as a string.</p>
@@ -309,7 +315,7 @@ Does not include default headers of the web client making the request.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string RequestBody { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? RequestBody { get; }</code></pre>
   </div>
 
 
@@ -337,7 +343,7 @@ Does not include default headers of the web client making the request.</p>
 
   <h3 id="OpenQA_Selenium_Remote_SendingRemoteHttpRequestEventArgs_AddHeader_System_String_System_String_" data-uid="OpenQA.Selenium.Remote.SendingRemoteHttpRequestEventArgs.AddHeader(System.String,System.String)">
   AddHeader(string, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/SendingRemoteHttpRequestEventArgs.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a header to the HTTP request.</p>
@@ -371,6 +377,15 @@ HTTP request being sent; however, be aware they may be overwritten by
 the client raising the event.</p>
 </div>
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p>If <code class="paramref">headerName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> or <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string.empty">Empty</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">headerValue</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 

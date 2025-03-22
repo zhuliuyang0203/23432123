@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter" class="text-break">
-Class InspectorAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class InspectorAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   InspectorAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the InspectorAdapter class.</p>
@@ -183,6 +183,12 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_Disable_OpenQA_Selenium_DevTools_V132_Inspector_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.Disable(OpenQA.Selenium.DevTools.V132.Inspector.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_Enable_OpenQA_Selenium_DevTools_V132_Inspector_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.Enable(OpenQA.Selenium.DevTools.V132.Inspector.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -281,7 +287,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -327,7 +333,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DetachedEventArgs&gt; Detached</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DetachedEventArgs&gt;? Detached</code></pre>
   </div>
 
 
@@ -350,7 +356,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_TargetCrashed" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.TargetCrashed">
   TargetCrashed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetCrashed</p>
@@ -358,7 +364,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCrashedEventArgs&gt; TargetCrashed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCrashedEventArgs&gt;? TargetCrashed</code></pre>
   </div>
 
 
@@ -381,7 +387,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Inspector_InspectorAdapter_TargetReloadedAfterCrash" data-uid="OpenQA.Selenium.DevTools.V132.Inspector.InspectorAdapter.TargetReloadedAfterCrash">
   TargetReloadedAfterCrash
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetReloadedAfterCrash</p>
@@ -389,7 +395,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetReloadedAfterCrashEventArgs&gt; TargetReloadedAfterCrash</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetReloadedAfterCrashEventArgs&gt;? TargetReloadedAfterCrash</code></pre>
   </div>
 
 
@@ -413,7 +419,7 @@ Class InspectorAdapter  <a class="header-action link-secondary" title="View sour
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Inspector/InspectorAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

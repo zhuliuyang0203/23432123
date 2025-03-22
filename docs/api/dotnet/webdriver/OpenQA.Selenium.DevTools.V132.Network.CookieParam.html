@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam" class="text-break">
-Class CookieParam  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class CookieParam  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class CookieParam  <a class="header-action link-secondary" title="View source" h
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Domain" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Domain">
   Domain
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>domain</p>
@@ -164,7 +164,7 @@ Class CookieParam  <a class="header-action link-secondary" title="View source" h
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;domain&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Domain { get; set; }</code></pre>
+public string? Domain { get; set; }</code></pre>
   </div>
 
 
@@ -188,7 +188,7 @@ public string Domain { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Expires" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Expires">
   Expires
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>expires</p>
@@ -222,7 +222,7 @@ public double? Expires { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_HttpOnly" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.HttpOnly">
   HttpOnly
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>httpOnly</p>
@@ -256,7 +256,7 @@ public bool? HttpOnly { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Name" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Name">
   Name
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>name</p>
@@ -289,7 +289,7 @@ public string Name { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_PartitionKey" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.PartitionKey">
   PartitionKey
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L144"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>partitionKey</p>
@@ -299,7 +299,7 @@ public string Name { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;partitionKey&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public CookiePartitionKey PartitionKey { get; set; }</code></pre>
+public CookiePartitionKey? PartitionKey { get; set; }</code></pre>
   </div>
 
 
@@ -323,7 +323,7 @@ public CookiePartitionKey PartitionKey { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Path" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Path">
   Path
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>path</p>
@@ -333,7 +333,7 @@ public CookiePartitionKey PartitionKey { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;path&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Path { get; set; }</code></pre>
+public string? Path { get; set; }</code></pre>
   </div>
 
 
@@ -357,7 +357,7 @@ public string Path { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Priority" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Priority">
   Priority
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>priority</p>
@@ -391,7 +391,7 @@ public CookiePriority? Priority { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_SameParty" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.SameParty">
   SameParty
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sameParty</p>
@@ -425,7 +425,7 @@ public bool? SameParty { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_SameSite" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.SameSite">
   SameSite
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sameSite</p>
@@ -459,7 +459,7 @@ public CookieSameSite? SameSite { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Secure" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Secure">
   Secure
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>secure</p>
@@ -493,7 +493,7 @@ public bool? Secure { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_SourcePort" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.SourcePort">
   SourcePort
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L134"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sourcePort</p>
@@ -527,7 +527,7 @@ public long? SourcePort { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_SourceScheme" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.SourceScheme">
   SourceScheme
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sourceScheme</p>
@@ -561,7 +561,7 @@ public CookieSourceScheme? SourceScheme { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_CookieParam_Url" data-uid="OpenQA.Selenium.DevTools.V132.Network.CookieParam.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>url</p>
@@ -571,7 +571,7 @@ public CookieSourceScheme? SourceScheme { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;url&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Url { get; set; }</code></pre>
+public string? Url { get; set; }</code></pre>
   </div>
 
 
@@ -628,7 +628,7 @@ public string Value { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/CookieParam.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

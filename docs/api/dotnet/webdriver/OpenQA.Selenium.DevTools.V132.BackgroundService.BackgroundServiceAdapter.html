@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter" class="text-break">
-Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   BackgroundServiceAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the BackgroundServiceAdapter class.</p>
@@ -183,6 +183,12 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_ClearEvents_OpenQA_Selenium_DevTools_V132_BackgroundService_ClearEventsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.ClearEvents(OpenQA.Selenium.DevTools.V132.BackgroundService.ClearEventsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearEvents(ClearEventsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearEvents</p>
@@ -238,7 +244,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearEventsCommandResponse&gt; ClearEvents(ClearEventsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearEventsCommandResponse?&gt; ClearEvents(ClearEventsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_SetRecording_OpenQA_Selenium_DevTools_V132_BackgroundService_SetRecordingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.SetRecording(OpenQA.Selenium.DevTools.V132.BackgroundService.SetRecordingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetRecording(SetRecordingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L70"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setRecording</p>
@@ -281,7 +287,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetRecordingCommandResponse&gt; SetRecording(SetRecordingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetRecordingCommandResponse?&gt; SetRecording(SetRecordingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_StartObserving_OpenQA_Selenium_DevTools_V132_BackgroundService_StartObservingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.StartObserving(OpenQA.Selenium.DevTools.V132.BackgroundService.StartObservingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StartObserving(StartObservingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>startObserving</p>
@@ -324,7 +330,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartObservingCommandResponse&gt; StartObserving(StartObservingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartObservingCommandResponse?&gt; StartObserving(StartObservingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_StopObserving_OpenQA_Selenium_DevTools_V132_BackgroundService_StopObservingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.StopObserving(OpenQA.Selenium.DevTools.V132.BackgroundService.StopObservingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StopObserving(StopObservingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stopObserving</p>
@@ -367,7 +373,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopObservingCommandResponse&gt; StopObserving(StopObservingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopObservingCommandResponse?&gt; StopObserving(StopObservingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -405,7 +411,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_BackgroundService_BackgroundServiceAdapter_BackgroundServiceEventReceived" data-uid="OpenQA.Selenium.DevTools.V132.BackgroundService.BackgroundServiceAdapter.BackgroundServiceEventReceived">
   BackgroundServiceEventReceived
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>backgroundServiceEventReceived</p>
@@ -413,7 +419,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BackgroundServiceEventReceivedEventArgs&gt; BackgroundServiceEventReceived</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BackgroundServiceEventReceivedEventArgs&gt;? BackgroundServiceEventReceived</code></pre>
   </div>
 
 
@@ -444,7 +450,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;RecordingStateChangedEventArgs&gt; RecordingStateChanged</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;RecordingStateChangedEventArgs&gt;? RecordingStateChanged</code></pre>
   </div>
 
 
@@ -468,7 +474,7 @@ Class BackgroundServiceAdapter  <a class="header-action link-secondary" title="V
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/BackgroundService/BackgroundServiceAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

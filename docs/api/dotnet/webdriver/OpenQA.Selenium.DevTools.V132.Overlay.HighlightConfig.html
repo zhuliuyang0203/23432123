@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig" class="text-break">
-Class HighlightConfig  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class HighlightConfig  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class HighlightConfig  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_BorderColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.BorderColor">
   BorderColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>borderColor</p>
@@ -164,7 +164,7 @@ Class HighlightConfig  <a class="header-action link-secondary" title="View sourc
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;borderColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA BorderColor { get; set; }</code></pre>
+public RGBA? BorderColor { get; set; }</code></pre>
   </div>
 
 
@@ -188,7 +188,7 @@ public RGBA BorderColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ColorFormat" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ColorFormat">
   ColorFormat
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L144"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>colorFormat</p>
@@ -222,7 +222,7 @@ public ColorFormat? ColorFormat { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ContainerQueryContainerHighlightConfig" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ContainerQueryContainerHighlightConfig">
   ContainerQueryContainerHighlightConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L194"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L143"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>containerQueryContainerHighlightConfig</p>
@@ -232,7 +232,7 @@ public ColorFormat? ColorFormat { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;containerQueryContainerHighlightConfig&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public ContainerQueryContainerHighlightConfig ContainerQueryContainerHighlightConfig { get; set; }</code></pre>
+public ContainerQueryContainerHighlightConfig? ContainerQueryContainerHighlightConfig { get; set; }</code></pre>
   </div>
 
 
@@ -256,7 +256,7 @@ public ContainerQueryContainerHighlightConfig ContainerQueryContainerHighlightCo
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ContentColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ContentColor">
   ContentColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>contentColor</p>
@@ -266,7 +266,7 @@ public ContainerQueryContainerHighlightConfig ContainerQueryContainerHighlightCo
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;contentColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA ContentColor { get; set; }</code></pre>
+public RGBA? ContentColor { get; set; }</code></pre>
   </div>
 
 
@@ -290,7 +290,7 @@ public RGBA ContentColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ContrastAlgorithm" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ContrastAlgorithm">
   ContrastAlgorithm
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L184"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L136"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>contrastAlgorithm</p>
@@ -324,7 +324,7 @@ public ContrastAlgorithm? ContrastAlgorithm { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_CssGridColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.CssGridColor">
   CssGridColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L134"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>cssGridColor</p>
@@ -334,7 +334,7 @@ public ContrastAlgorithm? ContrastAlgorithm { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;cssGridColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA CssGridColor { get; set; }</code></pre>
+public RGBA? CssGridColor { get; set; }</code></pre>
   </div>
 
 
@@ -358,7 +358,7 @@ public RGBA CssGridColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_EventTargetColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.EventTargetColor">
   EventTargetColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>eventTargetColor</p>
@@ -368,7 +368,7 @@ public RGBA CssGridColor { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;eventTargetColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA EventTargetColor { get; set; }</code></pre>
+public RGBA? EventTargetColor { get; set; }</code></pre>
   </div>
 
 
@@ -392,7 +392,7 @@ public RGBA EventTargetColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_FlexContainerHighlightConfig" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.FlexContainerHighlightConfig">
   FlexContainerHighlightConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L164"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>flexContainerHighlightConfig</p>
@@ -402,7 +402,7 @@ public RGBA EventTargetColor { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;flexContainerHighlightConfig&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public FlexContainerHighlightConfig FlexContainerHighlightConfig { get; set; }</code></pre>
+public FlexContainerHighlightConfig? FlexContainerHighlightConfig { get; set; }</code></pre>
   </div>
 
 
@@ -426,7 +426,7 @@ public FlexContainerHighlightConfig FlexContainerHighlightConfig { get; set; }</
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_FlexItemHighlightConfig" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.FlexItemHighlightConfig">
   FlexItemHighlightConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L174"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L129"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>flexItemHighlightConfig</p>
@@ -436,7 +436,7 @@ public FlexContainerHighlightConfig FlexContainerHighlightConfig { get; set; }</
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;flexItemHighlightConfig&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public FlexItemHighlightConfig FlexItemHighlightConfig { get; set; }</code></pre>
+public FlexItemHighlightConfig? FlexItemHighlightConfig { get; set; }</code></pre>
   </div>
 
 
@@ -460,7 +460,7 @@ public FlexItemHighlightConfig FlexItemHighlightConfig { get; set; }</code></pre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_GridHighlightConfig" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.GridHighlightConfig">
   GridHighlightConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L154"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L115"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>gridHighlightConfig</p>
@@ -470,7 +470,7 @@ public FlexItemHighlightConfig FlexItemHighlightConfig { get; set; }</code></pre
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;gridHighlightConfig&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public GridHighlightConfig GridHighlightConfig { get; set; }</code></pre>
+public GridHighlightConfig? GridHighlightConfig { get; set; }</code></pre>
   </div>
 
 
@@ -494,7 +494,7 @@ public GridHighlightConfig GridHighlightConfig { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_MarginColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.MarginColor">
   MarginColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>marginColor</p>
@@ -504,7 +504,7 @@ public GridHighlightConfig GridHighlightConfig { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;marginColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA MarginColor { get; set; }</code></pre>
+public RGBA? MarginColor { get; set; }</code></pre>
   </div>
 
 
@@ -528,7 +528,7 @@ public RGBA MarginColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_PaddingColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.PaddingColor">
   PaddingColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>paddingColor</p>
@@ -538,7 +538,7 @@ public RGBA MarginColor { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;paddingColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA PaddingColor { get; set; }</code></pre>
+public RGBA? PaddingColor { get; set; }</code></pre>
   </div>
 
 
@@ -562,7 +562,7 @@ public RGBA PaddingColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShapeColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShapeColor">
   ShapeColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>shapeColor</p>
@@ -572,7 +572,7 @@ public RGBA PaddingColor { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;shapeColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA ShapeColor { get; set; }</code></pre>
+public RGBA? ShapeColor { get; set; }</code></pre>
   </div>
 
 
@@ -596,7 +596,7 @@ public RGBA ShapeColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShapeMarginColor" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShapeMarginColor">
   ShapeMarginColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>shapeMarginColor</p>
@@ -606,7 +606,7 @@ public RGBA ShapeColor { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;shapeMarginColor&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RGBA ShapeMarginColor { get; set; }</code></pre>
+public RGBA? ShapeMarginColor { get; set; }</code></pre>
   </div>
 
 
@@ -630,7 +630,7 @@ public RGBA ShapeMarginColor { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShowAccessibilityInfo" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShowAccessibilityInfo">
   ShowAccessibilityInfo
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>showAccessibilityInfo</p>
@@ -664,7 +664,7 @@ public bool? ShowAccessibilityInfo { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShowExtensionLines" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShowExtensionLines">
   ShowExtensionLines
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>showExtensionLines</p>
@@ -698,7 +698,7 @@ public bool? ShowExtensionLines { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShowInfo" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShowInfo">
   ShowInfo
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>showInfo</p>
@@ -732,7 +732,7 @@ public bool? ShowInfo { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_HighlightConfig_ShowRulers" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.HighlightConfig.ShowRulers">
   ShowRulers
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>showRulers</p>
@@ -800,7 +800,7 @@ public bool? ShowStyles { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/HighlightConfig.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest" class="text-break">
-Class CapabilityRequest  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L24"><i class="bi bi-code-slash"></i></a>
+Class CapabilityRequest  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,7 +101,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class CapabilityRequest</code></pre>
+    <pre><code class="lang-csharp hljs">public record CapabilityRequest : IEquatable&lt;CapabilityRequest&gt;</code></pre>
   </div>
 
 
@@ -115,6 +115,12 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
     </dd>
   </dl>
 
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.html">CapabilityRequest</a>&gt;</div>
+    </dd>
+  </dl>
 
 
   <dl class="typelist inheritedMembers">
@@ -156,7 +162,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_AcceptInsecureCerts" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.AcceptInsecureCerts">
   AcceptInsecureCerts
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -187,7 +193,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_BrowserName" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.BrowserName">
   BrowserName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -218,7 +224,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_BrowserVersion" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.BrowserVersion">
   BrowserVersion
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -249,7 +255,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_PlatformName" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.PlatformName">
   PlatformName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -280,7 +286,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_ProxyConfiguration" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.ProxyConfiguration">
   ProxyConfiguration
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -307,18 +313,18 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
 
 
-  <a id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_WebSocketUrl_" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.WebSocketUrl*"></a>
+  <a id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_UnhandledPromptBehavior_" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.UnhandledPromptBehavior*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_WebSocketUrl" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.WebSocketUrl">
-  WebSocketUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Session_CapabilityRequest_UnhandledPromptBehavior" data-uid="OpenQA.Selenium.BiDi.Modules.Session.CapabilityRequest.UnhandledPromptBehavior">
+  UnhandledPromptBehavior
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool? WebSocketUrl { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public UserPromptHandler? UnhandledPromptBehavior { get; set; }</code></pre>
   </div>
 
 
@@ -327,7 +333,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.UserPromptHandler.html">UserPromptHandler</a></dt>
     <dd></dd>
   </dl>
 
@@ -342,7 +348,7 @@ Class CapabilityRequest  <a class="header-action link-secondary" title="View sou
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L24" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Session/CapabilityRequest.cs/#L22" class="edit-link">Edit this page</a>
         </div>
 
 

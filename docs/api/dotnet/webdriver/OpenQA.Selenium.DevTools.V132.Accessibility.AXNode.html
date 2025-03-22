@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode" class="text-break">
-Class AXNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class AXNode  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class AXNode  <a class="header-action link-secondary" title="View source" href="
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_BackendDOMNodeId" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.BackendDOMNodeId">
   BackendDOMNodeId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>backendDOMNodeId</p>
@@ -188,7 +188,7 @@ public long? BackendDOMNodeId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_ChildIds" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.ChildIds">
   ChildIds
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>childIds</p>
@@ -198,7 +198,7 @@ public long? BackendDOMNodeId { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;childIds&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string[] ChildIds { get; set; }</code></pre>
+public string[]? ChildIds { get; set; }</code></pre>
   </div>
 
 
@@ -222,7 +222,7 @@ public string[] ChildIds { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_ChromeRole" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.ChromeRole">
   ChromeRole
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>chromeRole</p>
@@ -232,7 +232,7 @@ public string[] ChildIds { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;chromeRole&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXValue ChromeRole { get; set; }</code></pre>
+public AXValue? ChromeRole { get; set; }</code></pre>
   </div>
 
 
@@ -256,7 +256,7 @@ public AXValue ChromeRole { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_Description" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.Description">
   Description
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>description</p>
@@ -266,7 +266,7 @@ public AXValue ChromeRole { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;description&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXValue Description { get; set; }</code></pre>
+public AXValue? Description { get; set; }</code></pre>
   </div>
 
 
@@ -290,7 +290,7 @@ public AXValue Description { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_FrameId" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.FrameId">
   FrameId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L134"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>frameId</p>
@@ -300,7 +300,7 @@ public AXValue Description { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;frameId&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string FrameId { get; set; }</code></pre>
+public string? FrameId { get; set; }</code></pre>
   </div>
 
 
@@ -357,7 +357,7 @@ public bool Ignored { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_IgnoredReasons" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.IgnoredReasons">
   IgnoredReasons
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>ignoredReasons</p>
@@ -367,7 +367,7 @@ public bool Ignored { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;ignoredReasons&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXProperty[] IgnoredReasons { get; set; }</code></pre>
+public AXProperty[]? IgnoredReasons { get; set; }</code></pre>
   </div>
 
 
@@ -391,7 +391,7 @@ public AXProperty[] IgnoredReasons { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_Name" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.Name">
   Name
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>name</p>
@@ -401,7 +401,7 @@ public AXProperty[] IgnoredReasons { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;name&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXValue Name { get; set; }</code></pre>
+public AXValue? Name { get; set; }</code></pre>
   </div>
 
 
@@ -425,7 +425,7 @@ public AXValue Name { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_NodeId" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.NodeId">
   NodeId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodeId</p>
@@ -458,7 +458,7 @@ public string NodeId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_ParentId" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.ParentId">
   ParentId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>parentId</p>
@@ -468,7 +468,7 @@ public string NodeId { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;parentId&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string ParentId { get; set; }</code></pre>
+public string? ParentId { get; set; }</code></pre>
   </div>
 
 
@@ -492,7 +492,7 @@ public string ParentId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_Properties" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.Properties">
   Properties
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>properties</p>
@@ -502,7 +502,7 @@ public string ParentId { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;properties&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXProperty[] Properties { get; set; }</code></pre>
+public AXProperty[]? Properties { get; set; }</code></pre>
   </div>
 
 
@@ -526,7 +526,7 @@ public AXProperty[] Properties { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_Role" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.Role">
   Role
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>role</p>
@@ -536,7 +536,7 @@ public AXProperty[] Properties { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;role&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXValue Role { get; set; }</code></pre>
+public AXValue? Role { get; set; }</code></pre>
   </div>
 
 
@@ -560,7 +560,7 @@ public AXValue Role { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Accessibility_AXNode_Value" data-uid="OpenQA.Selenium.DevTools.V132.Accessibility.AXNode.Value">
   Value
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>value</p>
@@ -570,7 +570,7 @@ public AXValue Role { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;value&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AXValue Value { get; set; }</code></pre>
+public AXValue? Value { get; set; }</code></pre>
   </div>
 
 
@@ -594,7 +594,7 @@ public AXValue Value { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Accessibility/AXNode.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

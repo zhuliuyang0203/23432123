@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings" class="text-break">
-Class ContinueInterceptedRequestCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class ContinueInterceptedRequestCommandSettings  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -160,7 +160,7 @@ Class ContinueInterceptedRequestCommandSettings  <a class="header-action link-se
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_AuthChallengeResponse" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.AuthChallengeResponse">
   AuthChallengeResponse
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the authChallengeResponse</p>
@@ -170,7 +170,7 @@ Class ContinueInterceptedRequestCommandSettings  <a class="header-action link-se
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;authChallengeResponse&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AuthChallengeResponse AuthChallengeResponse { get; set; }</code></pre>
+public AuthChallengeResponse? AuthChallengeResponse { get; set; }</code></pre>
   </div>
 
 
@@ -194,7 +194,7 @@ public AuthChallengeResponse AuthChallengeResponse { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_CommandName" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.CommandName">
   CommandName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the name of the command.</p>
@@ -227,7 +227,7 @@ public string CommandName { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_ErrorReason" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.ErrorReason">
   ErrorReason
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the errorReason</p>
@@ -261,7 +261,7 @@ public ErrorReason? ErrorReason { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_Headers" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.Headers">
   Headers
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the headers</p>
@@ -271,7 +271,7 @@ public ErrorReason? ErrorReason { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;headers&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public Headers Headers { get; set; }</code></pre>
+public Headers? Headers { get; set; }</code></pre>
   </div>
 
 
@@ -328,7 +328,7 @@ public string InterceptionId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_Method" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.Method">
   Method
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the method</p>
@@ -338,7 +338,7 @@ public string InterceptionId { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;method&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Method { get; set; }</code></pre>
+public string? Method { get; set; }</code></pre>
   </div>
 
 
@@ -362,7 +362,7 @@ public string Method { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_PostData" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.PostData">
   PostData
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the postData</p>
@@ -372,7 +372,7 @@ public string Method { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;postData&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string PostData { get; set; }</code></pre>
+public string? PostData { get; set; }</code></pre>
   </div>
 
 
@@ -396,7 +396,7 @@ public string PostData { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_RawResponse" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.RawResponse">
   RawResponse
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the rawResponse</p>
@@ -406,7 +406,7 @@ public string PostData { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;rawResponse&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string RawResponse { get; set; }</code></pre>
+public string? RawResponse { get; set; }</code></pre>
   </div>
 
 
@@ -430,7 +430,7 @@ public string RawResponse { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_ContinueInterceptedRequestCommandSettings_Url" data-uid="OpenQA.Selenium.DevTools.V132.Network.ContinueInterceptedRequestCommandSettings.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the url</p>
@@ -440,7 +440,7 @@ public string RawResponse { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;url&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Url { get; set; }</code></pre>
+public string? Url { get; set; }</code></pre>
   </div>
 
 
@@ -464,7 +464,7 @@ public string Url { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/ContinueInterceptedRequestCommand.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

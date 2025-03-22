@@ -413,9 +413,6 @@ Class ChromeDriver  <a class="header-action link-secondary" title="View source" 
   <div>
       <a class="xref" href="OpenQA.Selenium.BiDi.WebDriverExtensions.html#OpenQA_Selenium_BiDi_WebDriverExtensions_AsBiDiAsync_OpenQA_Selenium_IWebDriver_">WebDriverExtensions.AsBiDiAsync(IWebDriver)</a>
   </div>
-  <div>
-      <a class="xref" href="OpenQA.Selenium.BiDi.WebDriverExtensions.html#OpenQA_Selenium_BiDi_WebDriverExtensions_AsBiDiContextAsync_OpenQA_Selenium_IWebDriver_">WebDriverExtensions.AsBiDiContextAsync(IWebDriver)</a>
-  </div>
   </dd></dl>
 
 
@@ -485,7 +482,7 @@ public class Testing
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_OpenQA_Selenium_Chrome_ChromeDriverService_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeDriverService)">
   ChromeDriver(ChromeDriverService)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified driver service.</p>
@@ -511,6 +508,12 @@ public class Testing
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -518,7 +521,7 @@ public class Testing
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_OpenQA_Selenium_Chrome_ChromeDriverService_OpenQA_Selenium_Chrome_ChromeOptions_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeDriverService,OpenQA.Selenium.Chrome.ChromeOptions)">
   ChromeDriver(ChromeDriverService, ChromeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L144"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified
@@ -548,6 +551,12 @@ public class Testing
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> or <code class="paramref">options</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -555,7 +564,7 @@ public class Testing
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_OpenQA_Selenium_Chrome_ChromeDriverService_OpenQA_Selenium_Chrome_ChromeOptions_System_TimeSpan_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeDriverService,OpenQA.Selenium.Chrome.ChromeOptions,System.TimeSpan)">
   ChromeDriver(ChromeDriverService, ChromeOptions, TimeSpan)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L150"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L156"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriverService.html">ChromeDriverService</a>.</p>
@@ -587,6 +596,12 @@ public class Testing
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> or <code class="paramref">options</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -594,7 +609,7 @@ public class Testing
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_OpenQA_Selenium_Chrome_ChromeOptions_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(OpenQA.Selenium.Chrome.ChromeOptions)">
   ChromeDriver(ChromeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified options.</p>
@@ -620,6 +635,12 @@ public class Testing
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -627,7 +648,7 @@ public class Testing
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_System_String_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(System.String)">
   ChromeDriver(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L107"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified path
@@ -661,7 +682,7 @@ to the directory containing ChromeDriver.exe.</p>
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_System_String_OpenQA_Selenium_Chrome_ChromeOptions_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(System.String,OpenQA.Selenium.Chrome.ChromeOptions)">
   ChromeDriver(string, ChromeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L116"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L119"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified path
@@ -691,6 +712,12 @@ to the directory containing ChromeDriver.exe and options.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -698,7 +725,7 @@ to the directory containing ChromeDriver.exe and options.</p>
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver__ctor_System_String_OpenQA_Selenium_Chrome_ChromeOptions_System_TimeSpan_" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.#ctor(System.String,OpenQA.Selenium.Chrome.ChromeOptions,System.TimeSpan)">
   ChromeDriver(string, ChromeOptions, TimeSpan)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L132"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Chrome.ChromeDriver.html">ChromeDriver</a> class using the specified path
@@ -731,6 +758,12 @@ to the directory containing ChromeDriver.exe, options, and command timeout.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -742,7 +775,7 @@ to the directory containing ChromeDriver.exe, options, and command timeout.</p>
 
   <h3 id="OpenQA_Selenium_Chrome_ChromeDriver_CustomCommandDefinitions" data-uid="OpenQA.Selenium.Chrome.ChromeDriver.CustomCommandDefinitions">
   CustomCommandDefinitions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L161"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Chrome/ChromeDriver.cs/#L167"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a read-only dictionary of the custom WebDriver commands defined for ChromeDriver.

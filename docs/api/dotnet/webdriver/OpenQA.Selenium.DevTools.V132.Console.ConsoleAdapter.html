@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter" class="text-break">
-Class ConsoleAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class ConsoleAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   ConsoleAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the ConsoleAdapter class.</p>
@@ -183,6 +183,12 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_ClearMessages_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.ClearMessages*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_ClearMessages_OpenQA_Selenium_DevTools_V132_Console_ClearMessagesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.ClearMessages(OpenQA.Selenium.DevTools.V132.Console.ClearMessagesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  ClearMessages(ClearMessagesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  ClearMessages(ClearMessagesCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearMessages</p>
@@ -238,7 +244,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearMessagesCommandResponse&gt; ClearMessages(ClearMessagesCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearMessagesCommandResponse?&gt; ClearMessages(ClearMessagesCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_Disable_OpenQA_Selenium_DevTools_V132_Console_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.Disable(OpenQA.Selenium.DevTools.V132.Console.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -281,7 +287,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Console_ConsoleAdapter_Enable_OpenQA_Selenium_DevTools_V132_Console_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Console.ConsoleAdapter.Enable(OpenQA.Selenium.DevTools.V132.Console.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L64"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -324,7 +330,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -370,7 +376,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;MessageAddedEventArgs&gt; MessageAdded</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;MessageAddedEventArgs&gt;? MessageAdded</code></pre>
   </div>
 
 
@@ -394,7 +400,7 @@ Class ConsoleAdapter  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Console/ConsoleAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

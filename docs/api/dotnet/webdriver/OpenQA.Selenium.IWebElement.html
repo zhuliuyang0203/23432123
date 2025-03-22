@@ -467,7 +467,7 @@ are defined as elements with INPUT or TEXTAREA tags.</p>
 
   <h3 id="OpenQA_Selenium_IWebElement_Click" data-uid="OpenQA.Selenium.IWebElement.Click">
   Click()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L137"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Clicks this element.</p>
@@ -503,9 +503,6 @@ simulate a users to accidentally missing the target when clicking.
 
   <h4 class="section">Exceptions</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="OpenQA.Selenium.ElementNotVisibleException.html">ElementNotVisibleException</a></dt>
-    <dd><p>Thrown when the target element is not visible.</p>
-</dd>
     <dt><a class="xref" href="OpenQA.Selenium.StaleElementReferenceException.html">StaleElementReferenceException</a></dt>
     <dd><p>Thrown when the target element is no longer valid in the document DOM.</p>
 </dd>
@@ -517,7 +514,7 @@ simulate a users to accidentally missing the target when clicking.
 
   <h3 id="OpenQA_Selenium_IWebElement_GetAttribute_System_String_" data-uid="OpenQA.Selenium.IWebElement.GetAttribute(System.String)">
   GetAttribute(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L175"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L173"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the value of the specified attribute for this element.</p>
@@ -525,7 +522,7 @@ simulate a users to accidentally missing the target when clicking.
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">string GetAttribute(string attributeName)</code></pre>
+    <pre><code class="lang-csharp hljs">string? GetAttribute(string attributeName)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -570,7 +567,7 @@ there is no explicit attribute on the element:
 
   <h3 id="OpenQA_Selenium_IWebElement_GetCssValue_System_String_" data-uid="OpenQA.Selenium.IWebElement.GetCssValue(System.String)">
   GetCssValue(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L212"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L210"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the value of a CSS property of this element.</p>
@@ -622,7 +619,7 @@ return &quot;#008000&quot; for its value.</p>
 
   <h3 id="OpenQA_Selenium_IWebElement_GetDomAttribute_System_String_" data-uid="OpenQA.Selenium.IWebElement.GetDomAttribute(System.String)">
   GetDomAttribute(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L190"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L188"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the value of a declared HTML attribute of this element.</p>
@@ -630,7 +627,7 @@ return &quot;#008000&quot; for its value.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">string GetDomAttribute(string attributeName)</code></pre>
+    <pre><code class="lang-csharp hljs">string? GetDomAttribute(string attributeName)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -674,7 +671,7 @@ method or the <a class="xref" href="OpenQA.Selenium.IWebElement.html#OpenQA_Sele
 
   <h3 id="OpenQA_Selenium_IWebElement_GetDomProperty_System_String_" data-uid="OpenQA.Selenium.IWebElement.GetDomProperty(System.String)">
   GetDomProperty(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L199"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L197"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the value of a JavaScript property of this element.</p>
@@ -682,7 +679,7 @@ method or the <a class="xref" href="OpenQA.Selenium.IWebElement.html#OpenQA_Sele
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">string GetDomProperty(string propertyName)</code></pre>
+    <pre><code class="lang-csharp hljs">string? GetDomProperty(string propertyName)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -720,7 +717,7 @@ value is not set or the property does not exist.</p>
 
   <h3 id="OpenQA_Selenium_IWebElement_GetShadowRoot" data-uid="OpenQA.Selenium.IWebElement.GetShadowRoot">
   GetShadowRoot()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L219"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L217"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the representation of an element's shadow root for accessing the shadow DOM of a web component.</p>
@@ -759,7 +756,7 @@ value is not set or the property does not exist.</p>
 
   <h3 id="OpenQA_Selenium_IWebElement_SendKeys_System_String_" data-uid="OpenQA.Selenium.IWebElement.SendKeys(System.String)">
   SendKeys(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Simulates typing text into the element.</p>
@@ -795,9 +792,6 @@ backspaces, function keys, and so on. Valid special keys are defined in
     <dt><a class="xref" href="OpenQA.Selenium.InvalidElementStateException.html">InvalidElementStateException</a></dt>
     <dd><p>Thrown when the target element is not enabled.</p>
 </dd>
-    <dt><a class="xref" href="OpenQA.Selenium.ElementNotVisibleException.html">ElementNotVisibleException</a></dt>
-    <dd><p>Thrown when the target element is not visible.</p>
-</dd>
     <dt><a class="xref" href="OpenQA.Selenium.StaleElementReferenceException.html">StaleElementReferenceException</a></dt>
     <dd><p>Thrown when the target element is no longer valid in the document DOM.</p>
 </dd>
@@ -815,7 +809,7 @@ backspaces, function keys, and so on. Valid special keys are defined in
 
   <h3 id="OpenQA_Selenium_IWebElement_Submit" data-uid="OpenQA.Selenium.IWebElement.Submit">
   Submit()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IWebElement.cs/#L117"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Submits this element to the web server.</p>

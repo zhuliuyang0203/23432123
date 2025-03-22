@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule" class="text-break">
-Class BrowsingContextInputModule  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
+Class BrowsingContextInputModule  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -156,7 +156,7 @@ Class BrowsingContextInputModule  <a class="header-action link-secondary" title=
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule__ctor_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_OpenQA_Selenium_BiDi_Modules_Input_InputModule_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule.#ctor(OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,OpenQA.Selenium.BiDi.Modules.Input.InputModule)">
   BrowsingContextInputModule(BrowsingContext, InputModule)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -193,7 +193,7 @@ Class BrowsingContextInputModule  <a class="header-action link-secondary" title=
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule_PerformActionsAsync_System_Collections_Generic_IEnumerable_OpenQA_Selenium_BiDi_Modules_Input_SourceActions__OpenQA_Selenium_BiDi_Modules_Input_PerformActionsOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule.PerformActionsAsync(System.Collections.Generic.IEnumerable{OpenQA.Selenium.BiDi.Modules.Input.SourceActions},OpenQA.Selenium.BiDi.Modules.Input.PerformActionsOptions)">
   PerformActionsAsync(IEnumerable&lt;SourceActions&gt;, PerformActionsOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -231,7 +231,7 @@ Class BrowsingContextInputModule  <a class="header-action link-secondary" title=
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule_ReleaseActionsAsync_OpenQA_Selenium_BiDi_Modules_Input_ReleaseActionsOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule.ReleaseActionsAsync(OpenQA.Selenium.BiDi.Modules.Input.ReleaseActionsOptions)">
   ReleaseActionsAsync(ReleaseActionsOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L33"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -263,11 +263,51 @@ Class BrowsingContextInputModule  <a class="header-action link-secondary" title=
 
 
 
+  <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule_SetFilesAsync_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule.SetFilesAsync*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContextInputModule_SetFilesAsync_OpenQA_Selenium_BiDi_Modules_Script_ISharedReference_System_Collections_Generic_IEnumerable_System_String__OpenQA_Selenium_BiDi_Modules_Input_SetFilesOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextInputModule.SetFilesAsync(OpenQA.Selenium.BiDi.Modules.Script.ISharedReference,System.Collections.Generic.IEnumerable{System.String},OpenQA.Selenium.BiDi.Modules.Input.SetFilesOptions)">
+  SetFilesAsync(ISharedReference, IEnumerable&lt;string&gt;, SetFilesOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task SetFilesAsync(ISharedReference element, IEnumerable&lt;string&gt; files, SetFilesOptions? options = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>element</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.ISharedReference.html">ISharedReference</a></dt>
+    <dd></dd>
+    <dt><code>files</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.Input.SetFilesOptions.html">SetFilesOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/BrowsingContextInputModule.cs/#L26" class="edit-link">Edit this page</a>
         </div>
 
 

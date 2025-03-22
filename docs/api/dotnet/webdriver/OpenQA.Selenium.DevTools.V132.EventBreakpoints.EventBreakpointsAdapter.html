@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter" class="text-break">
-Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   EventBreakpointsAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the EventBreakpointsAdapter class.</p>
@@ -183,6 +183,12 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
   <a id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter_Disable_OpenQA_Selenium_DevTools_V132_EventBreakpoints_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.Disable(OpenQA.Selenium.DevTools.V132.EventBreakpoints.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter_RemoveInstrumentationBreakpoint_OpenQA_Selenium_DevTools_V132_EventBreakpoints_RemoveInstrumentationBreakpointCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.RemoveInstrumentationBreakpoint(OpenQA.Selenium.DevTools.V132.EventBreakpoints.RemoveInstrumentationBreakpointCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RemoveInstrumentationBreakpoint(RemoveInstrumentationBreakpointCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>removeInstrumentationBreakpoint</p>
@@ -281,7 +287,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RemoveInstrumentationBreakpointCommandResponse&gt; RemoveInstrumentationBreakpoint(RemoveInstrumentationBreakpointCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RemoveInstrumentationBreakpointCommandResponse?&gt; RemoveInstrumentationBreakpoint(RemoveInstrumentationBreakpointCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_V132_EventBreakpoints_EventBreakpointsAdapter_SetInstrumentationBreakpoint_OpenQA_Selenium_DevTools_V132_EventBreakpoints_SetInstrumentationBreakpointCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.EventBreakpoints.EventBreakpointsAdapter.SetInstrumentationBreakpoint(OpenQA.Selenium.DevTools.V132.EventBreakpoints.SetInstrumentationBreakpointCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetInstrumentationBreakpoint(SetInstrumentationBreakpointCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setInstrumentationBreakpoint</p>
@@ -324,7 +330,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetInstrumentationBreakpointCommandResponse&gt; SetInstrumentationBreakpoint(SetInstrumentationBreakpointCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetInstrumentationBreakpointCommandResponse?&gt; SetInstrumentationBreakpoint(SetInstrumentationBreakpointCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class EventBreakpointsAdapter  <a class="header-action link-secondary" title="Vi
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/EventBreakpoints/EventBreakpointsAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Network_UrlPattern" data-uid="OpenQA.Selenium.BiDi.Modules.Network.UrlPattern" class="text-break">
-Class UrlPattern  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class UrlPattern  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,8 +102,8 @@ Class UrlPattern  <a class="header-action link-secondary" title="View source" hr
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;type&quot;)]
-[JsonDerivedType(typeof(UrlPattern.Pattern), &quot;pattern&quot;)]
-[JsonDerivedType(typeof(UrlPattern.String), &quot;string&quot;)]
+[JsonDerivedType(typeof(PatternUrlPattern), &quot;pattern&quot;)]
+[JsonDerivedType(typeof(StringUrlPattern), &quot;string&quot;)]
 public abstract record UrlPattern : IEquatable&lt;UrlPattern&gt;</code></pre>
   </div>
 
@@ -128,8 +128,8 @@ public abstract record UrlPattern : IEquatable&lt;UrlPattern&gt;</code></pre>
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.UrlPattern.Pattern.html">UrlPattern.Pattern</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.UrlPattern.String.html">UrlPattern.String</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.PatternUrlPattern.html">PatternUrlPattern</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.StringUrlPattern.html">StringUrlPattern</a></div>
     </dd>
   </dl>
 
@@ -172,7 +172,7 @@ public abstract record UrlPattern : IEquatable&lt;UrlPattern&gt;</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Network_UrlPattern_op_Implicit_System_String__OpenQA_Selenium_BiDi_Modules_Network_UrlPattern" data-uid="OpenQA.Selenium.BiDi.Modules.Network.UrlPattern.op_Implicit(System.String)~OpenQA.Selenium.BiDi.Modules.Network.UrlPattern">
   implicit operator UrlPattern(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -208,7 +208,7 @@ public abstract record UrlPattern : IEquatable&lt;UrlPattern&gt;</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Network/UrlPattern.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

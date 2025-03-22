@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_Locator" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.Locator" class="text-break">
-Class Locator  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/Locator.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class Locator  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/Locator.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,10 +102,11 @@ Class Locator  <a class="header-action link-secondary" title="View source" href=
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;type&quot;)]
-[JsonDerivedType(typeof(Locator.Accessibility), &quot;accessibility&quot;)]
-[JsonDerivedType(typeof(Locator.Css), &quot;css&quot;)]
-[JsonDerivedType(typeof(Locator.InnerText), &quot;innerText&quot;)]
-[JsonDerivedType(typeof(Locator.XPath), &quot;xpath&quot;)]
+[JsonDerivedType(typeof(AccessibilityLocator), &quot;accessibility&quot;)]
+[JsonDerivedType(typeof(CssLocator), &quot;css&quot;)]
+[JsonDerivedType(typeof(ContextLocator), &quot;context&quot;)]
+[JsonDerivedType(typeof(InnerTextLocator), &quot;innerText&quot;)]
+[JsonDerivedType(typeof(XPathLocator), &quot;xpath&quot;)]
 public abstract record Locator : IEquatable&lt;Locator&gt;</code></pre>
   </div>
 
@@ -130,10 +131,11 @@ public abstract record Locator : IEquatable&lt;Locator&gt;</code></pre>
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.Locator.Accessibility.html">Locator.Accessibility</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.Locator.Css.html">Locator.Css</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.Locator.InnerText.html">Locator.InnerText</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.Locator.XPath.html">Locator.XPath</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.AccessibilityLocator.html">AccessibilityLocator</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ContextLocator.html">ContextLocator</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.CssLocator.html">CssLocator</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.InnerTextLocator.html">InnerTextLocator</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.XPathLocator.html">XPathLocator</a></div>
     </dd>
   </dl>
 
@@ -172,7 +174,7 @@ public abstract record Locator : IEquatable&lt;Locator&gt;</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/Locator.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/Locator.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

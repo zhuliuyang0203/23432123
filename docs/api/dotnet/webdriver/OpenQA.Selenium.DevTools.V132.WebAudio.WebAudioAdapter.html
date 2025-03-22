@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter" class="text-break">
-Class WebAudioAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class WebAudioAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   WebAudioAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the WebAudioAdapter class.</p>
@@ -183,6 +183,12 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_Disable_OpenQA_Selenium_DevTools_V132_WebAudio_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.Disable(OpenQA.Selenium.DevTools.V132.WebAudio.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L113"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L128"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_Enable_OpenQA_Selenium_DevTools_V132_WebAudio_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.Enable(OpenQA.Selenium.DevTools.V132.WebAudio.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L120"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -281,7 +287,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_GetRealtimeData_OpenQA_Selenium_DevTools_V132_WebAudio_GetRealtimeDataCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.GetRealtimeData(OpenQA.Selenium.DevTools.V132.WebAudio.GetRealtimeDataCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetRealtimeData(GetRealtimeDataCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L136"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getRealtimeData</p>
@@ -362,7 +368,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioListenerCreated" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioListenerCreated">
   AudioListenerCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioListenerCreated</p>
@@ -370,7 +376,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioListenerCreatedEventArgs&gt; AudioListenerCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioListenerCreatedEventArgs&gt;? AudioListenerCreated</code></pre>
   </div>
 
 
@@ -393,7 +399,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioListenerWillBeDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioListenerWillBeDestroyed">
   AudioListenerWillBeDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioListenerWillBeDestroyed</p>
@@ -401,7 +407,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioListenerWillBeDestroyedEventArgs&gt; AudioListenerWillBeDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioListenerWillBeDestroyedEventArgs&gt;? AudioListenerWillBeDestroyed</code></pre>
   </div>
 
 
@@ -424,7 +430,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioNodeCreated" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioNodeCreated">
   AudioNodeCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioNodeCreated</p>
@@ -432,7 +438,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioNodeCreatedEventArgs&gt; AudioNodeCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioNodeCreatedEventArgs&gt;? AudioNodeCreated</code></pre>
   </div>
 
 
@@ -455,7 +461,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioNodeWillBeDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioNodeWillBeDestroyed">
   AudioNodeWillBeDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L83"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioNodeWillBeDestroyed</p>
@@ -463,7 +469,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioNodeWillBeDestroyedEventArgs&gt; AudioNodeWillBeDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioNodeWillBeDestroyedEventArgs&gt;? AudioNodeWillBeDestroyed</code></pre>
   </div>
 
 
@@ -486,7 +492,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioParamCreated" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioParamCreated">
   AudioParamCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioParamCreated</p>
@@ -494,7 +500,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioParamCreatedEventArgs&gt; AudioParamCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioParamCreatedEventArgs&gt;? AudioParamCreated</code></pre>
   </div>
 
 
@@ -517,7 +523,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_AudioParamWillBeDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.AudioParamWillBeDestroyed">
   AudioParamWillBeDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L93"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>audioParamWillBeDestroyed</p>
@@ -525,7 +531,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioParamWillBeDestroyedEventArgs&gt; AudioParamWillBeDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AudioParamWillBeDestroyedEventArgs&gt;? AudioParamWillBeDestroyed</code></pre>
   </div>
 
 
@@ -548,7 +554,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_ContextChanged" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.ContextChanged">
   ContextChanged
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>contextChanged</p>
@@ -556,7 +562,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextChangedEventArgs&gt; ContextChanged</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextChangedEventArgs&gt;? ContextChanged</code></pre>
   </div>
 
 
@@ -587,7 +593,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextCreatedEventArgs&gt; ContextCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextCreatedEventArgs&gt;? ContextCreated</code></pre>
   </div>
 
 
@@ -610,7 +616,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_ContextWillBeDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.ContextWillBeDestroyed">
   ContextWillBeDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>contextWillBeDestroyed</p>
@@ -618,7 +624,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextWillBeDestroyedEventArgs&gt; ContextWillBeDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ContextWillBeDestroyedEventArgs&gt;? ContextWillBeDestroyed</code></pre>
   </div>
 
 
@@ -641,7 +647,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_NodeParamConnected" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.NodeParamConnected">
   NodeParamConnected
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodeParamConnected</p>
@@ -649,7 +655,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeParamConnectedEventArgs&gt; NodeParamConnected</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeParamConnectedEventArgs&gt;? NodeParamConnected</code></pre>
   </div>
 
 
@@ -672,7 +678,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_NodeParamDisconnected" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.NodeParamDisconnected">
   NodeParamDisconnected
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L113"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodeParamDisconnected</p>
@@ -680,7 +686,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeParamDisconnectedEventArgs&gt; NodeParamDisconnected</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeParamDisconnectedEventArgs&gt;? NodeParamDisconnected</code></pre>
   </div>
 
 
@@ -703,7 +709,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_NodesConnected" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.NodesConnected">
   NodesConnected
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodesConnected</p>
@@ -711,7 +717,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodesConnectedEventArgs&gt; NodesConnected</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodesConnectedEventArgs&gt;? NodesConnected</code></pre>
   </div>
 
 
@@ -734,7 +740,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_WebAudio_WebAudioAdapter_NodesDisconnected" data-uid="OpenQA.Selenium.DevTools.V132.WebAudio.WebAudioAdapter.NodesDisconnected">
   NodesDisconnected
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L103"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodesDisconnected</p>
@@ -742,7 +748,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodesDisconnectedEventArgs&gt; NodesDisconnected</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodesDisconnectedEventArgs&gt;? NodesDisconnected</code></pre>
   </div>
 
 
@@ -766,7 +772,7 @@ Class WebAudioAdapter  <a class="header-action link-secondary" title="View sourc
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/WebAudio/WebAudioAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

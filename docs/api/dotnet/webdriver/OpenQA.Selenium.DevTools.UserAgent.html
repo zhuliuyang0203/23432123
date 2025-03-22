@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_UserAgent" data-uid="OpenQA.Selenium.DevTools.UserAgent" class="text-break">
-Class UserAgent  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L25"><i class="bi bi-code-slash"></i></a>
+Class UserAgent  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -149,6 +149,71 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_DevTools_UserAgent__ctor_" data-uid="OpenQA.Selenium.DevTools.UserAgent.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_UserAgent__ctor" data-uid="OpenQA.Selenium.DevTools.UserAgent.#ctor">
+  UserAgent()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.UserAgent.html">UserAgent</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use the constructor which sets the userAgentString&quot;)]
+public UserAgent()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OpenQA_Selenium_DevTools_UserAgent__ctor_" data-uid="OpenQA.Selenium.DevTools.UserAgent.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_UserAgent__ctor_System_String_" data-uid="OpenQA.Selenium.DevTools.UserAgent.#ctor(System.String)">
+  UserAgent(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.UserAgent.html">UserAgent</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UserAgent(string userAgentString)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>userAgentString</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The user agent string.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -157,7 +222,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_UserAgent_AcceptLanguage" data-uid="OpenQA.Selenium.DevTools.UserAgent.AcceptLanguage">
   AcceptLanguage
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the language to accept in headers.</p>
@@ -165,7 +230,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string AcceptLanguage { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? AcceptLanguage { get; set; }</code></pre>
   </div>
 
 
@@ -189,7 +254,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_UserAgent_Platform" data-uid="OpenQA.Selenium.DevTools.UserAgent.Platform">
   Platform
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the platform.</p>
@@ -197,7 +262,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Platform { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? Platform { get; set; }</code></pre>
   </div>
 
 
@@ -221,7 +286,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_UserAgent_UserAgentString" data-uid="OpenQA.Selenium.DevTools.UserAgent.UserAgentString">
   UserAgentString
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the user agent string.</p>
@@ -253,7 +318,7 @@ Class UserAgent  <a class="header-action link-secondary" title="View source" hre
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L25" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/UserAgent.cs/#L27" class="edit-link">Edit this page</a>
         </div>
 
 

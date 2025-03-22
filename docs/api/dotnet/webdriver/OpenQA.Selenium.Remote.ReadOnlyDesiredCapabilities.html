@@ -155,7 +155,7 @@ If you wish to use default values use the static methods</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_AcceptInsecureCerts" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.AcceptInsecureCerts">
   AcceptInsecureCerts
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the browser accepts SSL certificates.</p>
@@ -219,7 +219,7 @@ If you wish to use default values use the static methods</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_Item_System_String_" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.Item(System.String)">
   this[string]
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L141"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L121"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the capability value with the specified name.</p>
@@ -264,7 +264,7 @@ If you wish to use default values use the static methods</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_Platform" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.Platform">
   Platform
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the platform</p>
@@ -296,7 +296,7 @@ If you wish to use default values use the static methods</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_Version" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.Version">
   Version
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the browser version</p>
@@ -331,8 +331,8 @@ If you wish to use default values use the static methods</p>
   <a id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_Equals_" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.Equals*"></a>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_Equals_System_Object_" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.Equals(System.Object)">
-  Equals(object)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L222"><i class="bi bi-code-slash"></i></a>
+  Equals(object?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L201"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Compare two DesiredCapabilities and will return either true or false</p>
@@ -340,7 +340,7 @@ If you wish to use default values use the static methods</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+    <pre><code class="lang-csharp hljs">public override bool Equals(object? obj)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -371,7 +371,7 @@ If you wish to use default values use the static methods</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_GetCapability_System_String_" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.GetCapability(System.String)">
   GetCapability(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L170"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L150"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a capability of the browser.</p>
@@ -379,7 +379,7 @@ If you wish to use default values use the static methods</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public object GetCapability(string capability)</code></pre>
+    <pre><code class="lang-csharp hljs">public object? GetCapability(string capability)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -411,7 +411,7 @@ if the capability is not set on the browser.</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_GetHashCode" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.GetHashCode">
   GetHashCode()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L199"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L178"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Return HashCode for the DesiredCapabilities that has been created</p>
@@ -444,7 +444,7 @@ if the capability is not set on the browser.</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_HasCapability_System_String_" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.HasCapability(System.String)">
   HasCapability(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L159"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L139"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a value indicating whether the browser has a given capability.</p>
@@ -483,7 +483,7 @@ if the capability is not set on the browser.</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_ToDictionary" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.ToDictionary">
   ToDictionary()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L190"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L169"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the <a class="xref" href="OpenQA.Selenium.ICapabilities.html">ICapabilities</a> object to a read-only <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary&lt;TKey, TValue&gt;</a>.</p>
@@ -516,7 +516,7 @@ if the capability is not set on the browser.</p>
 
   <h3 id="OpenQA_Selenium_Remote_ReadOnlyDesiredCapabilities_ToString" data-uid="OpenQA.Selenium.Remote.ReadOnlyDesiredCapabilities.ToString">
   ToString()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L212"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Remote/ReadOnlyDesiredCapabilities.cs/#L191"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Return a string of capabilities being used</p>

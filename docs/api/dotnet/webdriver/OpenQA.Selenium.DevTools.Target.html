@@ -120,10 +120,9 @@ Class Target  <a class="header-action link-secondary" title="View source" href="
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.DevTools.V130.V130Target.html">V130Target</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.DevTools.V131.V131Target.html">V131Target</a></div>
       <div><a class="xref" href="OpenQA.Selenium.DevTools.V132.V132Target.html">V132Target</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.DevTools.V85.V85Target.html">V85Target</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.DevTools.V133.V133Target.html">V133Target</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.DevTools.V134.V134Target.html">V134Target</a></div>
     </dd>
   </dl>
 
@@ -205,7 +204,7 @@ session ID established for commands to the target attached to.</p>
   <a id="OpenQA_Selenium_DevTools_Target_DetachFromTarget_" data-uid="OpenQA.Selenium.DevTools.Target.DetachFromTarget*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_Target_DetachFromTarget_System_String_System_String_" data-uid="OpenQA.Selenium.DevTools.Target.DetachFromTarget(System.String,System.String)">
-  DetachFromTarget(string, string)
+  DetachFromTarget(string?, string?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/Target.cs/#L69"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -214,7 +213,7 @@ session ID established for commands to the target attached to.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract Task DetachFromTarget(string sessionId = null, string targetId = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract Task DetachFromTarget(string? sessionId = null, string? targetId = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -247,7 +246,7 @@ session ID established for commands to the target attached to.</p>
   <a id="OpenQA_Selenium_DevTools_Target_GetTargets_" data-uid="OpenQA.Selenium.DevTools.Target.GetTargets*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_Target_GetTargets_System_Object_" data-uid="OpenQA.Selenium.DevTools.Target.GetTargets(System.Object)">
-  GetTargets(object)
+  GetTargets(object?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/Target.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -256,7 +255,7 @@ session ID established for commands to the target attached to.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract Task&lt;ReadOnlyCollection&lt;TargetInfo&gt;&gt; GetTargets(object settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract Task&lt;ReadOnlyCollection&lt;TargetInfo&gt;&gt; GetTargets(object? settings = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -397,7 +396,7 @@ targets available for this session.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetAttachedEventArgs&gt; TargetAttached</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetAttachedEventArgs&gt;? TargetAttached</code></pre>
   </div>
 
 
@@ -428,7 +427,7 @@ targets available for this session.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetDetachedEventArgs&gt; TargetDetached</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetDetachedEventArgs&gt;? TargetDetached</code></pre>
   </div>
 
 

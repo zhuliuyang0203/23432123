@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter" class="text-break">
-Class TracingAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class TracingAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   TracingAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the TracingAdapter class.</p>
@@ -183,6 +183,12 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_End_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.End*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_End_OpenQA_Selenium_DevTools_V132_Tracing_EndCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.End(OpenQA.Selenium.DevTools.V132.Tracing.EndCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  End(EndCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  End(EndCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>end</p>
@@ -238,7 +244,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EndCommandResponse&gt; End(EndCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EndCommandResponse?&gt; End(EndCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_GetCategories_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.GetCategories*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_GetCategories_OpenQA_Selenium_DevTools_V132_Tracing_GetCategoriesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.GetCategories(OpenQA.Selenium.DevTools.V132.Tracing.GetCategoriesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetCategories(GetCategoriesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  GetCategories(GetCategoriesCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getCategories</p>
@@ -281,7 +287,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetCategoriesCommandResponse&gt; GetCategories(GetCategoriesCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetCategoriesCommandResponse&gt; GetCategories(GetCategoriesCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_RecordClockSyncMarker_OpenQA_Selenium_DevTools_V132_Tracing_RecordClockSyncMarkerCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.RecordClockSyncMarker(OpenQA.Selenium.DevTools.V132.Tracing.RecordClockSyncMarkerCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RecordClockSyncMarker(RecordClockSyncMarkerCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>recordClockSyncMarker</p>
@@ -324,7 +330,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RecordClockSyncMarkerCommandResponse&gt; RecordClockSyncMarker(RecordClockSyncMarkerCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RecordClockSyncMarkerCommandResponse?&gt; RecordClockSyncMarker(RecordClockSyncMarkerCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_RequestMemoryDump_OpenQA_Selenium_DevTools_V132_Tracing_RequestMemoryDumpCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.RequestMemoryDump(OpenQA.Selenium.DevTools.V132.Tracing.RequestMemoryDumpCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RequestMemoryDump(RequestMemoryDumpCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>requestMemoryDump</p>
@@ -402,7 +408,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_Start_OpenQA_Selenium_DevTools_V132_Tracing_StartCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.Start(OpenQA.Selenium.DevTools.V132.Tracing.StartCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   Start(StartCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L92"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>start</p>
@@ -410,7 +416,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartCommandResponse&gt; Start(StartCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartCommandResponse?&gt; Start(StartCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -456,7 +462,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BufferUsageEventArgs&gt; BufferUsage</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BufferUsageEventArgs&gt;? BufferUsage</code></pre>
   </div>
 
 
@@ -479,7 +485,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_DataCollected" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.DataCollected">
   DataCollected
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>dataCollected</p>
@@ -487,7 +493,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DataCollectedEventArgs&gt; DataCollected</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DataCollectedEventArgs&gt;? DataCollected</code></pre>
   </div>
 
 
@@ -510,7 +516,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Tracing_TracingAdapter_TracingComplete" data-uid="OpenQA.Selenium.DevTools.V132.Tracing.TracingAdapter.TracingComplete">
   TracingComplete
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>tracingComplete</p>
@@ -518,7 +524,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TracingCompleteEventArgs&gt; TracingComplete</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TracingCompleteEventArgs&gt;? TracingComplete</code></pre>
   </div>
 
 
@@ -542,7 +548,7 @@ Class TracingAdapter  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Tracing/TracingAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

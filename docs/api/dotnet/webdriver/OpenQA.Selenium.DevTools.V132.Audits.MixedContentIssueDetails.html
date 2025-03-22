@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails" class="text-break">
-Class MixedContentIssueDetails  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class MixedContentIssueDetails  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class MixedContentIssueDetails  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails_Frame" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails.Frame">
   Frame
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>frame</p>
@@ -164,7 +164,7 @@ Class MixedContentIssueDetails  <a class="header-action link-secondary" title="V
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;frame&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AffectedFrame Frame { get; set; }</code></pre>
+public AffectedFrame? Frame { get; set; }</code></pre>
   </div>
 
 
@@ -188,7 +188,7 @@ public AffectedFrame Frame { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails_InsecureURL" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails.InsecureURL">
   InsecureURL
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>insecureURL</p>
@@ -221,7 +221,7 @@ public string InsecureURL { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails_MainResourceURL" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails.MainResourceURL">
   MainResourceURL
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>mainResourceURL</p>
@@ -254,7 +254,7 @@ public string MainResourceURL { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails_Request" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails.Request">
   Request
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>request</p>
@@ -264,7 +264,7 @@ public string MainResourceURL { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;request&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AffectedRequest Request { get; set; }</code></pre>
+public AffectedRequest? Request { get; set; }</code></pre>
   </div>
 
 
@@ -321,7 +321,7 @@ public MixedContentResolutionStatus ResolutionStatus { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Audits_MixedContentIssueDetails_ResourceType" data-uid="OpenQA.Selenium.DevTools.V132.Audits.MixedContentIssueDetails.ResourceType">
   ResourceType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>resourceType</p>
@@ -355,7 +355,7 @@ public MixedContentResourceType? ResourceType { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Audits/MixedContentIssueDetails.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

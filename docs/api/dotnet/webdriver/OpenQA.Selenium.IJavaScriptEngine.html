@@ -238,7 +238,7 @@ Interface IJavaScriptEngine  <a class="header-action link-secondary" title="View
   <h4 class="section">Exceptions</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
-    <dd><p>If <code class="paramref">scriptName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+    <dd><p>If <code class="paramref">scriptName</code> or <code class="paramref">script</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
 </dd>
   </dl>
 
@@ -248,7 +248,7 @@ Interface IJavaScriptEngine  <a class="header-action link-secondary" title="View
 
   <h3 id="OpenQA_Selenium_IJavaScriptEngine_AddScriptCallbackBinding_System_String_" data-uid="OpenQA.Selenium.IJavaScriptEngine.AddScriptCallbackBinding(System.String)">
   AddScriptCallbackBinding(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L132"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L134"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously adds a binding to a callback method that will raise
@@ -282,6 +282,15 @@ in the browser.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">bindingName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p>If A binding with the specified name already exists.</p>
+</dd>
+  </dl>
 
 
 
@@ -289,7 +298,7 @@ in the browser.</p>
 
   <h3 id="OpenQA_Selenium_IJavaScriptEngine_ClearAll" data-uid="OpenQA.Selenium.IJavaScriptEngine.ClearAll">
   ClearAll()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L155"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks and all
@@ -326,7 +335,7 @@ initialization scripts from being loaded for each document.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Asynchronously removes all intialization scripts from being
+  <div class="markdown level1 summary"><p>Asynchronously removes all initialization scripts from being
 loaded on every document load.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -357,7 +366,7 @@ loaded on every document load.</p>
 
   <h3 id="OpenQA_Selenium_IJavaScriptEngine_ClearScriptCallbackBindings" data-uid="OpenQA.Selenium.IJavaScriptEngine.ClearScriptCallbackBindings">
   ClearScriptCallbackBindings()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L145"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L148"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks.</p>
@@ -547,7 +556,7 @@ entire script across the wire for every execution.</p>
 
   <h3 id="OpenQA_Selenium_IJavaScriptEngine_RemoveScriptCallbackBinding_System_String_" data-uid="OpenQA.Selenium.IJavaScriptEngine.RemoveScriptCallbackBinding(System.String)">
   RemoveScriptCallbackBinding(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L142"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes a binding to a JavaScript callback.</p>
@@ -579,6 +588,12 @@ entire script across the wire for every execution.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">bindingName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -586,7 +601,7 @@ entire script across the wire for every execution.</p>
 
   <h3 id="OpenQA_Selenium_IJavaScriptEngine_Reset" data-uid="OpenQA.Selenium.IJavaScriptEngine.Reset">
   Reset()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L160"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L163"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks, all
@@ -737,7 +752,7 @@ stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;DomMutatedEventArgs&gt; DomMutated</code></pre>
+    <pre><code class="lang-csharp hljs">event EventHandler&lt;DomMutatedEventArgs&gt;? DomMutated</code></pre>
   </div>
 
 
@@ -768,7 +783,7 @@ stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptCallbackExecutedEventArgs&gt; JavaScriptCallbackExecuted</code></pre>
+    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptCallbackExecutedEventArgs&gt;? JavaScriptCallbackExecuted</code></pre>
   </div>
 
 
@@ -799,7 +814,7 @@ stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptConsoleApiCalledEventArgs&gt; JavaScriptConsoleApiCalled</code></pre>
+    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptConsoleApiCalledEventArgs&gt;? JavaScriptConsoleApiCalled</code></pre>
   </div>
 
 
@@ -825,12 +840,12 @@ stops listening for events.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/IJavaScriptEngine.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Occurs when an exeception is thrown by JavaScript being executed in the browser.</p>
+  <div class="markdown level1 summary"><p>Occurs when an exception is thrown by JavaScript being executed in the browser.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptExceptionThrownEventArgs&gt; JavaScriptExceptionThrown</code></pre>
+    <pre><code class="lang-csharp hljs">event EventHandler&lt;JavaScriptExceptionThrownEventArgs&gt;? JavaScriptExceptionThrown</code></pre>
   </div>
 
 

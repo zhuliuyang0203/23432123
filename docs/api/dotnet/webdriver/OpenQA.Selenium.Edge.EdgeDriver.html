@@ -413,9 +413,6 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
   <div>
       <a class="xref" href="OpenQA.Selenium.BiDi.WebDriverExtensions.html#OpenQA_Selenium_BiDi_WebDriverExtensions_AsBiDiAsync_OpenQA_Selenium_IWebDriver_">WebDriverExtensions.AsBiDiAsync(IWebDriver)</a>
   </div>
-  <div>
-      <a class="xref" href="OpenQA.Selenium.BiDi.WebDriverExtensions.html#OpenQA_Selenium_BiDi_WebDriverExtensions_AsBiDiContextAsync_OpenQA_Selenium_IWebDriver_">WebDriverExtensions.AsBiDiContextAsync(IWebDriver)</a>
-  </div>
   </dd></dl>
 
 
@@ -457,7 +454,7 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_OpenQA_Selenium_Edge_EdgeDriverService_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(OpenQA.Selenium.Edge.EdgeDriverService)">
   EdgeDriver(EdgeDriverService)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified driver service.</p>
@@ -483,6 +480,12 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -490,7 +493,7 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_OpenQA_Selenium_Edge_EdgeDriverService_OpenQA_Selenium_Edge_EdgeOptions_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(OpenQA.Selenium.Edge.EdgeDriverService,OpenQA.Selenium.Edge.EdgeOptions)">
   EdgeDriver(EdgeDriverService, EdgeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified
@@ -520,6 +523,12 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> or <code class="paramref">options</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -527,7 +536,7 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_OpenQA_Selenium_Edge_EdgeDriverService_OpenQA_Selenium_Edge_EdgeOptions_System_TimeSpan_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(OpenQA.Selenium.Edge.EdgeDriverService,OpenQA.Selenium.Edge.EdgeOptions,System.TimeSpan)">
   EdgeDriver(EdgeDriverService, EdgeOptions, TimeSpan)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L126"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriverService.html">EdgeDriverService</a>.</p>
@@ -559,6 +568,12 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">service</code> or <code class="paramref">options</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -566,7 +581,7 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_OpenQA_Selenium_Edge_EdgeOptions_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(OpenQA.Selenium.Edge.EdgeOptions)">
   EdgeDriver(EdgeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified options.</p>
@@ -592,6 +607,12 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -599,7 +620,7 @@ Class EdgeDriver  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_System_String_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(System.String)">
   EdgeDriver(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified path
@@ -633,7 +654,7 @@ to the directory containing the WebDriver executable.</p>
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_System_String_OpenQA_Selenium_Edge_EdgeOptions_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(System.String,OpenQA.Selenium.Edge.EdgeOptions)">
   EdgeDriver(string, EdgeOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified path
@@ -663,6 +684,12 @@ to the directory containing the WebDriver executable and options.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -670,7 +697,7 @@ to the directory containing the WebDriver executable and options.</p>
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver__ctor_System_String_OpenQA_Selenium_Edge_EdgeOptions_System_TimeSpan_" data-uid="OpenQA.Selenium.Edge.EdgeDriver.#ctor(System.String,OpenQA.Selenium.Edge.EdgeOptions,System.TimeSpan)">
   EdgeDriver(string, EdgeOptions, TimeSpan)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.Edge.EdgeDriver.html">EdgeDriver</a> class using the specified path
@@ -703,6 +730,12 @@ to the directory containing the WebDriver executable, options, and command timeo
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">options</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -714,7 +747,7 @@ to the directory containing the WebDriver executable, options, and command timeo
 
   <h3 id="OpenQA_Selenium_Edge_EdgeDriver_CustomCommandDefinitions" data-uid="OpenQA.Selenium.Edge.EdgeDriver.CustomCommandDefinitions">
   CustomCommandDefinitions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L131"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Edge/EdgeDriver.cs/#L137"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a read-only dictionary of the custom WebDriver commands defined for ChromeDriver.

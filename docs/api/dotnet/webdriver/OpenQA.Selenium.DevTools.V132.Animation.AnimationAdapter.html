@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter" class="text-break">
-Class AnimationAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class AnimationAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   AnimationAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the AnimationAdapter class.</p>
@@ -183,6 +183,12 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_Disable_OpenQA_Selenium_DevTools_V132_Animation_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.Disable(OpenQA.Selenium.DevTools.V132.Animation.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_Enable_OpenQA_Selenium_DevTools_V132_Animation_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.Enable(OpenQA.Selenium.DevTools.V132.Animation.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -281,7 +287,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_GetCurrentTime_OpenQA_Selenium_DevTools_V132_Animation_GetCurrentTimeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.GetCurrentTime(OpenQA.Selenium.DevTools.V132.Animation.GetCurrentTimeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetCurrentTime(GetCurrentTimeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getCurrentTime</p>
@@ -358,8 +364,8 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_GetPlaybackRate_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.GetPlaybackRate*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_GetPlaybackRate_OpenQA_Selenium_DevTools_V132_Animation_GetPlaybackRateCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.GetPlaybackRate(OpenQA.Selenium.DevTools.V132.Animation.GetPlaybackRateCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetPlaybackRate(GetPlaybackRateCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  GetPlaybackRate(GetPlaybackRateCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getPlaybackRate</p>
@@ -367,7 +373,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetPlaybackRateCommandResponse&gt; GetPlaybackRate(GetPlaybackRateCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetPlaybackRateCommandResponse&gt; GetPlaybackRate(GetPlaybackRateCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -402,7 +408,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_ReleaseAnimations_OpenQA_Selenium_DevTools_V132_Animation_ReleaseAnimationsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.ReleaseAnimations(OpenQA.Selenium.DevTools.V132.Animation.ReleaseAnimationsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ReleaseAnimations(ReleaseAnimationsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>releaseAnimations</p>
@@ -410,7 +416,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseAnimationsCommandResponse&gt; ReleaseAnimations(ReleaseAnimationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseAnimationsCommandResponse?&gt; ReleaseAnimations(ReleaseAnimationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -445,7 +451,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_ResolveAnimation_OpenQA_Selenium_DevTools_V132_Animation_ResolveAnimationCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.ResolveAnimation(OpenQA.Selenium.DevTools.V132.Animation.ResolveAnimationCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ResolveAnimation(ResolveAnimationCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>resolveAnimation</p>
@@ -488,7 +494,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_SeekAnimations_OpenQA_Selenium_DevTools_V132_Animation_SeekAnimationsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.SeekAnimations(OpenQA.Selenium.DevTools.V132.Animation.SeekAnimationsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SeekAnimations(SeekAnimationsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L103"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>seekAnimations</p>
@@ -496,7 +502,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SeekAnimationsCommandResponse&gt; SeekAnimations(SeekAnimationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SeekAnimationsCommandResponse?&gt; SeekAnimations(SeekAnimationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_SetPaused_OpenQA_Selenium_DevTools_V132_Animation_SetPausedCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.SetPaused(OpenQA.Selenium.DevTools.V132.Animation.SetPausedCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetPaused(SetPausedCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L110"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setPaused</p>
@@ -539,7 +545,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetPausedCommandResponse&gt; SetPaused(SetPausedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetPausedCommandResponse?&gt; SetPaused(SetPausedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -574,7 +580,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_SetPlaybackRate_OpenQA_Selenium_DevTools_V132_Animation_SetPlaybackRateCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.SetPlaybackRate(OpenQA.Selenium.DevTools.V132.Animation.SetPlaybackRateCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetPlaybackRate(SetPlaybackRateCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setPlaybackRate</p>
@@ -582,7 +588,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetPlaybackRateCommandResponse&gt; SetPlaybackRate(SetPlaybackRateCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetPlaybackRateCommandResponse?&gt; SetPlaybackRate(SetPlaybackRateCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -617,7 +623,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_SetTiming_OpenQA_Selenium_DevTools_V132_Animation_SetTimingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.SetTiming(OpenQA.Selenium.DevTools.V132.Animation.SetTimingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetTiming(SetTimingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setTiming</p>
@@ -625,7 +631,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetTimingCommandResponse&gt; SetTiming(SetTimingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetTimingCommandResponse?&gt; SetTiming(SetTimingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -671,7 +677,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationCanceledEventArgs&gt; AnimationCanceled</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationCanceledEventArgs&gt;? AnimationCanceled</code></pre>
   </div>
 
 
@@ -694,7 +700,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_AnimationCreated" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.AnimationCreated">
   AnimationCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>animationCreated</p>
@@ -702,7 +708,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationCreatedEventArgs&gt; AnimationCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationCreatedEventArgs&gt;? AnimationCreated</code></pre>
   </div>
 
 
@@ -725,7 +731,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_AnimationStarted" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.AnimationStarted">
   AnimationStarted
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>animationStarted</p>
@@ -733,7 +739,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationStartedEventArgs&gt; AnimationStarted</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationStartedEventArgs&gt;? AnimationStarted</code></pre>
   </div>
 
 
@@ -756,7 +762,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Animation_AnimationAdapter_AnimationUpdated" data-uid="OpenQA.Selenium.DevTools.V132.Animation.AnimationAdapter.AnimationUpdated">
   AnimationUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>animationUpdated</p>
@@ -764,7 +770,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationUpdatedEventArgs&gt; AnimationUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AnimationUpdatedEventArgs&gt;? AnimationUpdated</code></pre>
   </div>
 
 
@@ -788,7 +794,7 @@ Class AnimationAdapter  <a class="header-action link-secondary" title="View sour
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Animation/AnimationAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

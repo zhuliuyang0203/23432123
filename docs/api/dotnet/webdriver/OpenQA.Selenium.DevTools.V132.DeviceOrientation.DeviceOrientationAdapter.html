@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter" class="text-break">
-Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   DeviceOrientationAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the DeviceOrientationAdapter class.</p>
@@ -183,6 +183,12 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
   <a id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter_ClearDeviceOrientationOverride_" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter.ClearDeviceOrientationOverride*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter_ClearDeviceOrientationOverride_OpenQA_Selenium_DevTools_V132_DeviceOrientation_ClearDeviceOrientationOverrideCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter.ClearDeviceOrientationOverride(OpenQA.Selenium.DevTools.V132.DeviceOrientation.ClearDeviceOrientationOverrideCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  ClearDeviceOrientationOverride(ClearDeviceOrientationOverrideCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  ClearDeviceOrientationOverride(ClearDeviceOrientationOverrideCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearDeviceOrientationOverride</p>
@@ -238,7 +244,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearDeviceOrientationOverrideCommandResponse&gt; ClearDeviceOrientationOverride(ClearDeviceOrientationOverrideCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearDeviceOrientationOverrideCommandResponse?&gt; ClearDeviceOrientationOverride(ClearDeviceOrientationOverrideCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DeviceOrientation_DeviceOrientationAdapter_SetDeviceOrientationOverride_OpenQA_Selenium_DevTools_V132_DeviceOrientation_SetDeviceOrientationOverrideCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DeviceOrientation.DeviceOrientationAdapter.SetDeviceOrientationOverride(OpenQA.Selenium.DevTools.V132.DeviceOrientation.SetDeviceOrientationOverrideCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetDeviceOrientationOverride(SetDeviceOrientationOverrideCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setDeviceOrientationOverride</p>
@@ -281,7 +287,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetDeviceOrientationOverrideCommandResponse&gt; SetDeviceOrientationOverride(SetDeviceOrientationOverrideCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetDeviceOrientationOverrideCommandResponse?&gt; SetDeviceOrientationOverride(SetDeviceOrientationOverrideCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class DeviceOrientationAdapter  <a class="header-action link-secondary" title="V
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DeviceOrientation/DeviceOrientationAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

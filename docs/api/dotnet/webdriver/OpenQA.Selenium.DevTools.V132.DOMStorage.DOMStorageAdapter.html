@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter" class="text-break">
-Class DOMStorageAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class DOMStorageAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   DOMStorageAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the DOMStorageAdapter class.</p>
@@ -183,6 +183,12 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Clear_OpenQA_Selenium_DevTools_V132_DOMStorage_ClearCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Clear(OpenQA.Selenium.DevTools.V132.DOMStorage.ClearCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   Clear(ClearCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clear</p>
@@ -238,7 +244,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearCommandResponse&gt; Clear(ClearCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearCommandResponse?&gt; Clear(ClearCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <a id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Disable_OpenQA_Selenium_DevTools_V132_DOMStorage_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Disable(OpenQA.Selenium.DevTools.V132.DOMStorage.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -281,7 +287,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <a id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_Enable_OpenQA_Selenium_DevTools_V132_DOMStorage_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.Enable(OpenQA.Selenium.DevTools.V132.DOMStorage.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -324,7 +330,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_GetDOMStorageItems_OpenQA_Selenium_DevTools_V132_DOMStorage_GetDOMStorageItemsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.GetDOMStorageItems(OpenQA.Selenium.DevTools.V132.DOMStorage.GetDOMStorageItemsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetDOMStorageItems(GetDOMStorageItemsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getDOMStorageItems</p>
@@ -402,7 +408,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_RemoveDOMStorageItem_OpenQA_Selenium_DevTools_V132_DOMStorage_RemoveDOMStorageItemCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.RemoveDOMStorageItem(OpenQA.Selenium.DevTools.V132.DOMStorage.RemoveDOMStorageItemCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   RemoveDOMStorageItem(RemoveDOMStorageItemCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>removeDOMStorageItem</p>
@@ -410,7 +416,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RemoveDOMStorageItemCommandResponse&gt; RemoveDOMStorageItem(RemoveDOMStorageItemCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RemoveDOMStorageItemCommandResponse?&gt; RemoveDOMStorageItem(RemoveDOMStorageItemCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -445,7 +451,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_SetDOMStorageItem_OpenQA_Selenium_DevTools_V132_DOMStorage_SetDOMStorageItemCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.SetDOMStorageItem(OpenQA.Selenium.DevTools.V132.DOMStorage.SetDOMStorageItemCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetDOMStorageItem(SetDOMStorageItemCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setDOMStorageItem</p>
@@ -453,7 +459,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetDOMStorageItemCommandResponse&gt; SetDOMStorageItem(SetDOMStorageItemCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetDOMStorageItemCommandResponse?&gt; SetDOMStorageItem(SetDOMStorageItemCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -499,7 +505,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemAddedEventArgs&gt; DomStorageItemAdded</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemAddedEventArgs&gt;? DomStorageItemAdded</code></pre>
   </div>
 
 
@@ -522,7 +528,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_DomStorageItemRemoved" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.DomStorageItemRemoved">
   DomStorageItemRemoved
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>domStorageItemRemoved</p>
@@ -530,7 +536,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemRemovedEventArgs&gt; DomStorageItemRemoved</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemRemovedEventArgs&gt;? DomStorageItemRemoved</code></pre>
   </div>
 
 
@@ -553,7 +559,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_DomStorageItemUpdated" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.DomStorageItemUpdated">
   DomStorageItemUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>domStorageItemUpdated</p>
@@ -561,7 +567,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemUpdatedEventArgs&gt; DomStorageItemUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemUpdatedEventArgs&gt;? DomStorageItemUpdated</code></pre>
   </div>
 
 
@@ -584,7 +590,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMStorage_DOMStorageAdapter_DomStorageItemsCleared" data-uid="OpenQA.Selenium.DevTools.V132.DOMStorage.DOMStorageAdapter.DomStorageItemsCleared">
   DomStorageItemsCleared
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>domStorageItemsCleared</p>
@@ -592,7 +598,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemsClearedEventArgs&gt; DomStorageItemsCleared</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomStorageItemsClearedEventArgs&gt;? DomStorageItemsCleared</code></pre>
   </div>
 
 
@@ -616,7 +622,7 @@ Class DOMStorageAdapter  <a class="header-action link-secondary" title="View sou
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMStorage/DOMStorageAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

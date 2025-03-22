@@ -149,6 +149,61 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_DevTools_TargetInfo__ctor_" data-uid="OpenQA.Selenium.DevTools.TargetInfo.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_TargetInfo__ctor_System_String_System_String_System_String_System_String_System_Boolean_System_String_System_String_" data-uid="OpenQA.Selenium.DevTools.TargetInfo.#ctor(System.String,System.String,System.String,System.String,System.Boolean,System.String,System.String)">
+  TargetInfo(string, string, string, string, bool, string?, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.TargetInfo.html">TargetInfo</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetInfo(string targetId, string type, string title, string url, bool isAttached, string? openerId, string? browserContextId)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>targetId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ID of the target.</p>
+</dd>
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The type of target.</p>
+</dd>
+    <dt><code>title</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The title of the target.</p>
+</dd>
+    <dt><code>url</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The URL of the target.</p>
+</dd>
+    <dt><code>isAttached</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Whether the protocol is attached to the target.</p>
+</dd>
+    <dt><code>openerId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ID of the opener of the target.</p>
+</dd>
+    <dt><code>browserContextId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The browser context ID.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -157,7 +212,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_BrowserContextId" data-uid="OpenQA.Selenium.DevTools.TargetInfo.BrowserContextId">
   BrowserContextId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L81"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the browser context ID.</p>
@@ -165,7 +220,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string BrowserContextId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? BrowserContextId { get; }</code></pre>
   </div>
 
 
@@ -189,7 +244,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_IsAttached" data-uid="OpenQA.Selenium.DevTools.TargetInfo.IsAttached">
   IsAttached
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L71"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets a value indicating if the protocol is attached to the target.</p>
@@ -221,7 +276,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_OpenerId" data-uid="OpenQA.Selenium.DevTools.TargetInfo.OpenerId">
   OpenerId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ID of the opener of the target.</p>
@@ -229,7 +284,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string OpenerId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? OpenerId { get; }</code></pre>
   </div>
 
 
@@ -253,7 +308,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_TargetId" data-uid="OpenQA.Selenium.DevTools.TargetInfo.TargetId">
   TargetId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L51"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ID of the target.</p>
@@ -285,7 +340,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_Title" data-uid="OpenQA.Selenium.DevTools.TargetInfo.Title">
   Title
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the title of the target.</p>
@@ -317,7 +372,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_Type" data-uid="OpenQA.Selenium.DevTools.TargetInfo.Type">
   Type
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the type of target.</p>
@@ -349,7 +404,7 @@ Class TargetInfo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_TargetInfo_Url" data-uid="OpenQA.Selenium.DevTools.TargetInfo.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetInfo.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the URL of the target.</p>

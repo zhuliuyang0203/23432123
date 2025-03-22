@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter" class="text-break">
-Class OverlayAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class OverlayAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   OverlayAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the OverlayAdapter class.</p>
@@ -183,6 +183,12 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_Disable_OpenQA_Selenium_DevTools_V132_Overlay_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.Disable(OpenQA.Selenium.DevTools.V132.Overlay.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_Enable_OpenQA_Selenium_DevTools_V132_Overlay_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.Enable(OpenQA.Selenium.DevTools.V132.Overlay.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -281,7 +287,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_GetGridHighlightObjectsForTest_OpenQA_Selenium_DevTools_V132_Overlay_GetGridHighlightObjectsForTestCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.GetGridHighlightObjectsForTest(OpenQA.Selenium.DevTools.V132.Overlay.GetGridHighlightObjectsForTestCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetGridHighlightObjectsForTest(GetGridHighlightObjectsForTestCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getGridHighlightObjectsForTest</p>
@@ -359,7 +365,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_GetHighlightObjectForTest_OpenQA_Selenium_DevTools_V132_Overlay_GetHighlightObjectForTestCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.GetHighlightObjectForTest(OpenQA.Selenium.DevTools.V132.Overlay.GetHighlightObjectForTestCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetHighlightObjectForTest(GetHighlightObjectForTestCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getHighlightObjectForTest</p>
@@ -402,7 +408,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_GetSourceOrderHighlightObjectForTest_OpenQA_Selenium_DevTools_V132_Overlay_GetSourceOrderHighlightObjectForTestCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.GetSourceOrderHighlightObjectForTest(OpenQA.Selenium.DevTools.V132.Overlay.GetSourceOrderHighlightObjectForTestCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetSourceOrderHighlightObjectForTest(GetSourceOrderHighlightObjectForTestCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getSourceOrderHighlightObjectForTest</p>
@@ -444,8 +450,8 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HideHighlight_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HideHighlight*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HideHighlight_OpenQA_Selenium_DevTools_V132_Overlay_HideHighlightCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HideHighlight(OpenQA.Selenium.DevTools.V132.Overlay.HideHighlightCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  HideHighlight(HideHighlightCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  HideHighlight(HideHighlightCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>hideHighlight</p>
@@ -453,7 +459,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HideHighlightCommandResponse&gt; HideHighlight(HideHighlightCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HideHighlightCommandResponse?&gt; HideHighlight(HideHighlightCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -488,7 +494,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HighlightFrame_OpenQA_Selenium_DevTools_V132_Overlay_HighlightFrameCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HighlightFrame(OpenQA.Selenium.DevTools.V132.Overlay.HighlightFrameCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   HighlightFrame(HighlightFrameCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L103"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>highlightFrame</p>
@@ -496,7 +502,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HighlightFrameCommandResponse&gt; HighlightFrame(HighlightFrameCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HighlightFrameCommandResponse?&gt; HighlightFrame(HighlightFrameCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HighlightNode_OpenQA_Selenium_DevTools_V132_Overlay_HighlightNodeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HighlightNode(OpenQA.Selenium.DevTools.V132.Overlay.HighlightNodeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   HighlightNode(HighlightNodeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L110"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>highlightNode</p>
@@ -539,7 +545,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HighlightNodeCommandResponse&gt; HighlightNode(HighlightNodeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HighlightNodeCommandResponse?&gt; HighlightNode(HighlightNodeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -574,7 +580,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HighlightQuad_OpenQA_Selenium_DevTools_V132_Overlay_HighlightQuadCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HighlightQuad(OpenQA.Selenium.DevTools.V132.Overlay.HighlightQuadCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   HighlightQuad(HighlightQuadCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>highlightQuad</p>
@@ -582,7 +588,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HighlightQuadCommandResponse&gt; HighlightQuad(HighlightQuadCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HighlightQuadCommandResponse?&gt; HighlightQuad(HighlightQuadCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -617,7 +623,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HighlightRect_OpenQA_Selenium_DevTools_V132_Overlay_HighlightRectCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HighlightRect(OpenQA.Selenium.DevTools.V132.Overlay.HighlightRectCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   HighlightRect(HighlightRectCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>highlightRect</p>
@@ -625,7 +631,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HighlightRectCommandResponse&gt; HighlightRect(HighlightRectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HighlightRectCommandResponse?&gt; HighlightRect(HighlightRectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -660,7 +666,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_HighlightSourceOrder_OpenQA_Selenium_DevTools_V132_Overlay_HighlightSourceOrderCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.HighlightSourceOrder(OpenQA.Selenium.DevTools.V132.Overlay.HighlightSourceOrderCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   HighlightSourceOrder(HighlightSourceOrderCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L131"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L146"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>highlightSourceOrder</p>
@@ -668,7 +674,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;HighlightSourceOrderCommandResponse&gt; HighlightSourceOrder(HighlightSourceOrderCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;HighlightSourceOrderCommandResponse?&gt; HighlightSourceOrder(HighlightSourceOrderCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -703,7 +709,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetInspectMode_OpenQA_Selenium_DevTools_V132_Overlay_SetInspectModeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetInspectMode(OpenQA.Selenium.DevTools.V132.Overlay.SetInspectModeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetInspectMode(SetInspectModeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L138"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L154"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setInspectMode</p>
@@ -711,7 +717,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetInspectModeCommandResponse&gt; SetInspectMode(SetInspectModeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetInspectModeCommandResponse?&gt; SetInspectMode(SetInspectModeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -746,7 +752,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetPausedInDebuggerMessage_OpenQA_Selenium_DevTools_V132_Overlay_SetPausedInDebuggerMessageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetPausedInDebuggerMessage(OpenQA.Selenium.DevTools.V132.Overlay.SetPausedInDebuggerMessageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetPausedInDebuggerMessage(SetPausedInDebuggerMessageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L170"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setPausedInDebuggerMessage</p>
@@ -754,7 +760,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetPausedInDebuggerMessageCommandResponse&gt; SetPausedInDebuggerMessage(SetPausedInDebuggerMessageCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetPausedInDebuggerMessageCommandResponse?&gt; SetPausedInDebuggerMessage(SetPausedInDebuggerMessageCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -789,7 +795,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowAdHighlights_OpenQA_Selenium_DevTools_V132_Overlay_SetShowAdHighlightsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowAdHighlights(OpenQA.Selenium.DevTools.V132.Overlay.SetShowAdHighlightsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowAdHighlights(SetShowAdHighlightsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L145"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L162"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowAdHighlights</p>
@@ -797,7 +803,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowAdHighlightsCommandResponse&gt; SetShowAdHighlights(SetShowAdHighlightsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowAdHighlightsCommandResponse?&gt; SetShowAdHighlights(SetShowAdHighlightsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -832,7 +838,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowContainerQueryOverlays_OpenQA_Selenium_DevTools_V132_Overlay_SetShowContainerQueryOverlaysCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowContainerQueryOverlays(OpenQA.Selenium.DevTools.V132.Overlay.SetShowContainerQueryOverlaysCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowContainerQueryOverlays(SetShowContainerQueryOverlaysCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L194"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L218"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowContainerQueryOverlays</p>
@@ -840,7 +846,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowContainerQueryOverlaysCommandResponse&gt; SetShowContainerQueryOverlays(SetShowContainerQueryOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowContainerQueryOverlaysCommandResponse?&gt; SetShowContainerQueryOverlays(SetShowContainerQueryOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -875,7 +881,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowDebugBorders_OpenQA_Selenium_DevTools_V132_Overlay_SetShowDebugBordersCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowDebugBorders(OpenQA.Selenium.DevTools.V132.Overlay.SetShowDebugBordersCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowDebugBorders(SetShowDebugBordersCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L159"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L178"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowDebugBorders</p>
@@ -883,7 +889,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowDebugBordersCommandResponse&gt; SetShowDebugBorders(SetShowDebugBordersCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowDebugBordersCommandResponse?&gt; SetShowDebugBorders(SetShowDebugBordersCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -918,7 +924,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowFPSCounter_OpenQA_Selenium_DevTools_V132_Overlay_SetShowFPSCounterCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowFPSCounter(OpenQA.Selenium.DevTools.V132.Overlay.SetShowFPSCounterCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowFPSCounter(SetShowFPSCounterCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L166"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L186"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowFPSCounter</p>
@@ -926,7 +932,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowFPSCounterCommandResponse&gt; SetShowFPSCounter(SetShowFPSCounterCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowFPSCounterCommandResponse?&gt; SetShowFPSCounter(SetShowFPSCounterCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -961,7 +967,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowFlexOverlays_OpenQA_Selenium_DevTools_V132_Overlay_SetShowFlexOverlaysCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowFlexOverlays(OpenQA.Selenium.DevTools.V132.Overlay.SetShowFlexOverlaysCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowFlexOverlays(SetShowFlexOverlaysCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L180"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L202"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowFlexOverlays</p>
@@ -969,7 +975,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowFlexOverlaysCommandResponse&gt; SetShowFlexOverlays(SetShowFlexOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowFlexOverlaysCommandResponse?&gt; SetShowFlexOverlays(SetShowFlexOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1004,7 +1010,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowGridOverlays_OpenQA_Selenium_DevTools_V132_Overlay_SetShowGridOverlaysCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowGridOverlays(OpenQA.Selenium.DevTools.V132.Overlay.SetShowGridOverlaysCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowGridOverlays(SetShowGridOverlaysCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L173"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L194"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowGridOverlays</p>
@@ -1012,7 +1018,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowGridOverlaysCommandResponse&gt; SetShowGridOverlays(SetShowGridOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowGridOverlaysCommandResponse?&gt; SetShowGridOverlays(SetShowGridOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1047,7 +1053,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowHinge_OpenQA_Selenium_DevTools_V132_Overlay_SetShowHingeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowHinge(OpenQA.Selenium.DevTools.V132.Overlay.SetShowHingeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowHinge(SetShowHingeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L243"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L274"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowHinge</p>
@@ -1055,7 +1061,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowHingeCommandResponse&gt; SetShowHinge(SetShowHingeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowHingeCommandResponse?&gt; SetShowHinge(SetShowHingeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1090,7 +1096,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowHitTestBorders_OpenQA_Selenium_DevTools_V132_Overlay_SetShowHitTestBordersCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowHitTestBorders(OpenQA.Selenium.DevTools.V132.Overlay.SetShowHitTestBordersCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowHitTestBorders(SetShowHitTestBordersCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L222"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L250"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowHitTestBorders</p>
@@ -1098,7 +1104,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowHitTestBordersCommandResponse&gt; SetShowHitTestBorders(SetShowHitTestBordersCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowHitTestBordersCommandResponse?&gt; SetShowHitTestBorders(SetShowHitTestBordersCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1133,7 +1139,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowIsolatedElements_OpenQA_Selenium_DevTools_V132_Overlay_SetShowIsolatedElementsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowIsolatedElements(OpenQA.Selenium.DevTools.V132.Overlay.SetShowIsolatedElementsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowIsolatedElements(SetShowIsolatedElementsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L250"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L282"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowIsolatedElements</p>
@@ -1141,7 +1147,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowIsolatedElementsCommandResponse&gt; SetShowIsolatedElements(SetShowIsolatedElementsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowIsolatedElementsCommandResponse?&gt; SetShowIsolatedElements(SetShowIsolatedElementsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1176,7 +1182,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowLayoutShiftRegions_OpenQA_Selenium_DevTools_V132_Overlay_SetShowLayoutShiftRegionsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowLayoutShiftRegions(OpenQA.Selenium.DevTools.V132.Overlay.SetShowLayoutShiftRegionsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowLayoutShiftRegions(SetShowLayoutShiftRegionsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L208"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L234"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowLayoutShiftRegions</p>
@@ -1184,7 +1190,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowLayoutShiftRegionsCommandResponse&gt; SetShowLayoutShiftRegions(SetShowLayoutShiftRegionsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowLayoutShiftRegionsCommandResponse?&gt; SetShowLayoutShiftRegions(SetShowLayoutShiftRegionsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1219,7 +1225,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowPaintRects_OpenQA_Selenium_DevTools_V132_Overlay_SetShowPaintRectsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowPaintRects(OpenQA.Selenium.DevTools.V132.Overlay.SetShowPaintRectsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowPaintRects(SetShowPaintRectsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L201"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L226"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowPaintRects</p>
@@ -1227,7 +1233,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowPaintRectsCommandResponse&gt; SetShowPaintRects(SetShowPaintRectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowPaintRectsCommandResponse?&gt; SetShowPaintRects(SetShowPaintRectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1262,7 +1268,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowScrollBottleneckRects_OpenQA_Selenium_DevTools_V132_Overlay_SetShowScrollBottleneckRectsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowScrollBottleneckRects(OpenQA.Selenium.DevTools.V132.Overlay.SetShowScrollBottleneckRectsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowScrollBottleneckRects(SetShowScrollBottleneckRectsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L215"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L242"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowScrollBottleneckRects</p>
@@ -1270,7 +1276,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowScrollBottleneckRectsCommandResponse&gt; SetShowScrollBottleneckRects(SetShowScrollBottleneckRectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowScrollBottleneckRectsCommandResponse?&gt; SetShowScrollBottleneckRects(SetShowScrollBottleneckRectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1305,7 +1311,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowScrollSnapOverlays_OpenQA_Selenium_DevTools_V132_Overlay_SetShowScrollSnapOverlaysCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowScrollSnapOverlays(OpenQA.Selenium.DevTools.V132.Overlay.SetShowScrollSnapOverlaysCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowScrollSnapOverlays(SetShowScrollSnapOverlaysCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L187"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L210"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowScrollSnapOverlays</p>
@@ -1313,7 +1319,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowScrollSnapOverlaysCommandResponse&gt; SetShowScrollSnapOverlays(SetShowScrollSnapOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowScrollSnapOverlaysCommandResponse?&gt; SetShowScrollSnapOverlays(SetShowScrollSnapOverlaysCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1348,7 +1354,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowViewportSizeOnResize_OpenQA_Selenium_DevTools_V132_Overlay_SetShowViewportSizeOnResizeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowViewportSizeOnResize(OpenQA.Selenium.DevTools.V132.Overlay.SetShowViewportSizeOnResizeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowViewportSizeOnResize(SetShowViewportSizeOnResizeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L236"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L266"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowViewportSizeOnResize</p>
@@ -1356,7 +1362,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowViewportSizeOnResizeCommandResponse&gt; SetShowViewportSizeOnResize(SetShowViewportSizeOnResizeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowViewportSizeOnResizeCommandResponse?&gt; SetShowViewportSizeOnResize(SetShowViewportSizeOnResizeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1391,7 +1397,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowWebVitals_OpenQA_Selenium_DevTools_V132_Overlay_SetShowWebVitalsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowWebVitals(OpenQA.Selenium.DevTools.V132.Overlay.SetShowWebVitalsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowWebVitals(SetShowWebVitalsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L229"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L258"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowWebVitals</p>
@@ -1399,7 +1405,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowWebVitalsCommandResponse&gt; SetShowWebVitals(SetShowWebVitalsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowWebVitalsCommandResponse?&gt; SetShowWebVitals(SetShowWebVitalsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1434,7 +1440,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_SetShowWindowControlsOverlay_OpenQA_Selenium_DevTools_V132_Overlay_SetShowWindowControlsOverlayCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.SetShowWindowControlsOverlay(OpenQA.Selenium.DevTools.V132.Overlay.SetShowWindowControlsOverlayCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetShowWindowControlsOverlay(SetShowWindowControlsOverlayCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L257"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L290"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setShowWindowControlsOverlay</p>
@@ -1442,7 +1448,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetShowWindowControlsOverlayCommandResponse&gt; SetShowWindowControlsOverlay(SetShowWindowControlsOverlayCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetShowWindowControlsOverlayCommandResponse?&gt; SetShowWindowControlsOverlay(SetShowWindowControlsOverlayCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1480,7 +1486,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_InspectModeCanceled" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.InspectModeCanceled">
   InspectModeCanceled
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>inspectModeCanceled</p>
@@ -1488,7 +1494,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectModeCanceledEventArgs&gt; InspectModeCanceled</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectModeCanceledEventArgs&gt;? InspectModeCanceled</code></pre>
   </div>
 
 
@@ -1519,7 +1525,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectNodeRequestedEventArgs&gt; InspectNodeRequested</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InspectNodeRequestedEventArgs&gt;? InspectNodeRequested</code></pre>
   </div>
 
 
@@ -1542,7 +1548,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_NodeHighlightRequested" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.NodeHighlightRequested">
   NodeHighlightRequested
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>nodeHighlightRequested</p>
@@ -1550,7 +1556,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeHighlightRequestedEventArgs&gt; NodeHighlightRequested</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;NodeHighlightRequestedEventArgs&gt;? NodeHighlightRequested</code></pre>
   </div>
 
 
@@ -1573,7 +1579,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Overlay_OverlayAdapter_ScreenshotRequested" data-uid="OpenQA.Selenium.DevTools.V132.Overlay.OverlayAdapter.ScreenshotRequested">
   ScreenshotRequested
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>screenshotRequested</p>
@@ -1581,7 +1587,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ScreenshotRequestedEventArgs&gt; ScreenshotRequested</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ScreenshotRequestedEventArgs&gt;? ScreenshotRequested</code></pre>
   </div>
 
 
@@ -1605,7 +1611,7 @@ Class OverlayAdapter  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Overlay/OverlayAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

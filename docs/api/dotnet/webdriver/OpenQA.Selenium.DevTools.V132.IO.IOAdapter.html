@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter" class="text-break">
-Class IOAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class IOAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   IOAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the IOAdapter class.</p>
@@ -183,6 +183,12 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter_Close_OpenQA_Selenium_DevTools_V132_IO_CloseCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter.Close(OpenQA.Selenium.DevTools.V132.IO.CloseCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   Close(CloseCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>close</p>
@@ -238,7 +244,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;CloseCommandResponse&gt; Close(CloseCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;CloseCommandResponse?&gt; Close(CloseCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter_Read_OpenQA_Selenium_DevTools_V132_IO_ReadCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter.Read(OpenQA.Selenium.DevTools.V132.IO.ReadCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   Read(ReadCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>read</p>
@@ -316,7 +322,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_IO_IOAdapter_ResolveBlob_OpenQA_Selenium_DevTools_V132_IO_ResolveBlobCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.IO.IOAdapter.ResolveBlob(OpenQA.Selenium.DevTools.V132.IO.ResolveBlobCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ResolveBlob(ResolveBlobCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>resolveBlob</p>
@@ -359,7 +365,7 @@ Class IOAdapter  <a class="header-action link-secondary" title="View source" hre
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/IO/IOAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

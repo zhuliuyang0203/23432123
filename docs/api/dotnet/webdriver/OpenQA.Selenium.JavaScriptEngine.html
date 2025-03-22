@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_JavaScriptEngine" data-uid="OpenQA.Selenium.JavaScriptEngine" class="text-break">
-Class JavaScriptEngine  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L35"><i class="bi bi-code-slash"></i></a>
+Class JavaScriptEngine  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -164,7 +164,7 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine__ctor_OpenQA_Selenium_IWebDriver_" data-uid="OpenQA.Selenium.JavaScriptEngine.#ctor(OpenQA.Selenium.IWebDriver)">
   JavaScriptEngine(IWebDriver)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.JavaScriptEngine.html">JavaScriptEngine</a> class.</p>
@@ -201,7 +201,7 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_InitializationScripts" data-uid="OpenQA.Selenium.JavaScriptEngine.InitializationScripts">
   InitializationScripts
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the read-only list of initialization scripts added for this JavaScript engine.</p>
@@ -233,7 +233,7 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_ScriptCallbackBindings" data-uid="OpenQA.Selenium.JavaScriptEngine.ScriptCallbackBindings">
   ScriptCallbackBindings
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the read-only list of bindings added for this JavaScript engine.</p>
@@ -269,7 +269,7 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_AddInitializationScript_System_String_System_String_" data-uid="OpenQA.Selenium.JavaScriptEngine.AddInitializationScript(System.String,System.String)">
   AddInitializationScript(string, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L165"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L168"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously adds JavaScript to be loaded on every document load.</p>
@@ -304,6 +304,12 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptName</code> or <code class="paramref">script</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -311,7 +317,7 @@ Class JavaScriptEngine  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_AddScriptCallbackBinding_System_String_" data-uid="OpenQA.Selenium.JavaScriptEngine.AddScriptCallbackBinding(System.String)">
   AddScriptCallbackBinding(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L272"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L288"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously adds a binding to a callback method that will raise an event when the named
@@ -344,6 +350,15 @@ binding is called by JavaScript executing in the browser.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">bindingName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p>If A binding with the specified name already exists.</p>
+</dd>
+  </dl>
 
 
 
@@ -351,7 +366,7 @@ binding is called by JavaScript executing in the browser.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_ClearAll" data-uid="OpenQA.Selenium.JavaScriptEngine.ClearAll">
   ClearAll()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L315"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L342"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks, all
@@ -386,10 +401,10 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_ClearInitializationScripts" data-uid="OpenQA.Selenium.JavaScriptEngine.ClearInitializationScripts">
   ClearInitializationScripts()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L205"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L219"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Asynchronously removes all intialization scripts from being loaded on every document load.</p>
+  <div class="markdown level1 summary"><p>Asynchronously removes all initialization scripts from being loaded on every document load.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -419,7 +434,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_ClearScriptCallbackBindings" data-uid="OpenQA.Selenium.JavaScriptEngine.ClearScriptCallbackBindings">
   ClearScriptCallbackBindings()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L298"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L325"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks.</p>
@@ -452,7 +467,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_DisableDomMutationMonitoring" data-uid="OpenQA.Selenium.JavaScriptEngine.DisableDomMutationMonitoring">
   DisableDomMutationMonitoring()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L153"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L155"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Disables monitoring for DOM changes.</p>
@@ -485,7 +500,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_Dispose" data-uid="OpenQA.Selenium.JavaScriptEngine.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L337"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L364"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Releases all resources associated with this <a class="xref" href="OpenQA.Selenium.JavaScriptEngine.html">JavaScriptEngine</a>.</p>
@@ -512,7 +527,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_Dispose_System_Boolean_" data-uid="OpenQA.Selenium.JavaScriptEngine.Dispose(System.Boolean)">
   Dispose(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L346"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L374"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Releases all resources associated with this <a class="xref" href="OpenQA.Selenium.JavaScriptEngine.html">JavaScriptEngine</a>.</p>
@@ -545,7 +560,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_EnableDomMutationMonitoring" data-uid="OpenQA.Selenium.JavaScriptEngine.EnableDomMutationMonitoring">
   EnableDomMutationMonitoring()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L141"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Enables monitoring for DOM changes.</p>
@@ -578,7 +593,7 @@ all pinned scripts.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_PinScript_System_String_" data-uid="OpenQA.Selenium.JavaScriptEngine.PinScript(System.String)">
   PinScript(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L223"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L237"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Pins a JavaScript snippet for execution in the browser without transmitting the
@@ -624,7 +639,7 @@ entire script across the wire for every execution.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_RemoveInitializationScript_System_String_" data-uid="OpenQA.Selenium.JavaScriptEngine.RemoveInitializationScript(System.String)">
   RemoveInitializationScript(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L191"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L200"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes JavaScript from being loaded on every document load.</p>
@@ -656,6 +671,12 @@ entire script across the wire for every execution.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -663,7 +684,7 @@ entire script across the wire for every execution.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_RemoveScriptCallbackBinding_System_String_" data-uid="OpenQA.Selenium.JavaScriptEngine.RemoveScriptCallbackBinding(System.String)">
   RemoveScriptCallbackBinding(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L288"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L310"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes a binding to a JavaScript callback.</p>
@@ -695,6 +716,12 @@ entire script across the wire for every execution.</p>
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">bindingName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -702,7 +729,7 @@ entire script across the wire for every execution.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_Reset" data-uid="OpenQA.Selenium.JavaScriptEngine.Reset">
   Reset()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L328"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L355"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously removes all bindings to JavaScript callbacks, all
@@ -737,7 +764,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_StartEventMonitoring" data-uid="OpenQA.Selenium.JavaScriptEngine.StartEventMonitoring">
   StartEventMonitoring()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L119"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously starts monitoring for events from the browser's JavaScript engine.</p>
@@ -770,7 +797,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_StopEventMonitoring" data-uid="OpenQA.Selenium.JavaScriptEngine.StopEventMonitoring">
   StopEventMonitoring()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Stops monitoring for events from the browser's JavaScript engine.</p>
@@ -797,7 +824,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_UnpinScript_OpenQA_Selenium_PinnedScript_" data-uid="OpenQA.Selenium.JavaScriptEngine.UnpinScript(OpenQA.Selenium.PinnedScript)">
   UnpinScript(PinnedScript)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L251"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L265"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Unpins a previously pinned script from the browser.</p>
@@ -845,7 +872,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_DomMutated" data-uid="OpenQA.Selenium.JavaScriptEngine.DomMutated">
   DomMutated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Occurs when a value of an attribute in an element is being changed.</p>
@@ -853,7 +880,7 @@ pinned scripts, and stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomMutatedEventArgs&gt; DomMutated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DomMutatedEventArgs&gt;? DomMutated</code></pre>
   </div>
 
 
@@ -876,7 +903,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_JavaScriptCallbackExecuted" data-uid="OpenQA.Selenium.JavaScriptEngine.JavaScriptCallbackExecuted">
   JavaScriptCallbackExecuted
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Occurs when a JavaScript callback with a named binding is executed.</p>
@@ -884,7 +911,7 @@ pinned scripts, and stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptCallbackExecutedEventArgs&gt; JavaScriptCallbackExecuted</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptCallbackExecutedEventArgs&gt;? JavaScriptCallbackExecuted</code></pre>
   </div>
 
 
@@ -907,7 +934,7 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_JavaScriptConsoleApiCalled" data-uid="OpenQA.Selenium.JavaScriptEngine.JavaScriptConsoleApiCalled">
   JavaScriptConsoleApiCalled
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Occurs when methods on the JavaScript console are called.</p>
@@ -915,7 +942,7 @@ pinned scripts, and stops listening for events.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptConsoleApiCalledEventArgs&gt; JavaScriptConsoleApiCalled</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptConsoleApiCalledEventArgs&gt;? JavaScriptConsoleApiCalled</code></pre>
   </div>
 
 
@@ -938,15 +965,15 @@ pinned scripts, and stops listening for events.</p>
 
   <h3 id="OpenQA_Selenium_JavaScriptEngine_JavaScriptExceptionThrown" data-uid="OpenQA.Selenium.JavaScriptEngine.JavaScriptExceptionThrown">
   JavaScriptExceptionThrown
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Occurs when an exeception is thrown by JavaScript being executed in the browser.</p>
+  <div class="markdown level1 summary"><p>Occurs when an exception is thrown by JavaScript being executed in the browser.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptExceptionThrownEventArgs&gt; JavaScriptExceptionThrown</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;JavaScriptExceptionThrownEventArgs&gt;? JavaScriptExceptionThrown</code></pre>
   </div>
 
 
@@ -970,7 +997,7 @@ pinned scripts, and stops listening for events.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L35" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/JavaScriptEngine.cs/#L36" class="edit-link">Edit this page</a>
         </div>
 
 

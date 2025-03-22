@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter" class="text-break">
-Class MemoryAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class MemoryAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   MemoryAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the MemoryAdapter class.</p>
@@ -183,6 +183,12 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_ForciblyPurgeJavaScriptMemory_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.ForciblyPurgeJavaScriptMemory*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_ForciblyPurgeJavaScriptMemory_OpenQA_Selenium_DevTools_V132_Memory_ForciblyPurgeJavaScriptMemoryCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.ForciblyPurgeJavaScriptMemory(OpenQA.Selenium.DevTools.V132.Memory.ForciblyPurgeJavaScriptMemoryCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  ForciblyPurgeJavaScriptMemory(ForciblyPurgeJavaScriptMemoryCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  ForciblyPurgeJavaScriptMemory(ForciblyPurgeJavaScriptMemoryCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>forciblyPurgeJavaScriptMemory</p>
@@ -238,7 +244,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ForciblyPurgeJavaScriptMemoryCommandResponse&gt; ForciblyPurgeJavaScriptMemory(ForciblyPurgeJavaScriptMemoryCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ForciblyPurgeJavaScriptMemoryCommandResponse?&gt; ForciblyPurgeJavaScriptMemory(ForciblyPurgeJavaScriptMemoryCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetAllTimeSamplingProfile_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetAllTimeSamplingProfile*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetAllTimeSamplingProfile_OpenQA_Selenium_DevTools_V132_Memory_GetAllTimeSamplingProfileCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetAllTimeSamplingProfile(OpenQA.Selenium.DevTools.V132.Memory.GetAllTimeSamplingProfileCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetAllTimeSamplingProfile(GetAllTimeSamplingProfileCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  GetAllTimeSamplingProfile(GetAllTimeSamplingProfileCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L106"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getAllTimeSamplingProfile</p>
@@ -281,7 +287,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetAllTimeSamplingProfileCommandResponse&gt; GetAllTimeSamplingProfile(GetAllTimeSamplingProfileCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetAllTimeSamplingProfileCommandResponse&gt; GetAllTimeSamplingProfile(GetAllTimeSamplingProfileCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetBrowserSamplingProfile_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetBrowserSamplingProfile*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetBrowserSamplingProfile_OpenQA_Selenium_DevTools_V132_Memory_GetBrowserSamplingProfileCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetBrowserSamplingProfile(OpenQA.Selenium.DevTools.V132.Memory.GetBrowserSamplingProfileCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetBrowserSamplingProfile(GetBrowserSamplingProfileCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  GetBrowserSamplingProfile(GetBrowserSamplingProfileCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getBrowserSamplingProfile</p>
@@ -324,7 +330,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetBrowserSamplingProfileCommandResponse&gt; GetBrowserSamplingProfile(GetBrowserSamplingProfileCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetBrowserSamplingProfileCommandResponse&gt; GetBrowserSamplingProfile(GetBrowserSamplingProfileCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -358,8 +364,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetDOMCounters_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetDOMCounters*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetDOMCounters_OpenQA_Selenium_DevTools_V132_Memory_GetDOMCountersCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetDOMCounters(OpenQA.Selenium.DevTools.V132.Memory.GetDOMCountersCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetDOMCounters(GetDOMCountersCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  GetDOMCounters(GetDOMCountersCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getDOMCounters</p>
@@ -367,7 +373,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetDOMCountersCommandResponse&gt; GetDOMCounters(GetDOMCountersCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetDOMCountersCommandResponse&gt; GetDOMCounters(GetDOMCountersCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -401,8 +407,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetDOMCountersForLeakDetection_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetDOMCountersForLeakDetection*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetDOMCountersForLeakDetection_OpenQA_Selenium_DevTools_V132_Memory_GetDOMCountersForLeakDetectionCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetDOMCountersForLeakDetection(OpenQA.Selenium.DevTools.V132.Memory.GetDOMCountersForLeakDetectionCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetDOMCountersForLeakDetection(GetDOMCountersForLeakDetectionCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  GetDOMCountersForLeakDetection(GetDOMCountersForLeakDetectionCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getDOMCountersForLeakDetection</p>
@@ -410,7 +416,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetDOMCountersForLeakDetectionCommandResponse&gt; GetDOMCountersForLeakDetection(GetDOMCountersForLeakDetectionCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetDOMCountersForLeakDetectionCommandResponse&gt; GetDOMCountersForLeakDetection(GetDOMCountersForLeakDetectionCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -444,8 +450,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetSamplingProfile_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetSamplingProfile*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_GetSamplingProfile_OpenQA_Selenium_DevTools_V132_Memory_GetSamplingProfileCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.GetSamplingProfile(OpenQA.Selenium.DevTools.V132.Memory.GetSamplingProfileCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetSamplingProfile(GetSamplingProfileCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L111"><i class="bi bi-code-slash"></i></a>
+  GetSamplingProfile(GetSamplingProfileCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getSamplingProfile</p>
@@ -453,7 +459,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetSamplingProfileCommandResponse&gt; GetSamplingProfile(GetSamplingProfileCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetSamplingProfileCommandResponse&gt; GetSamplingProfile(GetSamplingProfileCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -487,8 +493,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_PrepareForLeakDetection_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.PrepareForLeakDetection*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_PrepareForLeakDetection_OpenQA_Selenium_DevTools_V132_Memory_PrepareForLeakDetectionCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.PrepareForLeakDetection(OpenQA.Selenium.DevTools.V132.Memory.PrepareForLeakDetectionCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  PrepareForLeakDetection(PrepareForLeakDetectionCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  PrepareForLeakDetection(PrepareForLeakDetectionCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>prepareForLeakDetection</p>
@@ -496,7 +502,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;PrepareForLeakDetectionCommandResponse&gt; PrepareForLeakDetection(PrepareForLeakDetectionCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;PrepareForLeakDetectionCommandResponse?&gt; PrepareForLeakDetection(PrepareForLeakDetectionCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_SetPressureNotificationsSuppressed_OpenQA_Selenium_DevTools_V132_Memory_SetPressureNotificationsSuppressedCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.SetPressureNotificationsSuppressed(OpenQA.Selenium.DevTools.V132.Memory.SetPressureNotificationsSuppressedCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetPressureNotificationsSuppressed(SetPressureNotificationsSuppressedCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setPressureNotificationsSuppressed</p>
@@ -539,7 +545,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetPressureNotificationsSuppressedCommandResponse&gt; SetPressureNotificationsSuppressed(SetPressureNotificationsSuppressedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetPressureNotificationsSuppressedCommandResponse?&gt; SetPressureNotificationsSuppressed(SetPressureNotificationsSuppressedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -574,7 +580,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_SimulatePressureNotification_OpenQA_Selenium_DevTools_V132_Memory_SimulatePressureNotificationCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.SimulatePressureNotification(OpenQA.Selenium.DevTools.V132.Memory.SimulatePressureNotificationCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SimulatePressureNotification(SimulatePressureNotificationCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>simulatePressureNotification</p>
@@ -582,7 +588,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SimulatePressureNotificationCommandResponse&gt; SimulatePressureNotification(SimulatePressureNotificationCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SimulatePressureNotificationCommandResponse?&gt; SimulatePressureNotification(SimulatePressureNotificationCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -617,7 +623,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_StartSampling_OpenQA_Selenium_DevTools_V132_Memory_StartSamplingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.StartSampling(OpenQA.Selenium.DevTools.V132.Memory.StartSamplingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StartSampling(StartSamplingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L83"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>startSampling</p>
@@ -625,7 +631,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartSamplingCommandResponse&gt; StartSampling(StartSamplingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartSamplingCommandResponse?&gt; StartSampling(StartSamplingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -659,8 +665,8 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_StopSampling_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.StopSampling*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Memory_MemoryAdapter_StopSampling_OpenQA_Selenium_DevTools_V132_Memory_StopSamplingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Memory.MemoryAdapter.StopSampling(OpenQA.Selenium.DevTools.V132.Memory.StopSamplingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  StopSampling(StopSamplingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  StopSampling(StopSamplingCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stopSampling</p>
@@ -668,7 +674,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopSamplingCommandResponse&gt; StopSampling(StopSamplingCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopSamplingCommandResponse?&gt; StopSampling(StopSamplingCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -703,7 +709,7 @@ Class MemoryAdapter  <a class="header-action link-secondary" title="View source"
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Memory/MemoryAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

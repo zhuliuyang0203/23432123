@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue" class="text-break">
-Class LocalValue  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L27"><i class="bi bi-code-slash"></i></a>
+Class LocalValue  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,17 +102,19 @@ Class LocalValue  <a class="header-action link-secondary" title="View source" hr
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;type&quot;)]
-[JsonDerivedType(typeof(LocalValue.Number), &quot;number&quot;)]
-[JsonDerivedType(typeof(LocalValue.String), &quot;string&quot;)]
-[JsonDerivedType(typeof(LocalValue.Null), &quot;null&quot;)]
-[JsonDerivedType(typeof(LocalValue.Undefined), &quot;undefined&quot;)]
-[JsonDerivedType(typeof(LocalValue.Channel), &quot;channel&quot;)]
-[JsonDerivedType(typeof(LocalValue.Array), &quot;array&quot;)]
-[JsonDerivedType(typeof(LocalValue.Date), &quot;date&quot;)]
-[JsonDerivedType(typeof(LocalValue.Map), &quot;map&quot;)]
-[JsonDerivedType(typeof(LocalValue.Object), &quot;object&quot;)]
-[JsonDerivedType(typeof(LocalValue.RegExp), &quot;regexp&quot;)]
-[JsonDerivedType(typeof(LocalValue.Set), &quot;set&quot;)]
+[JsonDerivedType(typeof(NumberLocalValue), &quot;number&quot;)]
+[JsonDerivedType(typeof(StringLocalValue), &quot;string&quot;)]
+[JsonDerivedType(typeof(NullLocalValue), &quot;null&quot;)]
+[JsonDerivedType(typeof(UndefinedLocalValue), &quot;undefined&quot;)]
+[JsonDerivedType(typeof(BooleanLocalValue), &quot;boolean&quot;)]
+[JsonDerivedType(typeof(BigIntLocalValue), &quot;bigint&quot;)]
+[JsonDerivedType(typeof(ChannelLocalValue), &quot;channel&quot;)]
+[JsonDerivedType(typeof(ArrayLocalValue), &quot;array&quot;)]
+[JsonDerivedType(typeof(DateLocalValue), &quot;date&quot;)]
+[JsonDerivedType(typeof(MapLocalValue), &quot;map&quot;)]
+[JsonDerivedType(typeof(ObjectLocalValue), &quot;object&quot;)]
+[JsonDerivedType(typeof(RegExpLocalValue), &quot;regexp&quot;)]
+[JsonDerivedType(typeof(SetLocalValue), &quot;set&quot;)]
 public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
   </div>
 
@@ -137,14 +139,14 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Array.html">LocalValue.Array</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Channel.html">LocalValue.Channel</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Date.html">LocalValue.Date</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Map.html">LocalValue.Map</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Object.html">LocalValue.Object</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.PrimitiveProtocolLocalValue.html">LocalValue.PrimitiveProtocolLocalValue</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.RegExp.html">LocalValue.RegExp</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.Set.html">LocalValue.Set</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.ArrayLocalValue.html">ArrayLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.ChannelLocalValue.html">ChannelLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.DateLocalValue.html">DateLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.MapLocalValue.html">MapLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.ObjectLocalValue.html">ObjectLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.PrimitiveProtocolLocalValue.html">PrimitiveProtocolLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RegExpLocalValue.html">RegExpLocalValue</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.SetLocalValue.html">SetLocalValue</a></div>
     </dd>
   </dl>
 
@@ -262,7 +264,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
   <a id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit*"></a>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_String__OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.String)~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
-  implicit operator LocalValue(string)
+  implicit operator LocalValue(string?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -270,7 +272,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(string value)</code></pre>
+    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(string? value)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -299,7 +301,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L27" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L25" class="edit-link">Edit this page</a>
         </div>
 
 

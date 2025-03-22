@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Communication_Command" data-uid="OpenQA.Selenium.BiDi.Communication.Command" class="text-break">
-Class Command  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class Command  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,47 +101,7 @@ Class Command  <a class="header-action link-secondary" title="View source" href=
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[JsonPolymorphic(TypeDiscriminatorPropertyName = &quot;method&quot;)]
-[JsonDerivedType(typeof(StatusCommand), &quot;session.status&quot;)]
-[JsonDerivedType(typeof(SubscribeCommand), &quot;session.subscribe&quot;)]
-[JsonDerivedType(typeof(UnsubscribeCommand), &quot;session.unsubscribe&quot;)]
-[JsonDerivedType(typeof(NewCommand), &quot;session.new&quot;)]
-[JsonDerivedType(typeof(EndCommand), &quot;session.end&quot;)]
-[JsonDerivedType(typeof(CreateUserContextCommand), &quot;browser.createUserContext&quot;)]
-[JsonDerivedType(typeof(GetUserContextsCommand), &quot;browser.getUserContexts&quot;)]
-[JsonDerivedType(typeof(RemoveUserContextCommand), &quot;browser.removeUserContext&quot;)]
-[JsonDerivedType(typeof(CloseCommand), &quot;browser.close&quot;)]
-[JsonDerivedType(typeof(CreateCommand), &quot;browsingContext.create&quot;)]
-[JsonDerivedType(typeof(NavigateCommand), &quot;browsingContext.navigate&quot;)]
-[JsonDerivedType(typeof(ReloadCommand), &quot;browsingContext.reload&quot;)]
-[JsonDerivedType(typeof(TraverseHistoryCommand), &quot;browsingContext.traverseHistory&quot;)]
-[JsonDerivedType(typeof(LocateNodesCommand), &quot;browsingContext.locateNodes&quot;)]
-[JsonDerivedType(typeof(ActivateCommand), &quot;browsingContext.activate&quot;)]
-[JsonDerivedType(typeof(CaptureScreenshotCommand), &quot;browsingContext.captureScreenshot&quot;)]
-[JsonDerivedType(typeof(SetViewportCommand), &quot;browsingContext.setViewport&quot;)]
-[JsonDerivedType(typeof(GetTreeCommand), &quot;browsingContext.getTree&quot;)]
-[JsonDerivedType(typeof(PrintCommand), &quot;browsingContext.print&quot;)]
-[JsonDerivedType(typeof(HandleUserPromptCommand), &quot;browsingContext.handleUserPrompt&quot;)]
-[JsonDerivedType(typeof(CloseCommand), &quot;browsingContext.close&quot;)]
-[JsonDerivedType(typeof(AddInterceptCommand), &quot;network.addIntercept&quot;)]
-[JsonDerivedType(typeof(ContinueRequestCommand), &quot;network.continueRequest&quot;)]
-[JsonDerivedType(typeof(ContinueResponseCommand), &quot;network.continueResponse&quot;)]
-[JsonDerivedType(typeof(FailRequestCommand), &quot;network.failRequest&quot;)]
-[JsonDerivedType(typeof(ProvideResponseCommand), &quot;network.provideResponse&quot;)]
-[JsonDerivedType(typeof(ContinueWithAuthCommand), &quot;network.continueWithAuth&quot;)]
-[JsonDerivedType(typeof(RemoveInterceptCommand), &quot;network.removeIntercept&quot;)]
-[JsonDerivedType(typeof(AddPreloadScriptCommand), &quot;script.addPreloadScript&quot;)]
-[JsonDerivedType(typeof(RemovePreloadScriptCommand), &quot;script.removePreloadScript&quot;)]
-[JsonDerivedType(typeof(EvaluateCommand), &quot;script.evaluate&quot;)]
-[JsonDerivedType(typeof(CallFunctionCommand), &quot;script.callFunction&quot;)]
-[JsonDerivedType(typeof(DisownCommand), &quot;script.disown&quot;)]
-[JsonDerivedType(typeof(GetRealmsCommand), &quot;script.getRealms&quot;)]
-[JsonDerivedType(typeof(PerformActionsCommand), &quot;input.performActions&quot;)]
-[JsonDerivedType(typeof(ReleaseActionsCommand), &quot;input.releaseActions&quot;)]
-[JsonDerivedType(typeof(GetCookiesCommand), &quot;storage.getCookies&quot;)]
-[JsonDerivedType(typeof(DeleteCookiesCommand), &quot;storage.deleteCookies&quot;)]
-[JsonDerivedType(typeof(SetCookieCommand), &quot;storage.setCookie&quot;)]
-public abstract class Command</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Command</code></pre>
   </div>
 
 
@@ -188,6 +148,41 @@ public abstract class Command</code></pre>
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_BiDi_Communication_Command__ctor_" data-uid="OpenQA.Selenium.BiDi.Communication.Command.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Communication_Command__ctor_System_String_" data-uid="OpenQA.Selenium.BiDi.Communication.Command.#ctor(System.String)">
+  Command(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Command(string method)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>method</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -196,14 +191,15 @@ public abstract class Command</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Communication_Command_Id" data-uid="OpenQA.Selenium.BiDi.Communication.Command.Id">
   Id
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Id { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[JsonPropertyOrder(0)]
+public int Id { get; }</code></pre>
   </div>
 
 
@@ -223,11 +219,43 @@ public abstract class Command</code></pre>
 
 
 
+  <a id="OpenQA_Selenium_BiDi_Communication_Command_Method_" data-uid="OpenQA.Selenium.BiDi.Communication.Command.Method*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Communication_Command_Method" data-uid="OpenQA.Selenium.BiDi.Communication.Command.Method">
+  Method
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[JsonPropertyOrder(1)]
+public string Method { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Command.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

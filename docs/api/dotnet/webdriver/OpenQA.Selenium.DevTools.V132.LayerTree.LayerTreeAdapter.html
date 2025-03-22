@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter" class="text-break">
-Class LayerTreeAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class LayerTreeAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   LayerTreeAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the LayerTreeAdapter class.</p>
@@ -183,6 +183,12 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_CompositingReasons_OpenQA_Selenium_DevTools_V132_LayerTree_CompositingReasonsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.CompositingReasons(OpenQA.Selenium.DevTools.V132.LayerTree.CompositingReasonsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CompositingReasons(CompositingReasonsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>compositingReasons</p>
@@ -272,8 +278,8 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_Disable_OpenQA_Selenium_DevTools_V132_LayerTree_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.Disable(OpenQA.Selenium.DevTools.V132.LayerTree.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -281,7 +287,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <a id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_Enable_OpenQA_Selenium_DevTools_V132_LayerTree_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.Enable(OpenQA.Selenium.DevTools.V132.LayerTree.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L70"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -324,7 +330,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_LoadSnapshot_OpenQA_Selenium_DevTools_V132_LayerTree_LoadSnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.LoadSnapshot(OpenQA.Selenium.DevTools.V132.LayerTree.LoadSnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   LoadSnapshot(LoadSnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>loadSnapshot</p>
@@ -402,7 +408,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_MakeSnapshot_OpenQA_Selenium_DevTools_V132_LayerTree_MakeSnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.MakeSnapshot(OpenQA.Selenium.DevTools.V132.LayerTree.MakeSnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   MakeSnapshot(MakeSnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L86"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>makeSnapshot</p>
@@ -445,7 +451,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_ProfileSnapshot_OpenQA_Selenium_DevTools_V132_LayerTree_ProfileSnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.ProfileSnapshot(OpenQA.Selenium.DevTools.V132.LayerTree.ProfileSnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ProfileSnapshot(ProfileSnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>profileSnapshot</p>
@@ -488,7 +494,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_ReleaseSnapshot_OpenQA_Selenium_DevTools_V132_LayerTree_ReleaseSnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.ReleaseSnapshot(OpenQA.Selenium.DevTools.V132.LayerTree.ReleaseSnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ReleaseSnapshot(ReleaseSnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>releaseSnapshot</p>
@@ -496,7 +502,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseSnapshotCommandResponse&gt; ReleaseSnapshot(ReleaseSnapshotCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ReleaseSnapshotCommandResponse?&gt; ReleaseSnapshot(ReleaseSnapshotCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_ReplaySnapshot_OpenQA_Selenium_DevTools_V132_LayerTree_ReplaySnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.ReplaySnapshot(OpenQA.Selenium.DevTools.V132.LayerTree.ReplaySnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ReplaySnapshot(ReplaySnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L110"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>replaySnapshot</p>
@@ -574,7 +580,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_SnapshotCommandLog_OpenQA_Selenium_DevTools_V132_LayerTree_SnapshotCommandLogCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.SnapshotCommandLog(OpenQA.Selenium.DevTools.V132.LayerTree.SnapshotCommandLogCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SnapshotCommandLog(SnapshotCommandLogCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L107"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L118"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>snapshotCommandLog</p>
@@ -628,7 +634,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LayerPaintedEventArgs&gt; LayerPainted</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LayerPaintedEventArgs&gt;? LayerPainted</code></pre>
   </div>
 
 
@@ -651,7 +657,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="OpenQA_Selenium_DevTools_V132_LayerTree_LayerTreeAdapter_LayerTreeDidChange" data-uid="OpenQA.Selenium.DevTools.V132.LayerTree.LayerTreeAdapter.LayerTreeDidChange">
   LayerTreeDidChange
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>layerTreeDidChange</p>
@@ -659,7 +665,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LayerTreeDidChangeEventArgs&gt; LayerTreeDidChange</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LayerTreeDidChangeEventArgs&gt;? LayerTreeDidChange</code></pre>
   </div>
 
 
@@ -683,7 +689,7 @@ Class LayerTreeAdapter  <a class="header-action link-secondary" title="View sour
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/LayerTree/LayerTreeAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

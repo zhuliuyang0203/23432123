@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_ITargetLocator" data-uid="OpenQA.Selenium.ITargetLocator" class="text-break">
-Interface ITargetLocator  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L25"><i class="bi bi-code-slash"></i></a>
+Interface ITargetLocator  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -125,7 +125,7 @@ Interface ITargetLocator  <a class="header-action link-secondary" title="View so
 
   <h3 id="OpenQA_Selenium_ITargetLocator_ActiveElement" data-uid="OpenQA.Selenium.ITargetLocator.ActiveElement">
   ActiveElement()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L96"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Switches to the element that currently has the focus, or the body element
@@ -160,7 +160,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_Alert" data-uid="OpenQA.Selenium.ITargetLocator.Alert">
   Alert()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Switches to the currently active modal dialog for this particular driver instance.</p>
@@ -193,7 +193,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_DefaultContent" data-uid="OpenQA.Selenium.ITargetLocator.DefaultContent">
   DefaultContent()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Selects either the first frame on the page or the main document when a page contains iFrames.</p>
@@ -226,7 +226,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_Frame_OpenQA_Selenium_IWebElement_" data-uid="OpenQA.Selenium.ITargetLocator.Frame(OpenQA.Selenium.IWebElement)">
   Frame(IWebElement)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Select a frame using its previously located <a class="xref" href="OpenQA.Selenium.IWebElement.html">IWebElement</a></p>
@@ -266,6 +266,12 @@ with the focus, or the body element if no element with focus can be detected.</p
     <dt><a class="xref" href="OpenQA.Selenium.StaleElementReferenceException.html">StaleElementReferenceException</a></dt>
     <dd><p>If the element is no longer valid.</p>
 </dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">frameElement</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p>If <code class="paramref">frameElement</code> cannot be converted to an <span class="xref">OpenQA.Selenium.Internal.IWebDriverObjectReference</span>.</p>
+</dd>
   </dl>
 
 
@@ -274,7 +280,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_Frame_System_Int32_" data-uid="OpenQA.Selenium.ITargetLocator.Frame(System.Int32)">
   Frame(int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Select a frame by its (zero-based) index.</p>
@@ -319,7 +325,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_Frame_System_String_" data-uid="OpenQA.Selenium.ITargetLocator.Frame(System.String)">
   Frame(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Select a frame by its name or ID.</p>
@@ -356,6 +362,9 @@ with the focus, or the body element if no element with focus can be detected.</p
     <dt><a class="xref" href="OpenQA.Selenium.NoSuchFrameException.html">NoSuchFrameException</a></dt>
     <dd><p>If the frame cannot be found.</p>
 </dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">frameName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
   </dl>
 
 
@@ -364,7 +373,7 @@ with the focus, or the body element if no element with focus can be detected.</p
 
   <h3 id="OpenQA_Selenium_ITargetLocator_NewWindow_OpenQA_Selenium_WindowType_" data-uid="OpenQA.Selenium.ITargetLocator.NewWindow(OpenQA.Selenium.WindowType)">
   NewWindow(WindowType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a new browser window and switches the focus for future commands
@@ -407,7 +416,7 @@ will be created of whatever type the driver does support.</p>
 
   <h3 id="OpenQA_Selenium_ITargetLocator_ParentFrame" data-uid="OpenQA.Selenium.ITargetLocator.ParentFrame">
   ParentFrame()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Select the parent frame of the currently selected frame.</p>
@@ -440,7 +449,7 @@ will be created of whatever type the driver does support.</p>
 
   <h3 id="OpenQA_Selenium_ITargetLocator_Window_System_String_" data-uid="OpenQA.Selenium.ITargetLocator.Window(System.String)">
   Window(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L71"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Switches the focus of future commands for this driver to the window with the given name.</p>
@@ -477,6 +486,9 @@ will be created of whatever type the driver does support.</p>
     <dt><a class="xref" href="OpenQA.Selenium.NoSuchWindowException.html">NoSuchWindowException</a></dt>
     <dd><p>If the window cannot be found.</p>
 </dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">windowName</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
   </dl>
 
 
@@ -485,7 +497,7 @@ will be created of whatever type the driver does support.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L25" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/ITargetLocator.cs/#L28" class="edit-link">Edit this page</a>
         </div>
 
 

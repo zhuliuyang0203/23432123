@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel" class="text-break">
-Class BoxModel  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class BoxModel  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class BoxModel  <a class="header-action link-secondary" title="View source" href
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_Border" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.Border">
   Border
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>border</p>
@@ -187,7 +187,7 @@ public double[] Border { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_Content" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.Content">
   Content
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>content</p>
@@ -220,7 +220,7 @@ public double[] Content { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_Height" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.Height">
   Height
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>height</p>
@@ -253,7 +253,7 @@ public long Height { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_Margin" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.Margin">
   Margin
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>margin</p>
@@ -319,7 +319,7 @@ public double[] Padding { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_ShapeOutside" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.ShapeOutside">
   ShapeOutside
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>shapeOutside</p>
@@ -329,7 +329,7 @@ public double[] Padding { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;shapeOutside&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public ShapeOutsideInfo ShapeOutside { get; set; }</code></pre>
+public ShapeOutsideInfo? ShapeOutside { get; set; }</code></pre>
   </div>
 
 
@@ -353,7 +353,7 @@ public ShapeOutsideInfo ShapeOutside { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOM_BoxModel_Width" data-uid="OpenQA.Selenium.DevTools.V132.DOM.BoxModel.Width">
   Width
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>width</p>
@@ -386,7 +386,7 @@ public long Width { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOM/BoxModel.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_LocateNodesResult" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesResult" class="text-break">
-Class LocateNodesResult  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L48"><i class="bi bi-code-slash"></i></a>
+Class LocateNodesResult  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,7 +101,7 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public record LocateNodesResult : IReadOnlyList&lt;RemoteValue.Node&gt;, IReadOnlyCollection&lt;RemoteValue.Node&gt;, IEnumerable&lt;RemoteValue.Node&gt;, IEnumerable, IEquatable&lt;LocateNodesResult&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public record LocateNodesResult : IReadOnlyList&lt;NodeRemoteValue&gt;, IReadOnlyCollection&lt;NodeRemoteValue&gt;, IEnumerable&lt;NodeRemoteValue&gt;, IEnumerable, IEquatable&lt;LocateNodesResult&gt;</code></pre>
   </div>
 
 
@@ -118,9 +118,9 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.html">RemoteValue</a>.<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.Node.html">Node</a>&gt;</div>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.html">RemoteValue</a>.<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.Node.html">Node</a>&gt;</div>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.html">RemoteValue</a>.<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.Node.html">Node</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.NodeRemoteValue.html">NodeRemoteValue</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.NodeRemoteValue.html">NodeRemoteValue</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.NodeRemoteValue.html">NodeRemoteValue</a>&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesResult.html">LocateNodesResult</a>&gt;</div>
     </dd>
@@ -166,7 +166,7 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_LocateNodesResult_Count" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesResult.Count">
   Count
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L51"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -197,14 +197,14 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_LocateNodesResult_Item_System_Int32_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesResult.Item(System.Int32)">
   this[int]
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public RemoteValue.Node this[int index] { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public NodeRemoteValue this[int index] { get; }</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -218,7 +218,7 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.html">RemoteValue</a>.<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.Node.html">Node</a></dt>
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.NodeRemoteValue.html">NodeRemoteValue</a></dt>
     <dd></dd>
   </dl>
 
@@ -237,20 +237,20 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_LocateNodesResult_GetEnumerator" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesResult.GetEnumerator">
   GetEnumerator()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerator&lt;RemoteValue.Node&gt; GetEnumerator()</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;NodeRemoteValue&gt; GetEnumerator()</code></pre>
   </div>
 
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.html">RemoteValue</a>.<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemoteValue.Node.html">Node</a>&gt;</dt>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.NodeRemoteValue.html">NodeRemoteValue</a>&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -268,7 +268,7 @@ Class LocateNodesResult  <a class="header-action link-secondary" title="View sou
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L48" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/LocateNodesCommand.cs/#L40" class="edit-link">Edit this page</a>
         </div>
 
 

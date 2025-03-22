@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Script_Target" data-uid="OpenQA.Selenium.BiDi.Modules.Script.Target" class="text-break">
-Class Target  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/Target.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class Target  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/Target.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,8 +101,8 @@ Class Target  <a class="header-action link-secondary" title="View source" href="
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[JsonDerivedType(typeof(Target.Realm))]
-[JsonDerivedType(typeof(Target.Context))]
+    <pre><code class="lang-csharp hljs">[JsonDerivedType(typeof(RealmTarget))]
+[JsonDerivedType(typeof(ContextTarget))]
 public abstract record Target : IEquatable&lt;Target&gt;</code></pre>
   </div>
 
@@ -127,8 +127,8 @@ public abstract record Target : IEquatable&lt;Target&gt;</code></pre>
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.Target.Context.html">Target.Context</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.Target.Realm.html">Target.Realm</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.ContextTarget.html">ContextTarget</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RealmTarget.html">RealmTarget</a></div>
     </dd>
   </dl>
 
@@ -167,7 +167,7 @@ public abstract record Target : IEquatable&lt;Target&gt;</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/Target.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/Target.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

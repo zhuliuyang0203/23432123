@@ -161,7 +161,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs__ctor_OpenQA_Selenium_HttpResponseData_" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.#ctor(OpenQA.Selenium.HttpResponseData)">
   NetworkResponseReceivedEventArgs(HttpResponseData)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.NetworkResponseReceivedEventArgs.html">NetworkResponseReceivedEventArgs</a> class.</p>
@@ -198,7 +198,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_RequestId" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.RequestId">
   RequestId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the request ID of the network request that generated this response.</p>
@@ -206,7 +206,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string RequestId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? RequestId { get; }</code></pre>
   </div>
 
 
@@ -230,7 +230,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseBody" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseBody">
   ResponseBody
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L70"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the body of the network response.</p>
@@ -238,7 +238,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ResponseBody { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? ResponseBody { get; }</code></pre>
   </div>
 
 
@@ -265,15 +265,15 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseContent" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseContent">
   ResponseContent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L75"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the content of the network response.</p>
+  <div class="markdown level1 summary"><p>Gets the content of the network response, if any.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public HttpResponseContent ResponseContent { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public HttpResponseContent? ResponseContent { get; }</code></pre>
   </div>
 
 
@@ -297,7 +297,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseHeaders" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseHeaders">
   ResponseHeaders
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L85"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the headers associated with this network response.</p>
@@ -329,7 +329,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseResourceType" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseResourceType">
   ResponseResourceType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the type of resource of the network response.</p>
@@ -337,7 +337,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ResponseResourceType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? ResponseResourceType { get; }</code></pre>
   </div>
 
 
@@ -361,7 +361,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseStatusCode" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseStatusCode">
   ResponseStatusCode
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the HTTP status code of the network response.</p>
@@ -393,7 +393,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
 
   <h3 id="OpenQA_Selenium_NetworkResponseReceivedEventArgs_ResponseUrl" data-uid="OpenQA.Selenium.NetworkResponseReceivedEventArgs.ResponseUrl">
   ResponseUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/NetworkResponseReceivedEventArgs.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the URL of the network response.</p>
@@ -401,7 +401,7 @@ Class NetworkResponseReceivedEventArgs  <a class="header-action link-secondary" 
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ResponseUrl { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? ResponseUrl { get; }</code></pre>
   </div>
 
 

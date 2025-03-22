@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame" class="text-break">
-Class CallFrame  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class CallFrame  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class CallFrame  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_CallFrameId" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.CallFrameId">
   CallFrameId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>callFrameId</p>
@@ -187,7 +187,7 @@ public string CallFrameId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_CanBeRestarted" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.CanBeRestarted">
   CanBeRestarted
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>canBeRestarted</p>
@@ -221,7 +221,7 @@ public bool? CanBeRestarted { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_FunctionLocation" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.FunctionLocation">
   FunctionLocation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>functionLocation</p>
@@ -231,7 +231,7 @@ public bool? CanBeRestarted { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;functionLocation&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public Location FunctionLocation { get; set; }</code></pre>
+public Location? FunctionLocation { get; set; }</code></pre>
   </div>
 
 
@@ -288,7 +288,7 @@ public string FunctionName { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_Location" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.Location">
   Location
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>location</p>
@@ -321,7 +321,7 @@ public Location Location { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_ReturnValue" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.ReturnValue">
   ReturnValue
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>returnValue</p>
@@ -331,7 +331,7 @@ public Location Location { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;returnValue&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RemoteObject ReturnValue { get; set; }</code></pre>
+public RemoteObject? ReturnValue { get; set; }</code></pre>
   </div>
 
 
@@ -355,7 +355,7 @@ public RemoteObject ReturnValue { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_ScopeChain" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.ScopeChain">
   ScopeChain
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>scopeChain</p>
@@ -388,7 +388,7 @@ public Scope[] ScopeChain { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_This" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.This">
   This
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>this</p>
@@ -421,7 +421,7 @@ public RemoteObject This { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Debugger_CallFrame_Url" data-uid="OpenQA.Selenium.DevTools.V132.Debugger.CallFrame.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>url</p>
@@ -454,7 +454,7 @@ public string Url { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Debugger/CallFrame.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

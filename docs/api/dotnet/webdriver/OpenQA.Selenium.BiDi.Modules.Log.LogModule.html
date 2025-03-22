@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule" class="text-break">
-Class LogModule  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
+Class LogModule  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class LogModule  <a class="header-action link-secondary" title="View source" hre
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule__ctor_OpenQA_Selenium_BiDi_Communication_Broker_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.#ctor(OpenQA.Selenium.BiDi.Communication.Broker)">
   LogModule(Broker)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -187,21 +187,21 @@ Class LogModule  <a class="header-action link-secondary" title="View source" hre
 
   <a id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_System_Action_OpenQA_Selenium_BiDi_Modules_Log_Entry__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync(System.Action{OpenQA.Selenium.BiDi.Modules.Log.Entry},OpenQA.Selenium.BiDi.SubscriptionOptions)">
-  OnEntryAddedAsync(Action&lt;Entry&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_System_Action_OpenQA_Selenium_BiDi_Modules_Log_LogEntry__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync(System.Action{OpenQA.Selenium.BiDi.Modules.Log.LogEntry},OpenQA.Selenium.BiDi.SubscriptionOptions)">
+  OnEntryAddedAsync(Action&lt;LogEntry&gt;, SubscriptionOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L33"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Subscription&gt; OnEntryAddedAsync(Action&lt;Entry&gt; handler, SubscriptionOptions? options = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;Subscription&gt; OnEntryAddedAsync(Action&lt;LogEntry&gt; handler, SubscriptionOptions? options = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>handler</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Log.Entry.html">Entry</a>&gt;</dt>
+    <dt><code>handler</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Log.LogEntry.html">LogEntry</a>&gt;</dt>
     <dd></dd>
     <dt><code>options</code> <a class="xref" href="OpenQA.Selenium.BiDi.SubscriptionOptions.html">SubscriptionOptions</a></dt>
     <dd></dd>
@@ -225,21 +225,21 @@ Class LogModule  <a class="header-action link-secondary" title="View source" hre
 
   <a id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_System_Func_OpenQA_Selenium_BiDi_Modules_Log_Entry_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync(System.Func{OpenQA.Selenium.BiDi.Modules.Log.Entry,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
-  OnEntryAddedAsync(Func&lt;Entry, Task&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Log_LogModule_OnEntryAddedAsync_System_Func_OpenQA_Selenium_BiDi_Modules_Log_LogEntry_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Log.LogModule.OnEntryAddedAsync(System.Func{OpenQA.Selenium.BiDi.Modules.Log.LogEntry,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
+  OnEntryAddedAsync(Func&lt;LogEntry, Task&gt;, SubscriptionOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Subscription&gt; OnEntryAddedAsync(Func&lt;Entry, Task&gt; handler, SubscriptionOptions? options = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;Subscription&gt; OnEntryAddedAsync(Func&lt;LogEntry, Task&gt; handler, SubscriptionOptions? options = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>handler</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Log.Entry.html">Entry</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
+    <dt><code>handler</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Log.LogEntry.html">LogEntry</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
     <dd></dd>
     <dt><code>options</code> <a class="xref" href="OpenQA.Selenium.BiDi.SubscriptionOptions.html">SubscriptionOptions</a></dt>
     <dd></dd>
@@ -265,7 +265,7 @@ Class LogModule  <a class="header-action link-secondary" title="View source" hre
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Log/LogModule.cs/#L26" class="edit-link">Edit this page</a>
         </div>
 
 

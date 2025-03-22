@@ -170,7 +170,7 @@ Class V132Target  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_V132_V132Target__ctor_OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.#ctor(OpenQA.Selenium.DevTools.V132.Target.TargetAdapter)">
   V132Target(TargetAdapter)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.V132.V132Target.html">V132Target</a> class.</p>
@@ -196,6 +196,12 @@ Class V132Target  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">adapter</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -207,7 +213,7 @@ Class V132Target  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="OpenQA_Selenium_DevTools_V132_V132Target_AttachToTarget_System_String_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.AttachToTarget(System.String)">
   AttachToTarget(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously attaches to a target.</p>
@@ -246,8 +252,8 @@ session ID established for commands to the target attached to.</p>
   <a id="OpenQA_Selenium_DevTools_V132_V132Target_DetachFromTarget_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.DetachFromTarget*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_V132Target_DetachFromTarget_System_String_System_String_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.DetachFromTarget(System.String,System.String)">
-  DetachFromTarget(string, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  DetachFromTarget(string?, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously detaches from a target.</p>
@@ -255,7 +261,7 @@ session ID established for commands to the target attached to.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Task DetachFromTarget(string sessionId = null, string targetId = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Task DetachFromTarget(string? sessionId = null, string? targetId = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -288,8 +294,8 @@ session ID established for commands to the target attached to.</p>
   <a id="OpenQA_Selenium_DevTools_V132_V132Target_GetTargets_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.GetTargets*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_V132Target_GetTargets_System_Object_" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.GetTargets(System.Object)">
-  GetTargets(object)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  GetTargets(object?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously gets the targets available for this session.</p>
@@ -297,7 +303,7 @@ session ID established for commands to the target attached to.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Task&lt;ReadOnlyCollection&lt;TargetInfo&gt;&gt; GetTargets(object settings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Task&lt;ReadOnlyCollection&lt;TargetInfo&gt;&gt; GetTargets(object? settings = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -329,7 +335,7 @@ targets available for this session.</p>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_V132Target_SetAutoAttach" data-uid="OpenQA.Selenium.DevTools.V132.V132Target.SetAutoAttach">
   SetAutoAttach()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/v132/V132Target.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously sets the DevTools Protocol connection to automatically attach to new targets.</p>

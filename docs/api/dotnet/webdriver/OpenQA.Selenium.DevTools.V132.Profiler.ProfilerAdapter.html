@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter" class="text-break">
-Class ProfilerAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class ProfilerAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   ProfilerAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the ProfilerAdapter class.</p>
@@ -183,6 +183,12 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -229,8 +235,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Disable_OpenQA_Selenium_DevTools_V132_Profiler_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Disable(OpenQA.Selenium.DevTools.V132.Profiler.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -238,7 +244,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Enable_OpenQA_Selenium_DevTools_V132_Profiler_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Enable(OpenQA.Selenium.DevTools.V132.Profiler.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -281,7 +287,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_GetBestEffortCoverage_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.GetBestEffortCoverage*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_GetBestEffortCoverage_OpenQA_Selenium_DevTools_V132_Profiler_GetBestEffortCoverageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.GetBestEffortCoverage(OpenQA.Selenium.DevTools.V132.Profiler.GetBestEffortCoverageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetBestEffortCoverage(GetBestEffortCoverageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  GetBestEffortCoverage(GetBestEffortCoverageCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getBestEffortCoverage</p>
@@ -324,7 +330,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetBestEffortCoverageCommandResponse&gt; GetBestEffortCoverage(GetBestEffortCoverageCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetBestEffortCoverageCommandResponse&gt; GetBestEffortCoverage(GetBestEffortCoverageCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_SetSamplingInterval_OpenQA_Selenium_DevTools_V132_Profiler_SetSamplingIntervalCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.SetSamplingInterval(OpenQA.Selenium.DevTools.V132.Profiler.SetSamplingIntervalCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetSamplingInterval(SetSamplingIntervalCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setSamplingInterval</p>
@@ -367,7 +373,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetSamplingIntervalCommandResponse&gt; SetSamplingInterval(SetSamplingIntervalCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetSamplingIntervalCommandResponse?&gt; SetSamplingInterval(SetSamplingIntervalCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -401,8 +407,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Start_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Start*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Start_OpenQA_Selenium_DevTools_V132_Profiler_StartCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Start(OpenQA.Selenium.DevTools.V132.Profiler.StartCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Start(StartCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  Start(StartCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L92"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>start</p>
@@ -410,7 +416,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartCommandResponse&gt; Start(StartCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartCommandResponse?&gt; Start(StartCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -445,7 +451,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_StartPreciseCoverage_OpenQA_Selenium_DevTools_V132_Profiler_StartPreciseCoverageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.StartPreciseCoverage(OpenQA.Selenium.DevTools.V132.Profiler.StartPreciseCoverageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StartPreciseCoverage(StartPreciseCoverageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L100"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>startPreciseCoverage</p>
@@ -487,8 +493,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Stop_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Stop*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_Stop_OpenQA_Selenium_DevTools_V132_Profiler_StopCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.Stop(OpenQA.Selenium.DevTools.V132.Profiler.StopCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Stop(StopCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  Stop(StopCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stop</p>
@@ -496,7 +502,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopCommandResponse&gt; Stop(StopCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopCommandResponse&gt; Stop(StopCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -530,8 +536,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_StopPreciseCoverage_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.StopPreciseCoverage*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_StopPreciseCoverage_OpenQA_Selenium_DevTools_V132_Profiler_StopPreciseCoverageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.StopPreciseCoverage(OpenQA.Selenium.DevTools.V132.Profiler.StopPreciseCoverageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  StopPreciseCoverage(StopPreciseCoverageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  StopPreciseCoverage(StopPreciseCoverageCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L116"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stopPreciseCoverage</p>
@@ -539,7 +545,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopPreciseCoverageCommandResponse&gt; StopPreciseCoverage(StopPreciseCoverageCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopPreciseCoverageCommandResponse?&gt; StopPreciseCoverage(StopPreciseCoverageCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -573,8 +579,8 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <a id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_TakePreciseCoverage_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.TakePreciseCoverage*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_TakePreciseCoverage_OpenQA_Selenium_DevTools_V132_Profiler_TakePreciseCoverageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.TakePreciseCoverage(OpenQA.Selenium.DevTools.V132.Profiler.TakePreciseCoverageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  TakePreciseCoverage(TakePreciseCoverageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L112"><i class="bi bi-code-slash"></i></a>
+  TakePreciseCoverage(TakePreciseCoverageCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L124"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>takePreciseCoverage</p>
@@ -582,7 +588,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TakePreciseCoverageCommandResponse&gt; TakePreciseCoverage(TakePreciseCoverageCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TakePreciseCoverageCommandResponse&gt; TakePreciseCoverage(TakePreciseCoverageCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -628,7 +634,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleProfileFinishedEventArgs&gt; ConsoleProfileFinished</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleProfileFinishedEventArgs&gt;? ConsoleProfileFinished</code></pre>
   </div>
 
 
@@ -651,7 +657,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_ConsoleProfileStarted" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.ConsoleProfileStarted">
   ConsoleProfileStarted
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>consoleProfileStarted</p>
@@ -659,7 +665,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleProfileStartedEventArgs&gt; ConsoleProfileStarted</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConsoleProfileStartedEventArgs&gt;? ConsoleProfileStarted</code></pre>
   </div>
 
 
@@ -682,7 +688,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Profiler_ProfilerAdapter_PreciseCoverageDeltaUpdate" data-uid="OpenQA.Selenium.DevTools.V132.Profiler.ProfilerAdapter.PreciseCoverageDeltaUpdate">
   PreciseCoverageDeltaUpdate
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>preciseCoverageDeltaUpdate</p>
@@ -690,7 +696,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;PreciseCoverageDeltaUpdateEventArgs&gt; PreciseCoverageDeltaUpdate</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;PreciseCoverageDeltaUpdateEventArgs&gt;? PreciseCoverageDeltaUpdate</code></pre>
   </div>
 
 
@@ -714,7 +720,7 @@ Class ProfilerAdapter  <a class="header-action link-secondary" title="View sourc
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Profiler/ProfilerAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

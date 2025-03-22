@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class ConsoleLogHandler ">
       
-      <meta name="description" content="Represents a log handler that writes log events to the console.">
+      <meta name="description" content="Represents a log handler that writes log events to the given text writer.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_Internal_Logging_ConsoleLogHandler" data-uid="OpenQA.Selenium.Internal.Logging.ConsoleLogHandler" class="text-break">
-Class ConsoleLogHandler  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L29"><i class="bi bi-code-slash"></i></a>
+Class ConsoleLogHandler  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,12 +97,13 @@ Class ConsoleLogHandler  <a class="header-action link-secondary" title="View sou
   <dl><dt>Assembly</dt><dd>WebDriver.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Represents a log handler that writes log events to the console.</p>
+  <div class="markdown summary"><p>Represents a log handler that writes log events to the given text writer.</p>
 </div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ConsoleLogHandler : ILogHandler</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use TextWriterHandler instead, will be removed in v4.32&quot;)]
+public class ConsoleLogHandler : TextWriterHandler, ILogHandler</code></pre>
   </div>
 
 
@@ -112,6 +113,7 @@ Class ConsoleLogHandler  <a class="header-action link-secondary" title="View sou
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.Internal.Logging.TextWriterHandler.html">TextWriterHandler</a></div>
       <div><span class="xref">ConsoleLogHandler</span></div>
     </dd>
   </dl>
@@ -127,6 +129,9 @@ Class ConsoleLogHandler  <a class="header-action link-secondary" title="View sou
   <dl class="typelist inheritedMembers">
     <dt>Inherited Members</dt>
     <dd>
+    <div>
+      <a class="xref" href="OpenQA.Selenium.Internal.Logging.TextWriterHandler.html#OpenQA_Selenium_Internal_Logging_TextWriterHandler_Handle_OpenQA_Selenium_Internal_Logging_LogEvent_">TextWriterHandler.Handle(LogEvent)</a>
+    </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
     </div>
@@ -155,31 +160,25 @@ Class ConsoleLogHandler  <a class="header-action link-secondary" title="View sou
 
 
 
-  <h2 class="section" id="methods">Methods
+  <h2 class="section" id="constructors">Constructors
 </h2>
 
 
-  <a id="OpenQA_Selenium_Internal_Logging_ConsoleLogHandler_Handle_" data-uid="OpenQA.Selenium.Internal.Logging.ConsoleLogHandler.Handle*"></a>
+  <a id="OpenQA_Selenium_Internal_Logging_ConsoleLogHandler__ctor_" data-uid="OpenQA.Selenium.Internal.Logging.ConsoleLogHandler.#ctor*"></a>
 
-  <h3 id="OpenQA_Selenium_Internal_Logging_ConsoleLogHandler_Handle_OpenQA_Selenium_Internal_Logging_LogEvent_" data-uid="OpenQA.Selenium.Internal.Logging.ConsoleLogHandler.Handle(OpenQA.Selenium.Internal.Logging.LogEvent)">
-  Handle(LogEvent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_Internal_Logging_ConsoleLogHandler__ctor" data-uid="OpenQA.Selenium.Internal.Logging.ConsoleLogHandler.#ctor">
+  ConsoleLogHandler()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Handles a log event by writing it to the console.</p>
+  <div class="markdown level1 summary"><p>Represents a log handler that writes log events to the given text writer.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Handle(LogEvent logEvent)</code></pre>
+    <pre><code class="lang-csharp hljs">public ConsoleLogHandler()</code></pre>
   </div>
 
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>logEvent</code> <a class="xref" href="OpenQA.Selenium.Internal.Logging.LogEvent.html">LogEvent</a></dt>
-    <dd><p>The log event to handle.</p>
-</dd>
-  </dl>
 
 
 
@@ -196,7 +195,7 @@ Class ConsoleLogHandler  <a class="header-action link-secondary" title="View sou
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L29" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/Logging/ConsoleLogHandler.cs/#L27" class="edit-link">Edit this page</a>
         </div>
 
 

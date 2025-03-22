@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter" class="text-break">
-Class TargetAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class TargetAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   TargetAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the TargetAdapter class.</p>
@@ -183,6 +183,12 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_ActivateTarget_OpenQA_Selenium_DevTools_V132_Target_ActivateTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.ActivateTarget(OpenQA.Selenium.DevTools.V132.Target.ActivateTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ActivateTarget(ActivateTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>activateTarget</p>
@@ -238,7 +244,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ActivateTargetCommandResponse&gt; ActivateTarget(ActivateTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ActivateTargetCommandResponse?&gt; ActivateTarget(ActivateTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_AttachToBrowserTarget_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.AttachToBrowserTarget*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_AttachToBrowserTarget_OpenQA_Selenium_DevTools_V132_Target_AttachToBrowserTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.AttachToBrowserTarget(OpenQA.Selenium.DevTools.V132.Target.AttachToBrowserTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  AttachToBrowserTarget(AttachToBrowserTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  AttachToBrowserTarget(AttachToBrowserTargetCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L100"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>attachToBrowserTarget</p>
@@ -281,7 +287,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;AttachToBrowserTargetCommandResponse&gt; AttachToBrowserTarget(AttachToBrowserTargetCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;AttachToBrowserTargetCommandResponse&gt; AttachToBrowserTarget(AttachToBrowserTargetCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_AttachToTarget_OpenQA_Selenium_DevTools_V132_Target_AttachToTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.AttachToTarget(OpenQA.Selenium.DevTools.V132.Target.AttachToTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   AttachToTarget(AttachToTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L83"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L92"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>attachToTarget</p>
@@ -359,7 +365,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_AutoAttachRelated_OpenQA_Selenium_DevTools_V132_Target_AutoAttachRelatedCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.AutoAttachRelated(OpenQA.Selenium.DevTools.V132.Target.AutoAttachRelatedCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   AutoAttachRelated(AutoAttachRelatedCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L174"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L196"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>autoAttachRelated</p>
@@ -367,7 +373,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;AutoAttachRelatedCommandResponse&gt; AutoAttachRelated(AutoAttachRelatedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;AutoAttachRelatedCommandResponse?&gt; AutoAttachRelated(AutoAttachRelatedCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -402,7 +408,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_CloseTarget_OpenQA_Selenium_DevTools_V132_Target_CloseTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.CloseTarget(OpenQA.Selenium.DevTools.V132.Target.CloseTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CloseTarget(CloseTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L108"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>closeTarget</p>
@@ -445,7 +451,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_CreateBrowserContext_OpenQA_Selenium_DevTools_V132_Target_CreateBrowserContextCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.CreateBrowserContext(OpenQA.Selenium.DevTools.V132.Target.CreateBrowserContextCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CreateBrowserContext(CreateBrowserContextCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L111"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L124"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>createBrowserContext</p>
@@ -488,7 +494,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_CreateTarget_OpenQA_Selenium_DevTools_V132_Target_CreateTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.CreateTarget(OpenQA.Selenium.DevTools.V132.Target.CreateTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   CreateTarget(CreateTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L125"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L140"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>createTarget</p>
@@ -531,7 +537,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_DetachFromTarget_OpenQA_Selenium_DevTools_V132_Target_DetachFromTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.DetachFromTarget(OpenQA.Selenium.DevTools.V132.Target.DetachFromTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   DetachFromTarget(DetachFromTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L132"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L148"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>detachFromTarget</p>
@@ -539,7 +545,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DetachFromTargetCommandResponse&gt; DetachFromTarget(DetachFromTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DetachFromTargetCommandResponse?&gt; DetachFromTarget(DetachFromTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -574,7 +580,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_DisposeBrowserContext_OpenQA_Selenium_DevTools_V132_Target_DisposeBrowserContextCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.DisposeBrowserContext(OpenQA.Selenium.DevTools.V132.Target.DisposeBrowserContextCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   DisposeBrowserContext(DisposeBrowserContextCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L156"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disposeBrowserContext</p>
@@ -582,7 +588,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisposeBrowserContextCommandResponse&gt; DisposeBrowserContext(DisposeBrowserContextCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisposeBrowserContextCommandResponse?&gt; DisposeBrowserContext(DisposeBrowserContextCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -617,7 +623,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_ExposeDevToolsProtocol_OpenQA_Selenium_DevTools_V132_Target_ExposeDevToolsProtocolCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.ExposeDevToolsProtocol(OpenQA.Selenium.DevTools.V132.Target.ExposeDevToolsProtocolCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ExposeDevToolsProtocol(ExposeDevToolsProtocolCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L116"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>exposeDevToolsProtocol</p>
@@ -625,7 +631,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ExposeDevToolsProtocolCommandResponse&gt; ExposeDevToolsProtocol(ExposeDevToolsProtocolCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ExposeDevToolsProtocolCommandResponse?&gt; ExposeDevToolsProtocol(ExposeDevToolsProtocolCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -659,8 +665,8 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <a id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_GetBrowserContexts_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.GetBrowserContexts*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_GetBrowserContexts_OpenQA_Selenium_DevTools_V132_Target_GetBrowserContextsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.GetBrowserContexts(OpenQA.Selenium.DevTools.V132.Target.GetBrowserContextsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetBrowserContexts(GetBrowserContextsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  GetBrowserContexts(GetBrowserContextsCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L132"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getBrowserContexts</p>
@@ -668,7 +674,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetBrowserContextsCommandResponse&gt; GetBrowserContexts(GetBrowserContextsCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetBrowserContextsCommandResponse&gt; GetBrowserContexts(GetBrowserContextsCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -703,7 +709,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_GetTargetInfo_OpenQA_Selenium_DevTools_V132_Target_GetTargetInfoCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.GetTargetInfo(OpenQA.Selenium.DevTools.V132.Target.GetTargetInfoCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetTargetInfo(GetTargetInfoCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L146"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L164"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getTargetInfo</p>
@@ -746,7 +752,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_GetTargets_OpenQA_Selenium_DevTools_V132_Target_GetTargetsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.GetTargets(OpenQA.Selenium.DevTools.V132.Target.GetTargetsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetTargets(GetTargetsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L153"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L172"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getTargets</p>
@@ -789,7 +795,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_SendMessageToTarget_OpenQA_Selenium_DevTools_V132_Target_SendMessageToTargetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.SendMessageToTarget(OpenQA.Selenium.DevTools.V132.Target.SendMessageToTargetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SendMessageToTarget(SendMessageToTargetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L160"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L180"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sendMessageToTarget</p>
@@ -797,7 +803,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SendMessageToTargetCommandResponse&gt; SendMessageToTarget(SendMessageToTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SendMessageToTargetCommandResponse?&gt; SendMessageToTarget(SendMessageToTargetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -832,7 +838,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_SetAutoAttach_OpenQA_Selenium_DevTools_V132_Target_SetAutoAttachCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.SetAutoAttach(OpenQA.Selenium.DevTools.V132.Target.SetAutoAttachCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetAutoAttach(SetAutoAttachCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L167"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L188"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setAutoAttach</p>
@@ -840,7 +846,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetAutoAttachCommandResponse&gt; SetAutoAttach(SetAutoAttachCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetAutoAttachCommandResponse?&gt; SetAutoAttach(SetAutoAttachCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -875,7 +881,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_SetDiscoverTargets_OpenQA_Selenium_DevTools_V132_Target_SetDiscoverTargetsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.SetDiscoverTargets(OpenQA.Selenium.DevTools.V132.Target.SetDiscoverTargetsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetDiscoverTargets(SetDiscoverTargetsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L181"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L204"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setDiscoverTargets</p>
@@ -883,7 +889,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetDiscoverTargetsCommandResponse&gt; SetDiscoverTargets(SetDiscoverTargetsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetDiscoverTargetsCommandResponse?&gt; SetDiscoverTargets(SetDiscoverTargetsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -918,7 +924,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_SetRemoteLocations_OpenQA_Selenium_DevTools_V132_Target_SetRemoteLocationsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.SetRemoteLocations(OpenQA.Selenium.DevTools.V132.Target.SetRemoteLocationsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetRemoteLocations(SetRemoteLocationsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L188"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L212"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setRemoteLocations</p>
@@ -926,7 +932,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetRemoteLocationsCommandResponse&gt; SetRemoteLocations(SetRemoteLocationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetRemoteLocationsCommandResponse?&gt; SetRemoteLocations(SetRemoteLocationsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -972,7 +978,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttachedToTargetEventArgs&gt; AttachedToTarget</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttachedToTargetEventArgs&gt;? AttachedToTarget</code></pre>
   </div>
 
 
@@ -995,7 +1001,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_DetachedFromTarget" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.DetachedFromTarget">
   DetachedFromTarget
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>detachedFromTarget</p>
@@ -1003,7 +1009,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DetachedFromTargetEventArgs&gt; DetachedFromTarget</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DetachedFromTargetEventArgs&gt;? DetachedFromTarget</code></pre>
   </div>
 
 
@@ -1026,7 +1032,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_ReceivedMessageFromTarget" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.ReceivedMessageFromTarget">
   ReceivedMessageFromTarget
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>receivedMessageFromTarget</p>
@@ -1034,7 +1040,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ReceivedMessageFromTargetEventArgs&gt; ReceivedMessageFromTarget</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ReceivedMessageFromTargetEventArgs&gt;? ReceivedMessageFromTarget</code></pre>
   </div>
 
 
@@ -1057,7 +1063,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_TargetCrashed" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.TargetCrashed">
   TargetCrashed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetCrashed</p>
@@ -1065,7 +1071,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCrashedEventArgs&gt; TargetCrashed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCrashedEventArgs&gt;? TargetCrashed</code></pre>
   </div>
 
 
@@ -1088,7 +1094,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_TargetCreated" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.TargetCreated">
   TargetCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetCreated</p>
@@ -1096,7 +1102,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCreatedEventArgs&gt; TargetCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetCreatedEventArgs&gt;? TargetCreated</code></pre>
   </div>
 
 
@@ -1119,7 +1125,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_TargetDestroyed" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.TargetDestroyed">
   TargetDestroyed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetDestroyed</p>
@@ -1127,7 +1133,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetDestroyedEventArgs&gt; TargetDestroyed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetDestroyedEventArgs&gt;? TargetDestroyed</code></pre>
   </div>
 
 
@@ -1150,7 +1156,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Target_TargetAdapter_TargetInfoChanged" data-uid="OpenQA.Selenium.DevTools.V132.Target.TargetAdapter.TargetInfoChanged">
   TargetInfoChanged
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>targetInfoChanged</p>
@@ -1158,7 +1164,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetInfoChangedEventArgs&gt; TargetInfoChanged</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;TargetInfoChangedEventArgs&gt;? TargetInfoChanged</code></pre>
   </div>
 
 
@@ -1182,7 +1188,7 @@ Class TargetAdapter  <a class="header-action link-secondary" title="View source"
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Target/TargetAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

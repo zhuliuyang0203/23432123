@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener" class="text-break">
-Class EventListener  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class EventListener  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class EventListener  <a class="header-action link-secondary" title="View source"
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_BackendNodeId" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.BackendNodeId">
   BackendNodeId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>backendNodeId</p>
@@ -188,7 +188,7 @@ public long? BackendNodeId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_ColumnNumber" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.ColumnNumber">
   ColumnNumber
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>columnNumber</p>
@@ -221,7 +221,7 @@ public long ColumnNumber { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_Handler" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.Handler">
   Handler
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>handler</p>
@@ -231,7 +231,7 @@ public long ColumnNumber { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;handler&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RemoteObject Handler { get; set; }</code></pre>
+public RemoteObject? Handler { get; set; }</code></pre>
   </div>
 
 
@@ -255,7 +255,7 @@ public RemoteObject Handler { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_LineNumber" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.LineNumber">
   LineNumber
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>lineNumber</p>
@@ -288,7 +288,7 @@ public long LineNumber { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_Once" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.Once">
   Once
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>once</p>
@@ -321,7 +321,7 @@ public bool Once { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_OriginalHandler" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.OriginalHandler">
   OriginalHandler
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>originalHandler</p>
@@ -331,7 +331,7 @@ public bool Once { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;originalHandler&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public RemoteObject OriginalHandler { get; set; }</code></pre>
+public RemoteObject? OriginalHandler { get; set; }</code></pre>
   </div>
 
 
@@ -355,7 +355,7 @@ public RemoteObject OriginalHandler { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_Passive" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.Passive">
   Passive
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>passive</p>
@@ -388,7 +388,7 @@ public bool Passive { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_ScriptId" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.ScriptId">
   ScriptId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>scriptId</p>
@@ -421,7 +421,7 @@ public string ScriptId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_DOMDebugger_EventListener_Type" data-uid="OpenQA.Selenium.DevTools.V132.DOMDebugger.EventListener.Type">
   Type
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>type</p>
@@ -487,7 +487,7 @@ public bool UseCapture { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/DOMDebugger/EventListener.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

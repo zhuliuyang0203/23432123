@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter" class="text-break">
-Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   HeapProfilerAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the HeapProfilerAdapter class.</p>
@@ -183,6 +183,12 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_AddInspectedHeapObject_OpenQA_Selenium_DevTools_V132_HeapProfiler_AddInspectedHeapObjectCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.AddInspectedHeapObject(OpenQA.Selenium.DevTools.V132.HeapProfiler.AddInspectedHeapObjectCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   AddInspectedHeapObject(AddInspectedHeapObjectCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L66"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>addInspectedHeapObject</p>
@@ -238,7 +244,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;AddInspectedHeapObjectCommandResponse&gt; AddInspectedHeapObject(AddInspectedHeapObjectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;AddInspectedHeapObjectCommandResponse?&gt; AddInspectedHeapObject(AddInspectedHeapObjectCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -272,8 +278,8 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <a id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_CollectGarbage_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.CollectGarbage*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_CollectGarbage_OpenQA_Selenium_DevTools_V132_HeapProfiler_CollectGarbageCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.CollectGarbage(OpenQA.Selenium.DevTools.V132.HeapProfiler.CollectGarbageCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  CollectGarbage(CollectGarbageCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  CollectGarbage(CollectGarbageCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>collectGarbage</p>
@@ -281,7 +287,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;CollectGarbageCommandResponse&gt; CollectGarbage(CollectGarbageCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;CollectGarbageCommandResponse?&gt; CollectGarbage(CollectGarbageCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -315,8 +321,8 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <a id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_Disable_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.Disable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_Disable_OpenQA_Selenium_DevTools_V132_HeapProfiler_DisableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.Disable(OpenQA.Selenium.DevTools.V132.HeapProfiler.DisableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Disable(DisableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  Disable(DisableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>disable</p>
@@ -324,7 +330,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse&gt; Disable(DisableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DisableCommandResponse?&gt; Disable(DisableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -358,8 +364,8 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <a id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_Enable_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.Enable*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_Enable_OpenQA_Selenium_DevTools_V132_HeapProfiler_EnableCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.Enable(OpenQA.Selenium.DevTools.V132.HeapProfiler.EnableCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  Enable(EnableCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  Enable(EnableCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L96"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enable</p>
@@ -367,7 +373,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse&gt; Enable(EnableCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EnableCommandResponse?&gt; Enable(EnableCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -402,7 +408,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_GetHeapObjectId_OpenQA_Selenium_DevTools_V132_HeapProfiler_GetHeapObjectIdCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.GetHeapObjectId(OpenQA.Selenium.DevTools.V132.HeapProfiler.GetHeapObjectIdCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetHeapObjectId(GetHeapObjectIdCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L104"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getHeapObjectId</p>
@@ -445,7 +451,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_GetObjectByHeapObjectId_OpenQA_Selenium_DevTools_V132_HeapProfiler_GetObjectByHeapObjectIdCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.GetObjectByHeapObjectId(OpenQA.Selenium.DevTools.V132.HeapProfiler.GetObjectByHeapObjectIdCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetObjectByHeapObjectId(GetObjectByHeapObjectIdCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L112"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getObjectByHeapObjectId</p>
@@ -487,8 +493,8 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <a id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_GetSamplingProfile_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.GetSamplingProfile*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_GetSamplingProfile_OpenQA_Selenium_DevTools_V132_HeapProfiler_GetSamplingProfileCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.GetSamplingProfile(OpenQA.Selenium.DevTools.V132.HeapProfiler.GetSamplingProfileCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetSamplingProfile(GetSamplingProfileCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  GetSamplingProfile(GetSamplingProfileCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L120"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getSamplingProfile</p>
@@ -496,7 +502,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetSamplingProfileCommandResponse&gt; GetSamplingProfile(GetSamplingProfileCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetSamplingProfileCommandResponse&gt; GetSamplingProfile(GetSamplingProfileCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_StartSampling_OpenQA_Selenium_DevTools_V132_HeapProfiler_StartSamplingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.StartSampling(OpenQA.Selenium.DevTools.V132.HeapProfiler.StartSamplingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StartSampling(StartSamplingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L128"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>startSampling</p>
@@ -539,7 +545,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartSamplingCommandResponse&gt; StartSampling(StartSamplingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartSamplingCommandResponse?&gt; StartSampling(StartSamplingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -574,7 +580,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_StartTrackingHeapObjects_OpenQA_Selenium_DevTools_V132_HeapProfiler_StartTrackingHeapObjectsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.StartTrackingHeapObjects(OpenQA.Selenium.DevTools.V132.HeapProfiler.StartTrackingHeapObjectsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StartTrackingHeapObjects(StartTrackingHeapObjectsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L136"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>startTrackingHeapObjects</p>
@@ -582,7 +588,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StartTrackingHeapObjectsCommandResponse&gt; StartTrackingHeapObjects(StartTrackingHeapObjectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StartTrackingHeapObjectsCommandResponse?&gt; StartTrackingHeapObjects(StartTrackingHeapObjectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -616,8 +622,8 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <a id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_StopSampling_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.StopSampling*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_StopSampling_OpenQA_Selenium_DevTools_V132_HeapProfiler_StopSamplingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.StopSampling(OpenQA.Selenium.DevTools.V132.HeapProfiler.StopSamplingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  StopSampling(StopSamplingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L129"><i class="bi bi-code-slash"></i></a>
+  StopSampling(StopSamplingCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L144"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stopSampling</p>
@@ -625,7 +631,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopSamplingCommandResponse&gt; StopSampling(StopSamplingCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopSamplingCommandResponse&gt; StopSampling(StopSamplingCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -660,7 +666,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_StopTrackingHeapObjects_OpenQA_Selenium_DevTools_V132_HeapProfiler_StopTrackingHeapObjectsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.StopTrackingHeapObjects(OpenQA.Selenium.DevTools.V132.HeapProfiler.StopTrackingHeapObjectsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   StopTrackingHeapObjects(StopTrackingHeapObjectsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L152"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>stopTrackingHeapObjects</p>
@@ -668,7 +674,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;StopTrackingHeapObjectsCommandResponse&gt; StopTrackingHeapObjects(StopTrackingHeapObjectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;StopTrackingHeapObjectsCommandResponse?&gt; StopTrackingHeapObjects(StopTrackingHeapObjectsCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -703,7 +709,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_TakeHeapSnapshot_OpenQA_Selenium_DevTools_V132_HeapProfiler_TakeHeapSnapshotCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.TakeHeapSnapshot(OpenQA.Selenium.DevTools.V132.HeapProfiler.TakeHeapSnapshotCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   TakeHeapSnapshot(TakeHeapSnapshotCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L143"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L160"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>takeHeapSnapshot</p>
@@ -711,7 +717,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TakeHeapSnapshotCommandResponse&gt; TakeHeapSnapshot(TakeHeapSnapshotCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TakeHeapSnapshotCommandResponse?&gt; TakeHeapSnapshot(TakeHeapSnapshotCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -757,7 +763,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AddHeapSnapshotChunkEventArgs&gt; AddHeapSnapshotChunk</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AddHeapSnapshotChunkEventArgs&gt;? AddHeapSnapshotChunk</code></pre>
   </div>
 
 
@@ -780,7 +786,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_HeapStatsUpdate" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.HeapStatsUpdate">
   HeapStatsUpdate
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>heapStatsUpdate</p>
@@ -788,7 +794,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;HeapStatsUpdateEventArgs&gt; HeapStatsUpdate</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;HeapStatsUpdateEventArgs&gt;? HeapStatsUpdate</code></pre>
   </div>
 
 
@@ -811,7 +817,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_LastSeenObjectId" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.LastSeenObjectId">
   LastSeenObjectId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>lastSeenObjectId</p>
@@ -819,7 +825,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LastSeenObjectIdEventArgs&gt; LastSeenObjectId</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;LastSeenObjectIdEventArgs&gt;? LastSeenObjectId</code></pre>
   </div>
 
 
@@ -842,7 +848,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_ReportHeapSnapshotProgress" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.ReportHeapSnapshotProgress">
   ReportHeapSnapshotProgress
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>reportHeapSnapshotProgress</p>
@@ -850,7 +856,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ReportHeapSnapshotProgressEventArgs&gt; ReportHeapSnapshotProgress</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ReportHeapSnapshotProgressEventArgs&gt;? ReportHeapSnapshotProgress</code></pre>
   </div>
 
 
@@ -873,7 +879,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 
   <h3 id="OpenQA_Selenium_DevTools_V132_HeapProfiler_HeapProfilerAdapter_ResetProfiles" data-uid="OpenQA.Selenium.DevTools.V132.HeapProfiler.HeapProfilerAdapter.ResetProfiles">
   ResetProfiles
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>resetProfiles</p>
@@ -881,7 +887,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ResetProfilesEventArgs&gt; ResetProfiles</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ResetProfilesEventArgs&gt;? ResetProfiles</code></pre>
   </div>
 
 
@@ -905,7 +911,7 @@ Class HeapProfilerAdapter  <a class="header-action link-secondary" title="View s
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/HeapProfiler/HeapProfilerAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 

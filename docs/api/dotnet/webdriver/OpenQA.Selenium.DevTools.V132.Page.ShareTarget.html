@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget" class="text-break">
-Class ShareTarget  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class ShareTarget  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -154,7 +154,7 @@ Class ShareTarget  <a class="header-action link-secondary" title="View source" h
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Action" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Action">
   Action
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>action</p>
@@ -187,7 +187,7 @@ public string Action { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Enctype" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Enctype">
   Enctype
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>enctype</p>
@@ -220,7 +220,7 @@ public string Enctype { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Files" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Files">
   Files
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>files</p>
@@ -230,7 +230,7 @@ public string Enctype { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;files&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public FileFilter[] Files { get; set; }</code></pre>
+public FileFilter[]? Files { get; set; }</code></pre>
   </div>
 
 
@@ -287,7 +287,7 @@ public string Method { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Text" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Text">
   Text
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>text</p>
@@ -297,7 +297,7 @@ public string Method { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;text&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Text { get; set; }</code></pre>
+public string? Text { get; set; }</code></pre>
   </div>
 
 
@@ -321,7 +321,7 @@ public string Text { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Title" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Title">
   Title
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>title</p>
@@ -331,7 +331,7 @@ public string Text { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;title&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Title { get; set; }</code></pre>
+public string? Title { get; set; }</code></pre>
   </div>
 
 
@@ -355,7 +355,7 @@ public string Title { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Page_ShareTarget_Url" data-uid="OpenQA.Selenium.DevTools.V132.Page.ShareTarget.Url">
   Url
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>url</p>
@@ -365,7 +365,7 @@ public string Title { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;url&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string Url { get; set; }</code></pre>
+public string? Url { get; set; }</code></pre>
   </div>
 
 
@@ -389,7 +389,7 @@ public string Url { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Page/ShareTarget.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs" class="text-break">
-Class UserPromptOpenedEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class UserPromptOpenedEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -170,16 +170,16 @@ Class UserPromptOpenedEventArgs  <a class="header-action link-secondary" title="
 
   <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs__ctor_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.#ctor*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs__ctor_OpenQA_Selenium_BiDi_BiDi_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptType_System_String_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.#ctor(OpenQA.Selenium.BiDi.BiDi,OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptType,System.String)">
-  UserPromptOpenedEventArgs(BiDi, BrowsingContext, UserPromptType, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs__ctor_OpenQA_Selenium_BiDi_BiDi_OpenQA_Selenium_BiDi_Modules_BrowsingContext_BrowsingContext_OpenQA_Selenium_BiDi_Modules_Session_UserPromptHandlerType_OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptType_System_String_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.#ctor(OpenQA.Selenium.BiDi.BiDi,OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext,OpenQA.Selenium.BiDi.Modules.Session.UserPromptHandlerType,OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptType,System.String)">
+  UserPromptOpenedEventArgs(BiDi, BrowsingContext, UserPromptHandlerType, UserPromptType, string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, UserPromptType Type, string Message)</code></pre>
+    <pre><code class="lang-csharp hljs">public UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, UserPromptHandlerType Handler, UserPromptType Type, string Message)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -187,6 +187,8 @@ Class UserPromptOpenedEventArgs  <a class="header-action link-secondary" title="
     <dt><code>BiDi</code> <a class="xref" href="OpenQA.Selenium.BiDi.BiDi.html">BiDi</a></dt>
     <dd></dd>
     <dt><code>Context</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContext.html">BrowsingContext</a></dt>
+    <dd></dd>
+    <dt><code>Handler</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.UserPromptHandlerType.html">UserPromptHandlerType</a></dt>
     <dd></dd>
     <dt><code>Type</code> <a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptType.html">UserPromptType</a></dt>
     <dd></dd>
@@ -213,7 +215,7 @@ Class UserPromptOpenedEventArgs  <a class="header-action link-secondary" title="
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_DefaultValue" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.DefaultValue">
   DefaultValue
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -241,11 +243,42 @@ public string? DefaultValue { get; }</code></pre>
 
 
 
+  <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_Handler_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.Handler*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_Handler" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.Handler">
+  Handler
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UserPromptHandlerType Handler { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.UserPromptHandlerType.html">UserPromptHandlerType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_Message_" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.Message*"></a>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_Message" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.Message">
   Message
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -276,7 +309,7 @@ public string? DefaultValue { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_BrowsingContext_UserPromptOpenedEventArgs_Type" data-uid="OpenQA.Selenium.BiDi.Modules.BrowsingContext.UserPromptOpenedEventArgs.Type">
   Type
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -307,7 +340,7 @@ public string? DefaultValue { get; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/BrowsingContext/UserPromptOpenedEventArgs.cs/#L24" class="edit-link">Edit this page</a>
         </div>
 
 

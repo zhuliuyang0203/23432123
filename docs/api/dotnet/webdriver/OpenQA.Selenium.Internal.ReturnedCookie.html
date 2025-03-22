@@ -181,7 +181,7 @@ Class ReturnedCookie  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_Internal_ReturnedCookie__ctor_" data-uid="OpenQA.Selenium.Internal.ReturnedCookie.#ctor*"></a>
 
   <h3 id="OpenQA_Selenium_Internal_ReturnedCookie__ctor_System_String_System_String_System_String_System_String_System_Nullable_System_DateTime__System_Boolean_System_Boolean_" data-uid="OpenQA.Selenium.Internal.ReturnedCookie.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Boolean,System.Boolean)">
-  ReturnedCookie(string, string, string, string, DateTime?, bool, bool)
+  ReturnedCookie(string, string, string?, string?, DateTime?, bool, bool)
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/ReturnedCookie.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -191,7 +191,7 @@ value, domain, path and expiration date.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ReturnedCookie(string name, string value, string domain, string path, DateTime? expiry, bool isSecure, bool isHttpOnly)</code></pre>
+    <pre><code class="lang-csharp hljs">public ReturnedCookie(string name, string value, string? domain, string? path, DateTime? expiry, bool isSecure, bool isHttpOnly)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -243,7 +243,7 @@ or if it contains a semi-colon.</p>
   <a id="OpenQA_Selenium_Internal_ReturnedCookie__ctor_" data-uid="OpenQA.Selenium.Internal.ReturnedCookie.#ctor*"></a>
 
   <h3 id="OpenQA_Selenium_Internal_ReturnedCookie__ctor_System_String_System_String_System_String_System_String_System_Nullable_System_DateTime__System_Boolean_System_Boolean_System_String_" data-uid="OpenQA.Selenium.Internal.ReturnedCookie.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Boolean,System.Boolean,System.String)">
-  ReturnedCookie(string, string, string, string, DateTime?, bool, bool, string)
+  ReturnedCookie(string, string, string?, string?, DateTime?, bool, bool, string?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Internal/ReturnedCookie.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -253,7 +253,7 @@ value, domain, path and expiration date.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ReturnedCookie(string name, string value, string domain, string path, DateTime? expiry, bool isSecure, bool isHttpOnly, string sameSite)</code></pre>
+    <pre><code class="lang-csharp hljs">public ReturnedCookie(string name, string value, string? domain, string? path, DateTime? expiry, bool isSecure, bool isHttpOnly, string? sameSite)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>

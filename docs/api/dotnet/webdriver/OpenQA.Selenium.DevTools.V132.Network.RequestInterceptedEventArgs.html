@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs" class="text-break">
-Class RequestInterceptedEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L10"><i class="bi bi-code-slash"></i></a>
+Class RequestInterceptedEventArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -158,7 +158,7 @@ Class RequestInterceptedEventArgs  <a class="header-action link-secondary" title
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_AuthChallenge" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.AuthChallenge">
   AuthChallenge
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the authChallenge</p>
@@ -168,7 +168,7 @@ Class RequestInterceptedEventArgs  <a class="header-action link-secondary" title
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;authChallenge&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public AuthChallenge AuthChallenge { get; set; }</code></pre>
+public AuthChallenge? AuthChallenge { get; set; }</code></pre>
   </div>
 
 
@@ -192,7 +192,7 @@ public AuthChallenge AuthChallenge { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_FrameId" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.FrameId">
   FrameId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the frameId</p>
@@ -225,7 +225,7 @@ public string FrameId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_InterceptionId" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.InterceptionId">
   InterceptionId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the interceptionId</p>
@@ -258,7 +258,7 @@ public string InterceptionId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_IsDownload" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.IsDownload">
   IsDownload
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the isDownload</p>
@@ -292,7 +292,7 @@ public bool? IsDownload { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_IsNavigationRequest" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.IsNavigationRequest">
   IsNavigationRequest
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the isNavigationRequest</p>
@@ -325,7 +325,7 @@ public bool IsNavigationRequest { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_RedirectUrl" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.RedirectUrl">
   RedirectUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the redirectUrl</p>
@@ -335,7 +335,7 @@ public bool IsNavigationRequest { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;redirectUrl&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string RedirectUrl { get; set; }</code></pre>
+public string? RedirectUrl { get; set; }</code></pre>
   </div>
 
 
@@ -392,7 +392,7 @@ public Request Request { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_RequestId" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.RequestId">
   RequestId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L125"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L95"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the requestId</p>
@@ -402,7 +402,7 @@ public Request Request { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;requestId&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public string RequestId { get; set; }</code></pre>
+public string? RequestId { get; set; }</code></pre>
   </div>
 
 
@@ -426,7 +426,7 @@ public string RequestId { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_ResourceType" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.ResourceType">
   ResourceType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the resourceType</p>
@@ -459,7 +459,7 @@ public ResourceType ResourceType { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_ResponseErrorReason" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.ResponseErrorReason">
   ResponseErrorReason
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the responseErrorReason</p>
@@ -493,7 +493,7 @@ public ErrorReason? ResponseErrorReason { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_ResponseHeaders" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.ResponseHeaders">
   ResponseHeaders
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the responseHeaders</p>
@@ -503,7 +503,7 @@ public ErrorReason? ResponseErrorReason { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;responseHeaders&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-public Headers ResponseHeaders { get; set; }</code></pre>
+public Headers? ResponseHeaders { get; set; }</code></pre>
   </div>
 
 
@@ -527,7 +527,7 @@ public Headers ResponseHeaders { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Network_RequestInterceptedEventArgs_ResponseStatusCode" data-uid="OpenQA.Selenium.DevTools.V132.Network.RequestInterceptedEventArgs.ResponseStatusCode">
   ResponseStatusCode
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L81"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the responseStatusCode</p>
@@ -561,7 +561,7 @@ public long? ResponseStatusCode { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L10" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Network/RequestInterceptedEventArgs.cs/#L13" class="edit-link">Edit this page</a>
         </div>
 
 

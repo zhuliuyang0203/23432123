@@ -153,6 +153,49 @@ Class TargetAttachedEventArgs  <a class="header-action link-secondary" title="Vi
 
 
 
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="OpenQA_Selenium_DevTools_TargetAttachedEventArgs__ctor_" data-uid="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.#ctor*"></a>
+
+  <h3 id="OpenQA_Selenium_DevTools_TargetAttachedEventArgs__ctor_System_String_OpenQA_Selenium_DevTools_TargetInfo_System_Boolean_" data-uid="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.#ctor(System.String,OpenQA.Selenium.DevTools.TargetInfo,System.Boolean)">
+  TargetAttachedEventArgs(string, TargetInfo?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.html">TargetAttachedEventArgs</a> type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetAttachedEventArgs(string sessionId, TargetInfo? targetInfo, bool waitingForDebugger)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sessionId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ID of the session of the target attached.</p>
+</dd>
+    <dt><code>targetInfo</code> <a class="xref" href="OpenQA.Selenium.DevTools.TargetInfo.html">TargetInfo</a></dt>
+    <dd><p>The target which is attached.</p>
+</dd>
+    <dt><code>waitingForDebugger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If the target is waiting on the debugger. Target continues after invoking <code>Runtime.runIfWaitingForDebugger</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <h2 class="section" id="properties">Properties
 </h2>
 
@@ -161,7 +204,7 @@ Class TargetAttachedEventArgs  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_TargetAttachedEventArgs_SessionId" data-uid="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.SessionId">
   SessionId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ID of the session of the target attached.</p>
@@ -193,7 +236,7 @@ Class TargetAttachedEventArgs  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_TargetAttachedEventArgs_TargetInfo" data-uid="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.TargetInfo">
   TargetInfo
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the target which is attached.</p>
@@ -201,7 +244,7 @@ Class TargetAttachedEventArgs  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TargetInfo TargetInfo { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public TargetInfo? TargetInfo { get; }</code></pre>
   </div>
 
 
@@ -225,10 +268,10 @@ Class TargetAttachedEventArgs  <a class="header-action link-secondary" title="Vi
 
   <h3 id="OpenQA_Selenium_DevTools_TargetAttachedEventArgs_WaitingForDebugger" data-uid="OpenQA.Selenium.DevTools.TargetAttachedEventArgs.WaitingForDebugger">
   WaitingForDebugger
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/DevTools/TargetAttachedEventArgs.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets if the target is waiting on the debugger. Target continues after invoking Runtime.runIfWaitingForDebugger.</p>
+  <div class="markdown level1 summary"><p>Gets if the target is waiting on the debugger. Target continues after invoking <code>Runtime.runIfWaitingForDebugger</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

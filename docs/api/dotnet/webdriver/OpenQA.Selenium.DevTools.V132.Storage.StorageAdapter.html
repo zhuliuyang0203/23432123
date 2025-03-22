@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter" class="text-break">
-Class StorageAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class StorageAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,7 +157,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter__ctor_OpenQA_Selenium_DevTools_IDevToolsSession_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.#ctor(OpenQA.Selenium.DevTools.IDevToolsSession)">
   StorageAdapter(IDevToolsSession)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of the StorageAdapter class.</p>
@@ -183,6 +183,12 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">session</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
 
 
 
@@ -194,7 +200,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_Session" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.Session">
   Session
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the DevToolsSession associated with the adapter.</p>
@@ -230,7 +236,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ClearCookies_OpenQA_Selenium_DevTools_V132_Storage_ClearCookiesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ClearCookies(OpenQA.Selenium.DevTools.V132.Storage.ClearCookiesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearCookies(ClearCookiesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L154"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearCookies</p>
@@ -238,7 +244,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearCookiesCommandResponse&gt; ClearCookies(ClearCookiesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearCookiesCommandResponse?&gt; ClearCookies(ClearCookiesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -273,7 +279,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ClearDataForOrigin_OpenQA_Selenium_DevTools_V132_Storage_ClearDataForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ClearDataForOrigin(OpenQA.Selenium.DevTools.V132.Storage.ClearDataForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearDataForOrigin(ClearDataForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearDataForOrigin</p>
@@ -281,7 +287,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearDataForOriginCommandResponse&gt; ClearDataForOrigin(ClearDataForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearDataForOriginCommandResponse?&gt; ClearDataForOrigin(ClearDataForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -316,7 +322,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ClearDataForStorageKey_OpenQA_Selenium_DevTools_V132_Storage_ClearDataForStorageKeyCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ClearDataForStorageKey(OpenQA.Selenium.DevTools.V132.Storage.ClearDataForStorageKeyCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearDataForStorageKey(ClearDataForStorageKeyCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearDataForStorageKey</p>
@@ -324,7 +330,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearDataForStorageKeyCommandResponse&gt; ClearDataForStorageKey(ClearDataForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearDataForStorageKeyCommandResponse?&gt; ClearDataForStorageKey(ClearDataForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -359,7 +365,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ClearSharedStorageEntries_OpenQA_Selenium_DevTools_V132_Storage_ClearSharedStorageEntriesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ClearSharedStorageEntries(OpenQA.Selenium.DevTools.V132.Storage.ClearSharedStorageEntriesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearSharedStorageEntries(ClearSharedStorageEntriesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L276"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L314"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearSharedStorageEntries</p>
@@ -367,7 +373,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ClearSharedStorageEntriesCommandResponse&gt; ClearSharedStorageEntries(ClearSharedStorageEntriesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ClearSharedStorageEntriesCommandResponse?&gt; ClearSharedStorageEntries(ClearSharedStorageEntriesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -402,7 +408,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ClearTrustTokens_OpenQA_Selenium_DevTools_V132_Storage_ClearTrustTokensCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ClearTrustTokens(OpenQA.Selenium.DevTools.V132.Storage.ClearTrustTokensCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ClearTrustTokens(ClearTrustTokensCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L220"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L250"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>clearTrustTokens</p>
@@ -445,7 +451,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_DeleteSharedStorageEntry_OpenQA_Selenium_DevTools_V132_Storage_DeleteSharedStorageEntryCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.DeleteSharedStorageEntry(OpenQA.Selenium.DevTools.V132.Storage.DeleteSharedStorageEntryCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   DeleteSharedStorageEntry(DeleteSharedStorageEntryCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L269"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L306"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>deleteSharedStorageEntry</p>
@@ -453,7 +459,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DeleteSharedStorageEntryCommandResponse&gt; DeleteSharedStorageEntry(DeleteSharedStorageEntryCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DeleteSharedStorageEntryCommandResponse?&gt; DeleteSharedStorageEntry(DeleteSharedStorageEntryCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -488,7 +494,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_DeleteStorageBucket_OpenQA_Selenium_DevTools_V132_Storage_DeleteStorageBucketCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.DeleteStorageBucket(OpenQA.Selenium.DevTools.V132.Storage.DeleteStorageBucketCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   DeleteStorageBucket(DeleteStorageBucketCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L304"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L346"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>deleteStorageBucket</p>
@@ -496,7 +502,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;DeleteStorageBucketCommandResponse&gt; DeleteStorageBucket(DeleteStorageBucketCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;DeleteStorageBucketCommandResponse?&gt; DeleteStorageBucket(DeleteStorageBucketCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -531,7 +537,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetCookies_OpenQA_Selenium_DevTools_V132_Storage_GetCookiesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetCookies(OpenQA.Selenium.DevTools.V132.Storage.GetCookiesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetCookies(GetCookiesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L122"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getCookies</p>
@@ -574,7 +580,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetInterestGroupDetails_OpenQA_Selenium_DevTools_V132_Storage_GetInterestGroupDetailsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetInterestGroupDetails(OpenQA.Selenium.DevTools.V132.Storage.GetInterestGroupDetailsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetInterestGroupDetails(GetInterestGroupDetailsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L227"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L258"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getInterestGroupDetails</p>
@@ -616,8 +622,8 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetRelatedWebsiteSets_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetRelatedWebsiteSets*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetRelatedWebsiteSets_OpenQA_Selenium_DevTools_V132_Storage_GetRelatedWebsiteSetsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetRelatedWebsiteSets(OpenQA.Selenium.DevTools.V132.Storage.GetRelatedWebsiteSetsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetRelatedWebsiteSets(GetRelatedWebsiteSetsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L339"><i class="bi bi-code-slash"></i></a>
+  GetRelatedWebsiteSets(GetRelatedWebsiteSetsCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L386"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getRelatedWebsiteSets</p>
@@ -625,7 +631,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetRelatedWebsiteSetsCommandResponse&gt; GetRelatedWebsiteSets(GetRelatedWebsiteSetsCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetRelatedWebsiteSetsCommandResponse&gt; GetRelatedWebsiteSets(GetRelatedWebsiteSetsCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -660,7 +666,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetSharedStorageEntries_OpenQA_Selenium_DevTools_V132_Storage_GetSharedStorageEntriesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetSharedStorageEntries(OpenQA.Selenium.DevTools.V132.Storage.GetSharedStorageEntriesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetSharedStorageEntries(GetSharedStorageEntriesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L255"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L290"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getSharedStorageEntries</p>
@@ -703,7 +709,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetSharedStorageMetadata_OpenQA_Selenium_DevTools_V132_Storage_GetSharedStorageMetadataCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetSharedStorageMetadata(OpenQA.Selenium.DevTools.V132.Storage.GetSharedStorageMetadataCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetSharedStorageMetadata(GetSharedStorageMetadataCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L248"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L282"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getSharedStorageMetadata</p>
@@ -746,7 +752,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetStorageKeyForFrame_OpenQA_Selenium_DevTools_V132_Storage_GetStorageKeyForFrameCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetStorageKeyForFrame(OpenQA.Selenium.DevTools.V132.Storage.GetStorageKeyForFrameCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetStorageKeyForFrame(GetStorageKeyForFrameCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getStorageKeyForFrame</p>
@@ -788,8 +794,8 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetTrustTokens_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetTrustTokens*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetTrustTokens_OpenQA_Selenium_DevTools_V132_Storage_GetTrustTokensCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetTrustTokens(OpenQA.Selenium.DevTools.V132.Storage.GetTrustTokensCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  GetTrustTokens(GetTrustTokensCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L213"><i class="bi bi-code-slash"></i></a>
+  GetTrustTokens(GetTrustTokensCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L242"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getTrustTokens</p>
@@ -797,7 +803,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GetTrustTokensCommandResponse&gt; GetTrustTokens(GetTrustTokensCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;GetTrustTokensCommandResponse&gt; GetTrustTokens(GetTrustTokensCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -832,7 +838,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_GetUsageAndQuota_OpenQA_Selenium_DevTools_V132_Storage_GetUsageAndQuotaCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.GetUsageAndQuota(OpenQA.Selenium.DevTools.V132.Storage.GetUsageAndQuotaCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   GetUsageAndQuota(GetUsageAndQuotaCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L143"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L162"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>getUsageAndQuota</p>
@@ -875,7 +881,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_OverrideQuotaForOrigin_OpenQA_Selenium_DevTools_V132_Storage_OverrideQuotaForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.OverrideQuotaForOrigin(OpenQA.Selenium.DevTools.V132.Storage.OverrideQuotaForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   OverrideQuotaForOrigin(OverrideQuotaForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L150"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L170"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>overrideQuotaForOrigin</p>
@@ -883,7 +889,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;OverrideQuotaForOriginCommandResponse&gt; OverrideQuotaForOrigin(OverrideQuotaForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;OverrideQuotaForOriginCommandResponse?&gt; OverrideQuotaForOrigin(OverrideQuotaForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -918,7 +924,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_ResetSharedStorageBudget_OpenQA_Selenium_DevTools_V132_Storage_ResetSharedStorageBudgetCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.ResetSharedStorageBudget(OpenQA.Selenium.DevTools.V132.Storage.ResetSharedStorageBudgetCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   ResetSharedStorageBudget(ResetSharedStorageBudgetCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L283"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L322"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>resetSharedStorageBudget</p>
@@ -926,7 +932,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ResetSharedStorageBudgetCommandResponse&gt; ResetSharedStorageBudget(ResetSharedStorageBudgetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ResetSharedStorageBudgetCommandResponse?&gt; ResetSharedStorageBudget(ResetSharedStorageBudgetCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -960,8 +966,8 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_RunBounceTrackingMitigations_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.RunBounceTrackingMitigations*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_RunBounceTrackingMitigations_OpenQA_Selenium_DevTools_V132_Storage_RunBounceTrackingMitigationsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.RunBounceTrackingMitigations(OpenQA.Selenium.DevTools.V132.Storage.RunBounceTrackingMitigationsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  RunBounceTrackingMitigations(RunBounceTrackingMitigationsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L311"><i class="bi bi-code-slash"></i></a>
+  RunBounceTrackingMitigations(RunBounceTrackingMitigationsCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L354"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>runBounceTrackingMitigations</p>
@@ -969,7 +975,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;RunBounceTrackingMitigationsCommandResponse&gt; RunBounceTrackingMitigations(RunBounceTrackingMitigationsCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;RunBounceTrackingMitigationsCommandResponse&gt; RunBounceTrackingMitigations(RunBounceTrackingMitigationsCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1003,8 +1009,8 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <a id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SendPendingAttributionReports_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SendPendingAttributionReports*"></a>
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SendPendingAttributionReports_OpenQA_Selenium_DevTools_V132_Storage_SendPendingAttributionReportsCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SendPendingAttributionReports(OpenQA.Selenium.DevTools.V132.Storage.SendPendingAttributionReportsCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
-  SendPendingAttributionReports(SendPendingAttributionReportsCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L332"><i class="bi bi-code-slash"></i></a>
+  SendPendingAttributionReports(SendPendingAttributionReportsCommandSettings?, CancellationToken, int?, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L378"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sendPendingAttributionReports</p>
@@ -1012,7 +1018,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SendPendingAttributionReportsCommandResponse&gt; SendPendingAttributionReports(SendPendingAttributionReportsCommandSettings command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SendPendingAttributionReportsCommandResponse&gt; SendPendingAttributionReports(SendPendingAttributionReportsCommandSettings? command = null, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1047,7 +1053,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetAttributionReportingLocalTestingMode_OpenQA_Selenium_DevTools_V132_Storage_SetAttributionReportingLocalTestingModeCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetAttributionReportingLocalTestingMode(OpenQA.Selenium.DevTools.V132.Storage.SetAttributionReportingLocalTestingModeCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetAttributionReportingLocalTestingMode(SetAttributionReportingLocalTestingModeCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L318"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L362"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setAttributionReportingLocalTestingMode</p>
@@ -1055,7 +1061,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetAttributionReportingLocalTestingModeCommandResponse&gt; SetAttributionReportingLocalTestingMode(SetAttributionReportingLocalTestingModeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetAttributionReportingLocalTestingModeCommandResponse?&gt; SetAttributionReportingLocalTestingMode(SetAttributionReportingLocalTestingModeCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1090,7 +1096,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetAttributionReportingTracking_OpenQA_Selenium_DevTools_V132_Storage_SetAttributionReportingTrackingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetAttributionReportingTracking(OpenQA.Selenium.DevTools.V132.Storage.SetAttributionReportingTrackingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetAttributionReportingTracking(SetAttributionReportingTrackingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L325"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L370"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setAttributionReportingTracking</p>
@@ -1098,7 +1104,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetAttributionReportingTrackingCommandResponse&gt; SetAttributionReportingTracking(SetAttributionReportingTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetAttributionReportingTrackingCommandResponse?&gt; SetAttributionReportingTracking(SetAttributionReportingTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1133,7 +1139,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetCookies_OpenQA_Selenium_DevTools_V132_Storage_SetCookiesCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetCookies(OpenQA.Selenium.DevTools.V132.Storage.SetCookiesCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetCookies(SetCookiesCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L129"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L146"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setCookies</p>
@@ -1141,7 +1147,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetCookiesCommandResponse&gt; SetCookies(SetCookiesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetCookiesCommandResponse?&gt; SetCookies(SetCookiesCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1176,7 +1182,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetInterestGroupAuctionTracking_OpenQA_Selenium_DevTools_V132_Storage_SetInterestGroupAuctionTrackingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetInterestGroupAuctionTracking(OpenQA.Selenium.DevTools.V132.Storage.SetInterestGroupAuctionTrackingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetInterestGroupAuctionTracking(SetInterestGroupAuctionTrackingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L241"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L274"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setInterestGroupAuctionTracking</p>
@@ -1184,7 +1190,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetInterestGroupAuctionTrackingCommandResponse&gt; SetInterestGroupAuctionTracking(SetInterestGroupAuctionTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetInterestGroupAuctionTrackingCommandResponse?&gt; SetInterestGroupAuctionTracking(SetInterestGroupAuctionTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1219,7 +1225,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetInterestGroupTracking_OpenQA_Selenium_DevTools_V132_Storage_SetInterestGroupTrackingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetInterestGroupTracking(OpenQA.Selenium.DevTools.V132.Storage.SetInterestGroupTrackingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetInterestGroupTracking(SetInterestGroupTrackingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L234"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L266"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setInterestGroupTracking</p>
@@ -1227,7 +1233,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetInterestGroupTrackingCommandResponse&gt; SetInterestGroupTracking(SetInterestGroupTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetInterestGroupTrackingCommandResponse?&gt; SetInterestGroupTracking(SetInterestGroupTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1262,7 +1268,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetSharedStorageEntry_OpenQA_Selenium_DevTools_V132_Storage_SetSharedStorageEntryCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetSharedStorageEntry(OpenQA.Selenium.DevTools.V132.Storage.SetSharedStorageEntryCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetSharedStorageEntry(SetSharedStorageEntryCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L262"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L298"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setSharedStorageEntry</p>
@@ -1270,7 +1276,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetSharedStorageEntryCommandResponse&gt; SetSharedStorageEntry(SetSharedStorageEntryCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetSharedStorageEntryCommandResponse?&gt; SetSharedStorageEntry(SetSharedStorageEntryCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1305,7 +1311,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetSharedStorageTracking_OpenQA_Selenium_DevTools_V132_Storage_SetSharedStorageTrackingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetSharedStorageTracking(OpenQA.Selenium.DevTools.V132.Storage.SetSharedStorageTrackingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetSharedStorageTracking(SetSharedStorageTrackingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L290"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L330"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setSharedStorageTracking</p>
@@ -1313,7 +1319,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetSharedStorageTrackingCommandResponse&gt; SetSharedStorageTracking(SetSharedStorageTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetSharedStorageTrackingCommandResponse?&gt; SetSharedStorageTracking(SetSharedStorageTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1348,7 +1354,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SetStorageBucketTracking_OpenQA_Selenium_DevTools_V132_Storage_SetStorageBucketTrackingCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SetStorageBucketTracking(OpenQA.Selenium.DevTools.V132.Storage.SetStorageBucketTrackingCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   SetStorageBucketTracking(SetStorageBucketTrackingCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L297"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L338"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>setStorageBucketTracking</p>
@@ -1356,7 +1362,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;SetStorageBucketTrackingCommandResponse&gt; SetStorageBucketTracking(SetStorageBucketTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;SetStorageBucketTrackingCommandResponse?&gt; SetStorageBucketTracking(SetStorageBucketTrackingCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1391,7 +1397,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_TrackCacheStorageForOrigin_OpenQA_Selenium_DevTools_V132_Storage_TrackCacheStorageForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.TrackCacheStorageForOrigin(OpenQA.Selenium.DevTools.V132.Storage.TrackCacheStorageForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   TrackCacheStorageForOrigin(TrackCacheStorageForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L157"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L178"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>trackCacheStorageForOrigin</p>
@@ -1399,7 +1405,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TrackCacheStorageForOriginCommandResponse&gt; TrackCacheStorageForOrigin(TrackCacheStorageForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TrackCacheStorageForOriginCommandResponse?&gt; TrackCacheStorageForOrigin(TrackCacheStorageForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1434,7 +1440,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_TrackCacheStorageForStorageKey_OpenQA_Selenium_DevTools_V132_Storage_TrackCacheStorageForStorageKeyCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.TrackCacheStorageForStorageKey(OpenQA.Selenium.DevTools.V132.Storage.TrackCacheStorageForStorageKeyCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   TrackCacheStorageForStorageKey(TrackCacheStorageForStorageKeyCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L164"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L186"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>trackCacheStorageForStorageKey</p>
@@ -1442,7 +1448,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TrackCacheStorageForStorageKeyCommandResponse&gt; TrackCacheStorageForStorageKey(TrackCacheStorageForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TrackCacheStorageForStorageKeyCommandResponse?&gt; TrackCacheStorageForStorageKey(TrackCacheStorageForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1477,7 +1483,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_TrackIndexedDBForOrigin_OpenQA_Selenium_DevTools_V132_Storage_TrackIndexedDBForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.TrackIndexedDBForOrigin(OpenQA.Selenium.DevTools.V132.Storage.TrackIndexedDBForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   TrackIndexedDBForOrigin(TrackIndexedDBForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L171"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L194"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>trackIndexedDBForOrigin</p>
@@ -1485,7 +1491,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TrackIndexedDBForOriginCommandResponse&gt; TrackIndexedDBForOrigin(TrackIndexedDBForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TrackIndexedDBForOriginCommandResponse?&gt; TrackIndexedDBForOrigin(TrackIndexedDBForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1520,7 +1526,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_TrackIndexedDBForStorageKey_OpenQA_Selenium_DevTools_V132_Storage_TrackIndexedDBForStorageKeyCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.TrackIndexedDBForStorageKey(OpenQA.Selenium.DevTools.V132.Storage.TrackIndexedDBForStorageKeyCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   TrackIndexedDBForStorageKey(TrackIndexedDBForStorageKeyCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L178"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L202"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>trackIndexedDBForStorageKey</p>
@@ -1528,7 +1534,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TrackIndexedDBForStorageKeyCommandResponse&gt; TrackIndexedDBForStorageKey(TrackIndexedDBForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TrackIndexedDBForStorageKeyCommandResponse?&gt; TrackIndexedDBForStorageKey(TrackIndexedDBForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1563,7 +1569,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_UntrackCacheStorageForOrigin_OpenQA_Selenium_DevTools_V132_Storage_UntrackCacheStorageForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.UntrackCacheStorageForOrigin(OpenQA.Selenium.DevTools.V132.Storage.UntrackCacheStorageForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   UntrackCacheStorageForOrigin(UntrackCacheStorageForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L185"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L210"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>untrackCacheStorageForOrigin</p>
@@ -1571,7 +1577,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;UntrackCacheStorageForOriginCommandResponse&gt; UntrackCacheStorageForOrigin(UntrackCacheStorageForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;UntrackCacheStorageForOriginCommandResponse?&gt; UntrackCacheStorageForOrigin(UntrackCacheStorageForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1606,7 +1612,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_UntrackCacheStorageForStorageKey_OpenQA_Selenium_DevTools_V132_Storage_UntrackCacheStorageForStorageKeyCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.UntrackCacheStorageForStorageKey(OpenQA.Selenium.DevTools.V132.Storage.UntrackCacheStorageForStorageKeyCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   UntrackCacheStorageForStorageKey(UntrackCacheStorageForStorageKeyCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L192"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L218"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>untrackCacheStorageForStorageKey</p>
@@ -1614,7 +1620,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;UntrackCacheStorageForStorageKeyCommandResponse&gt; UntrackCacheStorageForStorageKey(UntrackCacheStorageForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;UntrackCacheStorageForStorageKeyCommandResponse?&gt; UntrackCacheStorageForStorageKey(UntrackCacheStorageForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1649,7 +1655,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_UntrackIndexedDBForOrigin_OpenQA_Selenium_DevTools_V132_Storage_UntrackIndexedDBForOriginCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.UntrackIndexedDBForOrigin(OpenQA.Selenium.DevTools.V132.Storage.UntrackIndexedDBForOriginCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   UntrackIndexedDBForOrigin(UntrackIndexedDBForOriginCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L199"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L226"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>untrackIndexedDBForOrigin</p>
@@ -1657,7 +1663,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;UntrackIndexedDBForOriginCommandResponse&gt; UntrackIndexedDBForOrigin(UntrackIndexedDBForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;UntrackIndexedDBForOriginCommandResponse?&gt; UntrackIndexedDBForOrigin(UntrackIndexedDBForOriginCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1692,7 +1698,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_UntrackIndexedDBForStorageKey_OpenQA_Selenium_DevTools_V132_Storage_UntrackIndexedDBForStorageKeyCommandSettings_System_Threading_CancellationToken_System_Nullable_System_Int32__System_Boolean_" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.UntrackIndexedDBForStorageKey(OpenQA.Selenium.DevTools.V132.Storage.UntrackIndexedDBForStorageKeyCommandSettings,System.Threading.CancellationToken,System.Nullable{System.Int32},System.Boolean)">
   UntrackIndexedDBForStorageKey(UntrackIndexedDBForStorageKeyCommandSettings, CancellationToken, int?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L206"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L234"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>untrackIndexedDBForStorageKey</p>
@@ -1700,7 +1706,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;UntrackIndexedDBForStorageKeyCommandResponse&gt; UntrackIndexedDBForStorageKey(UntrackIndexedDBForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;UntrackIndexedDBForStorageKeyCommandResponse?&gt; UntrackIndexedDBForStorageKey(UntrackIndexedDBForStorageKeyCommandSettings command, CancellationToken cancellationToken = default, int? millisecondsTimeout = null, bool throwExceptionIfResponseNotReceived = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -1738,7 +1744,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_AttributionReportingSourceRegistered" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.AttributionReportingSourceRegistered">
   AttributionReportingSourceRegistered
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>attributionReportingSourceRegistered</p>
@@ -1746,7 +1752,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttributionReportingSourceRegisteredEventArgs&gt; AttributionReportingSourceRegistered</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttributionReportingSourceRegisteredEventArgs&gt;? AttributionReportingSourceRegistered</code></pre>
   </div>
 
 
@@ -1769,7 +1775,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_AttributionReportingTriggerRegistered" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.AttributionReportingTriggerRegistered">
   AttributionReportingTriggerRegistered
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L107"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>attributionReportingTriggerRegistered</p>
@@ -1777,7 +1783,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttributionReportingTriggerRegisteredEventArgs&gt; AttributionReportingTriggerRegistered</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AttributionReportingTriggerRegisteredEventArgs&gt;? AttributionReportingTriggerRegistered</code></pre>
   </div>
 
 
@@ -1808,7 +1814,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;CacheStorageContentUpdatedEventArgs&gt; CacheStorageContentUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;CacheStorageContentUpdatedEventArgs&gt;? CacheStorageContentUpdated</code></pre>
   </div>
 
 
@@ -1831,7 +1837,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_CacheStorageListUpdated" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.CacheStorageListUpdated">
   CacheStorageListUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>cacheStorageListUpdated</p>
@@ -1839,7 +1845,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;CacheStorageListUpdatedEventArgs&gt; CacheStorageListUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;CacheStorageListUpdatedEventArgs&gt;? CacheStorageListUpdated</code></pre>
   </div>
 
 
@@ -1862,7 +1868,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_IndexedDBContentUpdated" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.IndexedDBContentUpdated">
   IndexedDBContentUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>indexedDBContentUpdated</p>
@@ -1870,7 +1876,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;IndexedDBContentUpdatedEventArgs&gt; IndexedDBContentUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;IndexedDBContentUpdatedEventArgs&gt;? IndexedDBContentUpdated</code></pre>
   </div>
 
 
@@ -1893,7 +1899,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_IndexedDBListUpdated" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.IndexedDBListUpdated">
   IndexedDBListUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>indexedDBListUpdated</p>
@@ -1901,7 +1907,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;IndexedDBListUpdatedEventArgs&gt; IndexedDBListUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;IndexedDBListUpdatedEventArgs&gt;? IndexedDBListUpdated</code></pre>
   </div>
 
 
@@ -1924,7 +1930,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_InterestGroupAccessed" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.InterestGroupAccessed">
   InterestGroupAccessed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>interestGroupAccessed</p>
@@ -1932,7 +1938,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAccessedEventArgs&gt; InterestGroupAccessed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAccessedEventArgs&gt;? InterestGroupAccessed</code></pre>
   </div>
 
 
@@ -1955,7 +1961,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_InterestGroupAuctionEventOccurred" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.InterestGroupAuctionEventOccurred">
   InterestGroupAuctionEventOccurred
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>interestGroupAuctionEventOccurred</p>
@@ -1963,7 +1969,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAuctionEventOccurredEventArgs&gt; InterestGroupAuctionEventOccurred</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAuctionEventOccurredEventArgs&gt;? InterestGroupAuctionEventOccurred</code></pre>
   </div>
 
 
@@ -1986,7 +1992,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_InterestGroupAuctionNetworkRequestCreated" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.InterestGroupAuctionNetworkRequestCreated">
   InterestGroupAuctionNetworkRequestCreated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>interestGroupAuctionNetworkRequestCreated</p>
@@ -1994,7 +2000,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAuctionNetworkRequestCreatedEventArgs&gt; InterestGroupAuctionNetworkRequestCreated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;InterestGroupAuctionNetworkRequestCreatedEventArgs&gt;? InterestGroupAuctionNetworkRequestCreated</code></pre>
   </div>
 
 
@@ -2017,7 +2023,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_SharedStorageAccessed" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.SharedStorageAccessed">
   SharedStorageAccessed
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>sharedStorageAccessed</p>
@@ -2025,7 +2031,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;SharedStorageAccessedEventArgs&gt; SharedStorageAccessed</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;SharedStorageAccessedEventArgs&gt;? SharedStorageAccessed</code></pre>
   </div>
 
 
@@ -2048,7 +2054,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_StorageBucketCreatedOrUpdated" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.StorageBucketCreatedOrUpdated">
   StorageBucketCreatedOrUpdated
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L92"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>storageBucketCreatedOrUpdated</p>
@@ -2056,7 +2062,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;StorageBucketCreatedOrUpdatedEventArgs&gt; StorageBucketCreatedOrUpdated</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;StorageBucketCreatedOrUpdatedEventArgs&gt;? StorageBucketCreatedOrUpdated</code></pre>
   </div>
 
 
@@ -2079,7 +2085,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 
   <h3 id="OpenQA_Selenium_DevTools_V132_Storage_StorageAdapter_StorageBucketDeleted" data-uid="OpenQA.Selenium.DevTools.V132.Storage.StorageAdapter.StorageBucketDeleted">
   StorageBucketDeleted
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>storageBucketDeleted</p>
@@ -2087,7 +2093,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;StorageBucketDeletedEventArgs&gt; StorageBucketDeleted</code></pre>
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;StorageBucketDeletedEventArgs&gt;? StorageBucketDeleted</code></pre>
   </div>
 
 
@@ -2111,7 +2117,7 @@ Class StorageAdapter  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/bazel-bin/dotnet/src/webdriver/cdp/v132/Storage/StorageAdapter.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
 
