@@ -23,7 +23,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-public sealed class BrowserModule(Broker broker) : Module(broker)
+public sealed class BrowserModule(BiDiConnection broker) : Module(broker)
 {
     public async Task CloseAsync(CloseOptions? options = null)
     {

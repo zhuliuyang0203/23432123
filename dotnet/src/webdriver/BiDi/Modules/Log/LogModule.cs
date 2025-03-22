@@ -23,7 +23,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 
-public sealed class LogModule(Broker broker) : Module(broker)
+public sealed class LogModule(BiDiConnection broker) : Module(broker)
 {
     public async Task<Subscription> OnEntryAddedAsync(Func<LogEntry, Task> handler, SubscriptionOptions? options = null)
     {

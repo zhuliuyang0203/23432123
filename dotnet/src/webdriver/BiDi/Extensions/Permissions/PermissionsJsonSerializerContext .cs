@@ -1,4 +1,4 @@
-// <copyright file="RealmDestroyedEventArgs.cs" company="Selenium Committers">
+// <copyright file="PermissionsJsonSerializerContext .cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,9 +17,10 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Communication;
 using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+namespace OpenQA.Selenium.BiDi.Extensions.Permissions;
 
-public record RealmDestroyedEventArgs([property: JsonIgnore] BiDiConnection BiDi, Realm Realm) : EventArgs(BiDi);
+
+[JsonSerializable(typeof(SetPermissionCommand), TypeInfoPropertyName = "Permissions_SetPermissionCommand")]
+internal partial class PermissionsJsonSerializerContext : JsonSerializerContext;

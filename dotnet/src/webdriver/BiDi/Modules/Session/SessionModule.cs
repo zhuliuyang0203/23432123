@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal sealed class SessionModule(Broker broker) : Module(broker)
+internal sealed class SessionModule(BiDiConnection broker) : Module(broker)
 {
     public async Task<StatusResult> StatusAsync(StatusOptions? options = null)
     {

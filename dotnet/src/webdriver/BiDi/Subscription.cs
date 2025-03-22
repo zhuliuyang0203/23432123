@@ -27,10 +27,10 @@ namespace OpenQA.Selenium.BiDi;
 public class Subscription : IAsyncDisposable
 {
     private readonly Modules.Session.Subscription _subscription;
-    private readonly Broker _broker;
+    private readonly BiDiConnection _broker;
     private readonly Communication.EventHandler _eventHandler;
 
-    internal Subscription(Modules.Session.Subscription subscription, Broker broker, Communication.EventHandler eventHandler)
+    internal Subscription(Modules.Session.Subscription subscription, BiDiConnection broker, Communication.EventHandler eventHandler)
     {
         _subscription = subscription;
         _broker = broker;

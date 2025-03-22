@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public sealed class ScriptModule(Broker broker) : Module(broker)
+public sealed class ScriptModule(BiDiConnection broker) : Module(broker)
 {
     public async Task<EvaluateResult.Success> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)
     {

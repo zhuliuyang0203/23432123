@@ -24,7 +24,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public sealed class NetworkModule(Broker broker) : Module(broker)
+public sealed class NetworkModule(BiDiConnection broker) : Module(broker)
 {
     internal async Task<Intercept> AddInterceptAsync(IEnumerable<InterceptPhase> phases, AddInterceptOptions? options = null)
     {

@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
 using OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -35,23 +36,23 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 //[JsonDerivedType(typeof(PaintWorkletRealmInfo), "paint-worklet")]
 //[JsonDerivedType(typeof(AudioWorkletRealmInfo), "audio-worklet")]
 //[JsonDerivedType(typeof(WorkletRealmInfo), "worklet")]
-public abstract record RealmInfo(BiDi BiDi, Realm Realm, string Origin) : EventArgs(BiDi);
+public abstract record RealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : EventArgs(BiDi);
 
-public record WindowRealmInfo(BiDi BiDi, Realm Realm, string Origin, BrowsingContext.BrowsingContext Context) : RealmInfo(BiDi, Realm, Origin)
+public record WindowRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin, BrowsingContext.BrowsingContext Context) : RealmInfo(BiDi, Realm, Origin)
 {
     public string? Sandbox { get; set; }
 }
 
-public record DedicatedWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin, IReadOnlyList<Realm> Owners) : RealmInfo(BiDi, Realm, Origin);
+public record DedicatedWorkerRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin, IReadOnlyList<Realm> Owners) : RealmInfo(BiDi, Realm, Origin);
 
-public record SharedWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record SharedWorkerRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
 
-public record ServiceWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record ServiceWorkerRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
 
-public record WorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record WorkerRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
 
-public record PaintWorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record PaintWorkletRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
 
-public record AudioWorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record AudioWorkletRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
 
-public record WorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);
+public record WorkletRealmInfo(BiDiConnection BiDi, Realm Realm, string Origin) : RealmInfo(BiDi, Realm, Origin);

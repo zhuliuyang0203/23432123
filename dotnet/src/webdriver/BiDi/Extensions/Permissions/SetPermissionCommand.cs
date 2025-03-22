@@ -1,4 +1,4 @@
-// <copyright file="RealmDestroyedEventArgs.cs" company="Selenium Committers">
+// <copyright file="SetPermissionCommand.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -18,8 +18,22 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
-using System.Text.Json.Serialization;
+using OpenQA.Selenium.BiDi.Modules.Browser;
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+namespace OpenQA.Selenium.BiDi.Extensions.Permissions;
 
-public record RealmDestroyedEventArgs([property: JsonIgnore] BiDiConnection BiDi, Realm Realm) : EventArgs(BiDi);
+internal class SetPermissionCommand(SetPermissionCommandParameters @params)
+    : Command<SetPermissionCommandParameters>(@params, "permissions.setPermission");
+
+public record SetPermissionOptions : CommandOptions;
+
+internal record SetPermissionCommandParameters(PermissionDescriptor Descriptor, PermissionState State, string Origin, UserContext? UserContext) : CommandParameters;
+
+internal record PermissionDescriptor(string Name);
+
+public enum PermissionState
+{
+    Granted,
+    Denied,
+    Prompt
+}

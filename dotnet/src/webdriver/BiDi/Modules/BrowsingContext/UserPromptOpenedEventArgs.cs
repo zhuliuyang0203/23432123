@@ -17,11 +17,12 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public record UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, Session.UserPromptHandlerType Handler, UserPromptType Type, string Message)
+public record UserPromptOpenedEventArgs([property: JsonIgnore] BiDiConnection BiDi, BrowsingContext Context, Session.UserPromptHandlerType Handler, UserPromptType Type, string Message)
     : BrowsingContextEventArgs(BiDi, Context)
 {
     [JsonInclude]

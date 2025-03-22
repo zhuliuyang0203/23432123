@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Threading.Tasks;
 
@@ -26,7 +27,26 @@ public static class WebDriverExtensions
 {
     public static async Task<BiDi> AsBiDiAsync(this IWebDriver webDriver)
     {
-        if (webDriver is null) throw new ArgumentNullException(nameof(webDriver));
+        string webSocketUrl = GetWebSocketUrl(webDriver);
+        var bidi = await BiDi.ConnectAsync(webSocketUrl).ConfigureAwait(false);
+
+        return bidi;
+    }
+
+    public static Task<BiDiConnection> AsBiDiConnectionAsync(this IWebDriver webDriver)
+    {
+        string webSocketUrl = GetWebSocketUrl(webDriver);
+        var connection = new BiDiConnection(new Uri(webSocketUrl));
+
+        return Task.FromResult(connection);
+    }
+
+    private static string GetWebSocketUrl(IWebDriver webDriver)
+    {
+        if (webDriver is null)
+        {
+            throw new ArgumentNullException(nameof(webDriver));
+        }
 
         string? webSocketUrl = null;
 
@@ -35,10 +55,6 @@ public static class WebDriverExtensions
             webSocketUrl = hasCapabilities.Capabilities.GetCapability("webSocketUrl")?.ToString();
         }
 
-        if (webSocketUrl is null) throw new BiDiException("The driver is not compatible with bidirectional protocol or \"webSocketUrl\" not enabled in driver options.");
-
-        var bidi = await BiDi.ConnectAsync(webSocketUrl).ConfigureAwait(false);
-
-        return bidi;
+        return webSocketUrl ?? throw new BiDiException("The driver is not compatible with bidirectional protocol or \"webSocketUrl\" not enabled in driver options."); ;
     }
 }
