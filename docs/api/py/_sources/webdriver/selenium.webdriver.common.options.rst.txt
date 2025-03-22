@@ -4,15 +4,6 @@ selenium.webdriver.common.options
 .. automodule:: selenium.webdriver.common.options
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -21,11 +12,3 @@ selenium.webdriver.common.options
       BaseOptions
       PageLoadStrategy
    
-   
-
-   
-   
-   
-
-
-

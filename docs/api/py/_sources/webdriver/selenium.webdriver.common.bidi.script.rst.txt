@@ -4,15 +4,6 @@ selenium.webdriver.common.bidi.script
 .. automodule:: selenium.webdriver.common.bidi.script
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ selenium.webdriver.common.bidi.script
       LogEntryAdded
       Script
    
-   
-
-   
-   
-   
-
-
-

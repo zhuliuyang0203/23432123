@@ -4,11 +4,6 @@ selenium.webdriver.remote.webdriver
 .. automodule:: selenium.webdriver.remote.webdriver
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,10 +12,6 @@ selenium.webdriver.remote.webdriver
       get_remote_connection
       import_cdp
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -28,11 +19,3 @@ selenium.webdriver.remote.webdriver
       BaseWebDriver
       WebDriver
    
-   
-
-   
-   
-   
-
-
-

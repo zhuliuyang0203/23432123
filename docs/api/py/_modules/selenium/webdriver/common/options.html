@@ -1,54 +1,210 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.common.options &#8212; Selenium 4.29.0.202501201850 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
-    
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
-    <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
-    
-    <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.options</a></li> 
-      </ul>
-    </div>  
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../../../../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../../../../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../../../../_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>selenium.webdriver.common.options &#8212; Selenium 4.30.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
+    <script src="../../../../_static/documentation_options.js?v=b77305dc"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue-grey data-md-color-accent=blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#_modules/selenium/webdriver/common/options" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../../../index.html" title="Selenium 4.30.0 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">Selenium 4.30.0 documentation</span>
+          <span class="md-header-nav__topic"> selenium.webdriver.common.options </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../../../../search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder=""Search""
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+      
+  
+  <script src="../../../../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../../../../"versions.json"",
+        target_loc = "../../../../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.30.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../../../index.html" title="Selenium 4.30.0 documentation" class="md-nav__button md-logo">
+      
+        <img src="../../../../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../../../../index.html"
+       title="Selenium 4.30.0 documentation">Selenium 4.30.0 documentation</a>
+  </label>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
             
-  <h1>Source code for selenium.webdriver.common.options</h1><div class="highlight"><pre>
+  <h1 id="modules-selenium-webdriver-common-options--page-root">Source code for selenium.webdriver.common.options</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Licensed to the Software Freedom Conservancy (SFC) under one</span>
 <span class="c1"># or more contributor license agreements.  See the NOTICE file</span>
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The SFC licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -63,8 +219,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.proxy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Proxy</span>
 
 
-<div class="viewcode-block" id="PageLoadStrategy"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.PageLoadStrategy">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PageLoadStrategy</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum of possible page load strategies.</span>
+<div class="viewcode-block" id="PageLoadStrategy">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.PageLoadStrategy">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PageLoadStrategy</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Enum of possible page load strategies.</span>
 
 <span class="sd">    Selenium support following strategies:</span>
 <span class="sd">        * normal (default) - waits for all resources to download</span>
@@ -72,11 +230,12 @@
 <span class="sd">        * none - does not block `WebDriver` at all</span>
 
 <span class="sd">    Docs: https://www.selenium.dev/documentation/webdriver/drivers/options/#pageloadstrategy.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">normal</span> <span class="o">=</span> <span class="s2">&quot;normal&quot;</span>
-    <span class="n">eager</span> <span class="o">=</span> <span class="s2">&quot;eager&quot;</span>
-    <span class="n">none</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span></div>
+    <span class="n">normal</span> <span class="o">=</span> <span class="s2">"normal"</span>
+    <span class="n">eager</span> <span class="o">=</span> <span class="s2">"eager"</span>
+    <span class="n">none</span> <span class="o">=</span> <span class="s2">"none"</span></div>
+
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_BaseOptionsDescriptor</span><span class="p">:</span>
@@ -84,31 +243,31 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;enableBidi&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"enableBidi"</span><span class="p">:</span>
             <span class="c1"># whether BiDi is or will be enabled</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;webSocketUrl&quot;</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"webSocketUrl"</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;webSocketUrl&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"webSocketUrl"</span><span class="p">:</span>
             <span class="c1"># Return socket url or None if not created yet</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;acceptInsecureCerts&quot;</span><span class="p">,</span> <span class="s2">&quot;strictFileInteractability&quot;</span><span class="p">,</span> <span class="s2">&quot;setWindowRect&quot;</span><span class="p">,</span> <span class="s2">&quot;se:downloadsEnabled&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"acceptInsecureCerts"</span><span class="p">,</span> <span class="s2">"strictFileInteractability"</span><span class="p">,</span> <span class="s2">"setWindowRect"</span><span class="p">,</span> <span class="s2">"se:downloadsEnabled"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;enableBidi&quot;</span><span class="p">:</span>
-            <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="s2">&quot;webSocketUrl&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"enableBidi"</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="s2">"webSocketUrl"</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_PageLoadStrategyDescriptor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the point at which a navigation command is returned:</span>
+<span class="w">    </span><span class="sd">"""Determines the point at which a navigation command is returned:</span>
 <span class="sd">    https://w3c.github.io/webdriver/#dfn-table-of-page-load-strategies.</span>
 
 <span class="sd">    :param strategy: the strategy corresponding to a document readiness state</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -117,21 +276,21 @@
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;eager&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"normal"</span><span class="p">,</span> <span class="s2">"eager"</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">):</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Strategy can only be one of the following: normal, eager, none&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Strategy can only be one of the following: normal, eager, none"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_UnHandledPromptBehaviorDescriptor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How the driver should respond when an alert is present and the:</span>
+<span class="w">    </span><span class="sd">"""How the driver should respond when an alert is present and the:</span>
 <span class="sd">    command sent is not handling the alert:</span>
 <span class="sd">    https://w3c.github.io/webdriver/#dfn-table-of-page-load-strategies:</span>
 
 <span class="sd">    :param behavior: behavior to use when an alert is encountered</span>
 
 <span class="sd">    :returns: Values for implicit timeout, pageLoad timeout and script timeout if set (in milliseconds)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -140,23 +299,23 @@
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dismiss&quot;</span><span class="p">,</span> <span class="s2">&quot;accept&quot;</span><span class="p">,</span> <span class="s2">&quot;dismiss and notify&quot;</span><span class="p">,</span> <span class="s2">&quot;accept and notify&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"dismiss"</span><span class="p">,</span> <span class="s2">"accept"</span><span class="p">,</span> <span class="s2">"dismiss and notify"</span><span class="p">,</span> <span class="s2">"accept and notify"</span><span class="p">,</span> <span class="s2">"ignore"</span><span class="p">):</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Behavior can only be one of the following: dismiss, accept, dismiss and notify, &quot;</span>
-                <span class="s2">&quot;accept and notify, ignore&quot;</span>
+                <span class="s2">"Behavior can only be one of the following: dismiss, accept, dismiss and notify, "</span>
+                <span class="s2">"accept and notify, ignore"</span>
             <span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_TimeoutsDescriptor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How long the driver should wait for actions to complete before:</span>
+<span class="w">    </span><span class="sd">"""How long the driver should wait for actions to complete before:</span>
 <span class="sd">    returning an error https://w3c.github.io/webdriver/#timeouts:</span>
 
 <span class="sd">    :param timeouts: values in milliseconds for implicit wait, page load and script timeout</span>
 
 <span class="sd">    :returns: Values for implicit timeout, pageLoad timeout and script timeout if set (in milliseconds)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -165,14 +324,14 @@
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;implicit&quot;</span><span class="p">,</span> <span class="s2">&quot;pageLoad&quot;</span><span class="p">,</span> <span class="s2">&quot;script&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"implicit"</span><span class="p">,</span> <span class="s2">"pageLoad"</span><span class="p">,</span> <span class="s2">"script"</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Timeout keys can only be one of the following: implicit, pageLoad, script&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Timeout keys can only be one of the following: implicit, pageLoad, script"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_ProxyDescriptor</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;:Returns: Proxy if set, otherwise None.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""":Returns: Proxy if set, otherwise None."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -182,307 +341,287 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Proxy</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s2">&quot;Only Proxy objects can be passed in.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s2">"Only Proxy objects can be passed in."</span><span class="p">)</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">_caps</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to_capabilities</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="BaseOptions"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">BaseOptions</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for individual browser options.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseOptions">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseOptions</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Base class for individual browser options."""</span>
 
-    <span class="n">browser_version</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;browserVersion&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets the version of the browser.</span>
+    <span class="n">browser_version</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"browserVersion"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets the version of the browser.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.browser_version`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.browser_version` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `str`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `str`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">platform_name</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;platformName&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets name of the platform.</span>
+    <span class="n">platform_name</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"platformName"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets name of the platform.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.platform_name`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.platform_name` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `str`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `str`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">accept_insecure_certs</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;acceptInsecureCerts&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Set whether the session accepts insecure certificates.</span>
+    <span class="n">accept_insecure_certs</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"acceptInsecureCerts"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Set whether the session accepts insecure certificates.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.accept_insecure_certs`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.accept_insecure_certs` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `bool`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">strict_file_interactability</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;strictFileInteractability&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets whether session is about file interactability.</span>
+    <span class="n">strict_file_interactability</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"strictFileInteractability"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets whether session is about file interactability.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.strict_file_interactability`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.strict_file_interactability` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `bool`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">set_window_rect</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;setWindowRect&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets window size and position.</span>
+    <span class="n">set_window_rect</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"setWindowRect"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets window size and position.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.set_window_rect`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.set_window_rect` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `bool`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">enable_bidi</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;enableBidi&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Set whether the session has WebDriverBiDi enabled.</span>
+    <span class="n">enable_bidi</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"enableBidi"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Set whether the session has WebDriverBiDi enabled.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.enable_bidi`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.enable_bidi` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `bool`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">web_socket_url</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;webSocketUrl&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Set whether the session accepts insecure certificates.</span>
+    <span class="n">page_load_strategy</span> <span class="o">=</span> <span class="n">_PageLoadStrategyDescriptor</span><span class="p">(</span><span class="s2">"pageLoadStrategy"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">""":Gets and Sets page load strategy, the default is "normal".</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
-<span class="sd">    - Get</span>
-<span class="sd">        - `self.web_socket_url`</span>
-<span class="sd">    - Set</span>
-<span class="sd">        - `self.web_socket_url` = `value`</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    `value`: `str`</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    - Get</span>
-<span class="sd">        - `str` or `None`</span>
-<span class="sd">    - Set</span>
-<span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">page_load_strategy</span> <span class="o">=</span> <span class="n">_PageLoadStrategyDescriptor</span><span class="p">(</span><span class="s2">&quot;pageLoadStrategy&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;:Gets and Sets page load strategy, the default is &quot;normal&quot;.</span>
-
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.page_load_strategy`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.page_load_strategy` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `str`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `str`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">unhandled_prompt_behavior</span> <span class="o">=</span> <span class="n">_UnHandledPromptBehaviorDescriptor</span><span class="p">(</span><span class="s2">&quot;unhandledPromptBehavior&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;:Gets and Sets unhandled prompt behavior, the default is &quot;dismiss and</span>
-<span class="sd">    notify&quot;.</span>
+    <span class="n">unhandled_prompt_behavior</span> <span class="o">=</span> <span class="n">_UnHandledPromptBehaviorDescriptor</span><span class="p">(</span><span class="s2">"unhandledPromptBehavior"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">""":Gets and Sets unhandled prompt behavior, the default is "dismiss and</span>
+<span class="sd">    notify".</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.unhandled_prompt_behavior`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.unhandled_prompt_behavior` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `str`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `str`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">timeouts</span> <span class="o">=</span> <span class="n">_TimeoutsDescriptor</span><span class="p">(</span><span class="s2">&quot;timeouts&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;:Gets and Sets implicit timeout, pageLoad timeout and script timeout if</span>
+    <span class="n">timeouts</span> <span class="o">=</span> <span class="n">_TimeoutsDescriptor</span><span class="p">(</span><span class="s2">"timeouts"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">""":Gets and Sets implicit timeout, pageLoad timeout and script timeout if</span>
 <span class="sd">    set (in milliseconds)</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.timeouts`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.timeouts` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `dict`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `dict`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">proxy</span> <span class="o">=</span> <span class="n">_ProxyDescriptor</span><span class="p">(</span><span class="s2">&quot;proxy&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets and Gets Proxy.</span>
+    <span class="n">proxy</span> <span class="o">=</span> <span class="n">_ProxyDescriptor</span><span class="p">(</span><span class="s2">"proxy"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Sets and Gets Proxy.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.proxy`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.proxy` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `Proxy`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `Proxy`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">enable_downloads</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;se:downloadsEnabled&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets whether session can download files.</span>
+    <span class="n">enable_downloads</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"se:downloadsEnabled"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets whether session can download files.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.enable_downloads`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.enable_downloads` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
 <span class="sd">    `value`: `bool`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">web_socket_url</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">&quot;webSocketUrl&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and Sets WebSocket URL.</span>
+    <span class="n">web_socket_url</span> <span class="o">=</span> <span class="n">_BaseOptionsDescriptor</span><span class="p">(</span><span class="s2">"webSocketUrl"</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Gets and Sets WebSocket URL.</span>
 
-<span class="sd">    Usage</span>
-<span class="sd">    -----</span>
+<span class="sd">    Usage:</span>
+<span class="sd">    ------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `self.web_socket_url`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `self.web_socket_url` = `value`</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    `value`: `bool`</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    `value`: `str`</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
 <span class="sd">    - Get</span>
 <span class="sd">        - `bool`</span>
 <span class="sd">    - Set</span>
 <span class="sd">        - `None`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_caps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_capabilities</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="s2">&quot;pageLoadStrategy&quot;</span><span class="p">,</span> <span class="n">PageLoadStrategy</span><span class="o">.</span><span class="n">normal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_capability</span><span class="p">(</span><span class="s2">"pageLoadStrategy"</span><span class="p">,</span> <span class="n">PageLoadStrategy</span><span class="o">.</span><span class="n">normal</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_local_proxy</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -490,48 +629,63 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_caps</span>
 
-<div class="viewcode-block" id="BaseOptions.set_capability"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.set_capability">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets a capability.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseOptions.set_capability">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.set_capability">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_capability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Sets a capability."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_caps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="BaseOptions.enable_mobile"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.enable_mobile">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">enable_mobile</span><span class="p">(</span>
+
+<div class="viewcode-block" id="BaseOptions.enable_mobile">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.enable_mobile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enable_mobile</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">android_package</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">android_activity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">device_serial</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enables mobile browser use for browsers that support it.</span>
+<span class="w">        </span><span class="sd">"""Enables mobile browser use for browsers that support it.</span>
 
 <span class="sd">        :Args:</span>
 <span class="sd">            android_activity: The name of the android package to start</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">android_package</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;android_package must be passed in&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;androidPackage&quot;</span><span class="p">:</span> <span class="n">android_package</span><span class="p">}</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">"android_package must be passed in"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"androidPackage"</span><span class="p">:</span> <span class="n">android_package</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">android_activity</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span><span class="p">[</span><span class="s2">&quot;androidActivity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">android_activity</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span><span class="p">[</span><span class="s2">"androidActivity"</span><span class="p">]</span> <span class="o">=</span> <span class="n">android_activity</span>
         <span class="k">if</span> <span class="n">device_serial</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span><span class="p">[</span><span class="s2">&quot;androidDeviceSerial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">device_serial</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mobile_options</span><span class="p">[</span><span class="s2">"androidDeviceSerial"</span><span class="p">]</span> <span class="o">=</span> <span class="n">device_serial</span></div>
 
-<div class="viewcode-block" id="BaseOptions.to_capabilities"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.to_capabilities">[docs]</a>    <span class="nd">@abstractmethod</span>
+
+<div class="viewcode-block" id="BaseOptions.to_capabilities">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.to_capabilities">[docs]</a>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert options into capabilities dictionary.&quot;&quot;&quot;</span></div>
+<span class="w">        </span><span class="sd">"""Convert options into capabilities dictionary."""</span></div>
+
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">default_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return minimal capabilities necessary as a dictionary.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return minimal capabilities necessary as a dictionary."""</span>
 
-<div class="viewcode-block" id="BaseOptions.ignore_local_proxy_environment_variables"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.ignore_local_proxy_environment_variables">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">ignore_local_proxy_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;By calling this you will ignore HTTP_PROXY and HTTPS_PROXY from</span>
-<span class="sd">        being picked up and used.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_local_proxy</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+<div class="viewcode-block" id="BaseOptions.ignore_local_proxy_environment_variables">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.BaseOptions.ignore_local_proxy_environment_variables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ignore_local_proxy_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""By calling this you will ignore HTTP_PROXY and HTTPS_PROXY from</span>
+<span class="sd">        being picked up and used."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_local_proxy</span> <span class="o">=</span> <span class="kc">True</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ArgOptions"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ArgOptions</span><span class="p">(</span><span class="n">BaseOptions</span><span class="p">):</span>
-    <span class="n">BINARY_LOCATION_ERROR</span> <span class="o">=</span> <span class="s2">&quot;Binary Location Must be a String&quot;</span>
+
+<div class="viewcode-block" id="ArgOptions">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArgOptions</span><span class="p">(</span><span class="n">BaseOptions</span><span class="p">):</span>
+    <span class="n">BINARY_LOCATION_ERROR</span> <span class="o">=</span> <span class="s2">"Binary Location Must be a String"</span>
     <span class="c1"># FedCM capability key</span>
-    <span class="n">FEDCM_CAPABILITY</span> <span class="o">=</span> <span class="s2">&quot;fedcm:accounts&quot;</span>
+    <span class="n">FEDCM_CAPABILITY</span> <span class="o">=</span> <span class="s2">"fedcm:accounts"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -539,78 +693,78 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;:Returns: A list of arguments needed for the browser.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">""":Returns: A list of arguments needed for the browser."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arguments</span>
 
-<div class="viewcode-block" id="ArgOptions.add_argument"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.add_argument">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds an argument to the list.</span>
+<div class="viewcode-block" id="ArgOptions.add_argument">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.add_argument">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Adds an argument to the list.</span>
 
 <span class="sd">        :Args:</span>
 <span class="sd">         - Sets the arguments</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">argument</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_arguments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">argument</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;argument can not be null&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"argument can not be null"</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArgOptions.ignore_local_proxy_environment_variables"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.ignore_local_proxy_environment_variables">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">ignore_local_proxy_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;By calling this you will ignore HTTP_PROXY and HTTPS_PROXY from</span>
-<span class="sd">        being picked up and used.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ArgOptions.ignore_local_proxy_environment_variables">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.ignore_local_proxy_environment_variables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ignore_local_proxy_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""By calling this you will ignore HTTP_PROXY and HTTPS_PROXY from</span>
+<span class="sd">        being picked up and used."""</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;using ignore_local_proxy_environment_variables in Options has been deprecated, &quot;</span>
-            <span class="s2">&quot;instead, create a Proxy instance with ProxyType.DIRECT to ignore proxy settings, &quot;</span>
-            <span class="s2">&quot;pass the proxy instance into a ClientConfig constructor, &quot;</span>
-            <span class="s2">&quot;pass the client config instance into the Webdriver constructor&quot;</span><span class="p">,</span>
+            <span class="s2">"using ignore_local_proxy_environment_variables in Options has been deprecated, "</span>
+            <span class="s2">"instead, create a Proxy instance with ProxyType.DIRECT to ignore proxy settings, "</span>
+            <span class="s2">"pass the proxy instance into a ClientConfig constructor, "</span>
+            <span class="s2">"pass the client config instance into the Webdriver constructor"</span><span class="p">,</span>
             <span class="ne">DeprecationWarning</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ignore_local_proxy_environment_variables</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ArgOptions.to_capabilities"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.to_capabilities">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArgOptions.to_capabilities">
+<a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.options.html#selenium.webdriver.common.options.ArgOptions.to_capabilities">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_caps</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">default_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{}</span></div>
+
 </pre></div>
 
-            <div class="clearer"></div>
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2009-2025 Software Freedom Conservancy.
+              
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
     </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.options</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2009-2024 Software Freedom Conservancy.
-    </div>
+  </footer>
+  <script src="../../../../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
   </body>
 </html>

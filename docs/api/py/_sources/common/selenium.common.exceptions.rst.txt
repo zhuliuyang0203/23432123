@@ -4,19 +4,6 @@ selenium.common.exceptions
 .. automodule:: selenium.common.exceptions
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Exceptions
 
    .. autosummary::
@@ -56,7 +43,3 @@ selenium.common.exceptions
       UnknownMethodException
       WebDriverException
    
-   
-
-
-

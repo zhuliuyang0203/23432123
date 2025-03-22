@@ -4,11 +4,6 @@ selenium.webdriver.common.bidi.cdp
 .. automodule:: selenium.webdriver.common.bidi.cdp
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,10 +18,6 @@ selenium.webdriver.common.bidi.cdp
       set_global_connection
       set_global_session
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -36,10 +27,6 @@ selenium.webdriver.common.bidi.cdp
       CdpSession
       CmEventProxy
    
-   
-
-   
-   
    .. rubric:: Exceptions
 
    .. autosummary::
@@ -48,7 +35,3 @@ selenium.webdriver.common.bidi.cdp
       CdpConnectionClosed
       InternalError
    
-   
-
-
-

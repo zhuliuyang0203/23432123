@@ -4,11 +4,6 @@ selenium.webdriver.support.expected\_conditions
 .. automodule:: selenium.webdriver.support.expected_conditions
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -45,15 +40,3 @@ selenium.webdriver.support.expected\_conditions
       visibility_of_any_elements_located
       visibility_of_element_located
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

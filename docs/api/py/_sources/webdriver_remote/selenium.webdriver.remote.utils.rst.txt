@@ -4,11 +4,6 @@ selenium.webdriver.remote.utils
 .. automodule:: selenium.webdriver.remote.utils
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ selenium.webdriver.remote.utils
       dump_json
       load_json
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
