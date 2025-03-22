@@ -254,7 +254,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Switch to a new top-level browsing context.</p>
+<p>steep:ignore:start.</p>
 </div></span>
   
 </li>
@@ -405,12 +405,12 @@
       <pre class="lines">
 
 
-116
-117
-118</pre>
+118
+119
+120</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 116</span>
+      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 118</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_active_element'>active_element</span>
   <span class='ivar'>@bridge</span><span class='period'>.</span><span class='id identifier rubyid_switch_to_active_element'>switch_to_active_element</span>
@@ -446,12 +446,12 @@
       <pre class="lines">
 
 
-132
-133
-134</pre>
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 132</span>
+      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_alert'>alert</span>
   <span class='const'><span class='object_link'><a href="Alert.html" title="Selenium::WebDriver::Alert (class)">Alert</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Alert.html#initialize-instance_method" title="Selenium::WebDriver::Alert#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@bridge</span><span class='rparen'>)</span>
@@ -487,12 +487,12 @@
       <pre class="lines">
 
 
-124
-125
-126</pre>
+126
+127
+128</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 124</span>
+      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_default_content'>default_content</span>
   <span class='ivar'>@bridge</span><span class='period'>.</span><span class='id identifier rubyid_switch_to_default_content'>switch_to_default_content</span>
@@ -555,35 +555,13 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Switch to a new top-level browsing context</p>
+<p>steep:ignore:start</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>type</span>
-      
-      
-        <span class='type'></span>
-      
-      
-        <em class="default">(defaults to: <tt>:window</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>either :tab or :window</p>
-</div>
-      
-    </li>
-  
-</ul>
-
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -604,7 +582,6 @@
       <pre class="lines">
 
 
-53
 54
 55
 56
@@ -623,10 +600,11 @@
 69
 70
 71
-72</pre>
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new_window'>new_window</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='symbol'>:window</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Valid types are :tab and :window, received: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>window</span><span class='words_sep'>
@@ -742,8 +720,6 @@
       <pre class="lines">
 
 
-84
-85
 86
 87
 88
@@ -766,10 +742,12 @@
 105
 106
 107
-108</pre>
+108
+109
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 84</span>
+      <pre class="code"><span class="info file"># File 'rb/lib/selenium/webdriver/common/target_locator.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_window'>window</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -806,9 +784,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 23 20:03:29 2024 by
+  Generated on Fri Mar 21 23:38:58 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.37 (ruby-3.0.6).
+  0.9.37 (ruby-3.1.6).
 </div>
 
     </div>
