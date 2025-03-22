@@ -157,7 +157,7 @@ class WebElement(BaseWebElement):
         """Gets the given property of the element.
 
         Parameters:
-        ----------
+        -----------
         name : str
             - Name of the property to retrieve.
 
@@ -181,7 +181,7 @@ class WebElement(BaseWebElement):
         method only returns attributes declared in the element's HTML markup.
 
         Parameters:
-        ----------
+        -----------
         name : str
             - Name of the attribute to retrieve.
 
@@ -213,7 +213,7 @@ class WebElement(BaseWebElement):
         :func:`~selenium.webdriver.remote.BaseWebElement.get_property` methods respectively.
 
         Parameters:
-        ----------
+        -----------
         name : str
             - Name of the attribute/property to retrieve.
 
@@ -260,7 +260,7 @@ class WebElement(BaseWebElement):
         """Simulates typing into the element.
 
         Parameters:
-        ----------
+        -----------
         value : str
             - A string for typing, or setting form fields.  For setting
             file inputs, this could be a local file path.
@@ -383,7 +383,7 @@ class WebElement(BaseWebElement):
         """The value of a CSS property.
 
         Parameters:
-        ----------
+        -----------
         property_name : str
             - The name of the CSS property to get the value of.
 
@@ -494,7 +494,7 @@ class WebElement(BaseWebElement):
         bool : True if the screenshot was saved successfully, False otherwise.
 
         Parameters:
-        ----------
+        -----------
         filename : str
             The full path you wish to save your screenshot to. This
             should end with a `.png` extension.
@@ -555,7 +555,7 @@ class WebElement(BaseWebElement):
         """Executes a command against the underlying HTML element.
 
         Parameters:
-        ----------
+        -----------
         command : any
             The name of the command to _execute as a string.
 
@@ -575,7 +575,7 @@ class WebElement(BaseWebElement):
         """Find an element given a By strategy and locator.
 
         Parameters:
-        ----------
+        -----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
             - By.ID: Locate by element ID.
@@ -604,7 +604,7 @@ class WebElement(BaseWebElement):
         """Find elements given a By strategy and locator.
 
         Parameters:
-        ----------
+        -----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
             - By.ID: Locate by element ID.
