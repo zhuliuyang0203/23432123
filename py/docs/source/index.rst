@@ -14,12 +14,14 @@ The `selenium` package is used to automate web browser interaction from Python.
 +-----------------+--------------------------------------------------------------------------------------+
 | **GitHub**:     | https://github.com/SeleniumHQ/Selenium                                               |
 +-----------------+--------------------------------------------------------------------------------------+
-| **PyPI**:       | https://pypi.org/project/selenium/                                                   |
+| **PyPI**:       | https://pypi.org/project/selenium                                                    |
++-----------------+--------------------------------------------------------------------------------------+
+| **API Docs**:   | https://selenium.dev/selenium/docs/api/py/api.html                                   |
 +-----------------+--------------------------------------------------------------------------------------+
 | **IRC/Slack**:  | `Selenium chat room <https://www.selenium.dev/support/#ChatRoom>`_                   |
 +-----------------+--------------------------------------------------------------------------------------+
 
-Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer), as well as the Remote protocol.
+Several browsers/drivers are supported (Firefox, Chrome, Edge, Safari), as well as the Remote protocol.
 
 Supported Python Versions
 =========================
@@ -33,21 +35,22 @@ If you have `pip <https://pip.pypa.io/>`_ on your system, you can simply install
 
     pip install -U selenium
 
-Alternately, you can download the source distribution from `PyPI <https://pypi.org/project/selenium/#files>`, unarchive it, and run::
-
-    python -m pip install .
-
-Note: You may want to consider using `virtualenv <http://www.virtualenv.org/>`_ to create isolated Python environments.
+You may want to consider using a `virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments>`_
+to create isolated Python environments.
 
 Drivers
 =======
 
-Selenium requires a driver to interface with the chosen browser. Firefox,
-for example, requires `geckodriver <https://github.com/mozilla/geckodriver/releases>`_, which needs to be installed before the below examples can be run. Make sure it's in your `PATH`, e. g., place it in `/usr/bin` or `/usr/local/bin`.
+Selenium requires a driver to interface with the chosen browser (chromedriver, edgedriver, geckodriver, etc).
 
-Failure to observe this step will give you an error `selenium.common.exceptions.WebDriverException: Message: 'geckodriver' executable needs to be in PATH.`
+In older versions of Selenium, it was necessary to install and manage these drivers yourself. You had to make sure the driver
+executable was available on your system `PATH`, or specified explicitly in code. Modern versions of Selenium handle browser and
+driver installation for you with `Selenium Manager <https://www.selenium.dev/documentation/selenium_manager>`_. You generally
+don't have to worry about driver installation or configuration now that it's done for you when you instantiate a WebDriver.
+Selenium Manager works with most supported platforms and browsers. If it doesn't meet your needs, you can still install and
+specify browsers and drivers yourself.
 
-Other supported browsers will have their own drivers available. Links to some of the more popular browser drivers follow.
+Links to some of the more popular browser drivers:
 
 +--------------+-----------------------------------------------------------------------+
 | **Chrome**:  | https://chromedriver.chromium.org/downloads                           |
@@ -62,59 +65,65 @@ Other supported browsers will have their own drivers available. Links to some of
 Example 0:
 ==========
 
-* open a new Firefox browser
-* load the page at the given URL
+* launch a new Chrome browser
+* load a web page
+* close the browser
 
 .. code-block:: python
 
     from selenium import webdriver
 
-    browser = webdriver.Firefox()
-    browser.get('http://selenium.dev/')
+
+    driver = webdriver.Chrome()
+    driver.get('https://selenium.dev/')
+    driver.quit()
 
 Example 1:
 ==========
 
-* open a new Firefox browser
-* load the Yahoo homepage
-* search for "seleniumhq"
+* launch a new Chrome browser
+* load the Selenium documentation page
+* find the "Webdriver" link
+* click the "WebDriver" link
 * close the browser
 
 .. code-block:: python
 
     from selenium import webdriver
     from selenium.webdriver.common.by import By
-    from selenium.webdriver.common.keys import Keys
 
-    browser = webdriver.Firefox()
 
-    browser.get('http://www.yahoo.com')
-    assert 'Yahoo' in browser.title
+    driver = webdriver.Chrome()
 
-    elem = browser.find_element(By.NAME, 'p')  # Find the search box
-    elem.send_keys('seleniumhq' + Keys.RETURN)
+    driver.get('https://selenium.dev/documentation')
+    assert 'Selenium' in driver.title
 
-    browser.quit()
+    elem = driver.find_element(By.ID, 'm-documentationwebdriver')
+    elem.click()
+    assert 'WebDriver' in driver.title
+
+    driver.quit()
 
 Example 2:
 ==========
 
-Selenium WebDriver is often used as a basis for testing web applications.  Here is a simple example using Python's standard `unittest <http://docs.python.org/3/library/unittest.html>`_ library:
+Selenium WebDriver is often used as a basis for testing web applications. Here is a simple example using Python's standard `unittest <http://docs.python.org/3/library/unittest.html>`_ library:
 
 .. code-block:: python
 
     import unittest
     from selenium import webdriver
 
+
     class GoogleTestCase(unittest.TestCase):
 
         def setUp(self):
-            self.browser = webdriver.Firefox()
-            self.addCleanup(self.browser.quit)
+            self.driver = webdriver.Firefox()
+            self.addCleanup(self.driver.quit)
 
         def test_page_title(self):
-            self.browser.get('http://www.google.com')
-            self.assertIn('Google', self.browser.title)
+            self.driver.get('https://www.google.com')
+            self.assertIn('Google', self.driver.title)
 
     if __name__ == '__main__':
         unittest.main(verbosity=2)
@@ -143,9 +152,9 @@ Contributing
 
  - Create a branch for your work
  - Ensure `tox` is installed (using a `virtualenv` is recommended)
- - `python3.8 -m venv .venv && . .venv/bin/activate && pip install tox`
+ - Run: `python -m venv venv && source venv/bin/activate && pip install tox`
  - After making changes, before committing execute `tox -e linting`
- - If tox exits `0`, commit and push otherwise fix the newly introduced breakages.
+ - If tox exits `0`, commit and push. Otherwise fix the newly introduced style violations.
  - `flake8` requires manual fixes
- - `black` will often rewrite the breakages automatically, however the files are unstaged and should staged again.
- - `isort` will often rewrite the breakages automatically, however the files are unstaged and should staged again.
+ - `black` will rewrite the violations automatically, however the files are unstaged and should staged again.
+ - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again.

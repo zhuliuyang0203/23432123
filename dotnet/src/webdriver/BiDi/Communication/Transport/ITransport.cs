@@ -20,9 +20,6 @@
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using System.Text.Json.Serialization;
-
-#nullable enable
 
 namespace OpenQA.Selenium.BiDi.Communication.Transport;
 
@@ -30,8 +27,7 @@ interface ITransport : IDisposable
 {
     Task ConnectAsync(CancellationToken cancellationToken);
 
-    Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken);
+    Task<byte[]> ReceiveAsync(CancellationToken cancellationToken);
 
-    Task SendAsJsonAsync<TCommand>(TCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
-        where TCommand : Command;
+    Task SendAsync(byte[] data, CancellationToken cancellationToken);
 }

@@ -25,8 +25,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Firefox
 {
     /// <summary>
@@ -160,7 +158,7 @@ namespace OpenQA.Selenium.Firefox
             this.ProfileDirectory = GenerateProfileDirectoryName();
             if (!string.IsNullOrEmpty(this.sourceProfileDir))
             {
-                FileUtilities.CopyDirectory(this.sourceProfileDir, this.ProfileDirectory);
+                FileUtilities.CopyDirectory(this.sourceProfileDir!, this.ProfileDirectory);
             }
             else
             {

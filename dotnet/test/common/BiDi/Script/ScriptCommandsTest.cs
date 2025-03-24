@@ -36,10 +36,10 @@ class ScriptCommandsTest : BiDiTestFixture
         Assert.That(realms, Is.Not.Null);
         Assert.That(realms, Has.Count.EqualTo(2));
 
-        Assert.That(realms[0], Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realms[0], Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realms[0].Realm, Is.Not.Null);
 
-        Assert.That(realms[1], Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realms[1], Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realms[1].Realm, Is.Not.Null);
     }
 
@@ -53,10 +53,10 @@ class ScriptCommandsTest : BiDiTestFixture
         Assert.That(realms, Is.Not.Null);
         Assert.That(realms, Has.Count.EqualTo(2));
 
-        Assert.That(realms[0], Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realms[0], Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realms[0].Realm, Is.Not.Null);
 
-        Assert.That(realms[1], Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realms[1], Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realms[1].Realm, Is.Not.Null);
     }
 
@@ -67,7 +67,7 @@ class ScriptCommandsTest : BiDiTestFixture
 
         var realms = await tab.Script.GetRealmsAsync();
 
-        var tabRealm = realms[0] as RealmInfo.Window;
+        var tabRealm = realms[0] as WindowRealmInfo;
 
         Assert.That(tabRealm, Is.Not.Null);
         Assert.That(tabRealm.Context, Is.EqualTo(tab));
@@ -80,7 +80,7 @@ class ScriptCommandsTest : BiDiTestFixture
 
         var realms = await tab.Script.GetRealmsAsync(new() { Type = RealmType.Window });
 
-        var tabRealm = realms[0] as RealmInfo.Window;
+        var tabRealm = realms[0] as WindowRealmInfo;
 
         Assert.That(tabRealm, Is.Not.Null);
         Assert.That(tabRealm.Context, Is.EqualTo(tab));
@@ -93,7 +93,7 @@ class ScriptCommandsTest : BiDiTestFixture
 
         Assert.That(preloadScript, Is.Not.Null);
 
-        TaskCompletionSource<Modules.Log.Entry> tcs = new();
+        TaskCompletionSource<Modules.Log.LogEntry> tcs = new();
 
         await context.Log.OnEntryAddedAsync(tcs.SetResult);
 
@@ -110,7 +110,7 @@ class ScriptCommandsTest : BiDiTestFixture
     {
         var preloadScript = await bidi.Script.AddPreloadScriptAsync("(channel) => channel('will_be_send', 'will_be_ignored')", new()
         {
-            Arguments = [new LocalValue.Channel(new(new("channel_name")))]
+            Arguments = [new ChannelLocalValue(new(new("channel_name")))]
         });
 
         Assert.That(preloadScript, Is.Not.Null);
@@ -122,7 +122,7 @@ class ScriptCommandsTest : BiDiTestFixture
     {
         var preloadScript = await bidi.Script.AddPreloadScriptAsync("(channel) => channel('will_be_send', 'will_be_ignored')", new()
         {
-            Arguments = [new LocalValue.Channel(new(new("channel_name"))
+            Arguments = [new ChannelLocalValue(new(new("channel_name"))
             {
                 SerializationOptions = new()
                 {
@@ -164,6 +164,6 @@ class ScriptCommandsTest : BiDiTestFixture
 
         var resultAfterRemoval = await context.Script.EvaluateAsync("window.bar", true, targetOptions: new() { Sandbox = "sandbox" });
 
-        Assert.That(resultAfterRemoval.Result, Is.AssignableFrom<RemoteValue.Undefined>());
+        Assert.That(resultAfterRemoval.Result, Is.AssignableFrom<UndefinedRemoteValue>());
     }
 }

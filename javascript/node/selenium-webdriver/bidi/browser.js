@@ -15,6 +15,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+const { WindowState, ClientWindowInfo } = require('./clientWindowInfo')
+
 /**
  * Represents the commands and events under Browser Module.
  * Described in https://w3c.github.io/webdriver-bidi/#module-browser
@@ -83,6 +85,20 @@ class Browser {
 
     await this.bidi.send(command)
   }
+
+  /**
+   * Gets information about all client windows.
+   * @returns {Promise<ClientWindowInfo[]>} Array of client window information
+   */
+  async getClientWindows() {
+    const command = {
+      method: 'browser.getClientWindows',
+      params: {},
+    }
+
+    const response = await this.bidi.send(command)
+    return response.result.clientWindows.map((window) => ClientWindowInfo.fromJson(window))
+  }
 }
 
 async function getBrowserInstance(driver) {
@@ -92,3 +108,4 @@ async function getBrowserInstance(driver) {
 }
 
 module.exports = getBrowserInstance
+module.exports.WindowState = WindowState

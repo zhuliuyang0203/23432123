@@ -32,7 +32,7 @@ def with_tag_name(tag_name: str) -> "RelativeBy":
     """Start searching for relative objects using a tag name.
 
     Parameters:
-    ----------
+    -----------
     tag_name : str
         The DOM tag of element to start searching.
 
@@ -63,7 +63,7 @@ def locate_with(by: ByType, using: str) -> "RelativeBy":
     """Start searching for relative objects your search criteria with By.
 
     Parameters:
-    ----------
+    -----------
     by : ByType
         The method to find the element.
 
@@ -106,7 +106,7 @@ class RelativeBy:
         `locate_with` method as this signature could change.
 
         Attributes:
-        ----------
+        -----------
         root : Dict[By, str]
             - A dict with `By` enum as the key and the search query as the value
 
@@ -127,7 +127,7 @@ class RelativeBy:
         """Add a filter to look for elements above.
 
         Parameters:
-        ----------
+        -----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look above
 
@@ -161,7 +161,7 @@ class RelativeBy:
         """Add a filter to look for elements below.
 
         Parameters:
-        ----------
+        -----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look below
 
@@ -195,7 +195,7 @@ class RelativeBy:
         """Add a filter to look for elements to the left of.
 
         Parameters:
-        ----------
+        -----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look to the left of
 
@@ -229,7 +229,7 @@ class RelativeBy:
         """Add a filter to look for elements right of.
 
         Parameters:
-        ----------
+        -----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look right of
 
@@ -335,7 +335,7 @@ class RelativeBy:
         """Add a filter to look for elements near.
 
         Parameters:
-        ----------
+        -----------
         element_or_locator : Union[WebElement, Dict, None]
             Element to look near by the element or within a distance
 

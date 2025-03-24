@@ -52,7 +52,7 @@ class ActionBuilder:
         """Get the device with the given name.
 
         Parameters:
-        ----------
+        -----------
         name : str
             The name of the device to get.
 
@@ -86,7 +86,7 @@ class ActionBuilder:
         """Add a new key input device to the action builder.
 
         Parameters:
-        ----------
+        -----------
         name : str
             The name of the key input device.
 
@@ -107,7 +107,7 @@ class ActionBuilder:
         """Add a new pointer input device to the action builder.
 
         Parameters:
-        ----------
+        -----------
         kind : str
             The kind of pointer input device.
                 - "mouse"
@@ -134,7 +134,7 @@ class ActionBuilder:
         """Add a new wheel input device to the action builder.
 
         Parameters:
-        ----------
+        -----------
         name : str
             The name of the wheel input device.
 
@@ -186,7 +186,7 @@ class ActionBuilder:
         """Add a new input device to the action builder.
 
         Parameters:
-        ----------
+        -----------
         new_input : Union[KeyInput, PointerInput, WheelInput]
             The new input device to add.
         """

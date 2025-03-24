@@ -1,3 +1,108 @@
+v4.30.0
+======
+* Fix dev environment to run tests on Windows/MacOS (#15303)
+* Fix sporadic build issue with selenium manager in msbuild
+* Increment `WebDriver` towards nullability (#15228)
+* Do not warn when passing in null driver paths to driver service (#15328)
+* Add `SystemClock` singleton (#15285)
+* Remove obsoleted members/types for 4.30 (#15342)
+* Parse response before deserialization (#15268)
+* Address some nullability warnings in driver options
+* Make internal console writer more flexible via taking TextWriter only (#15346)
+* Annotate nullability on most remaining types (#15257)
+* Annotate CDP as AOT-unsafe (#14637)
+* Fix placement of obsolete argument in ConsoleLogHandler
+* Annotate nullability on more of `WebElement` (#15230)
+* Annotate nullable reference types on CDP-generated code (#15255)
+* Simplify and nullable annotate `DriverFinder` (#15232)
+* Annotate nullability on `WebDriver.SessionId` (#15350)
+* Enable nullability on remote file download APIs (#15351)
+* Annotate nullability on elements and `WebDriver` (#15352)
+* Annotate nullability on capabilities types (#15353)
+* Enable Nullable Reference Types (#15354)
+* Trim away CDP when publishing AOT apps (#15217)
+* [bidi] Order command properties in json to simplify logs reading
+* [bidi] Add SetFiles command in Input module (#15392)
+* [bidi] Added UnhandledPromptBehavior for new session capability (#15391)
+* [bidi] Encapsulate transport inside `Broker` (#15423)
+* [bidi] Align `Scipt.LocalValue.Map` with spec (#15395)
+* [bidi] Make `DisposeAsyncCore` protected
+* [bidi] Make `LocalValue` types not nested (#15428)
+* [bidi] Migrate RemoteValue to separate types (#15426)
+* [bidi] Reuse RegExpValue in script Local/Remote values
+* [bidi] Make `PartitionDescriptor` as not nested (#15435)
+* [bidi] Make `UrlPattern` as not nested (#15434)
+* [bidi] Make script `Target` as not nested (#15436)
+* [bidi] Make `LogEntry` as not nested (#15432)
+* [cdp] add support for 134 and remove 131
+* [cdp] remove support for v85 since no longer required by Firefox
+* [bidi] Make `BytesValue` not nested (#15433)
+* [bidi] Make input `Actions` as not nested (#15437)
+* [bidi] Make `ProxyConfiguration` as not nested (#15438)
+* [bidi] Make `Locator` types as not nested (#15429)
+* [bidi] Make `ClipRectangle` as not nested (#15431)
+* [bidi] Make `RealmInfo` as not nested (#15444)
+* [bidi] Make input `Origin` as not nested (#15445)
+
+v4.29.0
+======
+* Add CDP for Chrome 133 and remove 130
+* [dotnet] [bidi] Add network SetCacheBehavior command (#15133)
+* [dotnet] Annotate nullability on devtools event args (#15134)
+* [dotnet] Annotate nullability for `DriverService` and chromium/safari services (#15101)
+* [dotnet] Add nullability to `Command` type (#15147)
+* [dotnet] Annotate nullable reference types on input devices (#14804)
+* [dotnet] Annotate nullability on `SendingRemoteHttpRequestEventArgs` (#15148)
+* [dotnet] Fix obvious code style formatting
+* [dotnet] Address some build warnings (#15157)
+* [dotnet] Enhance Print PageSize class to support for predefined well-known sizes (#15144)
+* [dotnet] Improve bidi exception when it is not enabled (#15163)
+* [dotnet] Annotate nullability on `DriverOptions` (#15167)
+* [dotnet] Annotate nullability on `ChromiumOptions` (#15173)
+* [dotnet] Annotate nullability on interactions (#15152)
+* [dotnet] [bidi] Use JsonSerializerContext to be AOT friendly (#15162)
+* [dotnet] Annotate nullability on chrome-based driver services (#15154)
+* [dotnet] Simplify and modernize `DevToolsDomains.InitializeDomains` (#15198)
+* [dotnet] Add nullability to Chromium configuration types (#15204)
+* [dotnet] Allow UTF-16 tolerant string converter as a dictionary key (#15203)
+* [dotnet] Fix webauth credential to allow nullable `rpID` (#15201)
+* [dotnet] [bidi] Avoid polymorphic commands to be more statically easier (#15202)
+* [dotnet] Optimize reflection in `JsonEnumMemberConverter` (#15205)
+* [dotnet] Annotate nullability on firefox and chromium options (#15206)
+* [dotnet] Annotate nullability on `Actions` type (#15208)
+* [dotnet] Fix marionette host Firefox argument (#15153)
+* [dotnet] Make it easier to read bidi logs
+* [dotnet] Annotate nullability on `Navigate()` and `SwitchTo()` (#15211)
+* [dotnet] Annotate nullability on Firefox profile (#15207)
+* [dotnet] Annotate nullability on network interactions (#15209)
+* [dotnet] Add nullability to `Manage()` (#15210)
+* [dotnet] Remove Firefox CDP (#15200)
+* [dotnet] Fully annotate nullability on `HttpCommandExecutor` (#15110)
+* [dotnet] Annotate nullability on `SafariOptions`, error, and enums (#15219)
+* [dotnet] Fix `JavaScriptEngine.ScriptCallbackBindings` not containing new bindings (#15221)
+* [dotnet] Handle nullability on `WebElement` (#15225)
+* [dotnet] Annotate nullability on `FirefoxDriverService` (#15220)
+* [dotnet] Add nullability annotations to devtools domains (#15143)
+* [dotnet] Annotate nullability on Domains (#15237)
+* [dotnet] Add not-null `Response.Value` helper (#15243)
+* [dotnet] Annotate nullability on `JavaScript` protocol (#15238)
+* [dotnet] Annotate nullability on `Target` protocol (#15240)
+* [dotnet] Annotate nullability on `Log` protocol (#15239)
+* [dotnet] Annotate nullability on `JavaScriptEngine` and related types (#15218)
+* [dotnet] Annotate nullability on `DevToolsSession` (#15244)
+* [dotnet] [bidi] Support getting of client windows in browser module (#15241)
+* [dotnet][bidi] Remove json serialization from transport layer (#15250)
+* [dotnet][bidi] Add BrowsingContext.OnNavigationCommitted event (#15253)
+* [dotnet][bidi] Use subscription id for events to unsubscribe (#15251)
+* [dotnet][bidi] Add optional PromptUnload parameter when closing BrowsingContext and compiler helps (#15254)
+* [dotnet] Annotate nullability on `DevTools` and event args (#15252)
+* [dotnet] Annotate nullability on platform-specific WebDrivers (#15236)
+* [dotnet] Add back in a public parameterless constructor to `HttpRequestData` (#15258)
+* [dotnet] Simplify user creation of network types (#15267)
+* [dotnet][bidi] Remove AsBiDiContextAsync helper to avoid disposal issue (#15279)
+* [dotnet] Possibility to override underlying HttpClient/HttpClientHandler for all HTTP requests (#15283)
+* [dotnet][bidi] Underlying local/remote script number as double (#15301)
+
 v4.28.0
 ======
 * Add CDP for Chrome 132 and remove 129

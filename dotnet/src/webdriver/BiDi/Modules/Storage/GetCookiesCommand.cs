@@ -23,19 +23,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
 internal class GetCookiesCommand(GetCookiesCommandParameters @params)
     : Command<GetCookiesCommandParameters>(@params, "storage.getCookies");
 
-internal record GetCookiesCommandParameters : CommandParameters
-{
-    public CookieFilter? Filter { get; set; }
-
-    public PartitionDescriptor? Partition { get; set; }
-}
+internal record GetCookiesCommandParameters(CookieFilter? Filter, PartitionDescriptor? Partition) : CommandParameters;
 
 public record GetCookiesOptions : CommandOptions
 {
@@ -87,16 +80,15 @@ public class CookieFilter
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Context), "context")]
-[JsonDerivedType(typeof(StorageKey), "storageKey")]
-public abstract record PartitionDescriptor
+[JsonDerivedType(typeof(ContextPartitionDescriptor), "context")]
+[JsonDerivedType(typeof(StorageKeyPartitionDescriptor), "storageKey")]
+public abstract record PartitionDescriptor;
+
+public record ContextPartitionDescriptor(BrowsingContext.BrowsingContext Context) : PartitionDescriptor;
+
+public record StorageKeyPartitionDescriptor : PartitionDescriptor
 {
-    public record Context([property: JsonPropertyName("context")] BrowsingContext.BrowsingContext Descriptor) : PartitionDescriptor;
+    public string? UserContext { get; set; }
 
-    public record StorageKey : PartitionDescriptor
-    {
-        public string? UserContext { get; set; }
-
-        public string? SourceOrigin { get; set; }
-    }
+    public string? SourceOrigin { get; set; }
 }

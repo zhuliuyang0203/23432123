@@ -17,8 +17,6 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public record SetCookieHeader(string Name, BytesValue Value)

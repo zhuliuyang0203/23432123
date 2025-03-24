@@ -19,8 +19,6 @@
 
 using System.Drawing;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Interactions.Internal
 {
     /// <summary>

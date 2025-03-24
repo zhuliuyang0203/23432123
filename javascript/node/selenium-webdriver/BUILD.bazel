@@ -11,13 +11,12 @@ load("//javascript/private:browsers.bzl", "BROWSERS")
 
 npm_link_all_packages(name = "node_modules")
 
-VERSION = "4.29.0-nightly202501202154"
+VERSION = "4.31.0-nightly202503211716"
 
 BROWSER_VERSIONS = [
-    "v85",
-    "v131",
+    "v134",
     "v132",
-    "v130",
+    "v133",
 ]
 
 js_library(
@@ -39,6 +38,7 @@ js_library(
         "devtools/*.js",
         "common/*.js",
         "bidi/*.js",
+        "bidi/external/*.js",
     ]),
     deps = [
         ":node_modules/@bazel/runfiles",

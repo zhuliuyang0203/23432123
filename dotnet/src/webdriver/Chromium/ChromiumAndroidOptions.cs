@@ -19,8 +19,6 @@
 
 using OpenQA.Selenium.Internal;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Chromium
 {
     /// <summary>

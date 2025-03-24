@@ -290,7 +290,6 @@ closure_js_library(
         ":errors",
         ":json",
         ":useragent",
-        "//third_party/js/wgxpath",
         "@io_bazel_rules_closure//closure/library/array",
         "@io_bazel_rules_closure//closure/library/dom",
         "@io_bazel_rules_closure//closure/library/dom:nodetype",

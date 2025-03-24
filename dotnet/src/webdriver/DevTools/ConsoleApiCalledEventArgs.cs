@@ -20,8 +20,6 @@
 using System;
 using System.Collections.ObjectModel;
 
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>

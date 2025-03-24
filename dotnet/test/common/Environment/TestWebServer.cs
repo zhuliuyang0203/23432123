@@ -23,8 +23,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Environment
@@ -33,21 +31,17 @@ namespace OpenQA.Selenium.Environment
     {
         private Process webserverProcess;
 
-        private string standaloneTestJar = @"_main/java/test/org/openqa/selenium/environment/appserver";
+        private string standaloneAppserverPath;
         private string projectRootPath;
         private bool captureWebServerOutput;
         private bool hideCommandPrompt;
-        private string javaHomeDirectory;
         private string port;
-
-        private StringBuilder outputData = new StringBuilder();
 
         public TestWebServer(string projectRoot, TestWebServerConfig config)
         {
             this.projectRootPath = projectRoot;
             this.captureWebServerOutput = config.CaptureConsoleOutput;
             this.hideCommandPrompt = config.HideCommandPromptWindow;
-            this.javaHomeDirectory = config.JavaHomeDirectory;
             this.port = config.Port;
         }
 
@@ -58,73 +52,33 @@ namespace OpenQA.Selenium.Environment
                 try
                 {
                     var runfiles = Runfiles.Create();
-                    standaloneTestJar = runfiles.Rlocation(standaloneTestJar);
+                    standaloneAppserverPath = runfiles.Rlocation(@"_main/java/test/org/openqa/selenium/environment/appserver");
                 }
                 catch (FileNotFoundException)
                 {
-                    var baseDirectory = AppContext.BaseDirectory;
-                    standaloneTestJar = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
+                    // means we are NOT running under bazel runtime
+                    // most likely in IDE
                 }
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                var processFileName = standaloneAppserverPath ?? "bazel";
+
+                string processArguments = $"{port}";
+
+                if (standaloneAppserverPath is null)
                 {
-                    standaloneTestJar += ".exe";
+                    processArguments = $"run //java/test/org/openqa/selenium/environment:appserver {processArguments}";
+
+                    // Override project root path to be exact selenium repo path, not 'bazel-bin'
+                    projectRootPath = Path.Combine(AppContext.BaseDirectory, "../../../../../..");
                 }
-
-                Console.Write("Standalone jar is " + standaloneTestJar);
-
-                if (!File.Exists(standaloneTestJar))
-                {
-                    throw new FileNotFoundException(
-                        string.Format(
-                            "Test webserver jar at {0} didn't exist. Project root is {2}. Please build it using something like {1}.",
-                            standaloneTestJar,
-                            "bazel build //java/test/org/openqa/selenium/environment:appserver_deploy.jar",
-                            projectRootPath));
-                }
-
-                //List<string> javaSystemProperties = new List<string>();
-
-                StringBuilder processArgsBuilder = new StringBuilder();
-                // foreach (string systemProperty in javaSystemProperties)
-                // {
-                //     if (processArgsBuilder.Length > 0)
-                //     {
-                //         processArgsBuilder.Append(" ");
-                //     }
-                //
-                //     processArgsBuilder.AppendFormat("-D{0}", systemProperty);
-                // }
-                //
-                // if (processArgsBuilder.Length > 0)
-                // {
-                //     processArgsBuilder.Append(" ");
-                // }
-                //
-                // processArgsBuilder.AppendFormat("-jar {0}", standaloneTestJar);
-                processArgsBuilder.AppendFormat(" {0}", this.port);
-
-                Console.Write(processArgsBuilder.ToString());
 
                 webserverProcess = new Process();
-                webserverProcess.StartInfo.FileName = standaloneTestJar;
-                // if (!string.IsNullOrEmpty(javaExecutablePath))
-                // {
-                //     webserverProcess.StartInfo.FileName = Path.Combine(javaExecutablePath, javaExecutableName);
-                // }
-                // else
-                // {
-                //     webserverProcess.StartInfo.FileName = javaExecutableName;
-                // }
 
-                webserverProcess.StartInfo.Arguments = processArgsBuilder.ToString();
+                webserverProcess.StartInfo.FileName = processFileName;
+                webserverProcess.StartInfo.Arguments = processArguments;
                 webserverProcess.StartInfo.WorkingDirectory = projectRootPath;
                 webserverProcess.StartInfo.UseShellExecute = !(hideCommandPrompt || captureWebServerOutput);
                 webserverProcess.StartInfo.CreateNoWindow = hideCommandPrompt;
-                if (!string.IsNullOrEmpty(this.javaHomeDirectory))
-                {
-                    webserverProcess.StartInfo.EnvironmentVariables["JAVA_HOME"] = this.javaHomeDirectory;
-                }
 
                 captureWebServerOutput = true;
 
@@ -169,7 +123,8 @@ namespace OpenQA.Selenium.Environment
                         output = webserverProcess.StandardOutput.ReadToEnd();
                     }
 
-                    string errorMessage = string.Format("Could not start the test web server in {0} seconds.\nWorking directory: {1}\nProcess Args: {2}\nstdout: {3}\nstderr: {4}", timeout.TotalSeconds, projectRootPath, processArgsBuilder, output, error);
+                    string errorMessage = string.Format("Could not start the test web server in {0} seconds.\nWorking directory: {1}\nProcess Args: {2}\nstdout: {3}\nstderr: {4}", timeout.TotalSeconds, projectRootPath, processArguments, output, error);
+
                     throw new TimeoutException(errorMessage);
                 }
             }

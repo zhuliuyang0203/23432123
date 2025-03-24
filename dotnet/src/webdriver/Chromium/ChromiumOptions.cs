@@ -22,8 +22,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Chromium
 {
     /// <summary>
@@ -615,7 +613,7 @@ namespace OpenQA.Selenium.Chromium
 
             if (!string.IsNullOrEmpty(androidOptions.AndroidProcess))
             {
-                chromeOptions["androidProcess"] = androidOptions.AndroidProcess;
+                chromeOptions["androidProcess"] = androidOptions.AndroidProcess!;
             }
 
             if (androidOptions.UseRunningApp)
@@ -641,9 +639,9 @@ namespace OpenQA.Selenium.Chromium
             return perfLoggingPrefsDictionary;
         }
 
-        private static Dictionary<string, object> GenerateMobileEmulationSettingsDictionary(ChromiumMobileEmulationDeviceSettings? settings, string? deviceName)
+        private static Dictionary<string, object?> GenerateMobileEmulationSettingsDictionary(ChromiumMobileEmulationDeviceSettings? settings, string? deviceName)
         {
-            Dictionary<string, object> mobileEmulationSettings = new Dictionary<string, object>();
+            Dictionary<string, object?> mobileEmulationSettings = new Dictionary<string, object?>();
 
             if (!string.IsNullOrEmpty(deviceName))
             {

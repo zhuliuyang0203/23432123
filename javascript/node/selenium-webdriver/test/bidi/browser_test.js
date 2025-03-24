@@ -21,20 +21,21 @@ const assert = require('node:assert')
 const { suite } = require('../../lib/test')
 const { Browser } = require('selenium-webdriver')
 const BrowserBiDi = require('selenium-webdriver/bidi/browser')
+const { WindowState } = require('selenium-webdriver/bidi/browser')
 
 suite(
   function (env) {
+    let driver
+
+    beforeEach(async function () {
+      driver = await env.builder().build()
+    })
+
+    afterEach(function () {
+      return driver.quit()
+    })
+
     describe('BiDi Browser', function () {
-      let driver
-
-      beforeEach(async function () {
-        driver = await env.builder().build()
-      })
-
-      afterEach(function () {
-        return driver.quit()
-      })
-
       it('can create a user context', async function () {
         const browser = await BrowserBiDi(driver)
 
@@ -77,6 +78,25 @@ suite(
         assert.strictEqual(updatedUserContexts.includes(userContext2), false)
 
         await browser.removeUserContext(userContext1)
+      })
+    })
+
+    describe('Client Windows', function () {
+      it('can get client windows', async function () {
+        const browser = await BrowserBiDi(driver)
+        const windows = await browser.getClientWindows()
+
+        assert(Array.isArray(windows))
+        assert(windows.length > 0)
+
+        const window = windows[0]
+        assert(window.clientWindow)
+        assert(Object.values(WindowState).includes(window.state))
+        assert(Number.isInteger(window.width) && window.width > 0)
+        assert(Number.isInteger(window.height) && window.height > 0)
+        assert(Number.isInteger(window.x))
+        assert(Number.isInteger(window.y))
+        assert(typeof window.active === 'boolean')
       })
     })
   },

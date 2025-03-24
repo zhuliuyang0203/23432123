@@ -22,22 +22,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextModule(Broker broker) : Module(broker)
 {
     public async Task<BrowsingContext> CreateAsync(ContextType type, CreateOptions? options = null)
     {
-        var @params = new CreateCommandParameters(type);
-
-        if (options is not null)
-        {
-            @params.ReferenceContext = options.ReferenceContext;
-            @params.Background = options.Background;
-            @params.UserContext = options.UserContext;
-        }
+        var @params = new CreateCommandParameters(type, options?.ReferenceContext, options?.Background, options?.UserContext);
 
         var createResult = await Broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand(@params), options).ConfigureAwait(false);
 
@@ -46,12 +37,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
 
     public async Task<NavigateResult> NavigateAsync(BrowsingContext context, string url, NavigateOptions? options = null)
     {
-        var @params = new NavigateCommandParameters(context, url);
-
-        if (options is not null)
-        {
-            @params.Wait = options.Wait;
-        }
+        var @params = new NavigateCommandParameters(context, url, options?.Wait);
 
         return await Broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand(@params), options).ConfigureAwait(false);
     }
@@ -65,35 +51,21 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
 
     public async Task<LocateNodesResult> LocateNodesAsync(BrowsingContext context, Locator locator, LocateNodesOptions? options = null)
     {
-        var @params = new LocateNodesCommandParameters(context, locator);
-
-        if (options is not null)
-        {
-            @params.MaxNodeCount = options.MaxNodeCount;
-            @params.SerializationOptions = options.SerializationOptions;
-            @params.StartNodes = options.StartNodes;
-        }
+        var @params = new LocateNodesCommandParameters(context, locator, options?.MaxNodeCount, options?.SerializationOptions, options?.StartNodes);
 
         return await Broker.ExecuteCommandAsync<LocateNodesCommand, LocateNodesResult>(new LocateNodesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(BrowsingContext context, CaptureScreenshotOptions? options = null)
     {
-        var @params = new CaptureScreenshotCommandParameters(context);
-
-        if (options is not null)
-        {
-            @params.Origin = options.Origin;
-            @params.Format = options.Format;
-            @params.Clip = options.Clip;
-        }
+        var @params = new CaptureScreenshotCommandParameters(context, options?.Origin, options?.Format, options?.Clip);
 
         return await Broker.ExecuteCommandAsync<CaptureScreenshotCommand, CaptureScreenshotResult>(new CaptureScreenshotCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task CloseAsync(BrowsingContext context, CloseOptions? options = null)
     {
-        var @params = new CloseCommandParameters(context);
+        var @params = new CloseCommandParameters(context, options?.PromptUnload);
 
         await Broker.ExecuteCommandAsync(new CloseCommand(@params), options).ConfigureAwait(false);
     }
@@ -107,39 +79,21 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
 
     public async Task<NavigateResult> ReloadAsync(BrowsingContext context, ReloadOptions? options = null)
     {
-        var @params = new ReloadCommandParameters(context);
-
-        if (options is not null)
-        {
-            @params.IgnoreCache = options.IgnoreCache;
-            @params.Wait = options.Wait;
-        }
+        var @params = new ReloadCommandParameters(context, options?.IgnoreCache, options?.Wait);
 
         return await Broker.ExecuteCommandAsync<ReloadCommand, NavigateResult>(new ReloadCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task SetViewportAsync(BrowsingContext context, SetViewportOptions? options = null)
     {
-        var @params = new SetViewportCommandParameters(context);
-
-        if (options is not null)
-        {
-            @params.Viewport = options.Viewport;
-            @params.DevicePixelRatio = options?.DevicePixelRatio;
-        }
+        var @params = new SetViewportCommandParameters(context, options?.Viewport, options?.DevicePixelRatio);
 
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(GetTreeOptions? options = null)
     {
-        var @params = new GetTreeCommandParameters();
-
-        if (options is not null)
-        {
-            @params.MaxDepth = options.MaxDepth;
-            @params.Root = options.Root;
-        }
+        var @params = new GetTreeCommandParameters(options?.MaxDepth, options?.Root);
 
         var getTreeResult = await Broker.ExecuteCommandAsync<GetTreeCommand, GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
 
@@ -148,31 +102,14 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
 
     public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = null)
     {
-        var @params = new PrintCommandParameters(context);
-
-        if (options is not null)
-        {
-            @params.Background = options.Background;
-            @params.Margin = options.Margin;
-            @params.Orientation = options.Orientation;
-            @params.Page = options.Page;
-            @params.PageRanges = options.PageRanges;
-            @params.Scale = options.Scale;
-            @params.ShrinkToFit = options.ShrinkToFit;
-        }
+        var @params = new PrintCommandParameters(context, options?.Background, options?.Margin, options?.Orientation, options?.Page, options?.PageRanges, options?.Scale, options?.ShrinkToFit);
 
         return await Broker.ExecuteCommandAsync<PrintCommand, PrintResult>(new PrintCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task HandleUserPromptAsync(BrowsingContext context, HandleUserPromptOptions? options = null)
     {
-        var @params = new HandleUserPromptCommandParameters(context);
-
-        if (options is not null)
-        {
-            @params.Accept = options.Accept;
-            @params.UserText = options.UserText;
-        }
+        var @params = new HandleUserPromptCommandParameters(context, options?.Accept, options?.UserText);
 
         await Broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params), options).ConfigureAwait(false);
     }
@@ -245,6 +182,16 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
     public async Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> handler, BrowsingContextsSubscriptionOptions? options = null)
     {
         return await Broker.SubscribeAsync("browsingContext.navigationFailed", handler, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnNavigationCommittedAsync(Func<NavigationInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.navigationCommitted", handler, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnNavigationCommittedAsync(Action<NavigationInfo> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.navigationCommitted", handler, options).ConfigureAwait(false);
     }
 
     public async Task<Subscription> OnContextCreatedAsync(Func<BrowsingContextInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = null)

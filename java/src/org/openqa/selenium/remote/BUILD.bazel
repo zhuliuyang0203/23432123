@@ -31,6 +31,7 @@ java_export(
         "//java/src/org/openqa/selenium/bidi/log",
         "//java/src/org/openqa/selenium/bidi/module",
         "//java/src/org/openqa/selenium/bidi/network",
+        "//java/src/org/openqa/selenium/bidi/permissions",
         "//java/src/org/openqa/selenium/bidi/script",
         "//java/src/org/openqa/selenium/bidi/storage",
         "//java/src/org/openqa/selenium/devtools",

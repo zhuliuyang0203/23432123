@@ -21,6 +21,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 @pytest.mark.xfail_safari
 @pytest.mark.xfail_firefox
+@pytest.mark.xfail_remote
 def test_check_console_messages(driver, pages):
     with pytest.warns(None) as record:
         devtools, connection = driver.start_devtools()

@@ -199,6 +199,15 @@ public class NodeFlags implements HasRoles {
   public int registerPeriod = DEFAULT_REGISTER_PERIOD;
 
   @Parameter(
+      names = "--register-shutdown-on-failure",
+      description =
+          "If this flag is enabled, the Node will shut down after the register period is completed."
+              + " This is useful for container environments to restart and register again. If"
+              + " restarted multiple times, the Node container status will be CrashLoopBackOff.")
+  @ConfigValue(section = NODE_SECTION, name = "register-shutdown-on-failure", example = "false")
+  public boolean registerShutdownOnFailure = false;
+
+  @Parameter(
       names = "--heartbeat-period",
       description =
           "How often, in seconds, will the Node send heartbeat events to the Distributor "

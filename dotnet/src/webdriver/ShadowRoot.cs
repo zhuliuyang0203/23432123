@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -99,7 +97,7 @@ namespace OpenQA.Selenium
             parameters.Add("value", by.Criteria);
 
             Response commandResponse = this.driver.InternalExecute(DriverCommand.FindShadowChildElement, parameters);
-            return this.driver.GetElementFromResponse(commandResponse);
+            return this.driver.GetElementFromResponse(commandResponse)!;
         }
 
         /// <summary>

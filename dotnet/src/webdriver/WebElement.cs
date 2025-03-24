@@ -77,7 +77,8 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementTagName, parameters);
 
-                return commandResponse.Value.ToString();
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -95,7 +96,8 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementText, parameters);
 
-                return commandResponse.Value.ToString();
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -151,7 +153,11 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementRect, parameters);
 
-                Dictionary<string, object> rawPoint = (Dictionary<string, object>)commandResponse.Value;
+                if (commandResponse.Value is not Dictionary<string, object?> rawPoint)
+                {
+                    throw new WebDriverException($"GetElementRect command was successful, but response was not an object: {commandResponse.Value}");
+                }
+
                 int x = Convert.ToInt32(rawPoint["x"], CultureInfo.InvariantCulture);
                 int y = Convert.ToInt32(rawPoint["y"], CultureInfo.InvariantCulture);
                 return new Point(x, y);
@@ -171,7 +177,11 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetElementRect, parameters);
 
-                Dictionary<string, object> rawSize = (Dictionary<string, object>)commandResponse.Value;
+                if (commandResponse.Value is not Dictionary<string, object?> rawSize)
+                {
+                    throw new WebDriverException($"GetElementRect command was successful, but response was not an object: {commandResponse.Value}");
+                }
+
                 int width = Convert.ToInt32(rawSize["width"], CultureInfo.InvariantCulture);
                 int height = Convert.ToInt32(rawSize["height"], CultureInfo.InvariantCulture);
                 return new Size(width, height);
@@ -207,7 +217,7 @@ namespace OpenQA.Selenium
         {
             get
             {
-                object scriptResponse = this.driver.ExecuteScript("var rect = arguments[0].getBoundingClientRect(); return {'x': rect.left, 'y': rect.top};", this);
+                object scriptResponse = this.driver.ExecuteScript("var rect = arguments[0].getBoundingClientRect(); return {'x': rect.left, 'y': rect.top};", this)!;
 
                 Dictionary<string, object> rawLocation = (Dictionary<string, object>)scriptResponse;
 
@@ -229,7 +239,8 @@ namespace OpenQA.Selenium
 
                 Response commandResponse = this.Execute(DriverCommand.GetComputedAccessibleLabel, parameters);
 
-                return commandResponse.Value.ToString();
+                commandResponse.EnsureValueIsNotNull();
+                return commandResponse.Value.ToString()!;
             }
         }
 
@@ -240,16 +251,18 @@ namespace OpenQA.Selenium
         {
             get
             {
-                // TODO: Returning this as a string is incorrect. The W3C WebDriver Specification
-                // needs to be updated to more thoroughly document the structure of what is returned
-                // by this command. Once that is done, a type-safe class will be created, and will
-                // be returned by this property.
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("id", this.Id);
 
                 Response commandResponse = this.Execute(DriverCommand.GetComputedAccessibleRole, parameters);
 
+#nullable disable
+                // TODO: Returning this as a string is incorrect. The W3C WebDriver Specification
+                // needs to be updated to more thoroughly document the structure of what is returned
+                // by this command. Once that is done, a type-safe class will be created, and will
+                // be returned by this property.
                 return commandResponse.Value.ToString();
+#nullable enable
             }
         }
 
@@ -303,7 +316,6 @@ namespace OpenQA.Selenium
         /// behavior.
         /// </remarks>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual void Click()
         {
@@ -318,6 +330,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">The locating mechanism to use.</param>
         /// <returns>The first matching <see cref="IWebElement"/> on the current context.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         public virtual IWebElement FindElement(By by)
         {
@@ -344,7 +357,7 @@ namespace OpenQA.Selenium
 
             Response commandResponse = this.Execute(DriverCommand.FindChildElement, parameters);
 
-            return this.driver.GetElementFromResponse(commandResponse);
+            return this.driver.GetElementFromResponse(commandResponse)!;
         }
 
         /// <summary>
@@ -419,15 +432,14 @@ namespace OpenQA.Selenium
         /// via JavaScript.
         /// </remarks>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        public virtual string GetAttribute(string attributeName)
+        public virtual string? GetAttribute(string attributeName)
         {
-            Response commandResponse = null;
-            string attributeValue = string.Empty;
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             string atom = GetAtom("get-attribute.js");
             parameters.Add("script", atom);
             parameters.Add("args", new object[] { ((IWebDriverObjectReference)this).ToDictionary(), attributeName });
-            commandResponse = this.Execute(DriverCommand.ExecuteScript, parameters);
+
+            Response commandResponse = Execute(DriverCommand.ExecuteScript, parameters);
 
 
             // Normalize string values of boolean results as lowercase.
@@ -452,7 +464,7 @@ namespace OpenQA.Selenium
         /// of an IDL property of the element, either use the <see cref="GetAttribute(string)"/>
         /// method or the <see cref="GetDomProperty(string)"/> method.
         /// </remarks>
-        public virtual string GetDomAttribute(string attributeName)
+        public virtual string? GetDomAttribute(string attributeName)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", this.Id);
@@ -470,7 +482,7 @@ namespace OpenQA.Selenium
         /// <returns>The JavaScript property's current value. Returns a <see langword="null"/> if the
         /// value is not set or the property does not exist.</returns>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
-        public virtual string GetDomProperty(string propertyName)
+        public virtual string? GetDomProperty(string propertyName)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", this.Id);
@@ -493,12 +505,12 @@ namespace OpenQA.Selenium
             parameters.Add("id", this.Id);
 
             Response commandResponse = this.Execute(DriverCommand.GetElementShadowRoot, parameters);
-            if (commandResponse.Value is not Dictionary<string, object> shadowRootDictionary)
+            if (commandResponse.Value is not Dictionary<string, object?> shadowRootDictionary)
             {
                 throw new WebDriverException("Get shadow root command succeeded, but response value does not represent a shadow root.");
             }
 
-            if (!ShadowRoot.TryCreate(this.driver, shadowRootDictionary, out ShadowRoot shadowRoot))
+            if (!ShadowRoot.TryCreate(this.driver, shadowRootDictionary, out ShadowRoot? shadowRoot))
             {
                 throw new WebDriverException("Get shadow root command succeeded, but response value does not have a shadow root key value.");
             }
@@ -524,7 +536,9 @@ namespace OpenQA.Selenium
             parameters.Add("name", propertyName);
 
             Response commandResponse = this.Execute(DriverCommand.GetElementValueOfCssProperty, parameters);
-            return commandResponse.Value.ToString();
+
+            commandResponse.EnsureValueIsNotNull();
+            return commandResponse.Value.ToString()!;
         }
 
         /// <summary>
@@ -538,7 +552,9 @@ namespace OpenQA.Selenium
 
             // Get the screenshot as base64.
             Response screenshotResponse = this.Execute(DriverCommand.ElementScreenshot, parameters);
-            string base64 = screenshotResponse.Value.ToString();
+
+            screenshotResponse.EnsureValueIsNotNull();
+            string base64 = screenshotResponse.Value.ToString()!;
 
             // ... and convert it.
             return new Screenshot(base64);
@@ -553,7 +569,6 @@ namespace OpenQA.Selenium
         /// <see cref="Keys"/>.</remarks>
         /// <seealso cref="Keys"/>
         /// <exception cref="InvalidElementStateException">Thrown when the target element is not enabled.</exception>
-        /// <exception cref="ElementNotVisibleException">Thrown when the target element is not visible.</exception>
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual void SendKeys(string text)
         {
@@ -597,7 +612,7 @@ namespace OpenQA.Selenium
         /// <exception cref="StaleElementReferenceException">Thrown when the target element is no longer valid in the document DOM.</exception>
         public virtual void Submit()
         {
-            string elementType = this.GetAttribute("type");
+            string? elementType = this.GetAttribute("type");
             if (elementType != null && elementType == "submit")
             {
                 this.Click();
@@ -641,7 +656,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="obj">Object to compare against</param>
         /// <returns>A boolean if it is equal or not</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is not IWebElement other)
             {
@@ -682,14 +697,18 @@ namespace OpenQA.Selenium
         /// <param name="commandToExecute">The <see cref="DriverCommand"/> to execute against this element.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing names and values of the parameters for the command.</param>
         /// <returns>The <see cref="Response"/> object containing the result of the command execution.</returns>
-        protected virtual Response Execute(string commandToExecute, Dictionary<string, object> parameters)
+        protected virtual Response Execute(string commandToExecute, Dictionary<string,
+#nullable disable
+            object
+#nullable enable
+                >? parameters)
         {
             return this.driver.InternalExecute(commandToExecute, parameters);
         }
 
         private static string GetAtom(string atomResourceName)
         {
-            string atom = string.Empty;
+            string atom;
             using (Stream atomStream = ResourceUtilities.GetResourceStream(atomResourceName, atomResourceName))
             {
                 using (StreamReader atomReader = new StreamReader(atomStream))
@@ -721,7 +740,9 @@ namespace OpenQA.Selenium
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("file", base64zip);
                 Response response = this.Execute(DriverCommand.UploadFile, parameters);
-                return response.Value.ToString();
+
+                response.EnsureValueIsNotNull();
+                return response.Value.ToString()!;
             }
             catch (IOException e)
             {
