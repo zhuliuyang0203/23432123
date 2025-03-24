@@ -27,8 +27,8 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(MessageError))]
 [JsonSerializable(typeof(MessageEvent))]
 
-[JsonSerializable(typeof(Modules.Script.EvaluateResult.Success))]
-[JsonSerializable(typeof(Modules.Script.EvaluateResult.Exception))]
+[JsonSerializable(typeof(Modules.Script.EvaluateResultSuccess))]
+[JsonSerializable(typeof(Modules.Script.EvaluateResultException))]
 
 [JsonSerializable(typeof(Modules.Script.NumberRemoteValue))]
 [JsonSerializable(typeof(Modules.Script.BooleanRemoteValue))]

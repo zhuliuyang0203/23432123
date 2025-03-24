@@ -259,7 +259,7 @@ class BrowsingContextTest : BiDiTestFixture
     {
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
-            Origin = CaptureScreenshotOptions.ScreenshotOrigin.Document,
+            Origin = ScreenshotOrigin.Document,
             Clip = new BoxClipRectangle(5, 5, 10, 10)
         });
 
@@ -272,7 +272,7 @@ class BrowsingContextTest : BiDiTestFixture
     {
         var screenshot = await context.CaptureScreenshotAsync(new()
         {
-            Origin = CaptureScreenshotOptions.ScreenshotOrigin.Viewport,
+            Origin = ScreenshotOrigin.Viewport,
             Clip = new BoxClipRectangle(5, 5, 10, 10)
         });
 

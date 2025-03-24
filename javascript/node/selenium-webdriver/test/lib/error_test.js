@@ -139,6 +139,7 @@ describe('error', function () {
     test('unknown command', error.UnknownCommandError)
     test('unknown method', error.UnknownMethodError)
     test('unsupported operation', error.UnsupportedOperationError)
+    test('detached shadow root', error.DetachedShadowRootError)
 
     it('leaves remoteStacktrace empty if not in encoding', function () {
       assert.throws(
@@ -230,6 +231,7 @@ describe('error', function () {
     test('UNABLE_TO_CAPTURE_SCREEN', error.UnableToCaptureScreenError)
     test('ELEMENT_CLICK_INTERCEPTED', error.ElementClickInterceptedError)
     test('METHOD_NOT_ALLOWED', error.UnsupportedOperationError)
+    test('DETACHED_SHADOW_ROOT', error.DetachedShadowRootError)
 
     describe('UnexpectedAlertOpenError', function () {
       it('includes alert text from the response object', function () {

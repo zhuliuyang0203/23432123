@@ -405,6 +405,7 @@ const ErrorCode = {
   NO_SUCH_COOKIE: 62,
   UNABLE_TO_CAPTURE_SCREEN: 63,
   ELEMENT_CLICK_INTERCEPTED: 64,
+  DETACHED_SHADOW_ROOT: 65,
   METHOD_NOT_ALLOWED: 405,
 }
 
@@ -437,6 +438,7 @@ const LEGACY_ERROR_CODE_TO_TYPE = new Map([
   [ErrorCode.NO_SUCH_COOKIE, NoSuchCookieError],
   [ErrorCode.UNABLE_TO_CAPTURE_SCREEN, UnableToCaptureScreenError],
   [ErrorCode.ELEMENT_CLICK_INTERCEPTED, ElementClickInterceptedError],
+  [ErrorCode.DETACHED_SHADOW_ROOT, DetachedShadowRootError],
   [ErrorCode.METHOD_NOT_ALLOWED, UnsupportedOperationError],
 ])
 

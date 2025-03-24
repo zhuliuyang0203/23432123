@@ -260,13 +260,11 @@ public record NodeRemoteValue : RemoteValue, ISharedReference
     public NodeProperties? Value { get; internal set; }
 }
 
-public record WindowProxyRemoteValue(WindowProxyRemoteValue.Properties Value) : RemoteValue
+public record WindowProxyRemoteValue(WindowProxyProperties Value) : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
-
-    public record Properties(BrowsingContext.BrowsingContext Context);
 }
 
 public abstract record PrimitiveProtocolRemoteValue : RemoteValue;

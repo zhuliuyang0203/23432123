@@ -90,18 +90,11 @@ public record BooleanLocalValue(bool Value) : PrimitiveProtocolLocalValue;
 
 public record BigIntLocalValue(string Value) : PrimitiveProtocolLocalValue;
 
-public record ChannelLocalValue(ChannelLocalValue.ChannelProperties Value) : LocalValue
+public record ChannelLocalValue(ChannelProperties Value) : LocalValue
 {
     // TODO: Revise why we need it
     [JsonInclude]
     internal string type = "channel";
-
-    public record ChannelProperties(Channel Channel)
-    {
-        public SerializationOptions? SerializationOptions { get; set; }
-
-        public ResultOwnership? Ownership { get; set; }
-    }
 }
 
 public record ArrayLocalValue(IEnumerable<LocalValue> Value) : LocalValue;

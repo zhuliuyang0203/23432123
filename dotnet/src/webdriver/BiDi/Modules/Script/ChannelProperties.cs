@@ -1,4 +1,4 @@
-// <copyright file="ScriptEvaluateException.cs" company="Selenium Committers">
+// <copyright file="ChannelProperties.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,17 +17,11 @@
 // under the License.
 // </copyright>
 
-using System;
-
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public class ScriptEvaluateException(EvaluateResultException evaluateResultException) : Exception
+public record ChannelProperties(Channel Channel)
 {
-    private readonly EvaluateResultException _evaluateResultException = evaluateResultException;
+    public SerializationOptions? SerializationOptions { get; set; }
 
-    public string Text => _evaluateResultException.ExceptionDetails.Text;
-
-    public long ColumNumber => _evaluateResultException.ExceptionDetails.ColumnNumber;
-
-    public override string Message => $"{Text}{Environment.NewLine}{_evaluateResultException.ExceptionDetails.StackTrace}";
+    public ResultOwnership? Ownership { get; set; }
 }
