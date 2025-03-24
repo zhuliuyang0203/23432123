@@ -36,7 +36,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         /// Gets the version number of the runtime.
         /// </summary>
         [JsonPropertyName("runtimeVersion")]
-        public string RuntimeVersion { get; set; }
+        public string? RuntimeVersion { get; set; }
 
         [JsonPropertyName("definitionTemplates")]
         public CodeGenerationDefinitionTemplateSettings DefinitionTemplates { get; set; } = new CodeGenerationDefinitionTemplateSettings();

@@ -62,7 +62,7 @@ namespace OpenQA.Selenium
         /// variable, as if the function were called via "Function.apply"
         /// </para>
         /// </remarks>
-        object ExecuteScript(string script, params object[] args);
+        object? ExecuteScript(string script, params object?[] args);
 
         /// <summary>
         /// Executes JavaScript in the context of the currently selected frame or window.
@@ -100,7 +100,7 @@ namespace OpenQA.Selenium
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">If <paramref name="script" /> is <see langword="null"/>.</exception>
-        object ExecuteScript(PinnedScript script, params object[] args);
+        object? ExecuteScript(PinnedScript script, params object?[] args);
 
         /// <summary>
         /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
@@ -108,6 +108,6 @@ namespace OpenQA.Selenium
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
-        object ExecuteAsyncScript(string script, params object[] args);
+        object? ExecuteAsyncScript(string script, params object?[] args);
     }
 }

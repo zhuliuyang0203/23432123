@@ -23,6 +23,7 @@ import static org.openqa.selenium.testing.drivers.Browser.*;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Disabled;
@@ -32,6 +33,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UsernameAndPassword;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WindowType;
+import org.openqa.selenium.bidi.BiDiException;
+import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.bidi.module.Network;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.testing.JupiterTestBase;
@@ -262,6 +266,58 @@ class NetworkCommandsTest extends JupiterTestBase {
       driver.manage().timeouts().pageLoadTimeout(Duration.of(5, ChronoUnit.SECONDS));
 
       assertThatThrownBy(() -> driver.get(page)).isInstanceOf(WebDriverException.class);
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canSetCacheBehaviorToBypass() {
+    try (Network network = new Network(driver)) {
+      page = appServer.whereIs("basicAuth");
+
+      BrowsingContext context = new BrowsingContext(driver, WindowType.TAB);
+      String contextId = context.getId();
+
+      network.setCacheBehavior(CacheBehavior.BYPASS, Collections.singletonList(contextId));
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canSetCacheBehaviorToDefault() {
+    try (Network network = new Network(driver)) {
+      page = appServer.whereIs("basicAuth");
+
+      BrowsingContext context = new BrowsingContext(driver, WindowType.TAB);
+      String contextId = context.getId();
+
+      network.setCacheBehavior(CacheBehavior.DEFAULT, Collections.singletonList(contextId));
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canSetCacheBehaviorWithNoContextId() {
+    try (Network network = new Network(driver)) {
+      page = appServer.whereIs("basicAuth");
+
+      network.setCacheBehavior(CacheBehavior.BYPASS);
+      network.setCacheBehavior(CacheBehavior.DEFAULT);
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void throwsExceptionForInvalidContext() {
+    try (Network network = new Network(driver)) {
+      page = appServer.whereIs("basicAuth");
+
+      assertThatThrownBy(
+              () ->
+                  network.setCacheBehavior(
+                      CacheBehavior.DEFAULT, Collections.singletonList("invalid-context")))
+          .isInstanceOf(BiDiException.class)
+          .hasMessageContaining("no such frame");
     }
   }
 }

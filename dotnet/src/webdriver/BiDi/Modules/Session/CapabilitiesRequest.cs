@@ -19,11 +19,9 @@
 
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-public class CapabilitiesRequest
+public record CapabilitiesRequest
 {
     public CapabilityRequest? AlwaysMatch { get; set; }
 

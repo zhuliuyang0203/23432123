@@ -67,7 +67,7 @@ def add_pdls(chrome_milestone):
     if os.path.isdir(old_dir):
         shutil.rmtree(old_dir)
 
-    if not os.path.isdir(target_dir):
+    if not target_dir.is_dir() or not any(target_dir.iterdir()):
         os.makedirs(target_dir, exist_ok=True)
         if os.path.isdir(source_dir):
             shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)

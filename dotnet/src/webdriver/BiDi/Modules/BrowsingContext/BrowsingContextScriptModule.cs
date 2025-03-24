@@ -21,8 +21,6 @@ using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule scriptModule)
@@ -46,9 +44,9 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return await scriptModule.GetRealmsAsync(options).ConfigureAwait(false);
     }
 
-    public Task<EvaluateResult.Success> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
-        var contextTarget = new Target.Context(context);
+        var contextTarget = new ContextTarget(context);
 
         if (targetOptions is not null)
         {
@@ -65,9 +63,9 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return result.Result.ConvertTo<TResult>();
     }
 
-    public Task<EvaluateResult.Success> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
-        var contextTarget = new Target.Context(context);
+        var contextTarget = new ContextTarget(context);
 
         if (targetOptions is not null)
         {

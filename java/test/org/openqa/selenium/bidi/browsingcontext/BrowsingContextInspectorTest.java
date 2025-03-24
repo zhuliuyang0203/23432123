@@ -19,6 +19,7 @@ package org.openqa.selenium.bidi.browsingcontext;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +71,7 @@ class BrowsingContextInspectorTest extends JupiterTestBase {
 
       assertThat(browsingContextInfo.getId()).isEqualTo(windowHandle);
       assertThat("about:blank").isEqualTo(browsingContextInfo.getUrl());
-      assertThat(browsingContextInfo.getChildren()).isEqualTo(null);
+      assertThat(browsingContextInfo.getChildren()).isIn(null, List.of());
       assertThat(browsingContextInfo.getParentBrowsingContext()).isEqualTo(null);
     }
   }

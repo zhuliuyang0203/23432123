@@ -25,13 +25,24 @@ namespace OpenQA.Selenium.DevTools
     public class LogEntry
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="LogEntry"/> type.
+        /// </summary>
+        /// <param name="kind">The kind of message written to the log.</param>
+        /// <param name="message">The text of the message written to the log.</param>
+        public LogEntry(string kind, string message)
+        {
+            Kind = kind;
+            Message = message;
+        }
+
+        /// <summary>
         /// Gets the kind of message written to the log.
         /// </summary>
-        public string Kind { get; internal set; }
+        public string Kind { get; }
 
         /// <summary>
         /// Gets the text of the message written to the log.
         /// </summary>
-        public string Message { get; internal set; }
+        public string Message { get; }
     }
 }

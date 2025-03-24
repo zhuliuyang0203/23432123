@@ -30,10 +30,8 @@ module Selenium
                       DriverExtensions::FullPageScreenshot,
                       DriverExtensions::HasContext,
                       DriverExtensions::HasBiDi,
-                      DriverExtensions::HasDevTools,
                       DriverExtensions::HasLogEvents,
                       DriverExtensions::HasNetworkInterception,
-                      DriverExtensions::HasWebStorage,
                       DriverExtensions::PrintsPage].freeze
 
         include LocalDriver
@@ -45,23 +43,6 @@ module Selenium
 
         def browser
           :firefox
-        end
-
-        private
-
-        def devtools_url
-          if capabilities['moz:debuggerAddress'].nil?
-            raise(Error::WebDriverError, 'DevTools is not supported by this version of Firefox; use v85 or higher')
-          end
-
-          uri = URI("http://#{capabilities['moz:debuggerAddress']}")
-          response = Net::HTTP.get(uri.hostname, '/json/version', uri.port)
-
-          JSON.parse(response)['webSocketDebuggerUrl']
-        end
-
-        def devtools_version
-          Firefox::DEVTOOLS_VERSION
         end
       end # Driver
     end # Firefox

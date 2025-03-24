@@ -19,11 +19,10 @@
 
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class RemoveUserContextCommand(RemoveUserContextCommandParameters @params) : Command<RemoveUserContextCommandParameters>(@params);
+internal class RemoveUserContextCommand(RemoveUserContextCommandParameters @params)
+    : Command<RemoveUserContextCommandParameters>(@params, "browser.removeUserContext");
 
 internal record RemoveUserContextCommandParameters(UserContext UserContext) : CommandParameters;
 

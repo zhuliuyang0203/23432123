@@ -29,10 +29,24 @@ include Selenium # rubocop:disable Style/MixinUsage
 
 GlobalTestEnv = WebDriver::SpecSupport::TestEnvironment.new
 
+class SeleniumTestListener
+  def example_finished(notification)
+    exception = notification.example.exception
+    assertion_failed = exception &&
+                       (exception.is_a?(RSpec::Expectations::ExpectationNotMetError) ||
+                        exception.is_a?(RSpec::Core::Pending::PendingExampleFixedError))
+    pending_exception = exception.nil? && notification.example.pending && !notification.example.skip
+
+    GlobalTestEnv.reset_driver! if (exception && !assertion_failed) || pending_exception
+  end
+end
+
 RSpec.configure do |c|
   c.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true
   end
+
+  c.reporter.register_listener(SeleniumTestListener.new, :example_finished)
 
   c.include(WebDriver::SpecSupport::Helpers)
 
@@ -61,11 +75,6 @@ RSpec.configure do |c|
 
     results = guards.disposition
     send(*results) if results
-  end
-
-  c.after do |example|
-    result = example.execution_result
-    reset_driver! if example.exception || result.pending_exception
   end
 end
 

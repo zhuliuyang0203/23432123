@@ -264,13 +264,8 @@ public class DriverServiceSessionFactory implements SessionFactory {
             CdpEndpointFinder.getReportedUri("ms:edgeOptions", c)
                 .map(uri -> new DevToolsInfo(uri, c.getBrowserVersion()));
 
-    Function<Capabilities, Optional<DevToolsInfo>> firefox =
-        c ->
-            CdpEndpointFinder.getReportedUri("moz:debuggerAddress", c)
-                .map(uri -> new DevToolsInfo(uri, "85.0"));
-
     Optional<DevToolsInfo> maybeInfo =
-        Stream.of(chrome, edge, firefox)
+        Stream.of(chrome, edge)
             .map(finder -> finder.apply(caps))
             .filter(Optional::isPresent)
             .map(Optional::get)

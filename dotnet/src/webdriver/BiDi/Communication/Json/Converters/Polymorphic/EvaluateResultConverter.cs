@@ -22,8 +22,6 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 
 // https://github.com/dotnet/runtime/issues/72604
@@ -35,8 +33,8 @@ internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
 
         return jsonDocument.RootElement.GetProperty("type").ToString() switch
         {
-            "success" => jsonDocument.Deserialize<EvaluateResult.Success>(options),
-            "exception" => jsonDocument.Deserialize<EvaluateResult.Exception>(options),
+            "success" => jsonDocument.Deserialize<EvaluateResultSuccess>(options),
+            "exception" => jsonDocument.Deserialize<EvaluateResultException>(options),
             _ => null,
         };
     }

@@ -10,7 +10,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class CodeGeneratorBase<T> : ICodeGenerator<T>
-        where T : IDefinition
+        where T : class, IDefinition
     {
         private readonly Lazy<CodeGenerationSettings> m_settings;
         private readonly Lazy<TemplatesManager> m_templatesManager;
