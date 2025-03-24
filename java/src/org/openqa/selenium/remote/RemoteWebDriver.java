@@ -651,9 +651,9 @@ public class RemoteWebDriver
   }
 
   /**
-   * Retrieves the downloadable files as a map of file names and their corresponding URLs.
+   * Retrieves the names of the downloadable files.
    *
-   * @return A map containing file names as keys and URLs as values.
+   * @return A list containing the names of the downloadable files.
    * @throws WebDriverException if capability to enable downloads is not set
    */
   @Override
@@ -869,6 +869,9 @@ public class RemoteWebDriver
 
     @Override
     public void deleteCookieNamed(String name) {
+      if (name == null || name.isBlank()) {
+        throw new IllegalArgumentException("Cookie name cannot be empty");
+      }
       execute(DriverCommand.DELETE_COOKIE(name));
     }
 
@@ -927,6 +930,9 @@ public class RemoteWebDriver
 
     @Override
     public Cookie getCookieNamed(String name) {
+      if (name == null || name.isBlank()) {
+        throw new IllegalArgumentException("Cookie name cannot be empty");
+      }
       Set<Cookie> allCookies = getCookies();
       for (Cookie cookie : allCookies) {
         if (cookie.getName().equals(name)) {

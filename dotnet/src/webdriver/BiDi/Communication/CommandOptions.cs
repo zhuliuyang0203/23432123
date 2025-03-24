@@ -19,8 +19,6 @@
 
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication;
 
 public record CommandOptions

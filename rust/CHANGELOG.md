@@ -1,3 +1,24 @@
+0.4.30
+======
+* Remove check for old metadata file
+* Check lock folder at the end of SM execution and clear it if required
+* Store reference to lock file to clear folder when necessary
+* Read PROCESSOR_ARCHITECTURE env in Windows to determine architecture
+* Selenium Manager support nightly Grid (#13384) (#15366)
+* Support snap packages (Firefox, Chromium) in Selenium Manager
+
+0.4.29
+======
+
+
+0.4.28
+======
+
+* [rust] xz uncompressor for Firefox Linux nightlies (#14832)
+* [rust] Fix Edge updates API deserialization (#14851)
+* [rust] Use file lock to protect concurrent accesses to cache (fix #13511 and #13686)
+* [rust] Use tax.xz for Firefox package starting in version 135
+
 0.4.27
 ======
 * Use endpoint for stable versions first to manage Firefox (#14536) (#14613)

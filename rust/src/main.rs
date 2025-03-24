@@ -22,6 +22,7 @@ use exitcode::OK;
 use exitcode::UNAVAILABLE;
 use selenium_manager::config::{BooleanKey, StringKey, CACHE_PATH_KEY};
 use selenium_manager::grid::GridManager;
+use selenium_manager::lock::clear_lock_if_required;
 use selenium_manager::logger::{Logger, BROWSER_PATH, DRIVER_PATH};
 use selenium_manager::metadata::clear_metadata;
 use selenium_manager::TTL_SEC;
@@ -318,5 +319,6 @@ fn flush_and_exit(code: i32, log: &Logger, err: Option<Error>) -> ! {
     }
     log.set_code(code);
     log.flush();
+    clear_lock_if_required();
     exit(code);
 }

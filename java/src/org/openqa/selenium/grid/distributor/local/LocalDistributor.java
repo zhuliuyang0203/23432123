@@ -34,8 +34,6 @@ import static org.openqa.selenium.remote.tracing.Tags.EXCEPTION;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import dev.failsafe.Failsafe;
-import dev.failsafe.RetryPolicy;
 import java.io.Closeable;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -142,6 +140,7 @@ public class LocalDistributor extends Distributor implements Closeable {
   private final GridModel model;
   private final Map<NodeId, Node> nodes;
   private final SlotMatcher slotMatcher;
+  private final Duration purgeNodesInterval;
 
   private final ScheduledExecutorService newSessionService =
       Executors.newSingleThreadScheduledExecutor(
@@ -188,7 +187,8 @@ public class LocalDistributor extends Distributor implements Closeable {
       boolean rejectUnsupportedCaps,
       Duration sessionRequestRetryInterval,
       int newSessionThreadPoolSize,
-      SlotMatcher slotMatcher) {
+      SlotMatcher slotMatcher,
+      Duration purgeNodesInterval) {
     super(tracer, clientFactory, registrationSecret);
     this.tracer = Require.nonNull("Tracer", tracer);
     this.bus = Require.nonNull("Event bus", bus);
@@ -202,6 +202,7 @@ public class LocalDistributor extends Distributor implements Closeable {
     this.nodes = new ConcurrentHashMap<>();
     this.rejectUnsupportedCaps = rejectUnsupportedCaps;
     this.slotMatcher = slotMatcher;
+    this.purgeNodesInterval = purgeNodesInterval;
     Require.nonNull("Session request interval", sessionRequestRetryInterval);
 
     bus.addListener(NodeStatusEvent.listener(this::register));
@@ -232,8 +233,14 @@ public class LocalDistributor extends Distributor implements Closeable {
     NewSessionRunnable newSessionRunnable = new NewSessionRunnable();
     bus.addListener(NodeDrainComplete.listener(this::remove));
 
-    purgeDeadNodesService.scheduleAtFixedRate(
-        GuardedRunnable.guard(model::purgeDeadNodes), 30, 30, TimeUnit.SECONDS);
+    // Disable purge dead nodes service if interval is set to zero
+    if (!this.purgeNodesInterval.isZero()) {
+      purgeDeadNodesService.scheduleAtFixedRate(
+          GuardedRunnable.guard(model::purgeDeadNodes),
+          this.purgeNodesInterval.getSeconds(),
+          this.purgeNodesInterval.getSeconds(),
+          TimeUnit.SECONDS);
+    }
 
     nodeHealthCheckService.scheduleAtFixedRate(
         runNodeHealthChecks(),
@@ -276,7 +283,8 @@ public class LocalDistributor extends Distributor implements Closeable {
         distributorOptions.shouldRejectUnsupportedCaps(),
         newSessionQueueOptions.getSessionRequestRetryInterval(),
         distributorOptions.getNewSessionThreadPoolSize(),
-        distributorOptions.getSlotMatcher());
+        distributorOptions.getSlotMatcher(),
+        distributorOptions.getPurgeNodesInterval());
   }
 
   @Override
@@ -365,7 +373,10 @@ public class LocalDistributor extends Distributor implements Closeable {
       return this;
     }
 
-    updateNodeStatus(initialNodeStatus, healthCheck);
+    updateNodeAvailability(
+        initialNodeStatus.getExternalUri(),
+        initialNodeStatus.getNodeId(),
+        initialNodeStatus.getAvailability());
 
     LOG.info(
         String.format(
@@ -375,30 +386,6 @@ public class LocalDistributor extends Distributor implements Closeable {
     bus.fire(new NodeAddedEvent(node.getId()));
 
     return this;
-  }
-
-  private void updateNodeStatus(NodeStatus status, Runnable healthCheck) {
-    // Setting the Node as available if the initial call to status was successful.
-    // Otherwise, retry to have it available as soon as possible.
-    if (status.getAvailability() == UP) {
-      updateNodeAvailability(status.getExternalUri(), status.getNodeId(), status.getAvailability());
-    } else {
-      // Running the health check right after the Node registers itself. We retry the
-      // execution because the Node might on a complex network topology. For example,
-      // Kubernetes pods with IPs that take a while before they are reachable.
-      RetryPolicy<Object> initialHealthCheckPolicy =
-          RetryPolicy.builder()
-              .withMaxAttempts(-1)
-              .withMaxDuration(Duration.ofSeconds(90))
-              .withDelay(Duration.ofSeconds(15))
-              .abortIf(result -> true)
-              .build();
-
-      LOG.log(getDebugLogLevel(), "Running health check for Node " + status.getExternalUri());
-      ExecutorService executor = Executors.newSingleThreadExecutor();
-      executor.submit(() -> Failsafe.with(initialHealthCheckPolicy).run(healthCheck::run));
-      executor.shutdown();
-    }
   }
 
   private Runnable runNodeHealthChecks() {

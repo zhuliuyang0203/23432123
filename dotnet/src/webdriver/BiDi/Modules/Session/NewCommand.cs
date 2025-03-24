@@ -19,11 +19,10 @@
 
 using OpenQA.Selenium.BiDi.Communication;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class NewCommand(NewCommandParameters @params) : Command<NewCommandParameters>(@params);
+internal class NewCommand(NewCommandParameters @params)
+    : Command<NewCommandParameters>(@params, "session.new");
 
 internal record NewCommandParameters(CapabilitiesRequest Capabilities) : CommandParameters;
 

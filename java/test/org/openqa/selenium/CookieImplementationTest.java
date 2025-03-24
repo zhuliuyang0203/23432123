@@ -18,6 +18,7 @@
 package org.openqa.selenium;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.openqa.selenium.testing.drivers.Browser.ALL;
 import static org.openqa.selenium.testing.drivers.Browser.CHROME;
@@ -501,6 +502,18 @@ class CookieImplementationTest extends JupiterTestBase {
     assertCookieIsNotPresentWithName(key);
 
     driver.manage().deleteCookieNamed(key);
+  }
+
+  @Test
+  public void testDeleteEmptyNamedCookie() {
+    assertThrows(IllegalArgumentException.class, () -> driver.manage().deleteCookieNamed(""));
+    assertThrows(IllegalArgumentException.class, () -> driver.manage().deleteCookieNamed(" "));
+  }
+
+  @Test
+  public void testGetEmptyNamedCookie() {
+    assertThrows(IllegalArgumentException.class, () -> driver.manage().getCookieNamed(""));
+    assertThrows(IllegalArgumentException.class, () -> driver.manage().getCookieNamed(" "));
   }
 
   @Test

@@ -64,7 +64,6 @@ module Selenium
 
         describe '#install_addon' do
           it 'install and uninstall xpi file' do
-            Selenium::WebDriver.logger.level = :debug
             ext = File.expand_path("#{extensions}/webextensions-selenium-example.xpi", __dir__)
             id = driver.install_addon(ext)
 

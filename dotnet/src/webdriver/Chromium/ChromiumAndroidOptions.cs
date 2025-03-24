@@ -26,9 +26,6 @@ namespace OpenQA.Selenium.Chromium
     /// </summary>
     public class ChromiumAndroidOptions : AndroidOptions
     {
-        private string androidProcess;
-        private bool androidUseRunningApp;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromiumAndroidOptions"/> class.
         /// </summary>
@@ -40,19 +37,11 @@ namespace OpenQA.Selenium.Chromium
         /// <summary>
         /// Gets or sets a value indicating whether to use an already running app.
         /// </summary>
-        public bool UseRunningApp
-        {
-            get { return this.androidUseRunningApp; }
-            set { this.androidUseRunningApp = value; }
-        }
+        public bool UseRunningApp { get; set; }
 
         /// <summary>
         /// Gets or sets the process name of the Activity hosting the app.
         /// </summary>
-        public string AndroidProcess
-        {
-            get { return this.androidProcess; }
-            set { this.androidProcess = value; }
-        }
+        public string? AndroidProcess { get; set; }
     }
 }

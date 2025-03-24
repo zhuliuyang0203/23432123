@@ -27,8 +27,18 @@ namespace OpenQA.Selenium.DevTools
     public class EntryAddedEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="EntryAddedEventArgs"/> type.
+        /// </summary>
+        /// <param name="entry">The entry added to the browser's log.</param>
+        /// <exception cref="ArgumentNullException">If </exception>
+        public EntryAddedEventArgs(LogEntry entry)
+        {
+            Entry = entry ?? throw new ArgumentNullException(nameof(entry));
+        }
+
+        /// <summary>
         /// The entry added to the browser's log.
         /// </summary>
-        public LogEntry Entry { get; set; }
+        public LogEntry Entry { get; }
     }
 }

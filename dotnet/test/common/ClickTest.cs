@@ -262,6 +262,7 @@ namespace OpenQA.Selenium
         }
 
         [Test]
+        [IgnoreBrowser(Browser.Firefox, "https://bugzilla.mozilla.org/show_bug.cgi?id=1937115")]
         public void ShouldBeAbleToClickOnAnElementInFrameGreaterThanTwoViewports()
         {
             string url = EnvironmentManager.Instance.UrlBuilder.WhereIs("click_too_big_in_frame.html");

@@ -104,15 +104,8 @@ module Selenium
       # @see Script
       #
 
-      def script(*args)
-        if args.any?
-          WebDriver.logger.deprecate('`Driver#script` as an alias for `#execute_script`',
-                                     '`Driver#execute_script`',
-                                     id: :driver_script)
-          execute_script(*args)
-        else
-          @script ||= WebDriver::Script.new(bridge)
-        end
+      def script
+        @script ||= WebDriver::Script.new(bridge)
       end
 
       #
@@ -188,7 +181,7 @@ module Selenium
         bridge.quit
       ensure
         @service_manager&.stop
-        @devtools&.close
+        @devtools&.each_value(&:close)
       end
 
       #

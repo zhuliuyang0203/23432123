@@ -18,6 +18,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenQA.Selenium
 {
@@ -167,7 +168,8 @@ namespace OpenQA.Selenium
         /// </summary>
         public static readonly string EnableDownloads = "se:downloadsEnabled";
 
-        private static readonly List<string> KnownSpecCompliantCapabilityNames = new List<string>() {
+        private static readonly HashSet<string> KnownSpecCompliantCapabilityNames = new HashSet<string>()
+        {
             BrowserName,
             BrowserVersion,
             PlatformName,
@@ -188,8 +190,13 @@ namespace OpenQA.Selenium
         /// <param name="capabilityName">The name of the capability to check for compliance.</param>
         /// <returns><see langword="true"/> if the capability name is valid according to the rules
         /// of the specification; otherwise, <see langword="false"/>.</returns>
-        public static bool IsSpecCompliantCapabilityName(string capabilityName)
+        public static bool IsSpecCompliantCapabilityName([NotNullWhen(true)] string? capabilityName)
         {
+            if (capabilityName is null)
+            {
+                return false;
+            }
+
             if (KnownSpecCompliantCapabilityNames.Contains(capabilityName) || capabilityName.Contains(":"))
             {
                 return true;

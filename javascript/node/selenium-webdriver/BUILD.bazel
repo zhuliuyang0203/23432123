@@ -11,13 +11,12 @@ load("//javascript/private:browsers.bzl", "BROWSERS")
 
 npm_link_all_packages(name = "node_modules")
 
-VERSION = "4.28.0-nightly202411252022"
+VERSION = "4.31.0-nightly202503211716"
 
 BROWSER_VERSIONS = [
-    "v85",
-    "v131",
-    "v129",
-    "v130",
+    "v134",
+    "v132",
+    "v133",
 ]
 
 js_library(
@@ -32,7 +31,6 @@ js_library(
         "http/*.js",
         "io/*.js",
         "lib/*.js",
-        "lib/atoms/bidi-mutation-listener.js",
         "lib/fedcm/*.js",
         "net/*.js",
         "remote/*.js",
@@ -40,6 +38,7 @@ js_library(
         "devtools/*.js",
         "common/*.js",
         "bidi/*.js",
+        "bidi/external/*.js",
     ]),
     deps = [
         ":node_modules/@bazel/runfiles",

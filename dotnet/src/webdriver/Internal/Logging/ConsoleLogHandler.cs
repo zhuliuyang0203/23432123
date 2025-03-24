@@ -19,25 +19,11 @@
 
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
-    /// Represents a log handler that writes log events to the console.
+    /// Represents a log handler that writes log events to the given text writer.
     /// </summary>
-    public class ConsoleLogHandler : ILogHandler
-    {
-        // performance trick to avoid expensive Enum.ToString() with fixed length
-        private static readonly string[] _levels = { "TRACE", "DEBUG", " INFO", " WARN", "ERROR" };
-
-        /// <summary>
-        /// Handles a log event by writing it to the console.
-        /// </summary>
-        /// <param name="logEvent">The log event to handle.</param>
-        public void Handle(LogEvent logEvent)
-        {
-            Console.Error.WriteLine($"{logEvent.Timestamp:HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
-        }
-    }
+    [Obsolete("Use TextWriterHandler instead, will be removed in v4.32")]
+    public class ConsoleLogHandler() : TextWriterHandler(Console.Error);
 }

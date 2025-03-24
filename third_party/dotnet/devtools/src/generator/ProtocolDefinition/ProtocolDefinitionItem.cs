@@ -9,7 +9,7 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         [JsonPropertyName("deprecated")]
         public bool Deprecated { get; set; }
 
-        public string Description
+        public string? Description
         {
             get => InitialDescription?.Replace("<", "&lt;").Replace(">", "&gt;");
             set => InitialDescription = value;
@@ -20,14 +20,14 @@ namespace OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition
         public bool Experimental { get; set; }
 
         [JsonPropertyName("name")]
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return Name;
         }
 
         [JsonPropertyName("description")]
-        protected string InitialDescription { get; set; }
+        protected string? InitialDescription { get; set; }
     }
 }

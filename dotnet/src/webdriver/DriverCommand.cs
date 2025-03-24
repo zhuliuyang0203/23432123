@@ -117,7 +117,7 @@ namespace OpenQA.Selenium
         public static readonly string FindShadowChildElement = "findShadowChildElement";
 
         /// <summary>
-        /// Represents FindShadosChildElements command
+        /// Represents FindShadowChildElements command
         /// </summary>
         public static readonly string FindShadowChildElements = "findShadowChildElements";
 
@@ -357,6 +357,7 @@ namespace OpenQA.Selenium
         public static readonly string GetLog = "getLog";
 
         // Virtual Authenticator API
+
         // http://w3c.github.io/webauthn#sctn-automation
         /// <summary>
         /// Represents the AddVirtualAuthenticator command.

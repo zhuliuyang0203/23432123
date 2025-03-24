@@ -99,7 +99,7 @@ class StorageTest : BiDiTestFixture
         var cookie = cookies[0];
 
         Assert.That(cookie.Name, Is.EqualTo("fish"));
-        Assert.That((cookie.Value as BytesValue.String).Value, Is.EqualTo("cod"));
+        Assert.That((cookie.Value as StringBytesValue).Value, Is.EqualTo("cod"));
         Assert.That(cookie.Path, Is.EqualTo("/common/animals"));
         Assert.That(cookie.HttpOnly, Is.True);
         Assert.That(cookie.Secure, Is.False);

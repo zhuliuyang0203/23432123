@@ -17,11 +17,9 @@
 // under the License.
 // </copyright>
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-public class CapabilityRequest
+public record CapabilityRequest
 {
     public bool? AcceptInsecureCerts { get; set; }
 
@@ -33,5 +31,5 @@ public class CapabilityRequest
 
     public ProxyConfiguration? ProxyConfiguration { get; set; }
 
-    public bool? WebSocketUrl { get; set; }
+    public UserPromptHandler? UnhandledPromptBehavior { get; set; }
 }

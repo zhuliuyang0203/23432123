@@ -26,15 +26,14 @@ namespace OpenQA.Selenium
     /// </summary>
     public class DomMutatedEventArgs : EventArgs
     {
-        private DomMutationData attributeData;
+        internal DomMutatedEventArgs(DomMutationData attributeData)
+        {
+            AttributeData = attributeData;
+        }
 
         /// <summary>
         /// Gets the data about the attribute being changed.
         /// </summary>
-        public DomMutationData AttributeData
-        {
-            get { return this.attributeData; }
-            internal set { this.attributeData = value; }
-        }
+        public DomMutationData AttributeData { get; }
     }
 }

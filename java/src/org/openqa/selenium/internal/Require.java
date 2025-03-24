@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A utility class to check arguments (preconditions) and state.
@@ -35,6 +37,7 @@ import java.util.Objects;
  *   }
  * </pre>
  */
+@NullMarked
 public final class Require {
 
   private static final String MUST_BE_SET = "%s must be set";
@@ -56,25 +59,25 @@ public final class Require {
     }
   }
 
-  public static <T> T nonNull(String argName, T arg) {
+  public static <T> T nonNull(String argName, @Nullable T arg) {
     if (arg == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
     return arg;
   }
 
-  public static <T> T nonNull(String argName, T arg, String message, Object... args) {
+  public static <T> T nonNull(String argName, @Nullable T arg, String message, Object... args) {
     if (arg == null) {
       throw new IllegalArgumentException(String.join(" ", argName, String.format(message, args)));
     }
     return arg;
   }
 
-  public static <T> ArgumentChecker<T> argument(String argName, T arg) {
+  public static <T> ArgumentChecker<T> argument(String argName, @Nullable T arg) {
     return new ArgumentChecker<>(argName, arg);
   }
 
-  public static Duration nonNegative(String argName, Duration arg) {
+  public static Duration nonNegative(String argName, @Nullable Duration arg) {
     if (arg == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
@@ -84,7 +87,7 @@ public final class Require {
     return arg;
   }
 
-  public static Duration nonNegative(Duration arg) {
+  public static Duration nonNegative(@Nullable Duration arg) {
     if (arg == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, "Duration"));
     }
@@ -94,7 +97,7 @@ public final class Require {
     return arg;
   }
 
-  public static Duration positive(String argName, Duration arg) {
+  public static Duration positive(String argName, @Nullable Duration arg) {
     if (arg == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
@@ -104,7 +107,7 @@ public final class Require {
     return arg;
   }
 
-  public static Duration positive(Duration arg) {
+  public static Duration positive(@Nullable Duration arg) {
     if (arg == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, "Duration"));
     }
@@ -114,7 +117,7 @@ public final class Require {
     return arg;
   }
 
-  public static int nonNegative(String argName, Integer number) {
+  public static int nonNegative(String argName, @Nullable Integer number) {
     if (number == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
@@ -124,7 +127,7 @@ public final class Require {
     return number;
   }
 
-  public static int positive(String argName, Integer number, String message) {
+  public static int positive(String argName, @Nullable Integer number, @Nullable String message) {
     if (number == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
@@ -135,7 +138,7 @@ public final class Require {
     return number;
   }
 
-  public static double positive(String argName, Double number, String message) {
+  public static double positive(String argName, @Nullable Double number, @Nullable String message) {
     if (number == null) {
       throw new IllegalArgumentException(String.format(MUST_BE_SET, argName));
     }
@@ -146,24 +149,24 @@ public final class Require {
     return number;
   }
 
-  public static double positive(String argName, Double number) {
+  public static double positive(String argName, @Nullable Double number) {
     return positive(argName, number, null);
   }
 
-  public static int positive(String argName, Integer number) {
+  public static int positive(String argName, @Nullable Integer number) {
     return positive(argName, number, null);
   }
 
-  public static IntChecker argument(String argName, Integer number) {
+  public static IntChecker argument(String argName, @Nullable Integer number) {
     return new IntChecker(argName, number);
   }
 
   @Deprecated(forRemoval = true)
-  public static FileChecker argument(String argName, File file) {
+  public static FileChecker argument(String argName, @Nullable File file) {
     return new FileChecker(argName, file);
   }
 
-  public static PathChecker argument(String argName, Path path) {
+  public static PathChecker argument(String argName, @Nullable Path path) {
     return new PathChecker(argName, path);
   }
 
@@ -173,25 +176,25 @@ public final class Require {
     }
   }
 
-  public static <T> StateChecker<T> state(String name, T state) {
+  public static <T> StateChecker<T> state(String name, @Nullable T state) {
     return new StateChecker<>(name, state);
   }
 
   @Deprecated(forRemoval = true)
-  public static FileStateChecker state(String name, File file) {
+  public static FileStateChecker state(String name, @Nullable File file) {
     return new FileStateChecker(name, file);
   }
 
-  public static PathStateChecker state(String name, Path path) {
+  public static PathStateChecker state(String name, @Nullable Path path) {
     return new PathStateChecker(name, path);
   }
 
   public static class ArgumentChecker<T> {
 
     private final String argName;
-    private final T arg;
+    private final @Nullable T arg;
 
-    ArgumentChecker(String argName, T arg) {
+    ArgumentChecker(String argName, @Nullable T arg) {
       this.argName = argName;
       this.arg = arg;
     }
@@ -234,9 +237,9 @@ public final class Require {
   public static class IntChecker {
 
     private final String argName;
-    private final Integer number;
+    private final @Nullable Integer number;
 
-    IntChecker(String argName, Integer number) {
+    IntChecker(String argName, @Nullable Integer number) {
       this.argName = argName;
       this.number = number;
     }
@@ -256,9 +259,9 @@ public final class Require {
   public static class FileChecker {
 
     private final String argName;
-    private final File file;
+    private final @Nullable File file;
 
-    FileChecker(String argName, File file) {
+    FileChecker(String argName, @Nullable File file) {
       this.argName = argName;
       this.file = file;
     }
@@ -297,9 +300,9 @@ public final class Require {
   public static class PathChecker {
 
     private final String argName;
-    private final Path path;
+    private final @Nullable Path path;
 
-    PathChecker(String argName, Path path) {
+    PathChecker(String argName, @Nullable Path path) {
       this.argName = argName;
       this.path = path;
     }
@@ -338,9 +341,9 @@ public final class Require {
   public static class StateChecker<T> {
 
     private final String name;
-    private final T state;
+    private final @Nullable T state;
 
-    StateChecker(String name, T state) {
+    StateChecker(String name, @Nullable T state) {
       this.name = name;
       this.state = state;
     }
@@ -374,9 +377,9 @@ public final class Require {
   public static class FileStateChecker {
 
     private final String name;
-    private final File file;
+    private final @Nullable File file;
 
-    FileStateChecker(String name, File file) {
+    FileStateChecker(String name, @Nullable File file) {
       this.name = name;
       this.file = file;
     }
@@ -425,9 +428,9 @@ public final class Require {
   public static class PathStateChecker {
 
     private final String name;
-    private final Path path;
+    private final @Nullable Path path;
 
-    PathStateChecker(String name, Path path) {
+    PathStateChecker(String name, @Nullable Path path) {
       this.name = name;
       this.path = path;
     }

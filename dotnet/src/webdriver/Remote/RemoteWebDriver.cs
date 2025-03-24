@@ -26,6 +26,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenQA.Selenium.Remote
 {
@@ -78,7 +79,7 @@ namespace OpenQA.Selenium.Remote
 
         private const string DefaultRemoteServerUrl = "http://127.0.0.1:4444/wd/hub";
 
-        private DevToolsSession devToolsSession;
+        private DevToolsSession? devToolsSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoteWebDriver"/> class. This constructor defaults proxy to http://127.0.0.1:4444/wd/hub
@@ -142,10 +143,8 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
-        public bool HasActiveDevToolsSession
-        {
-            get { return this.devToolsSession != null; }
-        }
+        [MemberNotNullWhen(true, nameof(devToolsSession))]
+        public bool HasActiveDevToolsSession => this.devToolsSession != null;
 
         /// <summary>
         /// Finds the first element in the page that matches the ID supplied
@@ -208,7 +207,7 @@ namespace OpenQA.Selenium.Remote
                 // Finding elements by class name with whitespace is not allowed.
                 // However, converting the single class name to a valid CSS selector
                 // by prepending a '.' may result in a still-valid, but incorrect
-                // selector. Thus, we short-ciruit that behavior here.
+                // selector. Thus, we short-circuit that behavior here.
                 throw new InvalidSelectorException("Compound class names not allowed. Cannot have whitespace in class name. Use CSS selectors instead.");
             }
 
@@ -234,7 +233,7 @@ namespace OpenQA.Selenium.Remote
                 // Finding elements by class name with whitespace is not allowed.
                 // However, converting the single class name to a valid CSS selector
                 // by prepending a '.' may result in a still-valid, but incorrect
-                // selector. Thus, we short-ciruit that behavior here.
+                // selector. Thus, we short-circuit that behavior here.
                 throw new InvalidSelectorException("Compound class names not allowed. Cannot have whitespace in class name. Use CSS selectors instead.");
             }
 
@@ -426,6 +425,8 @@ namespace OpenQA.Selenium.Remote
         /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession()
         {
             if (this.Capabilities.GetCapability(CapabilityType.BrowserName) is "firefox")
@@ -443,6 +444,8 @@ namespace OpenQA.Selenium.Remote
         /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(DevToolsOptions options)
         {
             if (options is null)
@@ -452,24 +455,25 @@ namespace OpenQA.Selenium.Remote
 
             if (this.devToolsSession == null)
             {
-                if (!this.Capabilities.HasCapability(RemoteDevToolsEndPointCapabilityName))
+                object? debuggerAddressObject = this.Capabilities.GetCapability(RemoteDevToolsEndPointCapabilityName);
+                if (debuggerAddressObject is null)
                 {
                     throw new WebDriverException("Cannot find " + RemoteDevToolsEndPointCapabilityName + " capability for driver");
                 }
 
-                string debuggerAddress = this.Capabilities.GetCapability(RemoteDevToolsEndPointCapabilityName).ToString();
+                string debuggerAddress = debuggerAddressObject.ToString()!;
 
                 if (!options.ProtocolVersion.HasValue || options.ProtocolVersion == DevToolsSession.AutoDetectDevToolsProtocolVersion)
                 {
-                    if (!this.Capabilities.HasCapability(RemoteDevToolsVersionCapabilityName))
+                    object? versionObject = this.Capabilities.GetCapability(RemoteDevToolsVersionCapabilityName);
+                    if (versionObject is null)
                     {
                         throw new WebDriverException("Cannot find " + RemoteDevToolsVersionCapabilityName + " capability for driver");
                     }
 
-                    string version = this.Capabilities.GetCapability(RemoteDevToolsVersionCapabilityName).ToString();
+                    string version = versionObject.ToString()!;
 
-                    bool versionParsed = int.TryParse(version.Substring(0, version.IndexOf(".")), out int devToolsProtocolVersion);
-                    if (!versionParsed)
+                    if (!int.TryParse(version.Substring(0, version.IndexOf(".")), out int devToolsProtocolVersion))
                     {
                         throw new WebDriverException("Cannot parse protocol version from reported version string: " + version);
                     }
@@ -498,6 +502,8 @@ namespace OpenQA.Selenium.Remote
         /// <param name="protocolVersion">The specific version of the Developer Tools debugging protocol to use.</param>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
         [Obsolete("Use GetDevToolsSession(DevToolsOptions options)")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(int protocolVersion)
         {
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = protocolVersion });
@@ -516,9 +522,14 @@ namespace OpenQA.Selenium.Remote
             }
 
             Response commandResponse = this.Execute(DriverCommand.GetDownloadableFiles, null);
-            Dictionary<string, object> value = (Dictionary<string, object>)commandResponse.Value;
-            object[] namesArray = (object[])value["names"];
-            return namesArray.Select(obj => obj.ToString()).ToList();
+
+            if (commandResponse.Value is not Dictionary<string, object?> value)
+            {
+                throw new WebDriverException("GetDownloadableFiles returned successfully, but response content was not an object: " + commandResponse.Value);
+            }
+
+            object?[] namesArray = (object?[])value["names"]!;
+            return namesArray.Select(obj => obj!.ToString()!).ToList();
         }
 
         /// <summary>
@@ -526,6 +537,7 @@ namespace OpenQA.Selenium.Remote
         /// </summary>
         /// <param name="fileName">The name of the file to be downloaded.</param>
         /// <param name="targetDirectory">The target directory where the file should be downloaded to.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="targetDirectory"/> is null.</exception>
         public void DownloadFile(string fileName, string targetDirectory)
         {
             var enableDownloads = this.Capabilities.GetCapability(CapabilityType.EnableDownloads);
@@ -540,7 +552,12 @@ namespace OpenQA.Selenium.Remote
             };
 
             Response commandResponse = this.Execute(DriverCommand.DownloadFile, parameters);
-            string contents = ((Dictionary<string, object>)commandResponse.Value)["contents"].ToString();
+            if (commandResponse.Value is not Dictionary<string, object?> value)
+            {
+                throw new WebDriverException("DownloadFile returned successfully, but response content was not an object: " + commandResponse.Value);
+            }
+
+            string contents = value["contents"]!.ToString()!;
             byte[] fileData = Convert.FromBase64String(contents);
 
             Directory.CreateDirectory(targetDirectory);
@@ -576,6 +593,8 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Closes a DevTools session.
         /// </summary>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public void CloseDevToolsSession()
         {
             if (this.devToolsSession != null)

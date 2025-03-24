@@ -23,7 +23,6 @@ use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-const METADATA_FILE_OLD: &str = "selenium-manager.json";
 const METADATA_FILE: &str = "se-metadata.json";
 
 #[derive(Serialize, Deserialize)]
@@ -61,10 +60,6 @@ pub struct Metadata {
 }
 
 fn get_metadata_path(cache_path: PathBuf) -> PathBuf {
-    let old_metadata = cache_path.join(METADATA_FILE_OLD);
-    if old_metadata.exists() {
-        fs::remove_file(old_metadata).unwrap_or_default();
-    }
     cache_path.join(METADATA_FILE)
 }
 

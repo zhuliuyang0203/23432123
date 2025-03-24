@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 
@@ -29,8 +30,6 @@ namespace OpenQA.Selenium.Support.UI
     /// </summary>
     public class SelectElement : IWrapsElement
     {
-        private readonly IWebElement element;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectElement"/> class.
         /// </summary>
@@ -39,48 +38,39 @@ namespace OpenQA.Selenium.Support.UI
         /// <exception cref="UnexpectedTagNameException">Thrown when the element wrapped is not a &lt;select&gt; element.</exception>
         public SelectElement(IWebElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element), "element cannot be null");
             }
 
             string tagName = element.TagName;
 
-            if (string.IsNullOrEmpty(tagName) || string.Compare(tagName, "select", StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.IsNullOrEmpty(tagName) || !string.Equals(tagName, "select", StringComparison.OrdinalIgnoreCase))
             {
                 throw new UnexpectedTagNameException("select", tagName);
             }
 
-            this.element = element;
+            this.WrappedElement = element;
 
             // let check if it's a multiple
             string attribute = element.GetAttribute("multiple");
-            this.IsMultiple = attribute != null && attribute.ToLowerInvariant() != "false";
+            this.IsMultiple = attribute != null && !attribute.Equals("false", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
         /// Gets the <see cref="IWebElement"/> wrapped by this object.
         /// </summary>
-        public IWebElement WrappedElement
-        {
-            get { return this.element; }
-        }
+        public IWebElement WrappedElement { get; }
 
         /// <summary>
         /// Gets a value indicating whether the parent element supports multiple selections.
         /// </summary>
-        public bool IsMultiple { get; private set; }
+        public bool IsMultiple { get; }
 
         /// <summary>
         /// Gets the list of options for the select element.
         /// </summary>
-        public IList<IWebElement> Options
-        {
-            get
-            {
-                return this.element.FindElements(By.TagName("option"));
-            }
-        }
+        public IList<IWebElement> Options => this.WrappedElement.FindElements(By.TagName("option"));
 
         /// <summary>
         /// Gets the selected item within the select element.
@@ -133,25 +123,26 @@ namespace OpenQA.Selenium.Support.UI
         /// &lt;option value="foo"&gt;Bar&lt;/option&gt;
         /// </para>
         /// </remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="text"/> is <see langword="null"/>.</exception>
         /// <exception cref="NoSuchElementException">Thrown if there is no element with the given text present.</exception>
         public void SelectByText(string text, bool partialMatch = false)
         {
-            if (text == null)
+            if (text is null)
             {
                 throw new ArgumentNullException(nameof(text), "text must not be null");
             }
 
             bool matched = false;
-            IList<IWebElement> options;
+            ReadOnlyCollection<IWebElement> options;
 
             if (!partialMatch)
             {
                 // try to find the option via XPATH ...
-                options = this.element.FindElements(By.XPath(".//option[normalize-space(.) = " + EscapeQuotes(text) + "]"));
+                options = this.WrappedElement.FindElements(By.XPath(".//option[normalize-space(.) = " + EscapeQuotes(text) + "]"));
             }
             else
             {
-                options = this.element.FindElements(By.XPath(".//option[contains(normalize-space(.),  " + EscapeQuotes(text) + ")]"));
+                options = this.WrappedElement.FindElements(By.XPath(".//option[contains(normalize-space(.),  " + EscapeQuotes(text) + ")]"));
             }
 
             foreach (IWebElement option in options)
@@ -172,12 +163,12 @@ namespace OpenQA.Selenium.Support.UI
                 if (string.IsNullOrEmpty(substringWithoutSpace))
                 {
                     // hmm, text is either empty or contains only spaces - get all options ...
-                    candidates = this.element.FindElements(By.TagName("option"));
+                    candidates = this.WrappedElement.FindElements(By.TagName("option"));
                 }
                 else
                 {
                     // get candidates via XPATH ...
-                    candidates = this.element.FindElements(By.XPath(".//option[contains(., " + EscapeQuotes(substringWithoutSpace) + ")]"));
+                    candidates = this.WrappedElement.FindElements(By.XPath(".//option[contains(., " + EscapeQuotes(substringWithoutSpace) + ")]"));
                 }
 
                 foreach (IWebElement option in candidates)
@@ -216,7 +207,7 @@ namespace OpenQA.Selenium.Support.UI
             StringBuilder builder = new StringBuilder(".//option[@value = ");
             builder.Append(EscapeQuotes(value));
             builder.Append("]");
-            IList<IWebElement> options = this.element.FindElements(By.XPath(builder.ToString()));
+            IList<IWebElement> options = this.WrappedElement.FindElements(By.XPath(builder.ToString()));
 
             bool matched = false;
             foreach (IWebElement option in options)
@@ -298,7 +289,7 @@ namespace OpenQA.Selenium.Support.UI
             StringBuilder builder = new StringBuilder(".//option[normalize-space(.) = ");
             builder.Append(EscapeQuotes(text));
             builder.Append("]");
-            IList<IWebElement> options = this.element.FindElements(By.XPath(builder.ToString()));
+            IList<IWebElement> options = this.WrappedElement.FindElements(By.XPath(builder.ToString()));
             foreach (IWebElement option in options)
             {
                 SetSelected(option, false);
@@ -334,7 +325,7 @@ namespace OpenQA.Selenium.Support.UI
             StringBuilder builder = new StringBuilder(".//option[@value = ");
             builder.Append(EscapeQuotes(value));
             builder.Append("]");
-            IList<IWebElement> options = this.element.FindElements(By.XPath(builder.ToString()));
+            IList<IWebElement> options = this.WrappedElement.FindElements(By.XPath(builder.ToString()));
             foreach (IWebElement option in options)
             {
                 SetSelected(option, false);
@@ -432,8 +423,7 @@ namespace OpenQA.Selenium.Support.UI
         private static string GetLongestSubstringWithoutSpace(string s)
         {
             string result = string.Empty;
-            string[] substrings = s.Split(' ');
-            foreach (string substring in substrings)
+            foreach (string substring in s.Split(' '))
             {
                 if (substring.Length > result.Length)
                 {
