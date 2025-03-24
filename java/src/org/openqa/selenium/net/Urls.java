@@ -88,7 +88,7 @@ public class Urls {
           return createHttpUri(rawUri);
         }
 
-        if (Pattern.matches("\\d+", rawUri.substring(0, colonIndex))) {
+        if (isAllDigits(rawUri.substring(0, colonIndex))) {
           return createHttpUri(rawUri);
         }
       }
@@ -99,6 +99,16 @@ public class Urls {
     } catch (URISyntaxException e) {
       throw new UncheckedIOException(new IOException(e));
     }
+  }
+
+  private static boolean isAllDigits(final String input) {
+    for (int i = 0; i < input.length(); i++) {
+      if (!Character.isDigit(input.charAt(i))) {
+        return false;
+      }
+    }
+
+    return !input.isEmpty();
   }
 
   private static URI createHttpUri(String rawHost) {
