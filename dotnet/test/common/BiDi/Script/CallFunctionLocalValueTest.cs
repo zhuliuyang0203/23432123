@@ -378,4 +378,81 @@ class CallFunctionLocalValueTest : BiDiTestFixture
             """, false, new() { Arguments = [arg] });
         }, Throws.Nothing);
     }
+
+    [Test]
+    public void CanConvertNullBoolToLocalValue()
+    {
+        bool? arg = null;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NullLocalValue>());
+    }
+
+    [Test]
+    public void CanConvertTrueToLocalValue()
+    {
+        bool arg = true;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<BooleanLocalValue>());
+        Assert.That((result as BooleanLocalValue).Value, Is.True);
+    }
+
+    [Test]
+    public void CanConvertFalseToLocalValue()
+    {
+        bool arg = false;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<BooleanLocalValue>());
+        Assert.That((result as BooleanLocalValue).Value, Is.False);
+    }
+
+    [Test]
+    public void CanConvertNullIntToLocalValue()
+    {
+        int? arg = null;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NullLocalValue>());
+    }
+
+    [Test]
+    public void CanConvertZeroIntToLocalValue()
+    {
+        int arg = 0;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NumberLocalValue>());
+        Assert.That((result as NumberLocalValue).Value, Is.Zero);
+    }
+
+    [Test]
+    public void CanConvertNullDoubleToLocalValue()
+    {
+        double? arg = null;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NullLocalValue>());
+    }
+
+    [Test]
+    public void CanConvertZeroDoubleToLocalValue()
+    {
+        double arg = 0;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NumberLocalValue>());
+        Assert.That((result as NumberLocalValue).Value, Is.Zero);
+    }
+
+    [Test]
+    public void CanConvertNullStringToLocalValue()
+    {
+        string arg = null;
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<NullLocalValue>());
+    }
+
+    [Test]
+    public void CanConvertStringToLocalValue()
+    {
+        string arg = "value";
+        LocalValue result = (LocalValue)arg;
+        Assert.That(result, Is.TypeOf<StringLocalValue>());
+        Assert.That((result as StringLocalValue).Value, Is.EqualTo(arg));
+    }
 }
