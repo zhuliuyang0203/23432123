@@ -36,9 +36,9 @@ const { isObject } = require('./util')
 
 const log_ = logging.getLogger(`${logging.Type.DRIVER}.http`)
 
-const getAttribute = requireAtom('get-attribute.js', '//javascript/node/selenium-webdriver/lib/atoms:get-attribute.js')
-const isDisplayed = requireAtom('is-displayed.js', '//javascript/node/selenium-webdriver/lib/atoms:is-displayed.js')
-const findElements = requireAtom('find-elements.js', '//javascript/node/selenium-webdriver/lib/atoms:find-elements.js')
+const getAttribute = requireAtom('get-attribute.js', '//javascript/selenium-webdriver/lib/atoms:get-attribute.js')
+const isDisplayed = requireAtom('is-displayed.js', '//javascript/selenium-webdriver/lib/atoms:is-displayed.js')
+const findElements = requireAtom('find-elements.js', '//javascript/selenium-webdriver/lib/atoms:find-elements.js')
 
 /**
  * @param {string} module

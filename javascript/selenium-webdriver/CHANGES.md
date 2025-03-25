@@ -126,7 +126,7 @@
 - [bidi] Add realm destroyed event
 - [bidi] Add locate node command (#13489)
 - [bidi] Deprecate NetworkInspector in favor of Network
-- Make `npm run lint` pass for javascript/node/selenium-webdriver (#13560)
+- Make `npm run lint` pass for javascript/selenium-webdriver (#13560)
 - [bidi] Add "addintercept" and "removeintercept" commands (#13564)
 - [bidi] Add auth related commands (#13572)
 - [bidi] Add 'continueWithAuth' command

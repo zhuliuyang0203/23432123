@@ -20,7 +20,7 @@
 const fs = require('node:fs')
 const path = require('node:path')
 const { spawn } = require('node:child_process')
-const PROJECT_ROOT = path.normalize(path.join(__dirname, '../../../../..'))
+const PROJECT_ROOT = path.normalize(path.join(__dirname, '../../../..'))
 const WORKSPACE_FILE = path.join(PROJECT_ROOT, 'WORKSPACE')
 
 function isDevMode() {

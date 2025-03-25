@@ -10,7 +10,7 @@
     "webdriver",
     "webdriverjs"
   ],
-  "homepage": "https://github.com/SeleniumHQ/selenium/tree/trunk/javascript/node/selenium-webdriver#readme",
+  "homepage": "https://github.com/SeleniumHQ/selenium/tree/trunk/javascript/selenium-webdriver#readme",
   "bugs": {
     "url": "https://github.com/SeleniumHQ/selenium/issues"
   },
@@ -52,7 +52,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "bazel test //javascript/node/selenium-webdriver/...",
+    "test": "bazel test //javascript/selenium-webdriver/...",
     "generate-docs": "jsdoc --configure jsdoc_conf.json --verbose"
   },
   "mocha": {
