@@ -129,6 +129,10 @@ class Network:
             event_name (str): The event to subscribe to.
             callback (function): The callback function to execute on event.
                 Takes Request object as argument.
+
+        Returns:
+        -------
+            int : callback id
         """
 
         event = NetworkEvent(event_name)
@@ -225,6 +229,10 @@ class Network:
         ----------
             username (str): The username to authenticate with.
             password (str): The password to authenticate with.
+
+        Returns:
+        -------
+            int : callback id
         """
         event = "auth_required"
 
@@ -234,7 +242,14 @@ class Network:
         return self.add_request_handler(event, _callback)
 
     def _continue_with_auth(self, request, username, password):
-        """Continue with authentication."""
+        """Continue with authentication.
+
+        Parameters:
+        ----------
+            request (Request): The request to continue with.
+            username (str): The username to authenticate with.
+            password (str): The password to authenticate with.
+        """
 
         params = {}
         params["request"] = request.request_id
