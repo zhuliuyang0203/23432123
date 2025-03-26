@@ -20,12 +20,12 @@ import platform
 import socket
 import subprocess
 import time
-from runfiles import Runfiles
 from test.selenium.webdriver.common.network import get_lan_ip
 from test.selenium.webdriver.common.webserver import SimpleWebServer
 from urllib.request import urlopen
 
 import pytest
+from runfiles import Runfiles
 
 from selenium import webdriver
 from selenium.webdriver.remote.server import Server
