@@ -682,9 +682,8 @@ class Builder {
         }
         // Allocate a free port for the websocket only when not connecting to an existing instance
         // This avoids conflicts when multiple Firefox instances have started
-        if (!service?.args.includes('--connect-existing')) {
-          service?.args.push('--websocket-port')
-          service?.args.push(`${portprober.findFreePort()}`)
+        if (!service?.options_.args.includes('--connect-existing')) {
+          service?.addArguments('--websocket-port', `${portprober.findFreePort()}`)
         }
         return createDriver(firefox.Driver, capabilities, service)
       }

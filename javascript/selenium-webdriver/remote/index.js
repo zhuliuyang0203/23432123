@@ -314,7 +314,7 @@ DriverService.DEFAULT_START_TIMEOUT_MS = 30 * 1000
  */
 DriverService.Builder = class {
   /**
-   * @param {string} exe Path to the executable to use. This executable must
+   * @param {string} exex Path to the executable to use. This executable must
    *     accept the `--port` flag for defining the port to start the server on.
    * @throws {Error} If the provided executable path does not exist.
    */
