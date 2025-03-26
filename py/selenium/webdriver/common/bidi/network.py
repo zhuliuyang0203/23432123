@@ -301,37 +301,3 @@ class Request:
             params["url"] = self.url
 
         self.network.conn.execute(self.command_builder("network.continueWithRequest", params))
-
-
-class Response:
-    """Represents an intercepted network response."""
-
-    def __init__(self, request_id, url, status_code, headers, body, network: Network):
-        self.request_id = request_id
-        self.url = url
-        self.status_code = status_code
-        self.headers = headers
-        self.body = body
-        self.conn = network
-
-    def command_builder(self, method, params):
-        """Build a command iterator to send to the network.
-
-        Parameters:
-        ----------
-            method (str): The method to execute.
-            params (dict): The parameters to pass to the method.
-        """
-        command = {"method": method, "params": params}
-        cmd = yield command
-        return cmd
-
-    # def continue_response(self):
-    #     """Continue after receiving a response."""
-    #     params = {"requestId": self.request_id, "status": self.status_code}
-    #     if self.headers is not None:
-    #         params["headers"] = self.headers
-    #     if self.body is not None:
-    #         params["body"] = self.body
-    #     command = {"method": "network.continueResponse", "params": params}
-    #     self.network.conn.execute(self._command_iterator(command))

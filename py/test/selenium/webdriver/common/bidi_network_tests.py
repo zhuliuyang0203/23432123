@@ -38,23 +38,8 @@ def test_remove_intercept(driver):
     driver.network.remove_intercept(result["intercept"])
     assert driver.network.intercepts == [], "Intercept not removed"
 
-
 @pytest.mark.xfail_safari
-def test_add_request_handler(driver, pages):
-
-    requests = []
-
-    def callback(request):
-        requests.append(request)
-
-    callback_id = driver.network.add_request_handler("before_request", callback)
-    assert callback_id is not None, "Request handler not added"
-    driver.get("http://www.google.com")
-    assert requests, "No requests intercepted"
-
-
-@pytest.mark.xfail_safari
-def test_remove_request_handler(driver, pages):
+def test_add_and_remove_request_handler(driver, pages):
 
     requests = []
 
@@ -64,9 +49,9 @@ def test_remove_request_handler(driver, pages):
     callback_id = driver.network.add_request_handler("before_request", callback)
     assert callback_id is not None, "Request handler not added"
     driver.network.remove_request_handler("before_request", callback_id)
-    driver.get("http://www.google.com")
-    assert not requests, "No requests intercepted"
-
+    pages.load("formPage.html")
+    assert not requests, "Requests intercepted"
+    assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 @pytest.mark.xfail_safari
 def test_continue_request(driver, pages):
@@ -76,8 +61,8 @@ def test_continue_request(driver, pages):
 
     callback_id = driver.network.add_request_handler("before_request", callback)
     assert callback_id is not None, "Request handler not added"
-    driver.get("http://www.google.com")
-    assert driver.title == "Site is not secure", "Request not continued"
+    pages.load("formPage.html")
+    assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
 @pytest.mark.xfail_safari
