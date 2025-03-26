@@ -115,7 +115,7 @@ namespace OpenQA.Selenium.Support.Extensions
             }
         }
 
-        private static object ExecuteJavaScriptInternal(IWebDriver driver, string script, object?[] args)
+        private static object? ExecuteJavaScriptInternal(IWebDriver driver, string script, object?[] args)
         {
             IJavaScriptExecutor? executor = GetDriverAs<IJavaScriptExecutor>(driver)
                 ?? throw new WebDriverException("Driver does not implement IJavaScriptExecutor");

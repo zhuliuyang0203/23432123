@@ -1,3 +1,7 @@
+4.30.1 (2025-03-22)
+=========================
+* put back the driver#script method that was inadvertently deleted
+
 4.30.0 (2025-03-20)
 =========================
 Ruby:

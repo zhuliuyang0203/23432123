@@ -87,7 +87,7 @@ jobs:
         if: ${{ matrix.language == 'node' }}
         run: |
           npm install
-          npm install --prefix javascript/node/selenium-webdriver
+          npm install --prefix javascript/selenium-webdriver
       - name: Update Documentation
         run: ./go ${{ matrix.language }}:docs
       - name: Documentation Pull Request

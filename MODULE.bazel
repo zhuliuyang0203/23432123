@@ -25,7 +25,7 @@ bazel_dep(name = "rules_oci", version = "1.8.0")
 bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "rules_python", version = "1.1.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
-bazel_dep(name = "rules_ruby", version = "0.17.2")
+bazel_dep(name = "rules_ruby", version = "0.18.0")
 
 linter = use_extension("@apple_rules_lint//lint:extensions.bzl", "linter")
 linter.configure(
@@ -55,7 +55,7 @@ npm.npm_translate_lock(
         "@//:package.json",
         "@//:pnpm-workspace.yaml",
         "@//javascript/grid-ui:package.json",
-        "@//javascript/node/selenium-webdriver:package.json",
+        "@//javascript/selenium-webdriver:package.json",
     ],
     generate_bzl_library_targets = True,
     npmrc = "//:.npmrc",

@@ -37,16 +37,15 @@ public record EvaluateOptions : CommandOptions
 
 // https://github.com/dotnet/runtime/issues/72604
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-//[JsonDerivedType(typeof(Success), "success")]
-//[JsonDerivedType(typeof(Exception), "exception")]
-public abstract record EvaluateResult
-{
-    public record Success(RemoteValue Result, Realm Realm) : EvaluateResult
-    {
-        public static implicit operator RemoteValue(Success success) => success.Result;
-    }
+//[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
+//[JsonDerivedType(typeof(EvaluateResultException), "exception")]
+public abstract record EvaluateResult;
 
-    public record Exception(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
+public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateResult
+{
+    public static implicit operator RemoteValue(EvaluateResultSuccess success) => success.Result;
 }
+
+public record EvaluateResultException(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
 
 public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text);

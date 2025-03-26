@@ -33,8 +33,8 @@ internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
 
         return jsonDocument.RootElement.GetProperty("type").ToString() switch
         {
-            "success" => jsonDocument.Deserialize<EvaluateResult.Success>(options),
-            "exception" => jsonDocument.Deserialize<EvaluateResult.Exception>(options),
+            "success" => jsonDocument.Deserialize<EvaluateResultSuccess>(options),
+            "exception" => jsonDocument.Deserialize<EvaluateResultException>(options),
             _ => null,
         };
     }
