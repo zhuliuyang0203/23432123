@@ -205,6 +205,10 @@ public class NodeOptions {
     return Duration.ofSeconds(seconds);
   }
 
+  public boolean getRegisterShutdownOnFailure() {
+    return config.getBool(NODE_SECTION, "register-shutdown-on-failure").orElse(false);
+  }
+
   public Duration getHeartbeatPeriod() {
     // If the user sets 0 or less, we default to 1s.
     int seconds =

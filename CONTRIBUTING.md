@@ -109,7 +109,7 @@ installed on your local machine, or by executing:
 
 ```shell
 # Example of adding a dep to the JS webdriver bindings 
-cd javascript/node/selenium-webdriver
+cd javascript/selenium-webdriver
 bazel run javascript:pnpm -- install my-amazing-dep --dir $PWD
 ```
 
@@ -255,12 +255,12 @@ Build your code for the latest changes and run tests locally.
 
   Node Tests
   ```shell
-  % bazel test //javascript/node/selenium-webdriver:tests
+  % bazel test //javascript/selenium-webdriver:all
   ```
 
   Firefox Atom Tests
   ```shell
-  % bazel test --test_tag_filters=firefox //javascript/atoms/... //javascript/selenium-atoms/... //javascript/webdriver/...
+  % bazel test --test_tag_filters=firefox //javascript/atoms/... //javascript/webdriver/...
   ```
 
   Grid UI Unit Tests
@@ -358,8 +358,8 @@ Check https://selenium.dev/support/ for a complete list of options to communicat
 
 To access the EngFlow RBE, a developer needs to be granted access to our project
 container repository. Once that has been done, then any bazel command can be run
-remotely by using `--config=remote`. For example: `bazel build --config=remote
-grid` or `bazel test --config=remote java/test/...`
+remotely by using `--config=rbe`. For example: `bazel build --config=rbe
+grid` or `bazel test --config=rbe java/test/...`
 
 When you run a remote build, one of the first lines of output from Bazel will 
 include a link to the EngFlow UI so you can track the progress of the build and

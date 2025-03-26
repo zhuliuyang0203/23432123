@@ -20,26 +20,26 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Number), "number")]
-[JsonDerivedType(typeof(String), "string")]
-[JsonDerivedType(typeof(Null), "null")]
-[JsonDerivedType(typeof(Undefined), "undefined")]
-[JsonDerivedType(typeof(Channel), "channel")]
-[JsonDerivedType(typeof(Array), "array")]
-[JsonDerivedType(typeof(Date), "date")]
-[JsonDerivedType(typeof(Map), "map")]
-[JsonDerivedType(typeof(Object), "object")]
-[JsonDerivedType(typeof(RegExp), "regexp")]
-[JsonDerivedType(typeof(Set), "set")]
+[JsonDerivedType(typeof(NumberLocalValue), "number")]
+[JsonDerivedType(typeof(StringLocalValue), "string")]
+[JsonDerivedType(typeof(NullLocalValue), "null")]
+[JsonDerivedType(typeof(UndefinedLocalValue), "undefined")]
+[JsonDerivedType(typeof(BooleanLocalValue), "boolean")]
+[JsonDerivedType(typeof(BigIntLocalValue), "bigint")]
+[JsonDerivedType(typeof(ChannelLocalValue), "channel")]
+[JsonDerivedType(typeof(ArrayLocalValue), "array")]
+[JsonDerivedType(typeof(DateLocalValue), "date")]
+[JsonDerivedType(typeof(MapLocalValue), "map")]
+[JsonDerivedType(typeof(ObjectLocalValue), "object")]
+[JsonDerivedType(typeof(RegExpLocalValue), "regexp")]
+[JsonDerivedType(typeof(SetLocalValue), "set")]
 public abstract record LocalValue
 {
-    public static implicit operator LocalValue(int value) { return new Number(value); }
-    public static implicit operator LocalValue(string value) { return new String(value); }
+    public static implicit operator LocalValue(int value) { return new NumberLocalValue(value); }
+    public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
@@ -49,7 +49,7 @@ public abstract record LocalValue
             case LocalValue:
                 return (LocalValue)value;
             case null:
-                return new Null();
+                return new NullLocalValue();
             case int:
                 return (int)value;
             case string:
@@ -67,55 +67,44 @@ public abstract record LocalValue
                         values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
                     }
 
-                    return new Object(values);
+                    return new ObjectLocalValue(values);
                 }
         }
     }
-
-    public abstract record PrimitiveProtocolLocalValue : LocalValue
-    {
-
-    }
-
-    public record Number(long Value) : PrimitiveProtocolLocalValue
-    {
-        public static explicit operator Number(int n) => new Number(n);
-    }
-
-    public record String(string Value) : PrimitiveProtocolLocalValue;
-
-    public record Null : PrimitiveProtocolLocalValue;
-
-    public record Undefined : PrimitiveProtocolLocalValue;
-
-    public record Channel(Channel.ChannelProperties Value) : LocalValue
-    {
-        [JsonInclude]
-        internal string type = "channel";
-
-        public record ChannelProperties(Script.Channel Channel)
-        {
-            public SerializationOptions? SerializationOptions { get; set; }
-
-            public ResultOwnership? Ownership { get; set; }
-        }
-    }
-
-    public record Array(IEnumerable<LocalValue> Value) : LocalValue;
-
-    public record Date(string Value) : LocalValue;
-
-    public record Map(IDictionary<string, LocalValue> Value) : LocalValue; // seems to implement IDictionary
-
-    public record Object(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
-
-    public record RegExp(RegExp.RegExpValue Value) : LocalValue
-    {
-        public record RegExpValue(string Pattern)
-        {
-            public string? Flags { get; set; }
-        }
-    }
-
-    public record Set(IEnumerable<LocalValue> Value) : LocalValue;
 }
+
+public abstract record PrimitiveProtocolLocalValue : LocalValue;
+
+public record NumberLocalValue(double Value) : PrimitiveProtocolLocalValue
+{
+    public static explicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
+}
+
+public record StringLocalValue(string Value) : PrimitiveProtocolLocalValue;
+
+public record NullLocalValue : PrimitiveProtocolLocalValue;
+
+public record UndefinedLocalValue : PrimitiveProtocolLocalValue;
+
+public record BooleanLocalValue(bool Value) : PrimitiveProtocolLocalValue;
+
+public record BigIntLocalValue(string Value) : PrimitiveProtocolLocalValue;
+
+public record ChannelLocalValue(ChannelProperties Value) : LocalValue
+{
+    // TODO: Revise why we need it
+    [JsonInclude]
+    internal string type = "channel";
+}
+
+public record ArrayLocalValue(IEnumerable<LocalValue> Value) : LocalValue;
+
+public record DateLocalValue(string Value) : LocalValue;
+
+public record MapLocalValue(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
+
+public record ObjectLocalValue(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
+
+public record RegExpLocalValue(RegExpValue Value) : LocalValue;
+
+public record SetLocalValue(IEnumerable<LocalValue> Value) : LocalValue;

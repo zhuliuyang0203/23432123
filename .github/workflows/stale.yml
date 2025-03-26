@@ -23,6 +23,7 @@ jobs:
           stale-issue-label: 'I-stale'
           days-before-stale: 180
           days-before-close: 14
+          exempt-all-milestones: true
       - uses: actions/stale@v9
         with:
           close-issue-message: 'This issue was closed because we did not receive any additional information after 14 days.'

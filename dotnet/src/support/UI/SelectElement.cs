@@ -53,7 +53,7 @@ namespace OpenQA.Selenium.Support.UI
             this.WrappedElement = element;
 
             // let check if it's a multiple
-            string attribute = element.GetAttribute("multiple");
+            string? attribute = element.GetAttribute("multiple");
             this.IsMultiple = attribute != null && !attribute.Equals("false", StringComparison.OrdinalIgnoreCase);
         }
 

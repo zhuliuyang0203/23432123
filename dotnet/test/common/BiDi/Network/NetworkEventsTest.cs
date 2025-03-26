@@ -101,7 +101,7 @@ class NetworkEventsTest : BiDiTestFixture
 
         Assert.That(req.Request.Cookies, Has.Count.EqualTo(1));
         Assert.That(req.Request.Cookies[0].Name, Is.EqualTo("foo"));
-        Assert.That((req.Request.Cookies[0].Value as BytesValue.String).Value, Is.EqualTo("bar"));
+        Assert.That((req.Request.Cookies[0].Value as StringBytesValue).Value, Is.EqualTo("bar"));
     }
 
     [Test]

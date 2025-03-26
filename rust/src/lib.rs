@@ -94,11 +94,11 @@ pub const SINGLE_QUOTE: &str = "'";
 pub const ENV_PROGRAM_FILES: &str = "PROGRAMFILES";
 pub const ENV_PROGRAM_FILES_X86: &str = "PROGRAMFILES(X86)";
 pub const ENV_LOCALAPPDATA: &str = "LOCALAPPDATA";
+pub const ENV_PROCESSOR_ARCHITECTURE: &str = "PROCESSOR_ARCHITECTURE";
 pub const ENV_X86: &str = " (x86)";
 pub const ARCH_X86: &str = "x86";
 pub const ARCH_AMD64: &str = "amd64";
 pub const ARCH_ARM64: &str = "arm64";
-pub const ENV_PROCESSOR_ARCHITECTURE: &str = "PROCESSOR_ARCHITECTURE";
 pub const TTL_SEC: u64 = 3600;
 pub const UNAME_COMMAND: &str = "uname -{}";
 pub const ESCAPE_COMMAND: &str = r#"printf %q "{}""#;
@@ -179,6 +179,10 @@ pub trait SeleniumManager {
     fn is_download_browser(&self) -> bool;
 
     fn set_download_browser(&mut self, download_browser: bool);
+
+    fn is_snap(&self, browser_path: &str) -> bool;
+
+    fn get_snap_path(&self) -> Option<PathBuf>;
 
     // ----------------------------------------------------------
     // Shared functions
@@ -605,6 +609,18 @@ pub trait SeleniumManager {
             if let Some(path) = browser_path {
                 self.get_logger()
                     .debug(format!("Found {} in PATH: {}", browser_name, &path));
+                if self.is_snap(&path) {
+                    if let Some(snap_path) = self.get_snap_path() {
+                        if snap_path.exists() {
+                            self.get_logger().debug(format!(
+                                "Using {} snap: {}",
+                                browser_name,
+                                path_to_string(snap_path.as_path())
+                            ));
+                            return Some(snap_path);
+                        }
+                    }
+                }
                 return Some(Path::new(&path).to_path_buf());
             }
         }
@@ -798,7 +814,9 @@ pub trait SeleniumManager {
         }
 
         // With the discovered browser version, discover the proper driver version using online endpoints
-        if self.get_driver_version().is_empty() {
+        if self.get_driver_version().is_empty()
+            || (self.is_grid() && self.is_nightly(self.get_driver_version()))
+        {
             match self.discover_driver_version() {
                 Ok(driver_version) => {
                     self.set_driver_version(driver_version);
@@ -823,6 +841,7 @@ pub trait SeleniumManager {
 
                 // Display warning if the discovered driver version is not the same as the driver in PATH
                 if !self.get_driver_version().is_empty()
+                    && !self.is_snap(self.get_browser_path())
                     && (self.is_firefox() && !version.eq(self.get_driver_version()))
                     || (!self.is_firefox() && !major_version.eq(&self.get_major_browser_version()))
                 {
@@ -1030,7 +1049,7 @@ pub trait SeleniumManager {
         }
 
         let mut release_version = driver_version.to_string();
-        if !driver_version.ends_with('0') {
+        if !driver_version.ends_with('0') && !self.is_nightly(driver_version) {
             // E.g.: version 4.8.1 is shipped within release 4.8.0
             let error_message = format!(
                 "Wrong {} version: '{}'",

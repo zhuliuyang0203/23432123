@@ -27,7 +27,7 @@ module Selenium
       #
 
       class Driver < WebDriver::Driver
-        EXTENSIONS = [DriverExtensions::HasWebStorage].freeze
+        EXTENSIONS = [].freeze
 
         include LocalDriver
 

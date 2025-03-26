@@ -1,13 +1,21 @@
 require:
-  - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
+
+plugins:
+  - rubocop-performance
 
 AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
   Exclude:
     - !ruby/regexp /lib\/selenium\/devtools\/v\d+/
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+FactoryBot/CreateList:
+  Enabled: false
 
 Gemspec/DevelopmentDependencies:
   EnforcedStyle: gemspec
@@ -74,6 +82,9 @@ Metrics/PerceivedComplexity:
     - 'lib/selenium/webdriver/common/options.rb'
     - 'lib/selenium/webdriver/common/local_driver.rb'
     - 'lib/selenium/webdriver/common/logger.rb'
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
 
 Naming/FileName:
   Exclude:
@@ -148,3 +159,6 @@ Lint/Debugger:
   DebuggerMethods:
     Capybara:
       - save_screenshot: ~
+
+Lint/UselessConstantScoping:
+  Enabled: false

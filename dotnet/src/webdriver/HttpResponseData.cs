@@ -18,6 +18,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenQA.Selenium
 {
@@ -26,18 +27,22 @@ namespace OpenQA.Selenium
     /// </summary>
     public class HttpResponseData
     {
-        private Dictionary<string, string> headers = new Dictionary<string, string>();
-        private List<string> cookies = new List<string>();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpResponseData"/> type.
+        /// </summary>
+        public HttpResponseData()
+        {
+        }
 
         /// <summary>
         /// Gets or sets the ID of the request that generated this response.
         /// </summary>
-        public string RequestId { get; set; }
+        public string? RequestId { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the HTTP response.
         /// </summary>
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         /// <summary>
         /// Gets or sets the numeric status code of the HTTP response.
@@ -47,41 +52,36 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the body of the HTTP response.
         /// </summary>
-        public string Body
+        [DisallowNull]
+        public string? Body
         {
-            get
-            {
-                return this.Content?.ReadAsString();
-            }
-            set
-            {
-                this.Content = new HttpResponseContent(value);
-            }
+            get => this.Content?.ReadAsString();
+            set => this.Content = new HttpResponseContent(value);
         }
 
         /// <summary>
         /// Gets or sets the content of the HTTP response.
         /// </summary>
-        public HttpResponseContent Content { get; set; }
+        public HttpResponseContent? Content { get; set; }
 
         /// <summary>
         /// Gets or sets the type of resource for this response.
         /// </summary>
-        public string ResourceType { get; set; }
+        public string? ResourceType { get; set; }
 
         /// <summary>
         /// Gets or sets the reason for an error response.
         /// </summary>
-        public string ErrorReason { get; set; }
+        public string? ErrorReason { get; set; }
 
         /// <summary>
         /// Gets the headers of the HTTP response.
         /// </summary>
-        public Dictionary<string, string> Headers => this.headers;
+        public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Gets the cookie headers of the HTTP response.
         /// </summary>
-        public List<string> CookieHeaders => this.cookies;
+        public List<string> CookieHeaders { get; } = new List<string>();
     }
 }

@@ -35,7 +35,7 @@ class ScriptEventsTest : BiDiTestFixture
 
         await context.Script.CallFunctionAsync("(channel) => channel('foo')", false, new()
         {
-            Arguments = [new LocalValue.Channel(new(new("channel_name")))]
+            Arguments = [new ChannelLocalValue(new(new("channel_name")))]
         });
 
         var message = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -60,7 +60,7 @@ class ScriptEventsTest : BiDiTestFixture
         var realmInfo = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.That(realmInfo, Is.Not.Null);
-        Assert.That(realmInfo, Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realmInfo, Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realmInfo.Realm, Is.Not.Null);
     }
 

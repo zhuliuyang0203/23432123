@@ -67,7 +67,7 @@ def add_pdls(chrome_milestone):
     if os.path.isdir(old_dir):
         shutil.rmtree(old_dir)
 
-    if not os.path.isdir(target_dir):
+    if not target_dir.is_dir() or not any(target_dir.iterdir()):
         os.makedirs(target_dir, exist_ok=True)
         if os.path.isdir(source_dir):
             shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)
@@ -173,7 +173,7 @@ def update_python(chrome_milestone):
 
 
 def update_js(chrome_milestone):
-    file = root_dir / "javascript/node/selenium-webdriver/BUILD.bazel"
+    file = root_dir / "javascript/selenium-webdriver/BUILD.bazel"
     replace_in_file(file, old_chrome(chrome_milestone), new_chrome(chrome_milestone))
 
 

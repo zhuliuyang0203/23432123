@@ -21,11 +21,10 @@ using OpenQA.Selenium.BiDi.Communication;
 using System.Collections;
 using System.Collections.Generic;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class GetUserContextsCommand() : Command<CommandParameters>(CommandParameters.Empty);
+internal class GetUserContextsCommand()
+    : Command<CommandParameters>(CommandParameters.Empty, "browser.getUserContexts");
 
 public record GetUserContextsOptions : CommandOptions;
 

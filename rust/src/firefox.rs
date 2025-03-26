@@ -34,7 +34,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::mpsc;
 use std::sync::mpsc::{Receiver, Sender};
 
@@ -66,6 +66,8 @@ const MIN_DOWNLOADABLE_FIREFOX_VERSION_MAC: i32 = 4;
 const MIN_DOWNLOADABLE_FIREFOX_VERSION_LINUX: i32 = 4;
 const UNAVAILABLE_DOWNLOAD_ERROR_MESSAGE: &str =
     "{} {} not available for downloading (minimum version: {})";
+const FIREFOX_SNAP_LINK: &str = "/snap/bin/firefox";
+const FIREFOX_SNAP_BINARY: &str = "/snap/firefox/current/usr/lib/firefox/firefox";
 
 pub struct FirefoxManager {
     pub browser_name: &'static str,
@@ -628,6 +630,15 @@ impl SeleniumManager for FirefoxManager {
 
     fn set_download_browser(&mut self, download_browser: bool) {
         self.download_browser = download_browser;
+    }
+
+    fn is_snap(&self, browser_path: &str) -> bool {
+        LINUX.is(self.get_os())
+            && (browser_path.eq(FIREFOX_SNAP_LINK) || browser_path.eq(FIREFOX_SNAP_BINARY))
+    }
+
+    fn get_snap_path(&self) -> Option<PathBuf> {
+        Some(Path::new(FIREFOX_SNAP_BINARY).to_path_buf())
     }
 }
 

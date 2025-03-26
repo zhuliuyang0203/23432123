@@ -19,8 +19,6 @@
 
 using System;
 
-#nullable enable
-
 namespace OpenQA.Selenium.Support.UI
 {
     /// <summary>
@@ -28,6 +26,11 @@ namespace OpenQA.Selenium.Support.UI
     /// </summary>
     public class SystemClock : IClock
     {
+        /// <summary>
+        /// An instance of the <see cref="SystemClock"/> type.
+        /// </summary>
+        public static SystemClock Instance { get; } = new();
+
         /// <summary>
         /// Gets the current date and time values.
         /// </summary>

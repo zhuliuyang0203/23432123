@@ -23,8 +23,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>

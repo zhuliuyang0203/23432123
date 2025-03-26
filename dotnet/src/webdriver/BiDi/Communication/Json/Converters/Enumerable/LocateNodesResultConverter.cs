@@ -24,16 +24,14 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-#nullable enable
-
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 
 internal class LocateNodesResultConverter : JsonConverter<LocateNodesResult>
 {
     public override LocateNodesResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var doc = JsonDocument.ParseValue(ref reader);
-        var nodes = doc.RootElement.GetProperty("nodes").Deserialize<IReadOnlyList<RemoteValue.Node>>(options);
+        using var doc = JsonDocument.ParseValue(ref reader);
+        var nodes = doc.RootElement.GetProperty("nodes").Deserialize<IReadOnlyList<NodeRemoteValue>>(options);
 
         return new LocateNodesResult(nodes!);
     }

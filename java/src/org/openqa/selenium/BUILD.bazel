@@ -17,7 +17,6 @@ java_export(
         "internal/*.java",
         "interactions/**/*.java",
         "logging/**/*.java",
-        "mobile/*.java",
         "net/*.java",
         "virtualauthenticator/*.java",
         "print/*.java",

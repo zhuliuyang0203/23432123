@@ -199,8 +199,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Chrome does not retrieve cookies when in frame.")]
-        [IgnoreBrowser(Browser.Edge, "Edge does not retrieve cookies when in frame.")]
         [IgnoreBrowser(Browser.Firefox, "https://github.com/mozilla/geckodriver/issues/1104")]
         public void GetCookiesInAFrame()
         {

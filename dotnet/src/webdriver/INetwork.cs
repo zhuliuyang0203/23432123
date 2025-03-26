@@ -18,6 +18,7 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
@@ -30,12 +31,12 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Occurs when a browser sends a network request.
         /// </summary>
-        event EventHandler<NetworkRequestSentEventArgs> NetworkRequestSent;
+        event EventHandler<NetworkRequestSentEventArgs>? NetworkRequestSent;
 
         /// <summary>
         /// Occurs when a browser receives a network response.
         /// </summary>
-        event EventHandler<NetworkResponseReceivedEventArgs> NetworkResponseReceived;
+        event EventHandler<NetworkResponseReceivedEventArgs>? NetworkResponseReceived;
 
         /// <summary>
         /// Adds a <see cref="NetworkRequestHandler"/> to examine incoming network requests,
@@ -77,12 +78,16 @@ namespace OpenQA.Selenium
         /// Asynchronously starts monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         Task StartMonitoring();
 
         /// <summary>
         /// Asynchronously stops monitoring for network traffic.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
+        [RequiresUnreferencedCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported")]
+        [RequiresDynamicCode("Network monitoring is currently implemented with CDP. When it is implemented with BiDi, AOT will be supported.")]
         Task StopMonitoring();
     }
 }

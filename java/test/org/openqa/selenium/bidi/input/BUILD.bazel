@@ -22,6 +22,7 @@ java_selenium_test_suite(
         "//java/src/org/openqa/selenium/bidi/log",
         "//java/src/org/openqa/selenium/bidi/module",
         "//java/src/org/openqa/selenium/bidi/network",
+        "//java/src/org/openqa/selenium/bidi/permissions",
         "//java/src/org/openqa/selenium/bidi/script",
         "//java/src/org/openqa/selenium/chrome",
         "//java/src/org/openqa/selenium/firefox",

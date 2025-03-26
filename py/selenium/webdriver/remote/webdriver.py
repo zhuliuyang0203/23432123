@@ -91,7 +91,7 @@ def _create_caps(caps):
     options object.
 
     Parameters:
-    ----------
+    -----------
     caps : dict
         - A dictionary of capabilities requested by the caller.
     """
@@ -177,7 +177,7 @@ class WebDriver(BaseWebDriver):
     https://www.selenium.dev/documentation/legacy/json_wire_protocol/.
 
     Attributes:
-    ----------
+    -----------
     session_id - String ID of the browser session started and controlled by this WebDriver.
     capabilities - Dictionary of effective capabilities of this browser session as returned
         by the remote server. See https://www.selenium.dev/documentation/legacy/desired_capabilities/
@@ -202,7 +202,7 @@ class WebDriver(BaseWebDriver):
         protocol.
 
         Parameters:
-        ----------
+        -----------
         command_executor : str or remote_connection.RemoteConnection
             - Either a string representing the URL of the remote server or a custom
             remote_connection.RemoteConnection object. Defaults to 'http://127.0.0.1:4444/wd/hub'.
@@ -273,7 +273,7 @@ class WebDriver(BaseWebDriver):
         context. Ensures the original file detector is set afterwards.
 
         Parameters:
-        ----------
+        -----------
         file_detector_class : object
             - Class of the desired file detector. If the class is different
             from the current file_detector, then the class is instantiated with args and kwargs
@@ -333,7 +333,7 @@ class WebDriver(BaseWebDriver):
         """Creates a new session with the desired capabilities.
 
         Parameters:
-        ----------
+        -----------
         capabilities : dict
             - A capabilities dict to start the session with.
         """
@@ -381,7 +381,7 @@ class WebDriver(BaseWebDriver):
         https://chromedevtools.github.io/devtools-protocol/
 
         Parameters:
-        ----------
+        -----------
         cmd : str,
             - Command name
 
@@ -405,7 +405,7 @@ class WebDriver(BaseWebDriver):
         """Sends a command to be executed by a command.CommandExecutor.
 
         Parameters:
-        ----------
+        -----------
         driver_command : str
             - The name of the command to execute as a string.
 
@@ -441,7 +441,7 @@ class WebDriver(BaseWebDriver):
         onload event has fired).
 
         Parameters:
-        ----------
+        -----------
         url : str
             - The URL to be opened by the browser.
             - Must include the protocol (e.g., http://, https://).
@@ -501,7 +501,7 @@ class WebDriver(BaseWebDriver):
         """Synchronously Executes JavaScript in the current window/frame.
 
         Parameters:
-        ----------
+        -----------
         script : str
             - The javascript to execute.
 
@@ -531,7 +531,7 @@ class WebDriver(BaseWebDriver):
         """Asynchronously Executes JavaScript in the current window/frame.
 
         Parameters:
-        ----------
+        -----------
         script : str
             - The javascript to execute.
 
@@ -715,24 +715,34 @@ class WebDriver(BaseWebDriver):
         return self.execute(Command.GET_ALL_COOKIES)["value"]
 
     def get_cookie(self, name) -> Optional[Dict]:
-        """Get a single cookie by name. Returns the cookie if found, None if
-        not.
+        """Get a single cookie by name. Raises ValueError if the name is empty
+        or whitespace. Returns the cookie if found, None if not.
 
         Example:
         --------
         >>> cookie = driver.get_cookie('my_cookie')
         """
+        if not name or name.isspace():
+            raise ValueError("Cookie name cannot be empty")
+
         with contextlib.suppress(NoSuchCookieException):
             return self.execute(Command.GET_COOKIE, {"name": name})["value"]
+
         return None
 
     def delete_cookie(self, name) -> None:
-        """Deletes a single cookie with the given name.
+        """Deletes a single cookie with the given name. Raises ValueError if
+        the name is empty or whitespace.
 
         Example:
         --------
         >>> driver.delete_cookie('my_cookie')
         """
+
+        # firefox deletes all cookies when "" is passed as name
+        if not name or name.isspace():
+            raise ValueError("Cookie name cannot be empty")
+
         self.execute(Command.DELETE_COOKIE, {"name": name})
 
     def delete_all_cookies(self) -> None:
@@ -748,7 +758,7 @@ class WebDriver(BaseWebDriver):
         """Adds a cookie to your current session.
 
         Parameters:
-        ----------
+        -----------
         cookie_dict : dict
             - A dictionary object, with required keys - "name" and "value";
             - Optional keys - "path", "domain", "secure", "httpOnly", "expiry", "sameSite"
@@ -774,7 +784,7 @@ class WebDriver(BaseWebDriver):
         set_script_timeout.
 
         Parameters:
-        ----------
+        -----------
         time_to_wait : float
             - Amount of time to wait (in seconds)
 
@@ -789,7 +799,7 @@ class WebDriver(BaseWebDriver):
         execute_async_script call before throwing an error.
 
         Parameters:
-        ---------
+        -----------
         time_to_wait : float
             - The amount of time to wait (in seconds)
 
@@ -804,13 +814,13 @@ class WebDriver(BaseWebDriver):
         throwing an error.
 
         Parameters:
-         ---------
-         time_to_wait : float
+        -----------
+        time_to_wait : float
              - The amount of time to wait (in seconds)
 
-         Example:
-         --------
-         >>> driver.set_page_load_timeout(30)
+        Example:
+        --------
+        >>> driver.set_page_load_timeout(30)
         """
         try:
             self.execute(Command.SET_TIMEOUTS, {"pageLoad": int(float(time_to_wait) * 1000)})
@@ -855,7 +865,7 @@ class WebDriver(BaseWebDriver):
         """Find an element given a By strategy and locator.
 
         Parameters:
-        ----------
+        -----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
             - By.ID: Locate by element ID.
@@ -891,7 +901,7 @@ class WebDriver(BaseWebDriver):
         """Find elements given a By strategy and locator.
 
         Parameters:
-        ----------
+        -----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
             - By.ID: Locate by element ID.
@@ -906,11 +916,11 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        element = driver.find_element(By.ID, 'foo')
+        element = driver.find_elements(By.ID, 'foo')
 
         Returns:
         -------
-        WebElement
+        List[WebElement]
             list of `WebElements` matching locator strategy found on the page.
         """
         by, value = self.locator_converter.convert(by, value)
@@ -941,7 +951,7 @@ class WebDriver(BaseWebDriver):
         paths in your filename.
 
         Parameters:
-        ----------
+        -----------
         filename : str
             - The full path you wish to save your screenshot to. This
             - should end with a `.png` extension.
@@ -972,7 +982,7 @@ class WebDriver(BaseWebDriver):
         paths in your filename.
 
         Parameters:
-        ----------
+        -----------
         filename : str
             - The full path you wish to save your screenshot to. This
             - should end with a `.png` extension.
@@ -1006,7 +1016,7 @@ class WebDriver(BaseWebDriver):
         """Sets the width and height of the current window. (window.resizeTo)
 
         Parameters:
-        ----------
+        -----------
         width : int
             - the width in pixels to set the window to
 
@@ -1114,7 +1124,7 @@ class WebDriver(BaseWebDriver):
         - see UselessFileDetector
 
         Parameters:
-        ----------
+        -----------
         detector : Any
             - The detector to use. Must not be None.
         """
@@ -1139,7 +1149,7 @@ class WebDriver(BaseWebDriver):
         """Sets the current orientation of the device.
 
         Parameters:
-        ----------
+        -----------
         value : str
             - orientation to set it to.
 
@@ -1168,7 +1178,7 @@ class WebDriver(BaseWebDriver):
         """Gets the log for a given log type.
 
         Parameters:
-        ----------
+        -----------
         log_type : str
             - Type of log that which will be returned
 
@@ -1201,11 +1211,7 @@ class WebDriver(BaseWebDriver):
 
                 devtools = cdp.import_devtools(version)
                 if self.caps["browserName"].lower() == "firefox":
-                    warnings.warn(
-                        "CDP support for Firefox is deprecated and will be removed in future versions. Please switch to WebDriver BiDi.",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
+                    raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
             self._websocket_connection = WebSocketConnection(ws_url)
             targets = self._websocket_connection.execute(devtools.target.get_targets())
             target_id = targets[0].target_id
@@ -1257,14 +1263,11 @@ class WebDriver(BaseWebDriver):
         import urllib3
 
         http = urllib3.PoolManager()
-        _firefox = False
         if self.caps.get("browserName") == "chrome":
             debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
         elif self.caps.get("browserName") == "MicrosoftEdge":
             debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
-        else:
-            _firefox = True
-            debugger_address = self.caps.get("moz:debuggerAddress")
+
         res = http.request("GET", f"http://{debugger_address}/json/version")
         data = json.loads(res.data)
 
@@ -1273,12 +1276,7 @@ class WebDriver(BaseWebDriver):
 
         import re
 
-        if _firefox:
-            # Mozilla Automation Team asked to only support 85
-            # until WebDriver Bidi is available.
-            version = 85
-        else:
-            version = re.search(r".*/(\d+)\.", browser_version).group(1)
+        version = re.search(r".*/(\d+)\.", browser_version).group(1)
 
         return version, websocket_url
 
@@ -1374,7 +1372,7 @@ class WebDriver(BaseWebDriver):
         verification.
 
         Parameters:
-        ----------
+        -----------
         verified: True if the authenticator will pass user verification, False otherwise.
 
         Example:
@@ -1383,9 +1381,8 @@ class WebDriver(BaseWebDriver):
         """
         self.execute(Command.SET_USER_VERIFIED, {"authenticatorId": self._authenticator_id, "isUserVerified": verified})
 
-    def get_downloadable_files(self) -> dict:
-        """Retrieves the downloadable files as a map of file names and their
-        corresponding URLs.
+    def get_downloadable_files(self) -> list:
+        """Retrieves the downloadable files as a list of file names.
 
         Example:
         --------
@@ -1401,7 +1398,7 @@ class WebDriver(BaseWebDriver):
         directory.
 
         Parameters:
-        ----------
+        -----------
         file_name : str
             - The name of the file to download.
 
@@ -1497,7 +1494,7 @@ class WebDriver(BaseWebDriver):
         """Waits for and returns the FedCM dialog.
 
         Parameters:
-        ----------
+        -----------
         timeout : int
             - How long to wait for the dialog
 

@@ -1,10 +1,25 @@
-# Selenium
+<h1 align="center">
+  <br/>
+  <a href="https://selenium.dev"><img src="common/images/selenium_logo_mark_green.svg" alt="Selenium" width="100"></a>
+  <br/>
+  Selenium
+  <br/>
+</h1>
 
-[![CI](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml/badge.svg?branch=trunk&event=schedule)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml)
-[![CI - RBE](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml/badge.svg?branch=trunk&event=schedule)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml)
-[![Releases downloads](https://img.shields.io/github/downloads/SeleniumHQ/selenium/total.svg)](https://github.com/SeleniumHQ/selenium/releases)
+<h3 align="center">Automates browsers. That's it!</h3>
 
-<a href="https://selenium.dev"><img src="common/images/selenium_logo_mark_green.svg" width="180" alt="Selenium Logo"/></a>
+<p align="center">
+  <a href="#contributing">Contributing</a> •
+  <a href="#installing">Installing</a> •
+  <a href="#building">Building</a> •
+  <a href="#developing">Developing</a> •
+  <a href="#testing">Testing</a> •
+  <a href="#documenting">Documenting</a> •
+  <a href="#releasing">Releasing</a> •
+  <a href="#license">License</a>
+</p>
+
+<br>
 
 Selenium is an umbrella project encapsulating a variety of tools and
 libraries enabling web browser automation. Selenium specifically
@@ -15,12 +30,14 @@ major web browsers.
 The project is made possible by volunteer contributors who've
 generously donated thousands of hours in code development and upkeep.
 
-Selenium's source code is made available under the [Apache 2.0 license](https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE).
-
 This README is for developers interested in contributing to the project.
 For people looking to get started using Selenium, please check out
 our [User Manual](https://selenium.dev/documentation/) for detailed examples and descriptions, and if you
 get stuck, there are several ways to [Get Help](https://www.selenium.dev/support/).
+
+[![CI](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml/badge.svg)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml)
+[![CI - RBE](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml/badge.svg)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml)
+[![Releases downloads](https://img.shields.io/github/downloads/SeleniumHQ/selenium/total.svg)](https://github.com/SeleniumHQ/selenium/releases)
 
 ## Contributing
 
@@ -184,7 +201,7 @@ for Maven to use locally by deploying to your local maven repository (`~/.m2/rep
 
 #### Updating Dependencies
 
-Dependencies are defined in the file [maven_deps.bzl](https://github.com/SeleniumHQ/selenium/blob/trunk/java/maven_deps.bzl).
+Dependencies are defined in the file [MODULE.bazel](https://github.com/SeleniumHQ/selenium/blob/trunk/MODULE.bazel).
 To automatically update and pin new dependencies, run:
 
 ```shell
@@ -193,15 +210,46 @@ To automatically update and pin new dependencies, run:
 
 ### Python
 
-You can run Python code locally by updating generated files in the python directory using:
+#### Linting
+
+We follow the [PEP8 Style Guide for Python Code](https://peps.python.org/pep-0008) (except we use a 120 character line length).
+This is checked and enforced with several linting tools, including
+[black](https://pypi.org/project/black),
+[docformatter](https://pypi.org/project/docformatter),
+[flake8](https://flake8.pycqa.org),
+and [isort](https://pycqa.github.io/isort).
+
+To run all of the linting tools:
 ```shell
-./go py:update
+./go py:lint
 ```
 
-To install Selenium locally based on a specific commit, you can use:
+You need `tox` installed to run the linting tools (`pip install tox`).
+
+#### Local Installation
+
+To run Python code locally without building/installing the package, you must first install the dependencies:
+```shell
+pip install -r py/requirements.txt
+```
+
+Then, build the generated files and copy them into your local source tree:
+```shell
+./go py:local_dev
+```
+
+After that, you can import the selenium package directly from source from the `py` directory.
+
+Instead of running from source, you can build and install the selenium package (wheel) locally:
 ```shell
 ./go py:install
 ```
+
+This will attempt to install into the global Python `site-packages` directory,
+which might not be writable. To avoid this, you should create and activate a
+[virtual environment](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-virtual-environments)
+before installing.
+
 
 ### Ruby
 
@@ -266,6 +314,9 @@ Tests can also be filtered by tag like:
 bazel test //<language>/... --test_tag_filters=this,-not-this
 ```
 
+If there are multiple `--test_tag_filters`, only the last one is considered,
+so be careful if also using an inherited config
+
 ### Java
 
 <details>
@@ -298,13 +349,13 @@ bazel test //java/test/org/openqa/selenium/chrome:ChromeDriverFunctionalTest
 To run the tests run:
 
 ```sh
-bazel test //javascript/node/selenium-webdriver:tests
+bazel test //javascript/selenium-webdriver:tests
 ```
 
 You can use `--test_env` to pass in the browser name as `SELENIUM_BROWSER`.
 
 ```sh
-bazel test //javascript/node/selenium-webdriver:tests --test_env=SELENIUM_BROWSER=firefox
+bazel test //javascript/selenium-webdriver:tests --test_env=SELENIUM_BROWSER=firefox
 ```
 
 </details>
@@ -507,3 +558,7 @@ If you have access to the Selenium EngFlow repository, you can have the assets b
 ```shell
 ./go all:release['--config', 'release']
 ```
+
+## License
+
+Selenium's source code is made available under the [Apache 2.0 license](https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE).

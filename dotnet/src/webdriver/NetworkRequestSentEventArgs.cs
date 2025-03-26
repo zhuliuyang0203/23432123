@@ -27,10 +27,6 @@ namespace OpenQA.Selenium
     /// </summary>
     public class NetworkRequestSentEventArgs : EventArgs
     {
-        private readonly string requestId;
-        private readonly string requestUrl;
-        private readonly string requestMethod;
-        private readonly string requestPostData;
         private readonly Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
 
         /// <summary>
@@ -39,35 +35,38 @@ namespace OpenQA.Selenium
         /// <param name="requestData">The <see cref="HttpRequestData"/> that describes the network request.</param>
         public NetworkRequestSentEventArgs(HttpRequestData requestData)
         {
-            this.requestId = requestData.RequestId;
-            this.requestUrl = requestData.Url;
-            this.requestMethod = requestData.Method;
-            this.requestPostData = requestData.PostData;
-            foreach (KeyValuePair<string, string> header in requestData.Headers)
+            this.RequestId = requestData.RequestId;
+            this.RequestUrl = requestData.Url;
+            this.RequestMethod = requestData.Method;
+            this.RequestPostData = requestData.PostData;
+            if (requestData.Headers != null)
             {
-                this.requestHeaders[header.Key] = header.Value;
+                foreach (KeyValuePair<string, string> header in requestData.Headers)
+                {
+                    this.requestHeaders[header.Key] = header.Value;
+                }
             }
         }
 
         /// <summary>
         /// Gets the internal request ID of the network request.
         /// </summary>
-        public string RequestId => requestId;
+        public string? RequestId { get; }
 
         /// <summary>
         /// Gets the URL of the network request.
         /// </summary>
-        public string RequestUrl => requestUrl;
+        public string? RequestUrl { get; }
 
         /// <summary>
         /// Gets the HTTP method of the network request.
         /// </summary>
-        public string RequestMethod => requestMethod;
+        public string? RequestMethod { get; }
 
         /// <summary>
         /// Gets the post data of the network request, if any.
         /// </summary>
-        public string RequestPostData => requestPostData;
+        public string? RequestPostData { get; }
 
         /// <summary>
         /// Gets the collection of headers associated with the network request.
