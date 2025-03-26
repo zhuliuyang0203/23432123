@@ -100,6 +100,15 @@ module Selenium
       end
 
       #
+      # @return [Script]
+      # @see Script
+      #
+
+      def script
+        @script ||= WebDriver::Script.new(bridge)
+      end
+
+      #
       # @return [TargetLocator]
       # @see TargetLocator
       #

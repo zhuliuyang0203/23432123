@@ -163,7 +163,7 @@ class NetworkTest : BiDiTestFixture
         await using var intercept = await bidi.Network.InterceptAuthAsync(async e =>
         {
             //TODO Seems it would be better to have method which takes abstract options
-            await e.Request.Request.ContinueWithAuthAsync(new AuthCredentials.Basic("test", "test"));
+            await e.Request.Request.ContinueWithAuthAsync(new AuthCredentials("test", "test"));
         });
 
         await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });

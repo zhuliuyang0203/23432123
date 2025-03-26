@@ -29,35 +29,33 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 [JsonDerivedType(typeof(XPathLocator), "xpath")]
 public abstract record Locator;
 
-public record AccessibilityLocator(AccessibilityLocator.AccessibilityLocatorValue Value) : Locator
-{
-    public record AccessibilityLocatorValue
-    {
-        public string? Name { get; set; }
-        public string? Role { get; set; }
-    }
-}
+public record AccessibilityLocator(AccessibilityValue Value) : Locator;
 
 public record CssLocator(string Value) : Locator;
 
-public record ContextLocator(ContextLocator.ContextLocatorValue Value) : Locator
-{
-    public record ContextLocatorValue(BrowsingContext Context);
-}
+public record ContextLocator(ContextValue Value) : Locator;
 
 public record InnerTextLocator(string Value) : Locator
 {
     public bool? IgnoreCase { get; set; }
 
-    public Match? MatchType { get; set; }
+    public MatchType? MatchType { get; set; }
 
     public long? MaxDepth { get; set; }
-
-    public enum Match
-    {
-        Full,
-        Partial
-    }
 }
 
 public record XPathLocator(string Value) : Locator;
+
+public record AccessibilityValue
+{
+    public string? Name { get; set; }
+    public string? Role { get; set; }
+}
+
+public record ContextValue(BrowsingContext Context);
+
+public enum MatchType
+{
+    Full,
+    Partial
+}
