@@ -282,7 +282,8 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
 
   @Override
   public boolean isDisplayed() {
-    // String script = "return arguments[0].checkVisibility({ visibilityProperty: true, opacityProperty: true });"
+    // Note: The 'if (style.getPropertyValue())' condition in the below script is
+    // suspect. It may not cover all cases required.
     String script = "const visibility = arguments[0].checkVisibility({ visibilityProperty: true, opacityProperty: true, contentVisibilityAuto: true });\n"
         + "if (visibility) {\n"
         + "  const style = getComputedStyle(arguments[0]);\n"
@@ -308,8 +309,6 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
         + "}\n"
         + "return visibility;";
     Object value = parent.executeScript(script, this);
-
-    // Object value = execute(DriverCommand.IS_ELEMENT_DISPLAYED(id)).getValue();
     try {
       // See https://github.com/SeleniumHQ/selenium/issues/9266
       if (value == null) {
