@@ -228,7 +228,7 @@ class Network:
         event_name = "auth_required"
 
         def _callback(request):
-            request._continue_with_auth(request, username, password)
+            self._continue_with_auth(request, username, password)
 
         return self.add_request_handler(event_name, _callback)
 
