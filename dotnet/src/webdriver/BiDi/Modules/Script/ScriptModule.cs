@@ -18,7 +18,6 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
-using OpenQA.Selenium.DevTools.V132.Page;
 using System;
 using System.Threading.Tasks;
 
