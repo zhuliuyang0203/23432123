@@ -268,6 +268,12 @@ module Selenium
           expect { driver.manage.delete_cookie(nil) }
             .to raise_error(ArgumentError, /Cookie name cannot be null or empty/)
         end
+
+        it 'allows deleting a cookies using a symbol' do
+          driver.manage.add_cookie name: :foo, value: 'bar'
+          driver.manage.delete_cookie(:foo)
+          expect(driver.manage.all_cookies).to be_empty
+        end
       end
     end # Options
   end # WebDriver

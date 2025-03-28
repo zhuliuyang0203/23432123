@@ -331,6 +331,15 @@ function sendIndex(request, response) {
   response.end(data)
 }
 
+/**
+ * Detects the hostname.
+ * @return {string} The detected hostname or 'localhost' if not found.
+ */
+function getHostName() {
+  const hostnameFromEnv = process.env.HOSTNAME
+  return hostnameFromEnv ? hostnameFromEnv : 'localhost'
+}
+
 // PUBLIC application
 
 /**
@@ -371,6 +380,8 @@ exports.whereIs = function (filePath) {
   }
   return server.url(filePath)
 }
+
+exports.getHostName = getHostName
 
 exports.Pages = Pages
 

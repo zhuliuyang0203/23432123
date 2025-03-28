@@ -71,6 +71,7 @@ class StorageKeyPartitionDescriptor extends PartitionDescriptor {
 
   constructor() {
     super(Type.STORAGE_KEY)
+    this.#map.set('type', Type.STORAGE_KEY)
   }
 
   /**
