@@ -93,4 +93,15 @@ chrome_beta_data = select({
         "@mac_chrome_beta//:Chrome.app",
     ],
     "//conditions:default": [],
-}) + chromedriver_data
+}) + chromedriver_beta_data
+
+chromedriver_beta_data = select({
+    "@selenium//common:use_pinned_linux_chrome": [
+        "@linux_beta_chromedriver//:chromedriver",
+    ],
+    "@selenium//common:use_pinned_macos_chrome": [
+        "@mac_beta_chromedriver//:chromedriver",
+    ],
+    "@selenium//common:use_local_chromedriver": ["@selenium//common:chromedriver"],
+    "//conditions:default": [],
+})
