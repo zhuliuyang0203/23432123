@@ -58,7 +58,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     }
 
     [Test]
-    public async Task CanCallFunctionWithArgumentBoolean()
+    public async Task CanCallFunctionWithArgumentTrue()
     {
         var arg = new BooleanLocalValue(true);
 
@@ -69,6 +69,22 @@ class CallFunctionLocalValueTest : BiDiTestFixture
               }
             }
             """, false, new() { Arguments = [arg] });
+
+        Assert.That(result, Is.TypeOf<EvaluateResultSuccess>(), $"Call was not successful: {result}");
+    }
+
+    [Test]
+    public async Task CanCallFunctionWithArgumentFalse()
+    {
+        var arg = new BooleanLocalValue(false);
+
+        var result = await context.Script.CallFunctionAsync($$"""
+        (arg) => {
+            if (arg !== false) {
+            throw new Error("Assert failed: " + arg);
+            }
+        }
+        """, false, new() { Arguments = [arg] });
 
         Assert.That(result, Is.TypeOf<EvaluateResultSuccess>(), $"Call was not successful: {result}");
     }

@@ -349,13 +349,13 @@ bazel test //java/test/org/openqa/selenium/chrome:ChromeDriverFunctionalTest
 To run the tests run:
 
 ```sh
-bazel test //javascript/selenium-webdriver:tests
+bazel test //javascript/selenium-webdriver:all
 ```
 
 You can use `--test_env` to pass in the browser name as `SELENIUM_BROWSER`.
 
 ```sh
-bazel test //javascript/selenium-webdriver:tests --test_env=SELENIUM_BROWSER=firefox
+bazel test //javascript/selenium-webdriver:all --test_env=SELENIUM_BROWSER=firefox
 ```
 
 </details>

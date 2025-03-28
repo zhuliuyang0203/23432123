@@ -28,7 +28,13 @@ use std::path::Path;
 
 #[allow(dead_code)]
 pub fn get_selenium_manager() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_selenium-manager"))
+    let path = env!("CARGO_BIN_EXE_selenium-manager");
+
+    if Path::new(path).exists() {
+        return Command::new(path);
+    }
+
+    panic!("Binary not found {}", path)
 }
 
 #[allow(dead_code)]
