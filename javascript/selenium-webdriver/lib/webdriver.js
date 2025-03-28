@@ -1515,7 +1515,7 @@ class WebDriver {
       // Depending on what is running the code it could appear in 2 different places which is why we try
       // here and then the other location
       mutationListener = fs
-        .readFileSync('./javascript/node/selenium-webdriver/lib/atoms/mutation-listener.js', 'utf-8')
+        .readFileSync('./javascript/selenium-webdriver/lib/atoms/mutation-listener.js', 'utf-8')
         .toString()
     } catch {
       mutationListener = fs.readFileSync(path.resolve(__dirname, './atoms/mutation-listener.js'), 'utf-8').toString()

@@ -96,7 +96,7 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
 
-  javascript/node/selenium-webdriver:
+  javascript/selenium-webdriver:
     dependencies:
       '@bazel/runfiles':
         specifier: ^6.3.1

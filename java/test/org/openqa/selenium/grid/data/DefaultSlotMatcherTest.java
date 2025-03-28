@@ -76,9 +76,7 @@ class DefaultSlotMatcherTest {
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
             "se:downloadsEnabled",
-            true,
-            "moz:debuggerAddress",
-            "127.0.0.1:34959");
+            true);
     Capabilities capabilities =
         new ImmutableCapabilities(
             CapabilityType.BROWSER_NAME,
@@ -86,8 +84,6 @@ class DefaultSlotMatcherTest {
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
             "se:downloadsEnabled",
-            true,
-            "moz:debuggerAddress",
             true);
     assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
   }

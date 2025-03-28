@@ -453,7 +453,7 @@ namespace :side do
 end
 
 def node_version
-  File.foreach('javascript/node/selenium-webdriver/package.json') do |line|
+  File.foreach('javascript/selenium-webdriver/package.json') do |line|
     return line.split(':').last.strip.tr('",', '') if line.include?('version')
   end
 end
@@ -465,7 +465,7 @@ namespace :node do
   ]
 
   task atoms: atom_list do
-    base_dir = 'javascript/node/selenium-webdriver/lib/atoms'
+    base_dir = 'javascript/selenium-webdriver/lib/atoms'
     mkdir_p base_dir
 
     ['bazel-bin/javascript/atoms/fragments/is-displayed.js',
@@ -485,12 +485,12 @@ namespace :node do
   desc 'Build Node npm package'
   task :build do |_task, arguments|
     args = arguments.to_a.compact
-    Bazel.execute('build', args, '//javascript/node/selenium-webdriver')
+    Bazel.execute('build', args, '//javascript/selenium-webdriver')
   end
 
   task :'dry-run' do
     Bazel.execute('run', ['--stamp'],
-                  '//javascript/node/selenium-webdriver:selenium-webdriver.publish  -- --dry-run=true')
+                  '//javascript/selenium-webdriver:selenium-webdriver.publish  -- --dry-run=true')
   end
 
   desc 'Release Node npm package'
@@ -502,7 +502,7 @@ namespace :node do
     end
 
     puts 'Running Node package release...'
-    Bazel.execute('run', ['--config=release'], '//javascript/node/selenium-webdriver:selenium-webdriver.publish')
+    Bazel.execute('run', ['--config=release'], '//javascript/selenium-webdriver:selenium-webdriver.publish')
   end
 
   desc 'Release Node npm package'
@@ -515,8 +515,8 @@ namespace :node do
     puts 'Generating Node documentation'
     FileUtils.rm_rf('build/docs/api/javascript/')
     begin
-      sh 'npm install --prefix javascript/node/selenium-webdriver', verbose: true
-      sh 'npm run generate-docs --prefix javascript/node/selenium-webdriver', verbose: true
+      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
+      sh 'npm run generate-docs --prefix javascript/selenium-webdriver', verbose: true
     rescue StandardError => e
       puts "Node documentation generation contains errors; continuing... #{e.message}"
     end
@@ -527,8 +527,8 @@ namespace :node do
   desc 'Update JavaScript changelog'
   task :changelog do
     header = "## #{node_version}\n"
-    update_changelog(node_version, 'javascript', 'javascript/node/selenium-webdriver/',
-                     'javascript/node/selenium-webdriver/CHANGES.md', header)
+    update_changelog(node_version, 'javascript', 'javascript/selenium-webdriver/',
+                     'javascript/selenium-webdriver/CHANGES.md', header)
   end
 
   desc 'Update Node version'
@@ -537,17 +537,17 @@ namespace :node do
     nightly = "-nightly#{Time.now.strftime('%Y%m%d%H%M')}"
     new_version = updated_version(old_version, arguments[:version], nightly)
 
-    %w[javascript/node/selenium-webdriver/package.json javascript/node/selenium-webdriver/BUILD.bazel].each do |file|
+    %w[javascript/selenium-webdriver/package.json javascript/selenium-webdriver/BUILD.bazel].each do |file|
       text = File.read(file).gsub(old_version, new_version)
       File.open(file, 'w') { |f| f.puts text }
       @git.add(file)
     end
 
     # Update package-lock.json
-    Dir.chdir('javascript/node/selenium-webdriver') do
-      sh 'npm install --prefix javascript/node/selenium-webdriver', verbose: true
+    Dir.chdir('javascript/selenium-webdriver') do
+      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
     end
-    @git.add('javascript/node/selenium-webdriver/package-lock.json')
+    @git.add('javascript/selenium-webdriver/package-lock.json')
   end
 end
 
@@ -1127,7 +1127,7 @@ namespace :all do
      'dotnet/test/common/CustomDriverConfigs/',
      'dotnet/selenium-dotnet-version.bzl',
      'java/src/org/openqa/selenium/devtools/',
-     'javascript/node/selenium-webdriver/BUILD.bazel',
+     'javascript/selenium-webdriver/BUILD.bazel',
      'py/BUILD.bazel',
      'rb/lib/selenium/devtools/',
      'rb/Gemfile.lock',

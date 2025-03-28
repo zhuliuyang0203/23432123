@@ -17,7 +17,10 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
@@ -38,7 +41,9 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 [JsonDerivedType(typeof(SetLocalValue), "set")]
 public abstract record LocalValue
 {
-    public static implicit operator LocalValue(int value) { return new NumberLocalValue(value); }
+    public static implicit operator LocalValue(bool? value) { return value is bool b ? new BooleanLocalValue(b) : new NullLocalValue(); }
+    public static implicit operator LocalValue(int? value) { return value is int i ? new NumberLocalValue(i) : new NullLocalValue(); }
+    public static implicit operator LocalValue(double? value) { return value is double d ? new NumberLocalValue(d) : new NullLocalValue(); }
     public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
 
     // TODO: Extend converting from types
@@ -46,25 +51,88 @@ public abstract record LocalValue
     {
         switch (value)
         {
-            case LocalValue:
-                return (LocalValue)value;
+            case LocalValue localValue:
+                return localValue;
+
             case null:
                 return new NullLocalValue();
-            case int:
-                return (int)value;
-            case string:
-                return (string)value;
+
+            case bool b:
+                return new BooleanLocalValue(b);
+
+            case int i:
+                return new NumberLocalValue(i);
+
+            case double d:
+                return new NumberLocalValue(d);
+
+            case long l:
+                return new NumberLocalValue(l);
+
+            case DateTime dt:
+                return new DateLocalValue(dt.ToString("o"));
+
+            case BigInteger bigInt:
+                return new BigIntLocalValue(bigInt.ToString());
+
+            case string str:
+                return new StringLocalValue(str);
+
+            case IDictionary<string, string?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<string, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<int, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([ConvertFrom(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new MapLocalValue(bidiObject);
+                }
+
+            case IEnumerable<object?> list:
+                return new ArrayLocalValue(list.Select(ConvertFrom).ToList());
+
             case object:
                 {
-                    var type = value.GetType();
+                    const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
 
-                    var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    var properties = value.GetType().GetProperties(Flags);
 
-                    List<List<LocalValue>> values = [];
-
+                    var values = new List<List<LocalValue>>(properties.Length);
                     foreach (var property in properties)
                     {
-                        values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
+                        object? propertyValue;
+                        try
+                        {
+                            propertyValue = property.GetValue(value);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new BiDiException($"Could not retrieve property {property.Name} from {property.DeclaringType}", ex);
+                        }
+                        values.Add([property.Name, ConvertFrom(propertyValue)]);
                     }
 
                     return new ObjectLocalValue(values);

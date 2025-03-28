@@ -173,7 +173,7 @@ def update_python(chrome_milestone):
 
 
 def update_js(chrome_milestone):
-    file = root_dir / "javascript/node/selenium-webdriver/BUILD.bazel"
+    file = root_dir / "javascript/selenium-webdriver/BUILD.bazel"
     replace_in_file(file, old_chrome(chrome_milestone), new_chrome(chrome_milestone))
 
 

@@ -17,10 +17,10 @@
 
 'use strict';
 
-var fs = require('fs'),
+const fs = require('fs'),
     path = require('path');
 
-var COPYRIGHT_TEXT = [
+const COPYRIGHT_TEXT = [
   '// Licensed to the Software Freedom Conservancy (SFC) under one',
   '// or more contributor license agreements.  See the NOTICE file',
   '// distributed with this work for additional information',
@@ -41,19 +41,11 @@ var COPYRIGHT_TEXT = [
 ].join('\n');
 
 
-var BASE_PATH = path.normalize(path.join(__dirname, '..'));
+let BASE_PATH = path.normalize(path.join(__dirname, '../javascript'));
 
 // Ignore files whose copyright is not SFC or need manual inspection.
-var IGNORE_PATHS = [
+let IGNORE_PATHS = [
   path.join(BASE_PATH, 'atoms/test/jquery.min.js'),
-  path.join(BASE_PATH, 'firefox-driver/extension/components/httpd.js'),
-  path.join(BASE_PATH, 'jsunit'),
-  path.join(BASE_PATH, 'selenium-core/lib'),
-  path.join(BASE_PATH, 'selenium-core/scripts/ui-element.js'),
-  path.join(BASE_PATH, 'selenium-core/scripts/ui-map-sample.js'),
-  path.join(BASE_PATH, 'selenium-core/scripts/user-extensions.js'),
-  path.join(BASE_PATH, 'selenium-core/scripts/xmlextras.js'),
-  path.join(BASE_PATH, 'selenium-core/xpath')
 ];
 
 updateDir(BASE_PATH);
@@ -65,15 +57,15 @@ function updateDir(dirname) {
     if (filePath === 'node_modules') return;
 
     filePath = path.normalize(path.join(dirname, filePath));
-    if (IGNORE_PATHS.indexOf(filePath) != -1) {
+    if (IGNORE_PATHS.indexOf(filePath) !== -1) {
       return;
     }
 
     if (fs.statSync(filePath).isDirectory()) {
       updateDir(filePath);
     } else if (/.*\.js$/.test(filePath)) {
-      var index = -1;
-      var lines = fs.readFileSync(filePath, 'utf8').split(/\n/);
+      let index = -1;
+      let lines = fs.readFileSync(filePath, 'utf8').split(/\n/);
       lines.some(function(line) {
         if (line.slice(0, 2) === '//') {
           index += 1;
@@ -82,12 +74,12 @@ function updateDir(dirname) {
         return true;
       });
 
-      var content = COPYRIGHT_TEXT;
-      if (index == -1) {
+      let content = COPYRIGHT_TEXT;
+      if (index === -1) {
         console.log('...file is missing copyright header: %s', filePath);
         content += '\n' + lines.join('\n');
       } else {
-        var current = lines.slice(0, index + 1).join('\n') + '\n';
+        let current = lines.slice(0, index + 1).join('\n') + '\n';
         if (current === content) {
           // console.log('...header is up-to-date: %s', filePath);
           return;

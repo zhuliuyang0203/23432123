@@ -19,13 +19,19 @@
 
 const assert = require('node:assert')
 require('../../lib/test/fileserver')
-const { suite } = require('../../lib/test')
+const { suite, ignore } = require('../../lib/test')
 const { Browser } = require('selenium-webdriver')
 const Storage = require('selenium-webdriver/bidi/storage')
 const fileserver = require('../../lib/test/fileserver')
 const { CookieFilter } = require('selenium-webdriver/bidi/cookieFilter')
 const { BytesValue, SameSite } = require('selenium-webdriver/bidi/networkTypes')
-const { BrowsingContextPartitionDescriptor } = require('selenium-webdriver/bidi/partitionDescriptor')
+const {
+  BrowsingContextPartitionDescriptor,
+  StorageKeyPartitionDescriptor,
+} = require('selenium-webdriver/bidi/partitionDescriptor')
+const BrowserBiDi = require('selenium-webdriver/bidi/browser')
+const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
+const { CreateContextParameters } = require('selenium-webdriver/bidi/createContextParameters')
 const { PartialCookie } = require('selenium-webdriver/bidi/partialCookie')
 
 suite(
@@ -59,38 +65,101 @@ suite(
         assert.strictEqual(result.cookies[0].value.value, cookie.value)
       })
 
-      xit('can get cookie in default user context', async function () {
+      ignore(env.browsers(Browser.CHROME, Browser.EDGE)).it(
+        'can get cookie in default user context',
+        async function () {
+          const windowHandle = await driver.getWindowHandle()
+          const cookie = createCookieSpec()
+
+          await driver.manage().addCookie(cookie)
+
+          const cookieFilter = new CookieFilter()
+            .name(cookie.name)
+            .value(new BytesValue(BytesValue.Type.STRING, cookie.value))
+
+          await driver.switchTo().newWindow('window')
+
+          const descriptor = new BrowsingContextPartitionDescriptor(await driver.getWindowHandle())
+
+          const storage = await Storage(driver)
+          const resultAfterSwitchingContext = await storage.getCookies(cookieFilter, descriptor)
+
+          assert.strictEqual(resultAfterSwitchingContext.cookies[0].value.value, cookie.value)
+
+          await driver.switchTo().window(windowHandle)
+
+          const descriptorAfterSwitchingBack = new BrowsingContextPartitionDescriptor(await driver.getWindowHandle())
+
+          const result = await storage.getCookies(cookieFilter, descriptorAfterSwitchingBack)
+
+          assert.strictEqual(result.cookies[0].value.value, cookie.value)
+
+          const partitionKey = result.partitionKey
+
+          assert.notEqual(partitionKey.userContext, null)
+          assert.notEqual(partitionKey.sourceOrigin, null)
+          assert.strictEqual(partitionKey.userContext, 'default')
+        },
+      )
+
+      it('can get cookie in a user context', async function () {
+        const browser = await BrowserBiDi(driver)
+        const userContext = await browser.createUserContext()
         const windowHandle = await driver.getWindowHandle()
-        const cookie = createCookieSpec()
 
-        await driver.manage().addCookie(cookie)
+        const cookie = {
+          name: getRandomString(),
+          value: 'set',
+        }
 
-        const cookieFilter = new CookieFilter()
-          .name(cookie.name)
-          .value(new BytesValue(BytesValue.Type.STRING, cookie.value))
-
-        await driver.switchTo().newWindow('window')
-
-        const descriptor = new BrowsingContextPartitionDescriptor(await driver.getWindowHandle())
+        const partitionDescriptor = new StorageKeyPartitionDescriptor().userContext(userContext)
 
         const storage = await Storage(driver)
-        const resultAfterSwitchingContext = await storage.getCookies(cookieFilter, descriptor)
 
-        assert.strictEqual(resultAfterSwitchingContext.cookies[0].value.value, cookie.value)
+        const cookieDomain = fileserver.getHostName()
+        const partialCookie = new PartialCookie(
+          cookie.name,
+          new BytesValue(BytesValue.Type.STRING, cookie.value),
+          cookieDomain,
+        )
+
+        await storage.setCookie(partialCookie, partitionDescriptor)
+
+        const cookieFilter = new CookieFilter().name(cookie.name).value(new BytesValue(BytesValue.Type.STRING, 'set'))
+
+        // Create a new browsing context with the user context
+        const createParams = new CreateContextParameters().userContext(userContext)
+
+        const browsingContext = await BrowsingContext(driver, {
+          type: 'tab',
+          createParameters: createParams,
+        })
+
+        await driver.switchTo().window(browsingContext.id)
+
+        const result = await storage.getCookies(cookieFilter, partitionDescriptor)
+
+        assert.strictEqual(result.cookies.length > 0, true, 'Expected at least one cookie')
+        assert.strictEqual(result.cookies[0].value.value, cookie.value)
+
+        // Check if cookies were found
+        assert.strictEqual(result.cookies.length > 0, true, 'Expected at least one cookie')
+        assert.strictEqual(result.cookies[0].value.value, cookie.value)
+
+        // Check partitionKey if it exists
+        if (result.partitionKey) {
+          const partitionKey = result.partitionKey
+          assert.notEqual(partitionKey.userContext, null, 'Expected userContext to be non-null')
+          assert.strictEqual(partitionKey.userContext, userContext, 'Expected userContext to match')
+        }
 
         await driver.switchTo().window(windowHandle)
 
-        const descriptorAfterSwitchingBack = new BrowsingContextPartitionDescriptor(await driver.getWindowHandle())
+        const browsingContextPartitionDescriptor = new BrowsingContextPartitionDescriptor(windowHandle)
 
-        const result = await storage.getCookies(cookieFilter, descriptorAfterSwitchingBack)
+        const resultAfterSwitchingBack = await storage.getCookies(cookieFilter, browsingContextPartitionDescriptor)
 
-        assert.strictEqual(result.cookies[0].value.value, cookie.value)
-
-        const partitionKey = result.partitionKey
-
-        assert.notEqual(partitionKey.userContext, null)
-        assert.notEqual(partitionKey.sourceOrigin, null)
-        assert.strictEqual(partitionKey.userContext, 'default')
+        assert.strictEqual(resultAfterSwitchingBack.cookies.length, 0)
       })
 
       it('can add cookie', async function () {
@@ -166,7 +235,7 @@ suite(
         assert.strictEqual(result.cookies[1].value.value, cookie2.value)
       })
 
-      xit('can delete all cookies', async function () {
+      it('can delete all cookies', async function () {
         const cookie1 = createCookieSpec()
         const cookie2 = createCookieSpec()
 
@@ -182,7 +251,7 @@ suite(
         assert.strictEqual(result.cookies.length, 0)
       })
 
-      xit('can delete cookie by name', async function () {
+      it('can delete cookie by name', async function () {
         const cookie1 = createCookieSpec()
         const cookie2 = createCookieSpec()
 
