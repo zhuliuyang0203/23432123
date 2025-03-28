@@ -38,13 +38,20 @@ namespace OpenQA.Selenium
         {
             public readonly static JsonSerializerOptions JsonSerializerOptions = new()
             {
-                TypeInfoResolverChain =
-                {
-                    CommandJsonSerializerContext.Default,
-                    new DefaultJsonTypeInfoResolver()
-                },
+                TypeInfoResolver = GetTypeInfoResolver(),
                 Converters = { new ResponseValueJsonConverter() }
             };
+
+            private static IJsonTypeInfoResolver GetTypeInfoResolver()
+            {
+#if NET8_0_OR_GREATER
+                if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+                {
+                    return CommandJsonSerializerContext.Default;
+                }
+#endif
+                return JsonTypeInfoResolver.Combine(CommandJsonSerializerContext.Default, new DefaultJsonTypeInfoResolver());
+            }
         }
 
         private readonly Dictionary<string, object?> _parameters;
@@ -68,8 +75,6 @@ namespace OpenQA.Selenium
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
-        [RequiresUnreferencedCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added, or use the overload that takes pre-serialized string jsonParameters for guaranteed AOT compatibility.")]
-        [RequiresDynamicCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added, or use the overload that takes pre-serialized string jsonParameters for guaranteed AOT compatibility.")]
         public Command(SessionId? sessionId, string name, Dictionary<string, object?>? parameters)
         {
             this.SessionId = sessionId;
@@ -111,7 +116,14 @@ namespace OpenQA.Selenium
             {
                 if (HasParameters())
                 {
-                    return JsonSerializer.Serialize(this._parameters, JsonOptionsHolder.JsonSerializerOptions);
+                    try
+                    {
+                        return JsonSerializer.Serialize(this._parameters, JsonOptionsHolder.JsonSerializerOptions);
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        throw new WebDriverException("Attempted to serialize an unsupported type. Ensure you are using Selenium types, or well-known .NET types such as Dictionary<string, object> and object[]", ex);
+                    }
                 }
                 else
                 {
@@ -206,6 +218,7 @@ namespace OpenQA.Selenium
     [JsonSerializable(typeof(Dictionary<string, short>))]
     [JsonSerializable(typeof(Dictionary<string, ushort>))]
     [JsonSerializable(typeof(Dictionary<string, string>))]
+    [JsonSerializable(typeof(object[]))]
     [JsonSourceGenerationOptions(Converters = [typeof(ResponseValueJsonConverter)])]
     internal partial class CommandJsonSerializerContext : JsonSerializerContext;
 }
