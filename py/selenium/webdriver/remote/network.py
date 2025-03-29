@@ -87,7 +87,8 @@ class Network:
         remaining = [i for i in self.intercepts.values() if i["event"].event_class == event_name]
         if len(remaining) == 0:
             self.conn.execute(session_unsubscribe(event_name))
-            self.conn.remove_callback(event, self.callback_ids[event_name])
+            callback_id = self.callback_ids.pop(event_name)
+            self.conn.remove_callback(event, callback_id)
 
     def clear_intercepts(self):
         for intercept in self.intercepts:
