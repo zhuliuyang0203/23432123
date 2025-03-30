@@ -509,19 +509,21 @@ namespace :node do
   task deploy: :release
 
   desc 'Generate Node documentation'
-  task :docs, [:skip_update] do |_task, arguments|
+  task :docs do |_task, arguments|
     abort('Aborting documentation update: nightly versions should not update docs.') if node_version.include?('nightly')
 
     puts 'Generating Node documentation'
     FileUtils.rm_rf('build/docs/api/javascript/')
     begin
-      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
-      sh 'npm run generate-docs --prefix javascript/selenium-webdriver', verbose: true
+      Dir.chdir('javascript/selenium-webdriver') do
+        sh 'pnpm install', verbose: true
+        sh 'pnpm run generate-docs', verbose: true
+      end
     rescue StandardError => e
       puts "Node documentation generation contains errors; continuing... #{e.message}"
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update JavaScript changelog'
@@ -544,9 +546,7 @@ namespace :node do
     end
 
     # Update package-lock.json
-    Dir.chdir('javascript/selenium-webdriver') do
-      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
-    end
+    sh 'pnpm install --dir javascript/selenium-webdriver', verbose: true
     @git.add('javascript/selenium-webdriver/package-lock.json')
   end
 end
@@ -611,7 +611,7 @@ namespace :py do
   end
 
   desc 'Generate Python documentation'
-  task :docs, [:skip_update] do |_task, arguments|
+  task :docs do |_task, arguments|
     if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/)
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
@@ -626,7 +626,7 @@ namespace :py do
       raise
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Install Python wheel locally'
@@ -779,7 +779,7 @@ namespace :rb do
   end
 
   desc 'Generate Ruby documentation'
-  task :docs, [:skip_update] do |_task, arguments|
+  task :docs do |_task, arguments|
     abort('Aborting documentation update: nightly versions should not update docs.') if ruby_version.include?('nightly')
     puts 'Generating Ruby documentation'
 
@@ -788,7 +788,7 @@ namespace :rb do
     FileUtils.mkdir_p('build/docs/api')
     FileUtils.cp_r('bazel-bin/rb/docs.sh.runfiles/_main/docs/api/rb/.', 'build/docs/api/rb')
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update Ruby changelog'
@@ -875,7 +875,7 @@ namespace :dotnet do
   end
 
   desc 'Generate .NET documentation'
-  task :docs, [:skip_update] do |_task, arguments|
+  task :docs do |_task, arguments|
     if dotnet_version.include?('nightly')
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
@@ -905,7 +905,7 @@ namespace :dotnet do
       end
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update .NET changelog'
@@ -990,7 +990,7 @@ namespace :java do
   task install: :'maven-install'
 
   desc 'Generate Java documentation'
-  task :docs, [:skip_update] do |_task, arguments|
+  task :docs do |_task, arguments|
     if java_version.include?('SNAPSHOT')
       abort('Aborting documentation update: snapshot versions should not update docs.')
     end
@@ -998,7 +998,7 @@ namespace :java do
     puts 'Generating Java documentation'
     Rake::Task['javadocs'].invoke
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update Maven dependencies'
@@ -1248,8 +1248,8 @@ def update_gh_pages(force: true)
   @git.fetch('https://github.com/seleniumhq/selenium.git', {ref: 'gh-pages'})
 
   unless force
-    puts 'Stashing current changes before checkout...'
-    Git::Stash.new(@git, 'stash wip')
+    puts 'Stash changes that are not docs...'
+    @git.lib.send(:command, 'stash', ['push', '-m', 'stash wip', '--', ':(exclude)build/docs/api/'])
   end
 
   @git.checkout('gh-pages', force: force)
