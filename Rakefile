@@ -544,9 +544,7 @@ namespace :node do
     end
 
     # Update package-lock.json
-    Dir.chdir('javascript/selenium-webdriver') do
-      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
-    end
+    sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
     @git.add('javascript/selenium-webdriver/package-lock.json')
   end
 end
