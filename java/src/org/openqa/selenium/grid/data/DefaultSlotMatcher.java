@@ -50,6 +50,10 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
   */
   private static final List<String> EXTENSION_CAPABILITIES_PREFIXES =
       Arrays.asList("goog:", "moz:", "ms:", "se:");
+  public static final List<String> SPECIFIC_RELAY_CAPABILITIES_APP =
+      Arrays.asList("appium:app", "appium:appPackage", "appium:bundleId");
+  public static final List<String> MANDATORY_CAPABILITIES =
+      Arrays.asList("platformName", "browserName", "browserVersion");
 
   @Override
   public boolean matches(Capabilities stereotype, Capabilities capabilities) {
@@ -75,33 +79,22 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
     }
 
     // At the end, a simple browser, browserVersion and platformName match
-    boolean browserNameMatch =
-        (capabilities.getBrowserName() == null || capabilities.getBrowserName().isEmpty())
-            || Objects.equals(stereotype.getBrowserName(), capabilities.getBrowserName());
-    boolean browserVersionMatch =
-        (capabilities.getBrowserVersion() == null
-                || capabilities.getBrowserVersion().isEmpty()
-                || Objects.equals(capabilities.getBrowserVersion(), "stable"))
-            || browserVersionMatch(
-                stereotype.getBrowserVersion(), capabilities.getBrowserVersion());
-    boolean platformNameMatch =
-        capabilities.getPlatformName() == null
-            || Objects.equals(stereotype.getPlatformName(), capabilities.getPlatformName())
-            || (stereotype.getPlatformName() != null
-                && stereotype.getPlatformName().is(capabilities.getPlatformName()));
+    boolean browserNameMatch = browserNameMatch(stereotype, capabilities);
+    boolean browserVersionMatch = browserVersionMatch(stereotype, capabilities);
+    boolean platformNameMatch = platformNameMatch(stereotype, capabilities);
+
     return browserNameMatch && browserVersionMatch && platformNameMatch;
   }
 
-  private boolean browserVersionMatch(String stereotype, String capabilities) {
-    return new SemanticVersionComparator().compare(stereotype, capabilities) == 0;
-  }
-
-  private Boolean initialMatch(Capabilities stereotype, Capabilities capabilities) {
+  private boolean initialMatch(Capabilities stereotype, Capabilities capabilities) {
     return stereotype.getCapabilityNames().stream()
         // Matching of extension capabilities is implementation independent. Skip them
         .filter(name -> !name.contains(":"))
-        // Platform matching is special, we do it later
-        .filter(name -> !"platformName".equalsIgnoreCase(name))
+        // Mandatory capabilities match is done at the end
+        .filter(
+            name ->
+                MANDATORY_CAPABILITIES.stream()
+                    .noneMatch(mandatory -> mandatory.equalsIgnoreCase(name)))
         .map(
             name -> {
               if (capabilities.getCapability(name) instanceof String) {
@@ -119,7 +112,7 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
         .orElse(true);
   }
 
-  private Boolean managedDownloadsEnabled(Capabilities stereotype, Capabilities capabilities) {
+  private boolean managedDownloadsEnabled(Capabilities stereotype, Capabilities capabilities) {
     // First lets check if user wanted a Node with managed downloads enabled
     Object raw = capabilities.getCapability("se:downloadsEnabled");
     if (raw == null || !Boolean.parseBoolean(raw.toString())) {
@@ -132,7 +125,7 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
     return raw != null && Boolean.parseBoolean(raw.toString());
   }
 
-  private Boolean platformVersionMatch(Capabilities stereotype, Capabilities capabilities) {
+  private boolean platformVersionMatch(Capabilities stereotype, Capabilities capabilities) {
     /*
      This platform version match is not W3C compliant but users can add Appium servers as
      Nodes, so we avoid delaying the match until the Slot, which makes the whole matching
@@ -149,7 +142,7 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
         .orElse(true);
   }
 
-  private Boolean extensionCapabilitiesMatch(Capabilities stereotype, Capabilities capabilities) {
+  private boolean extensionCapabilitiesMatch(Capabilities stereotype, Capabilities capabilities) {
     /*
      We match extension capabilities when they are not prefixed with any of the
      EXTENSION_CAPABILITIES_PREFIXES items. Also, we match them only when the capabilities
@@ -174,5 +167,45 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
             })
         .reduce(Boolean::logicalAnd)
         .orElse(true);
+  }
+
+  private boolean browserNameMatch(Capabilities stereotype, Capabilities capabilities) {
+    return (capabilities.getBrowserName() == null || capabilities.getBrowserName().isEmpty())
+        || Objects.equals(stereotype.getBrowserName(), capabilities.getBrowserName())
+        || specificRelayCapabilitiesAppMatch(capabilities);
+  }
+
+  private boolean browserVersionMatch(String stereotype, String capabilities) {
+    return new SemanticVersionComparator().compare(stereotype, capabilities) == 0;
+  }
+
+  private boolean browserVersionMatch(Capabilities stereotype, Capabilities capabilities) {
+    return (capabilities.getBrowserVersion() == null
+            || capabilities.getBrowserVersion().isEmpty()
+            || Objects.equals(capabilities.getBrowserVersion(), "stable"))
+        || browserVersionMatch(stereotype.getBrowserVersion(), capabilities.getBrowserVersion())
+        || specificRelayCapabilitiesAppMatch(capabilities);
+  }
+
+  private boolean platformNameMatch(Capabilities stereotype, Capabilities capabilities) {
+    return capabilities.getPlatformName() == null
+        || Objects.equals(stereotype.getPlatformName(), capabilities.getPlatformName())
+        || (stereotype.getPlatformName() != null
+            && stereotype.getPlatformName().is(capabilities.getPlatformName()));
+  }
+
+  public static boolean specificRelayCapabilitiesAppMatch(Capabilities capabilities) {
+    /*
+    This match is specific for the Relay capabilities that are related to the Appium server for native application.
+    - If browserName is defined then we always assume it’s a hybrid browser session, so no app-related caps should be provided
+    - If app is provided then the assumption is that app should be fetched from somewhere first and then installed on the destination device
+    - If only appPackage is provided for uiautomator2 driver or bundleId for xcuitest then the assumption is we want to automate an app that is already installed on the device under test
+    - If both (app and appPackage) or (app and bundleId). This will then save some small-time for the driver as by default it tries to autodetect these values anyway by analyzing the fetched package’s manifest
+     */
+    return SPECIFIC_RELAY_CAPABILITIES_APP.stream()
+        .anyMatch(
+            name ->
+                capabilities.getCapability(name) != null
+                    && !capabilities.getCapability(name).toString().isEmpty());
   }
 }
