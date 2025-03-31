@@ -17,9 +17,8 @@
 
 # frozen_string_literal: true
 
-require 'spec_helper'
 require_relative '../../spec_helper'
-require 'selenium/webdriver/print_options'
+require 'selenium/webdriver/common/print_options'
 
 
 module Selenium
