@@ -123,15 +123,5 @@ build:rbe_release --config=release
 build:rbe_release --config=rbe
 build:rbe_release --remote_download_toplevel
 
-build:rbe-ci:linux --//common:use_pinned_linux_chrome=true
-build:rbe-ci:linux --//common:use_pinned_linux_firefox=true
-build:rbe-ci:linux --//common:use_pinned_linux_edge=true
-
-build:rbe-ci:macos --//common:use_pinned_macos_chrome=true
-build:rbe-ci:macos --//common:use_pinned_macos_firefox=true
-build:rbe-ci:macos --//common:use_pinned_macos_edge=true
-
-build:rbe-ci --//common:headless=true
-
 # RBE
 import %workspace%/.bazelrc.remote

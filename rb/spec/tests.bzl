@@ -47,8 +47,8 @@ BROWSERS = {
                 "CHROMEDRIVER_BINARY": "$(location @linux_beta_chromedriver//:chromedriver)",
             },
             "@selenium//common:use_pinned_macos_chrome": {
-                "CHROME_BINARY": "$(location @mac_chrome_beta//:Chrome.app)/Contents/MacOS/Chrome",
-                "CHROMEDRIVER_BINARY": "$(location @mac_chromedriver_beta//:chromedriver)",
+                "CHROME_BINARY": "$(location @mac_beta_chrome//:Chrome.app)/Contents/MacOS/Chrome",
+                "CHROMEDRIVER_BINARY": "$(location @mac_beta_chromedriver//:chromedriver)",
             },
             "//conditions:default": {},
         }) | select({
