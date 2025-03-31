@@ -552,45 +552,13 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// Executes commands with the driver
-        /// </summary>
-        /// <param name="driverCommandToExecute">Command that needs executing</param>
-        /// <param name="parameters">Parameters needed for the command</param>
-        /// <returns>WebDriver Response</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        internal Response InternalExecute(string driverCommandToExecute, Dictionary<string,
-#nullable disable
-            object
-#nullable enable
-            >? parameters)
-        {
-            return Task.Run(() => this.InternalExecuteAsync(driverCommandToExecute, parameters)).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
-        /// Executes commands with the driver asynchronously
-        /// </summary>
-        /// <param name="driverCommandToExecute">Command that needs executing</param>
-        /// <param name="parameters">Parameters needed for the command</param>
-        /// <returns>A task object representing the asynchronous operation</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        internal Task<Response> InternalExecuteAsync(string driverCommandToExecute, Dictionary<string,
-#nullable disable
-                object
-#nullable enable
-                >? parameters)
-        {
-            return this.ExecuteAsync(driverCommandToExecute, parameters);
-        }
-
-        /// <summary>
         /// Executes a command with this driver.
         /// </summary>
         /// <param name="driverCommandToExecute">A <see cref="DriverCommand"/> value representing the command to execute.</param>
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        protected virtual Response Execute(string driverCommandToExecute, Dictionary<string,
+        protected internal virtual Response Execute(string driverCommandToExecute, Dictionary<string,
 #nullable disable
             object
 #nullable enable
@@ -606,7 +574,7 @@ namespace OpenQA.Selenium
         /// <param name="parameters">A <see cref="Dictionary{K, V}"/> containing the names and values of the parameters of the command.</param>
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        protected virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string,
+        protected internal virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string,
 #nullable disable
             object
 #nullable enable

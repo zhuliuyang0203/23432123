@@ -1,6 +1,6 @@
 # Configuration for Label Commenter - https://github.com/peaceiris/actions-label-commenter
 labels:
-  - name: needs-triaging
+  - name: A-needs-triaging
     labeled:
       issue:
         body: |
@@ -15,7 +15,7 @@ labels:
                 Triage this issue by using labels.
               </p>
               <p>
-                If information is missing, add a helpful comment and then <code>I-issue-template</code> label.
+                If information is missing, add a helpful comment and then <code>J-issue-template</code> label.
               </p>
               <p>
                 If the issue is a question, add the <code>I-question</code> label.
@@ -101,18 +101,18 @@ labels:
 
           Feel free to comment the issues that you raise back in this issue. Thank you.
         action: close
-  - name: I-issue-template
+  - name: J-issue-template
     labeled:
       issue:
         body: |
           Hi, @{{ issue.user.login }}.
-          Please follow the issue template, we need more information to reproduce the issue.
+          Please follow the issue template; we need more information to reproduce the issue.
 
           Either a complete code snippet and URL/HTML (if more than one file is needed, provide a GitHub repo and instructions to run the code), the specific versions used, or a more detailed description to help us understand the issue.
 
           Note: If you cannot share your code and URL/HTML, any complete code snippet and URL/HTML that reproduces the issue is good enough.
 
-          Reply to this issue when all information is provided, thank you.
+          Reply to this issue when all information is provided. Thank you.
   - name: I-question
     labeled:
       issue:
@@ -137,3 +137,17 @@ labels:
 
           Please turn on logging and re-run your code. Information on how to adjust logs for your language can be found in our
           [Troubleshooting documentation](https://www.selenium.dev/documentation/webdriver/troubleshooting/logging/).
+  - name: B-support
+    labeled:
+      issue:
+        body: |
+          Hi, @{{ issue.user.login }}.
+
+          This is related to code in the Support packages. The support packages contain example code that
+          many users find helpful, but they do not necessarily represent the best practices for using Selenium,
+          and the Selenium team is not prioritizing work on them right now.
+          This doesn't mean that we won't ever work on them, but it is not on our roadmap as we push to release Selenium 5.
+
+          We actively encourage people to create their own wrapper and helper code that makes sense for them.
+          If you have any questions, please [contact us](https://www.selenium.dev/support)
+

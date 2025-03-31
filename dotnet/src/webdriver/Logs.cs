@@ -50,7 +50,7 @@ namespace OpenQA.Selenium
                 List<string> availableLogTypes = new List<string>();
                 try
                 {
-                    Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAvailableLogTypes, null);
+                    Response commandResponse = this.driver.Execute(DriverCommand.GetAvailableLogTypes, null);
                     if (commandResponse.Value is object[] responseValue)
                     {
                         foreach (object logKind in responseValue)
@@ -86,7 +86,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", logKind);
-            Response commandResponse = this.driver.InternalExecute(DriverCommand.GetLog, parameters);
+            Response commandResponse = this.driver.Execute(DriverCommand.GetLog, parameters);
 
             if (commandResponse.Value is object?[] responseValue)
             {

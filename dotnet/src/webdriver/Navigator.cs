@@ -57,7 +57,7 @@ namespace OpenQA.Selenium
         /// <returns>A task object representing the asynchronous operation.</returns>
         public async Task BackAsync()
         {
-            await this.driver.InternalExecuteAsync(DriverCommand.GoBack, null).ConfigureAwait(false);
+            await this.driver.ExecuteAsync(DriverCommand.GoBack, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace OpenQA.Selenium
         /// <returns>A task object representing the asynchronous operation.</returns>
         public async Task ForwardAsync()
         {
-            await this.driver.InternalExecuteAsync(DriverCommand.GoForward, null).ConfigureAwait(false);
+            await this.driver.ExecuteAsync(DriverCommand.GoForward, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace OpenQA.Selenium
             {
                 { "url", url }
             };
-            await this.driver.InternalExecuteAsync(DriverCommand.Get, parameters).ConfigureAwait(false);
+            await this.driver.ExecuteAsync(DriverCommand.Get, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace OpenQA.Selenium
         public async Task RefreshAsync()
         {
             // driver.SwitchTo().DefaultContent();
-            await this.driver.InternalExecuteAsync(DriverCommand.Refresh, null).ConfigureAwait(false);
+            await this.driver.ExecuteAsync(DriverCommand.Refresh, null).ConfigureAwait(false);
         }
     }
 }

@@ -703,7 +703,7 @@ namespace OpenQA.Selenium
 #nullable enable
                 >? parameters)
         {
-            return this.driver.InternalExecute(commandToExecute, parameters);
+            return this.driver.Execute(commandToExecute, parameters);
         }
 
         private static string GetAtom(string atomResourceName)
