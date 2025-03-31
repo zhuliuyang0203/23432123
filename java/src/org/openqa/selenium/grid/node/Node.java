@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -130,8 +131,8 @@ public abstract class Node implements HasReadyState, Routable {
   private final URI uri;
   private final Duration sessionTimeout;
   private final Route routes;
-  protected boolean draining;
-  protected boolean registered;
+  protected final AtomicBoolean draining = new AtomicBoolean(false);
+  protected final AtomicBoolean registered = new AtomicBoolean(false);
 
   protected Node(
       Tracer tracer, NodeId id, URI uri, Secret registrationSecret, Duration sessionTimeout) {
@@ -272,15 +273,15 @@ public abstract class Node implements HasReadyState, Routable {
   }
 
   public boolean isDraining() {
-    return draining;
+    return draining.get();
   }
 
   public boolean isRegistered() {
-    return registered;
+    return registered.get();
   }
 
   public void register() {
-    registered = true;
+    registered.set(true);
   }
 
   public abstract void drain();

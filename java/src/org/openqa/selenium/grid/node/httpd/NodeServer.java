@@ -74,7 +74,6 @@ import org.openqa.selenium.remote.tracing.Tracer;
 public class NodeServer extends TemplateGridServerCommand {
 
   private static final Logger LOG = Logger.getLogger(NodeServer.class.getName());
-  private final AtomicBoolean nodeRegistered = new AtomicBoolean(false);
   private Node node;
   private EventBus bus;
   private final Thread shutdownHook =
@@ -147,7 +146,6 @@ public class NodeServer extends TemplateGridServerCommand {
         NodeAddedEvent.listener(
             nodeId -> {
               if (node.getId().equals(nodeId)) {
-                nodeRegistered.set(true);
                 node.register();
                 LOG.info("Node has been added");
               }
@@ -238,7 +236,7 @@ public class NodeServer extends TemplateGridServerCommand {
               Failsafe.with(registrationPolicy)
                   .run(
                       () -> {
-                        if (nodeRegistered.get()) {
+                        if (node.isRegistered()) {
                           throw new InterruptedException("Stopping registration thread.");
                         }
                         HealthCheck.Result check = node.getHealthCheck().check();
