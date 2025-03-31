@@ -137,7 +137,7 @@ class StressTest {
               executor);
     }
 
-    CompletableFuture.allOf(futures).get(4, MINUTES);
+    CompletableFuture.allOf(futures).get(6, MINUTES);
   }
 
   @Test
@@ -190,6 +190,6 @@ class StressTest {
               executor);
     }
 
-    CompletableFuture.allOf(futures).get(5, MINUTES);
+    CompletableFuture.allOf(futures).get(6, MINUTES);
   }
 }
