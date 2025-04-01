@@ -145,6 +145,9 @@ class SupportedBidiDrivers(ContainerProtocol):
 
 
 class Driver:
+    _supported_drivers = SupportedDrivers()
+    _supported_options = SupportedOptions()
+
     def __init__(self, driver_class, request):
         self.driver_class = driver_class
         self._request = request
@@ -177,6 +180,16 @@ class Driver:
         if cls_name.lower() not in self.supported_drivers:
             raise AttributeError(f"Invalid driver class {cls_name.lower()}")
         self._driver_class = getattr(self.supported_drivers, cls_name.lower())
+
+    @property
+    def driver_class(self):
+        return self._driver_class
+
+    @driver_class.setter
+    def driver_class(self, cls_name):
+        if cls_name.lower() not in self._supported_drivers:
+            raise AttributeError(f"Invalid driver class {cls_name.lower()}")
+        self._driver_class = getattr(self._supported_drivers, cls_name.lower())
 
     @property
     def exe_platform(self):
