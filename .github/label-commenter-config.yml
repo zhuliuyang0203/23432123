@@ -1,6 +1,6 @@
 # Configuration for Label Commenter - https://github.com/peaceiris/actions-label-commenter
 labels:
-  - name: needs-triaging
+  - name: A-needs-triaging
     labeled:
       issue:
         body: |
