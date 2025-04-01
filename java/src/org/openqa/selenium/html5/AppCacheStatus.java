@@ -17,8 +17,12 @@
 
 package org.openqa.selenium.html5;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Represents the application cache status. */
 @Deprecated
+@NullMarked
 public enum AppCacheStatus {
   UNCACHED(0),
   IDLE(1),
@@ -43,7 +47,7 @@ public enum AppCacheStatus {
    * @param value The input value
    * @return {@link AppCacheStatus} The corresponding appcache status
    */
-  public static AppCacheStatus getEnum(int value) {
+  public static @Nullable AppCacheStatus getEnum(int value) {
     for (AppCacheStatus status : AppCacheStatus.values()) {
       if (value == status.value()) {
         return status;
@@ -52,7 +56,7 @@ public enum AppCacheStatus {
     return null;
   }
 
-  public static AppCacheStatus getEnum(String value) {
+  public static @Nullable AppCacheStatus getEnum(String value) {
     for (AppCacheStatus status : AppCacheStatus.values()) {
       if (status.toString().equalsIgnoreCase(value)) {
         return status;

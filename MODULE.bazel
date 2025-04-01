@@ -25,7 +25,7 @@ bazel_dep(name = "rules_oci", version = "1.8.0")
 bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "rules_python", version = "1.1.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
-bazel_dep(name = "rules_ruby", version = "0.17.2")
+bazel_dep(name = "rules_ruby", version = "0.18.0")
 
 linter = use_extension("@apple_rules_lint//lint:extensions.bzl", "linter")
 linter.configure(
@@ -55,7 +55,7 @@ npm.npm_translate_lock(
         "@//:package.json",
         "@//:pnpm-workspace.yaml",
         "@//javascript/grid-ui:package.json",
-        "@//javascript/node/selenium-webdriver:package.json",
+        "@//javascript/selenium-webdriver:package.json",
     ],
     generate_bzl_library_targets = True,
     npmrc = "//:.npmrc",
@@ -176,7 +176,7 @@ maven.install(
         "com.github.stephenc.jcip:jcip-annotations:1.0-1",
         "com.google.code.findbugs:jsr305:3.0.2",
         "com.google.code.gson:gson:2.12.1",
-        "com.google.guava:guava:33.4.0-jre",
+        "com.google.guava:guava:33.4.5-jre",
         "com.google.auto:auto-common:1.2.2",
         "com.google.auto.service:auto-service:1.1.1",
         "com.google.auto.service:auto-service-annotations:1.1.1",
@@ -219,7 +219,7 @@ maven.install(
         "org.junit.platform:junit-platform-commons:1.12.1",
         "org.junit.platform:junit-platform-engine:1.12.1",
         "org.mockito:mockito-core:5.16.1",
-        "org.redisson:redisson:3.45.0",
+        "org.redisson:redisson:3.45.1",
         "org.slf4j:slf4j-api:2.0.17",
         "org.slf4j:slf4j-jdk14:2.0.17",
         "org.tomlj:tomlj:1.1.1",

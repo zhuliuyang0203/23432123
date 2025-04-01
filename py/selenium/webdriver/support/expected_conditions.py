@@ -49,7 +49,7 @@ def title_is(title: str) -> Callable[[WebDriver], bool]:
     """An expectation for checking the title of a page.
 
     Parameters:
-    ----------
+    -----------
     title : str
         The expected title, which must be an exact match.
 
@@ -69,7 +69,7 @@ def title_contains(title: str) -> Callable[[WebDriver], bool]:
     substring.
 
     Parameters:
-    ----------
+    -----------
     title : str
         The fragment of title expected.
 
@@ -89,7 +89,7 @@ def presence_of_element_located(locator: Tuple[str, str]) -> Callable[[WebDriver
     page. This does not necessarily mean that the element is visible.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
 
@@ -117,7 +117,7 @@ def url_contains(url: str) -> Callable[[WebDriver], bool]:
     sensitive substring.
 
     Parameters:
-    ----------
+    -----------
     url : str
         The fragment of url expected.
 
@@ -136,7 +136,7 @@ def url_matches(pattern: str) -> Callable[[WebDriver], bool]:
     """An expectation for checking the current url.
 
     Parameters:
-    ----------
+    -----------
     pattern : str
         The pattern to match with the current url.
 
@@ -159,7 +159,7 @@ def url_to_be(url: str) -> Callable[[WebDriver], bool]:
     """An expectation for checking the current url.
 
     Parameters:
-    ----------
+    -----------
     url : str
         The expected url, which must be an exact match.
 
@@ -179,7 +179,7 @@ def url_changes(url: str) -> Callable[[WebDriver], bool]:
     string.
 
     Parameters:
-    ----------
+    -----------
     url : str
         The expected url, which must not be an exact match.
 
@@ -202,7 +202,7 @@ def visibility_of_element_located(
     but also has a height and width that is greater than 0.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
 
@@ -233,7 +233,7 @@ def visibility_of(element: WebElement) -> Callable[[Any], Union[Literal[False], 
     DOM of a page, is visible.
 
     Parameters:
-    ----------
+    -----------
     element : WebElement
         The WebElement to check.
 
@@ -267,7 +267,7 @@ def _element_if_visible(element: WebElement, visibility: bool = True) -> Union[L
     DOM of a page, is of the expected visibility.
 
     Parameters:
-    ----------
+    -----------
     element : WebElement
         The WebElement to check.
     visibility : bool
@@ -285,7 +285,7 @@ def presence_of_all_elements_located(locator: Tuple[str, str]) -> Callable[[WebD
     on a web page.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
 
@@ -313,7 +313,7 @@ def visibility_of_any_elements_located(locator: Tuple[str, str]) -> Callable[[We
     on a web page.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
 
@@ -344,7 +344,7 @@ def visibility_of_all_elements_located(
     displayed but also has a height and width that is greater than 0.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the elements.
 
@@ -379,7 +379,7 @@ def text_to_be_present_in_element(locator: Tuple[str, str], text_: str) -> Calla
     specified element.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
     text_ : str
@@ -415,7 +415,7 @@ def text_to_be_present_in_element_value(
     element's value.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
     text_ : str
@@ -451,7 +451,7 @@ def text_to_be_present_in_element_attribute(
     element's attribute.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
     attribute_ : str
@@ -492,7 +492,7 @@ def frame_to_be_available_and_switch_to_it(
     switch to.
 
     Parameters:
-    ----------
+    -----------
     locator : Union[Tuple[str, str], str, WebElement]
         Used to find the frame.
 
@@ -533,7 +533,7 @@ def invisibility_of_element_located(
     present on the DOM.
 
     Parameters:
-    ----------
+    -----------
     locator : Union[WebElement, Tuple[str, str]]
         Used to find the element.
 
@@ -582,7 +582,7 @@ def invisibility_of_element(
     present on the DOM.
 
     Parameters:
-    ----------
+    -----------
     element : Union[WebElement, Tuple[str, str]]
         Used to find the element.
 
@@ -608,7 +608,7 @@ def element_to_be_clickable(
     you can click it.
 
     Parameters:
-    ----------
+    -----------
     mark : Union[WebElement, Tuple[str, str]]
         Used to find the element.
 
@@ -643,7 +643,7 @@ def staleness_of(element: WebElement) -> Callable[[Any], bool]:
     """Wait until an element is no longer attached to the DOM.
 
     Parameters:
-    ----------
+    -----------
     element : WebElement
         The element to wait for.
 
@@ -675,7 +675,7 @@ def element_to_be_selected(element: WebElement) -> Callable[[Any], bool]:
     """An expectation for checking the selection is selected.
 
     Parameters:
-    ----------
+    -----------
     element : WebElement
         The WebElement to check.
 
@@ -702,7 +702,7 @@ def element_located_to_be_selected(locator: Tuple[str, str]) -> Callable[[WebDri
     """An expectation for the element to be located is selected.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
 
@@ -729,7 +729,7 @@ def element_selection_state_to_be(element: WebElement, is_selected: bool) -> Cal
     """An expectation for checking if the given element is selected.
 
     Parameters:
-    ----------
+    -----------
     element : WebElement
         The WebElement to check.
     is_selected : bool
@@ -760,7 +760,7 @@ def element_located_selection_state_to_be(
     specified is in that state.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
     is_selected : bool
@@ -792,7 +792,7 @@ def number_of_windows_to_be(num_windows: int) -> Callable[[WebDriver], bool]:
     """An expectation for the number of windows to be a certain value.
 
     Parameters:
-    ----------
+    -----------
     num_windows : int
         The expected number of windows.
 
@@ -819,7 +819,7 @@ def new_window_is_opened(current_handles: List[str]) -> Callable[[WebDriver], bo
     windows handles increase.
 
     Parameters:
-    ----------
+    -----------
     current_handles : List[str]
         The current window handles.
 
@@ -875,7 +875,7 @@ def element_attribute_to_include(locator: Tuple[str, str], attribute_: str) -> C
     specified element.
 
     Parameters:
-    ----------
+    -----------
     locator : Tuple[str, str]
         Used to find the element.
     attribute_ : str
@@ -908,7 +908,7 @@ def any_of(*expected_conditions: Callable[[D], T]) -> Callable[[D], Union[Litera
     """An expectation that any of multiple expected conditions is true.
 
     Parameters:
-    ----------
+    -----------
     expected_conditions : Callable[[D], T]
         The list of expected conditions to check.
 
@@ -950,7 +950,7 @@ def all_of(
     """An expectation that all of multiple expected conditions is true.
 
     Parameters:
-    ----------
+    -----------
     expected_conditions : Callable[[D], Union[T, Literal[False]]]
         The list of expected conditions to check.
 
@@ -993,7 +993,7 @@ def none_of(*expected_conditions: Callable[[D], Any]) -> Callable[[D], bool]:
     """An expectation that none of 1 or multiple expected conditions is true.
 
     Parameters:
-    ----------
+    -----------
     expected_conditions : Callable[[D], Any]
         The list of expected conditions to check.
 

@@ -168,9 +168,10 @@ namespace OpenQA.Selenium.Internal
             string? location = null;
 
             // Make sure not to call Path.GetDirectoryName if assembly location is null or empty
-            if (!string.IsNullOrEmpty(executingAssembly.Location))
+            string assemblyLocation = executingAssembly.Location;
+            if (!string.IsNullOrEmpty(assemblyLocation))
             {
-                location = Path.GetDirectoryName(executingAssembly.Location);
+                location = Path.GetDirectoryName(assemblyLocation);
             }
 
             if (string.IsNullOrEmpty(location))

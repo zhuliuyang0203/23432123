@@ -182,6 +182,6 @@ public class Cookie {
 
     getExpiry().ifPresent(expiryValue -> map.put("expiry", expiryValue));
 
-    return map;
+    return Map.copyOf(map);
   }
 }

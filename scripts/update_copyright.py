@@ -80,7 +80,7 @@ ROOT = Path(os.path.realpath(__file__)).parent.parent
 JS_EXCLUSIONS = [
     f"{ROOT}/javascript/atoms/test/jquery.min.js",
     f"{ROOT}/javascript/jsunit/**/*.js",
-    f"{ROOT}/javascript/node/selenium-webdriver/node_modules/**/*.js",
+    f"{ROOT}/javascript/selenium-webdriver/node_modules/**/*.js",
     f"{ROOT}/javascript/selenium-core/lib/**/*.js",
     f"{ROOT}/javascript/selenium-core/scripts/ui-element.js",
     f"{ROOT}/javascript/selenium-core/scripts/ui-map-sample.js",

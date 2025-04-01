@@ -1,3 +1,12 @@
+0.4.30
+======
+* Remove check for old metadata file
+* Check lock folder at the end of SM execution and clear it if required
+* Store reference to lock file to clear folder when necessary
+* Read PROCESSOR_ARCHITECTURE env in Windows to determine architecture
+* Selenium Manager support nightly Grid (#13384) (#15366)
+* Support snap packages (Firefox, Chromium) in Selenium Manager
+
 0.4.29
 ======
 

@@ -1,3 +1,15 @@
+v4.30.0
+======
+* [grid] remove firefox devtools leftovers #15323
+* [grid] remove indirection in cache structures
+* [grid] remove not reachable code
+* [grid] Add traces for event stop session in Node (#15348)
+* [grid] Allow longer startup time through docker (#15345)
+* remove usage of deprecated SemanticAttributes class #15384
+* [cdp] add support for 134 and remove 131
+* [cdp] remove support for v85 since no longer required by Firefox
+* [bidi] Add Permissions Module commands (#15294)
+
 v4.29.0
 ======
 * Add CDP for Chrome 133 and remove 130

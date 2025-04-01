@@ -1,3 +1,11 @@
+Selenium 4.30.0
+* Add CDP for Chrome 134 and remove 131
+* Remove support for v85 since no longer required by Firefox
+* expected_conditions: correct type annotation (#15337)
+* use `By` class attributes instead of strings in locator converter (#15402)
+* fix invalid selector bug for mutation observation
+* improve socket resource management with proper shutdown sequence (#15453)
+
 Selenium 4.29.0
 * Add CDP for Chrome 133 and remove 130
 * [py] Disable strict time stamps in Firefox profile (#15141)

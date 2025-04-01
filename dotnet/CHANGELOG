@@ -1,3 +1,49 @@
+v4.30.0
+======
+* Fix dev environment to run tests on Windows/MacOS (#15303)
+* Fix sporadic build issue with selenium manager in msbuild
+* Increment `WebDriver` towards nullability (#15228)
+* Do not warn when passing in null driver paths to driver service (#15328)
+* Add `SystemClock` singleton (#15285)
+* Remove obsoleted members/types for 4.30 (#15342)
+* Parse response before deserialization (#15268)
+* Address some nullability warnings in driver options
+* Make internal console writer more flexible via taking TextWriter only (#15346)
+* Annotate nullability on most remaining types (#15257)
+* Annotate CDP as AOT-unsafe (#14637)
+* Fix placement of obsolete argument in ConsoleLogHandler
+* Annotate nullability on more of `WebElement` (#15230)
+* Annotate nullable reference types on CDP-generated code (#15255)
+* Simplify and nullable annotate `DriverFinder` (#15232)
+* Annotate nullability on `WebDriver.SessionId` (#15350)
+* Enable nullability on remote file download APIs (#15351)
+* Annotate nullability on elements and `WebDriver` (#15352)
+* Annotate nullability on capabilities types (#15353)
+* Enable Nullable Reference Types (#15354)
+* Trim away CDP when publishing AOT apps (#15217)
+* [bidi] Order command properties in json to simplify logs reading
+* [bidi] Add SetFiles command in Input module (#15392)
+* [bidi] Added UnhandledPromptBehavior for new session capability (#15391)
+* [bidi] Encapsulate transport inside `Broker` (#15423)
+* [bidi] Align `Scipt.LocalValue.Map` with spec (#15395)
+* [bidi] Make `DisposeAsyncCore` protected
+* [bidi] Make `LocalValue` types not nested (#15428)
+* [bidi] Migrate RemoteValue to separate types (#15426)
+* [bidi] Reuse RegExpValue in script Local/Remote values
+* [bidi] Make `PartitionDescriptor` as not nested (#15435)
+* [bidi] Make `UrlPattern` as not nested (#15434)
+* [bidi] Make script `Target` as not nested (#15436)
+* [bidi] Make `LogEntry` as not nested (#15432)
+* [cdp] add support for 134 and remove 131
+* [cdp] remove support for v85 since no longer required by Firefox
+* [bidi] Make `BytesValue` not nested (#15433)
+* [bidi] Make input `Actions` as not nested (#15437)
+* [bidi] Make `ProxyConfiguration` as not nested (#15438)
+* [bidi] Make `Locator` types as not nested (#15429)
+* [bidi] Make `ClipRectangle` as not nested (#15431)
+* [bidi] Make `RealmInfo` as not nested (#15444)
+* [bidi] Make input `Origin` as not nested (#15445)
+
 v4.29.0
 ======
 * Add CDP for Chrome 133 and remove 130

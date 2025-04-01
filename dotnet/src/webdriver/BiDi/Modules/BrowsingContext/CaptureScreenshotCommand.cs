@@ -25,7 +25,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
     : Command<CaptureScreenshotCommandParameters>(@params, "browsingContext.captureScreenshot");
 
-internal record CaptureScreenshotCommandParameters(BrowsingContext Context, CaptureScreenshotOptions.ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
+internal record CaptureScreenshotCommandParameters(BrowsingContext Context, ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
 
 public record CaptureScreenshotOptions : CommandOptions
 {
@@ -34,12 +34,12 @@ public record CaptureScreenshotOptions : CommandOptions
     public ImageFormat? Format { get; set; }
 
     public ClipRectangle? Clip { get; set; }
+}
 
-    public enum ScreenshotOrigin
-    {
-        Viewport,
-        Document
-    }
+public enum ScreenshotOrigin
+{
+    Viewport,
+    Document
 }
 
 public record struct ImageFormat(string Type)

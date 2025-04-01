@@ -11,6 +11,12 @@ AllCops:
   Exclude:
     - !ruby/regexp /lib\/selenium\/devtools\/v\d+/
 
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+FactoryBot/CreateList:
+  Enabled: false
+
 Gemspec/DevelopmentDependencies:
   EnforcedStyle: gemspec
 

@@ -48,7 +48,7 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
+                Response commandResponse = this.driver.Execute(DriverCommand.GetWindowRect, null);
 
                 Dictionary<string, object?> rawPosition = (Dictionary<string, object?>)commandResponse.Value!;
                 int x = Convert.ToInt32(rawPosition["x"], CultureInfo.InvariantCulture);
@@ -62,7 +62,7 @@ namespace OpenQA.Selenium
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("x", value.X);
                 parameters.Add("y", value.Y);
-                this.driver.InternalExecute(DriverCommand.SetWindowRect, parameters);
+                this.driver.Execute(DriverCommand.SetWindowRect, parameters);
             }
         }
 
@@ -74,7 +74,7 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse = this.driver.InternalExecute(DriverCommand.GetWindowRect, null);
+                Response commandResponse = this.driver.Execute(DriverCommand.GetWindowRect, null);
 
                 Dictionary<string, object?> rawPosition = (Dictionary<string, object?>)commandResponse.Value!;
                 int height = Convert.ToInt32(rawPosition["height"], CultureInfo.InvariantCulture);
@@ -88,7 +88,7 @@ namespace OpenQA.Selenium
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("width", value.Width);
                 parameters.Add("height", value.Height);
-                this.driver.InternalExecute(DriverCommand.SetWindowRect, parameters);
+                this.driver.Execute(DriverCommand.SetWindowRect, parameters);
             }
         }
 
@@ -97,7 +97,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Maximize()
         {
-            this.driver.InternalExecute(DriverCommand.MaximizeWindow, null);
+            this.driver.Execute(DriverCommand.MaximizeWindow, null);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Minimize()
         {
-            this.driver.InternalExecute(DriverCommand.MinimizeWindow, null);
+            this.driver.Execute(DriverCommand.MinimizeWindow, null);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void FullScreen()
         {
-            this.driver.InternalExecute(DriverCommand.FullScreenWindow, null);
+            this.driver.Execute(DriverCommand.FullScreenWindow, null);
         }
     }
 }

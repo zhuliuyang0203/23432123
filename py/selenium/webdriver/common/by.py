@@ -63,7 +63,7 @@ class By:
     >>> element = driver.find_element(By.TAG_NAME, 'div')
 
     CLASS_NAME:
-    ----------
+    -----------
     Select the element by its class name.
 
     >>> element = driver.find_element(By.CLASS_NAME, 'myElement')

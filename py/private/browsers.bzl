@@ -72,11 +72,11 @@ BROWSERS = {
     "ie": {
         "args": ["--driver=ie"],
         "data": [],
-        "tags": COMMON_TAGS + ["ie", "skip-remote"],
+        "tags": COMMON_TAGS + ["ie", "skip-rbe"],
     },
     "safari": {
         "args": ["--driver=safari"],
         "data": [],
-        "tags": COMMON_TAGS + ["safari", "skip-remote"],
+        "tags": COMMON_TAGS + ["safari", "skip-rbe"],
     },
 }

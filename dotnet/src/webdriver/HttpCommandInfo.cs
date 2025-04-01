@@ -49,10 +49,11 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="method">Method of the Command</param>
         /// <param name="resourcePath">Relative URL path to the resource used to execute the command</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="method"/> or <paramref name="resourcePath"/> are <see langword="null"/>.</exception>
         public HttpCommandInfo(string method, string resourcePath)
         {
-            this.ResourcePath = resourcePath;
-            this.Method = method;
+            this.ResourcePath = resourcePath ?? throw new ArgumentNullException(nameof(resourcePath));
+            this.Method = method ?? throw new ArgumentNullException(nameof(method));
         }
 
         /// <summary>

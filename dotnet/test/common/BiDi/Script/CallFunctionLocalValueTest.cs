@@ -57,7 +57,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     }
 
     [Test]
-    public void CanCallFunctionWithArgumentBoolean()
+    public void CanCallFunctionWithArgumentTrue()
     {
         var arg = new BooleanLocalValue(true);
         Assert.That(async () =>
@@ -65,6 +65,22 @@ class CallFunctionLocalValueTest : BiDiTestFixture
             await context.Script.CallFunctionAsync($$"""
             (arg) => {
               if (arg !== true) {
+              throw new Error("Assert failed: " + arg);
+              }
+            }
+            """, false, new() { Arguments = [arg] });
+        }, Throws.Nothing);
+    }
+
+    [Test]
+    public void CanCallFunctionWithArgumentFalse()
+    {
+        var arg = new BooleanLocalValue(false);
+        Assert.That(async () =>
+        {
+            await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg !== false) {
               throw new Error("Assert failed: " + arg);
               }
             }
