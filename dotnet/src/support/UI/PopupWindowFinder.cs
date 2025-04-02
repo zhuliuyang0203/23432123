@@ -18,7 +18,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -132,35 +131,13 @@ namespace OpenQA.Selenium.Support.UI
             ReadOnlyCollection<string> existingHandles = this.driver.WindowHandles;
             popupMethod();
             WebDriverWait wait = new WebDriverWait(SystemClock.Instance, this.driver, this.timeout, this.sleepInterval);
-            string popupHandle = wait.Until<string>((d) =>
+            string popupHandle = wait.Until(driver =>
             {
-                string? foundHandle = null;
-                List<string> differentHandles = GetDifference(existingHandles, this.driver.WindowHandles);
-                if (differentHandles.Count > 0)
-                {
-                    foundHandle = differentHandles[0];
-                }
-
-                return foundHandle;
+                ReadOnlyCollection<string> newHandles = driver.WindowHandles;
+                return newHandles.Except(existingHandles, StringComparer.Ordinal).FirstOrDefault();
             });
 
             return popupHandle;
-        }
-
-        private static List<string> GetDifference(ReadOnlyCollection<string> existingHandles, ReadOnlyCollection<string> currentHandles)
-        {
-            // We are using LINQ to get the difference between the two lists.
-            // The non-LINQ version looks like the following:
-            // List<string> differentHandles = new List<string>();
-            // foreach (string handle in currentHandles)
-            // {
-            //    if (!existingHandles.Contains(handle))
-            //    {
-            //        currentHandles.Add(handle);
-            //    }
-            // }
-            // return differentHandles;
-            return currentHandles.Except(existingHandles).ToList();
         }
     }
 }

@@ -544,10 +544,6 @@ namespace :node do
       File.open(file, 'w') { |f| f.puts text }
       @git.add(file)
     end
-
-    # Update package-lock.json
-    sh 'pnpm install --dir javascript/selenium-webdriver', verbose: true
-    @git.add('javascript/selenium-webdriver/package-lock.json')
   end
 end
 

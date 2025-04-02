@@ -150,4 +150,16 @@ labels:
 
           We actively encourage people to create their own wrapper and helper code that makes sense for them.
           If you have any questions, please [contact us](https://www.selenium.dev/support)
+      pr:
+        body: |
+          Thank you, @{{ pull_request.user.login }} for this code suggestion.
+
+          The support packages contain example code that many users find helpful, but they do not necessarily represent
+          the best practices for using Selenium, and the Selenium team is not currently merging changes to them.
+
+          We actively encourage people to add the wrapper and helper code that makes sense for them to their own frameworks.
+          If you have any questions, please [contact us](https://www.selenium.dev/support)
+        action: close
+
+
 

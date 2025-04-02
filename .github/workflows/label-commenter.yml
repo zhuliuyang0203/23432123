@@ -4,6 +4,8 @@ name: Label Commenter
 on:
   issues:
     types: [ labeled ]
+  pull_request_target:
+    types: [labeled]
 
 permissions:
   contents: read
