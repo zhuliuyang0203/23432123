@@ -28,7 +28,7 @@ internal static class JsonExtensions
         Utf8JsonReader readerClone = reader;
 
         if (readerClone.TokenType != JsonTokenType.StartObject)
-            throw new JsonException();
+            throw new JsonException("Cannot determine the discriminator of json non-object token type.");
 
         string? discriminator = null;
 
