@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
 using System.Text.Json;
@@ -29,12 +30,10 @@ internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
 {
     public override EvaluateResult? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonDocument = JsonDocument.ParseValue(ref reader);
-
-        return jsonDocument.RootElement.GetProperty("type").ToString() switch
+        return reader.GetDiscriminator("type") switch
         {
-            "success" => jsonDocument.Deserialize<EvaluateResultSuccess>(options),
-            "exception" => jsonDocument.Deserialize<EvaluateResultException>(options),
+            "success" => JsonSerializer.Deserialize<EvaluateResultSuccess>(ref reader, options),
+            "exception" => JsonSerializer.Deserialize<EvaluateResultException>(ref reader, options),
             _ => null,
         };
     }
