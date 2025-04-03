@@ -140,6 +140,8 @@ public class Broker : IAsyncDisposable
                         var messageSuccess = JsonSerializer.Deserialize(ref utfJsonReader, successCommand.Item1.ResultType, _jsonSerializerContext);
 
                         successCommand.Item2.SetResult(messageSuccess);
+
+                        _pendingCommands.TryRemove(successId, out _);
                         break;
 
                     case "event":
@@ -166,6 +168,7 @@ public class Broker : IAsyncDisposable
                         var messageError = JsonSerializer.Deserialize(ref utfJsonReader, _jsonSerializerContext.MessageError);
                         var errorCommand = _pendingCommands[messageError.Id];
                         errorCommand.Item2.SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
+                        _pendingCommands.TryRemove(messageError.Id, out _);
                         break;
                 }
             }
