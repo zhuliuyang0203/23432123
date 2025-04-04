@@ -36,7 +36,7 @@ csharp_library(
     internals_visible_to = [
         "WebDriver.Common.Tests",
     ],
-    langversion = "12.0",
+    langversion = "13.0",
     nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
@@ -76,7 +76,7 @@ csharp_library(
     internals_visible_to = [
         "WebDriver.Common.Tests",
     ],
-    langversion = "12.0",
+    langversion = "13.0",
     nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
@@ -104,7 +104,7 @@ csharp_library(
     ]) + devtools_version_targets(),
     out = "WebDriver.StrongNamed",
     keyfile = "//dotnet:WebDriver.snk",
-    langversion = "12.0",
+    langversion = "13.0",
     nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
@@ -142,7 +142,7 @@ csharp_library(
         "NET8_0_OR_GREATER",
     ],
     keyfile = "//dotnet:WebDriver.snk",
-    langversion = "12.0",
+    langversion = "13.0",
     nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
