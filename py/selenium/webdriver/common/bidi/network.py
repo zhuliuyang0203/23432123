@@ -280,6 +280,15 @@ class Request:
         command = {"method": method, "params": params}
         cmd = yield command
         return cmd
+    
+    def fail_request(self):
+        """Fail this request."""
+
+        if not self.request_id:
+            raise ValueError("Request not found.")
+
+        params = {"request": self.request_id}
+        self.network.conn.execute(self.command_builder("network.failRequest", params))
 
     def continue_request(self, body=None, method=None, headers=None, cookies=None, url=None):
         """Continue after intercepting this request."""
