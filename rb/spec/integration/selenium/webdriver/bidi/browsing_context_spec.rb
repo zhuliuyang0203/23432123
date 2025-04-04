@@ -81,7 +81,9 @@ module Selenium
           expect(driver.execute_script('return window.devicePixelRatio')).to eq(2.0)
         end
 
-        it 'accepts users prompts without text' do
+        it 'accepts users prompts without text',
+           except: {browser: %i[edge chrome],
+                    reason: 'https://github.com/GoogleChromeLabs/chromium-bidi/issues/3281'} do
           browsing_context = described_class.new(bridge)
 
           driver.navigate.to url_for('alerts.html')
@@ -94,7 +96,9 @@ module Selenium
           expect(driver.title).to eq('Testing Alerts')
         end
 
-        it 'accepts users prompts with text' do
+        it 'accepts users prompts with text',
+           except: {browser: %i[edge chrome],
+                    reason: 'https://github.com/GoogleChromeLabs/chromium-bidi/issues/3281'} do
           browsing_context = described_class.new(bridge)
           driver.navigate.to url_for('alerts.html')
           driver.find_element(id: 'prompt').click
@@ -106,7 +110,8 @@ module Selenium
           expect(driver.title).to eq('Testing Alerts')
         end
 
-        it 'rejects users prompts' do
+        it 'rejects users prompts', except: {browser: %i[edge chrome],
+                                             reason: 'https://github.com/GoogleChromeLabs/chromium-bidi/issues/3281'} do
           browsing_context = described_class.new(bridge)
           driver.navigate.to url_for('alerts.html')
           driver.find_element(id: 'alert').click

@@ -122,14 +122,14 @@ labels:
           * 📮 [StackOverflow](https://stackoverflow.com/questions/tagged/selenium)
           * 🗣 Our [IRC/Slack/Matrix channels](https://www.selenium.dev/support/) where the community can help you as well
         action: close
-  - name: help wanted
+  - name: R-help wanted
     labeled:
       issue:
         body: |
           This issue is looking for contributors.
 
           Please comment below or reach out to us through our [IRC/Slack/Matrix channels](https://www.selenium.dev/support/) if you are interested.
-  - name: I-logging
+  - name: J-logging
     labeled:
       issue:
         body: |
