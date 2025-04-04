@@ -26,20 +26,26 @@ internal class ContinueWithAuthCommand(ContinueWithAuthParameters @params)
     : Command<ContinueWithAuthParameters>(@params, "network.continueWithAuth");
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "action")]
-[JsonDerivedType(typeof(Credentials), "provideCredentials")]
-[JsonDerivedType(typeof(Default), "default")]
-[JsonDerivedType(typeof(Cancel), "cancel")]
-internal abstract record ContinueWithAuthParameters(Request Request) : CommandParameters
-{
-    internal record Credentials(Request Request, [property: JsonPropertyName("credentials")] AuthCredentials AuthCredentials) : ContinueWithAuthParameters(Request);
+[JsonDerivedType(typeof(ContinueWithAuthCredentials), "provideCredentials")]
+[JsonDerivedType(typeof(ContinueWithAuthDefaultCredentials), "default")]
+[JsonDerivedType(typeof(ContinueWithAuthCancelCredentials), "cancel")]
+internal abstract record ContinueWithAuthParameters(Request Request) : CommandParameters;
 
-    internal record Default(Request Request) : ContinueWithAuthParameters(Request);
+internal record ContinueWithAuthCredentials(Request Request, AuthCredentials Credentials) : ContinueWithAuthParameters(Request);
 
-    internal record Cancel(Request Request) : ContinueWithAuthParameters(Request);
-}
+internal abstract record ContinueWithAuthNoCredentials(Request Request) : ContinueWithAuthParameters(Request);
+
+internal record ContinueWithAuthDefaultCredentials(Request Request) : ContinueWithAuthNoCredentials(Request);
+
+internal record ContinueWithAuthCancelCredentials(Request Request) : ContinueWithAuthNoCredentials(Request);
 
 public record ContinueWithAuthOptions : CommandOptions;
 
-public record ContinueWithDefaultAuthOptions : CommandOptions;
+public record ContinueWithAuthCredentialsOptions : ContinueWithAuthOptions;
 
-public record ContinueWithCancelledAuthOptions : CommandOptions;
+public record ContinueWithAuthNoCredentialsOptions : ContinueWithAuthOptions;
+
+public record ContinueWithAuthDefaultCredentialsOptions : ContinueWithAuthNoCredentialsOptions;
+
+public record ContinueWithAuthCancelCredentialsOptions : ContinueWithAuthNoCredentialsOptions;
+

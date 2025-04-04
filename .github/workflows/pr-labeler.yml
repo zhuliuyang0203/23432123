@@ -1,0 +1,27 @@
+# Configuration for Label Generation - ./.github/pr-labeler-config.yml
+name: Label pull requests based on file paths
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base repo to get config file
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: seleniumhq/selenium
+      - name: Auto label Pull Requests
+        uses: actions/labeler@v5
+        with:
+          # The individual PAT is needed so labeler auto-executes this workflow
+          # It expires 4/1/2026
+          repo-token: ${{ secrets.PR_LABELER_PAT }}
+          configuration-path: .github/pr-labeler-config.yml

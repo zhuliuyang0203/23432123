@@ -97,6 +97,17 @@ def pytest_ignore_collect(path, config):
     return len([d for d in _drivers if d.lower() in parts]) > 0
 
 
+def get_driver_class(driver_option):
+    """Generate the driver class name from the lowercase driver option"""
+    if driver_option == "webkitgtk":
+        driver_class = "WebKitGTK"
+    elif driver_option == "wpewebkit":
+        driver_class = "WPEWebKit"
+    else:
+        driver_class = driver_option.capitalize()
+    return driver_class
+
+
 driver_instance = None
 
 
@@ -105,7 +116,7 @@ def driver(request):
     kwargs = {}
 
     # browser can be changed with `--driver=firefox` as an argument or to addopts in pytest.ini
-    driver_class = getattr(request, "param", "Chrome").capitalize()
+    driver_class = get_driver_class(getattr(request, "param", "Chrome"))
 
     # skip tests if not available on the platform
     _platform = platform.system()
@@ -146,18 +157,16 @@ def driver(request):
             options = get_options(driver_class, request.config)
         if driver_class == "Chrome":
             options = get_options(driver_class, request.config)
+        if driver_class == "Edge":
+            options = get_options(driver_class, request.config)
+        if driver_class == "WebKitGTK":
+            options = get_options(driver_class, request.config)
+        if driver_class.lower() == "WPEWebKit":
+            options = get_options(driver_class, request.config)
         if driver_class == "Remote":
             options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
             options.set_capability("moz:firefoxOptions", {})
             options.enable_downloads = True
-        if driver_class.lower() == "webkitgtk":
-            driver_class = "WebKitGTK"
-            options = get_options(driver_class, request.config)
-        if driver_class == "Edge":
-            options = get_options(driver_class, request.config)
-        if driver_class.lower() == "wpewebkit":
-            driver_class = "WPEWebKit"
-            options = get_options(driver_class, request.config)
         if driver_path is not None:
             kwargs["service"] = get_service(driver_class, driver_path)
         if options is not None:
@@ -345,9 +354,9 @@ def driver_executable(request):
 @pytest.fixture(scope="function")
 def clean_service(request):
     try:
-        driver_class = request.config.option.drivers[0].capitalize()
-    except AttributeError:
-        raise Exception("This test requires a --driver to be specified.")
+        driver_class = get_driver_class(request.config.option.drivers[0])
+    except (AttributeError, TypeError):
+        raise Exception("This test requires a --driver to be specified")
 
     yield get_service(driver_class, request.config.option.executable)
 
@@ -355,9 +364,9 @@ def clean_service(request):
 @pytest.fixture(scope="function")
 def clean_driver(request):
     try:
-        driver_class = request.config.option.drivers[0].capitalize()
-    except AttributeError:
-        raise Exception("This test requires a --driver to be specified.")
+        driver_class = get_driver_class(request.config.option.drivers[0])
+    except (AttributeError, TypeError):
+        raise Exception("This test requires a --driver to be specified")
 
     driver_reference = getattr(webdriver, driver_class)
     yield driver_reference

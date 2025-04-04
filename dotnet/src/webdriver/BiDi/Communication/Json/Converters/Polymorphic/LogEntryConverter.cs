@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Log;
 using System;
 using System.Text.Json;
@@ -29,12 +30,10 @@ internal class LogEntryConverter : JsonConverter<Modules.Log.LogEntry>
 {
     public override Modules.Log.LogEntry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonDocument = JsonDocument.ParseValue(ref reader);
-
-        return jsonDocument.RootElement.GetProperty("type").ToString() switch
+        return reader.GetDiscriminator("type") switch
         {
-            "console" => jsonDocument.Deserialize<ConsoleLogEntry>(options),
-            "javascript" => jsonDocument.Deserialize<JavascriptLogEntry>(options),
+            "console" => JsonSerializer.Deserialize<ConsoleLogEntry>(ref reader, options),
+            "javascript" => JsonSerializer.Deserialize<JavascriptLogEntry>(ref reader, options),
             _ => null,
         };
     }

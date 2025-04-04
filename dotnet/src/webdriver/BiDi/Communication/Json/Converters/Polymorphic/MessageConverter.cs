@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -28,13 +29,11 @@ internal class MessageConverter : JsonConverter<Message>
 {
     public override Message? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonDocument = JsonDocument.ParseValue(ref reader);
-
-        return jsonDocument.RootElement.GetProperty("type").ToString() switch
+        return reader.GetDiscriminator("type") switch
         {
-            "success" => jsonDocument.Deserialize<MessageSuccess>(options),
-            "error" => jsonDocument.Deserialize<MessageError>(options),
-            "event" => jsonDocument.Deserialize<MessageEvent>(options),
+            "success" => JsonSerializer.Deserialize<MessageSuccess>(ref reader, options),
+            "error" => JsonSerializer.Deserialize<MessageError>(ref reader, options),
+            "event" => JsonSerializer.Deserialize<MessageEvent>(ref reader, options),
             _ => null,
         };
     }
