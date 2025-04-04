@@ -111,7 +111,8 @@ class Network:
             If intercept is None, all intercepts will be removed.
         """
         if intercept is None:
-            for intercept_id in self.intercepts:  # remove all intercepts
+            intercepts_to_remove = self.intercepts.copy()  # create a copy before iterating
+            for intercept_id in intercepts_to_remove:  # remove all intercepts
                 self.conn.execute(self.command_builder("network.removeIntercept", {"intercept": intercept_id}))
                 self.intercepts.remove(intercept_id)
         else:
