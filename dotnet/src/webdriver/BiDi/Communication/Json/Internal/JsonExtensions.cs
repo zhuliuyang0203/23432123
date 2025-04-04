@@ -48,7 +48,7 @@ internal static class JsonExtensions
                 {
                     discriminator = readerClone.GetString();
                 }
- 
+
                 break;
             }
 
