@@ -14,6 +14,24 @@
     > * [build] allow tests tagged exclusive-if-local to run on rbe
     > * Fix bug where symbol is not accepting on delete cookie
 * update devtools versions
+* bump versions in preparation for release
+
+4.31.0 (2025-04-04)
+=========================
+* bump versions to nightly
+* put back the script method that was inadvertently deleted
+* update changelog and bump version to 4.30.1
+* bump version to nightly
+* Remove the `wgxpath` library
+    > We needed to include this to support IE as it didn't have an
+    > underlying XPath implementation available to JS scripts to use.
+    > The `IEDriverServer` hasn't been recompiled for a while now,
+    > and no other driver needs to have an xpath shim. Removing it
+    > should be a no-op.
+* Allow symbols again to be passed on delete_cookie (#15519)
+    > * [build] allow tests tagged exclusive-if-local to run on rbe
+    > * Fix bug where symbol is not accepting on delete cookie
+* update devtools versions
 
 4.30.1 (2025-03-22)
 =========================

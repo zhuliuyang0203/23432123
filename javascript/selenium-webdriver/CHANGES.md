@@ -12,6 +12,22 @@
     > * [JS] Add websocket port option in Firefox ServiceBuilder when '--connect-existing' is not passed
     > * fix format
 - update devtools versions
+- bump versions in preparation for release
+
+## 4.31.0
+
+- Relocate selenium-webdriver to root directory (#15509)
+    > * [JS] Remove js_dossiar references
+    > * [JS] move selenium-webdriver to top level
+- [bidi]: fix storage module instance checks and add user context cookie test  (#15467)
+    > * fix storage module instance checks
+    > * add cookie test for user context
+    > * improve error message and run formatting
+- [build] fix javascript documentation generation
+- [JS] Add websocket port option in Firefox ServiceBuilder when '--connect-existing' is not passed (#15557)
+    > * [JS] Add websocket port option in Firefox ServiceBuilder when '--connect-existing' is not passed
+    > * fix format
+- update devtools versions
 
 ## 4.30.0
 

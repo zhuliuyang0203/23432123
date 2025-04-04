@@ -21,6 +21,31 @@ Selenium 4.31.0
     > one should always terminate the service process, even if an exception
     > is thrown.
     > Thus moving self._terminate_process() into a finally block.
+* bump versions in preparation for release
+
+Selenium 4.31.0
+* Fix docstring issues that sphinx complains about (#15466)
+    > * Fix docstring errors that sphinx complained about
+    > * Fix parameter type for web_socket_url
+    > * Remove duplicate web_socket_url from BaseOptions
+* bump versions to nightly
+* service: only shutdown if process not terminated (#15183)
+    > * service: only shutdown if process not terminated
+    > There are scenarios where a stop() is called on a Service object
+    > multiple times. This also happens when explicitly quitting a Webdriver using
+    > driver.quit() and afterwards having the garbage collector destroy the service
+    > object, calling stop() another time even though the service process
+    > has already terminated.
+    > The check inside the stop() call only ensured that the process variable
+    > is not None, but ignored the fact that the process might already have
+    > terminated. Therefor an additional check is introduced to only send
+    > the remote shutdown command if the service process has not ended.
+    > Fixes #15182
+    > * service: move process termination to finally block
+    > If a type error or similar occurs during send_remote_shutdown_command,
+    > one should always terminate the service process, even if an exception
+    > is thrown.
+    > Thus moving self._terminate_process() into a finally block.
 
 Selenium 4.30.0
 * Add CDP for Chrome 134 and remove 131
