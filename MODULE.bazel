@@ -226,9 +226,9 @@ maven.install(
         "org.zeromq:jeromq:0.6.0",
     ],
     boms = [
-        "io.opentelemetry:opentelemetry-bom:1.46.0",
-        "io.netty:netty-bom:4.1.118.Final",
-        "org.junit:junit-bom:5.11.4",
+        "io.opentelemetry:opentelemetry-bom:1.48.0",
+        "io.netty:netty-bom:4.2.0.Final",
+        "org.junit:junit-bom:5.12.1",
     ],
     excluded_artifacts = [
         "org.hamcrest:hamcrest-all",  # Replaced by hamcrest 2
