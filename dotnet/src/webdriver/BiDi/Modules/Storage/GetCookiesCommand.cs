@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ public record GetCookiesOptions : CommandOptions
     public PartitionDescriptor? Partition { get; set; }
 }
 
+[JsonConverter(typeof(GetCookiesResultConverter))]
 public record GetCookiesResult : IReadOnlyList<Network.Cookie>
 {
     private readonly IReadOnlyList<Network.Cookie> _cookies;

@@ -18,10 +18,11 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System;
 
 namespace OpenQA.Selenium.BiDi.Modules;
 
-public abstract class Module(Broker broker)
+public abstract class Module(BiDiConnection broker)
 {
-    protected Broker Broker { get; } = broker;
+    protected BiDiConnection Broker { get; } = broker ?? throw new ArgumentNullException(nameof(broker));
 }

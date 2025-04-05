@@ -17,6 +17,9 @@
 // under the License.
 // </copyright>
 
+using System.Text.Json.Serialization;
+using OpenQA.Selenium.BiDi.Communication;
+
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public record MessageEventArgs(BiDi BiDi, Channel Channel, RemoteValue Data, Source Source) : EventArgs(BiDi);
+public record MessageEventArgs([property: JsonIgnore] BiDiConnection BiDi, Channel Channel, RemoteValue Data, Source Source) : EventArgs(BiDi);

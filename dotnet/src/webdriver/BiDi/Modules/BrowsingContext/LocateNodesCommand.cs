@@ -18,8 +18,10 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -37,6 +39,7 @@ public record LocateNodesOptions : CommandOptions
     public IEnumerable<Script.ISharedReference>? StartNodes { get; set; }
 }
 
+[JsonConverter(typeof(LocateNodesResultConverter))]
 public record LocateNodesResult : IReadOnlyList<Script.NodeRemoteValue>
 {
     private readonly IReadOnlyList<Script.NodeRemoteValue> _nodes;

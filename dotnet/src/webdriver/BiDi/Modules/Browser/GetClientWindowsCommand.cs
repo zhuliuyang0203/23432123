@@ -18,8 +18,10 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
@@ -28,6 +30,7 @@ internal class GetClientWindowsCommand()
 
 public record GetClientWindowsOptions : CommandOptions;
 
+[JsonConverter(typeof(GetClientWindowsResultConverter))]
 public record GetClientWindowsResult : IReadOnlyList<ClientWindowInfo>
 {
     private readonly IReadOnlyList<ClientWindowInfo> _clientWindows;

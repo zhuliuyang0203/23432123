@@ -18,6 +18,8 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
@@ -36,6 +38,8 @@ public record EvaluateOptions : CommandOptions
 }
 
 // https://github.com/dotnet/runtime/issues/72604
+[JsonConverter(typeof(EvaluateResultConverter))]
+
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]

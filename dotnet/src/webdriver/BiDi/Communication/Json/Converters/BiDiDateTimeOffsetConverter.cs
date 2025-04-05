@@ -1,4 +1,4 @@
-// <copyright file="DateTimeOffsetConverter.cs" company="Selenium Committers">
+// <copyright file="BiDiDateTimeOffsetConverter.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -23,7 +23,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
-internal class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+internal class BiDiDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 {
     public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

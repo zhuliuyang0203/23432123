@@ -18,8 +18,10 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
@@ -35,6 +37,7 @@ public record GetRealmsOptions : CommandOptions
     public RealmType? Type { get; set; }
 }
 
+[JsonConverter(typeof(GetRealmsResultConverter))]
 public record GetRealmsResult : IReadOnlyList<RealmInfo>
 {
     private readonly IReadOnlyList<RealmInfo> _realms;

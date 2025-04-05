@@ -17,6 +17,9 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
+using System.Text.Json.Serialization;
+
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public record RealmDestroyedEventArgs(BiDi BiDi, Realm Realm) : EventArgs(BiDi);
+public record RealmDestroyedEventArgs([property: JsonIgnore] BiDiConnection BiDi, Realm Realm) : EventArgs(BiDi);

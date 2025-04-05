@@ -17,17 +17,19 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using System;
 using System.Threading.Tasks;
-using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi;
 
 public class BiDi : IAsyncDisposable
 {
-    private readonly Broker _broker;
+    private readonly bool _ownsConnection;
+    protected BiDiConnection BiDiConnection { get; }
 
-    private readonly Lazy<Modules.Session.SessionModule> _sessionModule;
     private readonly Lazy<Modules.BrowsingContext.BrowsingContextModule> _browsingContextModule;
     private readonly Lazy<Modules.Browser.BrowserModule> _browserModule;
     private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
@@ -36,23 +38,42 @@ public class BiDi : IAsyncDisposable
     private readonly Lazy<Modules.Log.LogModule> _logModule;
     private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
-    internal BiDi(string url)
+    protected BiDi(BiDiConnection connection, bool disposeConnection) : this()
     {
-        var uri = new Uri(url);
-
-        _broker = new Broker(this, uri);
-
-        _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
-        _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(_broker));
-        _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
-        _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(_broker));
-        _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
-        _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(_broker));
-        _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(_broker));
-        _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(_broker));
+        _ownsConnection = disposeConnection;
+        BiDiConnection = connection;
+        AddBiDiModuleJsonInfo(connection);
     }
 
-    internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
+    private BiDi()
+    {
+        _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(BiDiConnection));
+        _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(BiDiConnection));
+        _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(BiDiConnection));
+        _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(BiDiConnection));
+        _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(BiDiConnection));
+        _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(BiDiConnection));
+        _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(BiDiConnection));
+    }
+
+    private BiDiConnection AddBiDiModuleJsonInfo(BiDiConnection connection)
+    {
+        connection.AddSerializerContextAndConverters(BiDiJsonSerializerContext.Default,
+        [
+            new BrowsingContextConverter(this),
+            new BrowserUserContextConverter(this),
+            new InterceptConverter(this),
+            new RequestConverter(this),
+            new HandleConverter(this),
+            new InternalIdConverter(this),
+            new PreloadScriptConverter(this),
+            new RealmConverter(this),
+        ]);
+
+        return connection;
+    }
+
+    internal Modules.Session.SessionModule SessionModule => BiDiConnection.SessionModule;
     public Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
     public Modules.Browser.BrowserModule Browser => _browserModule.Value;
     public Modules.Network.NetworkModule Network => _networkModule.Value;
@@ -68,11 +89,17 @@ public class BiDi : IAsyncDisposable
 
     public static async Task<BiDi> ConnectAsync(string url)
     {
-        var bidi = new BiDi(url);
+        var connection = new BiDiConnection(new Uri(url));
+        var bidi = new BiDi(connection, disposeConnection: true);
 
-        await bidi._broker.ConnectAsync(default).ConfigureAwait(false);
+        await bidi.BiDiConnection.ConnectAsync(default).ConfigureAwait(false);
 
         return bidi;
+    }
+
+    public static BiDi Attach(BiDiConnection connection, bool disposeConnection = false)
+    {
+        return new BiDi(connection, disposeConnection);
     }
 
     public Task EndAsync(Modules.Session.EndOptions? options = null)
@@ -88,6 +115,9 @@ public class BiDi : IAsyncDisposable
 
     protected virtual async ValueTask DisposeAsyncCore()
     {
-        await _broker.DisposeAsync().ConfigureAwait(false);
+        if (_ownsConnection)
+        {
+            await BiDiConnection.DisposeAsync().ConfigureAwait(false);
+        }
     }
 }

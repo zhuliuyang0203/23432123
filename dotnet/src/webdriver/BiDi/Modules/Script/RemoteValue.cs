@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -26,6 +27,8 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 // https://github.com/dotnet/runtime/issues/72604
+[JsonConverter(typeof(RemoteValueConverter))]
+
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(NumberRemoteValue), "number")]
 //[JsonDerivedType(typeof(BooleanRemoteValue), "boolean")]

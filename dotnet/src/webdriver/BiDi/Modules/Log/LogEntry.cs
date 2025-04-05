@@ -17,25 +17,30 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 
 // https://github.com/dotnet/runtime/issues/72604
+[JsonConverter(typeof(LogEntryConverter))]
+
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
 //[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
-public abstract record LogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
+public abstract record LogEntry(BiDiConnection BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
     : EventArgs(BiDi)
 {
     public Script.StackTrace? StackTrace { get; set; }
 }
 
-public record ConsoleLogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp, string Method, IReadOnlyList<Script.RemoteValue> Args)
+public record ConsoleLogEntry(BiDiConnection BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp, string Method, IReadOnlyList<Script.RemoteValue> Args)
     : LogEntry(BiDi, Level, Source, Text, Timestamp);
 
-public record JavascriptLogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
+public record JavascriptLogEntry(BiDiConnection BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
     : LogEntry(BiDi, Level, Source, Text, Timestamp);
 
 public enum Level

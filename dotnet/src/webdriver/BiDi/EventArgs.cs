@@ -17,16 +17,17 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi;
 
-public abstract record EventArgs(BiDi BiDi)
+public abstract record EventArgs(BiDiConnection BiDi)
 {
     [JsonIgnore]
-    public BiDi BiDi { get; internal set; } = BiDi;
+    public BiDiConnection BiDi { get; internal set; } = BiDi;
 }
 
-public abstract record BrowsingContextEventArgs(BiDi BiDi, BrowsingContext Context)
+public abstract record BrowsingContextEventArgs([property: JsonIgnore] BiDiConnection BiDi, BrowsingContext Context)
     : EventArgs(BiDi);

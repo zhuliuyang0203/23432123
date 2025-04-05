@@ -17,11 +17,15 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
 // https://github.com/dotnet/runtime/issues/72604
+[JsonConverter(typeof(MessageConverter))]
+
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(MessageSuccess), "success")]
 //[JsonDerivedType(typeof(MessageError), "error")]

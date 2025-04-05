@@ -1,4 +1,4 @@
-// <copyright file="Channel.cs" company="Selenium Committers">
+// <copyright file="SetPermissionCommand.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,10 +17,23 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Communication.Json.Converters;
-using System.Text.Json.Serialization;
+using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Modules.Browser;
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+namespace OpenQA.Selenium.BiDi.Extensions.Permissions;
 
-[JsonConverter(typeof(ChannelConverter))]
-public record Channel(string Id);
+internal class SetPermissionCommand(SetPermissionCommandParameters @params)
+    : Command<SetPermissionCommandParameters>(@params, "permissions.setPermission");
+
+public record SetPermissionOptions : CommandOptions;
+
+internal record SetPermissionCommandParameters(PermissionDescriptor Descriptor, PermissionState State, string Origin, UserContext? UserContext) : CommandParameters;
+
+internal record PermissionDescriptor(string Name);
+
+public enum PermissionState
+{
+    Granted,
+    Denied,
+    Prompt
+}
