@@ -89,7 +89,7 @@
 
 
   <h1 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue" class="text-break">
-Class LocalValue  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L25"><i class="bi bi-code-slash"></i></a>
+Class LocalValue  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -189,7 +189,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_ConvertFrom_System_Object_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.ConvertFrom(System.Object)">
   ConvertFrom(object?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -227,21 +227,93 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
 
   <a id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit*"></a>
 
-  <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_Int32__OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.Int32)~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
-  implicit operator LocalValue(int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_Nullable_System_Boolean___OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.Nullable{System.Boolean})~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
+  implicit operator LocalValue(bool?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(int value)</code></pre>
+    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(bool? value)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.html">LocalValue</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_Nullable_System_Double___OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.Nullable{System.Double})~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
+  implicit operator LocalValue(double?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(double? value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>?</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.html">LocalValue</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit*"></a>
+
+  <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_Nullable_System_Int32___OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.Nullable{System.Int32})~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
+  implicit operator LocalValue(int?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator LocalValue(int? value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
     <dd></dd>
   </dl>
 
@@ -265,7 +337,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_LocalValue_op_Implicit_System_String__OpenQA_Selenium_BiDi_Modules_Script_LocalValue" data-uid="OpenQA.Selenium.BiDi.Modules.Script.LocalValue.op_Implicit(System.String)~OpenQA.Selenium.BiDi.Modules.Script.LocalValue">
   implicit operator LocalValue(string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -301,7 +373,7 @@ public abstract record LocalValue : IEquatable&lt;LocalValue&gt;</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L25" class="edit-link">Edit this page</a>
+          <a href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/LocalValue.cs/#L28" class="edit-link">Edit this page</a>
         </div>
 
 
