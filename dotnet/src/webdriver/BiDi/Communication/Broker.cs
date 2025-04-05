@@ -375,22 +375,28 @@ public sealed class Broker : IAsyncDisposable
         switch (type)
         {
             case "success":
+                if (id is null) throw new BiDiException("The remote end responded with 'success' message type, but missed required 'id' property.");
+
                 var successCommand = _pendingCommands[id.Value];
-                var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.Item1.ResultType, _jsonSerializerContext);
+                var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.Item1.ResultType, _jsonSerializerContext)!;
                 successCommand.Item2.SetResult(messageSuccess);
                 _pendingCommands.TryRemove(id.Value, out _);
                 break;
 
             case "event":
+                if (method is null) throw new BiDiException("The remote end responded with 'event' message type, but missed required 'method' property.");
+
                 var eventType = _eventTypesMap[method];
 
-                var eventArgs = (EventArgs)JsonSerializer.Deserialize(ref paramsReader, eventType, _jsonSerializerContext);
+                var eventArgs = (EventArgs)JsonSerializer.Deserialize(ref paramsReader, eventType, _jsonSerializerContext)!;
 
                 var messageEvent = new MessageEvent(method, eventArgs);
                 _pendingEvents.Add(messageEvent);
                 break;
 
             case "error":
+                if (id is null) throw new BiDiException("The remote end responded with 'error' message type, but missed required 'id' property.");
+
                 var messageError = new MessageError(id.Value) { Error = error, Message = message };
                 var errorCommand = _pendingCommands[messageError.Id];
                 errorCommand.Item2.SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
