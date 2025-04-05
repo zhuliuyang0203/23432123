@@ -405,7 +405,6 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=false",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -432,7 +431,7 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=true",
+            "--bidi",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -480,7 +479,7 @@ py_test_suite(
     ),
     args = [
         "--instafail",
-        "--headless=true",
+        "--headless",
     ] + BROWSERS["chrome"]["args"],
     data = BROWSERS["chrome"]["data"],
     env_inherit = ["DISPLAY"],

@@ -47,44 +47,43 @@ def pytest_addoption(parser):
         choices=drivers,
         dest="drivers",
         metavar="DRIVER",
-        help="driver to run tests against ({})".format(", ".join(drivers)),
+        help="Driver to run tests against ({})".format(", ".join(drivers)),
     )
     parser.addoption(
         "--browser-binary",
         action="store",
         dest="binary",
-        help="location of the browser binary",
+        help="Location of the browser binary",
     )
     parser.addoption(
         "--driver-binary",
         action="store",
         dest="executable",
-        help="location of the service executable binary",
+        help="Location of the service executable binary",
     )
     parser.addoption(
         "--browser-args",
         action="store",
         dest="args",
-        help="arguments to start the browser with",
+        help="Arguments to start the browser with",
     )
     parser.addoption(
         "--headless",
-        action="store",
+        action="store_true",
         dest="headless",
-        help="Allow tests to run in headless",
+        help="Run tests in headless mode",
     )
     parser.addoption(
         "--use-lan-ip",
         action="store_true",
         dest="use_lan_ip",
-        help="Whether to start test server with lan ip instead of localhost",
+        help="Start test server with lan ip instead of localhost",
     )
     parser.addoption(
         "--bidi",
-        action="store",
+        action="store_true",
         dest="bidi",
-        metavar="BIDI",
-        help="Whether to enable BiDi support",
+        help="Enable BiDi support",
     )
 
 
@@ -179,7 +178,7 @@ def driver(request):
     # and doesn't seems to be stable enough, causing the flakiness of the
     # subsequent tests.
     # Remove this when BiDi implementation and API is stable.
-    if bool(request.config.option.bidi):
+    if request.config.option.bidi:
 
         def fin():
             global driver_instance
@@ -196,8 +195,8 @@ def driver(request):
 def get_options(driver_class, config):
     browser_path = config.option.binary
     browser_args = config.option.args
-    headless = bool(config.option.headless)
-    bidi = bool(config.option.bidi)
+    headless = config.option.headless
+    bidi = config.option.bidi
     options = None
 
     if browser_path or browser_args:
