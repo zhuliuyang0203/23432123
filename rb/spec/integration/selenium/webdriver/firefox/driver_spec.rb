@@ -143,7 +143,8 @@ module Selenium
         end
 
         it 'can get and set context' do
-          reset_driver!(prefs: {'browser.download.dir': 'foo/bar'}) do |driver|
+          reset_driver!(args: ['-remote-allow-system-access'],
+                        prefs: {'browser.download.dir': 'foo/bar'}) do |driver|
             expect(driver.context).to eq 'content'
 
             driver.context = 'chrome'

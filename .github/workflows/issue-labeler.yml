@@ -181,3 +181,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: J-awaiting answer
+      - name: Remove label
+        if: steps.version-check.outputs.is-outdated == 'true'
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: A-needs-triaging

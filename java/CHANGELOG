@@ -1,3 +1,13 @@
+v4.31.0
+======
+* Add CDP for Chrome 135 and remove 132
+* handle `getNamedCookie` and `deleteNamedCookie` for empty strings (#15092)
+* [bidi] Prefer returning immutable versions of values when serialising to JSON
+* [grid] remove more firefox devtools leftovers SeleniumHQ (#15323)
+* Add nullness for AppCacheStatus, Credential, and Either (#15119)
+* Add nullness for interactions (#15118)
+* [grid] Expose register status via Node status response (#15448)
+
 v4.30.0
 ======
 * [grid] remove firefox devtools leftovers #15323

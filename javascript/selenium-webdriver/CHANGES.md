@@ -1,3 +1,9 @@
+## 4.31.0
+
+- [bidi]: fix storage module instance checks and add user context cookie test (#15467)
+- [JS] Add websocket port option in Firefox ServiceBuilder when '--connect-existing' is not passed (#15557)
+- [cdp] add support for 135 and remove 132
+
 ## 4.30.0
 
 - [bidi] fix chrome and firefox test for CI RBE (#15405)
