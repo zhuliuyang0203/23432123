@@ -42,6 +42,7 @@ def test_uses_chromedriver_logging(clean_driver, driver_executable) -> None:
         executable_path=driver_executable,
     )
 
+    driver1 = None
     driver2 = None
     try:
         driver1 = clean_driver(service=service1)
@@ -51,7 +52,8 @@ def test_uses_chromedriver_logging(clean_driver, driver_executable) -> None:
         with open(log_file) as fp:
             assert len(fp.readlines()) >= 2 * lines
     finally:
-        driver1.quit()
+        if driver1:
+            driver1.quit()
         if driver2:
             driver2.quit()
         os.remove(log_file)
