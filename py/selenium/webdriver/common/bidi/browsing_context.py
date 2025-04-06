@@ -21,14 +21,12 @@ from dataclasses import dataclass
 from .bidi import BidiCommand
 from .bidi import BidiObject
 
-BrowsingContext = str
-
 ReadinessState = typing.Literal["none", "interactive", "complete"]
 
 
 @dataclass
 class NavigateParameters(BidiObject):
-    context: BrowsingContext
+    context: str
     url: str
     wait: typing.Optional[ReadinessState] = None
 
@@ -40,3 +38,11 @@ class Navigate(BidiCommand):
 
 
 Navigation = str
+
+class BrowsingContext:
+    def __init__(self, conn):
+        self.conn = conn
+
+    def navigate(self, params: NavigateParameters):
+        result = self.conn.execute(NavigateParameters(params).cmd())
+        return result
