@@ -32,8 +32,8 @@ internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
     {
         return reader.GetDiscriminator("type") switch
         {
-            "success" => JsonSerializer.Deserialize<EvaluateResultSuccess>(ref reader, options),
-            "exception" => JsonSerializer.Deserialize<EvaluateResultException>(ref reader, options),
+            "success" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<EvaluateResultSuccess>()),
+            "exception" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<EvaluateResultException>()),
             _ => null,
         };
     }
