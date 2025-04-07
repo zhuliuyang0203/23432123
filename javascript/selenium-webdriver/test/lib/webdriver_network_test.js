@@ -23,7 +23,7 @@ const { Pages, suite } = require('../../lib/test')
 const until = require('selenium-webdriver/lib/until')
 const { By } = require('selenium-webdriver')
 const { Request, Response } = require('selenium-webdriver/http')
-const { Network } = require('../../bidi/network')
+const { Network } = require('selenium-webdriver/bidi/network')
 
 suite(
   function (env) {
