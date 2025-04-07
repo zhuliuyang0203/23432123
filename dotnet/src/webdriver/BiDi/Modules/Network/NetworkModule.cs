@@ -104,19 +104,19 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }
 
-    internal async Task ContinueWithAuthAsync(Request request, AuthCredentials credentials, ContinueWithAuthOptions? options = null)
+    internal async Task ContinueWithAuthAsync(Request request, AuthCredentials credentials, ContinueWithAuthCredentialsOptions? options = null)
     {
-        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthParameters.Credentials(request, credentials)), options).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthCredentials(request, credentials)), options).ConfigureAwait(false);
     }
 
-    internal async Task ContinueWithAuthAsync(Request request, ContinueWithDefaultAuthOptions? options = null)
+    internal async Task ContinueWithAuthAsync(Request request, ContinueWithAuthDefaultCredentialsOptions? options = null)
     {
-        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthParameters.Default(request)), options).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthDefaultCredentials(request)), options).ConfigureAwait(false);
     }
 
-    internal async Task ContinueWithAuthAsync(Request request, ContinueWithCancelledAuthOptions? options = null)
+    internal async Task ContinueWithAuthAsync(Request request, ContinueWithAuthCancelCredentialsOptions? options = null)
     {
-        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthParameters.Cancel(request)), options).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthCancelCredentials(request)), options).ConfigureAwait(false);
     }
 
     public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = null)

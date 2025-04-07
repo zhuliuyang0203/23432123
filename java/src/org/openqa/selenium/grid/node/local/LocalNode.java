@@ -1015,7 +1015,7 @@ public class LocalNode extends Node implements Closeable {
       AttributeMap attributeMap = tracer.createAttributeMap();
       attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
       bus.fire(new NodeDrainStarted(getId()));
-      draining = true;
+      draining.set(true);
       // Ensure the pendingSessions counter will not be decremented by timed out sessions not
       // included
       // in the currentSessionCount and the NodeDrainComplete will be raised to early.

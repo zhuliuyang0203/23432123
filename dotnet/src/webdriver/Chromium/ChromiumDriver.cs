@@ -361,6 +361,8 @@ namespace OpenQA.Selenium.Chromium
         /// <summary>
         /// Closes a DevTools session.
         /// </summary>
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public void CloseDevToolsSession()
         {
             if (this.devToolsSession != null)

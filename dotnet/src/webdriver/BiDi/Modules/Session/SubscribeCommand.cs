@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 internal class SubscribeCommand(SubscribeCommandParameters @params)
-    : Command<SubscribeCommandParameters>(@params, "session.subscribe");
+    : Command<SubscribeCommandParameters, SubscribeResult>(@params, "session.subscribe");
 
 internal record SubscribeCommandParameters(IEnumerable<string> Events, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
 
@@ -32,4 +32,4 @@ public record SubscribeOptions : CommandOptions
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
 
-internal record SubscribeResult(Subscription Subscription);
+internal record SubscribeResult(Subscription Subscription) : EmptyResult;
