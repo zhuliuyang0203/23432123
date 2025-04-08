@@ -24,7 +24,7 @@ using System.Collections.Generic;
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class LocateNodesCommand(LocateNodesCommandParameters @params)
-    : Command<LocateNodesCommandParameters>(@params, "browsingContext.locateNodes");
+    : Command<LocateNodesCommandParameters, LocateNodesResult>(@params, "browsingContext.locateNodes");
 
 internal record LocateNodesCommandParameters(BrowsingContext Context, Locator Locator, long? MaxNodeCount, Script.SerializationOptions? SerializationOptions, IEnumerable<Script.ISharedReference>? StartNodes) : CommandParameters;
 
@@ -37,7 +37,7 @@ public record LocateNodesOptions : CommandOptions
     public IEnumerable<Script.ISharedReference>? StartNodes { get; set; }
 }
 
-public record LocateNodesResult : IReadOnlyList<Script.NodeRemoteValue>
+public record LocateNodesResult : EmptyResult, IReadOnlyList<Script.NodeRemoteValue>
 {
     private readonly IReadOnlyList<Script.NodeRemoteValue> _nodes;
 
