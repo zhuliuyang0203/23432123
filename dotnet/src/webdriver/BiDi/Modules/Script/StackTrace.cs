@@ -17,8 +17,26 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public record StackTrace(IReadOnlyCollection<StackFrame> CallFrames);
+public record StackTrace(IReadOnlyList<StackFrame> CallFrames)
+{
+    public string FormatStackTrace(int indent)
+    {
+        if (CallFrames.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        const string Preamble = "---> ";
+        string firstLineIndentString = Environment.NewLine + new string(' ', indent);
+        string indentString = Environment.NewLine + new string(' ', indent + Preamble.Length);
+
+        string firstLine = firstLineIndentString + Preamble + CallFrames[0].FormatStackFrame();
+        return firstLine + indentString + string.Join(indentString, CallFrames.Skip(1).Select(frame => frame.FormatStackFrame()));
+    }
+}

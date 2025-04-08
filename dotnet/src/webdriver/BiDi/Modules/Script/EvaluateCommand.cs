@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
@@ -50,7 +51,7 @@ public abstract record EvaluateResult
 
         var exceptionResult = (EvaluateResultException)this;
 
-        throw new ScriptEvaluateException(exceptionResult.ExceptionDetails);
+        throw new BiDiException(exceptionResult.ExceptionDetails.FormatException());
     }
 }
 
@@ -61,4 +62,10 @@ public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateR
 
 public record EvaluateResultException(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
 
-public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text);
+public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text)
+{
+    public string FormatException()
+    {
+        return $"{Text} ({LineNumber},{ColumnNumber}){StackTrace.FormatStackTrace(indent: 2)}";
+    }
+}
