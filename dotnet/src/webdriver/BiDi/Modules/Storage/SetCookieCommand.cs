@@ -45,4 +45,4 @@ public record SetCookieOptions : CommandOptions
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public record SetCookieResult(PartitionKey PartitionKey) : EmptyResult;
+public record SetCookieResult(PartitionKey PartitionKey) : BiDiResult;

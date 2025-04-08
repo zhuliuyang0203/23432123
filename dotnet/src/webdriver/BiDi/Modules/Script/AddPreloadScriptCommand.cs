@@ -51,4 +51,4 @@ public record BrowsingContextAddPreloadScriptOptions
     public string? Sandbox { get; set; }
 }
 
-internal record AddPreloadScriptResult(PreloadScript Script) : EmptyResult;
+internal record AddPreloadScriptResult(PreloadScript Script) : BiDiResult;

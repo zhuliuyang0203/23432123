@@ -56,7 +56,7 @@ public record BoxClipRectangle(double X, double Y, double Width, double Height) 
 
 public record ElementClipRectangle([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : ClipRectangle;
 
-public record CaptureScreenshotResult(string Data) : EmptyResult
+public record CaptureScreenshotResult(string Data) : BiDiResult
 {
     public byte[] ToByteArray() => System.Convert.FromBase64String(Data);
 }

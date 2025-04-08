@@ -28,7 +28,7 @@ internal record NewCommandParameters(CapabilitiesRequest Capabilities) : Command
 
 public record NewOptions : CommandOptions;
 
-public record NewResult(string SessionId, Capability Capability) : EmptyResult;
+public record NewResult(string SessionId, Capability Capability) : BiDiResult;
 
 public record Capability(bool AcceptInsecureCerts, string BrowserName, string BrowserVersion, string PlatformName, bool SetWindowRect, string UserAgent)
 {

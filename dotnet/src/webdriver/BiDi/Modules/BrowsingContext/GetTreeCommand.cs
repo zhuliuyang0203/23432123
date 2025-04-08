@@ -46,4 +46,4 @@ public record BrowsingContextGetTreeOptions
     public long? MaxDepth { get; set; }
 }
 
-public record GetTreeResult(IReadOnlyList<BrowsingContextInfo> Contexts) : EmptyResult;
+public record GetTreeResult(IReadOnlyList<BrowsingContextInfo> Contexts) : BiDiResult;

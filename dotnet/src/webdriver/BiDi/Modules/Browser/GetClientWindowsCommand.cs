@@ -28,7 +28,7 @@ internal class GetClientWindowsCommand()
 
 public record GetClientWindowsOptions : CommandOptions;
 
-public record GetClientWindowsResult : EmptyResult, IReadOnlyList<ClientWindowInfo>
+public record GetClientWindowsResult : BiDiResult, IReadOnlyList<ClientWindowInfo>
 {
     private readonly IReadOnlyList<ClientWindowInfo> _clientWindows;
 

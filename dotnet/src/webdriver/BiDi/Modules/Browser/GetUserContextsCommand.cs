@@ -28,7 +28,7 @@ internal class GetUserContextsCommand()
 
 public record GetUserContextsOptions : CommandOptions;
 
-public record GetUserContextsResult : EmptyResult, IReadOnlyList<UserContextInfo>
+public record GetUserContextsResult : BiDiResult, IReadOnlyList<UserContextInfo>
 {
     private readonly IReadOnlyList<UserContextInfo> _userContexts;
 

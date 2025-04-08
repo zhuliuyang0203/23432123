@@ -35,7 +35,7 @@ public record GetRealmsOptions : CommandOptions
     public RealmType? Type { get; set; }
 }
 
-public record GetRealmsResult : EmptyResult, IReadOnlyList<RealmInfo>
+public record GetRealmsResult : BiDiResult, IReadOnlyList<RealmInfo>
 {
     private readonly IReadOnlyList<RealmInfo> _realms;
 

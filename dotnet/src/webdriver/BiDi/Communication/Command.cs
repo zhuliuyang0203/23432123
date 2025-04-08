@@ -42,7 +42,7 @@ public abstract class Command
 
 internal abstract class Command<TCommandParameters, TCommandResult>(TCommandParameters @params, string method) : Command(method, typeof(TCommandResult))
     where TCommandParameters : CommandParameters
-    where TCommandResult : EmptyResult
+    where TCommandResult : BiDiResult
 {
     [JsonPropertyOrder(2)]
     public TCommandParameters Params { get; } = @params;
@@ -53,4 +53,7 @@ internal record CommandParameters
     public static CommandParameters Empty { get; } = new CommandParameters();
 }
 
-public record EmptyResult;
+public sealed record EmptyResult : BiDiResult;
+
+public abstract record BiDiResult;
+

@@ -17,16 +17,15 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Input;
+using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Json serializer options should have AOT-safe type resolution")]
-[UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Json serializer options should have AOT-safe type resolution")]
 internal class InputOriginConverter : JsonConverter<Origin>
 {
     public override Origin Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -49,7 +48,7 @@ internal class InputOriginConverter : JsonConverter<Origin>
             writer.WriteStartObject();
             writer.WriteString("type", "element");
             writer.WritePropertyName("element");
-            JsonSerializer.Serialize(writer, element.Element, options);
+            JsonSerializer.Serialize(writer, element.Element, options.GetTypeInfo<ISharedReference>());
             writer.WriteEndObject();
         }
     }

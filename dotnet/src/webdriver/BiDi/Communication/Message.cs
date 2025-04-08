@@ -21,7 +21,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 
 internal abstract record Message;
 
-internal record MessageSuccess(long Id, EmptyResult Result) : Message;
+internal record MessageSuccess(long Id, BiDiResult Result) : Message;
 
 internal record MessageError(long Id) : Message
 {

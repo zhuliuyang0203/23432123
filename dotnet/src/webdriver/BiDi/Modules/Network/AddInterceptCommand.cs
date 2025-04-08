@@ -46,7 +46,7 @@ public record BrowsingContextAddInterceptOptions
     public IEnumerable<UrlPattern>? UrlPatterns { get; set; }
 }
 
-public record AddInterceptResult(Intercept Intercept) : EmptyResult;
+public record AddInterceptResult(Intercept Intercept) : BiDiResult;
 
 public enum InterceptPhase
 {

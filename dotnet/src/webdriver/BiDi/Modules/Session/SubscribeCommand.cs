@@ -32,4 +32,4 @@ public record SubscribeOptions : CommandOptions
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
 
-internal record SubscribeResult(Subscription Subscription) : EmptyResult;
+internal record SubscribeResult(Subscription Subscription) : BiDiResult;

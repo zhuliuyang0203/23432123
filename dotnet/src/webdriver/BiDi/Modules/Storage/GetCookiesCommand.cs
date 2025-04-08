@@ -37,7 +37,7 @@ public record GetCookiesOptions : CommandOptions
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public record GetCookiesResult : EmptyResult, IReadOnlyList<Network.Cookie>
+public record GetCookiesResult : BiDiResult, IReadOnlyList<Network.Cookie>
 {
     private readonly IReadOnlyList<Network.Cookie> _cookies;
 

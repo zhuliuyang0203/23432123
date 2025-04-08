@@ -41,4 +41,4 @@ public enum ContextType
     Window
 }
 
-public record CreateResult(BrowsingContext Context) : EmptyResult;
+public record CreateResult(BrowsingContext Context) : BiDiResult;

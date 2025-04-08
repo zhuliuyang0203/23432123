@@ -28,4 +28,4 @@ internal record DeleteCookiesCommandParameters(CookieFilter? Filter, PartitionDe
 
 public record DeleteCookiesOptions : GetCookiesOptions;
 
-public record DeleteCookiesResult(PartitionKey PartitionKey) : EmptyResult;
+public record DeleteCookiesResult(PartitionKey PartitionKey) : BiDiResult;

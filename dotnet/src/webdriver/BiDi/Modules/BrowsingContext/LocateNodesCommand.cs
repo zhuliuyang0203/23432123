@@ -37,7 +37,7 @@ public record LocateNodesOptions : CommandOptions
     public IEnumerable<Script.ISharedReference>? StartNodes { get; set; }
 }
 
-public record LocateNodesResult : EmptyResult, IReadOnlyList<Script.NodeRemoteValue>
+public record LocateNodesResult : BiDiResult, IReadOnlyList<Script.NodeRemoteValue>
 {
     private readonly IReadOnlyList<Script.NodeRemoteValue> _nodes;
 

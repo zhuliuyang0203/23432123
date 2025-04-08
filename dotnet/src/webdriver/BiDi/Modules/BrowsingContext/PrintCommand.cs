@@ -112,7 +112,7 @@ public readonly record struct PrintPageRange(int? Start, int? End)
 #endif
 }
 
-public record PrintResult(string Data) : EmptyResult
+public record PrintResult(string Data) : BiDiResult
 {
     public byte[] ToByteArray() => Convert.FromBase64String(Data);
 }

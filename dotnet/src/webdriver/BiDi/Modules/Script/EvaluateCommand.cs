@@ -39,7 +39,7 @@ public record EvaluateOptions : CommandOptions
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
-public abstract record EvaluateResult : EmptyResult;
+public abstract record EvaluateResult : BiDiResult;
 
 public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateResult
 {

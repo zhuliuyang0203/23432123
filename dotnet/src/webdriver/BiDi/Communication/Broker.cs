@@ -186,19 +186,19 @@ public sealed class Broker : IAsyncDisposable
 
     public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CommandOptions? options)
         where TCommand : Command
-        where TResult : EmptyResult
+        where TResult : BiDiResult
     {
         var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
         return (TResult)result;
     }
 
-    private async Task<EmptyResult> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
+    private async Task<BiDiResult> ExecuteCommandCoreAsync<TCommand>(TCommand command, CommandOptions? options)
         where TCommand : Command
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
-        var tcs = new TaskCompletionSource<EmptyResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var tcs = new TaskCompletionSource<BiDiResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var timeout = options?.Timeout ?? TimeSpan.FromSeconds(30);
 
@@ -380,7 +380,7 @@ public sealed class Broker : IAsyncDisposable
 
                 var successCommand = _pendingCommands[id.Value];
                 var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.ResultType, _jsonSerializerContext)!;
-                successCommand.TaskCompletionSource.SetResult((EmptyResult)messageSuccess);
+                successCommand.TaskCompletionSource.SetResult((BiDiResult)messageSuccess);
                 _pendingCommands.TryRemove(id.Value, out _);
                 break;
 
@@ -406,12 +406,12 @@ public sealed class Broker : IAsyncDisposable
         }
     }
 
-    class CommandInfo(long id, Type resultType, TaskCompletionSource<EmptyResult> taskCompletionSource)
+    class CommandInfo(long id, Type resultType, TaskCompletionSource<BiDiResult> taskCompletionSource)
     {
         public long Id { get; } = id;
 
         public Type ResultType { get; } = resultType;
 
-        public TaskCompletionSource<EmptyResult> TaskCompletionSource { get; } = taskCompletionSource;
+        public TaskCompletionSource<BiDiResult> TaskCompletionSource { get; } = taskCompletionSource;
     };
 }

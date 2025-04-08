@@ -28,4 +28,4 @@ internal record TraverseHistoryCommandParameters(BrowsingContext Context, long D
 
 public record TraverseHistoryOptions : CommandOptions;
 
-public record TraverseHistoryResult : EmptyResult;
+public record TraverseHistoryResult : BiDiResult;
