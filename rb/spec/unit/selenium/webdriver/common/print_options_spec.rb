@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# <copyright file="print_options_spec.rb" company="Selenium Committers">
 # Licensed to the Software Freedom Conservancy (SFC) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -17,6 +16,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 
 require File.expand_path('../spec_helper', __dir__)
 require 'selenium/webdriver/common/print_options'
@@ -44,16 +44,16 @@ module Selenium
       it 'can set predefined page sizes using symbols' do
         options.page_size = :a4
         expect(options.page_size).to eq({ width: 21.0, height: 29.7 })
-      
+
         options.page_size = :legal
         expect(options.page_size).to eq({ width: 21.59, height: 35.56 })
-      
+
         options.page_size = :tabloid
         expect(options.page_size).to eq({ width: 27.94, height: 43.18 })
-      
+
         options.page_size = :letter
         expect(options.page_size).to eq({ width: 21.59, height: 27.94 })
-      end      
+      end
 
       it 'raises an error for unsupported predefined page size symbols' do
         expect { options.page_size = :invalid }.to raise_error(ArgumentError, /Invalid page size/)
