@@ -18,6 +18,8 @@ import os
 import subprocess
 import time
 
+from unittest.mock import patch
+
 import pytest
 
 from selenium.common.exceptions import WebDriverException
@@ -116,8 +118,6 @@ class TestEdgeDriverService:
         assert "msedgedriver" in service.path
 
     def test_updates_path_after_setting_env_variable(self, service):
-        new_path = "/foo/bar"
-        os.environ["SE_EDGEDRIVER"] = new_path
         service.executable_path = self.service_path  # Simulating the update
-
-        assert "msedgedriver" in service.executable_path
+        with patch.dict("os.environ", {"SE_CHROMEDRIVER": "/foo/bar"}):
+            assert "msedgedriver" in service.executable_path
