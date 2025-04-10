@@ -33,8 +33,6 @@ def is_running_wayland():
 
 @pytest.mark.skipif(not is_running_wayland(), reason="This test only runs on Linux under Wayland")
 def test_firefox_opens_large_when_running_xwayland(request):  # noqa: F821
-    print("REQQQQ")
-    print(request)
     options = Options()
     if request.config.getoption("--headless"):
         options.add_argument("-headless")
