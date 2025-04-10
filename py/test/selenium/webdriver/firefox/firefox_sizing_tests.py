@@ -32,7 +32,9 @@ def is_running_wayland():
 
 
 @pytest.mark.skipif(not is_running_wayland(), reason="This test only runs on Linux under Wayland")
-def test_firefox_opens_large_when_running_xwayland(request):
+def test_firefox_opens_large_when_running_xwayland(request):  # noqa: F821
+    print("REQQQQ")
+    print(request)
     options = Options()
     if request.config.getoption("--headless"):
         options.add_argument("-headless")
@@ -51,7 +53,7 @@ def test_firefox_opens_large_when_running_xwayland(request):
 @pytest.mark.skipif(not is_running_wayland(), reason="This test only runs on Linux under Wayland")
 @pytest.mark.xfail(reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1959040")
 # Firefox opens in a small window when running on Linux/Wayland
-def test_firefox_opens_large_when_running_wayland():
+def test_firefox_opens_large_when_running_wayland(request):  # noqa: F821
     options = Options()
     if request.config.getoption("--headless"):
         options.add_argument("-headless")
