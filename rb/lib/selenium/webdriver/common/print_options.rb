@@ -17,7 +17,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-
 module Selenium
   module WebDriver
     # Represents options for printing a page.

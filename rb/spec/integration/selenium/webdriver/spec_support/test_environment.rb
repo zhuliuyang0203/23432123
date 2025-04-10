@@ -80,11 +80,11 @@ module Selenium
 
         def app_server
           @app_server ||= begin
-                            app_server = RackServer.new(root.join('common/src/web').to_s, random_port)
-                            app_server.start
+            app_server = RackServer.new(root.join('common/src/web').to_s, random_port)
+            app_server.start
 
-                            app_server
-                          end
+            app_server
+          end
         end
 
         def remote_server
