@@ -44,3 +44,21 @@ def session_unsubscribe(*events, browsing_contexts=None):
         cmd_dict["params"]["browsingContexts"] = browsing_contexts
     _ = yield cmd_dict
     return None
+
+
+def session_status():
+    """
+    The session.status command returns information about the remote end's readiness
+    to create new sessions and may include implementation-specific metadata.
+
+    Returns
+    -------
+    dict
+        Dictionary containing the ready state (bool), message (str) and metadata
+    """
+    cmd_dict = {
+        "method": "session.status",
+        "params": {},
+    }
+    result = yield cmd_dict
+    return result

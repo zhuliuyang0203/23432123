@@ -1269,6 +1269,30 @@ class WebDriver(BaseWebDriver):
 
         return self._network
 
+    def get_bidi_session_status(self):
+        """
+        Get the session status using WebDriver BiDi.
+        Returns information about whether a remote end is in a state
+        in which it can create new sessions.
+
+        Returns:
+        -------
+        dict
+            Dictionary containing the ready state (bool), message (str) and metadata
+
+        Example:
+        --------
+        >>> status = driver.get_bidi_session_status()
+        >>> print(status["ready"])
+        >>> print(status["message"])
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        from selenium.webdriver.common.bidi.session import session_status
+
+        return self._websocket_connection.execute(session_status())
+
     def _get_cdp_details(self):
         import json
 
