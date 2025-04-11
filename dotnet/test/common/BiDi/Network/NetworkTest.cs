@@ -89,7 +89,7 @@ class NetworkTest : BiDiTestFixture
         {
             times++;
 
-            await res.ContinueResponseAsync();
+            await res.ContinueAsync();
         });
 
         await context.NavigateAsync(UrlBuilder.WhereIs("bidi/logEntryAdded.html"), new() { Wait = ReadinessState.Complete });
@@ -162,7 +162,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async auth =>
         {
-            await auth.ContinueWithAuthAsync(new AuthCredentials("test", "test"));
+            await auth.ContinueAsync(new AuthCredentials("test", "test"));
         });
 
         await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });
@@ -176,7 +176,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async auth =>
         {
-            await auth.ContinueWithAuthAsync(new ContinueWithAuthDefaultCredentialsOptions());
+            await auth.ContinueAsync(new ContinueWithAuthDefaultCredentialsOptions());
         });
 
         var action = async () => await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });
@@ -190,7 +190,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async auth =>
         {
-            await auth.ContinueWithAuthAsync(new ContinueWithAuthCancelCredentialsOptions());
+            await auth.ContinueAsync(new ContinueWithAuthCancelCredentialsOptions());
         });
 
         var action = async () => await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });

@@ -80,7 +80,7 @@ public record InterceptedRequest(BiDi BiDi, BrowsingContext.BrowsingContext Cont
 public record InterceptedResponse(BiDi BiDi, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
     : ResponseStartedEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Response)
 {
-    public Task ContinueResponseAsync(ContinueResponseOptions? options = null)
+    public Task ContinueAsync(ContinueResponseOptions? options = null)
     {
         return BiDi.Network.ContinueResponseAsync(Request.Request, options);
     }
@@ -89,17 +89,17 @@ public record InterceptedResponse(BiDi BiDi, BrowsingContext.BrowsingContext Con
 public record InterceptedAuth(BiDi BiDi, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
     : AuthRequiredEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Response)
 {
-    public Task ContinueWithAuthAsync(AuthCredentials credentials, ContinueWithAuthCredentialsOptions? options = null)
+    public Task ContinueAsync(AuthCredentials credentials, ContinueWithAuthCredentialsOptions? options = null)
     {
         return BiDi.Network.ContinueWithAuthAsync(Request.Request, credentials, options);
     }
 
-    public Task ContinueWithAuthAsync(ContinueWithAuthDefaultCredentialsOptions? options = null)
+    public Task ContinueAsync(ContinueWithAuthDefaultCredentialsOptions? options = null)
     {
         return BiDi.Network.ContinueWithAuthAsync(Request.Request, options);
     }
 
-    public Task ContinueWithAuthAsync(ContinueWithAuthCancelCredentialsOptions? options = null)
+    public Task ContinueAsync(ContinueWithAuthCancelCredentialsOptions? options = null)
     {
         return BiDi.Network.ContinueWithAuthAsync(Request.Request, options);
     }
