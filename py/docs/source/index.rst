@@ -69,11 +69,11 @@ specify browsers and drivers yourself.
 Links to some of the more popular browser drivers:
 
 +--------------+-----------------------------------------------------------------------+
-| **Chrome**:  | https://chromedriver.chromium.org/downloads                           |
+| **Chrome**:  | https://developer.chrome.com/docs/chromedriver                        |
 +--------------+-----------------------------------------------------------------------+
 | **Edge**:    | https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver  |
 +--------------+-----------------------------------------------------------------------+
-| **Firefox**: | https://github.com/mozilla/geckodriver/releases                       |
+| **Firefox**: | https://github.com/mozilla/geckodriver                                |
 +--------------+-----------------------------------------------------------------------+
 | **Safari**:  | https://webkit.org/blog/6900/webdriver-support-in-safari-10           |
 +--------------+-----------------------------------------------------------------------+
