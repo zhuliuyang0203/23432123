@@ -176,6 +176,6 @@ Contributing
  - Run: `tox -e linting`
  - If tox exits `0`, commit and push. Otherwise, fix the newly introduced style violations
      - `flake8` requires manual fixes
-     - `black` will rewrite the violations automatically, however the files are unstaged and should staged again
-     - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again
+     - `black` will rewrite the violations automatically, however the files are unstaged and should be staged again
+     - `isort` will rewrite the violations automatically, however the files are unstaged and should be staged again
  - Submit a Pull Request
