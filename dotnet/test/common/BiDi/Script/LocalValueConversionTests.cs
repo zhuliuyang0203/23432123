@@ -21,6 +21,8 @@ using NUnit.Framework;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace OpenQA.Selenium.BiDi.Script;
 
@@ -156,6 +158,46 @@ class LocalValueConversionTests
         {
             Assert.That(value, Is.TypeOf<StringLocalValue>());
             Assert.That((value as StringLocalValue).Value, Is.EqualTo("value"));
+        }
+    }
+
+    [Test]
+    public void CanConvertArrayToLocalValue()
+    {
+        AssertValue(LocalValue.ConvertFrom(new List<int> { 1, 2 }));
+
+        AssertValue(LocalValue.ConvertFrom(new string[] { "a", "b" }));
+
+        static void AssertValue(LocalValue value)
+        {
+            Assert.That(value, Is.TypeOf<ArrayLocalValue>());
+            Assert.That((value as ArrayLocalValue).Value.Count, Is.EqualTo(2));
+        }
+    }
+
+    [Test]
+    public void CanConvertMapToLocalValue()
+    {
+        AssertValue(LocalValue.ConvertFrom(new Dictionary<int, string> { { 1, "a" }, { 2, "b" } }));
+
+        static void AssertValue(LocalValue value)
+        {
+            Assert.That(value, Is.TypeOf<MapLocalValue>());
+            Assert.That((value as MapLocalValue).Value.Count, Is.EqualTo(2));
+        }
+    }
+
+    [Test]
+    public void CanConvertSetToLocalValue()
+    {
+        AssertValue(LocalValue.ConvertFrom(new HashSet<int> { 1, 2 }));
+
+        AssertValue(LocalValue.ConvertFrom(ImmutableHashSet.CreateRange([1, 2])));
+
+        static void AssertValue(LocalValue value)
+        {
+            Assert.That(value, Is.TypeOf<SetLocalValue>());
+            Assert.That((value as SetLocalValue).Value.Count, Is.EqualTo(2));
         }
     }
 
