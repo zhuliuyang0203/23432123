@@ -17,9 +17,43 @@
 // under the License.
 // </copyright>
 
+using System.Text.RegularExpressions;
+
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public record RegExpValue(string Pattern)
 {
     public string? Flags { get; set; }
+
+    internal static RegexOptions JavaScriptFlagsToRegexOptions(string? flags)
+    {
+        if (string.IsNullOrEmpty(flags))
+        {
+            return RegexOptions.None;
+        }
+
+        RegexOptions value = default;
+
+        foreach (char flag in flags!)
+        {
+            if (flag == 'i')
+            {
+                value |= RegexOptions.IgnoreCase;
+            }
+            else if (flag == 'm')
+            {
+                value |= RegexOptions.Multiline;
+            }
+            else if (flag == 's')
+            {
+                value |= RegexOptions.Singleline;
+            }
+            else
+            {
+                // Unsupported flag
+            }
+        }
+
+        return value;
+    }
 }
