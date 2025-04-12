@@ -24,7 +24,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public sealed class NetworkModule(Broker broker) : Module(broker)
+public sealed partial class NetworkModule(Broker broker) : Module(broker)
 {
     internal async Task<Intercept> AddInterceptAsync(IEnumerable<InterceptPhase> phases, AddInterceptOptions? options = null)
     {
@@ -42,38 +42,11 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<Intercept> InterceptRequestAsync(Func<BeforeRequestSentEventArgs, Task> handler, AddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
-    {
-        var intercept = await AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
-
-        await intercept.OnBeforeRequestSentAsync(handler, options).ConfigureAwait(false);
-
-        return intercept;
-    }
-
-    public async Task<Intercept> InterceptResponseAsync(Func<ResponseStartedEventArgs, Task> handler, AddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
-    {
-        var intercept = await AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
-
-        await intercept.OnResponseStartedAsync(handler, options).ConfigureAwait(false);
-
-        return intercept;
-    }
-
     public async Task SetCacheBehaviorAsync(CacheBehavior behavior, SetCacheBehaviorOptions? options = null)
     {
         var @params = new SetCacheBehaviorCommandParameters(behavior, options?.Contexts);
 
         await Broker.ExecuteCommandAsync(new SetCacheBehaviorCommand(@params), options).ConfigureAwait(false);
-    }
-
-    public async Task<Intercept> InterceptAuthAsync(Func<AuthRequiredEventArgs, Task> handler, AddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
-    {
-        var intercept = await AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
-
-        await intercept.OnAuthRequiredAsync(handler, options).ConfigureAwait(false);
-
-        return intercept;
     }
 
     internal async Task ContinueRequestAsync(Request request, ContinueRequestOptions? options = null)

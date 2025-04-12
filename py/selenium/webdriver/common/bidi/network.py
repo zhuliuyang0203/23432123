@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from selenium.webdriver.common.bidi.common import command_builder
+
 
 class NetworkEvent:
     """Represents a network event."""
@@ -51,18 +53,6 @@ class Network:
         self.callbacks = {}
         self.subscriptions = {}
 
-    def command_builder(self, method, params):
-        """Build a command iterator to send to the network.
-
-        Parameters:
-        ----------
-            method (str): The method to execute.
-            params (dict): The parameters to pass to the method.
-        """
-        command = {"method": method, "params": params}
-        cmd = yield command
-        return cmd
-
     def _add_intercept(self, phases=[], contexts=None, url_patterns=None):
         """Add an intercept to the network.
 
@@ -88,7 +78,7 @@ class Network:
             params["phases"] = phases
         else:
             params["phases"] = ["beforeRequestSent"]
-        cmd = self.command_builder("network.addIntercept", params)
+        cmd = command_builder("network.addIntercept", params)
 
         result = self.conn.execute(cmd)
         self.intercepts.append(result["intercept"])
@@ -113,11 +103,11 @@ class Network:
         if intercept is None:
             intercepts_to_remove = self.intercepts.copy()  # create a copy before iterating
             for intercept_id in intercepts_to_remove:  # remove all intercepts
-                self.conn.execute(self.command_builder("network.removeIntercept", {"intercept": intercept_id}))
+                self.conn.execute(command_builder("network.removeIntercept", {"intercept": intercept_id}))
                 self.intercepts.remove(intercept_id)
         else:
             try:
-                self.conn.execute(self.command_builder("network.removeIntercept", {"intercept": intercept}))
+                self.conn.execute(command_builder("network.removeIntercept", {"intercept": intercept}))
                 self.intercepts.remove(intercept)
             except Exception as e:
                 raise Exception(f"Exception: {e}")
@@ -192,7 +182,7 @@ class Network:
         else:
             params = {}
             params["events"] = [event_name]
-            self.conn.execute(self.command_builder("session.subscribe", params))
+            self.conn.execute(command_builder("session.subscribe", params))
             self.subscriptions[event_name] = [callback_id]
 
         self.callbacks[callback_id] = result["intercept"]
@@ -220,7 +210,7 @@ class Network:
         if len(self.subscriptions[event_name]) == 0:
             params = {}
             params["events"] = [event_name]
-            self.conn.execute(self.command_builder("session.unsubscribe", params))
+            self.conn.execute(command_builder("session.unsubscribe", params))
             del self.subscriptions[event_name]
 
     def clear_request_handlers(self):
@@ -234,7 +224,7 @@ class Network:
                 del self.callbacks[callback_id]
             params = {}
             params["events"] = [event_name]
-            self.conn.execute(self.command_builder("session.unsubscribe", params))
+            self.conn.execute(command_builder("session.unsubscribe", params))
         self.subscriptions = {}
 
     def add_auth_handler(self, username, password):
@@ -294,18 +284,6 @@ class Request:
         self.timings = timings
         self.url = url
 
-    def command_builder(self, method, params):
-        """Build a command iterator to send to the network.
-
-        Parameters:
-        ----------
-            method (str): The method to execute.
-            params (dict): The parameters to pass to the method.
-        """
-        command = {"method": method, "params": params}
-        cmd = yield command
-        return cmd
-
     def fail_request(self):
         """Fail this request."""
 
@@ -313,7 +291,7 @@ class Request:
             raise ValueError("Request not found.")
 
         params = {"request": self.request_id}
-        self.network.conn.execute(self.command_builder("network.failRequest", params))
+        self.network.conn.execute(command_builder("network.failRequest", params))
 
     def continue_request(self, body=None, method=None, headers=None, cookies=None, url=None):
         """Continue after intercepting this request."""
@@ -333,7 +311,7 @@ class Request:
         if url is not None:
             params["url"] = url
 
-        self.network.conn.execute(self.command_builder("network.continueRequest", params))
+        self.network.conn.execute(command_builder("network.continueRequest", params))
 
     def _continue_with_auth(self, username=None, password=None):
         """Continue with authentication.
@@ -358,4 +336,4 @@ class Request:
             params["action"] = "provideCredentials"
             params["credentials"] = {"type": "password", "username": username, "password": password}
 
-        self.network.conn.execute(self.command_builder("network.continueWithAuth", params))
+        self.network.conn.execute(command_builder("network.continueWithAuth", params))
