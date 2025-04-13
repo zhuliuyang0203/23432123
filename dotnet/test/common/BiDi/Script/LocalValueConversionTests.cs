@@ -162,6 +162,22 @@ class LocalValueConversionTests
     }
 
     [Test]
+    public void CanConvertDateTimeOffsetToLocalValue()
+    {
+        var date = new DateTimeOffset(2025, 4, 13, 5, 40, 20, 123, 456, TimeSpan.FromHours(+3));
+
+        AssertValue(date);
+
+        AssertValue(LocalValue.ConvertFrom(date));
+
+        static void AssertValue(LocalValue value)
+        {
+            Assert.That(value, Is.TypeOf<DateLocalValue>());
+            Assert.That((value as DateLocalValue).Value, Is.EqualTo("2025-04-13T05:40:20.1234560+03:00"));
+        }
+    }
+
+    [Test]
     public void CanConvertArrayToLocalValue()
     {
         AssertValue(LocalValue.ConvertFrom(new List<int> { 1, 2 }));

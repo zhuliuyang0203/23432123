@@ -47,6 +47,7 @@ public abstract record LocalValue
     public static implicit operator LocalValue(int? value) { return ConvertFrom(value); }
     public static implicit operator LocalValue(double? value) { return ConvertFrom(value); }
     public static implicit operator LocalValue(string? value) { return ConvertFrom(value); }
+    public static implicit operator LocalValue(DateTimeOffset? value) { return ConvertFrom(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
@@ -71,7 +72,7 @@ public abstract record LocalValue
             case long l:
                 return ConvertFrom(l);
 
-            case DateTime dt:
+            case DateTimeOffset dt:
                 return ConvertFrom(dt);
 
             case BigInteger bigInt:
@@ -180,7 +181,7 @@ public abstract record LocalValue
         return new RegExpLocalValue(new RegExpValue(regex.ToString()) { Flags = flags });
     }
 
-    public static LocalValue ConvertFrom(DateTime? value)
+    public static LocalValue ConvertFrom(DateTimeOffset? value)
     {
         if (value is null)
         {
