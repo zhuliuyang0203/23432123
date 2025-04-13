@@ -24,11 +24,11 @@ using System.Collections.Generic;
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 internal class GetUserContextsCommand()
-    : Command<CommandParameters>(CommandParameters.Empty, "browser.getUserContexts");
+    : Command<CommandParameters, GetUserContextsResult>(CommandParameters.Empty, "browser.getUserContexts");
 
 public record GetUserContextsOptions : CommandOptions;
 
-public record GetUserContextsResult : IReadOnlyList<UserContextInfo>
+public record GetUserContextsResult : EmptyResult, IReadOnlyList<UserContextInfo>
 {
     private readonly IReadOnlyList<UserContextInfo> _userContexts;
 

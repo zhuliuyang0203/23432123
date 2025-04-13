@@ -21,7 +21,5 @@ jobs:
       - name: Auto label Pull Requests
         uses: actions/labeler@v5
         with:
-          # The individual PAT is needed so labeler auto-executes this workflow
-          # It expires 4/1/2026
-          repo-token: ${{ secrets.PR_LABELER_PAT }}
+          repo-token: ${{ secrets.SELENIUM_CI_TOKEN }}
           configuration-path: .github/pr-labeler-config.yml

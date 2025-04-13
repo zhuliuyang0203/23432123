@@ -1,4 +1,4 @@
-// <copyright file="V132JavaScript.cs" company="Selenium Committers">
+// <copyright file="V135JavaScript.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,29 +17,29 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.DevTools.V132.Page;
-using OpenQA.Selenium.DevTools.V132.Runtime;
+using OpenQA.Selenium.DevTools.V135.Page;
+using OpenQA.Selenium.DevTools.V135.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.DevTools.V132
+namespace OpenQA.Selenium.DevTools.V135
 {
     /// <summary>
-    /// Class containing the JavaScript implementation for version 132 of the DevTools Protocol.
+    /// Class containing the JavaScript implementation for version 135 of the DevTools Protocol.
     /// </summary>
-    public class V132JavaScript : JavaScript
+    public class V135JavaScript : JavaScript
     {
         private readonly RuntimeAdapter runtime;
         private readonly PageAdapter page;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="V132JavaScript"/> class.
+        /// Initializes a new instance of the <see cref="V135JavaScript"/> class.
         /// </summary>
         /// <param name="runtime">The DevTools Protocol adapter for the Runtime domain.</param>
         /// <param name="page">The DevTools Protocol adapter for the Page domain.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="runtime"/> or <paramref name="page"/> are <see langword="null"/>.</exception>
-        public V132JavaScript(RuntimeAdapter runtime, PageAdapter page)
+        public V135JavaScript(RuntimeAdapter runtime, PageAdapter page)
         {
             this.runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
             this.page = page ?? throw new ArgumentNullException(nameof(page));
@@ -72,7 +72,7 @@ namespace OpenQA.Selenium.DevTools.V132
         /// <returns>A task that represents the asynchronous operation.</returns>
         public override async Task EnablePage()
         {
-            await page.Enable().ConfigureAwait(false);
+            await page.Enable(new Page.EnableCommandSettings()).ConfigureAwait(false);
         }
 
         /// <summary>

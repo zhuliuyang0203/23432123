@@ -566,6 +566,32 @@ class DefaultSlotMatcherTest {
   }
 
   @Test
+  void extensionPrefixedOptionCapabilityIsIgnoredForMatching() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.BROWSER_VERSION,
+            "84",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "node:options",
+            "appium");
+
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.BROWSER_VERSION,
+            "84",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "node:options",
+            "selenium");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
   void emptyCapabilitiesDoNotMatch() {
     Capabilities stereotype =
         new ImmutableCapabilities(

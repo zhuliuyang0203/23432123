@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
 from unittest.mock import patch
 from urllib import parse
 
@@ -168,18 +167,17 @@ def test_get_proxy_direct_via_client_config():
 
 
 def test_get_proxy_system_matches_no_proxy_via_client_config():
-    os.environ["HTTP_PROXY"] = "http://admin:admin@system_proxy.com:8080"
-    os.environ["NO_PROXY"] = "localhost,127.0.0.1"
-    client_config = ClientConfig(
-        remote_server_addr="http://localhost:4444", proxy=Proxy({"proxyType": ProxyType.SYSTEM})
-    )
-    remote_connection = RemoteConnection(client_config=client_config)
-    conn = remote_connection._get_connection_manager()
-    assert isinstance(conn, urllib3.PoolManager)
-    proxy_url = remote_connection._client_config.get_proxy_url()
-    assert proxy_url is None
-    os.environ.pop("HTTP_PROXY")
-    os.environ.pop("NO_PROXY")
+    with patch.dict(
+        "os.environ", {"HTTP_PROXY": "http://admin:admin@system_proxy.com:8080", "NO_PROXY": "localhost,127.0.0.1"}
+    ):
+        client_config = ClientConfig(
+            remote_server_addr="http://localhost:4444", proxy=Proxy({"proxyType": ProxyType.SYSTEM})
+        )
+        remote_connection = RemoteConnection(client_config=client_config)
+        conn = remote_connection._get_connection_manager()
+        assert isinstance(conn, urllib3.PoolManager)
+        proxy_url = remote_connection._client_config.get_proxy_url()
+        assert proxy_url is None
 
 
 def test_get_proxy_url_none(mock_proxy_settings_missing):

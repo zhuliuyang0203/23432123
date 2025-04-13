@@ -1,3 +1,8 @@
+Selenium 4.31.0
+* Add CDP for Chrome 135 and remove 132
+* Fix docstring issues that sphinx complains about (#15466)
+* service: only shutdown if process not terminated (#15183)
+
 Selenium 4.30.0
 * Add CDP for Chrome 134 and remove 131
 * Remove support for v85 since no longer required by Firefox

@@ -24,7 +24,5 @@ jobs:
       - name: Label Commenter
         uses: peaceiris/actions-label-commenter@v1
         with:
-          # The individual PAT is needed so commenter can auto-executes on PRs from Forks
-          # It expires 4/1/2026
-          github_token: ${{ secrets.PR_LABELER_PAT }}
+          github_token: ${{ secrets.SELENIUM_CI_TOKEN }}
           config_file: .github/label-commenter-config.yml

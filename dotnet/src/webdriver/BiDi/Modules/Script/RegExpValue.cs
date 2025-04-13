@@ -17,9 +17,62 @@
 // under the License.
 // </copyright>
 
+using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public record RegExpValue(string Pattern)
 {
     public string? Flags { get; set; }
+
+    internal static string? GetRegExpFlags(RegexOptions options)
+    {
+        if (options == RegexOptions.None)
+        {
+            return null;
+        }
+
+        string flags = string.Empty;
+        const RegexOptions NonBacktracking = (RegexOptions)1024;
+#if NET8_0_OR_GREATER
+        Debug.Assert(NonBacktracking == RegexOptions.NonBacktracking);
+#endif
+        const RegexOptions NonApplicableOptions = RegexOptions.Compiled | NonBacktracking;
+
+        const RegexOptions UnsupportedOptions =
+            RegexOptions.ExplicitCapture |
+            RegexOptions.IgnorePatternWhitespace |
+            RegexOptions.RightToLeft |
+            RegexOptions.CultureInvariant;
+
+        options &= ~NonApplicableOptions;
+        if ((options & UnsupportedOptions) != 0)
+        {
+            throw new NotSupportedException($"The selected RegEx options are not supported in BiDi: {options & UnsupportedOptions}");
+        }
+
+        if ((options & RegexOptions.IgnoreCase) != 0)
+        {
+            flags += "i";
+            options = options & ~RegexOptions.IgnoreCase;
+        }
+
+        if ((options & RegexOptions.Multiline) != 0)
+        {
+            options = options & ~RegexOptions.Multiline;
+            flags += "m";
+        }
+
+        if ((options & RegexOptions.Singleline) != 0)
+        {
+            options = options & ~RegexOptions.Singleline;
+            flags += "s";
+        }
+
+        Debug.Assert(options == RegexOptions.None);
+
+        return flags;
+    }
 }

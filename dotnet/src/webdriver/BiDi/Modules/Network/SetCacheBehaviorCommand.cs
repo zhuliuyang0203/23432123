@@ -23,7 +23,7 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class SetCacheBehaviorCommand(SetCacheBehaviorCommandParameters @params)
-    : Command<SetCacheBehaviorCommandParameters>(@params, "network.setCacheBehavior");
+    : Command<SetCacheBehaviorCommandParameters, EmptyResult>(@params, "network.setCacheBehavior");
 
 internal record SetCacheBehaviorCommandParameters(CacheBehavior CacheBehavior, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
 
