@@ -49,9 +49,7 @@ public abstract record EvaluateResult : EmptyResult
             return success.Result;
         }
 
-        var exceptionResult = (EvaluateResultException)this;
-
-        throw new BiDiException(exceptionResult.ExceptionDetails.FormatException());
+        throw new BiDiException(ToString());
     }
 }
 
@@ -62,10 +60,4 @@ public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateR
 
 public record EvaluateResultException(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
 
-public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text)
-{
-    public string FormatException()
-    {
-        return $"{Text} ({LineNumber},{ColumnNumber}){StackTrace.FormatStackTrace(indent: 2)}";
-    }
-}
+public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text);
