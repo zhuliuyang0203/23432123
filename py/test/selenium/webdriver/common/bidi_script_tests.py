@@ -20,7 +20,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+@pytest.mark.xfail_ie
 @pytest.mark.xfail_safari
+@pytest.mark.xfail_webkitgtk
+@pytest.mark.xfail_wpewebkit
 def test_logs_console_messages(driver, pages):
     pages.load("bidi/logEntryAdded.html")
 
@@ -39,7 +42,10 @@ def test_logs_console_messages(driver, pages):
     assert log_entry.type_ == "console"
 
 
+@pytest.mark.xfail_ie
 @pytest.mark.xfail_safari
+@pytest.mark.xfail_webkitgtk
+@pytest.mark.xfail_wpewebkit
 def test_logs_console_errors(driver, pages):
     pages.load("bidi/logEntryAdded.html")
     log_entries = []
@@ -64,7 +70,10 @@ def test_logs_console_errors(driver, pages):
     assert log_entry.type_ == "console"
 
 
+@pytest.mark.xfail_ie
 @pytest.mark.xfail_safari
+@pytest.mark.xfail_webkitgtk
+@pytest.mark.xfail_wpewebkit
 def test_logs_multiple_console_messages(driver, pages):
     pages.load("bidi/logEntryAdded.html")
 
@@ -79,7 +88,10 @@ def test_logs_multiple_console_messages(driver, pages):
     assert len(log_entries) == 2
 
 
+@pytest.mark.xfail_ie
 @pytest.mark.xfail_safari
+@pytest.mark.xfail_webkitgtk
+@pytest.mark.xfail_wpewebkit
 def test_removes_console_message_handler(driver, pages):
     pages.load("bidi/logEntryAdded.html")
 
