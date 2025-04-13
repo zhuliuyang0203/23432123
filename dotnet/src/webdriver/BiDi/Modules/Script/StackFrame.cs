@@ -19,15 +19,4 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public record StackFrame(long LineNumber, long ColumnNumber, string Url, string FunctionName)
-{
-    public string FormatStackFrame()
-    {
-        if (string.IsNullOrEmpty(FunctionName))
-        {
-            return $"({LineNumber},{ColumnNumber}) {Url}";
-        }
-
-        return $"{FunctionName} ({LineNumber},{ColumnNumber}) {Url}";
-    }
-}
+public record StackFrame(long LineNumber, long ColumnNumber, string Url, string FunctionName);
