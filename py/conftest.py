@@ -126,6 +126,11 @@ def driver(request):
     if "WebKit" in driver_class and _platform == "Windows":
         pytest.skip("WebKit tests cannot be run on Windows")
 
+    # skip tests for drivers that don't support BiDi when --bidi is enabled
+    if request.config.option.bidi:
+        if driver_class in ("Ie", "Safari", "WebKitGTK", "WPEWebKit"):
+            pytest.skip(f"{driver_class} does not support BiDi")
+
     # conditionally mark tests as expected to fail based on driver
     marker = request.node.get_closest_marker(f"xfail_{driver_class.lower()}")
 
