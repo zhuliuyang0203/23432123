@@ -126,6 +126,11 @@ def driver(request):
     if "WebKit" in driver_class and _platform == "Windows":
         pytest.skip("WebKit tests cannot be run on Windows")
 
+    # skip tests for drivers that don't support BiDi when --bidi is enabled
+    if request.config.option.bidi:
+        if driver_class in ("Ie", "Safari", "WebKitGTK", "WPEWebKit"):
+            pytest.skip(f"{driver_class} does not support BiDi")
+
     # conditionally mark tests as expected to fail based on driver
     marker = request.node.get_closest_marker(f"xfail_{driver_class.lower()}")
 
@@ -154,18 +159,24 @@ def driver(request):
     if driver_instance is None:
         if driver_class == "Firefox":
             options = get_options(driver_class, request.config)
+            # There are issues with window size/position when running Firefox
+            # under Wayland, so we use XWayland instead.
+            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
         if driver_class == "Chrome":
             options = get_options(driver_class, request.config)
         if driver_class == "Edge":
             options = get_options(driver_class, request.config)
         if driver_class == "WebKitGTK":
             options = get_options(driver_class, request.config)
-        if driver_class.lower() == "WPEWebKit":
+        if driver_class == "WPEWebKit":
             options = get_options(driver_class, request.config)
         if driver_class == "Remote":
             options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
             options.set_capability("moz:firefoxOptions", {})
             options.enable_downloads = True
+            # There are issues with window size/position when running Firefox
+            # under Wayland, so we use XWayland instead.
+            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
         if driver_path is not None:
             kwargs["service"] = get_service(driver_class, driver_path)
         if options is not None:

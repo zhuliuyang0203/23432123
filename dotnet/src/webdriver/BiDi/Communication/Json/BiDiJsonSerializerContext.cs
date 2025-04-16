@@ -62,6 +62,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.AudioWorkletRealmInfo))]
 [JsonSerializable(typeof(Modules.Script.WorkletRealmInfo))]
 
+[JsonSerializable(typeof(Modules.Log.GenericLogEntry))]
 [JsonSerializable(typeof(Modules.Log.ConsoleLogEntry))]
 [JsonSerializable(typeof(Modules.Log.JavascriptLogEntry))]
 #endregion

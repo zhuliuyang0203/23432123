@@ -17,6 +17,7 @@
 import os
 import subprocess
 import time
+from unittest.mock import patch
 
 import pytest
 
@@ -125,8 +126,6 @@ class TestChromeDriverService:
         assert "chromedriver" in service.path
 
     def test_updates_path_after_setting_env_variable(self, service):
-        new_path = "/foo/bar"
-        os.environ["SE_CHROMEDRIVER"] = new_path
         service.executable_path = self.service_path  # Simulating the update
-
-        assert "chromedriver" in service.executable_path
+        with patch.dict("os.environ", {"SE_CHROMEDRIVER": "/foo/bar"}):
+            assert "chromedriver" in service.executable_path

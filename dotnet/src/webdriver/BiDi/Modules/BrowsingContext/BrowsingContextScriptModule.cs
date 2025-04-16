@@ -44,7 +44,7 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return await scriptModule.GetRealmsAsync(options).ConfigureAwait(false);
     }
 
-    public Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResult> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
         var contextTarget = new ContextTarget(context);
 
@@ -60,10 +60,10 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
     {
         var result = await EvaluateAsync(expression, awaitPromise, options, targetOptions).ConfigureAwait(false);
 
-        return result.Result.ConvertTo<TResult>();
+        return result.AsSuccessResult().ConvertTo<TResult>();
     }
 
-    public Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
+    public Task<EvaluateResult> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = null, ContextTargetOptions? targetOptions = null)
     {
         var contextTarget = new ContextTarget(context);
 
@@ -79,6 +79,6 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
     {
         var result = await CallFunctionAsync(functionDeclaration, awaitPromise, options, targetOptions).ConfigureAwait(false);
 
-        return result.Result.ConvertTo<TResult>();
+        return result.AsSuccessResult().ConvertTo<TResult>();
     }
 }

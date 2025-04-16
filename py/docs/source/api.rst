@@ -21,10 +21,29 @@ Webdriver.common
    :toctree: webdriver
 
    selenium.webdriver.common.action_chains
+   selenium.webdriver.common.actions.action_builder
+   selenium.webdriver.common.actions.input_device
+   selenium.webdriver.common.actions.interaction
+   selenium.webdriver.common.actions.key_actions
+   selenium.webdriver.common.actions.key_input
+   selenium.webdriver.common.actions.mouse_button
+   selenium.webdriver.common.actions.pointer_actions
+   selenium.webdriver.common.actions.pointer_input
+   selenium.webdriver.common.actions.wheel_actions
+   selenium.webdriver.common.actions.wheel_input
    selenium.webdriver.common.alert
+   selenium.webdriver.common.bidi.browser
+   selenium.webdriver.common.bidi.cdp
+   selenium.webdriver.common.bidi.common
+   selenium.webdriver.common.bidi.console
+   selenium.webdriver.common.bidi.network
+   selenium.webdriver.common.bidi.script
+   selenium.webdriver.common.bidi.session
    selenium.webdriver.common.by
    selenium.webdriver.common.desired_capabilities
    selenium.webdriver.common.driver_finder
+   selenium.webdriver.common.fedcm.account
+   selenium.webdriver.common.fedcm.dialog
    selenium.webdriver.common.keys
    selenium.webdriver.common.log
    selenium.webdriver.common.options
@@ -36,20 +55,6 @@ Webdriver.common
    selenium.webdriver.common.utils
    selenium.webdriver.common.virtual_authenticator
    selenium.webdriver.common.window
-   selenium.webdriver.common.actions.action_builder
-   selenium.webdriver.common.actions.input_device
-   selenium.webdriver.common.actions.interaction
-   selenium.webdriver.common.actions.key_actions
-   selenium.webdriver.common.actions.key_input
-   selenium.webdriver.common.actions.mouse_button
-   selenium.webdriver.common.actions.pointer_actions
-   selenium.webdriver.common.actions.pointer_input
-   selenium.webdriver.common.actions.wheel_actions
-   selenium.webdriver.common.actions.wheel_input
-   selenium.webdriver.common.bidi.cdp
-   selenium.webdriver.common.bidi.console
-   selenium.webdriver.common.bidi.script
-   selenium.webdriver.common.bidi.session
 
 Webdriver.support
 -----------------
@@ -125,8 +130,8 @@ Webdriver.ie
 .. autosummary::
    :toctree: webdriver_ie
 
-   selenium.webdriver.ie.service
    selenium.webdriver.ie.options
+   selenium.webdriver.ie.service
    selenium.webdriver.ie.webdriver
 
 Webdriver.remote
@@ -137,9 +142,12 @@ Webdriver.remote
    :toctree: webdriver_remote
 
    selenium.webdriver.remote.bidi_connection
+   selenium.webdriver.remote.client_config
    selenium.webdriver.remote.command
    selenium.webdriver.remote.errorhandler
+   selenium.webdriver.remote.fedcm
    selenium.webdriver.remote.file_detector
+   selenium.webdriver.remote.locator_converter
    selenium.webdriver.remote.mobile
    selenium.webdriver.remote.remote_connection
    selenium.webdriver.remote.script_key
@@ -163,17 +171,6 @@ Webdriver.safari
   selenium.webdriver.safari.service
   selenium.webdriver.safari.webdriver
 
-Webdriver.wpewebkit
--------------------
-
-.. currentmodule:: selenium.webdriver.wpewebkit
-.. autosummary::
-  :toctree: webdriver_wpewebkit
-
-  selenium.webdriver.wpewebkit.options
-  selenium.webdriver.wpewebkit.service
-  selenium.webdriver.wpewebkit.webdriver
-
 Webdriver.webkitgtk
 -------------------
 
@@ -184,6 +181,17 @@ Webdriver.webkitgtk
   selenium.webdriver.webkitgtk.options
   selenium.webdriver.webkitgtk.service
   selenium.webdriver.webkitgtk.webdriver
+
+Webdriver.wpewebkit
+-------------------
+
+.. currentmodule:: selenium.webdriver.wpewebkit
+.. autosummary::
+  :toctree: webdriver_wpewebkit
+
+  selenium.webdriver.wpewebkit.options
+  selenium.webdriver.wpewebkit.service
+  selenium.webdriver.wpewebkit.webdriver
 
 Indices and tables
 

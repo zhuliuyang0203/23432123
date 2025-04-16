@@ -24,6 +24,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Log;
 
 // https://github.com/dotnet/runtime/issues/72604
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+//[JsonDerivedType(typeof(GenericLogEntry))] // Fallback when discriminator is not recognized, we have to double check
 //[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
 //[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
 public abstract record LogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
@@ -31,6 +32,9 @@ public abstract record LogEntry(BiDi BiDi, Level Level, Script.Source Source, st
 {
     public Script.StackTrace? StackTrace { get; set; }
 }
+
+public record GenericLogEntry(BiDi BiDi, string Type, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
+    : LogEntry(BiDi, Level, Source, Text, Timestamp);
 
 public record ConsoleLogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp, string Method, IReadOnlyList<Script.RemoteValue> Args)
     : LogEntry(BiDi, Level, Source, Text, Timestamp);
