@@ -31,8 +31,9 @@ module Selenium
         include LocalDriver
 
         def initialize(options: nil, service: nil, url: nil, **opts)
-          caps, url = initialize_local_driver(options, service, url)
-          super(caps: caps, url: url, **opts)
+          initialize_local_driver(options, service, url) do |caps, driver_url|
+            super(caps: caps, url: driver_url, **opts)
+          end
         end
 
         def browser
