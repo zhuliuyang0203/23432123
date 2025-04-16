@@ -21,6 +21,7 @@ from typing import Optional
 from typing import Union
 
 from selenium.webdriver.common.bidi.common import command_builder
+
 # TODO: use new session module when https://github.com/SeleniumHQ/selenium/pull/15615 is merged
 from selenium.webdriver.common.bidi.session import session_subscribe
 from selenium.webdriver.common.bidi.session import session_unsubscribe

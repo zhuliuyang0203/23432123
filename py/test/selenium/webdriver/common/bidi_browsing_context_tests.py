@@ -26,6 +26,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+def create_alert_page(driver, pages):
+    """Create a page with an alert."""
+    url = pages.url("alerts.html")
+    driver.get(url)
+    return url
+
+
+def create_prompt_page(driver, pages):
+    """Create a page with a prompt."""
+    url = pages.url("javascriptPage.html")
+    driver.get(url)
+    return url
+
+
 def test_browsing_context_initialized(driver):
     """Test that the browsing context module is initialized properly."""
     assert driver.browsing_context is not None
@@ -231,20 +245,6 @@ def test_reload_with_readiness_state(driver, pages):
 
     # Clean up
     driver.browsing_context.close(context_id)
-
-
-def create_alert_page(driver, pages):
-    """Create a page with an alert."""
-    url = pages.url("alerts.html")
-    driver.get(url)
-    return url
-
-
-def create_prompt_page(driver, pages):
-    """Create a page with a prompt."""
-    url = pages.url("javascriptPage.html")
-    driver.get(url)
-    return url
 
 
 def test_handle_user_prompt(driver, pages):
