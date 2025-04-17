@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import os
 import subprocess
 import time
@@ -21,6 +22,8 @@ from unittest.mock import patch
 
 import pytest
 
+from selenium.common.exceptions import SessionNotCreatedException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
@@ -103,6 +106,21 @@ def test_log_output_null_default(driver, capfd) -> None:
     out, err = capfd.readouterr()
     assert "Starting ChromeDriver" not in out
     driver.quit()
+
+
+@pytest.mark.no_driver_after_test
+def test_driver_is_stopped_if_browser_cant_start(clean_driver, driver_executable) -> None:
+    options = Options()
+    options.add_argument("--user-data-dir=/no/such/location")
+    service = Service()
+    with pytest.raises(SessionNotCreatedException):
+        driver = clean_driver(options=options, service=service)
+    assert not service.is_connectable()
+    assert service.process.poll() < 0
+    try:
+        driver.quit()
+    except Exception:
+        pass
 
 
 @pytest.fixture
