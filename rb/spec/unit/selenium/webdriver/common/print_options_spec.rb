@@ -17,42 +17,40 @@
 # specific language governing permissions and limitations
 # under the License.
 
-
 require File.expand_path('../spec_helper', __dir__)
 require 'selenium/webdriver/common/print_options'
-
 
 module Selenium
   module WebDriver
     describe PrintOptions do
-      let(:options) { PrintOptions.new }
+      let(:options) { described_class.new }
 
       it 'has default values' do
         expect(options.orientation).to eq('portrait')
         expect(options.scale).to eq(1.0)
         expect(options.background).to be(false)
-        expect(options.page_size).to eq({ width: 21.0, height: 29.7 })
-        expect(options.margins).to eq({ top: 1.0, bottom: 1.0, left: 1.0, right: 1.0 })
+        expect(options.page_size).to eq({width: 21.0, height: 29.7})
+        expect(options.margins).to eq({top: 1.0, bottom: 1.0, left: 1.0, right: 1.0})
       end
 
       it 'can set custom page size' do
-        custom_size = { width: 25.0, height: 30.0 }
+        custom_size = {width: 25.0, height: 30.0}
         options.page_size = custom_size
         expect(options.page_size).to eq(custom_size)
       end
 
       it 'can set predefined page sizes using symbols' do
         options.page_size = :a4
-        expect(options.page_size).to eq({ width: 21.0, height: 29.7 })
+        expect(options.page_size).to eq({width: 21.0, height: 29.7})
 
         options.page_size = :legal
-        expect(options.page_size).to eq({ width: 21.59, height: 35.56 })
+        expect(options.page_size).to eq({width: 21.59, height: 35.56})
 
         options.page_size = :tabloid
-        expect(options.page_size).to eq({ width: 27.94, height: 43.18 })
+        expect(options.page_size).to eq({width: 27.94, height: 43.18})
 
         options.page_size = :letter
-        expect(options.page_size).to eq({ width: 21.59, height: 27.94 })
+        expect(options.page_size).to eq({width: 21.59, height: 27.94})
       end
 
       it 'raises an error for unsupported predefined page size symbols' do

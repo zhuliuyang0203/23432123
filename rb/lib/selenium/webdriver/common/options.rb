@@ -52,7 +52,7 @@ module Selenium
         end
 
         def set_capabilities
-          (W3C_OPTIONS + self::CAPABILITIES.keys).each do |key|
+          (W3C_OPTIONS + GRID_OPTIONS + self::CAPABILITIES.keys).each do |key|
             next if method_defined? key
 
             define_method key do

@@ -57,3 +57,4 @@
 -//rb/spec/integration/selenium/webdriver:element-chrome-bidi
 -//rb/spec/integration/selenium/webdriver:element-chrome-remote
 -//rb/spec/integration/selenium/webdriver:action_builder-firefox-beta-remote
+-//rb:lint
