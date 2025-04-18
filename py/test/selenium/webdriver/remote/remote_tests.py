@@ -17,9 +17,9 @@
 
 import re
 
-from selenium import webdriver
-
 import pytest
+
+from selenium import webdriver
 
 
 def test_remote_webdriver_requires_options_kwarg():
