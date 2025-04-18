@@ -64,7 +64,7 @@ def test_log_output_as_stdout(capfd) -> None:
     driver.quit()
 
 
-def test_driver_is_stopped_if_browser_cant_start(clean_driver, driver_executable) -> None:
+def test_driver_is_stopped_if_browser_cant_start(clean_driver) -> None:
     options = Options()
     options.add_argument("-profile==/no/such/location")
     service = Service()
