@@ -40,19 +40,12 @@ import org.jspecify.annotations.Nullable;
 public class Proxy {
 
   public enum ProxyType {
-    // Keep these in sync with the Firefox preferences numbers:
-    // http://kb.mozillazine.org/Network.proxy.type
-
-    DIRECT("direct"), // Direct connection, no proxy (default on Windows)
+    DIRECT("direct"), // Direct connection, no proxy
     MANUAL("manual"), // Manual proxy settings (e.g. for httpProxy)
     PAC("pac"), // Proxy auto-configuration from URL
-
-    RESERVED_1("reserved_1"), // Never used (but reserved in Firefox)
-
     AUTODETECT("autodetect"), // Proxy auto-detection (presumably with WPAD)
-    SYSTEM("system"), // Use system settings (default on Linux)
-
-    UNSPECIFIED("unspecified");
+    SYSTEM("system"), // Use system settings
+    UNSPECIFIED("unspecified"); // This must be changed before using
 
     private final String type;
 
@@ -132,7 +125,9 @@ public class Proxy {
   public Map<String, Object> toJson() {
     Map<String, Object> m = new HashMap<>();
 
-    if (proxyType != ProxyType.UNSPECIFIED) {
+    if (proxyType == ProxyType.UNSPECIFIED) {
+      throw new IllegalStateException("proxyType must be specified before use");
+    } else {
       m.put(PROXY_TYPE, proxyType.toString());
     }
     if (ftpProxy != null) {
@@ -170,7 +165,7 @@ public class Proxy {
 
   /**
    * Gets the {@link ProxyType}. This can signal if set to use a direct connection (without proxy),
-   * manually set proxy settings, auto-configured proxy settings, or whether to use the default
+   * manually set proxy settings, autoconfigured proxy settings, or whether to use the default
    * system proxy settings. It defaults to {@link ProxyType#UNSPECIFIED}.
    *
    * @return the proxy type employed
@@ -203,7 +198,7 @@ public class Proxy {
   /**
    * Specifies whether to autodetect proxy settings.
    *
-   * @param autodetect set to true to use proxy auto detection, false to leave proxy settings
+   * @param autodetect set to true to use proxy auto-detection, false to leave proxy settings
    *     unspecified
    * @return reference to self
    */
@@ -460,7 +455,6 @@ public class Proxy {
         builder.append("pac: ").append(getProxyAutoconfigUrl());
         break;
 
-      case RESERVED_1:
       case UNSPECIFIED:
         break;
     }
