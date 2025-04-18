@@ -17,14 +17,12 @@
 
 import os
 import subprocess
-
 from unittest.mock import patch
 
 import pytest
 
-from selenium.webdriver import Firefox
 from selenium.common.exceptions import SessionNotCreatedException
-from selenium.common.exceptions import WebDriverException
+from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
@@ -68,7 +66,6 @@ def test_log_output_as_stdout(capfd) -> None:
 
 def test_driver_is_stopped_if_browser_cant_start(clean_driver, driver_executable) -> None:
     options = Options()
-    #options.set_preference('profile', "/no/such/location")
     options.add_argument("-profile==/no/such/location")
     service = Service()
     with pytest.raises(SessionNotCreatedException):
