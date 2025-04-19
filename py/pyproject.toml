@@ -144,6 +144,11 @@ extend-exclude = 'selenium/webdriver/common/devtools'
 line-length = 120
 target-version = ['py39']
 
+[tool.autoflake]
+exclude = "*/devtools/*"
+in-place = true
+recursive = true
+
 [tool.docformatter]
 exclude = 'selenium/webdriver/common/devtools'
 recursive = true
