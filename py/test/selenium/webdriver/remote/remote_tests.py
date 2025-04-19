@@ -22,7 +22,7 @@ import pytest
 from selenium import webdriver
 
 
-def test_remote_webdriver_requires_options_paraeter():
+def test_remote_webdriver_requires_options_parameter():
     msg = "missing 1 required keyword-only argument: 'options' (instance of driver `options.Options` class)"
     with pytest.raises(TypeError, match=re.escape(msg)):
         webdriver.Remote()
