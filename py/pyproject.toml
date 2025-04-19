@@ -146,8 +146,11 @@ target-version = ['py39']
 
 [tool.autoflake]
 exclude = "*/devtools/*"
+ignore-pass-statements = true
 in-place = true
 recursive = true
+remove-duplicate-keys = true
+remove-unused-variables = true
 
 [tool.docformatter]
 exclude = 'selenium/webdriver/common/devtools'
