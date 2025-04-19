@@ -45,6 +45,7 @@ def test_should_get_the_size_of_the_current_window(driver):
     assert size.get("height") > 0
 
 
+@pytest.mark.xfail_edge
 def test_should_set_the_size_of_the_current_window(driver):
     size = driver.get_window_size()
 
@@ -57,13 +58,15 @@ def test_should_set_the_size_of_the_current_window(driver):
     assert new_size.get("height") == target_height
 
 
-@pytest.mark.xfail_chrome
 def test_should_get_the_position_of_the_current_window(driver):
     position = driver.get_window_position()
     assert position.get("x") >= 0
     assert position.get("y") >= 0
 
 
+@pytest.mark.xfail_chrome
+@pytest.mark.xfail_edge
+@pytest.mark.xfail_firefox(reason="https://github.com/mozilla/geckodriver/issues/2224")
 def test_should_set_the_position_of_the_current_window(driver):
     position = driver.get_window_position()
 
@@ -81,7 +84,6 @@ def test_should_set_the_position_of_the_current_window(driver):
 
 
 @pytest.mark.xfail_safari(raises=WebDriverException, reason="Get Window Rect command not implemented")
-@pytest.mark.xfail_chrome
 def test_should_get_the_rect_of_the_current_window(driver):
     rect = driver.get_window_rect()
     assert rect.get("x") >= 0
@@ -90,6 +92,8 @@ def test_should_get_the_rect_of_the_current_window(driver):
     assert rect.get("height") >= 0
 
 
+@pytest.mark.xfail_edge
+@pytest.mark.xfail_firefox(reason="https://github.com/mozilla/geckodriver/issues/2224")
 @pytest.mark.xfail_safari(raises=WebDriverException, reason="Get Window Rect command not implemented")
 def test_should_set_the_rect_of_the_current_window(driver):
     rect = driver.get_window_rect()

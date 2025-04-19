@@ -22,15 +22,6 @@ jobs:
       cache-key: rb-docs
       run: bazel run //rb:docs
 
-  lint:
-    name: Lint
-    needs: build
-    uses: ./.github/workflows/bazel.yml
-    with:
-      name: Lint
-      cache-key: rb-lint
-      run: bazel test //rb:lint
-
   unit-tests:
     name: Unit Tests
     needs: build

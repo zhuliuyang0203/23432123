@@ -14,7 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 """The WebDriver implementation."""
+
 import base64
 import contextlib
 import copy
@@ -223,7 +225,11 @@ class WebDriver(BaseWebDriver):
             - Custom client configuration to use. Defaults to None.
         """
 
-        if isinstance(options, list):
+        if options is None:
+            raise TypeError(
+                "missing 1 required keyword-only argument: 'options' (instance of driver `options.Options` class)"
+            )
+        elif isinstance(options, list):
             capabilities = create_matches(options)
             _ignore_local_proxy = False
         else:
@@ -345,9 +351,14 @@ class WebDriver(BaseWebDriver):
         """
 
         caps = _create_caps(capabilities)
-        response = self.execute(Command.NEW_SESSION, caps)["value"]
-        self.session_id = response.get("sessionId")
-        self.caps = response.get("capabilities")
+        try:
+            response = self.execute(Command.NEW_SESSION, caps)["value"]
+            self.session_id = response.get("sessionId")
+            self.caps = response.get("capabilities")
+        except Exception:
+            if self.service is not None:
+                self.service.stop()
+            raise
 
     def _wrap_value(self, value):
         if isinstance(value, dict):
@@ -1168,34 +1179,6 @@ class WebDriver(BaseWebDriver):
             self.execute(Command.SET_SCREEN_ORIENTATION, {"orientation": value})
         else:
             raise WebDriverException("You can only set the orientation to 'LANDSCAPE' and 'PORTRAIT'")
-
-    @property
-    def log_types(self):
-        """Gets a list of the available log types. This only works with w3c
-        compliant browsers.
-
-        Example:
-        --------
-        >>> driver.log_types
-        """
-        return self.execute(Command.GET_AVAILABLE_LOG_TYPES)["value"]
-
-    def get_log(self, log_type):
-        """Gets the log for a given log type.
-
-        Parameters:
-        -----------
-        log_type : str
-            - Type of log that which will be returned
-
-        Example:
-        --------
-        >>> driver.get_log('browser')
-        >>> driver.get_log('driver')
-        >>> driver.get_log('client')
-        >>> driver.get_log('server')
-        """
-        return self.execute(Command.GET_LOG, {"type": log_type})["value"]
 
     def start_devtools(self):
         global devtools
