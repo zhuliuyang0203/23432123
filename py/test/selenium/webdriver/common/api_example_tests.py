@@ -239,6 +239,7 @@ def test_is_element_displayed(driver, pages):
 
 @pytest.mark.xfail_edge
 @pytest.mark.xfail_firefox(reason="https://github.com/mozilla/geckodriver/issues/2224")
+@pytest.mark.xfail_remote(reason="https://github.com/mozilla/geckodriver/issues/2224")
 @pytest.mark.xfail_safari
 def test_move_window_position(driver, pages):
     pages.load("blank.html")

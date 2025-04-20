@@ -155,9 +155,10 @@ def driver(request):
     if driver_instance is None:
         if driver_class == "Firefox":
             options = get_options(driver_class, request.config)
-            # There are issues with window size/position when running Firefox
-            # under Wayland, so we use XWayland instead.
-            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
+            if platform.system() == "Linux":
+                # There are issues with window size/position when running Firefox
+                # under Wayland, so we use XWayland instead.
+                os.environ["MOZ_ENABLE_WAYLAND"] = "0"
         if driver_class == "Chrome":
             options = get_options(driver_class, request.config)
         if driver_class == "Edge":
@@ -170,9 +171,6 @@ def driver(request):
             options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
             options.set_capability("moz:firefoxOptions", {})
             options.enable_downloads = True
-            # There are issues with window size/position when running Firefox
-            # under Wayland, so we use XWayland instead.
-            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
         if driver_path is not None:
             kwargs["service"] = get_service(driver_class, driver_path)
         if options is not None:
@@ -310,6 +308,11 @@ def server(request):
             "is using port {}, continuing...".format(_port)
         )
     except Exception:
+        remote_env = os.environ.copy()
+        if platform.system() == "Linux":
+            # There are issues with window size/position when running Firefox
+            # under Wayland, so we use XWayland instead.
+            remote_env["MOZ_ENABLE_WAYLAND"] = "0"
         print("Starting the Selenium server")
         process = subprocess.Popen(
             [
@@ -323,7 +326,8 @@ def server(request):
                 "true",
                 "--enable-managed-downloads",
                 "true",
-            ]
+            ],
+            env=remote_env,
         )
         print(f"Selenium server running as process: {process.pid}")
         assert wait_for_server(url, 10), f"Timed out waiting for Selenium server at {url}"
