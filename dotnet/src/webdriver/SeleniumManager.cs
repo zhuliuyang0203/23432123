@@ -46,24 +46,46 @@ namespace OpenQA.Selenium
             string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
             if (binaryFullPath == null)
             {
-                var currentDirectory = AppContext.BaseDirectory;
+                SupportedPlatform? platform = null;
+
+#if NET8_0_OR_GREATER
+                if (OperatingSystem.IsWindows())
+                {
+                    platform = SupportedPlatform.Windows;
+                }
+                else if (OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+                {
+                    platform = SupportedPlatform.Linux;
+                }
+                else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+                {
+                    platform = SupportedPlatform.MacOS;
+                }
+#else
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe");
+                    platform = SupportedPlatform.Windows;
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager");
+                    platform = SupportedPlatform.Linux;
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    binaryFullPath = Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager");
+                    platform = SupportedPlatform.MacOS;
                 }
-                else
+#endif
+
+                var currentDirectory = AppContext.BaseDirectory;
+
+                binaryFullPath = platform switch
                 {
-                    throw new PlatformNotSupportedException(
-                        $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}");
-                }
+                    SupportedPlatform.Windows => Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe"),
+                    SupportedPlatform.Linux => Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager"),
+                    SupportedPlatform.MacOS => Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager"),
+                    _ => throw new PlatformNotSupportedException(
+                                            $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
+                };
             }
 
             if (!File.Exists(binaryFullPath))
@@ -225,4 +247,11 @@ namespace OpenQA.Selenium
     [JsonSerializable(typeof(SeleniumManagerResponse))]
     [JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
     internal sealed partial class SeleniumManagerSerializerContext : JsonSerializerContext;
+
+    internal enum SupportedPlatform
+    {
+        Windows,
+        Linux,
+        MacOS
+    }
 }
