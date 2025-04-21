@@ -34,6 +34,14 @@ dependencies = [
     "websocket-client~=1.8",
     ]
 
+[project.urls]
+homepage = "https://www.selenium.dev"
+source = "https://github.com/SeleniumHQ/selenium/tree/trunk/py"
+download = "https://pypi.org/project/selenium"
+changelog = "https://github.com/SeleniumHQ/selenium/blob/trunk/py/CHANGES"
+documentation = "https://www.selenium.dev/documentation/webdriver"
+issues = "https://github.com/SeleniumHQ/selenium/issues"
+
 [tool.setuptools]
 zip-safe = false
 
@@ -45,13 +53,6 @@ namespaces = true
 
 [[tool.setuptools-rust.bins]]
 target = "selenium.webdriver.common.selenium-manager"
-
-[project.urls]
-Repository = "https://github.com/SeleniumHQ/selenium/"
-BugTracker = "https://github.com/SeleniumHQ/selenium/issues"
-Changelog = "https://github.com/SeleniumHQ/selenium/blob/trunk/py/CHANGES"
-Documentation = "https://www.selenium.dev/documentation/overview/"
-SourceCode = "https://github.com/SeleniumHQ/selenium/tree/trunk/py"
 
 [tool.setuptools.package-data]
 "*" = [
