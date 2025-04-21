@@ -153,6 +153,10 @@ public class DriverService implements Closeable {
     return null;
   }
 
+  public String getDriverEnvironmentVariable() {
+    return null;
+  }
+
   protected File getDriverExecutable() {
     return null;
   }
