@@ -15,21 +15,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v132;
+package org.openqa.selenium.devtools.v135;
 
 import java.util.Optional;
 import org.openqa.selenium.devtools.Command;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.Event;
 import org.openqa.selenium.devtools.idealized.Javascript;
-import org.openqa.selenium.devtools.v132.page.Page;
-import org.openqa.selenium.devtools.v132.page.model.ScriptIdentifier;
-import org.openqa.selenium.devtools.v132.runtime.Runtime;
-import org.openqa.selenium.devtools.v132.runtime.model.BindingCalled;
+import org.openqa.selenium.devtools.v135.page.Page;
+import org.openqa.selenium.devtools.v135.page.model.ScriptIdentifier;
+import org.openqa.selenium.devtools.v135.runtime.Runtime;
+import org.openqa.selenium.devtools.v135.runtime.model.BindingCalled;
 
-public class v132Javascript extends Javascript<ScriptIdentifier, BindingCalled> {
+public class v135Javascript extends Javascript<ScriptIdentifier, BindingCalled> {
 
-  public v132Javascript(DevTools devtools) {
+  public v135Javascript(DevTools devtools) {
     super(devtools);
   }
 
@@ -55,7 +55,7 @@ public class v132Javascript extends Javascript<ScriptIdentifier, BindingCalled> 
 
   @Override
   protected Command<Void> enablePage() {
-    return Page.enable();
+    return Page.enable(Optional.empty());
   }
 
   @Override

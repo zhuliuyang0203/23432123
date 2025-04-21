@@ -25,26 +25,23 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-          fetch-tags: true
       - name: "Prep git"
         run: |
           git config --local user.email "selenium-ci@users.noreply.github.com"
           git config --local user.name "Selenium CI Bot"
-          if git rev-parse --verify release-preparation-${{ github.event.inputs.version }} >/dev/null 2>&1; then
-          git branch -D release-preparation-${{ github.event.inputs.version }}
+          if git rev-parse --verify rust-release-${{ github.event.inputs.version }} >/dev/null 2>&1; then
+            git branch -D rust-release-${{ github.event.inputs.version }}
           fi
-          git checkout -b release-preparation-${{ github.event.inputs.version }}
+          git checkout -b rust-release-${{ github.event.inputs.version }}
       - name: Update Rust Version
-        run: |
-          ./go rust:version ${{ github.event.inputs.version }}
-          ./go rust:changelog
+        run: ./go rust:version ${{ github.event.inputs.version }}
       - name: Commit Rust updates
         run: git commit -m "update selenium manager version and rust changelog"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.SELENIUM_CI_TOKEN }}
-          branch: release-preparation-${{ github.event.inputs.version }}
+          branch: rust-release-${{ github.event.inputs.version }}
           force: true
 
   selenium-manager:
@@ -53,9 +50,22 @@ jobs:
     uses: ./.github/workflows/ci-rust.yml
     with:
       release: true
-      branch: release-preparation-${{ github.event.inputs.version }}
+      branch: rust-release-${{ github.event.inputs.version }}
     secrets:
       SELENIUM_CI_TOKEN: ${{ secrets.SELENIUM_CI_TOKEN }}
+
+  cleanup-rust-branch:
+    name: Cleanup Rust Branch
+    needs: selenium-manager
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SELENIUM_CI_TOKEN }}
+      - name: "Delete rust release branch"
+        run: |
+          git push origin --delete rust-release-${{ github.event.inputs.version }}
 
   update-files:
     name: Update Files

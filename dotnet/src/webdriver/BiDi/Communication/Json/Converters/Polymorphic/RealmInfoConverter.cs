@@ -32,14 +32,14 @@ internal class RealmInfoConverter : JsonConverter<RealmInfo>
     {
         return reader.GetDiscriminator("type") switch
         {
-            "window" => JsonSerializer.Deserialize<WindowRealmInfo>(ref reader, options),
-            "dedicated-worker" => JsonSerializer.Deserialize<DedicatedWorkerRealmInfo>(ref reader, options),
-            "shared-worker" => JsonSerializer.Deserialize<SharedWorkerRealmInfo>(ref reader, options),
-            "service-worker" => JsonSerializer.Deserialize<ServiceWorkerRealmInfo>(ref reader, options),
-            "worker" => JsonSerializer.Deserialize<WorkerRealmInfo>(ref reader, options),
-            "paint-worklet" => JsonSerializer.Deserialize<PaintWorkletRealmInfo>(ref reader, options),
-            "audio-worklet" => JsonSerializer.Deserialize<AudioWorkletRealmInfo>(ref reader, options),
-            "worklet" => JsonSerializer.Deserialize<WorkletRealmInfo>(ref reader, options),
+            "window" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WindowRealmInfo>()),
+            "dedicated-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<DedicatedWorkerRealmInfo>()),
+            "shared-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<SharedWorkerRealmInfo>()),
+            "service-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<ServiceWorkerRealmInfo>()),
+            "worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WorkerRealmInfo>()),
+            "paint-worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<PaintWorkletRealmInfo>()),
+            "audio-worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<AudioWorkletRealmInfo>()),
+            "worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WorkletRealmInfo>()),
             _ => null,
         };
     }

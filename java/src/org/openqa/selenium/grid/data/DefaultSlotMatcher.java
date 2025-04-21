@@ -49,7 +49,7 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
    matched in the Node or in the browser driver.
   */
   private static final List<String> EXTENSION_CAPABILITIES_PREFIXES =
-      Arrays.asList("goog:", "moz:", "ms:", "se:");
+      Arrays.asList("goog:", "moz:", "ms:", "safari:", "se:");
 
   @Override
   public boolean matches(Capabilities stereotype, Capabilities capabilities) {
@@ -154,9 +154,12 @@ public class DefaultSlotMatcher implements SlotMatcher, Serializable {
      We match extension capabilities when they are not prefixed with any of the
      EXTENSION_CAPABILITIES_PREFIXES items. Also, we match them only when the capabilities
      of the new session request contains that specific extension capability.
+     We are also filtering "options" extension capabilities, as they should be handled
+     by the remote endpoint.
     */
     return stereotype.getCapabilityNames().stream()
         .filter(name -> name.contains(":"))
+        .filter(name -> !name.toLowerCase().contains("options"))
         .filter(name -> capabilities.asMap().containsKey(name))
         .filter(name -> EXTENSION_CAPABILITIES_PREFIXES.stream().noneMatch(name::contains))
         .map(

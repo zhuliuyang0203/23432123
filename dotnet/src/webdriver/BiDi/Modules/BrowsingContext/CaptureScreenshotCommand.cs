@@ -23,7 +23,7 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
-    : Command<CaptureScreenshotCommandParameters>(@params, "browsingContext.captureScreenshot");
+    : Command<CaptureScreenshotCommandParameters, CaptureScreenshotResult>(@params, "browsingContext.captureScreenshot");
 
 internal record CaptureScreenshotCommandParameters(BrowsingContext Context, ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
 
@@ -56,7 +56,7 @@ public record BoxClipRectangle(double X, double Y, double Width, double Height) 
 
 public record ElementClipRectangle([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : ClipRectangle;
 
-public record CaptureScreenshotResult(string Data)
+public record CaptureScreenshotResult(string Data) : EmptyResult
 {
     public byte[] ToByteArray() => System.Convert.FromBase64String(Data);
 }

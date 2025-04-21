@@ -18,6 +18,7 @@
 // </copyright>
 
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Internal;
 
@@ -41,6 +42,7 @@ internal static class JsonExtensions
             if (propertyName == name)
             {
                 discriminator = readerClone.GetString();
+
                 break;
             }
 
@@ -48,6 +50,11 @@ internal static class JsonExtensions
             readerClone.Read();
         }
 
-        return discriminator ?? throw new JsonException($"Couldn't determine '{name}' descriminator.");
+        return discriminator ?? throw new JsonException($"Couldn't determine '{name}' discriminator.");
+    }
+
+    public static JsonTypeInfo<T> GetTypeInfo<T>(this JsonSerializerOptions options)
+    {
+        return (JsonTypeInfo<T>)options.GetTypeInfo(typeof(T));
     }
 }

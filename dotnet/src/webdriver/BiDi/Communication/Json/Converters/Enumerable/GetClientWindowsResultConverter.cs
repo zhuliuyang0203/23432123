@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Browser;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ internal class GetClientWindowsResultConverter : JsonConverter<GetClientWindowsR
     public override GetClientWindowsResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var doc = JsonDocument.ParseValue(ref reader);
-        var clientWindows = doc.RootElement.GetProperty("clientWindows").Deserialize<IReadOnlyList<ClientWindowInfo>>(options);
+        var clientWindows = doc.RootElement.GetProperty("clientWindows").Deserialize(options.GetTypeInfo<IReadOnlyList<ClientWindowInfo>>());
 
         return new GetClientWindowsResult(clientWindows!);
     }

@@ -1,3 +1,20 @@
+v4.31.0
+======
+* [bidi] Decouple EvaluateResult in Script module (#15493)
+* [bidi] Decouple AuthCredentials in Network module (#15491)
+* [bidi] Decouple WindowProxyProperties in Script module (#15490)
+* [bidi] Decouple ChannelProperties in Script module (#15489)
+* [bidi] Decouple ScreenshotOrigin in BrowsingContext module (#15488)
+* [bidi] Decouple nested types in Locator (#15487)
+* Fix null warnings in `RelativeBy` by sealing the type (#15379)
+* [bidi] Simplify conversion to `LocalValue` (#15441)
+* Address lingering AOT warnings (#15506)
+* Unify protected and internal Execute methods (#15233)
+* Simplify `PopupWindowFinder.Invoke` (#15549)
+* [bidi] Make ContinueWithAuthCommand closer to spec (breaking change) (#15545)
+* [bidi] Avoid intermediate JsonDocument allocation to determine unordered discriminator (#15555)
+* Add CDP for Chrome 135 and remove 132
+
 v4.30.0
 ======
 * Fix dev environment to run tests on Windows/MacOS (#15303)

@@ -97,7 +97,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v134:v134.publish
-  //java/src/org/openqa/selenium/devtools/v132:v132.publish
+  //java/src/org/openqa/selenium/devtools/v135:v135.publish
   //java/src/org/openqa/selenium/devtools/v133:v133.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
@@ -1120,11 +1120,11 @@ namespace :all do
 
   desc 'Update all API Documentation'
   task :docs do
-    Rake::Task['java:docs'].invoke(true)
-    Rake::Task['py:docs'].invoke(true)
-    Rake::Task['rb:docs'].invoke(true)
-    Rake::Task['dotnet:docs'].invoke(true)
-    Rake::Task['node:docs'].invoke(true)
+    Rake::Task['java:docs'].invoke('skip_update')
+    Rake::Task['py:docs'].invoke('skip_update')
+    Rake::Task['rb:docs'].invoke('skip_update')
+    Rake::Task['dotnet:docs'].invoke('skip_update')
+    Rake::Task['node:docs'].invoke('skip_update')
 
     update_gh_pages
   end
@@ -1156,11 +1156,6 @@ namespace :all do
     Rake::Task['rb:release'].invoke(*args)
     Rake::Task['dotnet:release'].invoke(*args)
     Rake::Task['node:release'].invoke(*args)
-
-    unless args.include?('nightly')
-      puts 'bump all versions to nightly'
-      Rake::Task['all:version'].invoke('nightly')
-    end
   end
 
   task :lint do
@@ -1192,10 +1187,9 @@ namespace :all do
     Rake::Task['node:version'].invoke(version)
     Rake::Task['py:version'].invoke(version)
     Rake::Task['dotnet:version'].invoke(version)
+    Rake::Task['rust:version'].invoke(version)
 
     unless version == 'nightly'
-      Rake::Task['all:changelogs'].invoke
-
       major_minor = arguments[:version][/^\d+\.\d+/]
       file = '.github/ISSUE_TEMPLATE/bug-report.yml'
       old_version_pattern = /The latest released version of Selenium is (\d+\.\d+)/
@@ -1213,6 +1207,7 @@ namespace :all do
     Rake::Task['node:changelog'].invoke
     Rake::Task['py:changelog'].invoke
     Rake::Task['dotnet:changelog'].invoke
+    Rake::Task['rust:changelog'].invoke
   end
 end
 

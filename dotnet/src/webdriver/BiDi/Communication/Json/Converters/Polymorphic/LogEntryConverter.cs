@@ -32,9 +32,9 @@ internal class LogEntryConverter : JsonConverter<Modules.Log.LogEntry>
     {
         return reader.GetDiscriminator("type") switch
         {
-            "console" => JsonSerializer.Deserialize<ConsoleLogEntry>(ref reader, options),
-            "javascript" => JsonSerializer.Deserialize<JavascriptLogEntry>(ref reader, options),
-            _ => null,
+            "console" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<ConsoleLogEntry>()),
+            "javascript" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<JavascriptLogEntry>()),
+            _ => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<GenericLogEntry>()),
         };
     }
 
