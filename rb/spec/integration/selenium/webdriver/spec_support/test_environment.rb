@@ -119,12 +119,6 @@ module Selenium
           Dir.pwd.start_with?('/mnt/engflow')
         end
 
-        def version
-          return 'stable' if WebDriver::Platform.windows?
-
-          ENV['WD_BROWSER_VERSION'] || 'stable'
-        end
-
         def reset_remote_server
           @remote_server&.stop
           @remote_server = nil
@@ -272,7 +266,7 @@ module Selenium
         end
 
         def chrome_options(args: [], **opts)
-          opts[:browser_version] = version
+          opts[:browser_version] = 'stable' if WebDriver::Platform.windows?
           opts[:web_socket_url] = true if ENV['WEBDRIVER_BIDI'] && !opts.key?(:web_socket_url)
           opts[:binary] ||= ENV['CHROME_BINARY'] if ENV.key?('CHROME_BINARY')
           args << '--headless=chrome' if ENV['HEADLESS']
@@ -282,7 +276,7 @@ module Selenium
         end
 
         def edge_options(args: [], **opts)
-          opts[:browser_version] = version
+          opts[:browser_version] = 'stable' if WebDriver::Platform.windows?
           opts[:web_socket_url] = true if ENV['WEBDRIVER_BIDI'] && !opts.key?(:web_socket_url)
           opts[:binary] ||= ENV['EDGE_BINARY'] if ENV.key?('EDGE_BINARY')
           args << '--headless=chrome' if ENV['HEADLESS']
@@ -292,7 +286,7 @@ module Selenium
         end
 
         def firefox_options(args: [], **opts)
-          opts[:browser_version] = version
+          opts[:browser_version] = 'stable' if WebDriver::Platform.windows?
           opts[:web_socket_url] = true if ENV['WEBDRIVER_BIDI'] && !opts.key?(:web_socket_url)
           opts[:binary] ||= ENV['FIREFOX_BINARY'] if ENV.key?('FIREFOX_BINARY')
           args << '--headless' if ENV['HEADLESS']

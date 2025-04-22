@@ -416,6 +416,7 @@ def firefox_version_data():
 
 
 def firefox_linux(version):
+    return "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.bz2" % (version, version)
     if int(version.split(".")[0]) < 135:
         return "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.bz2" % (
             version, version)
@@ -517,3 +518,4 @@ pin_browsers_extension = module_extension(
 
     with open(target_file_path, "w") as file:
         file.write(content)
+

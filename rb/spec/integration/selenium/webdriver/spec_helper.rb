@@ -72,7 +72,6 @@ RSpec.configure do |c|
     guards.add_condition(:headless, !ENV['HEADLESS'].nil?)
     guards.add_condition(:bidi, !ENV['WEBDRIVER_BIDI'].nil?)
     guards.add_condition(:rbe, GlobalTestEnv.rbe?)
-    guards.add_condition(:version, GlobalTestEnv.version)
 
     results = guards.disposition
     send(*results) if results
