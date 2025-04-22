@@ -547,6 +547,7 @@ py_test_suite(
     srcs = glob(
         [
             "test/selenium/webdriver/common/**/*.py",
+            "test/selenium/webdriver/remote/**/*.py",
             "test/selenium/webdriver/support/**/*.py",
         ],
         exclude = BIDI_TESTS,
