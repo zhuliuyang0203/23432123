@@ -21,12 +21,6 @@ import filetype
 import pytest
 
 
-@pytest.mark.xfail_edge
-@pytest.mark.xfail_ie
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_safari
-@pytest.mark.xfail_webkitgtk
-@pytest.mark.xfail_wpewebkit
 def test_browser_specific_method(driver, pages):
     """This only works on Firefox"""
     pages.load("simpleTest.html")
