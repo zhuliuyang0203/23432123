@@ -7,7 +7,7 @@ java_selenium_test_suite(
     srcs = glob(["*Test.java"]),
     browsers = [
         "firefox",
-        "chrome"
+        "chrome",
     ],
     tags = [
         "selenium-remote",
