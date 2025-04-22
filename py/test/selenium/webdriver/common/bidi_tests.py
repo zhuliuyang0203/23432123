@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import pytest
 
 from selenium.webdriver.common.by import By
@@ -23,7 +24,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 @pytest.mark.xfail_firefox(reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1819965")
 @pytest.mark.xfail_remote(reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1819965")
-@pytest.mark.xfail_safari
 async def test_check_console_messages(driver, pages):
     async with driver.bidi_connection() as session:
         log = Log(driver, session)
@@ -37,7 +37,6 @@ async def test_check_console_messages(driver, pages):
 
 @pytest.mark.xfail_firefox(reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1819965")
 @pytest.mark.xfail_remote(reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1819965")
-@pytest.mark.xfail_safari
 async def test_check_error_console_messages(driver, pages):
     async with driver.bidi_connection() as session:
         log = Log(driver, session)
@@ -51,7 +50,6 @@ async def test_check_error_console_messages(driver, pages):
 
 
 @pytest.mark.xfail_firefox
-@pytest.mark.xfail_safari
 @pytest.mark.xfail_remote
 async def test_collect_js_exceptions(driver, pages):
     async with driver.bidi_connection() as session:
@@ -64,7 +62,6 @@ async def test_collect_js_exceptions(driver, pages):
 
 
 @pytest.mark.xfail_firefox
-@pytest.mark.xfail_safari
 @pytest.mark.xfail_remote
 async def test_collect_log_mutations(driver, pages):
     async with driver.bidi_connection() as session:

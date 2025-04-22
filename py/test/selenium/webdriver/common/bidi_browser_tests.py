@@ -21,13 +21,11 @@ from selenium.webdriver.common.bidi.browser import ClientWindowInfo
 from selenium.webdriver.common.bidi.browser import ClientWindowState
 
 
-@pytest.mark.xfail_safari
 def test_browser_initialized(driver):
     """Test that the browser module is initialized properly."""
     assert driver.browser is not None
 
 
-@pytest.mark.xfail_safari
 def test_create_user_context(driver):
     """Test creating a user context."""
     user_context = driver.browser.create_user_context()
@@ -37,7 +35,6 @@ def test_create_user_context(driver):
     driver.browser.remove_user_context(user_context)
 
 
-@pytest.mark.xfail_safari
 def test_get_user_contexts(driver):
     """Test getting user contexts."""
     user_context1 = driver.browser.create_user_context()
@@ -52,7 +49,6 @@ def test_get_user_contexts(driver):
     driver.browser.remove_user_context(user_context2)
 
 
-@pytest.mark.xfail_safari
 def test_remove_user_context(driver):
     """Test removing a user context."""
     user_context1 = driver.browser.create_user_context()
@@ -71,7 +67,6 @@ def test_remove_user_context(driver):
     driver.browser.remove_user_context(user_context1)
 
 
-@pytest.mark.xfail_safari
 def test_get_client_windows(driver):
     """Test getting client windows."""
     client_windows = driver.browser.get_client_windows()
@@ -91,13 +86,11 @@ def test_get_client_windows(driver):
     assert window_info.get_y() >= 0
 
 
-@pytest.mark.xfail_safari
 def test_raises_exception_when_removing_default_user_context(driver):
     with pytest.raises(Exception):
         driver.browser.remove_user_context("default")
 
 
-@pytest.mark.xfail_safari
 def test_client_window_state_constants(driver):
     assert ClientWindowState.FULLSCREEN == "fullscreen"
     assert ClientWindowState.MAXIMIZED == "maximized"

@@ -21,25 +21,21 @@ from selenium.webdriver.common.bidi.network import Request
 from selenium.webdriver.common.by import By
 
 
-@pytest.mark.xfail_safari
 def test_network_initialized(driver):
     assert driver.network is not None
 
 
-@pytest.mark.xfail_safari
 def test_add_intercept(driver, pages):
     result = driver.network._add_intercept()
     assert result is not None, "Intercept not added"
 
 
-@pytest.mark.xfail_safari
 def test_remove_intercept(driver):
     result = driver.network._add_intercept()
     driver.network._remove_intercept(result["intercept"])
     assert driver.network.intercepts == [], "Intercept not removed"
 
 
-@pytest.mark.xfail_safari
 def test_add_and_remove_request_handler(driver, pages):
 
     requests = []
@@ -55,7 +51,6 @@ def test_add_and_remove_request_handler(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
-@pytest.mark.xfail_safari
 def test_clear_request_handlers(driver, pages):
     requests = []
 
@@ -76,7 +71,6 @@ def test_clear_request_handlers(driver, pages):
 
 @pytest.mark.xfail_chrome
 @pytest.mark.xfail_edge
-@pytest.mark.xfail_safari
 def test_continue_request(driver, pages):
 
     def callback(request: Request):
@@ -90,7 +84,6 @@ def test_continue_request(driver, pages):
 
 @pytest.mark.xfail_chrome
 @pytest.mark.xfail_edge
-@pytest.mark.xfail_safari
 def test_continue_with_auth(driver):
 
     callback_id = driver.network.add_auth_handler("user", "passwd")
@@ -101,7 +94,6 @@ def test_continue_with_auth(driver):
 
 @pytest.mark.xfail_chrome
 @pytest.mark.xfail_edge
-@pytest.mark.xfail_safari
 def test_remove_auth_handler(driver):
     callback_id = driver.network.add_auth_handler("user", "passwd")
     assert callback_id is not None, "Request handler not added"
