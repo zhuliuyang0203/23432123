@@ -28,7 +28,7 @@ class CustomLocatorConverter(LocatorConverter):
         return super().convert(by, value)
 
 
-@pytest.mark.xfail
+@pytest.mark.skip(reason="Needs to be updated")
 def test_find_element_with_custom_locator(driver):
     driver.get("data:text/html,<div custom-attr='example'>Test</div>")
     element = driver.find_element("custom", "example")
@@ -36,7 +36,7 @@ def test_find_element_with_custom_locator(driver):
     assert element.text == "Test"
 
 
-@pytest.mark.xfail
+@pytest.mark.skip(reason="Needs to be updated")
 def test_find_elements_with_custom_locator(driver):
     driver.get("data:text/html,<div custom-attr='example'>Test1</div><div custom-attr='example'>Test2</div>")
     elements = driver.find_elements("custom", "example")

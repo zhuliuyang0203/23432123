@@ -28,6 +28,7 @@ from selenium import webdriver
 from test.selenium.webdriver.common.network import get_lan_ip
 from test.selenium.webdriver.common.webserver import SimpleWebServer
 
+
 drivers = (
     "chrome",
     "edge",
@@ -94,6 +95,11 @@ def pytest_ignore_collect(path, config):
         _drivers.add("unit")
     parts = path.dirname.split(os.path.sep)
     return len([d for d in _drivers if d.lower() in parts]) > 0
+
+
+def pytest_generate_tests(metafunc):
+    if "driver" in metafunc.fixturenames and metafunc.config.option.drivers:
+        metafunc.parametrize("driver", metafunc.config.option.drivers, indirect=True)
 
 
 def get_driver_class(driver_option):
@@ -391,6 +397,6 @@ def clean_driver(request):
         driver_reference = None
 
 
-def pytest_generate_tests(metafunc):
-    if "driver" in metafunc.fixturenames and metafunc.config.option.drivers:
-        metafunc.parametrize("driver", metafunc.config.option.drivers, indirect=True)
+@pytest.fixture
+def headless(request):
+    return request.config.option.headless
