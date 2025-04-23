@@ -17,15 +17,11 @@
 
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
-from selenium.webdriver.firefox.options import Options
 
 
-def test_profile_is_used(headless):
+def test_profile_is_used(firefox_options):
     ff_profile = FirefoxProfile()
     ff_profile.set_preference("browser.startup.page", "1")
-    options = Options()
-    options.profile = ff_profile
-    if headless:
-        options.add_argument("-headless")
-    with webdriver.Remote(options=options) as driver:
+    firefox_options.profile = ff_profile
+    with webdriver.Remote(options=firefox_options) as driver:
         assert "browser/content/blanktab.html" in driver.current_url

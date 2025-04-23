@@ -398,5 +398,8 @@ def clean_driver(request):
 
 
 @pytest.fixture
-def headless(request):
-    return request.config.option.headless
+def firefox_options(request):
+    options = webdriver.FirefoxOptions()
+    if request.config.option.headless:
+        options.add_argument("-headless")
+    return options

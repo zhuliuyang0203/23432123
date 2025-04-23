@@ -18,7 +18,6 @@
 import pytest
 
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.remote.locator_converter import LocatorConverter
 
 
@@ -31,15 +30,10 @@ class CustomLocatorConverter(LocatorConverter):
 
 
 @pytest.fixture()
-def custom_locator_driver(headless):
-    options = Options()
-    if headless:
-        options.add_argument("-headless")
-    try:
-        driver = webdriver.Remote(options=options, locator_converter=CustomLocatorConverter())
-        yield driver
-    finally:
-        driver.quit()
+def custom_locator_driver(firefox_options):
+    driver = webdriver.Remote(options=firefox_options, locator_converter=CustomLocatorConverter())
+    yield driver
+    driver.quit()
 
 
 def test_find_element_with_custom_locator(custom_locator_driver):
