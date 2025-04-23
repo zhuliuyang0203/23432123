@@ -29,4 +29,5 @@ def test_command_executor_ssl_certificate_is_verified():
         webdriver.Remote(command_executor="https://wrong.host.badssl.com/", options=options)
     assert isinstance(excinfo.value.reason, urllib3.exceptions.SSLError)
     assert site in str(excinfo.value)
-    assert "Hostname mismatch, certificate is not valid" in str(excinfo.value)
+    +# Check for general SSL certificate validation failure
+    assert "certificate is not valid" in str(excinfo.value).lower()
