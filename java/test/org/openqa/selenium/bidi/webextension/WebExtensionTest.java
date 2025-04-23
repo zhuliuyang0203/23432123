@@ -1,72 +1,76 @@
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 package org.openqa.selenium.bidi.webextension;
 
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.manager.SeleniumManager;
+import org.openqa.selenium.build.InProject;
 import org.openqa.selenium.testing.JupiterTestBase;
 
 public class WebExtensionTest extends JupiterTestBase {
 
-  private final Map<String, String> extensionData = Map.of(
-    "id", "1FC7D53C-0B0A-49E7-A8C0-47E77496A919@web-platform-tests.org",
-    "path", getExtensionPath("unpacked-extension"),
-    "archivePath", getExtensionPath("signed.xpi")
-  );
-
-  @BeforeEach
-  void setUp() {
-    Logger rootLogger = Logger.getLogger("");
-    Arrays.stream(rootLogger.getHandlers())
-        .forEach(
-            handler -> {
-              handler.setLevel(Level.FINE);
-            });
-    Logger smLogger = Logger.getLogger(SeleniumManager.class.getName());
-    smLogger.setLevel(Level.FINE);
-    FirefoxOptions options = new FirefoxOptions();
-    options.setBinary("/Applications/Firefox Nightly.app/Contents/MacOS/firefox");
-    options.setCapability("webSocketUrl", true);
-    driver = new FirefoxDriver(options);
-  }
-
-  public static String getExtensionPath(String filename) {
-    String currentDir = Paths.get("").toAbsolutePath().toString();
-    return Paths.get(currentDir, "webextension", filename).toString();
-  }
+  private final Map<String, String> extensionData =
+      Map.of(
+          "id", "webextensions-selenium-example-v3@example.com",
+          "path", "common/extensions/webextensions-selenium-example-signed",
+          "archivePath", "common/extensions/webextensions-selenium-example.xpi");
 
   @Test
   void installExtensionPath() {
+    Path path = InProject.locate(extensionData.get("path"));
+
     WebExtension extension = new WebExtension(driver);
     var exIn =
-        extension.Install(
-            new InstallExtensionParameters(
-                new ExtensionPath(
-                  extensionData.get("path"))));
-    assert exIn.get("extension")
-        .equals(extensionData.get("id"));
+        extension.Install(new InstallExtensionParameters(new ExtensionPath(path.toString())));
+    assert exIn.get("extension").equals(extensionData.get("id"));
 
     extension.Uninstall(new UninstallExtensionParameters(exIn));
   }
 
   @Test
   void installArchiveExtensionPath() {
+    Path path = InProject.locate(extensionData.get("archivePath"));
+
     WebExtension Extension = new WebExtension(driver);
     var ex =
-      Extension.Install(
-        new InstallExtensionParameters(
-          new ExtensionArchivePath(
-            extensionData.get("archivePath"))));
-    assert ex.get("extension")
-      .equals(extensionData.get("id"));
+        Extension.Install(
+            new InstallExtensionParameters(new ExtensionArchivePath(path.toString())));
+    assert ex.get("extension").equals(extensionData.get("id"));
 
     Extension.Uninstall(new UninstallExtensionParameters(ex));
   }
 
+  @Test
+  void installBase64ExtensionPath() throws IOException {
+    Path path = InProject.locate(extensionData.get("archivePath"));
+
+    WebExtension Extension = new WebExtension(driver);
+    var ex =
+        Extension.Install(
+            new InstallExtensionParameters(
+                new ExtensionBase64Encoded(
+                    Base64.getEncoder().encodeToString(Files.readAllBytes(path)))));
+    assert ex.get("extension").equals(extensionData.get("id"));
+
+    Extension.Uninstall(new UninstallExtensionParameters(ex));
+  }
 }

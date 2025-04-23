@@ -8,7 +8,6 @@ java_selenium_test_suite(
     browsers = [
         "firefox",
     ],
-    data = ["signed.xpi"] + glob(["unpacked-extension/**/*"]),
     tags = [
         "selenium-remote",
     ],
@@ -26,6 +25,7 @@ java_selenium_test_suite(
         "//java/src/org/openqa/selenium/manager",
         "//java/src/org/openqa/selenium/remote",
         "//java/src/org/openqa/selenium/support",
+        "//java/test/org/openqa/selenium/build",
         "//java/test/org/openqa/selenium/environment",
         "//java/test/org/openqa/selenium/testing:annotations",
         "//java/test/org/openqa/selenium/testing:test-base",

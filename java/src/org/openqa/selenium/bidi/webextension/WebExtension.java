@@ -39,7 +39,8 @@ public class WebExtension {
 
   public Map<String, Object> Install(InstallExtensionParameters parameters) {
     Require.nonNull("Install parameters", parameters);
-    return bidi.send(new Command<>("webExtension.install", parameters.getExtensionData().toMap(), Map.class));
+    return bidi.send(
+        new Command<>("webExtension.install", parameters.getExtensionData().toMap(), Map.class));
   }
 
   public Map<String, Object> Uninstall(UninstallExtensionParameters parameters) {
