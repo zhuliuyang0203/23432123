@@ -257,7 +257,7 @@ class WebDriver(BaseWebDriver):
         self._script = None
         self._network = None
         self._browser = None
-        self._session = None
+        self._bidi_session = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -1297,22 +1297,17 @@ class WebDriver(BaseWebDriver):
         return self._browser
 
     @property
-    def session(self):
-        """Returns the BiDi session object for the current WebDriver session.
-
-        Example:
-        --------
-        >>> driver.session.subscribe()
-        >>> driver.session.unsubscribe()
-        >>> session = driver.session.status()
+    def _session(self):
+        """
+        Returns the BiDi session object for the current WebDriver session.
         """
         if not self._websocket_connection:
             self._start_bidi()
 
-        if self._session is None:
-            self._session = Session(self._websocket_connection)
+        if self._bidi_session is None:
+            self._bidi_session = Session(self._websocket_connection)
 
-        return self._session
+        return self._bidi_session
 
     def _get_cdp_details(self):
         import json

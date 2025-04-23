@@ -22,7 +22,7 @@ from selenium.webdriver.common.window import WindowTypes
 
 @pytest.mark.xfail_safari
 def test_session_status(driver):
-    result = driver.session.status()
+    result = driver._session.status()
     assert result is not None
     assert "ready" in result
     assert "message" in result
@@ -33,7 +33,7 @@ def test_session_status(driver):
 @pytest.mark.xfail_safari
 def test_session_status_not_closed_with_one_window(driver):
     # initial session status
-    initial_status = driver.session.status()
+    initial_status = driver._session.status()
     assert initial_status is not None
 
     # Open new window and tab
@@ -44,7 +44,7 @@ def test_session_status_not_closed_with_one_window(driver):
     driver.close()
 
     # Session should still be active
-    status_after_closing = driver.session.status()
+    status_after_closing = driver._session.status()
     assert status_after_closing is not None
     assert "ready" in status_after_closing
     assert "message" in status_after_closing
