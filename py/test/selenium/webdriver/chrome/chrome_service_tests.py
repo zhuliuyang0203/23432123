@@ -14,37 +14,48 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import os
 import subprocess
 import time
+from unittest.mock import patch
 
 import pytest
 
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import SessionNotCreatedException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
-@pytest.mark.xfail_chrome(raises=WebDriverException)
 @pytest.mark.no_driver_after_test
 def test_uses_chromedriver_logging(clean_driver, driver_executable) -> None:
     log_file = "chromedriver.log"
     service_args = ["--append-log"]
 
-    service = Service(
+    service1 = Service(
         log_output=log_file,
         service_args=service_args,
         executable_path=driver_executable,
     )
+
+    service2 = Service(
+        log_output=log_file,
+        service_args=service_args,
+        executable_path=driver_executable,
+    )
+
+    driver1 = None
     driver2 = None
     try:
-        driver1 = clean_driver(service=service)
+        driver1 = clean_driver(service=service1)
         with open(log_file) as fp:
             lines = len(fp.readlines())
-        driver2 = clean_driver(service=service)
+        driver2 = clean_driver(service=service2)
         with open(log_file) as fp:
             assert len(fp.readlines()) >= 2 * lines
     finally:
-        driver1.quit()
+        if driver1:
+            driver1.quit()
         if driver2:
             driver2.quit()
         os.remove(log_file)
@@ -97,6 +108,17 @@ def test_log_output_null_default(driver, capfd) -> None:
     driver.quit()
 
 
+@pytest.mark.no_driver_after_test
+def test_driver_is_stopped_if_browser_cant_start(clean_driver) -> None:
+    options = Options()
+    options.add_argument("--user-data-dir=/no/such/location")
+    service = Service()
+    with pytest.raises(SessionNotCreatedException):
+        clean_driver(options=options, service=service)
+    assert not service.is_connectable()
+    assert service.process.poll() is not None
+
+
 @pytest.fixture
 def service():
     return Service()
@@ -116,8 +138,6 @@ class TestChromeDriverService:
         assert "chromedriver" in service.path
 
     def test_updates_path_after_setting_env_variable(self, service):
-        new_path = "/foo/bar"
-        os.environ["SE_CHROMEDRIVER"] = new_path
         service.executable_path = self.service_path  # Simulating the update
-
-        assert "chromedriver" in service.executable_path
+        with patch.dict("os.environ", {"SE_CHROMEDRIVER": "/foo/bar"}):
+            assert "chromedriver" in service.executable_path

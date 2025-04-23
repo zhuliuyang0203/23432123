@@ -22,7 +22,7 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class NavigateCommand(NavigateCommandParameters @params)
-    : Command<NavigateCommandParameters>(@params, "browsingContext.navigate");
+    : Command<NavigateCommandParameters, NavigateResult>(@params, "browsingContext.navigate");
 
 internal record NavigateCommandParameters(BrowsingContext Context, string Url, ReadinessState? Wait) : CommandParameters;
 
@@ -38,4 +38,4 @@ public enum ReadinessState
     Complete
 }
 
-public record NavigateResult(Navigation Navigation, string Url);
+public record NavigateResult(Navigation Navigation, string Url) : EmptyResult;

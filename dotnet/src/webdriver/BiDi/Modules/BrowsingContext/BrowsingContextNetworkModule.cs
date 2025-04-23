@@ -25,44 +25,50 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule networkModule)
 {
-    public async Task<Intercept> InterceptRequestAsync(Func<BeforeRequestSentEventArgs, Task> handler, BrowsingContextAddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
+    public async Task<Intercept> InterceptRequestAsync(Func<InterceptedRequest, Task> handler, InterceptRequestOptions? options = null)
     {
-        AddInterceptOptions addInterceptOptions = new(interceptOptions)
+        AddInterceptOptions addInterceptOptions = new(options)
         {
             Contexts = [context]
         };
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.BeforeRequestSent], addInterceptOptions).ConfigureAwait(false);
 
-        await intercept.OnBeforeRequestSentAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnBeforeRequestSentAsync(
+            async req => await handler(new(req.BiDi, req.Context, req.IsBlocked, req.Navigation, req.RedirectCount, req.Request, req.Timestamp, req.Initiator)),
+            new BrowsingContextsSubscriptionOptions(null) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public async Task<Intercept> InterceptResponseAsync(Func<ResponseStartedEventArgs, Task> handler, BrowsingContextAddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
+    public async Task<Intercept> InterceptResponseAsync(Func<InterceptedResponse, Task> handler, InterceptResponseOptions? options = null)
     {
-        AddInterceptOptions addInterceptOptions = new(interceptOptions)
+        AddInterceptOptions addInterceptOptions = new(options)
         {
             Contexts = [context]
         };
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.ResponseStarted], addInterceptOptions).ConfigureAwait(false);
 
-        await intercept.OnResponseStartedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnResponseStartedAsync(
+            async res => await handler(new(res.BiDi, res.Context, res.IsBlocked, res.Navigation, res.RedirectCount, res.Request, res.Timestamp, res.Response)),
+            new BrowsingContextsSubscriptionOptions(null) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public async Task<Intercept> InterceptAuthAsync(Func<AuthRequiredEventArgs, Task> handler, BrowsingContextAddInterceptOptions? interceptOptions = null, SubscriptionOptions? options = null)
+    public async Task<Intercept> InterceptAuthAsync(Func<InterceptedAuth, Task> handler, InterceptAuthOptions? options = null)
     {
-        AddInterceptOptions addInterceptOptions = new(interceptOptions)
+        AddInterceptOptions addInterceptOptions = new(options)
         {
             Contexts = [context]
         };
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.AuthRequired], addInterceptOptions).ConfigureAwait(false);
 
-        await intercept.OnAuthRequiredAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnAuthRequiredAsync(
+            async auth => await handler(new(auth.BiDi, auth.Context, auth.IsBlocked, auth.Navigation, auth.RedirectCount, auth.Request, auth.Timestamp, auth.Response)),
+            new BrowsingContextsSubscriptionOptions(null) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
@@ -127,3 +133,9 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
         return networkModule.OnAuthRequiredAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 }
+
+public record InterceptRequestOptions : BrowsingContextAddInterceptOptions;
+
+public record InterceptResponseOptions : BrowsingContextAddInterceptOptions;
+
+public record InterceptAuthOptions : BrowsingContextAddInterceptOptions;

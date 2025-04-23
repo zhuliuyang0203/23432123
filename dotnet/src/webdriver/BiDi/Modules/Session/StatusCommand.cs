@@ -22,8 +22,8 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 internal class StatusCommand()
-    : Command<CommandParameters>(CommandParameters.Empty, "session.status");
+    : Command<CommandParameters, StatusResult>(CommandParameters.Empty, "session.status");
 
-public record StatusResult(bool Ready, string Message);
+public record StatusResult(bool Ready, string Message) : EmptyResult;
 
 public record StatusOptions : CommandOptions;

@@ -9,24 +9,40 @@ Python language bindings for Selenium WebDriver.
 
 The `selenium` package is used to automate web browser interaction from Python.
 
-+-----------------+--------------------------------------------------------------------------------------+
-| **Home**:       | https://selenium.dev                                                                 |
-+-----------------+--------------------------------------------------------------------------------------+
-| **GitHub**:     | https://github.com/SeleniumHQ/Selenium                                               |
-+-----------------+--------------------------------------------------------------------------------------+
-| **PyPI**:       | https://pypi.org/project/selenium                                                    |
-+-----------------+--------------------------------------------------------------------------------------+
-| **API Docs**:   | https://selenium.dev/selenium/docs/api/py/api.html                                   |
-+-----------------+--------------------------------------------------------------------------------------+
-| **IRC/Slack**:  | `Selenium chat room <https://www.selenium.dev/support/#ChatRoom>`_                   |
-+-----------------+--------------------------------------------------------------------------------------+
++-------------------+------------------------------------------------+
+| **Home**:         | https://selenium.dev                           |
++-------------------+------------------------------------------------+
+| **GitHub**:       | https://github.com/SeleniumHQ/Selenium         |
++-------------------+------------------------------------------------+
+| **PyPI**:         | https://pypi.org/project/selenium              |
++-------------------+------------------------------------------------+
+| **IRC/Slack**:    | https://www.selenium.dev/support/#ChatRoom     |
++-------------------+------------------------------------------------+
+| **Docs**:         | https://www.selenium.dev/selenium/docs/api/py  |
++-------------------+------------------------------------------------+
+| **API Docs**:     | `api.html <api.html>`_                         |
++-------------------+------------------------------------------------+
 
-Several browsers/drivers are supported (Firefox, Chrome, Edge, Safari), as well as the Remote protocol.
+Updated documentation published with each commit is available at: https://selenium-python-api-docs.readthedocs.io
+
+----
 
 Supported Python Versions
 =========================
 
 * Python 3.9+
+
+Supported Browsers
+==================
+
+Several browsers are supported, as well as the Remote protocol:
+
+* Chrome
+* Edge
+* Firefox
+* Safari
+* WebKitGTK
+* WPEWebKit
 
 Installing
 ==========
@@ -53,13 +69,13 @@ specify browsers and drivers yourself.
 Links to some of the more popular browser drivers:
 
 +--------------+-----------------------------------------------------------------------+
-| **Chrome**:  | https://chromedriver.chromium.org/downloads                           |
+| **Chrome**:  | https://developer.chrome.com/docs/chromedriver                        |
 +--------------+-----------------------------------------------------------------------+
-| **Edge**:    | https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/ |
+| **Edge**:    | https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver  |
 +--------------+-----------------------------------------------------------------------+
-| **Firefox**: | https://github.com/mozilla/geckodriver/releases                       |
+| **Firefox**: | https://github.com/mozilla/geckodriver                                |
 +--------------+-----------------------------------------------------------------------+
-| **Safari**:  | https://webkit.org/blog/6900/webdriver-support-in-safari-10/          |
+| **Safari**:  | https://webkit.org/blog/6900/webdriver-support-in-safari-10           |
 +--------------+-----------------------------------------------------------------------+
 
 Example 0:
@@ -107,7 +123,8 @@ Example 1:
 Example 2:
 ==========
 
-Selenium WebDriver is often used as a basis for testing web applications. Here is a simple example using Python's standard `unittest <http://docs.python.org/3/library/unittest.html>`_ library:
+Selenium WebDriver is often used as a basis for testing web applications. Here is a simple example using Python's standard
+`unittest <http://docs.python.org/3/library/unittest.html>`_ library:
 
 .. code-block:: python
 
@@ -143,18 +160,22 @@ Use The Source Luke!
 
 View source code online:
 
-+-----------+------------------------------------------------------+
-| Official: | https://github.com/SeleniumHQ/selenium/tree/trunk/py |
-+-----------+------------------------------------------------------+
++---------------+-------------------------------------------------------+
+| **Official**: | https://github.com/SeleniumHQ/selenium/tree/trunk/py  |
++---------------+-------------------------------------------------------+
 
 Contributing
 =============
 
+ - Fork the selenium repo and clone it locally
  - Create a branch for your work
- - Ensure `tox` is installed (using a `virtualenv` is recommended)
- - Run: `python -m venv venv && source venv/bin/activate && pip install tox`
- - After making changes, before committing execute `tox -e linting`
- - If tox exits `0`, commit and push. Otherwise fix the newly introduced style violations.
- - `flake8` requires manual fixes
- - `black` will rewrite the violations automatically, however the files are unstaged and should staged again.
- - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again.
+     - Run: `git checkout -b my-cool-branch-name`
+ - Create a virtual environment and install tox
+     - Run: `python -m venv venv && source venv/bin/activate && pip install tox`
+ - Make your changes
+ - Run: `tox -e linting`
+ - If tox exits `0`, commit and push. Otherwise, fix the newly introduced style violations
+     - `flake8` requires manual fixes
+     - `black` will rewrite the violations automatically, however the files are unstaged and should be staged again
+     - `isort` will rewrite the violations automatically, however the files are unstaged and should be staged again
+ - Submit a Pull Request

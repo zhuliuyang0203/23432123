@@ -18,11 +18,12 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class EvaluateCommand(EvaluateCommandParameters @params)
-    : Command<EvaluateCommandParameters>(@params, "script.evaluate");
+    : Command<EvaluateCommandParameters, EvaluateResult>(@params, "script.evaluate");
 
 internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise, ResultOwnership? ResultOwnership, SerializationOptions? SerializationOptions, bool? UserActivation) : CommandParameters;
 
@@ -39,7 +40,18 @@ public record EvaluateOptions : CommandOptions
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
-public abstract record EvaluateResult;
+public abstract record EvaluateResult : EmptyResult
+{
+    public RemoteValue AsSuccessResult()
+    {
+        if (this is EvaluateResultSuccess success)
+        {
+            return success.Result;
+        }
+
+        throw new InvalidCastException($"Expected the result to be {nameof(EvaluateResultSuccess)}, but received {this}");
+    }
+}
 
 public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateResult
 {

@@ -22,7 +22,7 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class RemoveInterceptCommand(RemoveInterceptCommandParameters @params)
-    : Command<RemoveInterceptCommandParameters>(@params, "network.removeIntercept");
+    : Command<RemoveInterceptCommandParameters, EmptyResult>(@params, "network.removeIntercept");
 
 internal record RemoveInterceptCommandParameters(Intercept Intercept) : CommandParameters;
 

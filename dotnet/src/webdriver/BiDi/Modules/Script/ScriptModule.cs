@@ -25,46 +25,32 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public sealed class ScriptModule(Broker broker) : Module(broker)
 {
-    public async Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)
+    public async Task<EvaluateResult> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)
     {
         var @params = new EvaluateCommandParameters(expression, target, awaitPromise, options?.ResultOwnership, options?.SerializationOptions, options?.UserActivation);
 
-        var result = await Broker.ExecuteCommandAsync<EvaluateCommand, EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
-
-        if (result is EvaluateResultException exp)
-        {
-            throw new ScriptEvaluateException(exp);
-        }
-
-        return (EvaluateResultSuccess)result;
+        return await Broker.ExecuteCommandAsync<EvaluateCommand, EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<TResult?> EvaluateAsync<TResult>(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)
     {
         var result = await EvaluateAsync(expression, awaitPromise, target, options).ConfigureAwait(false);
 
-        return result.Result.ConvertTo<TResult>();
+        return result.AsSuccessResult().ConvertTo<TResult>();
     }
 
-    public async Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)
+    public async Task<EvaluateResult> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)
     {
         var @params = new CallFunctionCommandParameters(functionDeclaration, awaitPromise, target, options?.Arguments, options?.ResultOwnership, options?.SerializationOptions, options?.This, options?.UserActivation);
 
-        var result = await Broker.ExecuteCommandAsync<CallFunctionCommand, EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
-
-        if (result is EvaluateResultException exp)
-        {
-            throw new ScriptEvaluateException(exp);
-        }
-
-        return (EvaluateResultSuccess)result;
+        return await Broker.ExecuteCommandAsync<CallFunctionCommand, EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<TResult?> CallFunctionAsync<TResult>(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)
     {
         var result = await CallFunctionAsync(functionDeclaration, awaitPromise, target, options).ConfigureAwait(false);
 
-        return result.Result.ConvertTo<TResult>();
+        return result.AsSuccessResult().ConvertTo<TResult>();
     }
 
     public async Task<GetRealmsResult> GetRealmsAsync(GetRealmsOptions? options = null)
