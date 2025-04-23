@@ -29,9 +29,11 @@ class MyCustomElement(WebElement):
 
 @pytest.fixture()
 def custom_element_driver(driver):
-    driver._web_element_cls = MyCustomElement
-    yield driver
-    driver._web_element_cls = WebElement
+    try:
+        driver._web_element_cls = MyCustomElement
+        yield driver
+    finally:
+        driver._web_element_cls = WebElement
 
 
 def test_find_element_with_custom_class(custom_element_driver, pages):
