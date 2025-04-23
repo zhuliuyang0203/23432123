@@ -50,7 +50,9 @@ def test_find_element_with_custom_locator(custom_locator_driver):
 
 
 def test_find_elements_with_custom_locator(custom_locator_driver):
-    custom_locator_driver.get("data:text/html,<div custom-attr='example'>Test1</div><div custom-attr='example'>Test2</div>")
+    custom_locator_driver.get(
+        "data:text/html,<div custom-attr='example'>Test1</div><div custom-attr='example'>Test2</div>"
+    )
     elements = custom_locator_driver.find_elements("custom", "example")
     assert len(elements) == 2
     assert elements[0].text == "Test1"
