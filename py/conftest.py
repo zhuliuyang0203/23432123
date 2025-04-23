@@ -20,13 +20,13 @@ import platform
 import socket
 import subprocess
 import time
-from test.selenium.webdriver.common.network import get_lan_ip
-from test.selenium.webdriver.common.webserver import SimpleWebServer
 from urllib.request import urlopen
 
 import pytest
 
 from selenium import webdriver
+from test.selenium.webdriver.common.network import get_lan_ip
+from test.selenium.webdriver.common.webserver import SimpleWebServer
 
 drivers = (
     "chrome",
@@ -97,7 +97,7 @@ def pytest_ignore_collect(path, config):
 
 
 def get_driver_class(driver_option):
-    """Generate the driver class name from the lowercase driver option"""
+    """Generate the driver class name from the lowercase driver option."""
     if driver_option == "webkitgtk":
         driver_class = "WebKitGTK"
     elif driver_option == "wpewebkit":
@@ -113,10 +113,8 @@ driver_instance = None
 @pytest.fixture(scope="function")
 def driver(request):
     kwargs = {}
-
     # browser can be changed with `--driver=firefox` as an argument or to addopts in pytest.ini
     driver_class = get_driver_class(getattr(request, "param", "Chrome"))
-
     # skip tests if not available on the platform
     _platform = platform.system()
     if driver_class == "Safari" and _platform != "Darwin":
@@ -125,12 +123,10 @@ def driver(request):
         pytest.skip("IE and EdgeHTML Tests can only run on Windows")
     if "WebKit" in driver_class and _platform == "Windows":
         pytest.skip("WebKit tests cannot be run on Windows")
-
     # skip tests for drivers that don't support BiDi when --bidi is enabled
     if request.config.option.bidi:
         if driver_class in ("Ie", "Safari", "WebKitGTK", "WPEWebKit"):
             pytest.skip(f"{driver_class} does not support BiDi")
-
     # conditionally mark tests as expected to fail based on driver
     marker = request.node.get_closest_marker(f"xfail_{driver_class.lower()}")
 
@@ -182,7 +178,6 @@ def driver(request):
 
         driver_instance = getattr(webdriver, driver_class)(**kwargs)
     yield driver_instance
-
     # Close the browser after BiDi tests. Those make event subscriptions
     # and doesn't seems to be stable enough, causing the flakiness of the
     # subsequent tests.

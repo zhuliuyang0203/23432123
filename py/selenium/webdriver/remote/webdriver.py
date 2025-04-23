@@ -354,7 +354,7 @@ class WebDriver(BaseWebDriver):
             self.session_id = response.get("sessionId")
             self.caps = response.get("capabilities")
         except Exception:
-            if self.service is not None:
+            if hasattr(self, "service") and self.service is not None:
                 self.service.stop()
             raise
 
