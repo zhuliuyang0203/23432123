@@ -34,7 +34,6 @@ import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.module.Input;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NeedsFreshDriver;
 import org.openqa.selenium.testing.NotYetImplemented;
