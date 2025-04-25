@@ -59,7 +59,11 @@ class Server:
         self.env = env
 
         self.process = None
-        self.status_url = f"http://{self.host}:{self.port}/status"
+        self.status_url = self._get_status_url()
+
+    def _get_status_url(self):
+        host = self.host if self.host is not None else "localhost"
+        return f"http://{host}:{self.port}/status"
 
     def _validate_path(self, path):
         if path and not os.path.exists(path):
