@@ -15,9 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from dataclasses import dataclass
-from typing import List
-
+from .log import LogEntryAdded
 from .session import Session
 
 
@@ -58,54 +56,3 @@ class Script:
                 handler(log_entry)
 
         return _handle_log_entry
-
-
-class LogEntryAdded:
-    event_class = "log.entryAdded"
-
-    @classmethod
-    def from_json(cls, json):
-        if json["type"] == "console":
-            return ConsoleLogEntry.from_json(json)
-        elif json["type"] == "javascript":
-            return JavaScriptLogEntry.from_json(json)
-
-
-@dataclass
-class ConsoleLogEntry:
-    level: str
-    text: str
-    timestamp: str
-    method: str
-    args: List[dict]
-    type_: str
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(
-            level=json["level"],
-            text=json["text"],
-            timestamp=json["timestamp"],
-            method=json["method"],
-            args=json["args"],
-            type_=json["type"],
-        )
-
-
-@dataclass
-class JavaScriptLogEntry:
-    level: str
-    text: str
-    timestamp: str
-    stacktrace: dict
-    type_: str
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(
-            level=json["level"],
-            text=json["text"],
-            timestamp=json["timestamp"],
-            stacktrace=json["stackTrace"],
-            type_=json["type"],
-        )
