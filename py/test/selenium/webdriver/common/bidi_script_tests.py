@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from selenium.webdriver.common.bidi.log import LogLevel
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -31,7 +32,7 @@ def test_logs_console_messages(driver, pages):
     WebDriverWait(driver, 5).until(lambda _: log_entries)
 
     log_entry = log_entries[0]
-    assert log_entry.level == "info"
+    assert log_entry.level == LogLevel.INFO
     assert log_entry.method == "log"
     assert log_entry.text == "Hello, world!"
     assert log_entry.type_ == "console"
@@ -55,7 +56,7 @@ def test_logs_console_errors(driver, pages):
     assert len(log_entries) == 1
 
     log_entry = log_entries[0]
-    assert log_entry.level == "error"
+    assert log_entry.level == LogLevel.ERROR
     assert log_entry.method == "error"
     assert log_entry.text == "I am console error"
     assert log_entry.type_ == "console"
@@ -105,7 +106,7 @@ def test_javascript_error_messages(driver, pages):
 
     log_entry = log_entries[0]
     assert log_entry.text == "Error: Not working"
-    assert log_entry.level == "error"
+    assert log_entry.level == LogLevel.ERROR
     assert log_entry.type_ == "javascript"
 
 
