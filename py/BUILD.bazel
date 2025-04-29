@@ -321,7 +321,6 @@ py_library(
         "test/selenium/webdriver/__init__.py",
         "test/selenium/webdriver/chrome/__init__.py",
         "test/selenium/webdriver/common/__init__.py",
-        "test/selenium/webdriver/common/conftest.py",
         "test/selenium/webdriver/common/network.py",
         "test/selenium/webdriver/common/webserver.py",
         "test/selenium/webdriver/firefox/__init__.py",
@@ -330,7 +329,6 @@ py_library(
         "test/selenium/webdriver/marionette/conftest.py",
         "test/selenium/webdriver/safari/conftest.py",
         "test/selenium/webdriver/support/__init__.py",
-        "test/selenium/webdriver/support/conftest.py",
     ],
     data = [
         "pyproject.toml",
@@ -547,6 +545,7 @@ py_test_suite(
     srcs = glob(
         [
             "test/selenium/webdriver/common/**/*.py",
+            "test/selenium/webdriver/remote/**/*.py",
             "test/selenium/webdriver/support/**/*.py",
         ],
         exclude = BIDI_TESTS,

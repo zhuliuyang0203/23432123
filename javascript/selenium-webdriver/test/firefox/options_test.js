@@ -90,7 +90,7 @@ suite(
             assert.deepStrictEqual(
               {
                 androidPackage: 'org.mozilla.firefox',
-                prefs: { 'remote.active-protocols': 3 },
+                prefs: { 'remote.active-protocols': 1 },
               },
               firefoxOptions,
             )

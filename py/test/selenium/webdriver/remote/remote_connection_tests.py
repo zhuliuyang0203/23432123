@@ -14,12 +14,14 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import base64
 
 import filetype
 
 
 def test_browser_specific_method(driver, pages):
+    """This only works on Firefox"""
     pages.load("simpleTest.html")
     screenshot = driver.execute("FULL_PAGE_SCREENSHOT")["value"]
     result = base64.b64decode(screenshot)
