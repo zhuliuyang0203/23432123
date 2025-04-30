@@ -57,7 +57,6 @@ class NetworkCommandsTest extends JupiterTestBase {
 
   @Test
   @NeedsFreshDriver
-  @NotYetImplemented(EDGE)
   void canContinueRequest() throws InterruptedException {
     try (Network network = new Network(driver)) {
       String intercept =

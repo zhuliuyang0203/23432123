@@ -18,6 +18,7 @@
 import time
 
 import pytest
+from urllib3.exceptions import ReadTimeoutError
 
 from selenium.common.exceptions import InvalidElementStateException
 from selenium.common.exceptions import InvalidSelectorException
@@ -357,3 +358,14 @@ def test_expected_condition_attribute_to_be_include_in_element(driver, pages):
         WebDriverWait(driver, 0.01).until(EC.element_attribute_to_include((By.ID, "inputRequired"), "test"))
     value = WebDriverWait(driver, 5).until(EC.element_attribute_to_include((By.ID, "inputRequired"), "value"))
     assert value is not None
+
+
+def test_driver_with_http_timeout(driver, pages):
+    """This test starts a webdriver with an http client timeout set less than the implicit
+    wait, and verifies the http timeout is triggered first when waiting for an element.
+    """
+    pages.load("simpleTest.html")
+    driver.command_executor.client_config.timeout = 6
+    driver.implicitly_wait(8)
+    with pytest.raises(ReadTimeoutError):
+        driver.find_element(By.ID, "no_element_to_be_found")

@@ -151,6 +151,7 @@ Webdriver.remote
    selenium.webdriver.remote.mobile
    selenium.webdriver.remote.remote_connection
    selenium.webdriver.remote.script_key
+   selenium.webdriver.remote.server
    selenium.webdriver.remote.shadowroot
    selenium.webdriver.remote.switch_to
    selenium.webdriver.remote.utils
