@@ -98,7 +98,7 @@ JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chromium:chromium.publish
   //java/src/org/openqa/selenium/devtools/v134:v134.publish
   //java/src/org/openqa/selenium/devtools/v135:v135.publish
-  //java/src/org/openqa/selenium/devtools/v133:v133.publish
+  //java/src/org/openqa/selenium/devtools/v136:v136.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
   //java/src/org/openqa/selenium/grid/sessionmap/jdbc:jdbc.publish
@@ -892,7 +892,7 @@ namespace :dotnet do
       sh 'docfx dotnet/docs/docfx.json'
     rescue StandardError
       case $CHILD_STATUS.exitstatus
-      when 133
+      when 136
         raise 'Ensure the dotnet/tools directory is added to your PATH environment variable (e.g., `~/.dotnet/tools`)'
       when 255
         puts '.NET documentation build failed, likely because of DevTools namespacing. This is ok; continuing'

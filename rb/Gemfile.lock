@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    selenium-devtools (0.135.0)
+    selenium-devtools (0.136.0)
       selenium-webdriver (~> 4.2)
     selenium-webdriver (4.32.0.nightly)
       base64 (~> 0.2)
