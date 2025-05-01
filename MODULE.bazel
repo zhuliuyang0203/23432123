@@ -27,6 +27,15 @@ bazel_dep(name = "rules_python", version = "1.1.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
 bazel_dep(name = "rules_ruby", version = "0.18.0")
 
+# Until `rules_jvm_external` 6.8 ships
+git_override(
+    module_name = "rules_jvm_external",
+    commit = "d8af22108bd8b353a226140570008231f2921931",
+    patch_strip = 1,
+    patches = ["//java:rules_jvm_external_javadoc.patch"],
+    remote = "https://github.com/bazel-contrib/rules_jvm_external.git",
+)
+
 linter = use_extension("@apple_rules_lint//lint:extensions.bzl", "linter")
 linter.configure(
     name = "java-spotbugs",
@@ -140,16 +149,6 @@ use_repo(pip, "py_dev_requirements")
 
 register_toolchains("@pythons_hub//:all")
 
-# https://github.com/bazelbuild/rules_jvm_external/pull/1079
-archive_override(
-    module_name = "rules_jvm_external",
-    integrity = "sha256-yS8Qes1PLbYbe10b1WSgl0Auqn/1Wlxg8O3wSr7a/Sg=",
-    patch_strip = 1,
-    patches = ["//java:rules_jvm_external_javadoc.patch"],
-    strip_prefix = "rules_jvm_external-f572a26116c7ef71d8842dd056c2605782f7be8d",
-    urls = ["https://github.com/bazelbuild/rules_jvm_external/archive/f572a26116c7ef71d8842dd056c2605782f7be8d.tar.gz"],
-)
-
 java_toolchains = use_extension("@rules_java//java:extensions.bzl", "toolchains")
 use_repo(
     java_toolchains,
@@ -185,22 +184,22 @@ maven.install(
         "dev.failsafe:failsafe:3.3.2",
         "io.grpc:grpc-context:1.71.0",
         "io.lettuce:lettuce-core:6.5.5.RELEASE",
-        "io.netty:netty-buffer:4.2.0.Final",
-        "io.netty:netty-codec-http:4.2.0.Final",
-        "io.netty:netty-codec-http2:4.2.0.Final",
-        "io.netty:netty-common:4.2.0.Final",
-        "io.netty:netty-handler:4.2.0.Final",
-        "io.netty:netty-handler-proxy:4.2.0.Final",
-        "io.netty:netty-transport:4.2.0.Final",
-        "io.opentelemetry:opentelemetry-api:1.48.0",
-        "io.opentelemetry:opentelemetry-context:1.48.0",
-        "io.opentelemetry:opentelemetry-exporter-logging:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk-common:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk-testing:1.48.0",
-        "io.opentelemetry:opentelemetry-sdk-trace:1.48.0",
+        "io.netty:netty-buffer",
+        "io.netty:netty-codec-http",
+        "io.netty:netty-codec-http2",
+        "io.netty:netty-common",
+        "io.netty:netty-handler",
+        "io.netty:netty-handler-proxy",
+        "io.netty:netty-transport",
+        "io.opentelemetry:opentelemetry-api",
+        "io.opentelemetry:opentelemetry-context",
+        "io.opentelemetry:opentelemetry-exporter-logging",
+        "io.opentelemetry:opentelemetry-sdk",
+        "io.opentelemetry:opentelemetry-sdk-common",
+        "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure",
+        "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi",
+        "io.opentelemetry:opentelemetry-sdk-testing",
+        "io.opentelemetry:opentelemetry-sdk-trace",
         "it.ozimov:embedded-redis:0.7.3",
         "net.bytebuddy:byte-buddy:1.17.5",
         "org.htmlunit:htmlunit-core-js:4.11.0",
@@ -211,13 +210,13 @@ maven.install(
         "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5",
         "org.hsqldb:hsqldb:2.7.4",
         "org.jspecify:jspecify:1.0.0",
-        "org.junit.jupiter:junit-jupiter-api:5.12.1",
-        "org.junit.jupiter:junit-jupiter-engine:5.12.1",
-        "org.junit.jupiter:junit-jupiter-params:5.12.1",
-        "org.junit.platform:junit-platform-launcher:1.12.1",
-        "org.junit.platform:junit-platform-reporting:1.12.1",
-        "org.junit.platform:junit-platform-commons:1.12.1",
-        "org.junit.platform:junit-platform-engine:1.12.1",
+        "org.junit.jupiter:junit-jupiter-api",
+        "org.junit.jupiter:junit-jupiter-engine",
+        "org.junit.jupiter:junit-jupiter-params",
+        "org.junit.platform:junit-platform-launcher",
+        "org.junit.platform:junit-platform-reporting",
+        "org.junit.platform:junit-platform-commons",
+        "org.junit.platform:junit-platform-engine",
         "org.mockito:mockito-core:5.16.1",
         "org.redisson:redisson:3.45.1",
         "org.slf4j:slf4j-api:2.0.17",
@@ -226,9 +225,9 @@ maven.install(
         "org.zeromq:jeromq:0.6.0",
     ],
     boms = [
-        "io.opentelemetry:opentelemetry-bom:1.46.0",
-        "io.netty:netty-bom:4.1.118.Final",
-        "org.junit:junit-bom:5.11.4",
+        "io.opentelemetry:opentelemetry-bom:1.49.0",
+        "io.netty:netty-bom:4.1.121.Final",
+        "org.junit:junit-bom:5.12.2",
     ],
     excluded_artifacts = [
         "org.hamcrest:hamcrest-all",  # Replaced by hamcrest 2
