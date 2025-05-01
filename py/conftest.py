@@ -17,14 +17,11 @@
 
 import os
 import platform
-import socket
-import subprocess
-import time
-from urllib.request import urlopen
 
 import pytest
 
 from selenium import webdriver
+from selenium.webdriver.remote.server import Server
 from test.selenium.webdriver.common.network import get_lan_ip
 from test.selenium.webdriver.common.webserver import SimpleWebServer
 
@@ -125,7 +122,7 @@ def driver(request):
 
     # skip tests in the 'remote' directory if run with a local driver
     if request.node.path.parts[-2] == "remote" and driver_class != "Remote":
-        pytest.skip(f"Remote tests can't be run with driver '{driver_option}'")
+        pytest.skip(f"Remote tests can't be run with driver '{driver_option.lower()}'")
 
     # skip tests that can't run on certain platforms
     _platform = platform.system()
@@ -295,60 +292,26 @@ def server(request):
         yield None
         return
 
-    _host = "localhost"
-    _port = 4444
-    _path = os.path.join(
+    jar_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         "java/src/org/openqa/selenium/grid/selenium_server_deploy.jar",
     )
 
-    def wait_for_server(url, timeout):
-        start = time.time()
-        while time.time() - start < timeout:
-            try:
-                urlopen(url)
-                return 1
-            except OSError:
-                time.sleep(0.2)
-        return 0
+    remote_env = os.environ.copy()
+    if platform.system() == "Linux":
+        # There are issues with window size/position when running Firefox
+        # under Wayland, so we use XWayland instead.
+        remote_env["MOZ_ENABLE_WAYLAND"] = "0"
 
-    _socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    url = f"http://{_host}:{_port}/status"
-    try:
-        _socket.connect((_host, _port))
-        print(
-            "The remote driver server is already running or something else"
-            "is using port {}, continuing...".format(_port)
-        )
-    except Exception:
-        remote_env = os.environ.copy()
-        if platform.system() == "Linux":
-            # There are issues with window size/position when running Firefox
-            # under Wayland, so we use XWayland instead.
-            remote_env["MOZ_ENABLE_WAYLAND"] = "0"
-        print("Starting the Selenium server")
-        process = subprocess.Popen(
-            [
-                "java",
-                "-jar",
-                _path,
-                "standalone",
-                "--port",
-                "4444",
-                "--selenium-manager",
-                "true",
-                "--enable-managed-downloads",
-                "true",
-            ],
-            env=remote_env,
-        )
-        print(f"Selenium server running as process: {process.pid}")
-        assert wait_for_server(url, 10), f"Timed out waiting for Selenium server at {url}"
-        print("Selenium server is ready")
-        yield process
-        process.terminate()
-        process.wait()
-        print("Selenium server has been terminated")
+    if os.path.exists(jar_path):
+        # use the grid server built by bazel
+        server = Server(path=jar_path, env=remote_env)
+    else:
+        # use the local grid server (downloads a new one if needed)
+        server = Server(env=remote_env)
+    server.start()
+    yield server
+    server.stop()
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -399,6 +362,13 @@ def clean_driver(request):
 
 @pytest.fixture
 def firefox_options(request):
+    try:
+        driver_option = request.config.option.drivers[0]
+    except (AttributeError, TypeError):
+        raise Exception("This test requires a --driver to be specified")
+    # skip tests in the 'remote' directory if run with a local driver
+    if request.node.path.parts[-2] == "remote" and get_driver_class(driver_option) != "Remote":
+        pytest.skip(f"Remote tests can't be run with driver '{driver_option}'")
     options = webdriver.FirefoxOptions()
     if request.config.option.headless:
         options.add_argument("-headless")

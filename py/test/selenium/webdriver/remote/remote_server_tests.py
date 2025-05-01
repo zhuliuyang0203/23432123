@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Licensed to the Software Freedom Conservancy (SFC) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -17,24 +15,30 @@
 # specific language governing permissions and limitations
 # under the License.
 
-module Selenium
-  module WebDriver
-    module Firefox
-      class Service < WebDriver::Service
-        DEFAULT_PORT = 4444
-        EXECUTABLE = 'geckodriver'
-        SHUTDOWN_SUPPORTED = false
-        DRIVER_PATH_ENV_KEY = 'SE_GECKODRIVER'
+import os
 
-        def initialize(path: nil, port: nil, log: nil, args: nil)
-          args ||= []
-          unless args.any? { |arg| arg.include?('--connect-existing') }
-            args << '--websocket-port'
-            args << WebDriver::PortProber.above(9222).to_s
-          end
-          super
-        end
-      end # Service
-    end # Firefox
-  end # WebDriver
-end # Selenium
+import pytest
+
+from selenium.webdriver.remote.server import Server
+
+
+@pytest.fixture
+def standalone_server():
+    server = Server()
+    server_path = server.download_if_needed()
+    remove_file(server_path)
+    yield server
+    remove_file(server_path)
+
+
+def remove_file(path):
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        pass
+
+
+def test_download_latest_server(standalone_server):
+    server_path = standalone_server.download_if_needed()
+    assert os.path.exists(server_path)
+    assert os.path.getsize(server_path) > 0
