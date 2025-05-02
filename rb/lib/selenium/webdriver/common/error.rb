@@ -46,12 +46,14 @@ module Selenium
       }.freeze
 
       class WebDriverError < StandardError
+        # @rbs (?String) -> void
         def initialize(msg = '')
           # Remove this conditional when all the error pages have been documented
           super(URLS[class_name] ? "#{msg}; #{SUPPORT_MSG} #{URLS[class_name]}" : msg)
         end
 
         # steep:ignore:start
+        # @rbs () -> Symbol
         def class_name
           self.class.name.split('::')&.last&.to_sym
         end

@@ -23,6 +23,7 @@ module Selenium
       class ExceptionEvent
         attr_accessor :description, :timestamp, :stacktrace
 
+        # @rbs (description: String, timestamp: Float, stacktrace: Array[untyped]) -> void
         def initialize(description:, timestamp:, stacktrace:)
           @description = description
           @timestamp = Time.at(timestamp / 1000)

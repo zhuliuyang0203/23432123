@@ -47,6 +47,7 @@ module Selenium
         @path = path
       end
 
+      # @rbs () -> nil
       def self.path
         @path ||= nil
       end

@@ -23,11 +23,13 @@ module Selenium
       class InterceptedItem
         attr_reader :network, :request
 
+        # @rbs (Selenium::WebDriver::BiDi::Network, Hash[untyped, untyped]) -> void
         def initialize(network, request)
           @network = network
           @request = request
         end
 
+        # @rbs () -> String
         def id
           @id ||= @request['request']
         end

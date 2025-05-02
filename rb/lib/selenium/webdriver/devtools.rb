@@ -28,20 +28,24 @@ module Selenium
       autoload :Request, 'selenium/webdriver/devtools/request'
       autoload :Response, 'selenium/webdriver/devtools/response'
 
+      # @rbs (url: String, target_type: String) -> void
       def initialize(url:, target_type:)
         @ws = WebSocketConnection.new(url: url)
         @session_id = nil
         start_session(target_type: target_type)
       end
 
+      # @rbs () -> nil
       def close
         @ws.close
       end
 
+      # @rbs () -> Hash[untyped, untyped]
       def callbacks
         @ws.callbacks
       end
 
+      # @rbs (String, **nil | String | bool | String? | bool | bool? | String | Hash[untyped, untyped] | Array[untyped]? | (String | Array[untyped])? | String | (String | Integer | Array[untyped])?) -> Hash[untyped, untyped]?
       def send_cmd(method, **params)
         data = {method: method, params: params.compact}
         data[:sessionId] = @session_id if @session_id
@@ -51,6 +55,7 @@ module Selenium
         message
       end
 
+      # @rbs (Symbol, *nil) -> (Selenium::DevTools::V135::Target | Selenium::DevTools::V135::Page | Selenium::DevTools::V135::CSS | Selenium::DevTools::V135::DOM | Selenium::DevTools::V135::DOMDebugger | Selenium::DevTools::V135::Runtime | Selenium::DevTools::V135::Network | Selenium::DevTools::V135::Fetch)
       def method_missing(method, *_args)
         namespace = "Selenium::DevTools::V#{Selenium::DevTools.version}"
         methods_to_classes = "#{namespace}::METHODS_TO_CLASSES"
@@ -81,6 +86,7 @@ module Selenium
 
       private
 
+      # @rbs (target_type: String) -> String?
       def start_session(target_type:)
         targets = target.get_targets.dig('result', 'targetInfos')
         found_target = targets.find { |target| target['type'] == target_type }

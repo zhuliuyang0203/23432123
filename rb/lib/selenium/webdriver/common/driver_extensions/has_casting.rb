@@ -27,6 +27,7 @@ module Selenium
         # @return [Array] list of sinks available for casting with id and name values
         #
 
+        # @rbs () -> Array[untyped]
         def cast_sinks
           @bridge.cast_sinks
         end

@@ -64,6 +64,7 @@ RSpec.configure do |c|
     GlobalTestEnv.quit_driver
     trace.disable
     trace.save_comments
+    trace.save_files(out_dir: 'sig/')
   end
 
   c.filter_run_when_matching :focus

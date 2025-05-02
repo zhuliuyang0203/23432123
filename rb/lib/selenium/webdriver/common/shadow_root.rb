@@ -30,6 +30,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (Selenium::WebDriver::Remote::Bridge, String) -> void
       def initialize(bridge, id)
         @bridge = bridge
         @id = id
@@ -39,6 +40,7 @@ module Selenium
         format '#<%<class>s:0x%<hash>x id=%<id>s>', class: self.class, hash: hash * 2, id: @id.inspect
       end
 
+      # @rbs (Selenium::WebDriver::ShadowRoot) -> bool
       def ==(other)
         other.is_a?(self.class) && ref == other.ref
       end
@@ -53,6 +55,7 @@ module Selenium
       # @see SearchContext
       #
 
+      # @rbs () -> Array[untyped]
       def ref
         [:shadow_root, @id]
       end

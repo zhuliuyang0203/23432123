@@ -1,41 +1,15 @@
-module Selenium
-  module WebDriver
-    module Remote
-      module Http
-        class Common
-          MAX_REDIRECTS: Integer
+class Selenium::WebDriver::Remote::Http::Common
+  def call: (Symbol, String, Hash[untyped, untyped]) -> Selenium::WebDriver::Remote::Response
+          | (Symbol, String, nil) -> nil
+          | (Symbol, String, Hash[untyped, untyped]) -> nil
+          | (Symbol, String, nil) -> Selenium::WebDriver::Remote::Response
 
-          CONTENT_TYPE: String
+  def server_url: () -> URI::HTTP
 
-          DEFAULT_HEADERS: Hash[String, untyped]
+  def common_headers: () -> Hash[untyped, untyped]
 
-          @common_headers: Hash[String, untyped]
+  def create_response: (String, String, String) -> Selenium::WebDriver::Remote::Response
+                     | (String, String, String) -> nil
 
-          attr_accessor self.extra_headers: Hash[String, untyped]
-
-          attr_writer self.user_agent: String
-
-          def self.user_agent: -> String
-
-          attr_writer server_url: String
-
-          def quit_errors: () -> Array[untyped]
-
-          def close: () -> nil
-
-          def call: (untyped verb, untyped url, untyped command_hash) -> untyped
-
-          private
-
-          def common_headers: -> Hash[String, untyped]
-
-          def server_url: () -> String
-
-          def request: (*untyped) -> untyped
-
-          def create_response: (Integer code, Hash[String, untyped] body, String content_type) -> Remote::Response
-        end
-      end
-    end
-  end
+  def self.user_agent: () -> String
 end

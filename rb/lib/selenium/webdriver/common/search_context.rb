@@ -38,6 +38,7 @@ module Selenium
       class << self
         attr_accessor :extra_finders
 
+        # @rbs () -> Hash[untyped, untyped]
         def finders
           FINDERS.merge(extra_finders || {})
         end
@@ -62,6 +63,7 @@ module Selenium
       # @raise [Error::NoSuchElementError] if the element doesn't exist
       #
 
+      # @rbs (*Hash[untyped, untyped]) -> Selenium::WebDriver::Element?
       def find_element(*args)
         how, what = extract_args(args)
 
@@ -77,6 +79,7 @@ module Selenium
       # @see SearchContext#find_element
       #
 
+      # @rbs (*Hash[untyped, untyped]) -> Array[untyped]
       def find_elements(*args)
         how, what = extract_args(args)
 
@@ -88,6 +91,7 @@ module Selenium
 
       private
 
+      # @rbs (Array[untyped]) -> Array[untyped]
       def extract_args(args)
         case args.size
         when 2

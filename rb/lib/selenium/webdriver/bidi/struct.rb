@@ -22,6 +22,7 @@ module Selenium
     class BiDi
       class Struct < ::Struct
         class << self
+          # @rbs (*Symbol) -> Class
           def new(*args, &block)
             super do
               define_method(:initialize) do |**kwargs|

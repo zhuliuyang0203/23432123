@@ -34,6 +34,7 @@ module Selenium
       alias user_consenting? user_consenting
       alias user_verified? user_verified
 
+      # @rbs (**Symbol | bool) -> void
       def initialize(**opts)
         @protocol = opts.delete(:protocol) { :ctap2 }
         @transport = opts.delete(:transport) { :usb }
@@ -49,6 +50,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (*untyped) -> Hash[untyped, untyped]
       def as_json(*)
         {'protocol' => PROTOCOL[protocol],
          'transport' => TRANSPORT[transport],

@@ -1,17 +1,5 @@
-module Selenium
-  module WebDriver
-    module Chrome
-      class Driver < Chromium::Driver
-        include LocalDriver
+class Selenium::WebDriver::Chrome::Driver
+  def initialize: (?options: Selenium::WebDriver::Chrome::Options, ?service: Selenium::WebDriver::Chrome::Service, ?url: nil, **nil) -> void
 
-        def initialize: (?options: untyped?, ?service: untyped?, ?url: untyped?, **untyped opts) -> void
-
-        def browser: () -> Symbol
-
-        private
-
-        def devtools_address: () -> String
-      end
-    end
-  end
+  def browser: () -> Symbol
 end

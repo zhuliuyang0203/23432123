@@ -64,6 +64,7 @@ module Selenium
         Process.detach(@pid) if detach
       end
 
+      # @rbs (?Integer) -> nil
       def stop(timeout = 3)
         return unless @pid
         return if exited?
@@ -113,6 +114,7 @@ module Selenium
 
       private
 
+      # @rbs (Integer) -> nil
       def terminate_and_wait_else_kill(timeout)
         WebDriver.logger.debug("Sending TERM to process: #{@pid}", id: :process)
         terminate(@pid)
@@ -126,6 +128,7 @@ module Selenium
         WebDriver.logger.debug("      -> killed #{@pid}", id: :process)
       end
 
+      # @rbs (Integer) -> void
       def terminate(pid)
         Process.kill(SIGTERM, pid)
       end

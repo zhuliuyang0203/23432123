@@ -32,25 +32,30 @@ module Selenium
       class InputDevice
         attr_reader :name, :actions, :type
 
+        # @rbs (?String?) -> void
         def initialize(name = nil)
           @name = name || SecureRandom.uuid
           @actions = []
         end
 
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput::TypingInteraction | Selenium::WebDriver::Interactions::PointerMove | Selenium::WebDriver::Interactions::PointerPress | Selenium::WebDriver::Interactions::Pause | Selenium::WebDriver::Interactions::Scroll) -> Array[untyped]
         def add_action(action)
           raise TypeError, "#{action.inspect} is not a valid action" unless action.class < Interaction
 
           @actions << action
         end
 
+        # @rbs () -> Array[untyped]
         def clear_actions
           @actions.clear
         end
 
+        # @rbs (?Integer) -> Array[untyped]
         def create_pause(duration = 0)
           add_action(Pause.new(self, duration))
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           {type: type, id: name, actions: @actions.map(&:encode)} unless @actions.empty?
         end

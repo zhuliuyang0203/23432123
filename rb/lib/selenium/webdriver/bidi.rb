@@ -31,30 +31,37 @@ module Selenium
       autoload :InterceptedAuth, 'selenium/webdriver/bidi/network/intercepted_auth'
       autoload :InterceptedItem, 'selenium/webdriver/bidi/network/intercepted_item'
 
+      # @rbs (url: String) -> void
       def initialize(url:)
         @ws = WebSocketConnection.new(url: url)
       end
 
+      # @rbs () -> nil
       def close
         @ws.close
       end
 
+      # @rbs () -> Hash[untyped, untyped]
       def callbacks
         @ws.callbacks
       end
 
+      # @rbs (String) -> void
       def add_callback(event, &block)
         @ws.add_callback(event, &block)
       end
 
+      # @rbs (String, Integer) -> void
       def remove_callback(event, id)
         @ws.remove_callback(event, id)
       end
 
+      # @rbs () -> Selenium::WebDriver::BiDi::Session
       def session
         @session ||= Session.new(self)
       end
 
+      # @rbs (String, **String | String | Integer | String | bool) -> Hash[untyped, untyped]
       def send_cmd(method, **params)
         data = {method: method, params: params.compact}
         message = @ws.send_cmd(**data)
@@ -63,6 +70,7 @@ module Selenium
         message['result']
       end
 
+      # @rbs (Hash[untyped, untyped]) -> String
       def error_message(message)
         "#{message['error']}: #{message['message']}\n#{message['stacktrace']}"
       end

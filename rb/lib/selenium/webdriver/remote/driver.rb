@@ -30,6 +30,7 @@ module Selenium
         include DriverExtensions::HasSessionId
         include DriverExtensions::HasFileDownloads
 
+        # @rbs (?capabilities: nil, ?options: Selenium::WebDriver::Firefox::Options, ?service: nil, ?url: String, **nil) -> void
         def initialize(capabilities: nil, options: nil, service: nil, url: nil, **opts)
           raise ArgumentError, "Can not set :service object on #{self.class}" if service
 
@@ -44,10 +45,12 @@ module Selenium
 
         private
 
+        # @rbs () -> String
         def devtools_url
           capabilities['se:cdp']
         end
 
+        # @rbs () -> Integer
         def devtools_version
           cdp_version = capabilities['se:cdpVersion']&.split('.')&.first
           raise Error::WebDriverError, 'DevTools is not supported by the Remote Server' unless cdp_version
@@ -55,6 +58,7 @@ module Selenium
           Integer(cdp_version)
         end
 
+        # @rbs (Selenium::WebDriver::Firefox::Options, nil) -> Hash[untyped, untyped]
         def process_options(options, capabilities)
           if options && capabilities
             msg = "Don't use both :options and :capabilities when initializing #{self.class}, prefer :options"

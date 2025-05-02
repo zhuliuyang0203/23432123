@@ -23,6 +23,7 @@ module Selenium
       class ConsoleEvent
         attr_accessor :type, :timestamp, :args
 
+        # @rbs (type: String, timestamp: Float, args: Array[untyped]) -> void
         def initialize(type:, timestamp:, args:)
           @type = type.to_sym
           @timestamp = Time.at(timestamp / 1000)

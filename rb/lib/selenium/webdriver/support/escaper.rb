@@ -21,6 +21,7 @@ module Selenium
   module WebDriver
     module Support
       module Escaper
+        # @rbs (String) -> String
         def self.escape(str)
           if str.include?('"') && str.include?("'")
             parts = str.split('"', -1).map { |part| %("#{part}") }

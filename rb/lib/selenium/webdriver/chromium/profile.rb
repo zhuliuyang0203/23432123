@@ -27,6 +27,7 @@ module Selenium
       class Profile
         include ProfileHelper
 
+        # @rbs (?nil) -> void
         def initialize(model = nil)
           @model = verify_model(model)
           @extensions = []
@@ -34,6 +35,7 @@ module Selenium
           @directory = nil
         end
 
+        # @rbs (String) -> Array[untyped]?
         def add_extension(path)
           raise Error::WebDriverError, "could not find extension at #{path.inspect}" unless File.file?(path)
 
@@ -44,6 +46,7 @@ module Selenium
           @encoded_extensions << encoded
         end
 
+        # @rbs () -> String
         def directory
           @directory || layout_on_disk
         end
@@ -73,6 +76,7 @@ module Selenium
           @directory
         end
 
+        # @rbs (*untyped) -> Hash[untyped, untyped]
         def as_json(*)
           extensions = @extensions.map do |crx_path|
             File.open(crx_path, 'rb') { |crx_file| Base64.strict_encode64 crx_file.read }

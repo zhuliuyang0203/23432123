@@ -33,6 +33,7 @@ module Selenium
         POINTER = :pointer
         ORIGINS = [VIEWPORT, POINTER].freeze
 
+        # @rbs (Selenium::WebDriver::Interactions::PointerInput, Float, Integer, Integer, **Selenium::WebDriver::Element | Symbol | Symbol | Float | Integer) -> void
         def initialize(source, duration, x, y, **opts)
           super(source)
           @duration = duration * 1000
@@ -43,10 +44,12 @@ module Selenium
           @opts = opts
         end
 
+        # @rbs (Selenium::WebDriver::Interactions::PointerInput) -> nil
         def assert_source(source)
           raise TypeError, "#{source.type} is not a valid input type" unless source.is_a? PointerInput
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           process_opts.merge('type' => type.to_s,
                              'duration' => @duration.to_i,

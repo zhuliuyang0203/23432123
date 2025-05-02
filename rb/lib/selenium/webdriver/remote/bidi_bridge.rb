@@ -23,40 +23,48 @@ module Selenium
       class BiDiBridge < Bridge
         attr_reader :bidi
 
+        # @rbs (Hash[untyped, untyped]) -> Selenium::WebDriver::BiDi
         def create_session(capabilities)
           super
           socket_url = @capabilities[:web_socket_url]
           @bidi = Selenium::WebDriver::BiDi.new(url: socket_url)
         end
 
+        # @rbs (String) -> Hash[untyped, untyped]
         def get(url)
           browsing_context.navigate(url)
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def go_back
           browsing_context.traverse_history(-1)
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def go_forward
           browsing_context.traverse_history(1)
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def refresh
           browsing_context.reload
         end
 
+        # @rbs () -> nil
         def quit
           super
         ensure
           bidi.close
         end
 
+        # @rbs () -> Array[untyped]
         def close
           execute(:close_window).tap { |handles| bidi.close if handles.empty? }
         end
 
         private
 
+        # @rbs () -> Selenium::WebDriver::BiDi::BrowsingContext
         def browsing_context
           @browsing_context ||= WebDriver::BiDi::BrowsingContext.new(self)
         end

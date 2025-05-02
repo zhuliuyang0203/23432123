@@ -29,22 +29,26 @@ module Selenium
       class TypingInteraction < Interaction
         attr_reader :type
 
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput, Symbol, String | Symbol) -> void
         def initialize(source, type, key)
           super(source)
           @type = assert_type(type)
           @key = Keys.encode_key(key)
         end
 
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput) -> nil
         def assert_source(source)
           raise TypeError, "#{source.type} is not a valid input type" unless source.is_a? KeyInput
         end
 
+        # @rbs (Symbol) -> Symbol
         def assert_type(type)
           raise TypeError, "#{type.inspect} is not a valid key subtype" unless KeyInput::SUBTYPES.key? type
 
           KeyInput::SUBTYPES[type]
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           {type: @type, value: @key}
         end

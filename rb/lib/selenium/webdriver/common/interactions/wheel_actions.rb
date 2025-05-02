@@ -27,6 +27,7 @@ module Selenium
       # It can be overridden with default_scroll_duration=
       #
 
+      # @rbs () -> Float
       def default_scroll_duration
         @default_scroll_duration ||= @duration / 1000.0 # convert ms to seconds
       end
@@ -41,6 +42,7 @@ module Selenium
       # @param [Object] element Which element to scroll into the viewport.
       # @param [Object] device Which device to use to scroll
       # @return [Selenium::WebDriver::WheelActions] A self reference.
+      # @rbs (Selenium::WebDriver::Element, ?device: nil) -> Selenium::WebDriver::ActionBuilder
       def scroll_to(element, device: nil)
         scroll(origin: element, device: device)
       end
@@ -55,6 +57,7 @@ module Selenium
       # @param [Integer] delta_x Distance along X axis to scroll using the wheel. A negative value scrolls left.
       # @param [Integer] delta_y Distance along Y axis to scroll using the wheel. A negative value scrolls up.
       # @return [Selenium::WebDriver::WheelActions] A self reference.
+      # @rbs (Integer, Integer, ?device: nil) -> Selenium::WebDriver::ActionBuilder
       def scroll_by(delta_x, delta_y, device: nil)
         scroll(delta_x: delta_x, delta_y: delta_y, device: device)
       end
@@ -85,6 +88,7 @@ module Selenium
       # @param [Integer] delta_y Distance along Y axis to scroll using the wheel. A negative value scrolls up.
       # @return [Selenium::WebDriver::WheelActions] A self reference.
       # @raise [Error::MoveTargetOutOfBoundsError] If the origin with offset is outside the viewport.
+      # @rbs (Selenium::WebDriver::WheelActions::ScrollOrigin, Integer, Integer, ?device: nil) -> Selenium::WebDriver::ActionBuilder
       def scroll_from(scroll_origin, delta_x, delta_y, device: nil)
         raise TypeError, "#{scroll_origin.inspect} isn't a valid ScrollOrigin" unless scroll_origin.is_a?(ScrollOrigin)
 
@@ -98,6 +102,7 @@ module Selenium
 
       private
 
+      # @rbs (**Selenium::WebDriver::Element? | Integer? | (Integer | Selenium::WebDriver::Element)? | (Integer | Symbol)?) -> Selenium::WebDriver::ActionBuilder
       def scroll(**opts)
         opts[:duration] = default_scroll_duration
         wheel = wheel_input(opts.delete(:device))
@@ -106,6 +111,7 @@ module Selenium
         self
       end
 
+      # @rbs (?nil) -> Selenium::WebDriver::Interactions::WheelInput
       def wheel_input(name = nil)
         device(name: name, type: Interactions::WHEEL) || add_wheel_input('wheel')
       end

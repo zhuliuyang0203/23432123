@@ -1,62 +1,31 @@
-module Selenium
-  module WebDriver
-    # @api private
-    module Platform
-      @home: untyped
+module Selenium::WebDriver::Platform
+  def self.ci: () -> nil
 
-      @engine: untyped
+  def self.os: () -> Symbol
 
-      @os: untyped
+  def self.localhost: () -> String
 
-      def self?.home: () -> untyped
+  def self.jruby?: () -> bool
 
-      def self?.engine: () -> untyped
+  def self.engine: () -> Symbol
 
-      def self?.os: () -> untyped
+  def self.windows?: () -> bool
 
-      def self?.ci: () -> Symbol?
+  def self.truffleruby?: () -> bool
 
-      def self?.jruby?: () -> untyped
+  def self.cygwin_path: (String, ?only_cygwin: bool, **nil) -> String
 
-      def self?.truffleruby?: () -> untyped
+  def self.cygwin?: () -> bool
 
-      def self?.ruby_version: () -> untyped
+  def self.assert_executable: (String) -> void
 
-      def self?.windows?: () -> untyped
+  def self.assert_file: (String) -> void
 
-      def self?.mac?: () -> untyped
+  def self.exit_hook: () -> void
 
-      def self?.linux?: () -> untyped
+  def self.interfaces: () -> Array[untyped]
 
-      def self?.wsl?: () -> untyped
+  def self.ip: () -> String
 
-      def self?.cygwin?: () -> untyped
-
-      def self?.null_device: () -> untyped
-
-      def self?.wrap_in_quotes_if_necessary: (untyped str) -> (String | untyped)
-
-      def self?.cygwin_path: (untyped path, **untyped opts) -> untyped
-
-      def self?.unix_path: (untyped path) -> untyped
-
-      def self?.windows_path: (untyped path) -> untyped
-
-      def self?.make_writable: (untyped file) -> untyped
-
-      def self?.assert_file: (untyped path) -> untyped?
-
-      def self?.assert_executable: (untyped path) -> untyped?
-
-      def self?.exit_hook: () { () -> untyped } -> untyped
-
-      def self?.localhost: () -> untyped
-
-      def self?.ip: () -> untyped
-
-      def self?.interfaces: () -> untyped
-
-      def unix?: -> untyped
-    end
-  end
+  def self.null_device: () -> String
 end

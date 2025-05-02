@@ -22,10 +22,12 @@ module Selenium
     module WheelActions
       class ScrollOrigin
         class << self
+          # @rbs (Selenium::WebDriver::Element, ?Integer, ?Integer) -> Selenium::WebDriver::WheelActions::ScrollOrigin
           def element(element, x_offset = 0, y_offset = 0)
             new(element, x_offset, y_offset)
           end
 
+          # @rbs (?Integer, ?Integer) -> Selenium::WebDriver::WheelActions::ScrollOrigin
           def viewport(x_offset = 0, y_offset = 0)
             new(:viewport, x_offset, y_offset)
           end
@@ -37,6 +39,7 @@ module Selenium
         # Use a static method to access
         # @api private
         #
+        # @rbs (Selenium::WebDriver::Element | Symbol, Integer, Integer) -> void
         def initialize(origin, x_offset, y_offset)
           @origin = origin
           @x_offset = x_offset

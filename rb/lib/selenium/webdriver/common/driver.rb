@@ -77,6 +77,7 @@ module Selenium
         add_extensions(@bridge.browser)
       end
 
+      # @rbs () -> String
       def inspect
         format '#<%<class>s:0x%<hash>x browser=%<browser>s>', class: self.class, hash: hash * 2,
                                                               browser: bridge.browser.inspect
@@ -88,6 +89,7 @@ module Selenium
       #
       # @return [Hash]
       #
+      # @rbs () -> Hash[untyped, untyped]
       def status
         @bridge.status
       end
@@ -107,6 +109,7 @@ module Selenium
       # @see Script
       #
 
+      # @rbs () -> Selenium::WebDriver::Script?
       def script
         @script ||= WebDriver::Script.new(bridge)
       end
@@ -116,6 +119,7 @@ module Selenium
       # @see TargetLocator
       #
 
+      # @rbs () -> Selenium::WebDriver::TargetLocator
       def switch_to
         @switch_to ||= WebDriver::TargetLocator.new(bridge)
       end
@@ -125,6 +129,7 @@ module Selenium
       # @see Manager
       #
 
+      # @rbs () -> Selenium::WebDriver::Manager
       def manage
         bridge.manage
       end
@@ -134,6 +139,7 @@ module Selenium
       # @see ActionBuilder
       #
 
+      # @rbs (**nil) -> Selenium::WebDriver::ActionBuilder
       def action(**opts)
         bridge.action(**opts)
       end
@@ -142,6 +148,7 @@ module Selenium
       # Opens the specified URL in the browser.
       #
 
+      # @rbs (String) -> nil
       def get(url)
         navigate.to(url)
       end
@@ -152,6 +159,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def current_url
         bridge.url
       end
@@ -162,6 +170,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def title
         bridge.title
       end
@@ -172,6 +181,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def page_source
         bridge.page_source
       end
@@ -192,6 +202,7 @@ module Selenium
       # Close the current window, or the browser if no windows are left.
       #
 
+      # @rbs () -> Array[untyped]
       def close
         bridge&.close
       end
@@ -203,6 +214,7 @@ module Selenium
       # @see TargetLocator#window
       #
 
+      # @rbs () -> Array[untyped]
       def window_handles
         bridge.window_handles
       end
@@ -213,6 +225,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def window_handle
         bridge.window_handle
       end
@@ -249,6 +262,7 @@ module Selenium
       # @return [WebDriver::Element,Integer,Float,Boolean,NilClass,String,Array]
       #
 
+      # @rbs (String, *Array[untyped] | nil) -> Hash[untyped, untyped]
       def execute_async_script(script, *args)
         bridge.execute_async_script(script, *args)
       end
@@ -258,6 +272,7 @@ module Selenium
       # @see VirtualAuthenticator
       #
 
+      # @rbs (Selenium::WebDriver::VirtualAuthenticatorOptions) -> Selenium::WebDriver::VirtualAuthenticator
       def add_virtual_authenticator(options)
         bridge.add_virtual_authenticator(options)
       end
@@ -297,16 +312,19 @@ module Selenium
       #   driver[:tag_name => 'div'] #=> #<WebDriver::Element:0x1011c3b88>
       #
 
+      # @rbs (Symbol | Hash[untyped, untyped]) -> Selenium::WebDriver::Element
       def [](sel)
         sel = {id: sel} if sel.is_a?(String) || sel.is_a?(Symbol)
 
         find_element sel
       end
 
+      # @rbs () -> Symbol
       def browser
         bridge.browser
       end
 
+      # @rbs () -> Selenium::WebDriver::Remote::Capabilities
       def capabilities
         bridge.capabilities
       end
@@ -316,6 +334,7 @@ module Selenium
       # @see SearchContext
       #
 
+      # @rbs () -> Array[untyped]
       def ref
         [:driver, nil]
       end
@@ -338,6 +357,7 @@ module Selenium
         @service_manager.uri
       end
 
+      # @rbs () -> String
       def screenshot
         bridge.screenshot
       end

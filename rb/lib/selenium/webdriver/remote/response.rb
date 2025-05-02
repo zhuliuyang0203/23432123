@@ -60,6 +60,7 @@ module Selenium
           raise Error::ServerError, self
         end
 
+        # @rbs (Selenium::WebDriver::Error::NoSuchAlertError | Selenium::WebDriver::Error::UnknownError, String, String) -> void
         def add_cause(ex, error, backtrace)
           cause = Error::WebDriverError.new
           backtrace = backtrace_from_remote(backtrace) if backtrace.is_a?(Array)

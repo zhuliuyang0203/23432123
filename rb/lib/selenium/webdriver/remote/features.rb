@@ -28,18 +28,22 @@ module Selenium
           delete_downloadable_files: [:delete, 'session/:session_id/se/files']
         }.freeze
 
+        # @rbs (Hash[untyped, untyped]) -> Hash[untyped, untyped]
         def add_commands(commands)
           @command_list = command_list.merge(commands)
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def command_list
           @command_list ||= REMOTE_COMMANDS
         end
 
+        # @rbs (Symbol) -> Array[untyped]
         def commands(command)
           command_list[command]
         end
 
+        # @rbs (String) -> String
         def upload(local_file)
           unless File.file?(local_file)
             WebDriver.logger.error("File detector only works with files. #{local_file.inspect} isn`t a file!",
@@ -50,6 +54,7 @@ module Selenium
           execute :upload_file, {}, {file: Zipper.zip_file(local_file)}
         end
 
+        # @rbs (Array[untyped]) -> Array[untyped]
         def upload_if_necessary(keys)
           local_files = keys.first&.split("\n")&.filter_map { |key| @file_detector.call(Array(key)) }
           return keys unless local_files&.any?
@@ -58,14 +63,17 @@ module Selenium
           Array(keys.join("\n"))
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def downloadable_files
           execute :get_downloadable_files
         end
 
+        # @rbs (String) -> Hash[untyped, untyped]
         def download_file(name)
           execute :download_file, {}, {name: name}
         end
 
+        # @rbs () -> nil
         def delete_downloadable_files
           execute :delete_downloadable_files
         end

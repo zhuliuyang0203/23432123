@@ -59,6 +59,7 @@ module Selenium
         # @yieldparam [Proc] continue block which proceeds with the request and optionally yields response
         #
 
+        # @rbs () -> void
         def intercept(&block)
           if browser == :firefox
             WebDriver.logger.deprecate(

@@ -28,16 +28,19 @@ module Selenium
       #
 
       class Pause < Interaction
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput, ?Integer) -> void
         def initialize(source, duration = nil)
           super(source)
           @duration = duration
           @type = :pause
         end
 
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput) -> nil
         def assert_source(source)
           raise TypeError, "#{source.type} is not a valid input type" unless source.is_a? InputDevice
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           output = {type: type}
           output[:duration] = (@duration * 1000).to_i if @duration

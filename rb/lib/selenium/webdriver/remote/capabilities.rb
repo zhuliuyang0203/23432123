@@ -159,6 +159,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> nil
         def proxy
           @capabilities[:proxy]
         end
@@ -183,6 +184,7 @@ module Selenium
           @capabilities[:timeouts] = timeouts
         end
 
+        # @rbs () -> Integer
         def implicit_timeout
           timeouts[:implicit]
         end
@@ -192,6 +194,7 @@ module Selenium
           timeouts[:implicit] = timeout
         end
 
+        # @rbs () -> Integer
         def page_load_timeout
           timeouts[:page_load] || timeouts[:pageLoad]
         end
@@ -201,6 +204,7 @@ module Selenium
           timeouts[:page_load] = timeout
         end
 
+        # @rbs () -> Integer
         def script_timeout
           timeouts[:script]
         end

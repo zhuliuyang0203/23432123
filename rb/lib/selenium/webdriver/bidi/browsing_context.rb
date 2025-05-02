@@ -32,6 +32,7 @@ module Selenium
         }.freeze
 
         # TODO: store current window handle in bridge object instead of always calling it
+        # @rbs (Selenium::WebDriver::Remote::BiDiBridge) -> void
         def initialize(bridge)
           @bridge = bridge
           @bidi = @bridge.bidi
@@ -44,6 +45,7 @@ module Selenium
         # @param url [String] The URL to navigate to.
         # @param context_id [String, NilClass] The ID of the browsing context to navigate in.
         #   Defaults to the window handle of the current context.
+        # @rbs (String, ?context_id: nil) -> Hash[untyped, untyped]
         def navigate(url, context_id: nil)
           context_id ||= @bridge.window_handle
           @bidi.send_cmd('browsingContext.navigate', context: context_id, url: url, wait: @readiness)
@@ -55,6 +57,7 @@ module Selenium
         #   Positive values go forwards, negative values go backwards.
         # @param context_id [String, NilClass] The ID of the context to traverse.
         #   Defaults to the window handle of the current context.
+        # @rbs (Integer, ?context_id: nil) -> Hash[untyped, untyped]
         def traverse_history(delta, context_id: nil)
           context_id ||= @bridge.window_handle
           @bidi.send_cmd('browsingContext.traverseHistory', context: context_id, delta: delta)
@@ -65,6 +68,7 @@ module Selenium
         #   Defaults to the window handle of the current context.
         # @param [Boolean] ignore_cache Whether to bypass the cache when reloading.
         #   Defaults to false.
+        # @rbs (?context_id: nil, ?ignore_cache: bool) -> Hash[untyped, untyped]
         def reload(context_id: nil, ignore_cache: false)
           context_id ||= @bridge.window_handle
           params = {context: context_id, ignore_cache: ignore_cache, wait: @readiness}
@@ -75,6 +79,7 @@ module Selenium
         #
         # @param [String] context_id The ID of the context to close.
         #   Defaults to the window handle of the current context.
+        # @rbs (?context_id: String) -> void
         def close(context_id: nil)
           context_id ||= @bridge.window_handle
           @bidi.send_cmd('browsingContext.close', context: context_id)
@@ -88,6 +93,7 @@ module Selenium
         #   Defaults to the current window handle.
         #
         # @return [String] The context ID of the created browsing context.
+        # @rbs (?type: nil, ?context_id: nil) -> String
         def create(type: nil, context_id: nil)
           type ||= :window
           context_id ||= @bridge.window_handle
@@ -95,16 +101,19 @@ module Selenium
           result['context']
         end
 
+        # @rbs (?context_id: nil, ?width: Integer, ?height: Integer, ?device_pixel_ratio: Float) -> void
         def set_viewport(context_id: nil, width: nil, height: nil, device_pixel_ratio: nil)
           context_id ||= @bridge.window_handle
           params = {context: context_id, viewport: {width:, height:}, device_pixel_ratio:}
           @bidi.send_cmd('browsingContext.setViewport', **params)
         end
 
+        # @rbs (String, ?accept: bool, ?text: nil | String) -> void
         def handle_user_prompt(context_id, accept: true, text: nil)
           @bidi.send_cmd('browsingContext.handleUserPrompt', context: context_id, accept: accept, text: text)
         end
 
+        # @rbs (?context_id: nil) -> void
         def activate(context_id: nil)
           context_id ||= @bridge.window_handle
           @bidi.send_cmd('browsingContext.activate', context: context_id)

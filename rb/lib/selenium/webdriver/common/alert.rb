@@ -20,6 +20,7 @@
 module Selenium
   module WebDriver
     class Alert
+      # @rbs (Selenium::WebDriver::Remote::Bridge) -> void
       def initialize(bridge)
         @bridge = bridge
 
@@ -27,18 +28,22 @@ module Selenium
         bridge.alert_text
       end
 
+      # @rbs () -> void
       def accept
         @bridge.accept_alert
       end
 
+      # @rbs () -> void
       def dismiss
         @bridge.dismiss_alert
       end
 
+      # @rbs (String) -> void
       def send_keys(keys)
         @bridge.alert = keys
       end
 
+      # @rbs () -> String?
       def text
         @bridge.alert_text
       end

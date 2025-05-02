@@ -23,15 +23,18 @@ module Selenium
       class Session
         Status = Struct.new(:ready, :message)
 
+        # @rbs (Selenium::WebDriver::BiDi) -> void
         def initialize(bidi)
           @bidi = bidi
         end
 
+        # @rbs () -> Selenium::WebDriver::BiDi::Session::Status?
         def status
           status = @bidi.send_cmd('session.status')
           Status.new(**status)
         end
 
+        # @rbs (String, ?nil) -> Hash[untyped, untyped]
         def subscribe(events, browsing_contexts = nil)
           opts = {events: Array(events)}
           opts[:browsing_contexts] = Array(browsing_contexts) if browsing_contexts

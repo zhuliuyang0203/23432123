@@ -1,11 +1,5 @@
-module Selenium
-  module WebDriver
-    module LocalDriver
-      include _Driver
+module Selenium::WebDriver::LocalDriver
+  def initialize_local_driver: (Selenium::WebDriver::Chrome::Options, Selenium::WebDriver::Chrome::Service, nil) -> Array[untyped]
 
-      def initialize_local_driver: (untyped options, untyped service, untyped url) -> Array[untyped]
-
-      def process_options: (untyped options, untyped service) -> untyped
-    end
-  end
+  def process_options: (Selenium::WebDriver::Chrome::Options, Selenium::WebDriver::Chrome::Service) -> Hash[untyped, untyped]
 end

@@ -26,6 +26,7 @@ module Selenium
         SHUTDOWN_SUPPORTED = false
         DRIVER_PATH_ENV_KEY = 'SE_GECKODRIVER'
 
+        # @rbs (?path: nil, ?port: nil, ?log: nil, ?args: nil) -> void
         def initialize(path: nil, port: nil, log: nil, args: nil)
           args ||= []
           unless args.any? { |arg| arg.include?('--connect-existing') }

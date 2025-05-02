@@ -127,6 +127,7 @@ module Selenium
       # @param [Symbol, Array<Symbol>] id
       # @yield see #deprecate
       #
+      # @rbs (String, ?id: Array[untyped]) -> nil
       def info(message, id: [], &block)
         discard_or_log(:info, message, id, &block)
       end
@@ -162,6 +163,7 @@ module Selenium
       # @param [String] reference
       # @yield appends additional message to end of provided template
       #
+      # @rbs (String, ?String, ?id: Symbol, ?reference: String) -> void
       def deprecate(old, new = nil, id: [], reference: '', &block)
         id = Array(id)
         return if @ignored.include?(:deprecations)

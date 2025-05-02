@@ -41,6 +41,7 @@ module Selenium
             @guarded[:reason] = @reason
           end
 
+          # @rbs () -> String
           def message
             details = case reason
                       when Integer

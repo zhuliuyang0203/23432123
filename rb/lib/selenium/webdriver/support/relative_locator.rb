@@ -27,10 +27,12 @@ module Selenium
       class RelativeLocator
         KEYS = %w[above below left right near distance].freeze
 
+        # @rbs (Hash[untyped, untyped]) -> void
         def initialize(locator)
           @filters, @root = locator.partition { |how, _| KEYS.include?(how) }.map(&:to_h)
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def as_json
           {
             relative: {

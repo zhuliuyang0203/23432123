@@ -31,6 +31,7 @@ module Selenium
           # @param [String] what
           #
 
+          # @rbs (String, String) -> Array[untyped]
           def convert(how, what)
             how = SearchContext.finders[how.to_sym] || how
 
@@ -63,6 +64,7 @@ module Selenium
           # @see https://mathiasbynens.be/notes/css-escapes
           #
 
+          # @rbs (String) -> String
           def escape_css(string)
             string = string.gsub(ESCAPE_CSS_REGEXP) { |match| "\\#{match}" }
             string = "\\#{UNICODE_CODE_POINT + Integer(string[0])} #{string[1..]}" if string[0]&.match?(/[[:digit:]]/)

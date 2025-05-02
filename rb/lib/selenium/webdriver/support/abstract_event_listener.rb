@@ -74,8 +74,10 @@ module Selenium
 
         def after_execute_script(script, driver) end
 
+        # @rbs (Selenium::WebDriver::Driver) -> nil
         def before_quit(driver) end
 
+        # @rbs (Selenium::WebDriver::Driver) -> nil
         def after_quit(driver) end
 
         def before_close(driver) end

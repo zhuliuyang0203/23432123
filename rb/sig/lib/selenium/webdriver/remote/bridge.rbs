@@ -1,277 +1,53 @@
-module Selenium
-  module WebDriver
-    module Remote
-      class Bridge
-        include _CommandList
-        include _Features
+class Selenium::WebDriver::Remote::Bridge
+  def get: (String) -> nil
 
-        @bidi: WebDriver::BiDi
-        @http: untyped
+  def execute: (Symbol, ?Hash[untyped, untyped], ?Hash[untyped, untyped]) -> nil
+             | (Symbol, ?Hash[untyped, untyped], ?nil) -> nil
+             | (Symbol, ?Hash[untyped, untyped], ?Hash[untyped, untyped]) -> Hash[untyped, untyped]
+             | (Symbol, ?Hash[untyped, untyped], ?nil) -> String
+             | (Symbol, ?Hash[untyped, untyped], ?nil) -> Hash[untyped, untyped]
+             | (Symbol, ?Hash[untyped, untyped], ?nil) -> Array[untyped]
 
-        @file_detector: untyped
+  def session_id: () -> String
 
-        @session_id: untyped
+  def fedcm_title: () -> nil
+                 | () -> String
 
-        @capabilities: untyped
+  def fedcm_subtitle: () -> nil
 
-        @browser: untyped
+  def fedcm_dialog_type: () -> nil
+                       | () -> String
 
-        @manage: untyped
+  def fedcm_account_list: () -> nil
+                        | () -> Array[untyped]
 
-        @escaper: untyped
+  def select_fedcm_account: (Integer) -> nil
 
-        include Atoms
+  def cancel_fedcm_dialog: () -> nil
 
-        PORT: Integer
+  def quit: () -> nil
 
-        attr_accessor http: untyped
+  def initialize: (url: URI::HTTP, ?http_client: nil) -> void
 
-        attr_accessor file_detector: untyped
+  def self.locator_converter: () -> Selenium::WebDriver::Remote::Bridge::LocatorConverter
 
-        attr_reader capabilities: untyped
+  def create_session: (Hash[untyped, untyped]) -> Selenium::WebDriver::Remote::Bridge
 
-        def initialize: (url: String | URI, ?http_client: untyped?) -> void
+  def prepare_capabilities_payload: (Hash[untyped, untyped]) -> Hash[untyped, untyped]
 
-        def bidi: -> WebDriver::Error::WebDriverError
+  def commands: (Symbol) -> Array[untyped]
 
-        def cancel_fedcm_dialog: -> nil
+  def command_list: () -> Hash[untyped, untyped]
 
-        def click_fedcm_dialog_button: -> nil
+  def browser: () -> Symbol
 
-        def create_session: (untyped capabilities) -> untyped
+  def execute_script: (String, *nil) -> nil
 
-        extend WebDriver::Chrome::Features
+  def unwrap_script_result: (nil) -> nil
 
-        extend WebDriver::Firefox::Features
+  def click_fedcm_dialog_button: () -> nil
 
-        extend WebDriver::Edge::Features
+  def fedcm_delay: (bool) -> nil
 
-        extend WebDriver::Safari::Features
-
-        def fedcm_account_list: -> Array[Hash[untyped, untyped]]
-
-        def fedcm_dialog_type: -> String
-
-        def fedcm_subtitle: -> String?
-
-        def fedcm_title: -> String
-
-        def reset_fedcm_cooldown: -> nil
-
-        def select_fedcm_account: (Integer index) -> nil
-
-        def session_id: () -> untyped
-
-        def browser: () -> untyped
-
-        def fedcm_delay: -> bool
-
-        def status: () -> untyped
-
-        def get: (untyped url) -> untyped
-
-        def timeouts: () -> untyped
-
-        def timeouts=: (untyped timeouts) -> untyped
-
-        def accept_alert: () -> untyped
-
-        def dismiss_alert: () -> untyped
-
-        def alert=: (untyped keys) -> untyped
-
-        def alert_text: () -> untyped
-
-        def go_back: () -> untyped
-
-        def go_forward: () -> untyped
-
-        def url: () -> untyped
-
-        def title: () -> untyped
-
-        def page_source: () -> untyped
-
-        def new_window: (untyped type) -> untyped
-
-        def switch_to_window: (untyped name) -> untyped
-
-        def switch_to_frame: (untyped id) -> untyped
-
-        def switch_to_parent_frame: () -> untyped
-
-        def switch_to_default_content: () -> untyped
-
-        QUIT_ERRORS: ::Array[untyped]
-
-        def quit: () -> untyped
-
-        def close: () -> untyped
-
-        def refresh: () -> untyped
-
-        def window_handles: () -> untyped
-
-        def window_handle: () -> untyped
-
-        def resize_window: (untyped width, untyped height, ?::Symbol handle) -> untyped
-
-        def window_size: (?::Symbol handle) -> untyped
-
-        def minimize_window: () -> untyped
-
-        def maximize_window: (?::Symbol handle) -> untyped
-
-        def full_screen_window: () -> untyped
-
-        def reposition_window: (untyped x, untyped y) -> untyped
-
-        def window_position: () -> untyped
-
-        def set_window_rect: (?x: untyped?, ?y: untyped?, ?width: untyped?, ?height: untyped?) -> untyped
-
-        def window_rect: () -> untyped
-
-        def screenshot: () -> untyped
-
-        def element_screenshot: (untyped element) -> untyped
-
-        def local_storage_item: (untyped key, ?untyped? value) -> untyped
-
-        def remove_local_storage_item: (untyped key) -> untyped
-
-        def local_storage_keys: () -> untyped
-
-        def clear_local_storage: () -> untyped
-
-        def local_storage_size: () -> untyped
-
-        def session_storage_item: (untyped key, ?untyped? value) -> untyped
-
-        def remove_session_storage_item: (untyped key) -> untyped
-
-        def session_storage_keys: () -> untyped
-
-        def clear_session_storage: () -> untyped
-
-        def session_storage_size: () -> untyped
-
-        def execute_script: (untyped script, *untyped args) -> untyped
-
-        def execute_async_script: (untyped script, *untyped args) -> untyped
-
-        def manage: () -> untyped
-
-        def add_cookie: (untyped cookie) -> untyped
-
-        def delete_cookie: (untyped name) -> untyped
-
-        def cookie: (untyped name) -> untyped
-
-        def cookies: () -> untyped
-
-        def delete_all_cookies: () -> untyped
-
-        def action: (?async: bool, ?devices: untyped, ?duration: ::Integer) -> untyped
-
-        alias actions action
-
-        def send_actions: (untyped data) -> untyped
-
-        def release_actions: () -> untyped
-
-        def print_page: (?::Hash[untyped, untyped] options) -> untyped
-
-        def click_element: (untyped element) -> untyped
-
-        def send_keys_to_element: (untyped element, untyped keys) -> untyped
-
-        def upload: (untyped local_file) -> untyped
-
-        def clear_element: (untyped element) -> untyped
-
-        def submit_element: (untyped element) -> untyped
-
-        def element_tag_name: (untyped element) -> untyped
-
-        def element_attribute: (untyped element, untyped name) -> untyped
-
-        def element_dom_attribute: (untyped element, untyped name) -> untyped
-
-        def element_property: (untyped element, untyped name) -> untyped
-
-        def element_aria_role: (untyped element) -> untyped
-
-        def element_aria_label: (untyped element) -> untyped
-
-        def element_value: (untyped element) -> untyped
-
-        def element_text: (untyped element) -> untyped
-
-        def element_location: (untyped element) -> untyped
-
-        def element_rect: (untyped element) -> untyped
-
-        def element_location_once_scrolled_into_view: (untyped element) -> untyped
-
-        def element_size: (untyped element) -> untyped
-
-        def element_enabled?: (untyped element) -> untyped
-
-        def element_selected?: (untyped element) -> untyped
-
-        def element_displayed?: (untyped element) -> untyped
-
-        def element_value_of_css_property: (untyped element, untyped prop) -> untyped
-
-        def active_element: () -> untyped
-
-        alias switch_to_active_element active_element
-
-        def find_element_by: (untyped how, untyped what, ?untyped parent_ref) -> untyped
-
-        def find_elements_by: (untyped how, untyped what, ?untyped parent_ref) -> untyped
-
-        def shadow_root: (untyped element) -> untyped
-
-        def add_virtual_authenticator: (untyped options) -> untyped
-
-        def remove_virtual_authenticator: (untyped id) -> untyped
-
-        def add_credential: (untyped credential, untyped id) -> untyped
-
-        def credentials: (untyped authenticator_id) -> untyped
-
-        def remove_credential: (untyped credential_id, untyped authenticator_id) -> untyped
-
-        def remove_all_credentials: (untyped authenticator_id) -> untyped
-
-        def user_verified: (untyped verified, untyped authenticator_id) -> untyped
-
-        private
-
-        def execute: (untyped command, ?::Hash[untyped, untyped] opts, ?untyped? command_hash) -> String
-
-        def escaper: () -> untyped
-
-        def commands: (untyped command) -> untyped
-
-        def unwrap_script_result: (untyped arg) -> untyped
-
-        def element_id_from: (untyped id) -> untyped
-
-        def shadow_root_id_from: (untyped id) -> untyped
-
-        def prepare_capabilities_payload: (untyped capabilities) -> { capabilities: untyped }
-
-        def convert_locator: (untyped how, untyped what) -> ::Array[untyped]
-
-        ESCAPE_CSS_REGEXP: ::Regexp
-
-        UNICODE_CODE_POINT: 30
-
-        def escape_css: (untyped string) -> untyped
-      end
-    end
-  end
+  def reset_fedcm_cooldown: () -> nil
 end

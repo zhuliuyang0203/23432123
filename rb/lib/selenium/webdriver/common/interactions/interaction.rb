@@ -30,6 +30,7 @@ module Selenium
       class Interaction
         attr_reader :type
 
+        # @rbs (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput | Selenium::WebDriver::Interactions::WheelInput) -> void
         def initialize(source)
           assert_source(source)
         end

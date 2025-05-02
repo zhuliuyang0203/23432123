@@ -71,6 +71,7 @@ module Selenium
         #   driver = Selenium::WebDriver.for :firefox, :profile => profile
         #
 
+        # @rbs (?nil) -> void
         def initialize(model = nil)
           @model = verify_model(model)
 
@@ -78,6 +79,7 @@ module Selenium
           @extensions = {}
         end
 
+        # @rbs () -> String
         def layout_on_disk
           profile_dir = @model ? create_tmp_copy(@model) : Dir.mktmpdir('webdriver-profile')
           FileReaper << profile_dir
@@ -97,6 +99,7 @@ module Selenium
         # @see http://preferential.mozdev.org/preferences.html
         #
 
+        # @rbs (String, String | Integer) -> (Integer | String)
         def []=(key, value)
           unless VALID_PREFERENCE_TYPES.any? { |e| value.is_a? e }
             raise TypeError, "expected one of #{VALID_PREFERENCE_TYPES.inspect}, got #{value.inspect}:#{value.class}"
@@ -162,6 +165,7 @@ module Selenium
           self["network.proxy.#{key}_port"] = Integer(port) if port
         end
 
+        # @rbs (String) -> void
         def install_extensions(directory)
           destination = File.join(directory, 'extensions')
 
@@ -171,16 +175,19 @@ module Selenium
           end
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def read_model_prefs
           return {} unless @model
 
           read_user_prefs(File.join(@model, 'user.js'))
         end
 
+        # @rbs (String) -> void
         def delete_extensions_cache(directory)
           FileUtils.rm_f File.join(directory, 'extensions.cache')
         end
 
+        # @rbs (String) -> void
         def delete_lock_files(directory)
           LOCK_FILES.each do |name|
             FileUtils.rm_f File.join(directory, name)
@@ -191,6 +198,7 @@ module Selenium
           File.basename(path, File.extname(path))
         end
 
+        # @rbs (String) -> void
         def update_user_prefs_in(directory)
           path = File.join(directory, 'user.js')
           prefs = read_user_prefs(path)
@@ -203,6 +211,7 @@ module Selenium
           write_prefs prefs, path
         end
 
+        # @rbs (String) -> Hash[untyped, untyped]
         def read_user_prefs(path)
           prefs = {}
           return prefs unless File.exist?(path)
@@ -220,6 +229,7 @@ module Selenium
           prefs
         end
 
+        # @rbs (Hash[untyped, untyped], String) -> Hash[untyped, untyped]
         def write_prefs(prefs, path)
           File.open(path, 'w') do |file|
             prefs.each do |key, value|

@@ -27,6 +27,7 @@ module Selenium
         # @return [Array<DevTools::PinnedScript>]
         #
 
+        # @rbs () -> Array[untyped]
         def pinned_scripts
           @pinned_scripts ||= []
         end
@@ -46,6 +47,7 @@ module Selenium
         # @return [DevTools::PinnedScript]
         #
 
+        # @rbs (String) -> Selenium::WebDriver::DevTools::PinnedScript
         def pin_script(script)
           script = DevTools::PinnedScript.new(script)
           pinned_scripts << script
@@ -64,6 +66,7 @@ module Selenium
         # @param [DevTools::PinnedScript] script
         #
 
+        # @rbs (Selenium::WebDriver::DevTools::PinnedScript) -> void
         def unpin_script(script)
           devtools.runtime.evaluate(expression: script.remove)
           devtools.page.remove_script_to_evaluate_on_new_document(identifier: script.devtools_identifier)

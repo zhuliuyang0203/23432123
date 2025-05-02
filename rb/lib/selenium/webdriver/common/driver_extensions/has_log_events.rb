@@ -56,6 +56,7 @@ module Selenium
         # @yieldparam [DevTools::ConsoleEvent, DevTools::ExceptionEvent, DevTools::MutationEvent]
         #
 
+        # @rbs (Symbol) -> void
         def on_log_event(kind, &block)
           if browser == :firefox
             WebDriver.logger.deprecate(
@@ -76,10 +77,12 @@ module Selenium
 
         private
 
+        # @rbs () -> Hash[untyped, untyped]
         def log_listeners
           @log_listeners ||= Hash.new { |listeners, kind| listeners[kind] = [] }
         end
 
+        # @rbs () -> Array[untyped]
         def log_console_events
           devtools.runtime.on(:console_api_called) do |params|
             event = DevTools::ConsoleEvent.new(
@@ -94,6 +97,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> Array[untyped]
         def log_exception_events
           devtools.runtime.on(:exception_thrown) do |params|
             description = if params.dig('exceptionDetails', 'exception')
@@ -114,6 +118,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> Array[untyped]
         def log_mutation_events
           devtools.page.enable
 
@@ -124,6 +129,7 @@ module Selenium
           devtools.runtime.on(:binding_called) { |event| log_mutation_event(event) }
         end
 
+        # @rbs (Hash[untyped, untyped]) -> Array[untyped]
         def log_mutation_event(params)
           payload = JSON.parse(params['payload'])
           elements = find_elements(css: "*[data-__webdriver_id='#{payload['target']}']")
@@ -141,6 +147,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> String
         def mutation_listener
           @mutation_listener ||= read_atom(:mutationListener)
         end

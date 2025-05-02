@@ -34,6 +34,7 @@ module Selenium
           Chrome::Options.new(**opts)
         end
 
+        # @rbs (**Array[untyped]) -> Selenium::WebDriver::Firefox::Options
         def firefox(**opts)
           Firefox::Options.new(**opts)
         end
@@ -43,6 +44,7 @@ module Selenium
         end
         alias internet_explorer ie
 
+        # @rbs (**Array[untyped] | bool | nil) -> Selenium::WebDriver::Edge::Options
         def edge(**opts)
           Edge::Options.new(**opts)
         end

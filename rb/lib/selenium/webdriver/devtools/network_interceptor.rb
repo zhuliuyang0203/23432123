@@ -38,11 +38,13 @@ module Selenium
         # Typical reason is browser cancelling intercepted requests/responses.
         INVALID_INTERCEPTION_ID_ERROR_CODE = '-32602'
 
+        # @rbs (Selenium::WebDriver::DevTools) -> void
         def initialize(devtools)
           @devtools = devtools
           @lock = Mutex.new
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def intercept(&block)
           devtools.network.on(:loading_failed) { |params| track_cancelled_request(params) }
           devtools.fetch.on(:request_paused) { |params| request_paused(params, &block) }
@@ -59,6 +61,7 @@ module Selenium
         # We should be thread-safe to use the hash without synchronization
         # because its keys are interception job identifiers and they should be
         # unique within a devtools session.
+        # @rbs () -> Hash[untyped, untyped]
         def pending_response_requests
           @pending_response_requests ||= {}
         end
@@ -74,6 +77,7 @@ module Selenium
           lock.synchronize { cancelled_requests << data['requestId'] }
         end
 
+        # @rbs (Hash[untyped, untyped]) -> Hash[untyped, untyped]?
         def request_paused(data, &block)
           id = data['requestId']
           network_id = data['networkId']
@@ -90,10 +94,12 @@ module Selenium
 
         # The presence of any of these fields indicate we're at the response stage.
         # @see https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-requestPaused
+        # @rbs (Hash[untyped, untyped]) -> bool
         def response?(params)
           params.key?('responseStatusCode') || params.key?('responseErrorReason')
         end
 
+        # @rbs (String, Hash[untyped, untyped]) -> Hash[untyped, untyped]
         def intercept_request(id, params, &block)
           original = DevTools::Request.from(id, params)
           mutable = DevTools::Request.from(id, params)
@@ -109,6 +115,7 @@ module Selenium
           end
         end
 
+        # @rbs (String, Hash[untyped, untyped]) -> Hash[untyped, untyped]?
         def intercept_response(id, params)
           return continue_response(id) unless block_given?
 
@@ -124,11 +131,13 @@ module Selenium
           end
         end
 
+        # @rbs (String) -> Hash[untyped, untyped]?
         def continue_request(id)
           devtools.fetch.continue_request(request_id: id)
         end
         alias continue_response continue_request
 
+        # @rbs (Selenium::WebDriver::DevTools::Request) -> Hash[untyped, untyped]
         def mutate_request(request)
           devtools.fetch.continue_request(
             request_id: request.id,
@@ -141,6 +150,7 @@ module Selenium
           )
         end
 
+        # @rbs (Selenium::WebDriver::DevTools::Response) -> Hash[untyped, untyped]
         def mutate_response(response)
           devtools.fetch.fulfill_request(
             request_id: response.id,
@@ -152,12 +162,14 @@ module Selenium
           )
         end
 
+        # @rbs (String) -> String
         def fetch_response_body(id)
           devtools.fetch.get_response_body(request_id: id).dig('result', 'body')
         rescue Error::WebDriverError => e
           raise unless e.message.start_with?(CANNOT_GET_BODY_ON_REDIRECT_ERROR_CODE)
         end
 
+        # @rbs (String) -> Hash[untyped, untyped]?
         def with_cancellable_request(network_id)
           yield
         rescue Error::WebDriverError => e

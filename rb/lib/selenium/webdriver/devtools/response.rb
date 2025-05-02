@@ -29,6 +29,7 @@ module Selenium
         # @api private
         #
 
+        # @rbs (String, String, Hash[untyped, untyped]) -> Selenium::WebDriver::DevTools::Response
         def self.from(id, encoded_body, params)
           new(
             id: id,
@@ -40,6 +41,7 @@ module Selenium
           )
         end
 
+        # @rbs (id: String, code: Integer, body: String, headers: Hash[untyped, untyped]) -> void
         def initialize(id:, code:, body:, headers:)
           @id = id
           @code = code
@@ -47,6 +49,7 @@ module Selenium
           @headers = headers
         end
 
+        # @rbs (Selenium::WebDriver::DevTools::Response) -> bool
         def ==(other)
           self.class == other.class &&
             id == other.id &&

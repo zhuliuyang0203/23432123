@@ -29,14 +29,17 @@ module Selenium
           full_page_screenshot: [:get, 'session/:session_id/moz/screenshot/full']
         }.freeze
 
+        # @rbs () -> Hash[untyped, untyped]
         def command_list
           FIREFOX_COMMANDS.merge(self.class::COMMANDS)
         end
 
+        # @rbs (Symbol) -> Array[untyped]
         def commands(command)
           command_list[command]
         end
 
+        # @rbs (String, bool?) -> String
         def install_addon(path, temporary)
           addon = if File.directory?(path)
                     Zipper.zip(path)
@@ -49,18 +52,22 @@ module Selenium
           execute :install_addon, {}, payload
         end
 
+        # @rbs (String) -> nil
         def uninstall_addon(id)
           execute :uninstall_addon, {}, {id: id}
         end
 
+        # @rbs () -> String
         def full_screenshot
           execute :full_page_screenshot
         end
 
+        # @rbs (String) -> nil
         def context=(context)
           execute :set_context, {}, {context: context}
         end
 
+        # @rbs () -> String
         def context
           execute :get_context
         end

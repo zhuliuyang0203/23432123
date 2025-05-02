@@ -25,6 +25,7 @@ module Selenium
         #
         # FedCm by default delays promise resolution in failure cases for privacy reasons.
         # This method allows turning it off to let tests run faster where this is not relevant.
+        # @rbs (bool) -> nil
         def enable_fedcm_delay=(enable)
           @bridge.fedcm_delay(enable)
         end
@@ -33,14 +34,17 @@ module Selenium
         #
         # If a user agent triggers a cooldown when the account chooser is dismissed,
         # this method resets that cooldown so that the dialog can be triggered again immediately.
+        # @rbs () -> nil
         def reset_fedcm_cooldown
           @bridge.reset_fedcm_cooldown
         end
 
+        # @rbs () -> Selenium::WebDriver::FedCM::Dialog
         def fedcm_dialog
           @fedcm_dialog ||= FedCM::Dialog.new(@bridge)
         end
 
+        # @rbs (?timeout: Integer, ?interval: Float, ?message: nil, ?ignore: nil) -> Selenium::WebDriver::FedCM::Dialog
         def wait_for_fedcm_dialog(timeout: 5, interval: 0.2, message: nil, ignore: nil)
           wait = Wait.new(timeout: timeout, interval: interval, message: message, ignore: ignore)
           wait.until do

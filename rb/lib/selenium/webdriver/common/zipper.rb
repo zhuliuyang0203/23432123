@@ -32,6 +32,7 @@ module Selenium
       EXTENSIONS = %w[.zip .xpi].freeze
 
       class << self
+        # @rbs (String) -> String
         def unzip(path)
           destination = Dir.mktmpdir('webdriver-unzip')
           FileReaper << destination
@@ -49,6 +50,7 @@ module Selenium
           destination
         end
 
+        # @rbs (String) -> String
         def zip(path)
           with_tmp_zip do |zip|
             ::Find.find(path) do |file|
@@ -60,6 +62,7 @@ module Selenium
           end
         end
 
+        # @rbs (String) -> String
         def zip_file(path)
           with_tmp_zip do |zip|
             add_zip_entry zip, path, File.basename(path)
@@ -71,6 +74,7 @@ module Selenium
 
         private
 
+        # @rbs () -> String
         def with_tmp_zip(&blk)
           # Don't use Tempfile since it lacks rb_file_s_rename permission on Windows.
           Dir.mktmpdir do |tmp_dir|
@@ -79,6 +83,7 @@ module Selenium
           end
         end
 
+        # @rbs (Zip::File, String, String) -> void
         def add_zip_entry(zip, file, entry_name)
           entry = Zip::Entry.new(zip.name, entry_name)
           entry.follow_symlinks = true

@@ -33,6 +33,7 @@ module Selenium
           Chrome::Service.new(**opts)
         end
 
+        # @rbs (**nil) -> Selenium::WebDriver::Firefox::Service
         def firefox(**opts)
           Firefox::Service.new(**opts)
         end
@@ -42,6 +43,7 @@ module Selenium
         end
         alias internet_explorer ie
 
+        # @rbs (**nil) -> Selenium::WebDriver::Edge::Service
         def edge(**opts)
           Edge::Service.new(**opts)
         end
@@ -100,6 +102,7 @@ module Selenium
         self.class::SHUTDOWN_SUPPORTED
       end
 
+      # @rbs () -> String
       def find_driver_path
         default_options = WebDriver.const_get("#{self.class.name&.split('::')&.[](2)}::Options").new
         DriverFinder.new(default_options, self).driver_path

@@ -20,6 +20,7 @@
 module Selenium
   module WebDriver
     class Timeouts
+      # @rbs (Selenium::WebDriver::Remote::Bridge) -> void
       def initialize(bridge)
         @bridge = bridge
       end
@@ -28,6 +29,7 @@ module Selenium
       # Gets the amount of time the driver should wait when searching for elements.
       #
 
+      # @rbs () -> Float
       def implicit_wait
         Float(@bridge.timeouts['implicit']) / 1000
       end
@@ -36,6 +38,7 @@ module Selenium
       # Set the amount of time the driver should wait when searching for elements.
       #
 
+      # @rbs (Integer | Float) -> void
       def implicit_wait=(seconds)
         @bridge.timeouts = {'implicit' => Integer(seconds * 1000)}
       end
@@ -45,6 +48,7 @@ module Selenium
       # execution before throwing an error.
       #
 
+      # @rbs () -> Float
       def script
         Float(@bridge.timeouts['script']) / 1000
       end
@@ -56,6 +60,7 @@ module Selenium
       # script will be allowed to run indefinitely.
       #
 
+      # @rbs (Float | Integer) -> Hash[untyped, untyped]
       def script=(seconds)
         @bridge.timeouts = {'script' => Integer(seconds * 1000)}
       end
@@ -65,6 +70,7 @@ module Selenium
       # Gets the amount of time to wait for a page load to complete before throwing an error.
       #
 
+      # @rbs () -> Float
       def page_load
         Float(@bridge.timeouts['pageLoad']) / 1000
       end
@@ -74,6 +80,7 @@ module Selenium
       # If the timeout is negative, page loads can be indefinite.
       #
 
+      # @rbs (Integer) -> void
       def page_load=(seconds)
         @bridge.timeouts = {'pageLoad' => Integer(seconds * 1000)}
       end

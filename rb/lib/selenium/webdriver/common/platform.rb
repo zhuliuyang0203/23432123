@@ -84,6 +84,7 @@ module Selenium
         os == :windows
       end
 
+      # @rbs () -> bool
       def mac?
         os == :macosx
       end

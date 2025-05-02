@@ -1,41 +1,19 @@
-module Selenium
-  module WebDriver
-    module Support
-      class Guards
-        @example: untyped
+class Selenium::WebDriver::Support::Guards
+  def initialize: (RSpec::Core::Example, ?bug_tracker: String, ?conditions: nil) -> void
 
-        @bug_tracker: untyped
+  def collect_example_guards: () -> Array[untyped]
 
-        @guard_conditions: untyped
+  def add_condition: (Symbol, ?Symbol) -> void
+                   | (Symbol, ?nil) -> void
+                   | (Symbol, ?bool) -> void
 
-        @guards: untyped
+  def disposition: () -> nil
+                 | () -> Array[untyped]
 
-        @messages: untyped
+  def skipping_guard: () -> nil
 
-        GUARD_TYPES: Array[Symbol]
+  def satisfied?: (Selenium::WebDriver::Support::Guards::Guard) -> bool
 
-        attr_reader messages: untyped
-
-        attr_accessor bug_tracker: untyped
-
-        def initialize: (untyped example, ?bug_tracker: String, ?conditions: untyped?) -> void
-
-        def add_condition: (untyped name, ?untyped? condition) { () -> untyped } -> untyped
-
-        def add_message: (untyped name, untyped message) -> untyped
-
-        def disposition: () -> Array[untyped]?
-
-        def satisfied?: (untyped guard) -> untyped
-
-        private
-
-        def collect_example_guards: () -> untyped
-
-        def skipping_guard: () -> untyped
-
-        def pending_guard: () -> untyped
-      end
-    end
-  end
+  def pending_guard: () -> nil
+                   | () -> Selenium::WebDriver::Support::Guards::Guard
 end

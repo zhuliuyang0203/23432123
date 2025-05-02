@@ -35,10 +35,12 @@ module Selenium
           send_command: [:post, 'session/:session_id/ms/cdp/execute']
         }.freeze
 
+        # @rbs () -> Hash[untyped, untyped]
         def command_list
           EDGE_COMMANDS.merge(CHROMIUM_COMMANDS).merge(self.class::COMMANDS)
         end
 
+        # @rbs (Symbol) -> Array[untyped]
         def commands(command)
           command_list[command]
         end

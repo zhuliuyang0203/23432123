@@ -25,6 +25,7 @@ module Selenium
       #
 
       class EventFiringBridge
+        # @rbs (Selenium::WebDriver::Remote::Bridge, Selenium::WebDriver::Support::AbstractEventListener) -> void
         def initialize(delegate, listener)
           @delegate = delegate
 
@@ -93,6 +94,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> nil
         def quit
           dispatch(:quit, driver) { @delegate.quit }
         end
@@ -108,10 +110,12 @@ module Selenium
           Element.new @delegate, ref
         end
 
+        # @rbs () -> Selenium::WebDriver::Driver
         def driver
           @driver ||= Driver.new(bridge: self)
         end
 
+        # @rbs (Symbol, *Selenium::WebDriver::Driver) -> nil
         def dispatch(name, *args)
           @listener.__send__(:"before_#{name}", *args)
           returned = yield
@@ -120,6 +124,7 @@ module Selenium
           returned
         end
 
+        # @rbs (Symbol, *untyped, **untyped) -> (Symbol | Proc | Hash[untyped, untyped])
         def method_missing(meth, ...) # rubocop:disable Style/MissingRespondToMissing
           @delegate.__send__(meth, ...)
         end

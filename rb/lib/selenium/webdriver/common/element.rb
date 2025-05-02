@@ -31,6 +31,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (Selenium::WebDriver::Remote::Bridge, String) -> void
       def initialize(bridge, id)
         @bridge = bridge
         @id = id
@@ -40,11 +41,13 @@ module Selenium
         format '#<%<class>s:0x%<hash>x id=%<id>s>', class: self.class, hash: hash * 2, id: @id.inspect
       end
 
+      # @rbs (Selenium::WebDriver::Element) -> bool
       def ==(other)
         other.is_a?(self.class) && ref == other.ref
       end
       alias eql? ==
 
+      # @rbs () -> Integer
       def hash
         [@id, @bridge].hash
       end
@@ -73,6 +76,7 @@ module Selenium
       #  defined
       #
 
+      # @rbs () -> nil
       def click
         bridge.click_element @id
       end
@@ -87,6 +91,7 @@ module Selenium
       # @return [String] The tag name of this element.
       #
 
+      # @rbs () -> String
       def tag_name
         bridge.element_tag_name @id
       end
@@ -123,6 +128,7 @@ module Selenium
       # @see #property
       #
 
+      # @rbs (String) -> String
       def attribute(name)
         bridge.element_attribute self, name
       end
@@ -142,6 +148,7 @@ module Selenium
       # @see #property
       #
 
+      # @rbs (String) -> String?
       def dom_attribute(name)
         bridge.element_dom_attribute @id, name
       end
@@ -156,6 +163,7 @@ module Selenium
       # @return [String, nil] property value
       #
 
+      # @rbs (Symbol) -> String
       def property(name)
         bridge.element_property @id, name
       end
@@ -166,6 +174,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def aria_role
         bridge.element_aria_role @id
       end
@@ -176,6 +185,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def accessible_name
         bridge.element_aria_label @id
       end
@@ -186,6 +196,7 @@ module Selenium
       # @return [String]
       #
 
+      # @rbs () -> String
       def text
         bridge.element_text @id
       end
@@ -204,6 +215,7 @@ module Selenium
       # @see Keys::KEYS
       #
 
+      # @rbs (*String) -> void
       def send_keys(*args)
         bridge.send_keys_to_element @id, Keys.encode(args)
       end
@@ -219,6 +231,7 @@ module Selenium
       # consider following with a call to #send_keys with the tab key.
       #
 
+      # @rbs () -> nil
       def clear
         bridge.clear_element @id
       end
@@ -229,6 +242,7 @@ module Selenium
       # @return [Boolean]
       #
 
+      # @rbs () -> bool
       def enabled?
         bridge.element_enabled? @id
       end
@@ -239,6 +253,7 @@ module Selenium
       # @return [Boolean]
       #
 
+      # @rbs () -> bool
       def selected?
         bridge.element_selected? @id
       end
@@ -249,6 +264,7 @@ module Selenium
       # @return [Boolean]
       #
 
+      # @rbs () -> bool
       def displayed?
         bridge.element_displayed? self
       end
@@ -257,6 +273,7 @@ module Selenium
       # Submit this element
       #
 
+      # @rbs () -> nil
       def submit
         bridge.submit_element @id
       end
@@ -272,6 +289,7 @@ module Selenium
       # @see http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration
       #
 
+      # @rbs (String) -> String
       def css_value(prop)
         bridge.element_value_of_css_property @id, prop
       end
@@ -283,6 +301,7 @@ module Selenium
       # @return [WebDriver::Point]
       #
 
+      # @rbs () -> Selenium::WebDriver::Point
       def location
         bridge.element_location @id
       end
@@ -293,6 +312,7 @@ module Selenium
       # @return [WebDriver::Rectangle]
       #
 
+      # @rbs () -> Selenium::WebDriver::Rectangle
       def rect
         bridge.element_rect @id
       end
@@ -303,6 +323,7 @@ module Selenium
       # @return [WebDriver::Point]
       #
 
+      # @rbs () -> Selenium::WebDriver::Point
       def location_once_scrolled_into_view
         bridge.element_location_once_scrolled_into_view @id
       end
@@ -313,6 +334,7 @@ module Selenium
       # @return [WebDriver::Dimension]
       #
 
+      # @rbs () -> Selenium::WebDriver::Dimension
       def size
         bridge.element_size @id
       end
@@ -323,6 +345,7 @@ module Selenium
       # @return [WebDriver::ShadowRoot]
       #
 
+      # @rbs () -> Selenium::WebDriver::ShadowRoot?
       def shadow_root
         bridge.shadow_root @id
       end
@@ -351,6 +374,7 @@ module Selenium
       # @see SearchContext
       #
 
+      # @rbs () -> Array[untyped]
       def ref
         [:element, @id]
       end
@@ -362,6 +386,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (*untyped) -> String
       def to_json(*)
         JSON.generate as_json
       end
@@ -372,6 +397,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (*untyped) -> Hash[untyped, untyped]
       def as_json(*)
         @id.is_a?(Hash) ? @id : {ELEMENT_KEY => @id}
       end
@@ -387,6 +413,7 @@ module Selenium
         tn == 'option' || (tn == 'input' && %w[radio checkbox].include?(type))
       end
 
+      # @rbs () -> String
       def screenshot
         bridge.element_screenshot(@id)
       end

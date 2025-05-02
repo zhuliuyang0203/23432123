@@ -29,6 +29,7 @@ module Selenium
         # @api private
         #
 
+        # @rbs (String, Hash[untyped, untyped]) -> Selenium::WebDriver::DevTools::Request
         def self.from(id, params)
           new(
             id: id,
@@ -39,6 +40,7 @@ module Selenium
           )
         end
 
+        # @rbs (id: String, url: String, method: String, headers: Hash[untyped, untyped], post_data: nil) -> void
         def initialize(id:, url:, method:, headers:, post_data:)
           @id = id
           @url = url
@@ -47,6 +49,7 @@ module Selenium
           @post_data = post_data
         end
 
+        # @rbs (Selenium::WebDriver::DevTools::Request) -> bool
         def ==(other)
           self.class == other.class &&
             id == other.id &&

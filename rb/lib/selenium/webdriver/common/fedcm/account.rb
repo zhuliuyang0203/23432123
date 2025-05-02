@@ -31,6 +31,7 @@ module Selenium
                     :idp_config_url, :login_state, :terms_of_service_url, :privacy_policy_url
 
         # steep:ignore:start
+        # @rbs (**String) -> void
         def initialize(**args)
           @account_id = args['accountId']
           @email = args['email']

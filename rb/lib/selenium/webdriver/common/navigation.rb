@@ -38,6 +38,7 @@ module Selenium
       # Move back a single entry in the browser's history.
       #
 
+      # @rbs () -> void
       def back
         @bridge.go_back
       end
@@ -46,6 +47,7 @@ module Selenium
       # Move forward a single entry in the browser's history.
       #
 
+      # @rbs () -> void
       def forward
         @bridge.go_forward
       end
@@ -54,6 +56,7 @@ module Selenium
       # Refresh the current page.
       #
 
+      # @rbs () -> void
       def refresh
         @bridge.refresh
       end

@@ -27,6 +27,7 @@ module Selenium
       #
 
       class Scroll < Interaction
+        # @rbs (source: Selenium::WebDriver::Interactions::WheelInput, ?origin: Selenium::WebDriver::Element | Symbol, ?duration: Float, **nil | Integer) -> void
         def initialize(source:, origin: :viewport, duration: 0.25, **opts)
           super(source)
           @type = :scroll
@@ -40,10 +41,12 @@ module Selenium
           raise ArgumentError, "Invalid arguments: #{opts.keys}" unless opts.empty?
         end
 
+        # @rbs (Selenium::WebDriver::Interactions::WheelInput) -> nil
         def assert_source(source)
           raise TypeError, "#{source.type} is not a valid input type" unless source.is_a? WheelInput
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           {'type' => type.to_s,
            'duration' => @duration.to_i,

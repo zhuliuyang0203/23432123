@@ -1,21 +1,6 @@
-module Selenium
-  module WebDriver
-    module Support
-      class Guards
-        class GuardCondition
-          @name: untyped
+class Selenium::WebDriver::Support::Guards::GuardCondition
+  def initialize: (Symbol, ?Symbol) -> void
+                | (Symbol, ?bool) -> void
 
-          @execution: untyped
-
-          attr_accessor name: untyped
-
-          attr_accessor execution: untyped
-
-          def initialize: (untyped name, ?untyped? condition) ?{ () -> untyped } -> void
-
-          def satisfied?: (untyped guard) -> untyped
-        end
-      end
-    end
-  end
+  def satisfied?: (Selenium::WebDriver::Support::Guards::Guard) -> bool
 end

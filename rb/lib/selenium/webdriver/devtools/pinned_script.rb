@@ -23,6 +23,7 @@ module Selenium
       class PinnedScript
         attr_accessor :key, :devtools_identifier, :script
 
+        # @rbs (String) -> void
         def initialize(script)
           @key = SecureRandom.alphanumeric
           @script = script
@@ -32,6 +33,7 @@ module Selenium
         # @api private
         #
 
+        # @rbs () -> String
         def callable
           "function __webdriver_#{key}(arguments) { #{script} }"
         end
@@ -40,6 +42,7 @@ module Selenium
         # @api private
         #
 
+        # @rbs (*untyped) -> String
         def to_json(*)
           %{"return __webdriver_#{key}(arguments)"}
         end
@@ -48,6 +51,7 @@ module Selenium
         # @api private
         #
 
+        # @rbs () -> String
         def remove
           "__webdriver_#{key} = undefined"
         end

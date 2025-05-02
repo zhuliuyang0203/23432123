@@ -38,6 +38,7 @@ module Selenium
       # @return [ActionBuilder] A self reference.
       #
 
+      # @rbs (Selenium::WebDriver::Remote::BiDiBridge, ?devices: Array[untyped], ?async: bool, ?duration: Integer) -> void
       def initialize(bridge, devices: [], async: false, duration: 250)
         @bridge = bridge
         @duration = duration
@@ -61,6 +62,7 @@ module Selenium
       #
       #
 
+      # @rbs (Symbol, String) -> Selenium::WebDriver::Interactions::PointerInput
       def add_pointer_input(kind, name)
         add_input(Interactions.pointer(kind, name: name))
       end
@@ -77,6 +79,7 @@ module Selenium
       # @return [Interactions::KeyInput] The key input added
       #
 
+      # @rbs (String) -> Selenium::WebDriver::Interactions::KeyInput
       def add_key_input(name)
         add_input(Interactions.key(name))
       end
@@ -93,6 +96,7 @@ module Selenium
       # @return [Interactions::WheelInput] The wheel input added
       #
 
+      # @rbs (String) -> Selenium::WebDriver::Interactions::WheelInput
       def add_wheel_input(name)
         add_input(Interactions.wheel(name))
       end
@@ -105,6 +109,7 @@ module Selenium
       # @return [Selenium::WebDriver::Interactions::InputDevice] input device with given name or type
       #
 
+      # @rbs (?name: nil, ?type: Symbol) -> (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput)?
       def device(name: nil, type: nil)
         input = @devices.find { |device| (device.name == name.to_s || name.nil?) && (device.type == type || type.nil?) }
 
@@ -181,6 +186,7 @@ module Selenium
       # @return [ActionBuilder] A self reference.
       #
 
+      # @rbs (?device: Selenium::WebDriver::Interactions::KeyInput, ?number: Integer, ?duration: Integer) -> Selenium::WebDriver::ActionBuilder
       def pauses(device: nil, number: nil, duration: 0)
         number ||= 2
         device ||= pointer_input
@@ -194,6 +200,7 @@ module Selenium
       # Executes the actions added to the builder.
       #
 
+      # @rbs () -> nil
       def perform
         @bridge.send_actions @devices.filter_map(&:encode)
         clear_all_actions
@@ -204,6 +211,7 @@ module Selenium
       # Clears all actions from the builder.
       #
 
+      # @rbs () -> Array[untyped]
       def clear_all_actions
         @devices.each(&:clear_actions)
       end
@@ -212,6 +220,7 @@ module Selenium
       # Releases all action states from the browser.
       #
 
+      # @rbs () -> void
       def release_actions
         @bridge.release_actions
       end
@@ -224,6 +233,7 @@ module Selenium
       # @param [Array[InputDevice]] action_devices Array of Input Devices performing an action in this tick.
       #
 
+      # @rbs (*Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput | Selenium::WebDriver::Interactions::WheelInput) -> void
       def tick(*action_devices)
         return if @async
 
@@ -234,6 +244,7 @@ module Selenium
       # Adds an InputDevice
       #
 
+      # @rbs (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput | Symbol | Selenium::WebDriver::Interactions::WheelInput) -> (Selenium::WebDriver::Interactions::KeyInput | Selenium::WebDriver::Interactions::PointerInput | Selenium::WebDriver::Interactions::WheelInput)
       def add_input(device)
         device = Interactions.send(device) if device.is_a?(Symbol) && Interactions.respond_to?(device)
 

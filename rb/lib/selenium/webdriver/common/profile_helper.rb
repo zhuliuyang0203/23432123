@@ -35,6 +35,7 @@ module Selenium
         JSON.parse(json).fetch('zip')
       end
 
+      # @rbs () -> String
       def encoded
         Zipper.zip(layout_on_disk)
       end
@@ -60,6 +61,7 @@ module Selenium
         tmp_directory
       end
 
+      # @rbs (nil) -> nil
       def verify_model(model)
         return unless model
 

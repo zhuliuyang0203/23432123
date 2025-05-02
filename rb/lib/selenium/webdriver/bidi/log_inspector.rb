@@ -40,6 +40,7 @@ module Selenium
           WARNING: 'warning'
         }.freeze
 
+        # @rbs (Selenium::WebDriver::Chrome::Driver, ?nil) -> void
         def initialize(driver, browsing_context_ids = nil)
           WebDriver.logger.deprecate('LogInspector class',
                                      'Script class with driver.script',
@@ -54,6 +55,7 @@ module Selenium
           @bidi.session.subscribe('log.entryAdded', browsing_context_ids)
         end
 
+        # @rbs (?Selenium::WebDriver::BiDi::FilterBy?) -> void
         def on_console_entry(filter_by = nil, &block)
           check_valid_filter(filter_by)
 
@@ -63,6 +65,7 @@ module Selenium
           end
         end
 
+        # @rbs (?Selenium::WebDriver::BiDi::FilterBy?) -> void
         def on_javascript_log(filter_by = nil, &block)
           check_valid_filter(filter_by)
 
@@ -72,6 +75,7 @@ module Selenium
           end
         end
 
+        # @rbs () -> void
         def on_javascript_exception(&block)
           on_log do |params|
             type = params['type']
@@ -79,6 +83,7 @@ module Selenium
           end
         end
 
+        # @rbs (?Selenium::WebDriver::BiDi::FilterBy?) -> Integer?
         def on_log(filter_by = nil, &block)
           unless filter_by.nil?
             check_valid_filter(filter_by)
@@ -94,17 +99,20 @@ module Selenium
 
         private
 
+        # @rbs (Symbol) -> Integer
         def on(event, &block)
           event = EVENTS[event] if event.is_a?(Symbol)
           @bidi.add_callback("log.#{event}", &block)
         end
 
+        # @rbs (Selenium::WebDriver::BiDi::FilterBy?) -> void
         def check_valid_filter(filter_by)
           return if filter_by.nil? || filter_by.instance_of?(FilterBy)
 
           raise "Pass valid FilterBy object. Received: #{filter_by.inspect}"
         end
 
+        # @rbs (Hash[untyped, untyped], Selenium::WebDriver::BiDi::FilterBy?) -> Array[untyped]?
         def console_log_events(params, filter_by)
           event = ConsoleLogEntry.new(
             level: params['level'],
@@ -125,6 +133,7 @@ module Selenium
           yield(event)
         end
 
+        # @rbs (Hash[untyped, untyped], Selenium::WebDriver::BiDi::FilterBy?) -> Selenium::WebDriver::BiDi::JavascriptLogEntry?
         def javascript_log_events(params, filter_by)
           event = JavascriptLogEntry.new(
             level: params['level'],

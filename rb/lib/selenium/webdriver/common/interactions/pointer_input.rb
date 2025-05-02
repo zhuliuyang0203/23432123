@@ -31,32 +31,38 @@ module Selenium
 
         attr_reader :kind
 
+        # @rbs (Symbol, ?name: String | nil) -> void
         def initialize(kind, name: nil)
           super(name)
           @kind = assert_kind(kind)
           @type = Interactions::POINTER
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           output = super
           output[:parameters] = {pointerType: kind} if output
           output
         end
 
+        # @rbs (Symbol) -> Symbol
         def assert_kind(pointer)
           raise TypeError, "#{pointer.inspect} is not a valid pointer type" unless KIND.key? pointer
 
           KIND[pointer]
         end
 
+        # @rbs (?duration: Float, ?x: Integer, ?y: Integer, ?origin: Selenium::WebDriver::Element | Symbol, **nil | Float | Integer) -> void
         def create_pointer_move(duration: 0, x: 0, y: 0, origin: nil, **opts)
           add_action(PointerMove.new(self, duration, x, y, origin: origin, **opts))
         end
 
+        # @rbs (Symbol, **nil) -> Array[untyped]
         def create_pointer_down(button, **opts)
           add_action(PointerPress.new(self, :down, button, **opts))
         end
 
+        # @rbs (Symbol, **nil) -> Array[untyped]
         def create_pointer_up(button, **opts)
           add_action(PointerPress.new(self, :up, button, **opts))
         end

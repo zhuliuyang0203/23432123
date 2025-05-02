@@ -24,6 +24,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (Selenium::WebDriver::Remote::Bridge) -> void
       def initialize(bridge)
         @bridge = bridge
       end
@@ -32,6 +33,7 @@ module Selenium
       # switch to the frame with the given id
       #
 
+      # @rbs (String) -> void
       def frame(id)
         @bridge.switch_to_frame id
       end
@@ -40,6 +42,7 @@ module Selenium
       # switch to the parent frame
       #
 
+      # @rbs () -> void
       def parent_frame
         @bridge.switch_to_parent_frame
       end
@@ -51,6 +54,7 @@ module Selenium
       #
 
       # steep:ignore:start
+      # @rbs (?Symbol) -> Array[untyped]?
       def new_window(type = :window)
         raise ArgumentError, "Valid types are :tab and :window, received: #{type.inspect}" unless %i[window
                                                                                                      tab].include?(type)
@@ -83,6 +87,7 @@ module Selenium
       #   A window handle, obtained through Driver#window_handles
       #
 
+      # @rbs (String) -> (bool | Array[untyped] | String)?
       def window(id)
         if block_given?
           original = begin
@@ -115,6 +120,7 @@ module Selenium
       # @return [WebDriver::Element]
       #
 
+      # @rbs () -> Selenium::WebDriver::Element
       def active_element
         @bridge.switch_to_active_element
       end
@@ -123,6 +129,7 @@ module Selenium
       # selects either the first frame on the page, or the main document when a page contains iframes.
       #
 
+      # @rbs () -> void
       def default_content
         @bridge.switch_to_default_content
       end
@@ -131,6 +138,7 @@ module Selenium
       # switches to the currently active modal dialog for this particular driver instance
       #
 
+      # @rbs () -> Selenium::WebDriver::Alert?
       def alert
         Alert.new(@bridge)
       end

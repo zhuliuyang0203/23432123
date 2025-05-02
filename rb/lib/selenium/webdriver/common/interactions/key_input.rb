@@ -29,15 +29,18 @@ module Selenium
       class KeyInput < InputDevice
         SUBTYPES = {down: :keyDown, up: :keyUp, pause: :pause}.freeze
 
+        # @rbs (?String) -> void
         def initialize(name = nil)
           super
           @type = Interactions::KEY
         end
 
+        # @rbs (String | Symbol) -> Array[untyped]
         def create_key_down(key)
           add_action(TypingInteraction.new(self, :down, key))
         end
 
+        # @rbs (String | Symbol) -> Array[untyped]
         def create_key_up(key)
           add_action(TypingInteraction.new(self, :up, key))
         end

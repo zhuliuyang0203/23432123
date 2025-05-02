@@ -56,6 +56,7 @@ module Selenium
         # @option opts [Hash] :options A hash for raw options
         #
 
+        # @rbs (?log_level: nil, **Array[untyped]) -> void
         def initialize(log_level: nil, **opts)
           @debugger_address = opts.delete(:debugger_address) { true }
           opts[:accept_insecure_certs] = true unless opts.key?(:accept_insecure_certs)
@@ -150,6 +151,7 @@ module Selenium
 
         private
 
+        # @rbs (Hash[untyped, untyped]) -> void
         def process_browser_options(browser_options)
           browser_options['moz:debuggerAddress'] = true if @debugger_address
           options = browser_options[KEY]
@@ -157,6 +159,7 @@ module Selenium
           options['profile'] = @profile if @profile
         end
 
+        # @rbs (nil) -> nil
         def process_profile(profile)
           @profile = case profile
                      when nil
@@ -168,6 +171,7 @@ module Selenium
                      end
         end
 
+        # @rbs (Symbol | String) -> bool
         def camelize?(key)
           key != 'prefs'
         end

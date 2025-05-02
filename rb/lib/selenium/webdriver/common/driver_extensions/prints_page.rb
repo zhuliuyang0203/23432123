@@ -32,6 +32,7 @@ module Selenium
         # @api public
         #
 
+        # @rbs (String, **nil) -> void
         def save_print_page(path, **options)
           File.open(path, 'wb') do |file|
             content = Base64.decode64 print_page(**options)
@@ -47,6 +48,7 @@ module Selenium
         # @api public
         #
 
+        # @rbs (**nil | String | String | Array[untyped] | Hash[untyped, untyped]) -> String
         def print_page(**options)
           options[:pageRanges] = Array(options.delete(:page_ranges)) || []
           options[:shrinkToFit] = options.delete(:shrink_to_fit) { true }

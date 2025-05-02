@@ -27,6 +27,7 @@ module Selenium
         # @return [BiDi]
         #
 
+        # @rbs () -> Selenium::WebDriver::BiDi
         def bidi
           @bridge.bidi
         end

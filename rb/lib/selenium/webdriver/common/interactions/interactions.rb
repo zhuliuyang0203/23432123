@@ -30,10 +30,12 @@ module Selenium
       #
 
       class << self
+        # @rbs (?String) -> Selenium::WebDriver::Interactions::KeyInput
         def key(name = nil)
           KeyInput.new(name)
         end
 
+        # @rbs (?Symbol, ?name: String | nil) -> Selenium::WebDriver::Interactions::PointerInput
         def pointer(kind = :mouse, name: nil)
           PointerInput.new(kind, name: name)
         end
@@ -42,6 +44,7 @@ module Selenium
           pointer(name: name)
         end
 
+        # @rbs (?name: nil) -> Selenium::WebDriver::Interactions::PointerInput
         def pen(name: nil)
           pointer(:pen, name: name)
         end
@@ -54,6 +57,7 @@ module Selenium
           NoneInput.new(name)
         end
 
+        # @rbs (?String) -> Selenium::WebDriver::Interactions::WheelInput
         def wheel(name = nil)
           WheelInput.new(name)
         end

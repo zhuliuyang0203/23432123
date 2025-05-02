@@ -44,6 +44,7 @@ module Selenium
 
         protected
 
+        # @rbs () -> String
         def devtools_url
           uri = URI(devtools_address)
           response = Net::HTTP.get(uri.hostname, '/json/version', uri.port)
@@ -51,6 +52,7 @@ module Selenium
           JSON.parse(response)['webSocketDebuggerUrl']
         end
 
+        # @rbs () -> Integer
         def devtools_version
           Integer(capabilities.browser_version.split('.').first)
         end

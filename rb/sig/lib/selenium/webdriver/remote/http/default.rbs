@@ -1,48 +1,31 @@
-module Selenium
-  module WebDriver
-    module Remote
-      module Http
-        # @api private
-        class Default < Common
-          @open_timeout: untyped
+class Selenium::WebDriver::Remote::Http::Default
+  def request: (Symbol, URI::HTTP, Hash[untyped, untyped], String, ?Integer) -> Selenium::WebDriver::Remote::Response
+             | (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> nil
+             | (Symbol, URI::HTTP, Hash[untyped, untyped], String, ?Integer) -> nil
+             | (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> Selenium::WebDriver::Remote::Response
 
-          @read_timeout: untyped
+  def new_request_for: (Symbol, URI::HTTP, Hash[untyped, untyped], String) -> Net::HTTP::Post
+                     | (Symbol, URI::HTTP, Hash[untyped, untyped], nil) -> Net::HTTP::Get
+                     | (Symbol, URI::HTTP, Hash[untyped, untyped], nil) -> Net::HTTP::Delete
 
-          @http: untyped
+  def response_for: (Net::HTTP::Post) -> Net::HTTPOK
+                  | (Net::HTTP::Get) -> Net::HTTPNotFound
+                  | (Net::HTTP::Post) -> Net::HTTPNotFound
+                  | (Net::HTTP::Delete) -> Net::HTTPOK
+                  | (Net::HTTP::Get) -> Net::HTTPOK
+                  | (Net::HTTP::Post) -> Net::HTTPInternalServerError
 
-          @proxy: untyped
+  def http: () -> Net::HTTP
 
-          attr_writer proxy: untyped
+  def close: () -> nil
 
-          attr_accessor open_timeout: untyped
+  def initialize: (?open_timeout: nil, ?read_timeout: nil) -> void
 
-          attr_accessor read_timeout: untyped
+  def new_http_client: () -> Net::HTTP
 
-          def initialize: (?open_timeout: untyped?, ?read_timeout: untyped?) -> void
+  def use_proxy?: () -> bool
 
-          def close: () -> untyped
+  def proxy: () -> nil
 
-          private
-
-          def http: () -> untyped
-
-          def start: (untyped http) -> untyped
-
-          MAX_RETRIES: Integer
-
-          def request: (untyped verb, untyped url, untyped headers, untyped payload, ?::Integer redirects) -> untyped
-
-          def new_request_for: (untyped verb, untyped url, untyped headers, untyped payload) -> untyped
-
-          def response_for: (untyped request) -> untyped
-
-          def new_http_client: () -> untyped
-
-          def proxy: () -> untyped
-
-          def use_proxy?: () -> untyped
-        end
-      end
-    end
-  end
+  def start: (Net::HTTP) -> void
 end

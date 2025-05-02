@@ -1,17 +1,3 @@
-module Selenium
-  module WebDriver
-    module Chrome
-      class Options < Chromium::Options
-        KEY: String
-
-        BROWSER: String
-
-        private
-
-        def enable_logging: (untyped browser_options) -> untyped
-
-        def binary_path: () -> untyped
-      end
-    end
-  end
+class Selenium::WebDriver::Chrome::Options
+  def binary_path: () -> nil
 end

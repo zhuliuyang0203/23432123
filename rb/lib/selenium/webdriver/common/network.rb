@@ -29,21 +29,25 @@ module Selenium
 
       def_delegators :network, :continue_with_auth, :continue_with_request, :continue_with_response
 
+      # @rbs (Selenium::WebDriver::Chrome::Driver) -> void
       def initialize(bridge)
         @network = BiDi::Network.new(bridge.bidi)
         @callbacks = {}
       end
 
+      # @rbs (Hash[untyped, untyped]) -> Hash[untyped, untyped]
       def remove_handler(id)
         intercept = callbacks[id]
         network.remove_intercept(intercept['intercept'])
         callbacks.delete(id)
       end
 
+      # @rbs () -> void
       def clear_handlers
         callbacks.each_key { |id| remove_handler(id) }
       end
 
+      # @rbs (?String?, ?String?, *nil | String, ?pattern_type: nil | Symbol) -> Hash[untyped, untyped]
       def add_authentication_handler(username = nil, password = nil, *filter, pattern_type: nil, &block)
         selected_block =
           if username && password
@@ -62,6 +66,7 @@ module Selenium
         )
       end
 
+      # @rbs (*nil | String, ?pattern_type: nil | Symbol) -> Hash[untyped, untyped]
       def add_request_handler(*filter, pattern_type: nil, &block)
         add_handler(
           :before_request,
@@ -73,6 +78,7 @@ module Selenium
         )
       end
 
+      # @rbs (*nil | String, ?pattern_type: nil | Symbol) -> Hash[untyped, untyped]
       def add_response_handler(*filter, pattern_type: nil, &block)
         add_handler(
           :response_started,
@@ -86,6 +92,7 @@ module Selenium
 
       private
 
+      # @rbs (Symbol, String, Class, Array[untyped], ?pattern_type: nil | Symbol) -> Hash[untyped, untyped]
       def add_handler(event_type, phase, intercept_type, filter, pattern_type: nil)
         intercept = network.add_intercept(phases: [phase], url_patterns: [filter].flatten, pattern_type: pattern_type)
         callback_id = network.on(event_type) do |event|

@@ -30,6 +30,7 @@ module Selenium
       class << self
         attr_writer :bin_path
 
+        # @rbs () -> String
         def bin_path
           @bin_path ||= '../../../../../bin'
         end
@@ -72,6 +73,7 @@ module Selenium
           result
         end
 
+        # @rbs () -> String
         def platform_location
           directory = File.expand_path(bin_path, __FILE__)
           if Platform.windows?

@@ -41,6 +41,7 @@ module Selenium
                    forward: 4}.freeze
         DIRECTIONS = {down: :pointerDown, up: :pointerUp}.freeze
 
+        # @rbs (Selenium::WebDriver::Interactions::PointerInput, Symbol, Symbol, **nil) -> void
         def initialize(source, direction, button, **opts)
           super(source)
           @direction = assert_direction(direction)
@@ -49,16 +50,19 @@ module Selenium
           @opts = opts
         end
 
+        # @rbs () -> Hash[untyped, untyped]
         def encode
           process_opts.merge('type' => type.to_s, 'button' => @button)
         end
 
         private
 
+        # @rbs (Selenium::WebDriver::Interactions::PointerInput) -> nil
         def assert_source(source)
           raise TypeError, "#{source.type} is not a valid input type" unless source.is_a? PointerInput
         end
 
+        # @rbs (Symbol) -> Integer
         def assert_button(button)
           case button
           when Symbol
@@ -74,6 +78,7 @@ module Selenium
           end
         end
 
+        # @rbs (Symbol) -> Symbol
         def assert_direction(direction)
           raise ArgumentError, "#{direction.inspect} is not a valid button direction" unless DIRECTIONS.key? direction
 

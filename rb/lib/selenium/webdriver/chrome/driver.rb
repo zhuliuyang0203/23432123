@@ -43,6 +43,7 @@ module Selenium
 
         private
 
+        # @rbs () -> String
         def devtools_address
           "http://#{capabilities['goog:chromeOptions']['debuggerAddress']}"
         end

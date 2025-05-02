@@ -31,11 +31,13 @@ module Selenium
           @reap = defined?(@reap) ? @reap : true
         end
 
+        # @rbs () -> Array[untyped]
         def tmp_files
           @tmp_files ||= Hash.new { |hash, pid| hash[pid] = [] }
           @tmp_files[Process.pid]
         end
 
+        # @rbs (String) -> void
         def <<(file)
           tmp_files << file
         end

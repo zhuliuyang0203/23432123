@@ -33,6 +33,7 @@ module Selenium
       # @option opts [Array, Exception] :ignore Exceptions to ignore while polling (default: Error::NoSuchElementError)
       #
 
+      # @rbs (?Hash[untyped, untyped]) -> void
       def initialize(opts = {})
         @timeout  = opts.fetch(:timeout, DEFAULT_TIMEOUT)
         @interval = opts.fetch(:interval, DEFAULT_INTERVAL)
@@ -47,6 +48,7 @@ module Selenium
       # @return [Object] the result of the block
       #
 
+      # @rbs () -> Selenium::WebDriver::FedCM::Dialog
       def until
         end_time = current_time + @timeout
         last_error = nil
@@ -75,6 +77,7 @@ module Selenium
 
       private
 
+      # @rbs () -> Float
       def current_time
         Process.clock_gettime(Process::CLOCK_MONOTONIC)
       end

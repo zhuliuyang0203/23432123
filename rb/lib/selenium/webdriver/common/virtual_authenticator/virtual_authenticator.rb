@@ -27,6 +27,7 @@ module Selenium
       # Use `Driver#add_virtual_authenticator`
       #
 
+      # @rbs (Selenium::WebDriver::Remote::Bridge, String, Selenium::WebDriver::VirtualAuthenticatorOptions) -> void
       def initialize(bridge, authenticator_id, options)
         @id = authenticator_id
         @bridge = bridge
@@ -34,11 +35,13 @@ module Selenium
         @valid = true
       end
 
+      # @rbs (Selenium::WebDriver::Credential) -> nil
       def add_credential(credential)
         credential = credential.as_json
         @bridge.add_credential credential, @id
       end
 
+      # @rbs () -> Array[untyped]
       def credentials
         credential_data = @bridge.credentials @id
         credential_data.map do |cred|
@@ -46,24 +49,29 @@ module Selenium
         end
       end
 
+      # @rbs (Array[untyped] | String) -> void
       def remove_credential(credential_id)
         credential_id = Credential.encode(credential_id) if credential_id.instance_of?(Array)
         @bridge.remove_credential credential_id, @id
       end
 
+      # @rbs () -> void
       def remove_all_credentials
         @bridge.remove_all_credentials @id
       end
 
+      # @rbs (bool) -> void
       def user_verified=(verified)
         @bridge.user_verified verified, @id
       end
 
+      # @rbs () -> bool
       def remove!
         @bridge.remove_virtual_authenticator(@id)
         @valid = false
       end
 
+      # @rbs () -> bool
       def valid?
         @valid
       end

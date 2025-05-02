@@ -29,6 +29,7 @@ module Selenium
         # @return [String] identifier of installed addon
         #
 
+        # @rbs (String, ?bool?) -> String
         def install_addon(path, temporary = nil)
           @bridge.install_addon(path, temporary)
         end
@@ -39,6 +40,7 @@ module Selenium
         # @param [String] id Identifier of installed addon
         #
 
+        # @rbs (String) -> void
         def uninstall_addon(id)
           @bridge.uninstall_addon(id)
         end

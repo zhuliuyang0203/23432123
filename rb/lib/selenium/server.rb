@@ -215,6 +215,7 @@ module Selenium
       @log_file&.close
     end
 
+    # @rbs () -> String
     def webdriver_url
       "http://#{@host}:#{@port}/wd/hub"
     end

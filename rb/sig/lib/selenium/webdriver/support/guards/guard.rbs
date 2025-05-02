@@ -1,40 +1,13 @@
-module Selenium
-  module WebDriver
-    module Support
-      class Guards
-        class Guard
-          @guarded: untyped
+class Selenium::WebDriver::Support::Guards::Guard
+  def initialize: (Hash[untyped, untyped], Symbol, ?Selenium::WebDriver::Support::Guards) -> void
 
-          @tracker: untyped
+  def exclusive?: () -> bool
 
-          @messages: untyped
+  def exclude?: () -> bool
 
-          @type: untyped
+  def except?: () -> bool
 
-          @reason: untyped
+  def only?: () -> bool
 
-          attr_reader guarded: untyped
-
-          attr_reader tracker: String
-          attr_reader type: untyped
-
-          attr_reader messages: untyped
-
-          attr_reader reason: untyped
-
-          def initialize: (untyped guarded, untyped type, ?untyped? guards) -> void
-
-          def message: () -> untyped
-
-          def except?: () -> untyped
-
-          def only?: () -> untyped
-
-          def exclude?: () -> untyped
-
-          def exclusive?: () -> untyped
-        end
-      end
-    end
-  end
+  def message: () -> String
 end

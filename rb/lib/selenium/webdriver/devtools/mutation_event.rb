@@ -23,6 +23,7 @@ module Selenium
       class MutationEvent
         attr_accessor :element, :attribute_name, :current_value, :old_value
 
+        # @rbs (element: Selenium::WebDriver::Element, attribute_name: String, current_value: String, old_value: String) -> void
         def initialize(element:, attribute_name:, current_value:, old_value:)
           @element = element
           @attribute_name = attribute_name
