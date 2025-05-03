@@ -82,8 +82,6 @@ def setup(driver, pages):
 
     yield
 
-    driver.quit()
-
 
 def test_storage_initialized(driver):
     """Test that the storage module is initialized properly."""
