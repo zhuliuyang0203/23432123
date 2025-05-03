@@ -153,7 +153,7 @@ class Driver:
         self._service = None
         self.kwargs = {}
         self.options = driver_class
-        self.headless = driver_class
+        self.headless = request.config.option.headless
         self.bidi = request.config.option.bidi
 
     @property
@@ -213,17 +213,17 @@ class Driver:
 
     @property
     def headless(self):
-        self._headless = self._request.config.option.headless
         if self._headless:
             return True
         return False
 
     @headless.setter
-    def headless(self, driver_class):
-        if self.headless:
-            if driver_class.lower() == "chrome" or driver_class.lower() == "edge":
+    def headless(self, value):
+        self._headless = value
+        if self._headless:
+            if self.driver_class.lower() == "chrome" or self.driver_class.lower() == "edge":
                 self._options.add_argument("--headless=new")
-            if driver_class.lower() == "firefox":
+            if self.driver_class.lower() == "firefox":
                 self._options.add_argument("-headless")
 
     @property
@@ -245,17 +245,29 @@ class Driver:
     def options(self, cls_name):
         if cls_name.lower() not in self.supported_options:
             raise AttributeError(f"Invalid Options class {cls_name.lower()}")
-        self._options = getattr(webdriver, getattr(self.supported_options, cls_name.lower()))()
+
         if self.driver_class == self.supported_drivers.firefox:
-            # There are issues with window size/position when running Firefox
-            # under Wayland, so we use XWayland instead.
-            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
-        if self.driver_class == self.supported_drivers.remote:
+            self._options = getattr(webdriver, self.supported_options.firefox)()
+            if self.exe_platform == "Linux":
+                # There are issues with window size/position when running Firefox
+                # under Wayland, so we use XWayland instead.
+                os.environ["MOZ_ENABLE_WAYLAND"] = "0"
+        elif self.driver_class == self.supported_drivers.remote:
+            self._options = getattr(webdriver, self.supported_options.firefox)()
             self._options.set_capability("moz:firefoxOptions", {})
             self._options.enable_downloads = True
-            os.environ["MOZ_ENABLE_WAYLAND"] = "0"
-        if self.driver_class == self.supported_drivers.webkitgtk:
-            self._options.overlay_scrollbars_enabled = False
+        else:
+            opts_cls = getattr(self.supported_options, cls_name.lower())
+            self._options = getattr(webdriver, opts_cls)()
+
+        if self.browser_path or self.browser_args:
+            if self.driver_class == self.supported_drivers.webkitgtk:
+                self._options.overlay_scrollbars_enabled = False
+            if self.browser_path is not None:
+                self._options.binary_location = browser_path.strip("'")
+            if self.browser_args is not None:
+                for arg in self.browser_args.split():
+                    self._options.add_argument(arg)
 
     @property
     def service(self):
