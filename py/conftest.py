@@ -152,8 +152,6 @@ class Driver:
         self._service = None
         self.kwargs = {}
         self.options = driver_class
-        self.headless = request.config.option.headless
-        self.bidi = request.config.option.bidi
 
     @property
     def supported_drivers(self):
@@ -211,29 +209,15 @@ class Driver:
 
     @property
     def headless(self):
-        if self._headless:
+        if self._request.config.option.headless:
             return True
         return False
 
-    @headless.setter
-    def headless(self, value):
-        self._headless = value
-        if self._headless:
-            if self.driver_class.lower() == "chrome" or self.driver_class.lower() == "edge":
-                self._options.add_argument("--headless=new")
-            if self.driver_class.lower() == "firefox":
-                self._options.add_argument("-headless")
-
     @property
     def bidi(self):
-        return self._bidi
-
-    @bidi.setter
-    def bidi(self, value):
-        self._bidi = value
-        if self._bidi:
-            self._options.web_socket_url = True
-            self._options.unhandled_prompt_behavior = "ignore"
+        if self._request.config.option.bidi:
+            return True
+        return False
 
     @property
     def options(self):
@@ -266,6 +250,16 @@ class Driver:
             if self.browser_args is not None:
                 for arg in self.browser_args.split():
                     self._options.add_argument(arg)
+
+        if self.headless:
+            if self.driver_class.lower() == "chrome" or self.driver_class.lower() == "edge":
+                self._options.add_argument("--headless=new")
+            if self.driver_class.lower() == "firefox":
+                self._options.add_argument("-headless")
+
+        if self.bidi:
+            self._options.web_socket_url = True
+            self._options.unhandled_prompt_behavior = "ignore"
 
     @property
     def service(self):
