@@ -263,7 +263,9 @@ class FirefoxDriverTest extends JupiterTestBase {
   @NoDriverAfterTest
   @Test
   void canSetContext() {
-    HasContext context = (HasContext) driver;
+    localDriver =
+        new FirefoxDriver(getDefaultOptions().addArguments("-remote-allow-system-access"));
+    HasContext context = (HasContext) localDriver;
 
     assertThat(context.getContext()).isEqualTo(FirefoxCommandContext.CONTENT);
     context.setContext(FirefoxCommandContext.CHROME);
