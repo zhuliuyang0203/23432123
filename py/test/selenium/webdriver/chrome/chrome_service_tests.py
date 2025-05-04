@@ -109,7 +109,6 @@ def test_log_output_null_default(driver, capfd) -> None:
 
 @pytest.mark.no_driver_after_test
 def test_driver_is_stopped_if_browser_cant_start(clean_driver, clean_options, driver_executable) -> None:
-    #options = Options()
     clean_options.add_argument("--user-data-dir=/no/such/location")
     service = Service(executable_path=driver_executable)
     with pytest.raises(SessionNotCreatedException):
