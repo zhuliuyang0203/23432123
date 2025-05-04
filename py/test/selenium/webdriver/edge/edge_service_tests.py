@@ -23,7 +23,6 @@ from unittest.mock import patch
 import pytest
 
 from selenium.common.exceptions import SessionNotCreatedException
-from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 
 
@@ -109,12 +108,11 @@ def test_log_output_null_default(driver, capfd) -> None:
 
 
 @pytest.mark.no_driver_after_test
-def test_driver_is_stopped_if_browser_cant_start(clean_driver, clean_service, driver_executable) -> None:
-    options = Options()
-    options.add_argument("--user-data-dir=/no/such/location")
+def test_driver_is_stopped_if_browser_cant_start(clean_driver, clean_options, clean_service, driver_executable) -> None:
+    clean_options.add_argument("--user-data-dir=/no/such/location")
     service = Service(executable_path=driver_executable)
     with pytest.raises(SessionNotCreatedException):
-        clean_driver(options=options, service=service)
+        clean_driver(options=clean_options, service=service)
     assert not service.is_connectable()
     assert service.process.poll() is not None
 
