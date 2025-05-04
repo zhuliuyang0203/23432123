@@ -214,7 +214,7 @@ def get_options(driver_class, config):
     headless = config.option.headless
     bidi = config.option.bidi
 
-    options = options = getattr(webdriver, f"{driver_class}Options")()
+    options = getattr(webdriver, f"{driver_class}Options")()
 
     if browser_path or browser_args:
         if driver_class == "WebKitGTK":
