@@ -20,8 +20,6 @@ from unittest.mock import patch
 import pytest
 import urllib3
 
-from selenium import webdriver
-
 
 @pytest.mark.no_driver_after_test
 def test_bad_proxy_doesnt_interfere(clean_driver, clean_options, clean_service):
