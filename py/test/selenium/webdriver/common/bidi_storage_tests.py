@@ -75,289 +75,281 @@ def get_document_cookie_or_none(driver):
         return None
 
 
-@pytest.fixture(autouse=True)
-def setup(driver, pages):
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
+class TestBidiStorage:
 
-    yield
+    @pytest.fixture(autouse=True)
+    def setup(self, driver, pages):
+        driver.get(pages.url("simpleTest.html"))
+        driver.delete_all_cookies()
 
+    def test_storage_initialized(self, driver):
+        """Test that the storage module is initialized properly."""
+        assert driver.storage is not None
 
-def test_storage_initialized(driver):
-    """Test that the storage module is initialized properly."""
-    assert driver.storage is not None
+    def test_get_cookie_by_name(self, driver, pages, webserver):
+        """Test getting a cookie by name."""
+        assert_no_cookies_are_present(driver)
 
+        key = generate_unique_key()
+        value = "set"
+        assert_cookie_is_not_present_with_name(driver, key)
 
-def test_get_cookie_by_name(driver, pages, webserver):
-    """Test getting a cookie by name."""
-    assert_no_cookies_are_present(driver)
+        driver.add_cookie({"name": key, "value": value})
 
-    key = generate_unique_key()
-    value = "set"
-    assert_cookie_is_not_present_with_name(driver, key)
+        # Test
+        cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
 
-    driver.add_cookie({"name": key, "value": value})
+        result = driver.storage.get_cookies(filter=cookie_filter)
 
-    # Test
-    cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
+        # Verify
+        assert len(result.cookies) > 0
+        assert result.cookies[0].value.value == value
 
-    result = driver.storage.get_cookies(filter=cookie_filter)
+    @pytest.mark.xfail_chrome
+    @pytest.mark.xfail_edge
+    def test_get_cookie_in_default_user_context(self, driver, pages, webserver):
+        """Test getting a cookie in the default user context."""
+        assert_no_cookies_are_present(driver)
 
-    # Verify
-    assert len(result.cookies) > 0
-    assert result.cookies[0].value.value == value
+        window_handle = driver.current_window_handle
+        key = generate_unique_key()
+        value = "set"
+        assert_cookie_is_not_present_with_name(driver, key)
 
+        driver.add_cookie({"name": key, "value": value})
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
-def test_get_cookie_in_default_user_context(driver, pages, webserver):
-    """Test getting a cookie in the default user context."""
-    assert_no_cookies_are_present(driver)
+        # Test
+        cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
 
-    window_handle = driver.current_window_handle
-    key = generate_unique_key()
-    value = "set"
-    assert_cookie_is_not_present_with_name(driver, key)
+        driver.switch_to.new_window(WindowTypes.WINDOW)
 
-    driver.add_cookie({"name": key, "value": value})
+        descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
 
-    # Test
-    cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
+        params = cookie_filter
+        result_after_switching_context = driver.storage.get_cookies(filter=params, partition=descriptor)
 
-    driver.switch_to.new_window(WindowTypes.WINDOW)
+        assert len(result_after_switching_context.cookies) > 0
+        assert result_after_switching_context.cookies[0].value.value == value
 
-    descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
+        driver.switch_to.window(window_handle)
 
-    params = cookie_filter
-    result_after_switching_context = driver.storage.get_cookies(filter=params, partition=descriptor)
+        descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
 
-    assert len(result_after_switching_context.cookies) > 0
-    assert result_after_switching_context.cookies[0].value.value == value
+        result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
 
-    driver.switch_to.window(window_handle)
+        assert len(result.cookies) > 0
+        assert result.cookies[0].value.value == value
+        partition_key = result.partition_key
 
-    descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
+        assert partition_key.source_origin is not None
+        assert partition_key.user_context is not None
+        assert partition_key.user_context == "default"
 
-    result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
+    def test_get_cookie_in_a_user_context(self, driver, pages, webserver):
+        """Test getting a cookie in a user context."""
+        assert_no_cookies_are_present(driver)
 
-    assert len(result.cookies) > 0
-    assert result.cookies[0].value.value == value
-    partition_key = result.partition_key
+        user_context = driver.browser.create_user_context()
+        window_handle = driver.current_window_handle
 
-    assert partition_key.source_origin is not None
-    assert partition_key.user_context is not None
-    assert partition_key.user_context == "default"
+        key = generate_unique_key()
+        value = "set"
 
+        descriptor = StorageKeyPartitionDescriptor(user_context=user_context)
 
-def test_get_cookie_in_a_user_context(driver, pages, webserver):
-    """Test getting a cookie in a user context."""
-    assert_no_cookies_are_present(driver)
+        parameters = PartialCookie(key, BytesValue(BytesValue.TYPE_STRING, value), webserver.host)
 
-    user_context = driver.browser.create_user_context()
-    window_handle = driver.current_window_handle
+        driver.storage.set_cookie(cookie=parameters, partition=descriptor)
 
-    key = generate_unique_key()
-    value = "set"
+        # Test
+        cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
 
-    descriptor = StorageKeyPartitionDescriptor(user_context=user_context)
+        # Create a new window with the user context
+        new_window = driver.browsing_context.create(type=WindowTypes.TAB, user_context=user_context)
 
-    parameters = PartialCookie(key, BytesValue(BytesValue.TYPE_STRING, value), webserver.host)
+        driver.switch_to.window(new_window)
 
-    driver.storage.set_cookie(cookie=parameters, partition=descriptor)
+        result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
 
-    # Test
-    cookie_filter = CookieFilter(name=key, value=BytesValue(BytesValue.TYPE_STRING, "set"))
+        assert len(result.cookies) > 0
+        assert result.cookies[0].value.value == value
+        partition_key = result.partition_key
 
-    # Create a new window with the user context
-    new_window = driver.browsing_context.create(type=WindowTypes.TAB, user_context=user_context)
+        assert partition_key.user_context is not None
+        assert partition_key.user_context == user_context
 
-    driver.switch_to.window(new_window)
+        driver.switch_to.window(window_handle)
 
-    result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
+        browsing_context_partition_descriptor = BrowsingContextPartitionDescriptor(window_handle)
 
-    assert len(result.cookies) > 0
-    assert result.cookies[0].value.value == value
-    partition_key = result.partition_key
+        result1 = driver.storage.get_cookies(filter=cookie_filter, partition=browsing_context_partition_descriptor)
 
-    assert partition_key.user_context is not None
-    assert partition_key.user_context == user_context
+        assert len(result1.cookies) == 0
 
-    driver.switch_to.window(window_handle)
+        # Clean up
+        driver.browsing_context.close(new_window)
+        driver.browser.remove_user_context(user_context)
 
-    browsing_context_partition_descriptor = BrowsingContextPartitionDescriptor(window_handle)
+    def test_add_cookie(self, driver, pages, webserver):
+        """Test adding a cookie."""
+        assert_no_cookies_are_present(driver)
 
-    result1 = driver.storage.get_cookies(filter=cookie_filter, partition=browsing_context_partition_descriptor)
+        key = generate_unique_key()
+        value = "foo"
 
-    assert len(result1.cookies) == 0
+        parameters = PartialCookie(key, BytesValue(BytesValue.TYPE_STRING, value), webserver.host)
+        assert_cookie_is_not_present_with_name(driver, key)
 
-    # Clean up
-    driver.browsing_context.close(new_window)
-    driver.browser.remove_user_context(user_context)
+        # Test
+        driver.storage.set_cookie(cookie=parameters)
 
+        # Verify
+        assert_cookie_has_value(driver, key, value)
+        driver.get(pages.url("simpleTest.html"))
+        assert_cookie_has_value(driver, key, value)
 
-def test_add_cookie(driver, pages, webserver):
-    """Test adding a cookie."""
-    assert_no_cookies_are_present(driver)
+    @pytest.mark.xfail_chrome
+    @pytest.mark.xfail_edge
+    def test_add_and_get_cookie(self, driver, pages, webserver):
+        """Test adding and getting a cookie with all parameters."""
+        assert_no_cookies_are_present(driver)
 
-    key = generate_unique_key()
-    value = "foo"
+        value = BytesValue(BytesValue.TYPE_STRING, "cod")
+        domain = webserver.host
 
-    parameters = PartialCookie(key, BytesValue(BytesValue.TYPE_STRING, value), webserver.host)
-    assert_cookie_is_not_present_with_name(driver, key)
+        expiry = int(time.time() + 3600)
 
-    # Test
-    driver.storage.set_cookie(cookie=parameters)
+        path = "/simpleTest.html"
 
-    # Verify
-    assert_cookie_has_value(driver, key, value)
-    driver.get(pages.url("simpleTest.html"))
-    assert_cookie_has_value(driver, key, value)
+        cookie = PartialCookie(
+            "fish", value, domain, path=path, http_only=True, secure=False, same_site=SameSite.LAX, expiry=expiry
+        )
 
+        # Test
+        driver.storage.set_cookie(cookie=cookie)
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
-def test_add_and_get_cookie(driver, pages, webserver):
-    """Test adding and getting a cookie with all parameters."""
-    assert_no_cookies_are_present(driver)
+        driver.get(pages.url("simpleTest.html"))
 
-    value = BytesValue(BytesValue.TYPE_STRING, "cod")
-    domain = webserver.host
+        cookie_filter = CookieFilter(
+            name="fish",
+            value=value,
+            domain=domain,
+            path=path,
+            http_only=True,
+            secure=False,
+            same_site=SameSite.LAX,
+            expiry=expiry,
+        )
 
-    expiry = int(time.time() + 3600)  # 1 hour from now
+        descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
 
-    path = "/simpleTest.html"
+        result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
+        key = result.partition_key
 
-    cookie = PartialCookie(
-        "fish", value, domain, path=path, http_only=True, secure=False, same_site=SameSite.LAX, expiry=expiry
-    )
+        # Verify
+        assert len(result.cookies) > 0
+        result_cookie = result.cookies[0]
 
-    # Test
-    driver.storage.set_cookie(cookie=cookie)
+        assert result_cookie.name == "fish"
+        assert result_cookie.value.value == value.value
+        assert result_cookie.domain == domain
+        assert result_cookie.path == path
+        assert result_cookie.http_only is True
+        assert result_cookie.secure is False
+        assert result_cookie.same_site == SameSite.LAX
+        assert result_cookie.expiry == expiry
+        assert key.source_origin is not None
+        assert key.user_context is not None
+        assert key.user_context == "default"
 
-    driver.get(pages.url("simpleTest.html"))
+    @pytest.mark.xfail_edge
+    def test_get_all_cookies(self, driver, pages, webserver):
+        """Test getting all cookies."""
+        assert_no_cookies_are_present(driver)
 
-    cookie_filter = CookieFilter(
-        name="fish",
-        value=value,
-        domain=domain,
-        path=path,
-        http_only=True,
-        secure=False,
-        same_site=SameSite.LAX,
-        expiry=expiry,
-    )
+        key1 = generate_unique_key()
+        key2 = generate_unique_key()
 
-    descriptor = BrowsingContextPartitionDescriptor(driver.current_window_handle)
+        assert_cookie_is_not_present_with_name(driver, key1)
+        assert_cookie_is_not_present_with_name(driver, key2)
 
-    result = driver.storage.get_cookies(filter=cookie_filter, partition=descriptor)
-    key = result.partition_key
+        # Test
+        params = CookieFilter()
+        result = driver.storage.get_cookies(filter=params)
 
-    # Verify
-    assert len(result.cookies) > 0
-    result_cookie = result.cookies[0]
+        count_before = len(result.cookies)
 
-    assert result_cookie.name == "fish"
-    assert result_cookie.value.value == value.value
-    assert result_cookie.domain == domain
-    assert result_cookie.path == path
-    assert result_cookie.http_only is True
-    assert result_cookie.secure is False
-    assert result_cookie.same_site == SameSite.LAX
-    assert result_cookie.expiry == expiry
-    assert key.source_origin is not None
-    assert key.user_context is not None
-    assert key.user_context == "default"
+        driver.add_cookie({"name": key1, "value": "value"})
+        driver.add_cookie({"name": key2, "value": "value"})
 
+        driver.get(pages.url("simpleTest.html"))
+        result = driver.storage.get_cookies(filter=params)
 
-@pytest.mark.xfail_edge
-def test_get_all_cookies(driver, pages, webserver):
-    """Test getting all cookies."""
-    assert_no_cookies_are_present(driver)
+        # Verify
+        assert len(result.cookies) == count_before + 2
+        cookie_names = [cookie.name for cookie in result.cookies]
+        assert key1 in cookie_names
+        assert key2 in cookie_names
 
-    key1 = generate_unique_key()
-    key2 = generate_unique_key()
+    def test_delete_all_cookies(self, driver, pages, webserver):
+        """Test deleting all cookies."""
+        assert_no_cookies_are_present(driver)
 
-    assert_cookie_is_not_present_with_name(driver, key1)
-    assert_cookie_is_not_present_with_name(driver, key2)
+        driver.add_cookie({"name": "foo", "value": "set"})
+        assert_some_cookies_are_present(driver)
 
-    # Test
-    params = CookieFilter()
-    result = driver.storage.get_cookies(filter=params)
+        # Test
+        driver.storage.delete_cookies(filter=CookieFilter())
 
-    count_before = len(result.cookies)
+        # Verify
+        assert_no_cookies_are_present(driver)
 
-    driver.add_cookie({"name": key1, "value": "value"})
-    driver.add_cookie({"name": key2, "value": "value"})
+        driver.get(pages.url("simpleTest.html"))
+        assert_no_cookies_are_present(driver)
 
-    driver.get(pages.url("simpleTest.html"))
-    result = driver.storage.get_cookies(filter=params)
+    def test_delete_cookie_with_name(self, driver, pages, webserver):
+        """Test deleting a cookie with a specific name."""
+        assert_no_cookies_are_present(driver)
 
-    # Verify
-    assert len(result.cookies) == count_before + 2
-    cookie_names = [cookie.name for cookie in result.cookies]
-    assert key1 in cookie_names
-    assert key2 in cookie_names
+        key1 = generate_unique_key()
+        key2 = generate_unique_key()
 
+        driver.add_cookie({"name": key1, "value": "set"})
+        driver.add_cookie({"name": key2, "value": "set"})
 
-def test_delete_all_cookies(driver, pages, webserver):
-    """Test deleting all cookies."""
-    assert_no_cookies_are_present(driver)
+        assert_cookie_is_present_with_name(driver, key1)
+        assert_cookie_is_present_with_name(driver, key2)
 
-    driver.add_cookie({"name": "foo", "value": "set"})
-    assert_some_cookies_are_present(driver)
+        # Test
+        driver.storage.delete_cookies(filter=CookieFilter(name=key1))
 
-    # Test
-    driver.storage.delete_cookies(filter=CookieFilter())
+        # Verify
+        assert_cookie_is_not_present_with_name(driver, key1)
+        assert_cookie_is_present_with_name(driver, key2)
 
-    # Verify
-    assert_no_cookies_are_present(driver)
+        driver.get(pages.url("simpleTest.html"))
+        assert_cookie_is_not_present_with_name(driver, key1)
+        assert_cookie_is_present_with_name(driver, key2)
 
-    driver.get(pages.url("simpleTest.html"))
-    assert_no_cookies_are_present(driver)
+    def test_add_cookies_with_different_paths(self, driver, pages, webserver):
+        """Test adding cookies with different paths that are related to ours."""
+        assert_no_cookies_are_present(driver)
 
+        cookie1 = PartialCookie(
+            "fish", BytesValue(BytesValue.TYPE_STRING, "cod"), webserver.host, path="/simpleTest.html"
+        )
 
-def test_delete_cookie_with_name(driver, pages, webserver):
-    """Test deleting a cookie with a specific name."""
-    assert_no_cookies_are_present(driver)
+        cookie2 = PartialCookie("planet", BytesValue(BytesValue.TYPE_STRING, "earth"), webserver.host, path="/")
 
-    key1 = generate_unique_key()
-    key2 = generate_unique_key()
+        # Test
+        driver.storage.set_cookie(cookie=cookie1)
+        driver.storage.set_cookie(cookie=cookie2)
 
-    driver.add_cookie({"name": key1, "value": "set"})
-    driver.add_cookie({"name": key2, "value": "set"})
+        driver.get(pages.url("simpleTest.html"))
 
-    assert_cookie_is_present_with_name(driver, key1)
-    assert_cookie_is_present_with_name(driver, key2)
+        # Verify
+        assert_cookie_is_present_with_name(driver, "fish")
+        assert_cookie_is_present_with_name(driver, "planet")
 
-    # Test
-    driver.storage.delete_cookies(filter=CookieFilter(name=key1))
-
-    # Verify
-    assert_cookie_is_not_present_with_name(driver, key1)
-    assert_cookie_is_present_with_name(driver, key2)
-
-    driver.get(pages.url("simpleTest.html"))
-    assert_cookie_is_not_present_with_name(driver, key1)
-    assert_cookie_is_present_with_name(driver, key2)
-
-
-def test_add_cookies_with_different_paths(driver, pages, webserver):
-    """Test adding cookies with different paths that are related to ours."""
-    assert_no_cookies_are_present(driver)
-
-    cookie1 = PartialCookie("fish", BytesValue(BytesValue.TYPE_STRING, "cod"), webserver.host, path="/simpleTest.html")
-
-    cookie2 = PartialCookie("planet", BytesValue(BytesValue.TYPE_STRING, "earth"), webserver.host, path="/")
-
-    # Test
-    driver.storage.set_cookie(cookie=cookie1)
-    driver.storage.set_cookie(cookie=cookie2)
-
-    driver.get(pages.url("simpleTest.html"))
-
-    # Verify
-    assert_cookie_is_present_with_name(driver, "fish")
-    assert_cookie_is_present_with_name(driver, "planet")
-
-    driver.get(pages.url("formPage.html"))
-    assert_cookie_is_not_present_with_name(driver, "fish")
+        driver.get(pages.url("formPage.html"))
+        assert_cookie_is_not_present_with_name(driver, "fish")
