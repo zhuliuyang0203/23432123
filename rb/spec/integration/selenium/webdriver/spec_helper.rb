@@ -45,7 +45,7 @@ end
 module TraceHelper
   # @rbs () -> RBS::Trace
   def self.trace
-    @trace ||= if Gem::Specification.find_all_by_name('rbs-trace').any?
+    @trace ||= if GlobalTestEnv.send(:current_env)[:ci].nil?
                  require 'rbs-trace'
                  RBS::Trace.new
                end
