@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selenium"
-version = "4.32.0"
+version = "4.33.0.202505022255"
 license = { text = "Apache 2.0" }
 description = "Official Python bindings for Selenium WebDriver."
 readme = "README.rst"
@@ -91,6 +91,7 @@ testpaths = ["test"]
 
 # mypy global options
 [tool.mypy]
+exclude = "selenium/webdriver/common/devtools"
 # The aim in future here is we would be able to turn (most) of these flags on, however the typing technical
 # debt is quite colossal right now.  For now we should maybe get everything working with the config here
 # then look at going after partially or completely untyped defs as a phase-2.
