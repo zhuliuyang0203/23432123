@@ -5,12 +5,4 @@ class Selenium::WebDriver::ChildProcess
               | (Integer, ?Integer) -> Array[untyped]
 
   def poll_for_exit: (Integer) -> nil
-
-  def self.build: (*String) -> Selenium::WebDriver::ChildProcess
-
-  def initialize: (*String) -> void
-
-  def start: () -> nil
-
-  def io: () -> String
 end

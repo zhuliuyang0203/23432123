@@ -1,7 +1,5 @@
 class Selenium::WebDriver::Remote::Http::Default
   def request: (Symbol, URI::HTTP, Hash[untyped, untyped], String, ?Integer) -> Selenium::WebDriver::Remote::Response
-             | (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> nil
-             | (Symbol, URI::HTTP, Hash[untyped, untyped], String, ?Integer) -> nil
              | (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> Selenium::WebDriver::Remote::Response
 
   def new_request_for: (Symbol, URI::HTTP, Hash[untyped, untyped], String) -> Net::HTTP::Post
@@ -9,23 +7,10 @@ class Selenium::WebDriver::Remote::Http::Default
                      | (Symbol, URI::HTTP, Hash[untyped, untyped], nil) -> Net::HTTP::Delete
 
   def response_for: (Net::HTTP::Post) -> Net::HTTPOK
-                  | (Net::HTTP::Get) -> Net::HTTPNotFound
-                  | (Net::HTTP::Post) -> Net::HTTPNotFound
-                  | (Net::HTTP::Delete) -> Net::HTTPOK
                   | (Net::HTTP::Get) -> Net::HTTPOK
-                  | (Net::HTTP::Post) -> Net::HTTPInternalServerError
+                  | (Net::HTTP::Delete) -> Net::HTTPOK
 
   def http: () -> Net::HTTP
 
   def close: () -> nil
-
-  def initialize: (?open_timeout: nil, ?read_timeout: nil) -> void
-
-  def new_http_client: () -> Net::HTTP
-
-  def use_proxy?: () -> bool
-
-  def proxy: () -> nil
-
-  def start: (Net::HTTP) -> void
 end

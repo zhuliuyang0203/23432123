@@ -2,30 +2,4 @@ module Selenium::WebDriver::Platform
   def self.ci: () -> nil
 
   def self.os: () -> Symbol
-
-  def self.localhost: () -> String
-
-  def self.jruby?: () -> bool
-
-  def self.engine: () -> Symbol
-
-  def self.windows?: () -> bool
-
-  def self.truffleruby?: () -> bool
-
-  def self.cygwin_path: (String, ?only_cygwin: bool, **nil) -> String
-
-  def self.cygwin?: () -> bool
-
-  def self.assert_executable: (String) -> void
-
-  def self.assert_file: (String) -> void
-
-  def self.exit_hook: () -> void
-
-  def self.interfaces: () -> Array[untyped]
-
-  def self.ip: () -> String
-
-  def self.null_device: () -> String
 end

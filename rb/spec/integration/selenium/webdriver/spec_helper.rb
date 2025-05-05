@@ -19,7 +19,6 @@
 
 require 'rubygems'
 require 'time'
-require 'rbs-trace'
 require 'rspec'
 
 require 'selenium-webdriver'
@@ -36,10 +35,25 @@ class SeleniumTestListener
     exception = notification.example.exception
     assertion_failed = exception &&
                        (exception.is_a?(RSpec::Expectations::ExpectationNotMetError) ||
-                        exception.is_a?(RSpec::Core::Pending::PendingExampleFixedError))
+                         exception.is_a?(RSpec::Core::Pending::PendingExampleFixedError))
     pending_exception = exception.nil? && notification.example.pending && !notification.example.skip
 
     GlobalTestEnv.reset_driver! if (exception && !assertion_failed) || pending_exception
+  end
+end
+
+module TraceHelper
+  # @rbs () -> RBS::Trace
+  def self.trace
+    @trace ||= if Gem::Specification.find_all_by_name('rbs-trace').any?
+                 require 'rbs-trace'
+                 RBS::Trace.new
+               end
+  end
+
+  # @rbs () -> bool
+  def self.enabled?
+    !trace.nil?
   end
 end
 
@@ -52,19 +66,19 @@ RSpec.configure do |c|
 
   c.include(WebDriver::SpecSupport::Helpers)
 
-  trace = RBS::Trace.new
-
   c.before(:suite) do
     GlobalTestEnv.remote_server.start if GlobalTestEnv.driver == :remote && ENV['WD_REMOTE_URL'].nil?
     GlobalTestEnv.print_env
-    trace.enable
+    TraceHelper.trace.enable if TraceHelper.enabled?
   end
 
   c.after(:suite) do
     GlobalTestEnv.quit_driver
-    trace.disable
-    trace.save_comments
-    trace.save_files(out_dir: 'sig/')
+    if TraceHelper.enabled?
+      TraceHelper.trace.disable
+      TraceHelper.trace.save_comments
+      TraceHelper.trace.save_files(out_dir: 'sig/')
+    end
   end
 
   c.filter_run_when_matching :focus

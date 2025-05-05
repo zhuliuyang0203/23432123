@@ -8,22 +8,4 @@ class Selenium::WebDriver::ServiceManager
   def connect_to_server: () -> Net::HTTPOK
 
   def stop_process: () -> nil
-
-  def initialize: (Selenium::WebDriver::Chrome::Service) -> void
-
-  def start: () -> void
-
-  def process_running?: () -> nil
-
-  def socket_lock: () -> Selenium::WebDriver::SocketLock
-
-  def find_free_port: () -> void
-
-  def start_process: () -> void
-
-  def build_process: (*String) -> Selenium::WebDriver::ChildProcess
-
-  def connect_until_stable: () -> nil
-
-  def uri: () -> URI::HTTP
 end

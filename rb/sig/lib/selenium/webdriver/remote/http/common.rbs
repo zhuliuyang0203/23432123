@@ -1,7 +1,5 @@
 class Selenium::WebDriver::Remote::Http::Common
   def call: (Symbol, String, Hash[untyped, untyped]) -> Selenium::WebDriver::Remote::Response
-          | (Symbol, String, nil) -> nil
-          | (Symbol, String, Hash[untyped, untyped]) -> nil
           | (Symbol, String, nil) -> Selenium::WebDriver::Remote::Response
 
   def server_url: () -> URI::HTTP
@@ -9,7 +7,4 @@ class Selenium::WebDriver::Remote::Http::Common
   def common_headers: () -> Hash[untyped, untyped]
 
   def create_response: (String, String, String) -> Selenium::WebDriver::Remote::Response
-                     | (String, String, String) -> nil
-
-  def self.user_agent: () -> String
 end

@@ -1,13 +1,5 @@
-module Selenium
-  module WebDriver
-    module DriverExtensions
-      module HasNetworkConditions
-        def network_conditions: () -> untyped
+module Selenium::WebDriver::DriverExtensions::HasNetworkConditions
+  def network_conditions=: (Hash[untyped, untyped]) -> void
 
-        def network_conditions=: (untyped conditions) -> untyped
-
-        def delete_network_conditions: () -> untyped
-      end
-    end
-  end
+  def network_conditions: () -> Hash[untyped, untyped]
 end

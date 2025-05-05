@@ -8,6 +8,4 @@ class Selenium::WebDriver::Support::Guards::Guard
   def except?: () -> bool
 
   def only?: () -> bool
-
-  def message: () -> String
 end

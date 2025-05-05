@@ -1,10 +1,3 @@
 module Selenium::WebDriver::Error
   def self.for_error: (nil) -> nil
-                    | (String) -> Class
-end
-
-class Selenium::WebDriver::Error::WebDriverError
-  def initialize: (?String) -> void
-
-  def class_name: () -> Symbol
 end

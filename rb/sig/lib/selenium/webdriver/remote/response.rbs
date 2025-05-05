@@ -4,17 +4,10 @@ class Selenium::WebDriver::Remote::Response
   def assert_ok: () -> nil
 
   def error: () -> nil
-           | () -> Selenium::WebDriver::Error::NoSuchAlertError
-           | () -> Selenium::WebDriver::Error::UnknownError
 
   def process_error: () -> nil
                    | () -> Array[untyped]
 
   def []: (String) -> nil
         | (String) -> Hash[untyped, untyped]
-        | (String) -> String
-        | (String) -> Array[untyped]
-
-  def add_cause: (Selenium::WebDriver::Error::NoSuchAlertError, String, String) -> void
-               | (Selenium::WebDriver::Error::UnknownError, String, String) -> void
 end

@@ -1,53 +1,9 @@
 class Selenium::WebDriver::Remote::Bridge
-  def get: (String) -> nil
-
   def execute: (Symbol, ?Hash[untyped, untyped], ?Hash[untyped, untyped]) -> nil
-             | (Symbol, ?Hash[untyped, untyped], ?nil) -> nil
-             | (Symbol, ?Hash[untyped, untyped], ?Hash[untyped, untyped]) -> Hash[untyped, untyped]
-             | (Symbol, ?Hash[untyped, untyped], ?nil) -> String
              | (Symbol, ?Hash[untyped, untyped], ?nil) -> Hash[untyped, untyped]
-             | (Symbol, ?Hash[untyped, untyped], ?nil) -> Array[untyped]
+             | (Symbol, ?Hash[untyped, untyped], ?nil) -> nil
 
   def session_id: () -> String
 
-  def fedcm_title: () -> nil
-                 | () -> String
-
-  def fedcm_subtitle: () -> nil
-
-  def fedcm_dialog_type: () -> nil
-                       | () -> String
-
-  def fedcm_account_list: () -> nil
-                        | () -> Array[untyped]
-
-  def select_fedcm_account: (Integer) -> nil
-
-  def cancel_fedcm_dialog: () -> nil
-
   def quit: () -> nil
-
-  def initialize: (url: URI::HTTP, ?http_client: nil) -> void
-
-  def self.locator_converter: () -> Selenium::WebDriver::Remote::Bridge::LocatorConverter
-
-  def create_session: (Hash[untyped, untyped]) -> Selenium::WebDriver::Remote::Bridge
-
-  def prepare_capabilities_payload: (Hash[untyped, untyped]) -> Hash[untyped, untyped]
-
-  def commands: (Symbol) -> Array[untyped]
-
-  def command_list: () -> Hash[untyped, untyped]
-
-  def browser: () -> Symbol
-
-  def execute_script: (String, *nil) -> nil
-
-  def unwrap_script_result: (nil) -> nil
-
-  def click_fedcm_dialog_button: () -> nil
-
-  def fedcm_delay: (bool) -> nil
-
-  def reset_fedcm_cooldown: () -> nil
 end
