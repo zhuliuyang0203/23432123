@@ -4,6 +4,9 @@ set -eufo pipefail
 # We want to see what's going on
 set -x
 
+# Define heap size for GitHub Actions runner
+HEAP_SIZE="-Xmx4g"
+
 # Default to auto if no parameter is provided
 CACHE_RESULTS="auto"
 
@@ -15,7 +18,7 @@ fi
 # Now run the tests. The engflow build uses pinned browsers
 # so this should be fine
 # shellcheck disable=SC2046
-bazel test --config=rbe-ci --build_tests_only \
+bazel --host_jvm_args=${HEAP_SIZE} test --config=rbe-ci --build_tests_only \
   --keep_going --flaky_test_attempts=2 \
   --cache_test_results=${CACHE_RESULTS} \
   //... -- $(cat .skipped-tests | tr '\n' ' ')
