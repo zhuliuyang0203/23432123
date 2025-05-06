@@ -53,6 +53,129 @@ class DefaultSlotMatcherTest {
   }
 
   @Test
+  public void testSpecificRelayCapabilitiesAppMatch() {
+    Capabilities capabilitiesWithApp =
+        new ImmutableCapabilities(
+            "appium:app",
+            "link.to.apk",
+            "appium:appPackage",
+            "com.example.app",
+            "appium:platformVersion",
+            "15",
+            "platformName",
+            "Android",
+            "appium:automationName",
+            "uiautomator2");
+    assertThat(DefaultSlotMatcher.matchConditionToRemoveCapability(capabilitiesWithApp)).isTrue();
+    capabilitiesWithApp =
+        new ImmutableCapabilities(
+            "browserName",
+            "chrome",
+            "appium:platformVersion",
+            "15",
+            "platformName",
+            "Android",
+            "appium:automationName",
+            "uiautomator2");
+    assertThat(DefaultSlotMatcher.matchConditionToRemoveCapability(capabilitiesWithApp)).isFalse();
+  }
+
+  @Test
+  public void testRelayNodeMatchByRemovingBrowserNameWhenAppSet() {
+    /*
+    Relay node stereotype does not have browserName (where user wants to restrict to run a native app only)
+    Request capabilities have both browserName (it might initialize by ChromeOptions) and app set
+    The browserName will be filter out when validating match
+     */
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.PLATFORM_NAME, Platform.ANDROID, "appium:platformVersion", "14");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "appium:platformVersion",
+            "14",
+            "appium:app",
+            "link.to.apk",
+            "appium:automationName",
+            "uiautomator2");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  public void testRelayNodeNotMatchHybridBrowserVersionWhenStereotypeWithoutBrowserName() {
+    /*
+    Relay node 1 has stereotype does not have browserName (where user wants to restrict to run a native app only)
+    Request capabilities want to run a hybrid app (browserName is set) and app isn't set
+    Request capabilities should not match the stereotype
+    Relay node 2 has stereotype with browserName set should match the request capabilities
+     */
+    Capabilities stereotype1 =
+        new ImmutableCapabilities(
+            CapabilityType.PLATFORM_NAME, Platform.ANDROID, "appium:platformVersion", "14");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "appium:platformVersion",
+            "14",
+            "appium:automationName",
+            "uiautomator2");
+    assertThat(slotMatcher.matches(stereotype1, capabilities)).isFalse();
+    Capabilities stereotype2 =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "appium:platformVersion",
+            "14");
+    assertThat(slotMatcher.matches(stereotype2, capabilities)).isTrue();
+  }
+
+  @Test
+  public void testRelayNodeNotMatchWhenNonW3CCompliantPlatformVersionSet() {
+    /*
+    There are Appium server plugins which allow to “fix” non W3C compliant capabilities by automatically adding `appium:` prefix to them
+    Relay Node 1: When `platformVersion` is set in both stereotype and capabilities, the non W3C compliant `platformVersion` should be not matched
+    Relay Node 2: When `platformVersion` is set in stereotype and capabilities, the non W3C compliant `platformVersion` should be matched
+    */
+    Capabilities stereotype1 =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "platformVersion",
+            "14");
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "platformVersion",
+            "15",
+            "appium:automationName",
+            "uiautomator2");
+    assertThat(slotMatcher.matches(stereotype1, capabilities)).isFalse();
+    Capabilities stereotype2 =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.PLATFORM_NAME,
+            Platform.ANDROID,
+            "platformVersion",
+            "15");
+    assertThat(slotMatcher.matches(stereotype2, capabilities)).isTrue();
+  }
+
+  @Test
   void fullMatch() {
     Capabilities stereotype =
         new ImmutableCapabilities(

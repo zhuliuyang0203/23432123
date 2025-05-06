@@ -48,6 +48,7 @@ from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.bidi.session import Session
+from selenium.webdriver.common.bidi.storage import Storage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.options import ArgOptions
 from selenium.webdriver.common.options import BaseOptions
@@ -266,6 +267,7 @@ class WebDriver(BaseWebDriver):
         self._browser = None
         self._bidi_session = None
         self._browsing_context = None
+        self._storage = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -1316,6 +1318,29 @@ class WebDriver(BaseWebDriver):
             self._browsing_context = BrowsingContext(self._websocket_connection)
 
         return self._browsing_context
+
+    @property
+    def storage(self):
+        """Returns a storage module object for BiDi storage commands.
+
+        Returns:
+        --------
+        Storage: an object containing access to BiDi storage commands.
+
+        Examples:
+        ---------
+        >>> cookie_filter = CookieFilter(name="example")
+        >>> result = driver.storage.get_cookies(filter=cookie_filter)
+        >>> driver.storage.set_cookie(cookie=PartialCookie("name", BytesValue(BytesValue.TYPE_STRING, "value"), "domain"))
+        >>> driver.storage.delete_cookies(filter=CookieFilter(name="example"))
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._storage is None:
+            self._storage = Storage(self._websocket_connection)
+
+        return self._storage
 
     def _get_cdp_details(self):
         import json

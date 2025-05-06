@@ -1,3 +1,21 @@
+Selenium 4.32.0
+* Add CDP for Chrome 136 and remove 133
+* BiDi Network implementation of Intercepts and Auth in Python (#14592)
+* Fix select being able to select options hidden by css rules (#15135)
+* [bidi]: Implement BiDi browser module  (#15616)
+* Call service.stop() when session can't be started (#15636)
+* Remove logging API for non-Chromium browsers  (#15641)
+* Raise TypeError when creating webdriver.Remote() without options (#15619)
+* Add autoflake linter and update linting dependencies (#15643)
+* Fix driver service stop when starting browser fails (#15656)
+* [bidi]: add bidi command `session.status` and encapsulate in Session class (#15615)
+* Set remote active protocol in Firefox to BiDi only
+* [bidi]: Implement BiDi `browsing_context` module (#15631)
+* [BiDi] separate log module from script module and add more tests (#15668)
+* Add client_config property and update deprecation messages (#15674)
+* Remove support for GLOBAL_DEFAULT_TIMEOUT environment variable (#15673)
+* Server class to manage (download/run) grid server (#15666)
+
 Selenium 4.31.0
 * Add CDP for Chrome 135 and remove 132
 * Fix docstring issues that sphinx complains about (#15466)

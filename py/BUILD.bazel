@@ -62,12 +62,12 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.32.0.202504060755"
+SE_VERSION = "4.33.0.202505022255"
 
 BROWSER_VERSIONS = [
     "v134",
     "v135",
-    "v133",
+    "v136",
 ]
 
 TEST_DEPS = [
