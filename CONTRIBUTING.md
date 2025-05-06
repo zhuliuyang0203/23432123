@@ -109,7 +109,7 @@ installed on your local machine, or by executing:
 
 ```shell
 # Example of adding a dep to the JS webdriver bindings 
-cd javascript/node/selenium-webdriver
+cd javascript/selenium-webdriver
 bazel run javascript:pnpm -- install my-amazing-dep --dir $PWD
 ```
 
@@ -255,12 +255,12 @@ Build your code for the latest changes and run tests locally.
 
   Node Tests
   ```shell
-  % bazel test //javascript/node/selenium-webdriver:tests
+  % bazel test //javascript/selenium-webdriver:all
   ```
 
   Firefox Atom Tests
   ```shell
-  % bazel test --test_tag_filters=firefox //javascript/atoms/... //javascript/selenium-atoms/... //javascript/webdriver/...
+  % bazel test --test_tag_filters=firefox //javascript/atoms/... //javascript/webdriver/...
   ```
 
   Grid UI Unit Tests

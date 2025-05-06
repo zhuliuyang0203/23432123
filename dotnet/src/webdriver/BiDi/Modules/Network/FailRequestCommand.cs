@@ -22,7 +22,7 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class FailRequestCommand(FailRequestCommandParameters @params)
-    : Command<FailRequestCommandParameters>(@params, "network.failRequest");
+    : Command<FailRequestCommandParameters, EmptyResult>(@params, "network.failRequest");
 
 internal record FailRequestCommandParameters(Request Request) : CommandParameters;
 

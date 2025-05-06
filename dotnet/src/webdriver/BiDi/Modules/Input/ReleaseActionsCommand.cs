@@ -22,7 +22,7 @@ using OpenQA.Selenium.BiDi.Communication;
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 internal class ReleaseActionsCommand(ReleaseActionsCommandParameters @params)
-    : Command<ReleaseActionsCommandParameters>(@params, "input.releaseActions");
+    : Command<ReleaseActionsCommandParameters, EmptyResult>(@params, "input.releaseActions");
 
 internal record ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext Context) : CommandParameters;
 

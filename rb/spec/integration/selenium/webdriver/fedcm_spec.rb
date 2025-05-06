@@ -22,12 +22,12 @@ require_relative 'spec_helper'
 module Selenium
   module WebDriver
     module FedCM
-      describe FedCM, exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {browser: %i[chrome edge]}] do
+      describe FedCM,
+               exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {browser: %i[chrome edge]}] do
         let(:dialog) { driver.fedcm_dialog }
 
-        before do
-          driver.get url_for('fedcm/fedcm.html')
-        end
+        before { driver.get url_for('fedcm/fedcm.html') }
+        after { reset_driver! }
 
         context 'without dialog present' do
           it 'throws an error' do
@@ -50,7 +50,7 @@ module Selenium
             expect(dialog.title).to eq('Sign in to localhost with localhost')
           end
 
-          it 'returns the subtitle', skip: 'Investigate flakiness only on pipeline' do
+          it 'returns the subtitle' do
             expect(dialog.subtitle).to be_nil
           end
 
@@ -67,7 +67,8 @@ module Selenium
             expect(dialog.select_account(1)).to be_nil
           end
 
-          it 'clicks the dialog', skip: 'Investigate IDP config issue' do
+          it 'clicks the dialog', except: {browser: %i[chrome edge],
+                                           reason: "error: 'Use another account' not supported for this IDP"} do
             expect(dialog.click).to be_nil
           end
 

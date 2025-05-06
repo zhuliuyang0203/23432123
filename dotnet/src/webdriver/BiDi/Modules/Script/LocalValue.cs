@@ -17,8 +17,13 @@
 // under the License.
 // </copyright>
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
@@ -38,38 +43,240 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 [JsonDerivedType(typeof(SetLocalValue), "set")]
 public abstract record LocalValue
 {
-    public static implicit operator LocalValue(int value) { return new NumberLocalValue(value); }
-    public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
+    public static implicit operator LocalValue(bool? value) { return ConvertFrom(value); }
+    public static implicit operator LocalValue(int? value) { return ConvertFrom(value); }
+    public static implicit operator LocalValue(double? value) { return ConvertFrom(value); }
+    public static implicit operator LocalValue(string? value) { return ConvertFrom(value); }
+    public static implicit operator LocalValue(DateTimeOffset? value) { return ConvertFrom(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
     {
         switch (value)
         {
-            case LocalValue:
-                return (LocalValue)value;
+            case LocalValue localValue:
+                return localValue;
+
             case null:
                 return new NullLocalValue();
-            case int:
-                return (int)value;
-            case string:
-                return (string)value;
-            case object:
+
+            case bool b:
+                return ConvertFrom(b);
+
+            case int i:
+                return ConvertFrom(i);
+
+            case double d:
+                return ConvertFrom(d);
+
+            case long l:
+                return ConvertFrom(l);
+
+            case DateTimeOffset dt:
+                return ConvertFrom(dt);
+
+            case BigInteger bigInt:
+                return ConvertFrom(bigInt);
+
+            case string str:
+                return ConvertFrom(str);
+
+            case Regex regex:
+                return ConvertFrom(regex);
+
+            case { } when value.GetType().GetInterfaces()
+                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISet<>)):
                 {
-                    var type = value.GetType();
+                    IEnumerable set = (IEnumerable)value;
 
-                    var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    List<LocalValue> setValues = [];
 
-                    List<List<LocalValue>> values = [];
-
-                    foreach (var property in properties)
+                    foreach (var obj in set)
                     {
-                        values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
+                        setValues.Add(ConvertFrom(obj));
                     }
 
-                    return new ObjectLocalValue(values);
+                    return new SetLocalValue(setValues);
                 }
+
+            case IDictionary dictionary:
+                return ConvertFrom(dictionary);
+
+            case IEnumerable enumerable:
+                return ConvertFrom(enumerable);
+
+            default:
+                return ReflectionBasedConvertFrom(value);
         }
+    }
+
+    public static LocalValue ConvertFrom(bool? value)
+    {
+        if (value is bool b)
+        {
+            return new BooleanLocalValue(b);
+        }
+
+        return new NullLocalValue();
+    }
+
+    public static LocalValue ConvertFrom(int? value)
+    {
+        if (value is int b)
+        {
+            return new NumberLocalValue(b);
+        }
+
+        return new NullLocalValue();
+    }
+
+    public static LocalValue ConvertFrom(double? value)
+    {
+        if (value is double b)
+        {
+            return new NumberLocalValue(b);
+        }
+
+        return new NullLocalValue();
+    }
+
+    public static LocalValue ConvertFrom(long? value)
+    {
+        if (value is long b)
+        {
+            return new NumberLocalValue(b);
+        }
+
+        return new NullLocalValue();
+    }
+
+    public static LocalValue ConvertFrom(string? value)
+    {
+        if (value is not null)
+        {
+            return new StringLocalValue(value);
+        }
+
+        return new NullLocalValue();
+    }
+
+    /// <summary>
+    /// Converts a .NET Regex into a BiDi Regex
+    /// </summary>
+    /// <param name="regex">A .NET Regex.</param>
+    /// <returns>A BiDi Regex.</returns>
+    /// <remarks>
+    /// Note that the .NET regular expression engine does not work the same as the JavaScript engine.
+    /// To minimize the differences between the two engines, it is recommended to enabled the <see cref="RegexOptions.ECMAScript"/> option.
+    /// </remarks>
+    public static LocalValue ConvertFrom(Regex? regex)
+    {
+        if (regex is null)
+        {
+            return new NullLocalValue();
+        }
+
+        string? flags = RegExpValue.GetRegExpFlags(regex.Options);
+
+        return new RegExpLocalValue(new RegExpValue(regex.ToString()) { Flags = flags });
+    }
+
+    public static LocalValue ConvertFrom(DateTimeOffset? value)
+    {
+        if (value is null)
+        {
+            return new NullLocalValue();
+        }
+
+        return new DateLocalValue(value.Value.ToString("o"));
+    }
+
+    public static LocalValue ConvertFrom(BigInteger? value)
+    {
+        if (value is not null)
+        {
+            return new BigIntLocalValue(value.Value.ToString());
+        }
+
+        return new NullLocalValue();
+    }
+
+    public static LocalValue ConvertFrom(IEnumerable? value)
+    {
+        if (value is null)
+        {
+            return new NullLocalValue();
+        }
+
+        List<LocalValue> list = [];
+
+        foreach (var element in value)
+        {
+            list.Add(ConvertFrom(element));
+        }
+
+        return new ArrayLocalValue(list);
+    }
+
+    public static LocalValue ConvertFrom(IDictionary? value)
+    {
+        if (value is null)
+        {
+            return new NullLocalValue();
+        }
+
+        var bidiObject = new List<List<LocalValue>>(value.Count);
+
+        foreach (var key in value.Keys)
+        {
+            bidiObject.Add([ConvertFrom(key), ConvertFrom(value[key])]);
+        }
+
+        return new MapLocalValue(bidiObject);
+    }
+
+    public static LocalValue ConvertFrom<T>(ISet<T?>? value)
+    {
+        if (value is null)
+        {
+            return new NullLocalValue();
+        }
+
+        LocalValue[] convertedValues = [.. value.Select(x => ConvertFrom(x))];
+
+        return new SetLocalValue(convertedValues);
+    }
+
+    private static LocalValue ReflectionBasedConvertFrom(object? value)
+    {
+        if (value is null)
+        {
+            return new NullLocalValue();
+        }
+
+        const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+
+        System.Reflection.PropertyInfo[] properties = value.GetType().GetProperties(Flags);
+
+        var values = new List<List<LocalValue>>(properties.Length);
+
+        foreach (System.Reflection.PropertyInfo? property in properties)
+        {
+            object? propertyValue;
+
+            try
+            {
+                propertyValue = property.GetValue(value);
+            }
+            catch (Exception ex)
+            {
+                throw new BiDiException($"Could not retrieve property {property.Name} from {property.DeclaringType}", ex);
+            }
+
+            values.Add([property.Name, ConvertFrom(propertyValue)]);
+        }
+
+        return new ObjectLocalValue(values);
     }
 }
 
@@ -92,9 +299,9 @@ public record BigIntLocalValue(string Value) : PrimitiveProtocolLocalValue;
 
 public record ChannelLocalValue(ChannelProperties Value) : LocalValue
 {
-    // TODO: Revise why we need it
+    // AddPreloadScript takes arguments typed as ChannelLocalValue but still requires "type":"channel"
     [JsonInclude]
-    internal string type = "channel";
+    internal string Type => "channel";
 }
 
 public record ArrayLocalValue(IEnumerable<LocalValue> Value) : LocalValue;

@@ -23,7 +23,7 @@ using System.Collections.Generic;
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class ContinueResponseCommand(ContinueResponseCommandParameters @params)
-    : Command<ContinueResponseCommandParameters>(@params, "network.continueResponse");
+    : Command<ContinueResponseCommandParameters, EmptyResult>(@params, "network.continueResponse");
 
 internal record ContinueResponseCommandParameters(Request Request, IEnumerable<SetCookieHeader>? Cookies, IEnumerable<AuthCredentials>? Credentials, IEnumerable<Header>? Headers, string? ReasonPhrase, long? StatusCode) : CommandParameters;
 
