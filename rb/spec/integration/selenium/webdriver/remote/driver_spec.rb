@@ -42,7 +42,9 @@ module Selenium
           wait.until { driver.find_element(id: 'upload_label').displayed? }
 
           driver.switch_to.frame('upload_target')
-          wait.until { driver.find_element(xpath: '//body') }
+          wait(ignore: [Error::NoSuchElementError, Error::StaleElementReferenceError]).until do
+            !driver.find_element(xpath: '//body').text.empty?
+          end
 
           body = driver.find_element(xpath: '//body')
           expect(body.text.scan('This is a dummy test file').count).to eq(1)
@@ -83,8 +85,7 @@ module Selenium
           end
         end
 
-        it 'errors when not set', {except: {browser: :firefox, reason: 'grid always sets true and firefox returns it'},
-                                   exclude: {browser: :safari, reason: 'grid hangs'}} do
+        it 'errors when not set', {exclude: {browser: :safari, reason: 'grid hangs'}} do
           reset_driver!(enable_downloads: false) do |driver|
             expect {
               driver.downloadable_files

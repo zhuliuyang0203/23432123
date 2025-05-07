@@ -97,8 +97,8 @@ module Selenium
           end
         end
 
-        def wait(timeout = 10)
-          Wait.new(timeout: timeout)
+        def wait(timeout = 10, **opts)
+          Wait.new(timeout: timeout, **opts)
         end
 
         def png_size(path)

@@ -107,7 +107,7 @@ module Selenium
             case env['PATH_INFO']
             when '/upload'
               req = Rack::Request.new(env)
-              body = case req['upload']
+              body = case req.params['upload']
                      when Array
                        req.params['upload'].map { |upload| upload[:tempfile].read }.join("\n")
                      when Hash
