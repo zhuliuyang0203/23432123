@@ -64,13 +64,6 @@ impl Command {
     }
 }
 
-pub fn run_powershell_command_with_log(log: &Logger, command: Command) -> Result<String, Error> {
-    log.debug(format!("Running ps command: {}", command.display()));
-    let output = run_powershell_command(command)?;
-    log.debug(format!("Output: {:?}", output));
-    Ok(output)
-}
-
 pub fn run_shell_command_with_log(
     log: &Logger,
     os: &str,
@@ -80,10 +73,6 @@ pub fn run_shell_command_with_log(
     let output = run_shell_command_by_os(os, command)?;
     log.debug(format!("Output: {:?}", output));
     Ok(output)
-}
-
-pub fn run_powershell_command(command: Command) -> Result<String, Error> {
-    run_shell_command("powershell", "-c", command)
 }
 
 pub fn run_shell_command_by_os(os: &str, command: Command) -> Result<String, Error> {

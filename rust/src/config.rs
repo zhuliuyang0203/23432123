@@ -16,12 +16,12 @@
 // under the License.
 
 use crate::config::OS::{LINUX, MACOS, WINDOWS};
-use crate::shell::{run_powershell_command, run_shell_command_by_os};
+use crate::shell::run_shell_command_by_os;
 use crate::{
     default_cache_folder, format_one_arg, path_to_string, Command, ENV_PROCESSOR_ARCHITECTURE,
     REQUEST_TIMEOUT_SEC, UNAME_COMMAND,
 };
-use crate::{ARCH_AMD64, ARCH_ARM64, ARCH_X86, PS_GET_OS_COMMAND, TTL_SEC};
+use crate::{ARCH_AMD64, ARCH_ARM64, ARCH_X86, TTL_SEC};
 use anyhow::anyhow;
 use anyhow::Error;
 use std::cell::RefCell;
@@ -30,6 +30,11 @@ use std::env::consts::OS;
 use std::fs::read_to_string;
 use std::path::Path;
 use toml::Table;
+use winapi::um::sysinfoapi::{GetNativeSystemInfo, SYSTEM_INFO};
+use winapi::um::winnt::{
+    PROCESSOR_ARCHITECTURE_AMD64, PROCESSOR_ARCHITECTURE_ARM, PROCESSOR_ARCHITECTURE_ARM64,
+    PROCESSOR_ARCHITECTURE_IA64, PROCESSOR_ARCHITECTURE_INTEL,
+};
 
 thread_local!(static CACHE_PATH: RefCell<String> = RefCell::new(path_to_string(&default_cache_folder())));
 
@@ -71,8 +76,7 @@ impl ManagerConfig {
         let self_arch = if WINDOWS.is(self_os) {
             let mut architecture = env::var(ENV_PROCESSOR_ARCHITECTURE).unwrap_or_default();
             if architecture.is_empty() {
-                let get_os_command = Command::new_single(PS_GET_OS_COMMAND.to_string());
-                architecture = run_powershell_command(get_os_command).unwrap_or_default();
+                architecture = get_win_os_architecture();
             }
             if architecture.contains("32") {
                 ARCH_X86.to_string()
@@ -296,4 +300,21 @@ fn read_cache_path() -> String {
         }
     });
     cache_path
+}
+
+fn get_win_os_architecture() -> String {
+    unsafe {
+        let mut system_info: SYSTEM_INFO = std::mem::zeroed();
+        GetNativeSystemInfo(&mut system_info);
+
+        match system_info.u.s() {
+            si if si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 => "64-bit",
+            si if si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL => "32-bit",
+            si if si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM => "ARM",
+            si if si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64 => "ARM64",
+            si if si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64 => "Itanium-based",
+            _ => "Unknown",
+        }
+        .to_string()
+    }
 }
