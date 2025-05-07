@@ -1,5 +1,5 @@
 {
-  "checksum": "d2d968dacd2ceab962c18fa28697dc189f31b3991a3554ff21e167836627a3b8",
+  "checksum": "94dc89c8790518c956fd52cd06689af1557f6c755c7bd1a1414719ef73ac468c",
   "crates": {
     "addr2line 0.21.0": {
       "name": "addr2line",
@@ -13479,6 +13479,10 @@
               "target": "which"
             },
             {
+              "id": "winapi 0.3.9",
+              "target": "winapi"
+            },
+            {
               "id": "xz2 0.1.7",
               "target": "xz2"
             },
@@ -18838,14 +18842,36 @@
         ],
         "crate_features": {
           "common": [
-            "fileapi",
-            "handleapi",
-            "processthreadsapi",
-            "std",
-            "winbase",
-            "winerror"
+            "sysinfoapi",
+            "winnt",
+            "winver"
           ],
-          "selects": {}
+          "selects": {
+            "aarch64-pc-windows-msvc": [
+              "fileapi",
+              "handleapi",
+              "processthreadsapi",
+              "std",
+              "winbase",
+              "winerror"
+            ],
+            "i686-pc-windows-msvc": [
+              "fileapi",
+              "handleapi",
+              "processthreadsapi",
+              "std",
+              "winbase",
+              "winerror"
+            ],
+            "x86_64-pc-windows-msvc": [
+              "fileapi",
+              "handleapi",
+              "processthreadsapi",
+              "std",
+              "winbase",
+              "winerror"
+            ]
+          }
         },
         "deps": {
           "common": [
@@ -21972,6 +21998,7 @@
     "toml 0.8.20",
     "walkdir 2.5.0",
     "which 7.0.2",
+    "winapi 0.3.9",
     "xz2 0.1.7",
     "zip 2.2.3"
   ],
