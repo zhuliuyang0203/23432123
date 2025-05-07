@@ -94,21 +94,27 @@ module Selenium
           Thread.current.abort_on_exception = true
           Thread.current.report_on_exception = false
 
-          until socket.eof?
-            incoming_frame << socket.readpartial(1024)
+          read_and_process_frames until socket.eof?
+        rescue *CONNECTION_ERRORS => e
+          WebDriver.logger.debug("BiDi socket closed: #{e.class} - #{e.message}", id: :websocket)
+          Thread.exit
+        rescue StandardError => e
+          WebDriver.logger.debug("Unexpected error in BiDi socket thread: #{e.class} - #{e.message}", id: :websocket)
+          Thread.exit
+        end
+      end
 
-            while (frame = incoming_frame.next)
-              message = process_frame(frame)
-              next unless message['method']
+      def read_and_process_frames
+        incoming_frame << socket.readpartial(1024)
 
-              params = message['params']
-              callbacks[message['method']].each do |callback|
-                @callback_threads.add(callback_thread(params, &callback))
-              end
-            end
+        while (frame = incoming_frame.next)
+          message = process_frame(frame)
+          next unless message['method']
+
+          params = message['params']
+          callbacks[message['method']].each do |callback|
+            @callback_threads.add(callback_thread(params, &callback))
           end
-        rescue *CONNECTION_ERRORS
-          Thread.stop
         end
       end
 
@@ -142,7 +148,7 @@ module Selenium
 
           yield params
         rescue Error::WebDriverError, *CONNECTION_ERRORS
-          Thread.stop
+          Thread.exit
         end
       end
 
