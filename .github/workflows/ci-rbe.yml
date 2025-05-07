@@ -6,6 +6,12 @@ on:
     branches:
       - trunk
   workflow_dispatch:
+    inputs:
+      disable_test_cache:
+        description: 'Force re-run of tests (disable test cache)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   format:
