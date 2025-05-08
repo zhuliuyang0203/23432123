@@ -29,17 +29,22 @@ use directories::BaseDirs;
 use flate2::read::GzDecoder;
 use fs_extra::dir::{move_dir, CopyOptions};
 use regex::Regex;
+#[cfg(windows)]
 use std::ffi::OsStr;
 use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::{BufReader, Cursor, Read};
+#[cfg(windows)]
 use std::os::windows::ffi::OsStrExt;
 use std::path::{Path, PathBuf};
+#[cfg(windows)]
 use std::ptr;
 use tar::Archive;
 use walkdir::{DirEntry, WalkDir};
+#[cfg(windows)]
 use winapi::shared::minwindef::LPVOID;
+#[cfg(windows)]
 use winapi::um::winver::{GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW};
 use xz2::read::XzDecoder;
 use zip::ZipArchive;
@@ -600,6 +605,12 @@ pub fn capitalize(s: &str) -> String {
     }
 }
 
+#[cfg(not(windows))]
+pub fn get_win_file_version(_file_path: &str) -> Option<String> {
+    None
+}
+
+#[cfg(windows)]
 pub fn get_win_file_version(file_path: &str) -> Option<String> {
     unsafe {
         let wide_path: Vec<u16> = OsStr::new(file_path).encode_wide().chain(Some(0)).collect();
