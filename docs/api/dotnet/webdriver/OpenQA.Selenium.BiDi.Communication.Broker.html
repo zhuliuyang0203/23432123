@@ -101,7 +101,7 @@ Class Broker  <a class="header-action link-secondary" title="View source" href="
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Broker : IAsyncDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class Broker : IAsyncDisposable</code></pre>
   </div>
 
 
@@ -137,9 +137,6 @@ Class Broker  <a class="header-action link-secondary" title="View source" href="
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
@@ -227,42 +224,11 @@ resetting unmanaged resources asynchronously.</p>
 
 
 
-  <a id="OpenQA_Selenium_BiDi_Communication_Broker_DisposeAsyncCore_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.DisposeAsyncCore*"></a>
-
-  <h3 id="OpenQA_Selenium_BiDi_Communication_Broker_DisposeAsyncCore" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.DisposeAsyncCore">
-  DisposeAsyncCore()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L311"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual ValueTask DisposeAsyncCore()</code></pre>
-  </div>
-
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask">ValueTask</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-
-
-
   <a id="OpenQA_Selenium_BiDi_Communication_Broker_ExecuteCommandAsync_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.ExecuteCommandAsync*"></a>
 
   <h3 id="OpenQA_Selenium_BiDi_Communication_Broker_ExecuteCommandAsync__1___0_OpenQA_Selenium_BiDi_Communication_CommandOptions_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.ExecuteCommandAsync``1(``0,OpenQA.Selenium.BiDi.Communication.CommandOptions)">
   ExecuteCommandAsync&lt;TCommand&gt;(TCommand, CommandOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L194"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L181"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -305,14 +271,14 @@ resetting unmanaged resources asynchronously.</p>
 
   <h3 id="OpenQA_Selenium_BiDi_Communication_Broker_ExecuteCommandAsync__2___0_OpenQA_Selenium_BiDi_Communication_CommandOptions_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.ExecuteCommandAsync``2(``0,OpenQA.Selenium.BiDi.Communication.CommandOptions)">
   ExecuteCommandAsync&lt;TCommand, TResult&gt;(TCommand, CommandOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L186"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L187"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TResult&gt; ExecuteCommandAsync&lt;TCommand, TResult&gt;(TCommand command, CommandOptions? options) where TCommand : Command</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TResult&gt; ExecuteCommandAsync&lt;TCommand, TResult&gt;(TCommand command, CommandOptions? options) where TCommand : Command where TResult : EmptyResult</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -350,7 +316,7 @@ resetting unmanaged resources asynchronously.</p>
 
   <h3 id="OpenQA_Selenium_BiDi_Communication_Broker_SubscribeAsync__1_System_String_System_Action___0__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.SubscribeAsync``1(System.String,System.Action{``0},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   SubscribeAsync&lt;TEventArgs&gt;(string, Action&lt;TEventArgs&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L222"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L218"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -395,7 +361,7 @@ resetting unmanaged resources asynchronously.</p>
 
   <h3 id="OpenQA_Selenium_BiDi_Communication_Broker_SubscribeAsync__1_System_String_System_Func___0_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Communication.Broker.SubscribeAsync``1(System.String,System.Func{``0,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   SubscribeAsync&lt;TEventArgs&gt;(string, Func&lt;TEventArgs, Task&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L249"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Communication/Broker.cs/#L247"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>

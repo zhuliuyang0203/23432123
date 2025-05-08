@@ -101,7 +101,7 @@ Class TraverseHistoryResult  <a class="header-action link-secondary" title="View
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public record TraverseHistoryResult : IEquatable&lt;TraverseHistoryResult&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public record TraverseHistoryResult : EmptyResult, IEquatable&lt;EmptyResult&gt;, IEquatable&lt;TraverseHistoryResult&gt;</code></pre>
   </div>
 
 
@@ -111,6 +111,7 @@ Class TraverseHistoryResult  <a class="header-action link-secondary" title="View
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Communication.EmptyResult.html">EmptyResult</a></div>
       <div><span class="xref">TraverseHistoryResult</span></div>
     </dd>
   </dl>
@@ -118,6 +119,7 @@ Class TraverseHistoryResult  <a class="header-action link-secondary" title="View
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Communication.EmptyResult.html">EmptyResult</a>&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.TraverseHistoryResult.html">TraverseHistoryResult</a>&gt;</div>
     </dd>
   </dl>

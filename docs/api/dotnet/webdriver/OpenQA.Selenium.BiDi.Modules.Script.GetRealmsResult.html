@@ -101,7 +101,7 @@ Class GetRealmsResult  <a class="header-action link-secondary" title="View sourc
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public record GetRealmsResult : IReadOnlyList&lt;RealmInfo&gt;, IReadOnlyCollection&lt;RealmInfo&gt;, IEnumerable&lt;RealmInfo&gt;, IEnumerable, IEquatable&lt;GetRealmsResult&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public record GetRealmsResult : EmptyResult, IEquatable&lt;EmptyResult&gt;, IReadOnlyList&lt;RealmInfo&gt;, IReadOnlyCollection&lt;RealmInfo&gt;, IEnumerable&lt;RealmInfo&gt;, IEnumerable, IEquatable&lt;GetRealmsResult&gt;</code></pre>
   </div>
 
 
@@ -111,6 +111,7 @@ Class GetRealmsResult  <a class="header-action link-secondary" title="View sourc
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Communication.EmptyResult.html">EmptyResult</a></div>
       <div><span class="xref">GetRealmsResult</span></div>
     </dd>
   </dl>
@@ -118,6 +119,7 @@ Class GetRealmsResult  <a class="header-action link-secondary" title="View sourc
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Communication.EmptyResult.html">EmptyResult</a>&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RealmInfo.html">RealmInfo</a>&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlycollection-1">IReadOnlyCollection</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RealmInfo.html">RealmInfo</a>&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RealmInfo.html">RealmInfo</a>&gt;</div>

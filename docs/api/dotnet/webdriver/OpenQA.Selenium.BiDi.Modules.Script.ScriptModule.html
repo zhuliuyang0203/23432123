@@ -189,7 +189,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_AddPreloadScriptAsync_System_String_OpenQA_Selenium_BiDi_Modules_Script_AddPreloadScriptOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.AddPreloadScriptAsync(System.String,OpenQA.Selenium.BiDi.Modules.Script.AddPreloadScriptOptions)">
   AddPreloadScriptAsync(string, AddPreloadScriptOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -227,14 +227,14 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_CallFunctionAsync_System_String_System_Boolean_OpenQA_Selenium_BiDi_Modules_Script_Target_OpenQA_Selenium_BiDi_Modules_Script_CallFunctionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.CallFunctionAsync(System.String,System.Boolean,OpenQA.Selenium.BiDi.Modules.Script.Target,OpenQA.Selenium.BiDi.Modules.Script.CallFunctionOptions)">
   CallFunctionAsync(string, bool, Target, CallFunctionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EvaluateResultSuccess&gt; CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EvaluateResult&gt; CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -251,7 +251,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.EvaluateResultSuccess.html">EvaluateResultSuccess</a>&gt;</dt>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.EvaluateResult.html">EvaluateResult</a>&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -269,7 +269,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_CallFunctionAsync__1_System_String_System_Boolean_OpenQA_Selenium_BiDi_Modules_Script_Target_OpenQA_Selenium_BiDi_Modules_Script_CallFunctionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.CallFunctionAsync``1(System.String,System.Boolean,OpenQA.Selenium.BiDi.Modules.Script.Target,OpenQA.Selenium.BiDi.Modules.Script.CallFunctionOptions)">
   CallFunctionAsync&lt;TResult&gt;(string, bool, Target, CallFunctionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -323,7 +323,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;EvaluateResultSuccess&gt; EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;EvaluateResult&gt; EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -340,7 +340,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.EvaluateResultSuccess.html">EvaluateResultSuccess</a>&gt;</dt>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.EvaluateResult.html">EvaluateResult</a>&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -358,7 +358,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_EvaluateAsync__1_System_String_System_Boolean_OpenQA_Selenium_BiDi_Modules_Script_Target_OpenQA_Selenium_BiDi_Modules_Script_EvaluateOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.EvaluateAsync``1(System.String,System.Boolean,OpenQA.Selenium.BiDi.Modules.Script.Target,OpenQA.Selenium.BiDi.Modules.Script.EvaluateOptions)">
   EvaluateAsync&lt;TResult&gt;(string, bool, Target, EvaluateOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -405,7 +405,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_GetRealmsAsync_OpenQA_Selenium_BiDi_Modules_Script_GetRealmsOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.GetRealmsAsync(OpenQA.Selenium.BiDi.Modules.Script.GetRealmsOptions)">
   GetRealmsAsync(GetRealmsOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -441,7 +441,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnMessageAsync_System_Action_OpenQA_Selenium_BiDi_Modules_Script_MessageEventArgs__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnMessageAsync(System.Action{OpenQA.Selenium.BiDi.Modules.Script.MessageEventArgs},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnMessageAsync(Action&lt;MessageEventArgs&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -479,7 +479,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnMessageAsync_System_Func_OpenQA_Selenium_BiDi_Modules_Script_MessageEventArgs_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnMessageAsync(System.Func{OpenQA.Selenium.BiDi.Modules.Script.MessageEventArgs,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnMessageAsync(Func&lt;MessageEventArgs, Task&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -517,7 +517,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnRealmCreatedAsync_System_Action_OpenQA_Selenium_BiDi_Modules_Script_RealmInfo__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnRealmCreatedAsync(System.Action{OpenQA.Selenium.BiDi.Modules.Script.RealmInfo},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnRealmCreatedAsync(Action&lt;RealmInfo&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L94"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -555,7 +555,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnRealmCreatedAsync_System_Func_OpenQA_Selenium_BiDi_Modules_Script_RealmInfo_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnRealmCreatedAsync(System.Func{OpenQA.Selenium.BiDi.Modules.Script.RealmInfo,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnRealmCreatedAsync(Func&lt;RealmInfo, Task&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L103"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -593,7 +593,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnRealmDestroyedAsync_System_Action_OpenQA_Selenium_BiDi_Modules_Script_RealmDestroyedEventArgs__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnRealmDestroyedAsync(System.Action{OpenQA.Selenium.BiDi.Modules.Script.RealmDestroyedEventArgs},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnRealmDestroyedAsync(Action&lt;RealmDestroyedEventArgs&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L104"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -631,7 +631,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_OnRealmDestroyedAsync_System_Func_OpenQA_Selenium_BiDi_Modules_Script_RealmDestroyedEventArgs_System_Threading_Tasks_Task__OpenQA_Selenium_BiDi_SubscriptionOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.OnRealmDestroyedAsync(System.Func{OpenQA.Selenium.BiDi.Modules.Script.RealmDestroyedEventArgs,System.Threading.Tasks.Task},OpenQA.Selenium.BiDi.SubscriptionOptions)">
   OnRealmDestroyedAsync(Func&lt;RealmDestroyedEventArgs, Task&gt;, SubscriptionOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L113"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L99"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -669,7 +669,7 @@ Class ScriptModule  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="OpenQA_Selenium_BiDi_Modules_Script_ScriptModule_RemovePreloadScriptAsync_OpenQA_Selenium_BiDi_Modules_Script_PreloadScript_OpenQA_Selenium_BiDi_Modules_Script_RemovePreloadScriptOptions_" data-uid="OpenQA.Selenium.BiDi.Modules.Script.ScriptModule.RemovePreloadScriptAsync(OpenQA.Selenium.BiDi.Modules.Script.PreloadScript,OpenQA.Selenium.BiDi.Modules.Script.RemovePreloadScriptOptions)">
   RemovePreloadScriptAsync(PreloadScript, RemovePreloadScriptOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/BiDi/Modules/Script/ScriptModule.cs/#L72"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
