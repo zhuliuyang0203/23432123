@@ -77,7 +77,11 @@ class WebElement(BaseWebElement):
         self._id = id_
 
     def __repr__(self):
-        return f'<{type(self).__module__}.{type(self).__name__} (session="{self._parent.session_id}", element="{self._id}")>'
+        return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}", element="{self._id}")>'
+
+    @property
+    def session_id(self) -> str:
+        return self._parent.session_id
 
     @property
     def tag_name(self) -> str:

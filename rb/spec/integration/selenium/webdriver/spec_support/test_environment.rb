@@ -95,8 +95,9 @@ module Selenium
                  elsif ENV.key?('GECKODRIVER_BINARY')
                    ["-Dwebdriver.gecko.driver=#{ENV['GECKODRIVER_BINARY']}"]
                  else
-                   %w[--selenium-manager true --enable-managed-downloads true]
+                   %w[--selenium-manager true]
                  end
+          args += %w[--enable-managed-downloads true]
 
           @remote_server ||= Selenium::Server.new(
             remote_server_jar,

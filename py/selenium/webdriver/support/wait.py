@@ -81,7 +81,7 @@ class WebDriverWait(Generic[D]):
         # avoid the divide by zero
         if self._poll == 0:
             self._poll = POLL_FREQUENCY
-        exceptions = list(IGNORED_EXCEPTIONS)
+        exceptions: list = list(IGNORED_EXCEPTIONS)
         if ignored_exceptions:
             try:
                 exceptions.extend(iter(ignored_exceptions))
@@ -89,7 +89,7 @@ class WebDriverWait(Generic[D]):
                 exceptions.append(ignored_exceptions)
         self._ignored_exceptions = tuple(exceptions)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self._driver.session_id}")>'
 
     def until(self, method: Callable[[D], Union[Literal[False], T]], message: str = "") -> T:
