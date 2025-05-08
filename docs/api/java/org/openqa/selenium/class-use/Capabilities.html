@@ -608,14 +608,17 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Slot.</span><code><a href="../grid/data/Slot.html#isSupporting(org.openqa.selenium.Capabilities,org.openqa.selenium.grid.data.SlotMatcher)" class="member-name-link">isSupporting</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;caps,
  <a href="../grid/data/SlotMatcher.html" title="interface in org.openqa.selenium.grid.data">SlotMatcher</a>&nbsp;slotMatcher)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">DefaultSlotMatcher.</span><code><a href="../grid/data/DefaultSlotMatcher.html#matches(org.openqa.selenium.Capabilities,org.openqa.selenium.Capabilities)" class="member-name-link">matches</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;stereotype,
- <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DefaultSlotMatcher.</span><code><a href="../grid/data/DefaultSlotMatcher.html#matchConditionToRemoveCapability(org.openqa.selenium.Capabilities)" class="member-name-link">matchConditionToRemoveCapability</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SlotMatcher.</span><code><a href="../grid/data/SlotMatcher.html#matches(org.openqa.selenium.Capabilities,org.openqa.selenium.Capabilities)" class="member-name-link">matches</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;stereotype,
+<div class="col-second even-row-color"><span class="type-name-label">DefaultSlotMatcher.</span><code><a href="../grid/data/DefaultSlotMatcher.html#matches(org.openqa.selenium.Capabilities,org.openqa.selenium.Capabilities)" class="member-name-link">matches</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;stereotype,
  <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SlotMatcher.</span><code><a href="../grid/data/SlotMatcher.html#matches(org.openqa.selenium.Capabilities,org.openqa.selenium.Capabilities)" class="member-name-link">matches</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;stereotype,
+ <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../grid/data/package-summary.html">org.openqa.selenium.grid.data</a> with parameters of type <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></span></div>
 <div class="summary-table three-column-summary">
@@ -988,8 +991,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#getStereotype()" class="member-name-link">getStereotype</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#filterRelayCapabilities(org.openqa.selenium.Capabilities)" class="member-name-link">filterRelayCapabilities</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#getStereotype()" class="member-name-link">getStereotype</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../grid/node/relay/package-summary.html">org.openqa.selenium.grid.node.relay</a> that return types with arguments of type <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></span></div>
 <div class="summary-table three-column-summary">
@@ -1007,9 +1013,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#test(org.openqa.selenium.Capabilities)" class="member-name-link">test</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
+<div class="col-first even-row-color"><code><a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#filterRelayCapabilities(org.openqa.selenium.Capabilities)" class="member-name-link">filterRelayCapabilities</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RelaySessionFactory.</span><code><a href="../grid/node/relay/RelaySessionFactory.html#test(org.openqa.selenium.Capabilities)" class="member-name-link">test</a><wbr>(<a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a>&nbsp;capabilities)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../grid/node/relay/package-summary.html">org.openqa.selenium.grid.node.relay</a> with parameters of type <a href="../Capabilities.html" title="interface in org.openqa.selenium">Capabilities</a></span></div>
 <div class="summary-table three-column-summary">
