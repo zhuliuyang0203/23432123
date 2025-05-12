@@ -73,12 +73,12 @@ RSpec.configure do |c|
   end
 
   c.after(:suite) do
-    GlobalTestEnv.quit_driver
     if TraceHelper.enabled?
       TraceHelper.trace.disable
       TraceHelper.trace.save_comments
       TraceHelper.trace.save_files(out_dir: 'sig/')
     end
+    GlobalTestEnv.quit_driver
   end
 
   c.filter_run_when_matching :focus
