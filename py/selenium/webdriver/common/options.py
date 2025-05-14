@@ -19,6 +19,7 @@ import warnings
 from abc import ABCMeta
 from abc import abstractmethod
 from enum import Enum
+from typing import List
 from typing import Optional
 
 from selenium.common.exceptions import InvalidArgumentException
@@ -475,14 +476,14 @@ class ArgOptions(BaseOptions):
 
     def __init__(self) -> None:
         super().__init__()
-        self._arguments = []
+        self._arguments: List[str] = []
 
     @property
     def arguments(self):
         """:Returns: A list of arguments needed for the browser."""
         return self._arguments
 
-    def add_argument(self, argument) -> None:
+    def add_argument(self, argument: str) -> None:
         """Adds an argument to the list.
 
         :Args:

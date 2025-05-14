@@ -164,14 +164,14 @@ module Selenium
           @root ||= Pathname.new('../../../../../../../').realpath(__FILE__)
         end
 
-        def create_driver!(listener: nil, **opts, &block)
+        def create_driver!(listener: nil, **, &block)
           check_for_previous_error
 
           method = :"#{driver}_driver"
           instance = if private_methods.include?(method)
-                       send(method, listener: listener, options: build_options(**opts))
+                       send(method, listener: listener, options: build_options(**))
                      else
-                       WebDriver::Driver.for(driver, listener: listener, options: build_options(**opts))
+                       WebDriver::Driver.for(driver, listener: listener, options: build_options(**))
                      end
           @create_driver_error_count -= 1 unless @create_driver_error_count.zero?
           if block
@@ -191,12 +191,12 @@ module Selenium
 
         private
 
-        def build_options(**opts)
+        def build_options(**)
           options_method = :"#{browser}_options"
           if private_methods.include?(options_method)
-            send(options_method, **opts)
+            send(options_method, **)
           else
-            WebDriver::Options.send(browser, **opts)
+            WebDriver::Options.send(browser, **)
           end
         end
 
@@ -225,45 +225,45 @@ module Selenium
           raise DriverInstantiationError, msg, @create_driver_error.backtrace
         end
 
-        def remote_driver(**opts)
+        def remote_driver(**)
           url = ENV.fetch('WD_REMOTE_URL', remote_server.webdriver_url)
 
-          WebDriver::Driver.for(:remote, url: url, **opts)
+          WebDriver::Driver.for(:remote, url: url, **)
         end
 
-        def chrome_driver(service: nil, **opts)
+        def chrome_driver(service: nil, **)
           service ||= WebDriver::Service.chrome
           service.args << '--disable-build-check' if ENV['DISABLE_BUILD_CHECK']
           service.args << '--verbose' if WebDriver.logger.debug?
           service.executable_path = ENV['CHROMEDRIVER_BINARY'] if ENV.key?('CHROMEDRIVER_BINARY')
-          WebDriver::Driver.for(:chrome, service: service, **opts)
+          WebDriver::Driver.for(:chrome, service: service, **)
         end
 
-        def edge_driver(service: nil, **opts)
+        def edge_driver(service: nil, **)
           service ||= WebDriver::Service.edge
           service.args << '--disable-build-check' if ENV['DISABLE_BUILD_CHECK']
           service.args << '--verbose' if WebDriver.logger.debug?
           service.executable_path = ENV['MSEDGEDRIVER_BINARY'] if ENV.key?('MSEDGEDRIVER_BINARY')
-          WebDriver::Driver.for(:edge, service: service, **opts)
+          WebDriver::Driver.for(:edge, service: service, **)
         end
 
-        def firefox_driver(service: nil, **opts)
+        def firefox_driver(service: nil, **)
           service ||= WebDriver::Service.firefox
           service.args.push('--log', 'trace') if WebDriver.logger.debug?
           service.executable_path = ENV['GECKODRIVER_BINARY'] if ENV.key?('GECKODRIVER_BINARY')
-          WebDriver::Driver.for(:firefox, service: service, **opts)
+          WebDriver::Driver.for(:firefox, service: service, **)
         end
 
-        def safari_driver(**opts)
+        def safari_driver(**)
           service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
           service = WebDriver::Service.safari(**service_opts)
-          WebDriver::Driver.for(:safari, service: service, **opts)
+          WebDriver::Driver.for(:safari, service: service, **)
         end
 
-        def safari_preview_driver(**opts)
+        def safari_preview_driver(**)
           service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
           service = WebDriver::Service.safari(**service_opts)
-          WebDriver::Driver.for(:safari, service: service, **opts)
+          WebDriver::Driver.for(:safari, service: service, **)
         end
 
         def chrome_options(args: [], **opts)
@@ -299,9 +299,9 @@ module Selenium
           WebDriver::Options.ie(**opts)
         end
 
-        def safari_preview_options(**opts)
+        def safari_preview_options(**)
           WebDriver::Safari.technology_preview!
-          WebDriver::Options.safari(**opts)
+          WebDriver::Options.safari(**)
         end
 
         def random_port

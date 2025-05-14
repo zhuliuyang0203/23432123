@@ -321,6 +321,10 @@ public class ChromiumDriver extends RemoteWebDriver
   @Override
   public Map<String, Object> executeCdpCommand(String commandName, Map<String, Object> parameters) {
     Require.nonNull("Command Name", commandName);
+    if (this.cdp == null) {
+      return java.util.Collections.emptyMap();
+    }
+
     return cdp.executeCdpCommand(commandName, parameters);
   }
 
@@ -358,36 +362,56 @@ public class ChromiumDriver extends RemoteWebDriver
 
   @Override
   public List<Map<String, String>> getCastSinks() {
+    if (this.casting == null) {
+      return java.util.Collections.emptyList();
+    }
+
     return casting.getCastSinks();
   }
 
   @Override
   public String getCastIssueMessage() {
+    if (this.casting == null) {
+      return "";
+    }
+
     return casting.getCastIssueMessage();
   }
 
   @Override
   public void selectCastSink(String deviceName) {
     Require.nonNull("Device Name", deviceName);
-    casting.selectCastSink(deviceName);
+
+    if (this.casting != null) {
+      casting.selectCastSink(deviceName);
+    }
   }
 
   @Override
   public void startDesktopMirroring(String deviceName) {
     Require.nonNull("Device Name", deviceName);
-    casting.startDesktopMirroring(deviceName);
+
+    if (this.casting != null) {
+      casting.startDesktopMirroring(deviceName);
+    }
   }
 
   @Override
   public void startTabMirroring(String deviceName) {
     Require.nonNull("Device Name", deviceName);
-    casting.startTabMirroring(deviceName);
+
+    if (this.casting != null) {
+      casting.startTabMirroring(deviceName);
+    }
   }
 
   @Override
   public void stopCasting(String deviceName) {
     Require.nonNull("Device Name", deviceName);
-    casting.stopCasting(deviceName);
+
+    if (this.casting != null) {
+      casting.stopCasting(deviceName);
+    }
   }
 
   @Override
