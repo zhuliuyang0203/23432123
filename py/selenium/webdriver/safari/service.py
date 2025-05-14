@@ -37,13 +37,13 @@ class Service(service.Service):
 
     def __init__(
         self,
-        executable_path: str = None,
+        executable_path: Optional[str] = None,
         port: int = 0,
         service_args: Optional[List[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         reuse_service=False,
         enable_logging: bool = False,
-        driver_path_env_key: str = None,
+        driver_path_env_key: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []

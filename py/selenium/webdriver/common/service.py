@@ -55,11 +55,11 @@ class Service(ABC):
 
     def __init__(
         self,
-        executable_path: str = None,
+        executable_path: Optional[str] = None,
         port: int = 0,
-        log_output: SubprocessStdAlias = None,
+        log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[Any, Any]] = None,
-        driver_path_env_key: str = None,
+        driver_path_env_key: Optional[str] = None,
         **kwargs,
     ) -> None:
         if isinstance(log_output, str):

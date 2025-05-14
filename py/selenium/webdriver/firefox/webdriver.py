@@ -20,6 +20,7 @@ import warnings
 import zipfile
 from contextlib import contextmanager
 from io import BytesIO
+from typing import Optional
 
 from selenium.webdriver.common.driver_finder import DriverFinder
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
@@ -37,8 +38,8 @@ class WebDriver(RemoteWebDriver):
 
     def __init__(
         self,
-        options: Options = None,
-        service: Service = None,
+        options: Optional[Options] = None,
+        service: Optional[Service] = None,
         keep_alive: bool = True,
     ) -> None:
         """Creates a new instance of the Firefox driver. Starts the service and

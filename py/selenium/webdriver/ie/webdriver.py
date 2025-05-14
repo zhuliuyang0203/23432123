@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from typing import Optional
+
 from selenium.webdriver.common.driver_finder import DriverFinder
 from selenium.webdriver.remote.client_config import ClientConfig
 from selenium.webdriver.remote.remote_connection import RemoteConnection
@@ -30,8 +32,8 @@ class WebDriver(RemoteWebDriver):
 
     def __init__(
         self,
-        options: Options = None,
-        service: Service = None,
+        options: Optional[Options] = None,
+        service: Optional[Service] = None,
         keep_alive: bool = True,
     ) -> None:
         """Creates a new instance of the Ie driver.

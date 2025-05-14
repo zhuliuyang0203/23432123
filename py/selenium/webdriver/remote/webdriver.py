@@ -32,6 +32,7 @@ from base64 import urlsafe_b64encode
 from contextlib import asynccontextmanager
 from contextlib import contextmanager
 from importlib import import_module
+from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -422,7 +423,7 @@ class WebDriver(BaseWebDriver):
         """
         return self.execute("executeCdpCommand", {"cmd": cmd, "params": cmd_args})["value"]
 
-    def execute(self, driver_command: str, params: dict = None) -> dict:
+    def execute(self, driver_command: str, params: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """Sends a command to be executed by a command.CommandExecutor.
 
         Parameters:
@@ -518,7 +519,7 @@ class WebDriver(BaseWebDriver):
         """
         return list(self.pinned_scripts)
 
-    def execute_script(self, script, *args):
+    def execute_script(self, script: str, *args):
         """Synchronously Executes JavaScript in the current window/frame.
 
         Parameters:
