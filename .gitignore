@@ -133,6 +133,7 @@ MODULE.bazel.lock
 /.vscode/
 /.scannerwork/
 /.bazelrc.local
+/MODULE.bazel.lock
 
 # Engflow
 *.crt

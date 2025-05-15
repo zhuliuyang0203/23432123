@@ -89,11 +89,11 @@ module Selenium
 
         def remote_server
           args = if ENV.key?('CHROMEDRIVER_BINARY')
-                   ["-Dwebdriver.chrome.driver=#{ENV['CHROMEDRIVER_BINARY']}"]
+                   ["--jvm_flag=-Dwebdriver.chrome.driver=#{ENV['CHROMEDRIVER_BINARY']}"]
                  elsif ENV.key?('MSEDGEDRIVER_BINARY')
-                   ["-Dwebdriver.edge.driver=#{ENV['MSEDGEDRIVER_BINARY']}"]
+                   ["--jvm_flag=-Dwebdriver.edge.driver=#{ENV['MSEDGEDRIVER_BINARY']}"]
                  elsif ENV.key?('GECKODRIVER_BINARY')
-                   ["-Dwebdriver.gecko.driver=#{ENV['GECKODRIVER_BINARY']}"]
+                   ["--jvm_flag=-Dwebdriver.gecko.driver=#{ENV['GECKODRIVER_BINARY']}"]
                  else
                    %w[--selenium-manager true]
                  end
@@ -101,19 +101,12 @@ module Selenium
 
           @remote_server ||= Selenium::Server.new(
             remote_server_jar,
-            java: bazel_java,
             port: random_port,
             log_level: WebDriver.logger.debug? && 'FINE',
             background: true,
             timeout: 60,
             args: args
           )
-        end
-
-        def bazel_java
-          return unless ENV.key?('WD_BAZEL_JAVA_LOCATION')
-
-          File.expand_path(File.read(File.expand_path(ENV.fetch('WD_BAZEL_JAVA_LOCATION'))).chomp)
         end
 
         def rbe?
@@ -131,6 +124,8 @@ module Selenium
         end
 
         def remote_server_jar
+          return ENV['WD_BAZEL_SERVER_LOCATION'] if ENV.key?('WD_BAZEL_SERVER_LOCATION')
+
           jar = 'java/src/org/openqa/selenium/grid/selenium_server_deploy.jar'
           test_jar = Pathname.new(Dir.pwd).join(jar)
           built_jar = root.join("bazel-bin/#{jar}")

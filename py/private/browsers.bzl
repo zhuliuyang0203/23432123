@@ -15,40 +15,40 @@ headless_args = select({
 
 chrome_args = select({
     "@selenium//common:use_pinned_linux_chrome": [
-        "--driver-binary=$(location @linux_chromedriver//:chromedriver)",
-        "--browser-binary=$(location @linux_chrome//:chrome-linux64/chrome)",
+        "--driver-binary=$(rlocationpath @linux_chromedriver//:chromedriver)",
+        "--browser-binary=$(rlocationpath @linux_chrome//:chrome-linux64/chrome)",
         "--browser-args=--disable-dev-shm-usage",
         "--browser-args=--no-sandbox",
     ],
     "@selenium//common:use_pinned_macos_chrome": [
-        "--driver-binary=$(location @mac_chromedriver//:chromedriver)",
-        "--browser-binary=$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
+        "--driver-binary=$(rlocationpath @mac_chromedriver//:chromedriver)",
+        "--browser-binary=$(rlocationpath @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
     ],
     "//conditions:default": [],
 }) + headless_args
 
 edge_args = select({
     "@selenium//common:use_pinned_linux_edge": [
-        "--driver-binary=$(location @linux_edgedriver//:msedgedriver)",
-        "--browser-binary=$(location @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
+        "--driver-binary=$(rlocationpath @linux_edgedriver//:msedgedriver)",
+        "--browser-binary=$(rlocationpath @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
         "--browser-args=--disable-dev-shm-usage",
         "--browser-args=--no-sandbox",
     ],
     "@selenium//common:use_pinned_macos_edge": [
-        "--driver-binary=$(location @mac_edgedriver//:msedgedriver)",
-        "--browser-binary='$(location @mac_edge//:Edge.app)/Contents/MacOS/Microsoft Edge'",
+        "--driver-binary=$(rlocationpath @mac_edgedriver//:msedgedriver)",
+        "--browser-binary='$(rlocationpath @mac_edge//:Edge.app)/Contents/MacOS/Microsoft Edge'",
     ],
     "//conditions:default": [],
 }) + headless_args
 
 firefox_args = select({
     "@selenium//common:use_pinned_linux_firefox": [
-        "--driver-binary=$(location @linux_geckodriver//:geckodriver)",
-        "--browser-binary=$(location @linux_firefox//:firefox/firefox)",
+        "--driver-binary=$(rlocationpath @linux_geckodriver//:geckodriver)",
+        "--browser-binary=$(rlocationpath @linux_firefox//:firefox/firefox)",
     ],
     "@selenium//common:use_pinned_macos_firefox": [
-        "--driver-binary=$(location @mac_geckodriver//:geckodriver)",
-        "--browser-binary=$(location @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
+        "--driver-binary=$(rlocationpath @mac_geckodriver//:geckodriver)",
+        "--browser-binary=$(rlocationpath @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
     ],
     "//conditions:default": [],
 }) + headless_args

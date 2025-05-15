@@ -240,9 +240,14 @@ module Selenium
     def process
       @process ||= begin
         # extract any additional_args that start with -D as options
-        properties = @additional_args.dup - @additional_args.delete_if { |arg| arg[/^-D/] }
-        args = ['-jar', @jar, @role, '--port', @port.to_s]
-        server_command = [@java] + properties + args + @additional_args
+        properties = @additional_args.dup - @additional_args.delete_if { |arg| arg[/^(--jvm_flag=)?-D/] }
+        server_command = if @jar.end_with?('.jar')
+                           [@java, *properties, '-jar', @jar]
+                         else
+                           [@jar, *properties]
+                         end
+        args = [@role, '--port', @port.to_s]
+        server_command += args + @additional_args
         cp = WebDriver::ChildProcess.build(*server_command)
 
         if @log.is_a?(String)

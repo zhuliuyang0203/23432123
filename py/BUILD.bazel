@@ -72,6 +72,7 @@ BROWSER_VERSIONS = [
 
 TEST_DEPS = [
     requirement("attrs"),
+    requirement("bazel_runfiles"),
     requirement("debugpy"),
     requirement("filetype"),
     requirement("idna"),

@@ -34,12 +34,16 @@ java_binary(
         "//common:linux": [
             "@linux_chrome//:chrome-linux64/chrome",
             "@linux_chromedriver//:chromedriver",
+            "@linux_edge//:opt/microsoft/msedge/microsoft-edge",
+            "@linux_edgedriver//:msedgedriver",
             "@linux_firefox//:firefox/firefox",
             "@linux_geckodriver//:geckodriver",
         ],
         "//common:macos": [
             "@mac_chrome//:Chrome.app",
             "@mac_chromedriver//:chromedriver",
+            "@mac_edge//:Edge.app",
+            "@mac_edgedriver//:msedgedriver",
             "@mac_firefox//:Firefox.app",
             "@mac_geckodriver//:geckodriver",
         ],
@@ -49,12 +53,16 @@ java_binary(
         "//common:linux": [
             "-Dwebdriver.chrome.driver=$(location @linux_chromedriver//:chromedriver)",
             "-Dwebdriver.chrome.binary=$(location @linux_chrome//:chrome-linux64/chrome)",
+            "-Dwebdriver.edge.binary=$(location @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
+            "-Dwebdriver.edge.driver=$(location @linux_edgedriver//:msedgedriver)",
             "-Dwebdriver.gecko.driver=$(location @linux_geckodriver//:geckodriver)",
             "-Dwebdriver.firefox.bin=$(location @linux_firefox//:firefox/firefox)",
         ],
         "//common:macos": [
             "-Dwebdriver.chrome.driver=$(location @mac_chromedriver//:chromedriver)",
             "-Dwebdriver.chrome.binary=$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
+            "-Dwebdriver.edge.binary=\"$(location @mac_edge//:Edge.app)/Contents/MacOS/Microsoft Edge\"",
+            "-Dwebdriver.edge.driver=$(location @mac_edgedriver//:msedgedriver)",
             "-Dwebdriver.gecko.driver=$(location @mac_geckodriver//:geckodriver)",
             "-Dwebdriver.firefox.bin=$(location @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
         ],
