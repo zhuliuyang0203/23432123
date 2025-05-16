@@ -669,11 +669,6 @@ namespace :py do
     @git.add(conf)
   end
 
-  desc 'Update Python Syntax'
-  task :lint do
-    sh 'tox -c py/tox.ini -e linting'
-  end
-
   namespace :test do
     desc 'Python unit tests'
     task :unit do
@@ -1165,7 +1160,6 @@ namespace :all do
   task :lint do
     ext = /mswin|msys|mingw|cygwin|bccwin|wince|emc/.match?(RbConfig::CONFIG['host_os']) ? 'ps1' : 'sh'
     sh "./scripts/format.#{ext}", verbose: true
-    Rake::Task['py:lint'].invoke
   end
 
   # Example: `./go all:prepare 4.31.0 early-stable`
