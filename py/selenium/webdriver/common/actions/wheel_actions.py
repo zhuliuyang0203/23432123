@@ -16,21 +16,34 @@
 # under the License.
 
 from typing import Optional
+from typing import Union
 
 from .interaction import Interaction
 from .wheel_input import WheelInput
 
 
 class WheelActions(Interaction):
-    def __init__(self, source: Optional[WheelInput] = None):
+    def __init__(self, source: Optional[WheelInput] = None) -> None:
         if source is None:
             source = WheelInput("wheel")
         super().__init__(source)
 
-    def pause(self, duration: float = 0):
+    def pause(self, duration: Union[float, int] = 0) -> "WheelActions":
         self.source.create_pause(duration)
         return self
 
-    def scroll(self, x=0, y=0, delta_x=0, delta_y=0, duration=0, origin="viewport"):
+    def scroll(
+        self,
+        x: int = 0,
+        y: int = 0,
+        delta_x: int = 0,
+        delta_y: int = 0,
+        duration: Union[float, int] = 0,
+        origin: str = "viewport",
+    ) -> "WheelActions":
+        """
+        :Args:
+         - duration: The duration of the scroll, in seconds.
+        """
         self.source.create_scroll(x, y, delta_x, delta_y, duration, origin)
         return self

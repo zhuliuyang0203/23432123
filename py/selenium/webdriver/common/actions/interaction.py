@@ -15,30 +15,39 @@
 # specific language governing permissions and limitations
 # under the License.
 from typing import Dict
+from typing import Literal
 from typing import Union
+
+from .key_input import KeyInput
+from .pointer_input import PointerInput
+from .wheel_input import WheelInput
 
 KEY = "key"
 POINTER = "pointer"
 NONE = "none"
 WHEEL = "wheel"
 SOURCE_TYPES = {KEY, POINTER, NONE}
+SOURCE_TYPES_LITERAL = Literal['key', 'pointer', 'none', 'wheel']
 
 POINTER_MOUSE = "mouse"
 POINTER_TOUCH = "touch"
 POINTER_PEN = "pen"
-
 POINTER_KINDS = {POINTER_MOUSE, POINTER_TOUCH, POINTER_PEN}
+POINTER_KINDS_LITERAL = Literal['mouse', 'touch', 'pen']
 
 
 class Interaction:
     PAUSE = "pause"
 
-    def __init__(self, source: str) -> None:
+    def __init__(self, source: Union[KeyInput, PointerInput, WheelInput]) -> None:
         self.source = source
 
 
 class Pause(Interaction):
-    def __init__(self, source, duration: float = 0) -> None:
+    def __init__(self, source: Union[KeyInput, PointerInput, WheelInput], duration: Union[int, float] = 0) -> None:
+        """
+        :Args:
+         - duration: duration of the pause in seconds"""
         super().__init__(source)
         self.duration = duration
 

@@ -26,27 +26,28 @@ from selenium.webdriver.remote.webelement import WebElement
 from .input_device import InputDevice
 from .interaction import POINTER
 from .interaction import POINTER_KINDS
+from .interaction import POINTER_KINDS_LITERAL, SOURCE_TYPES_LITERAL
 
 
 class PointerInput(InputDevice):
     DEFAULT_MOVE_DURATION = 250
 
-    def __init__(self, kind, name):
+    def __init__(self, kind: POINTER_KINDS_LITERAL, name: str) -> None:
         super().__init__()
         if kind not in POINTER_KINDS:
             raise InvalidArgumentException(f"Invalid PointerInput kind '{kind}'")
-        self.type = POINTER
-        self.kind = kind
+        self.type: SOURCE_TYPES_LITERAL = POINTER
+        self.kind: POINTER_KINDS_LITERAL = kind
         self.name = name
 
     def create_pointer_move(
         self,
-        duration=DEFAULT_MOVE_DURATION,
-        x: float = 0,
-        y: float = 0,
-        origin: Optional[WebElement] = None,
+        duration: Union[int, float] = DEFAULT_MOVE_DURATION,
+        x: Union[int, float] = 0,
+        y: Union[int, float] = 0,
+        origin: Union[WebElement, str, None] = None,
         **kwargs,
-    ):
+    ) -> None:
         action = {"type": "pointerMove", "duration": duration, "x": x, "y": y, **kwargs}
         if isinstance(origin, WebElement):
             action["origin"] = {"element-6066-11e4-a52e-4f735466cecf": origin.id}
@@ -54,23 +55,23 @@ class PointerInput(InputDevice):
             action["origin"] = origin
         self.add_action(self._convert_keys(action))
 
-    def create_pointer_down(self, **kwargs):
+    def create_pointer_down(self, **kwargs) -> None:
         data = {"type": "pointerDown", "duration": 0, **kwargs}
         self.add_action(self._convert_keys(data))
 
-    def create_pointer_up(self, button):
+    def create_pointer_up(self, button) -> None:
         self.add_action({"type": "pointerUp", "duration": 0, "button": button})
 
-    def create_pointer_cancel(self):
+    def create_pointer_cancel(self) -> None:
         self.add_action({"type": "pointerCancel"})
 
     def create_pause(self, pause_duration: Union[int, float] = 0) -> None:
         self.add_action({"type": "pause", "duration": int(pause_duration * 1000)})
 
-    def encode(self):
+    def encode(self) -> Dict[str, Any]:
         return {"type": self.type, "parameters": {"pointerType": self.kind}, "id": self.name, "actions": self.actions}
 
-    def _convert_keys(self, actions: Dict[str, Any]):
+    def _convert_keys(self, actions: Dict[str, Any]) -> Dict[str, Any]:
         out = {}
         for k, v in actions.items():
             if v is None:

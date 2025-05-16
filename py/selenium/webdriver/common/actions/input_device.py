@@ -19,6 +19,7 @@ import uuid
 from typing import Any
 from typing import List
 from typing import Optional
+from typing import Union
 
 
 class InputDevice:
@@ -35,5 +36,5 @@ class InputDevice:
     def clear_actions(self) -> None:
         self.actions = []
 
-    def create_pause(self, duration: float = 0) -> None:
+    def create_pause(self, pause_duration: Union[float, int] = 0) -> None:
         pass

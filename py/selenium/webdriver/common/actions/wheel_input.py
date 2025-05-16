@@ -14,6 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+from typing import Any
+from typing import Dict
 from typing import Union
 
 from selenium.webdriver.remote.webelement import WebElement
@@ -29,11 +32,11 @@ class ScrollOrigin:
         self._y_offset = y_offset
 
     @classmethod
-    def from_element(cls, element: WebElement, x_offset: int = 0, y_offset: int = 0):
+    def from_element(cls, element: WebElement, x_offset: int = 0, y_offset: int = 0) -> "ScrollOrigin":
         return cls(element, x_offset, y_offset)
 
     @classmethod
-    def from_viewport(cls, x_offset: int = 0, y_offset: int = 0):
+    def from_viewport(cls, x_offset: int = 0, y_offset: int = 0) -> "ScrollOrigin":
         return cls("viewport", x_offset, y_offset)
 
     @property
@@ -50,15 +53,21 @@ class ScrollOrigin:
 
 
 class WheelInput(InputDevice):
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         super().__init__(name=name)
         self.name = name
-        self.type = interaction.WHEEL
+        self.type: interaction.SOURCE_TYPES_LITERAL = interaction.WHEEL
 
-    def encode(self) -> dict:
+    def encode(self) -> dict[str, Any]:
         return {"type": self.type, "id": self.name, "actions": self.actions}
 
-    def create_scroll(self, x: int, y: int, delta_x: int, delta_y: int, duration: int, origin) -> None:
+    def create_scroll(
+        self, x: int, y: int, delta_x: int, delta_y: int, duration: Union[float, int], origin: Union[str, WebElement, Dict[str, str]]
+    ) -> None:
+        """
+        :Args:
+         - duration: The duration to pause for after the scroll, in seconds.
+        """
         if isinstance(origin, WebElement):
             origin = {"element-6066-11e4-a52e-4f735466cecf": origin.id}
         self.add_action(
@@ -74,4 +83,8 @@ class WheelInput(InputDevice):
         )
 
     def create_pause(self, pause_duration: Union[int, float] = 0) -> None:
+        """
+        :Args:
+         - pause_duration: duration of the pause in seconds
+        """
         self.add_action({"type": "pause", "duration": int(pause_duration * 1000)})

@@ -103,7 +103,7 @@ class ActionBuilder:
         self._add_input(new_input)
         return new_input
 
-    def add_pointer_input(self, kind: str, name: str) -> PointerInput:
+    def add_pointer_input(self, kind: interaction.POINTER_KINDS_LITERAL, name: str) -> PointerInput:
         """Add a new pointer input device to the action builder.
 
         Parameters:
