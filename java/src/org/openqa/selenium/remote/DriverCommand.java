@@ -161,7 +161,7 @@ public interface DriverCommand {
 
   static CommandPayload NEW_SESSION(Capabilities capabilities) {
     Require.nonNull("Capabilities", capabilities);
-    return new CommandPayload(NEW_SESSION, Map.of("capabilities", singleton(capabilities)));
+    return NEW_SESSION(singleton(capabilities));
   }
 
   static CommandPayload NEW_SESSION(Collection<Capabilities> capabilities) {
@@ -343,8 +343,7 @@ public interface DriverCommand {
 
   @Deprecated
   static CommandPayload SET_IMPLICIT_WAIT_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("implicit", TimeUnit.MILLISECONDS.convert(time, unit)));
+    return SET_IMPLICIT_WAIT_TIMEOUT(Duration.ofMillis(unit.toMillis(time)));
   }
 
   static CommandPayload SET_IMPLICIT_WAIT_TIMEOUT(Duration duration) {
@@ -353,8 +352,7 @@ public interface DriverCommand {
 
   @Deprecated
   static CommandPayload SET_SCRIPT_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("script", TimeUnit.MILLISECONDS.convert(time, unit)));
+    return SET_SCRIPT_TIMEOUT(Duration.ofMillis(unit.toMillis(time)));
   }
 
   static CommandPayload SET_SCRIPT_TIMEOUT(Duration duration) {
@@ -363,8 +361,7 @@ public interface DriverCommand {
 
   @Deprecated
   static CommandPayload SET_PAGE_LOAD_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("pageLoad", TimeUnit.MILLISECONDS.convert(time, unit)));
+    return SET_PAGE_LOAD_TIMEOUT(Duration.ofMillis(unit.toMillis(time)));
   }
 
   static CommandPayload SET_PAGE_LOAD_TIMEOUT(Duration duration) {
