@@ -231,8 +231,6 @@ To run all of the linting tools:
 ./go py:lint
 ```
 
-You need `tox` installed to run the linting tools (`pip install tox`).
-
 #### Local Installation
 
 To run Python code locally without building/installing the package, you must first install the dependencies:

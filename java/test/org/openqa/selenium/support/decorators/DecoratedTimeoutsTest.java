@@ -61,7 +61,7 @@ class DecoratedTimeoutsTest {
 
   @Test
   void implicitlyWaitLegacy() {
-    verifyFunction($ -> $.implicitlyWait(10, TimeUnit.SECONDS));
+    verifyFunction($ -> $.implicitlyWait(Duration.ofSeconds(10)));
   }
 
   @Test

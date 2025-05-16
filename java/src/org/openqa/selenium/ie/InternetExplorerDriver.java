@@ -33,13 +33,6 @@ public class InternetExplorerDriver extends RemoteWebDriver {
   /** Capability that defines whether to ignore the browser zoom level or not. */
   public static final String IGNORE_ZOOM_SETTING = "ignoreZoomSetting";
 
-  /**
-   * Capability that defines to use whether to use native or javascript events during operations.
-   *
-   * @deprecated Non W3C compliant
-   */
-  @Deprecated public static final String NATIVE_EVENTS = "nativeEvents";
-
   /** Capability that defines the initial URL to be used when IE is launched. */
   public static final String INITIAL_BROWSER_URL = "initialBrowserUrl";
 
