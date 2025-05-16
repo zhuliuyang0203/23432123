@@ -131,15 +131,9 @@ ignore_missing_imports = true
 # suppress error messages about imports that cannot be resolved.
 ignore_missing_imports = true
 
-[tool.docformatter]
-exclude = "selenium/webdriver/common/devtools"
-in-place = true
-recursive = true
-
 [tool.ruff]
 extend-exclude = [
     "selenium/webdriver/common/devtools/",
-    "private/",
     "generate.py",
 ]
 line-length = 120
