@@ -1,7 +1,5 @@
 class Selenium::WebDriver::Logger
   def debug: (String, ?id: Array[untyped]) -> nil
-           | (String, ?id: Symbol) -> nil
 
   def discard_or_log: (Symbol, String, Array[untyped]) -> nil
-                    | (Symbol, String, Symbol) -> nil
 end

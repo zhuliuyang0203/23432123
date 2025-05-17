@@ -1,13 +1,3 @@
-module Selenium
-  module WebDriver
-    module Interactions
-      class Interaction
-        attr_reader type: untyped
-
-        def initialize: (untyped source) -> void
-
-        def assert_source: (untyped _source) -> untyped
-      end
-    end
-  end
+class Selenium::WebDriver::Interactions::Interaction
+  def initialize: (Selenium::WebDriver::Interactions::WheelInput) -> void
 end

@@ -3,5 +3,7 @@ class Selenium::WebDriver::Support::Guards::Guard
 
   def exclusive?: () -> bool
 
+  def exclude?: () -> bool
+
   def message: () -> String
 end

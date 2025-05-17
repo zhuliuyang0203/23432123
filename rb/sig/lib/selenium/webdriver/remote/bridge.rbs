@@ -1,7 +1,3 @@
 class Selenium::WebDriver::Remote::Bridge
-  def quit: () -> nil
-
-  def execute: (Symbol, ?Hash[untyped, untyped], ?nil) -> void
-
-  def session_id: () -> String
+  def action: (?async: bool, ?devices: Array[untyped], ?duration: Integer) -> Selenium::WebDriver::ActionBuilder
 end

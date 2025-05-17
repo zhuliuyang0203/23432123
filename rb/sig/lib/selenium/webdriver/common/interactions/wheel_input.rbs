@@ -1,13 +1,5 @@
-module Selenium
-  module WebDriver
-    module Interactions
-      class WheelInput < InputDevice
-        @type: untyped
+class Selenium::WebDriver::Interactions::WheelInput
+  def initialize: (?String) -> void
 
-        def initialize: (?untyped? name) -> void
-
-        def create_scroll: (**untyped opts) -> untyped
-      end
-    end
-  end
+  def create_scroll: (**Integer | Float) -> void
 end

@@ -1,11 +1,12 @@
 class Selenium::WebDriver::Remote::Http::Default
-  def request: (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> Selenium::WebDriver::Remote::Response
+  def request: (Symbol, URI::HTTP, Hash[untyped, untyped], String, ?Integer) -> Selenium::WebDriver::Remote::Response
+             | (Symbol, URI::HTTP, Hash[untyped, untyped], nil, ?Integer) -> Selenium::WebDriver::Remote::Response
 
-  def new_request_for: (Symbol, URI::HTTP, Hash[untyped, untyped], nil) -> Net::HTTP::Delete
+  def new_request_for: (Symbol, URI::HTTP, Hash[untyped, untyped], String) -> Net::HTTP::Post
+                     | (Symbol, URI::HTTP, Hash[untyped, untyped], nil) -> Net::HTTP::Get
 
-  def response_for: (Net::HTTP::Delete) -> Net::HTTPOK
+  def response_for: (Net::HTTP::Post) -> Net::HTTPOK
+                  | (Net::HTTP::Get) -> Net::HTTPOK
 
   def http: () -> Net::HTTP
-
-  def close: () -> nil
 end

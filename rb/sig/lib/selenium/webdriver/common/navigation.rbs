@@ -1,5 +1,5 @@
 class Selenium::WebDriver::Navigation
   def initialize: (Selenium::WebDriver::Remote::Bridge) -> void
 
-  def to: (String) -> nil
+  def to: (String) -> void
 end

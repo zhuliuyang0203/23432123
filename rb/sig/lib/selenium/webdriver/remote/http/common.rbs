@@ -1,5 +1,6 @@
 class Selenium::WebDriver::Remote::Http::Common
-  def call: (Symbol, String, nil) -> Selenium::WebDriver::Remote::Response
+  def call: (Symbol, String, Hash[untyped, untyped]) -> Selenium::WebDriver::Remote::Response
+          | (Symbol, String, nil) -> Selenium::WebDriver::Remote::Response
 
   def server_url: () -> URI::HTTP
 
