@@ -17,6 +17,7 @@
 
 import os
 import platform
+from pathlib import Path
 
 import pytest
 
@@ -84,13 +85,12 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_ignore_collect(path, config):
+def pytest_ignore_collect(collection_path, config):
     drivers_opt = config.getoption("drivers")
     _drivers = set(drivers).difference(drivers_opt or drivers)
     if drivers_opt:
         _drivers.add("unit")
-    parts = path.dirname.split(os.path.sep)
-    return len([d for d in _drivers if d.lower() in parts]) > 0
+    return len([d for d in _drivers if d.lower() in collection_path.parts]) > 0
 
 
 def pytest_generate_tests(metafunc):
@@ -298,7 +298,7 @@ def server(request):
         # under Wayland, so we use XWayland instead.
         remote_env["MOZ_ENABLE_WAYLAND"] = "0"
 
-    if os.path.exists(jar_path):
+    if Path(jar_path).exists():
         # use the grid server built by bazel
         server = Server(path=jar_path, env=remote_env)
     else:

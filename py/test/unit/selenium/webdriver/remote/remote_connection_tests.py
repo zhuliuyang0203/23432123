@@ -67,13 +67,12 @@ def test_get_remote_connection_headers_defaults():
     assert headers.get("User-Agent").split(" ")[-1] in {"windows)", "mac)", "linux)", "mac", "windows", "linux"}
 
 
-def test_get_remote_connection_headers_adds_auth_header_if_pass():
+def test_get_remote_connection_headers_adds_auth_header_if_pass(recwarn):
     url = "http://user:pass@remote"
-    with pytest.warns(None) as record:
-        headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
+    headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
     assert headers.get("Authorization") == "Basic dXNlcjpwYXNz"
     assert (
-        record[0].message.args[0]
+        recwarn[0].message.args[0]
         == "Embedding username and password in URL could be insecure, use ClientConfig instead"
     )
 

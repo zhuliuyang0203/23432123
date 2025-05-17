@@ -115,9 +115,6 @@ public enum Browser {
     public Capabilities getCapabilities() {
       InternetExplorerOptions options = new InternetExplorerOptions();
 
-      if (Boolean.getBoolean("selenium.ie.disable_native_events")) {
-        options.disableNativeEvents();
-      }
       if (Boolean.getBoolean("selenium.ie.require_window_focus")) {
         options.requireWindowFocus();
       }

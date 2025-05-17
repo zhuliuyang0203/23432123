@@ -955,12 +955,6 @@ public class RemoteWebDriver
 
     protected class RemoteTimeouts implements Timeouts {
 
-      @Deprecated
-      @Override
-      public Timeouts implicitlyWait(long time, TimeUnit unit) {
-        return implicitlyWait(Duration.ofMillis(unit.toMillis(time)));
-      }
-
       @Override
       public Timeouts implicitlyWait(Duration duration) {
         execute(DriverCommand.SET_IMPLICIT_WAIT_TIMEOUT(duration));

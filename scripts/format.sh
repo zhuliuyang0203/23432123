@@ -33,7 +33,7 @@ bazel run @rules_rust//:rustfmt
 
 # TODO: use bazel target when rules_python supports formatting
 section "Python"
-echo "    python - isort, black, flake8, docformatter" >&2
+echo "    python - isort, black, autoflake, flake8, docformatter" >&2
 pip install tox
 export TOXENV=linting
 tox -c py/tox.ini

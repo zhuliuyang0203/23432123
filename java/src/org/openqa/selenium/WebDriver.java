@@ -296,26 +296,6 @@ public interface WebDriver extends SearchContext {
   interface Timeouts {
 
     /**
-     * @deprecated Use {@link #implicitlyWait(Duration)}
-     *     <p>Specifies the amount of time the driver should wait when searching for an element if
-     *     it is not immediately present.
-     *     <p>When searching for a single element, the driver should poll the page until the element
-     *     has been found, or this timeout expires before throwing a {@link NoSuchElementException}.
-     *     When searching for multiple elements, the driver should poll the page until at least one
-     *     element has been found or this timeout has expired.
-     *     <p>Increasing the implicit wait timeout should be used judiciously as it will have an
-     *     adverse effect on test run time, especially when used with slower location strategies
-     *     like XPath.
-     *     <p>If the timeout is negative, not null, or greater than 2e16 - 1, an error code with
-     *     invalid argument will be returned.
-     * @param time The amount of time to wait.
-     * @param unit The unit of measure for {@code time}.
-     * @return A self reference.
-     */
-    @Deprecated
-    Timeouts implicitlyWait(long time, TimeUnit unit);
-
-    /**
      * Specifies the amount of time the driver should wait when searching for an element if it is
      * not immediately present.
      *
@@ -333,9 +313,7 @@ public interface WebDriver extends SearchContext {
      * @param duration The duration to wait.
      * @return A self reference.
      */
-    default Timeouts implicitlyWait(Duration duration) {
-      return implicitlyWait(duration.toMillis(), TimeUnit.MILLISECONDS);
-    }
+    Timeouts implicitlyWait(Duration duration);
 
     /**
      * Gets the amount of time the driver should wait when searching for an element if it is not

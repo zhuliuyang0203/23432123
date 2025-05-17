@@ -12,7 +12,6 @@ requires-python = "~=3.9"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: POSIX",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS :: MacOS X",
@@ -26,12 +25,12 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     ]
 dependencies = [
-    "urllib3[socks]>=1.26,<3",
-    "trio~=0.17",
-    "trio-websocket~=0.9",
-    "certifi>=2021.10.8",
-    "typing_extensions~=4.9",
-    "websocket-client~=1.8",
+    "urllib3[socks]~=2.4.0",
+    "trio~=0.30.0",
+    "trio-websocket~=0.12.2",
+    "certifi>=2025.4.26",
+    "typing_extensions~=4.13.2",
+    "websocket-client~=1.8.0",
     ]
 
 [project.urls]
