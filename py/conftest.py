@@ -17,8 +17,8 @@
 
 import os
 import platform
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 
 import pytest
 
@@ -438,17 +438,6 @@ def driver_executable(request):
 
 
 @pytest.fixture(scope="function")
-def clean_service(request):
-    _supported_drivers = SupportedDrivers()
-    try:
-        driver_class = getattr(_supported_drivers, request.config.option.drivers[0].lower())
-    except (AttributeError, TypeError):
-        raise Exception("This test requires a --driver to be specified.")
-    selenium_driver = Driver(driver_class, request)
-    yield selenium_driver.service
-
-
-@pytest.fixture(scope="function")
 def clean_driver(request):
     _supported_drivers = SupportedDrivers()
     try:
@@ -463,14 +452,16 @@ def clean_driver(request):
 
 @pytest.fixture(scope="function")
 def clean_service(request):
-    driver_class = get_driver_class(request.config.option.drivers[0])
-    yield get_service(driver_class, request.config.option.executable)
+    driver_class = request.config.option.drivers[0].lower()
+    selenium_driver = Driver(driver_class, request)
+    yield selenium_driver.service
 
 
 @pytest.fixture(scope="function")
 def clean_options(request):
-    driver_class = get_driver_class(request.config.option.drivers[0])
-    yield get_options(driver_class, request.config)
+    driver_class = request.config.option.drivers[0].lower()
+    selenium_driver = Driver(driver_class, request)
+    yield selenium_driver.options
 
 
 @pytest.fixture
