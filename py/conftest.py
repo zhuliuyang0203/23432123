@@ -344,16 +344,6 @@ def driver(request):
     if request.node.get_closest_marker("no_driver_after_test"):
         driver_instance = None
 
-    # Close the browser after BiDi tests. Those make event subscriptions
-    # and doesn't seems to be stable enough, causing the flakiness of the
-    # subsequent tests.
-    # Remove this when BiDi implementation and API is stable.
-    if selenium_driver.bidi:
-        request.addfinalizer(selenium_driver.stop_driver)
-
-    if request.node.get_closest_marker("no_driver_after_test"):
-        driver_instance = None
-
 
 @pytest.fixture(scope="session", autouse=True)
 def stop_driver(request):
