@@ -1,3 +1,4 @@
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 load("@bazel_skylib//rules:select_file.bzl", "select_file")
 load("@py_dev_requirements//:requirements.bzl", "requirement")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
@@ -9,6 +10,11 @@ load("//common:defs.bzl", "copy_file")
 load("//py:defs.bzl", "generate_devtools", "py_test_suite")
 load("//py/private:browsers.bzl", "BROWSERS")
 load("//py/private:import.bzl", "py_import")
+
+format_multirun(
+    name = "format",
+    python = "@aspect_rules_lint//format:ruff",
+)
 
 py_binary(
     name = "selenium-release",
@@ -62,12 +68,12 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.32.0.202504060755"
+SE_VERSION = "4.33.0.202505022255"
 
 BROWSER_VERSIONS = [
     "v134",
     "v135",
-    "v133",
+    "v136",
 ]
 
 TEST_DEPS = [
@@ -78,7 +84,7 @@ TEST_DEPS = [
     requirement("iniconfig"),
     requirement("importlib_metadata"),
     requirement("h11"),
-    requirement("more_itertools"),
+    requirement("more-itertools"),
     requirement("multidict"),
     requirement("outcome"),
     requirement("pluggy"),
@@ -198,7 +204,7 @@ py_library(
     deps = [
         requirement("urllib3"),
         requirement("trio"),
-        requirement("trio_websocket"),
+        requirement("trio-websocket"),
         requirement("certifi"),
         requirement("typing_extensions"),
         requirement("websocket-client"),
@@ -269,7 +275,6 @@ py_wheel(
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: Apache Software License",
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: MacOS :: MacOS X",
@@ -289,12 +294,12 @@ py_wheel(
     python_requires = ">=3.9",
     python_tag = "py3",
     requires = [
-        "urllib3[socks]>=1.26,<3",
-        "trio~=0.17",
-        "trio-websocket~=0.9",
-        "certifi>=2021.10.8",
-        "typing_extensions~=4.9",
-        "websocket-client~=1.8",
+        "urllib3[socks]~=2.4.0",
+        "trio~=0.30.0",
+        "trio-websocket~=0.12.2",
+        "certifi>=2025.4.26",
+        "typing_extensions~=4.13.2",
+        "websocket-client~=1.8.0",
     ],
     strip_path_prefixes = [
         "py/",
@@ -321,7 +326,6 @@ py_library(
         "test/selenium/webdriver/__init__.py",
         "test/selenium/webdriver/chrome/__init__.py",
         "test/selenium/webdriver/common/__init__.py",
-        "test/selenium/webdriver/common/conftest.py",
         "test/selenium/webdriver/common/network.py",
         "test/selenium/webdriver/common/webserver.py",
         "test/selenium/webdriver/firefox/__init__.py",
@@ -330,7 +334,6 @@ py_library(
         "test/selenium/webdriver/marionette/conftest.py",
         "test/selenium/webdriver/safari/conftest.py",
         "test/selenium/webdriver/support/__init__.py",
-        "test/selenium/webdriver/support/conftest.py",
     ],
     data = [
         "pyproject.toml",
@@ -547,6 +550,7 @@ py_test_suite(
     srcs = glob(
         [
             "test/selenium/webdriver/common/**/*.py",
+            "test/selenium/webdriver/remote/**/*.py",
             "test/selenium/webdriver/support/**/*.py",
         ],
         exclude = BIDI_TESTS,

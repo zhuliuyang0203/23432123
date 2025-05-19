@@ -14,6 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+import pytest
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -24,20 +27,27 @@ class MyCustomElement(WebElement):
         return "Custom element method"
 
 
-def test_find_element_with_custom_class(driver, pages):
+@pytest.fixture()
+def custom_element_driver(driver):
+    try:
+        driver._web_element_cls = MyCustomElement
+        yield driver
+    finally:
+        driver._web_element_cls = WebElement
+
+
+def test_find_element_with_custom_class(custom_element_driver, pages):
     """Test to ensure custom element class is used for a single element."""
-    driver._web_element_cls = MyCustomElement
     pages.load("simpleTest.html")
-    element = driver.find_element(By.TAG_NAME, "body")
+    element = custom_element_driver.find_element(By.TAG_NAME, "body")
     assert isinstance(element, MyCustomElement)
     assert element.custom_method() == "Custom element method"
 
 
-def test_find_elements_with_custom_class(driver, pages):
+def test_find_elements_with_custom_class(custom_element_driver, pages):
     """Test to ensure custom element class is used for multiple elements."""
-    driver._web_element_cls = MyCustomElement
     pages.load("simpleTest.html")
-    elements = driver.find_elements(By.TAG_NAME, "div")
+    elements = custom_element_driver.find_elements(By.TAG_NAME, "div")
     assert all(isinstance(el, MyCustomElement) for el in elements)
     assert all(el.custom_method() == "Custom element method" for el in elements)
 

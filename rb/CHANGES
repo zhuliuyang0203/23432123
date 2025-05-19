@@ -1,3 +1,15 @@
+4.32.0 (2025-05-02)
+=========================
+* Add CDP for Chrome 136 and remove 133
+* log at info level with names and values when Guards#add_condition used
+* Add PrintOptions Implementation for Ruby WebDriver (#15158)
+* [ruby] fix lint for print_options.rb (#15608)
+* add enable_downloads to attr_accessor for all options classes
+* make logging of test guards debug level not info
+* Set remote active protocol in Firefox to BiDi only
+* handle issue with selenium manager exit status being nil (#15676)
+* Add websocket-port parameter to firefox service (#15458)
+
 4.31.0 (2025-04-04)
 =========================
 * Add support for 135 and remove 132

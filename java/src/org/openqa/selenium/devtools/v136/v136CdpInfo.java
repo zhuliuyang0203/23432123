@@ -1,4 +1,3 @@
-// <copyright file="ScriptEvaluateException.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -15,19 +14,16 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// </copyright>
 
-using System;
+package org.openqa.selenium.devtools.v136;
 
-namespace OpenQA.Selenium.BiDi.Modules.Script;
+import com.google.auto.service.AutoService;
+import org.openqa.selenium.devtools.CdpInfo;
 
-public class ScriptEvaluateException(EvaluateResultException evaluateResultException) : Exception
-{
-    private readonly EvaluateResultException _evaluateResultException = evaluateResultException;
+@AutoService(CdpInfo.class)
+public class v136CdpInfo extends CdpInfo {
 
-    public string Text => _evaluateResultException.ExceptionDetails.Text;
-
-    public long ColumNumber => _evaluateResultException.ExceptionDetails.ColumnNumber;
-
-    public override string Message => $"{Text}{Environment.NewLine}{_evaluateResultException.ExceptionDetails.StackTrace}";
+  public v136CdpInfo() {
+    super(136, v136Domains::new);
+  }
 }

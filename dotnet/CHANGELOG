@@ -1,5 +1,22 @@
+v4.32.0
+======
+* Add CDP for Chrome 136 and remove 133
+* [bidi] Revisit some core functionality to deserialize without intermediate `JsonElement` allocation (#15575)
+* [bidi] Address BiDi's JSON converter AOT warnings (#15390)
+* [bidi] Added missing GenericLogEntry log entry type in Script module (#15591)
+* [bidi] Add GenericLogEntry to json serializer context
+* [bidi] Combine network interception to apply rules (breaking change) (#15603)
+* [bidi] Add strongly-typed `LocalValue.ConvertFrom` overloads (#15532)
+* [bidi] Do not throw when CallFunction or Evaluate return exceptional result (breaking change) (#15521)
+* [bidi] Reuse memory when receiving websocket messages (#15640)
+* Enhance Selenium Manager platform detection (#15649)
+* [bidi] Use sync version of writing to memory stream while receiving messages
+* Use namespace file scoped (#15651)
+* Set remote active protocol in Firefox to BiDi only
+
 v4.31.0
 ======
+* Add CDP for Chrome 135 and remove 132
 * [bidi] Decouple EvaluateResult in Script module (#15493)
 * [bidi] Decouple AuthCredentials in Network module (#15491)
 * [bidi] Decouple WindowProxyProperties in Script module (#15490)
@@ -13,10 +30,10 @@ v4.31.0
 * Simplify `PopupWindowFinder.Invoke` (#15549)
 * [bidi] Make ContinueWithAuthCommand closer to spec (breaking change) (#15545)
 * [bidi] Avoid intermediate JsonDocument allocation to determine unordered discriminator (#15555)
-* Add CDP for Chrome 135 and remove 132
 
 v4.30.0
 ======
+* Add CDP for Chrome 134 and remove 131
 * Fix dev environment to run tests on Windows/MacOS (#15303)
 * Fix sporadic build issue with selenium manager in msbuild
 * Increment `WebDriver` towards nullability (#15228)

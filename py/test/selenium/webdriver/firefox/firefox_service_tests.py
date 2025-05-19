@@ -14,23 +14,25 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import os
 import subprocess
 from unittest.mock import patch
 
 import pytest
 
+from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver import Firefox
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
 
-def test_log_output_as_filename() -> None:
+def test_log_output_as_filename(recwarn) -> None:
     log_file = "geckodriver.log"
     service = Service(log_output=log_file)
     try:
-        with pytest.warns(None) as record:
-            driver = Firefox(service=service)
-        assert len(record) == 0
+        driver = Firefox(service=service)
+        assert len(recwarn) == 0
         with open(log_file) as fp:
             assert "geckodriver\tINFO\tListening" in fp.readline()
     finally:
@@ -59,6 +61,16 @@ def test_log_output_as_stdout(capfd) -> None:
     out, err = capfd.readouterr()
     assert "geckodriver\tINFO\tListening" in out
     driver.quit()
+
+
+def test_driver_is_stopped_if_browser_cant_start(clean_driver) -> None:
+    options = Options()
+    options.add_argument("-profile=/no/such/location")
+    service = Service()
+    with pytest.raises(SessionNotCreatedException):
+        clean_driver(options=options, service=service)
+    assert not service.is_connectable()
+    assert service.process.poll() is not None
 
 
 @pytest.fixture
