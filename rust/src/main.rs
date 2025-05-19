@@ -25,11 +25,11 @@ use selenium_manager::grid::GridManager;
 use selenium_manager::lock::clear_lock_if_required;
 use selenium_manager::logger::{Logger, BROWSER_PATH, DRIVER_PATH};
 use selenium_manager::metadata::clear_metadata;
+use selenium_manager::REQUEST_TIMEOUT_SEC;
 use selenium_manager::TTL_SEC;
 use selenium_manager::{
     clear_cache, get_manager_by_browser, get_manager_by_driver, SeleniumManager,
 };
-use selenium_manager::{REQUEST_TIMEOUT_SEC, SM_BETA_LABEL};
 use std::backtrace::{Backtrace, BacktraceStatus};
 use std::path::Path;
 use std::process::exit;
@@ -145,6 +145,10 @@ struct Cli {
     #[clap(long)]
     language_binding: Option<String>,
 
+    /// Selenium version (to be sent to plausible.io)
+    #[clap(long, value_parser, default_value = "")]
+    selenium_version: String,
+
     /// Avoid sends usage statistics to plausible.io
     #[clap(long)]
     avoid_stats: bool,
@@ -223,9 +227,7 @@ fn main() {
     selenium_manager.set_cache_path(cache_path.clone());
     selenium_manager.set_offline(cli.offline);
     selenium_manager.set_language_binding(cli.language_binding.unwrap_or_default());
-    let sm_version = clap::crate_version!();
-    let selenium_version = sm_version.strip_prefix(SM_BETA_LABEL).unwrap_or(sm_version);
-    selenium_manager.set_selenium_version(selenium_version.to_string());
+    selenium_manager.set_selenium_version(cli.selenium_version);
     selenium_manager.set_avoid_stats(cli.avoid_stats);
     selenium_manager.set_skip_driver_in_path(cli.skip_driver_in_path);
     selenium_manager.set_skip_browser_in_path(cli.skip_browser_in_path);
