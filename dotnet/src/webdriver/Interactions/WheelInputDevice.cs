@@ -205,28 +205,28 @@ public class WheelInputDevice : InputDevice
             return toReturn;
         }
 
-            private Dictionary<string, object> ConvertElement()
+        private Dictionary<string, object> ConvertElement()
+        {
+            IWebDriverObjectReference? elementReference = this.target as IWebDriverObjectReference;
+            if (elementReference == null)
             {
-                IWebDriverObjectReference? elementReference = this.target as IWebDriverObjectReference;
-                if (elementReference == null)
+                IWrapsElement? elementWrapper = this.target as IWrapsElement;
+                while (elementWrapper != null)
                 {
-                    IWrapsElement? elementWrapper = this.target as IWrapsElement;
-                    while (elementWrapper != null)
+                    elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;
+                    if (ReferenceEquals(elementWrapper, elementWrapper.WrappedElement))
                     {
-                        elementReference = elementWrapper.WrappedElement as IWebDriverObjectReference;
-                        if (ReferenceEquals(elementWrapper, elementWrapper.WrappedElement))
-                        {
-                            throw new InvalidOperationException("Cannot determine root element: element wrapper wraps itself");
-                        }
-
-                        elementWrapper = elementWrapper.WrappedElement as IWrapsElement;
+                        throw new InvalidOperationException("Cannot determine root element: element wrapper wraps itself");
                     }
-                }
 
-                if (elementReference == null)
-                {
-                    throw new ArgumentException($"Target element cannot be converted to {nameof(IWebDriverObjectReference)}");
+                    elementWrapper = elementWrapper.WrappedElement as IWrapsElement;
                 }
+            }
+
+            if (elementReference == null)
+            {
+                throw new ArgumentException($"Target element cannot be converted to {nameof(IWebDriverObjectReference)}");
+            }
 
             Dictionary<string, object> elementDictionary = elementReference.ToDictionary();
             return elementDictionary;
