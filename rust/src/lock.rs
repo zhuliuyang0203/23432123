@@ -25,7 +25,7 @@ use crate::files::{create_parent_path_if_not_exists, create_path_if_not_exists};
 use fs2::FileExt;
 use std::fs;
 
-thread_local!(static LOCK_PATH: RefCell<Option<PathBuf>> = RefCell::new(None));
+thread_local!(static LOCK_PATH: RefCell<Option<PathBuf>> = const { RefCell::new(None) });
 
 const LOCK_FILE: &str = "sm.lock";
 
