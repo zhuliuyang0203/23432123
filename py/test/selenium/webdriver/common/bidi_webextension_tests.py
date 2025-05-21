@@ -24,10 +24,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 EXTENSION_ID = "webextensions-selenium-example-v3@example.com"
-EXTENSION_PATH = "webextensions-selenium-example"
+EXTENSION_PATH = "webextensions-selenium-example-signed"
 EXTENSION_ARCHIVE_PATH = "webextensions-selenium-example.xpi"
 
-extensions = os.path.abspath("../../../../../../test/extensions/")
+extensions = os.path.abspath("../../../../../../../common/extensions/")
 
 
 def test_webextension_initialized(driver):
@@ -110,7 +110,7 @@ def test_install_base64_extension_path(driver, pages):
 @pytest.mark.xfail_edge
 def test_install_unsigned_extension(driver, pages):
     """Test installing an unsigned extension."""
-    path = os.path.join(extensions, "webextensions-selenium-example-unsigned")
+    path = os.path.join(extensions, "webextensions-selenium-example")
 
     ex = driver.webextension.install(path=path)
     assert ex.get("extension") == EXTENSION_ID
