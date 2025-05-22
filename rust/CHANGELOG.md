@@ -1,20 +1,6 @@
 0.4.33
 ======
 * Replace WMIC commands (deprecated) by WinAPI in Windows (#15363)
-    > * Replace WMIC commands (to be deprecated) by PowerShell in Windows
-    > * Use multiple command in exec driver test
-    > * Revert "Use multiple command in exec driver test"
-    > This reverts commit 802da7ae481bfc4371bd4ee64ccb3e6cde886e41.
-    > * Remove iexplorer exec test
-    > * Revert "Remove iexplorer exec test"
-    > This reverts commit 91649aa33bb5113aea346cfacdaa16e5853630ef.
-    > * Use PowerShell only for previous WMIC commands
-    > * Run PS command to discover OS
-    > * Setup PROCESSOR_ARCHITECTURE env for Windows
-    > * Avoid repetition in logic to run powershell or not
-    > * Use winapi instead of PowerShell to discover browser version
-    > * Update checksum in Cargo.Bazel.lock
-    > * Use conditional compilation for winapi logic (only compiled in Windows)
 * Minor clippy fixes
 
 0.4.32

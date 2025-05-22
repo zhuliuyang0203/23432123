@@ -1,24 +1,18 @@
 v4.33.0
 ======
+* Add CDP for Chrome 137 and remove 134
 * Removing deprecated items in Require.java (#15711)
 * Removing RemoteStatus as it was deprecated. (#15712)
-    > * Removing RemoteStatus as it was deprecated.
-    > Also ScreenshotException.getBase64EncodedScreenshot()
-    > * Fixing FF context test for Python
 * Fix spotbugs issues
 * fix autoclose casting
-    > java.lang.ClassCastException: class jdk.internal.net.http.HttpClientFacade cannot be cast to class java.lang.AutoCloseable (jdk.internal.net.http.HttpClientFacade is in module java.net.http of loader 'platform'; java.lang.AutoCloseable is in module java.base of loader 'bootstrap'
 * Use immutable values for return values
 * Deprecating methods that use FirefoxBinary as well.
-    > We need to do that first so we can properly remove FirefoxBinary
 * Removing deprecated NATIVE_EVENTS field
 * Removing deprecated SlowLoadableComponent constructor
 * Removing deprecated implicitlyWait timeout
 * Removing unused IME_ACTIVATE_ENGINE.
 * Removing deprecated `setScriptTimeout` and `pageLoadTimeout`. (#15764)
 * Reverting deprecation notice for `getAttribute`.
-    > Closes #13334
-* update devtools versions
 
 v4.32.0
 ======

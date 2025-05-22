@@ -1,15 +1,8 @@
 4.33.0 (2025-05-22)
 =========================
-* Bumping to nightly
+* Add CDP for Chrome 137 and remove 134
 * Let firefox choose the bidi port by default (#15727)
-    > If the user hasn't asked for a specific port then just let
-    > firefox choose a random one.
 * Upgrade to Ruby 3.2
-    > - CRuby 3.1 is EOL
-    > - JRuby 10 is the latest
-    > - TruffleRuby 24.2 is the latest
-* update devtools versions
-* bump versions in preparation for release
 
 4.32.0 (2025-05-02)
 =========================

@@ -1,23 +1,13 @@
 Selenium 4.33.0
-* Bumping to nightly
+* Add CDP for Chrome 137 and remove 134
 * [bidi]: add bidi storage module (#15669)
-    > * add bidi storage module
-    > * add tests for storage module
-    > * use autouse fixture for cookie deletion
-    > * remove driver.quit() in fixture
-    > * move tests to a test class
 * Add session_id property to webelement and fix mypy error  (#15705)
 * [BiDi] use constant for LogLevel (#15677)
 * Missing Headers Assignment in Network Class’s _on_request() (#15736)
-    > Missing Headers Assignment in _on_request()
 * Correct type annotations of default-None params (#15341)
 * Add missing 'id' property to ShadowRoot class (#15739)
 * Use ruff for linting and code formatting (#15746)
-    > * Replaces the current Python linters (black, isort, docformatter, autoflake, flake8) with ruff
-    > * Integrates it into the build system
-    > * Formats all Python source files
 * return `message` as part of exception in `execute` method (#15751)
-* bump versions in preparation for release
 
 Selenium 4.32.0
 * Add CDP for Chrome 136 and remove 133
