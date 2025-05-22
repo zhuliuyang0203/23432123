@@ -14,7 +14,7 @@ npm_link_all_packages(name = "node_modules")
 VERSION = "4.33.0-nightly202505022255"
 
 BROWSER_VERSIONS = [
-    "v134",
+    "v137",
     "v135",
     "v136",
 ]

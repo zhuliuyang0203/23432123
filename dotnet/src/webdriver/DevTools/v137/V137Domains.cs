@@ -1,4 +1,4 @@
-// <copyright file="V134Domains.cs" company="Selenium Committers">
+// <copyright file="V137Domains.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -19,21 +19,21 @@
 
 using System;
 
-namespace OpenQA.Selenium.DevTools.V134;
+namespace OpenQA.Selenium.DevTools.V137;
 
 /// <summary>
-/// Class containing the domain implementation for version 134 of the DevTools Protocol.
+/// Class containing the domain implementation for version 137 of the DevTools Protocol.
 /// </summary>
-public class V134Domains : DevToolsDomains
+public class V137Domains : DevToolsDomains
 {
     private readonly DevToolsSessionDomains domains;
 
     /// <summary>
-    /// Initializes a new instance of the V134Domains class.
+    /// Initializes a new instance of the V137Domains class.
     /// </summary>
     /// <param name="session">The DevToolsSession to use with this set of domains.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="session"/> is <see langword="null"/>.</exception>
-    public V134Domains(DevToolsSession session)
+    public V137Domains(DevToolsSession session)
     {
         this.domains = new DevToolsSessionDomains(session ?? throw new ArgumentNullException(nameof(session)));
     }
@@ -41,7 +41,7 @@ public class V134Domains : DevToolsDomains
     /// <summary>
     /// Gets the DevTools Protocol version for which this class is valid.
     /// </summary>
-    public static int DevToolsVersion => 134;
+    public static int DevToolsVersion => 137;
 
     /// <summary>
     /// Gets the version-specific domains for the DevTools session. This value must be cast to a version specific type to be at all useful.
@@ -51,20 +51,20 @@ public class V134Domains : DevToolsDomains
     /// <summary>
     /// Gets the object used for manipulating network information in the browser.
     /// </summary>
-    public override DevTools.Network Network => new V134Network(domains.Network, domains.Fetch);
+    public override DevTools.Network Network => new V137Network(domains.Network, domains.Fetch);
 
     /// <summary>
     /// Gets the object used for manipulating the browser's JavaScript execution.
     /// </summary>
-    public override JavaScript JavaScript => new V134JavaScript(domains.Runtime, domains.Page);
+    public override JavaScript JavaScript => new V137JavaScript(domains.Runtime, domains.Page);
 
     /// <summary>
     /// Gets the object used for manipulating DevTools Protocol targets.
     /// </summary>
-    public override DevTools.Target Target => new V134Target(domains.Target);
+    public override DevTools.Target Target => new V137Target(domains.Target);
 
     /// <summary>
     /// Gets the object used for manipulating the browser's logs.
     /// </summary>
-    public override DevTools.Log Log => new V134Log(domains.Log);
+    public override DevTools.Log Log => new V137Log(domains.Log);
 }
