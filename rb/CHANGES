@@ -1,4 +1,4 @@
-4.33.0 (2025-05-22)
+4.33.0 (2025-05-23)
 =========================
 * Add CDP for Chrome 137 and remove 134
 * Let firefox choose the bidi port by default (#15727)

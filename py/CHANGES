@@ -10,6 +10,7 @@ Selenium 4.33.0
 * return `message` as part of exception in `execute` method (#15751)
 * [bidi]: Add bidi webExtension module (#15749)
 * Better error for downloads on local webdrivers (#15756)
+* Add missing modules to python API docs (#15779)
 
 Selenium 4.32.0
 * Add CDP for Chrome 136 and remove 133
