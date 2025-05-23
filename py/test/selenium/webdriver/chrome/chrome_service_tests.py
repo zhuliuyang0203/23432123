@@ -109,12 +109,24 @@ def test_log_output_null_default(driver, capfd) -> None:
 
 @pytest.mark.no_driver_after_test
 def test_driver_is_stopped_if_browser_cant_start(clean_driver, clean_options, driver_executable) -> None:
+    """
+    Tests that the ChromeDriver process stops cleanly when browser startup fails.
+    """
     clean_options.add_argument("--user-data-dir=/no/such/location")
     service = Service(executable_path=driver_executable)
     with pytest.raises(SessionNotCreatedException):
         clean_driver(options=clean_options, service=service)
     assert not service.is_connectable()
     assert service.process.poll() is not None
+
+
+def test_invalid_executable_raises_exception():
+    """
+    Test that Service raises ValueError when given a non-existent or non-executable path.
+    """
+    bad_path = "/invalid/path/to/chromedriver"
+    with pytest.raises(ValueError):
+        Service(executable_path=bad_path)
 
 
 @pytest.fixture
@@ -137,5 +149,5 @@ class TestChromeDriverService:
 
     def test_updates_path_after_setting_env_variable(self, service):
         service.executable_path = self.service_path  # Simulating the update
-        with patch.dict("os.environ", {"SE_CHROMEDRIVER": "/foo/bar"}):
+        with patch.dict("os.environ", {"SE_CHROMEDRIVER": "/foo/bar/chromedriver"}):
             assert "chromedriver" in service.executable_path
