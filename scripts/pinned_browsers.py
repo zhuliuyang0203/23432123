@@ -26,52 +26,36 @@ def calculate_hash(url):
     return h.hexdigest()
 
 
-#!/usr/bin/env python
+def get_chrome_milestone():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--chrome_channel", default="Stable", help="Set the Chrome channel"
+    )
+    args = parser.parse_args()
+    channel = args.chrome_channel
 
-import argparse
-import hashlib
-import json
-import os
-import sys
-from pathlib import Path
+    r = http.request(
+        "GET",
+        f"https://chromiumdash.appspot.com/fetch_releases?channel={channel}&num=1&platform=Mac,Linux",
+    )
+    all_versions = json.loads(r.data)
+    # use the same milestone for all chrome releases, so pick the lowest
+    milestone = min(
+        [version["milestone"] for version in all_versions if version["milestone"]]
+    )
+    r = http.request(
+        "GET",
+        "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json",
+    )
+    versions = json.loads(r.data)["versions"]
 
-import urllib3
-from packaging.version import parse
-
-http = urllib3.PoolManager()
-
-
-def calculate_hash(url):
-    print("Calculate hash for %s" % url, file=sys.stderr)
-    h = hashlib.sha256()
-    r = http.request("GET", url, preload_content=False)
-    for b in iter(lambda: r.read(4096), b""):
-        h.update(b)
-    return h.hexdigest()
-
-
-def get_chrome_versions():
-    channels = ['Stable', 'Beta']
-    versions = {}
-    for channel in channels:
-        r = http.request(
-            "GET", f"https://chromiumdash.appspot.com/fetch_releases?channel={channel}&num=1&platform=Mac,Linux"
-        )
-        all_versions = json.loads(r.data)
-        milestone = min([version["milestone"] for version in all_versions if version["milestone"]])
-        r = http.request(
-            "GET", "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
-        )
-        all_known_versions = json.loads(r.data)["versions"]
-        selected_version = sorted(
-            filter(lambda v: v["version"].split(".")[0] == str(milestone), all_known_versions),
-            key=lambda v: parse(v["version"])
-        )[-1]
-        versions[channel] = selected_version
-    return versions
+    return sorted(
+        filter(lambda v: v["version"].split(".")[0] == str(milestone), versions),
+        key=lambda v: parse(v["version"]),
+    )[-1]
 
 
-def chromedriver(selected_version, workspace_name=""):
+def chromedriver(selected_version):
     content = ""
 
     drivers = selected_version["downloads"]["chromedriver"]
@@ -79,62 +63,69 @@ def chromedriver(selected_version, workspace_name=""):
     linux = [d["url"] for d in drivers if d["platform"] == "linux64"][0]
     sha = calculate_hash(linux)
 
-    content += f"""    http_archive(
-        name = \"linux_{workspace_name}chromedriver\",
-        url = \"{linux}\",
-        sha256 = \"{sha}\",
-        strip_prefix = \"chromedriver-linux64\",
+    content = (
+        content
+        + """    http_archive(
+        name = "linux_chromedriver",
+        url = "%s",
+        sha256 = "%s",
+        strip_prefix = "chromedriver-linux64",
         build_file_content = \"\"\"
-load(\"@aspect_rules_js//js:defs.bzl\", \"js_library\")
-package(default_visibility = [\"//visibility:public\"])
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+package(default_visibility = ["//visibility:public"])
 
-exports_files([\"chromedriver\"])
+exports_files(["chromedriver"])
 
 js_library(
-    name = \"chromedriver-js\",
-    data = [\"chromedriver\"],
+    name = "chromedriver-js",
+    data = ["chromedriver"],
 )
 \"\"\",
     )
 """
+        % (linux, sha)
+    )
 
     mac = [d["url"] for d in drivers if d["platform"] == "mac-x64"][0]
     sha = calculate_hash(mac)
-    content += f"""
+    content = (
+        content
+        + """
     http_archive(
-        name = \"mac_{workspace_name}chromedriver\",
-        url = \"{mac}\",
-        sha256 = \"{sha}\",
-        strip_prefix = \"chromedriver-mac-x64\",
+        name = "mac_chromedriver",
+        url = "%s",
+        sha256 = "%s",
+        strip_prefix = "chromedriver-mac-x64",
         build_file_content = \"\"\"
-load(\"@aspect_rules_js//js:defs.bzl\", \"js_library\")
-package(default_visibility = [\"//visibility:public\"])
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+package(default_visibility = ["//visibility:public"])
 
-exports_files([\"chromedriver\"])
+exports_files(["chromedriver"])
 
 js_library(
-    name = \"chromedriver-js\",
-    data = [\"chromedriver\"],
+    name = "chromedriver-js",
+    data = ["chromedriver"],
 )
 \"\"\",
     )
 """
+        % (mac, sha)
+    )
 
     return content
 
-def chrome(selected_version, workspace_name=""):
-    print(f"Calculating hash for Chrome ({workspace_name or 'stable'}) version {selected_version['version']}", file=sys.stderr)
 
+def chrome(selected_version):
     chrome_downloads = selected_version["downloads"]["chrome"]
 
     linux = [d["url"] for d in chrome_downloads if d["platform"] == "linux64"][0]
     sha = calculate_hash(linux)
 
-    content = f"""
+    content = """
     http_archive(
-        name = "linux_{workspace_name}chrome",
-        url = "{linux}",
-        sha256 = "{sha}",
+        name = "linux_chrome",
+        url = "%s",
+        sha256 = "%s",
         build_file_content = \"\"\"
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -152,15 +143,19 @@ js_library(
 )
 \"\"\",
     )
-"""
+
+""" % (
+        linux,
+        sha,
+    )
 
     mac = [d["url"] for d in chrome_downloads if d["platform"] == "mac-x64"][0]
     sha = calculate_hash(mac)
 
-    content += f"""    http_archive(
-        name = "mac_{workspace_name}chrome",
-        url = "{mac}",
-        sha256 = "{sha}",
+    content += """    http_archive(
+        name = "mac_chrome",
+        url = "%s",
+        sha256 = "%s",
         strip_prefix = "chrome-mac-x64",
         patch_cmds = [
             "mv 'Google Chrome for Testing.app' Chrome.app",
@@ -178,7 +173,11 @@ js_library(
 )
 \"\"\",
     )
-"""
+
+""" % (
+        mac,
+        sha,
+    )
 
     return content
 
@@ -274,10 +273,7 @@ js_library(
 )
 \"\"\",
     )
-""" % (
-            linux,
-            linux_hash.lower()
-        )
+""" % (linux, linux_hash.lower())
 
     return content
 
@@ -285,17 +281,22 @@ js_library(
 def edgedriver():
     r_stable = http.request("GET", "https://msedgedriver.azureedge.net/LATEST_STABLE")
     stable_version = r_stable.data.decode("utf-16").strip()
-    major_version = stable_version.split('.')[0]
-    r = http.request("GET", f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_LINUX")
+    major_version = stable_version.split(".")[0]
+    r = http.request(
+        "GET",
+        f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_LINUX",
+    )
     linux_version = r.data.decode("utf-16").strip()
 
     content = ""
 
-    linux = "https://msedgedriver.azureedge.net/%s/edgedriver_linux64.zip" % linux_version
+    linux = (
+        "https://msedgedriver.azureedge.net/%s/edgedriver_linux64.zip" % linux_version
+    )
     sha = calculate_hash(linux)
     content = (
-      content
-      + """
+        content
+        + """
     http_archive(
         name = "linux_edgedriver",
         url = "%s",
@@ -313,16 +314,19 @@ js_library(
 \"\"\",
     )
 """
-      % (linux, sha)
+        % (linux, sha)
     )
 
-    r = http.request("GET", f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_MACOS")
+    r = http.request(
+        "GET",
+        f"https://msedgedriver.azureedge.net/LATEST_RELEASE_{major_version}_MACOS",
+    )
     macos_version = r.data.decode("utf-16").strip()
     mac = "https://msedgedriver.azureedge.net/%s/edgedriver_mac64.zip" % macos_version
     sha = calculate_hash(mac)
     content = (
-      content
-      + """
+        content
+        + """
     http_archive(
         name = "mac_edgedriver",
         url = "%s",
@@ -340,7 +344,7 @@ js_library(
 \"\"\",
     )
 """
-      % (mac, sha)
+        % (mac, sha)
     )
     return content
 
@@ -348,14 +352,16 @@ js_library(
 def geckodriver():
     content = ""
 
-    r = http.request("GET", "https://api.github.com/repos/mozilla/geckodriver/releases/latest")
+    r = http.request(
+        "GET", "https://api.github.com/repos/mozilla/geckodriver/releases/latest"
+    )
     for a in json.loads(r.data)["assets"]:
         if a["name"].endswith("-linux64.tar.gz"):
             url = a["browser_download_url"]
             sha = calculate_hash(url)
             content = (
-              content
-              + """    http_archive(
+                content
+                + """    http_archive(
         name = "linux_geckodriver",
         url = "%s",
         sha256 = "%s",
@@ -372,15 +378,15 @@ js_library(
 \"\"\",
     )
 """
-              % (url, sha)
+                % (url, sha)
             )
 
         if a["name"].endswith("-macos.tar.gz"):
             url = a["browser_download_url"]
             sha = calculate_hash(url)
             content = (
-              content
-              + """
+                content
+                + """
     http_archive(
         name = "mac_geckodriver",
         url = "%s",
@@ -398,7 +404,7 @@ js_library(
 \"\"\",
     )
 """
-              % (url, sha)
+                % (url, sha)
             )
     return content
 
@@ -419,29 +425,38 @@ def firefox():
 
 
 def firefox_version_data():
-    versions = http.request("GET", "https://product-details.mozilla.org/1.0/firefox_versions.json")
+    versions = http.request(
+        "GET", "https://product-details.mozilla.org/1.0/firefox_versions.json"
+    )
     return versions.data
 
 
 def firefox_linux(version):
     if int(version.split(".")[0]) < 135:
-        return "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.bz2" % (
-            version, version)
+        return (
+            "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.bz2"
+            % (version, version)
+        )
     else:
-        return "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.xz" % (
-            version, version)
+        return (
+            "https://ftp.mozilla.org/pub/firefox/releases/%s/linux-x86_64/en-US/firefox-%s.tar.xz"
+            % (version, version)
+        )
 
 
 def firefox_mac(version):
-    return "https://ftp.mozilla.org/pub/firefox/releases/%s/mac/en-US/Firefox%%20%s.dmg" % (version, version)
+    return (
+        "https://ftp.mozilla.org/pub/firefox/releases/%s/mac/en-US/Firefox%%20%s.dmg"
+        % (version, version)
+    )
 
 
 def print_firefox(version, workspace_name, sha_linux, sha_mac):
     content = ""
 
     content = (
-      content
-      + f"""    http_archive(
+        content
+        + f"""    http_archive(
         name = "linux_{workspace_name}firefox",
         url = "{firefox_linux(version)}",
         sha256 = "{sha_linux}",
@@ -467,8 +482,8 @@ js_library(
     )
 
     content = (
-      content
-      + f"""    dmg_archive(
+        content
+        + f"""    dmg_archive(
         name = "mac_{workspace_name}firefox",
         url = "{firefox_mac(version)}",
         sha256 = "{sha_mac}",
@@ -504,21 +519,13 @@ def pin_browsers():
     local_drivers(name = "local_drivers")
 
 """
-    content += firefox()
-    content += geckodriver()
-    content += edge()
-    content += edgedriver()
-
-    chrome_versions = get_chrome_versions()
-    chrome_stable = chrome_versions['Stable']
-    content += chrome(chrome_stable)
-    content += chromedriver(chrome_stable)
-
-    chrome_beta = chrome_versions['Beta']
-    if chrome_stable["version"] != chrome_beta["version"]:
-        content += chrome(chrome_beta, workspace_name="beta_")
-        content += chromedriver(chrome_beta, workspace_name="beta_")
-
+    content = content + firefox()
+    content = content + geckodriver()
+    content = content + edge()
+    content = content + edgedriver()
+    chrome_milestone = get_chrome_milestone()
+    content = content + chrome(chrome_milestone)
+    content = content + chromedriver(chrome_milestone)
     content += """
 def _pin_browsers_extension_impl(_ctx):
     pin_browsers()

@@ -15,15 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from base64 import b64decode
-from base64 import urlsafe_b64decode
+from base64 import b64decode, urlsafe_b64decode
 from typing import List
 
 import pytest
 
 from selenium.common.exceptions import InvalidArgumentException
-from selenium.webdriver.common.virtual_authenticator import Credential
-from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions
+from selenium.webdriver.common.virtual_authenticator import Credential, VirtualAuthenticatorOptions
 from selenium.webdriver.remote.webdriver import WebDriver
 
 # working Key
@@ -337,7 +335,8 @@ def test_set_user_verified(driver, pages):
     # Register a credential requiring UV.
 
     response = driver.execute_async_script(
-        "registerCredential({authenticatorSelection: {userVerification: 'required'}}).then(arguments[arguments.length - 1]);"
+        "registerCredential({authenticatorSelection: {userVerification: 'required'}})"
+        + ".then(arguments[arguments.length - 1]);"
     )
     assert response.get("status", "") == "OK"
     raw_id = response["credential"]["rawId"]

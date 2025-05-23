@@ -51,6 +51,7 @@ import { Size } from '../../models/size'
 import LiveView from '../LiveView/LiveView'
 import SessionData, { createSessionData } from '../../models/session-data'
 import { useNavigate } from 'react-router-dom'
+import ColumnSelector from './ColumnSelector'
 
 function descendingComparator<T> (a: T, b: T, orderBy: keyof T): number {
   if (orderBy === 'sessionDurationMillis') {
@@ -94,7 +95,7 @@ interface HeadCell {
   numeric: boolean
 }
 
-const headCells: HeadCell[] = [
+const fixedHeadCells: HeadCell[] = [
   { id: 'id', numeric: false, label: 'Session' },
   { id: 'capabilities', numeric: false, label: 'Capabilities' },
   { id: 'startTime', numeric: false, label: 'Start time' },
@@ -107,10 +108,11 @@ interface EnhancedTableProps {
     property: keyof SessionData) => void
   order: Order
   orderBy: string
+  headCells: HeadCell[]
 }
 
 function EnhancedTableHead (props: EnhancedTableProps): JSX.Element {
-  const { order, orderBy, onRequestSort } = props
+  const { order, orderBy, onRequestSort, headCells } = props
   const createSortHandler = (property: keyof SessionData) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property)
   }
@@ -181,6 +183,16 @@ function RunningSessions (props) {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchFilter, setSearchFilter] = useState('')
   const [searchBarHelpOpen, setSearchBarHelpOpen] = useState(false)
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(() => {
+    try {
+      const savedColumns = localStorage.getItem('selenium-grid-selected-columns')
+      return savedColumns ? JSON.parse(savedColumns) : []
+    } catch (e) {
+      console.error('Error loading saved columns:', e)
+      return []
+    }
+  })
+  const [headCells, setHeadCells] = useState<HeadCell[]>(fixedHeadCells)
   const liveViewRef = useRef(null)
   const navigate = useNavigate()
 
@@ -264,8 +276,27 @@ function RunningSessions (props) {
 
   const { sessions, origin, sessionId } = props
 
+  const getCapabilityValue = (capabilitiesStr: string, key: string): string => {
+    try {
+      const capabilities = JSON.parse(capabilitiesStr as string)
+      const value = capabilities[key]
+      
+      if (value === undefined || value === null) {
+        return ''
+      }
+      
+      if (typeof value === 'object') {
+        return JSON.stringify(value)
+      }
+      
+      return String(value)
+    } catch (e) {
+      return ''
+    }
+  }
+
   const rows = sessions.map((session) => {
-    return createSessionData(
+    const sessionData = createSessionData(
       session.id,
       session.capabilities,
       session.startTime,
@@ -276,6 +307,12 @@ function RunningSessions (props) {
       session.slot,
       origin
     )
+    
+    selectedColumns.forEach(column => {
+      sessionData[column] = getCapabilityValue(session.capabilities, column)
+    })
+    
+    return sessionData
   })
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
 
@@ -291,6 +328,16 @@ function RunningSessions (props) {
       setRowLiveViewOpen(s)
     }
   }, [sessionId, sessions])
+  
+  useEffect(() => {
+    const dynamicHeadCells = selectedColumns.map(column => ({
+      id: column,
+      numeric: false,
+      label: column
+    }))
+    
+    setHeadCells([...fixedHeadCells, ...dynamicHeadCells])
+  }, [selectedColumns])
 
   return (
     <Box width='100%'>
@@ -298,12 +345,22 @@ function RunningSessions (props) {
         <div>
           <Paper sx={{ width: '100%', marginBottom: 2 }}>
             <EnhancedTableToolbar title='Running'>
-              <RunningSessionsSearchBar
-                searchFilter={searchFilter}
-                handleSearch={setSearchFilter}
-                searchBarHelpOpen={searchBarHelpOpen}
-                setSearchBarHelpOpen={setSearchBarHelpOpen}
-              />
+              <Box display="flex" alignItems="center">
+                <ColumnSelector 
+                  sessions={sessions}
+                  selectedColumns={selectedColumns}
+                  onColumnSelectionChange={(columns) => {
+                    setSelectedColumns(columns)
+                    localStorage.setItem('selenium-grid-selected-columns', JSON.stringify(columns))
+                  }}
+                />
+                <RunningSessionsSearchBar
+                  searchFilter={searchFilter}
+                  handleSearch={setSearchFilter}
+                  searchBarHelpOpen={searchBarHelpOpen}
+                  setSearchBarHelpOpen={setSearchBarHelpOpen}
+                />
+              </Box>
             </EnhancedTableToolbar>
             <TableContainer>
               <Table
@@ -316,6 +373,7 @@ function RunningSessions (props) {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
+                  headCells={headCells}
                 />
                 <TableBody>
                   {stableSort(rows, getComparator(order, orderBy))
@@ -494,6 +552,10 @@ function RunningSessions (props) {
                           <TableCell align='left'>
                             {row.nodeUri}
                           </TableCell>
+                          {/* Add dynamic columns */}
+                          {selectedColumns.map(column => (
+                            <TableCell key={column} align='left'>{row[column]}</TableCell>
+                          ))}
                         </TableRow>
                       )
                     })}

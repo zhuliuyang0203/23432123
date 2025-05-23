@@ -123,7 +123,7 @@ class WebDriver(RemoteWebDriver):
         :Usage:
             ::
 
-                driver.install_addon('/path/to/firebug.xpi')
+                driver.install_addon("/path/to/firebug.xpi")
         """
 
         if os.path.isdir(path):
@@ -151,7 +151,7 @@ class WebDriver(RemoteWebDriver):
         :Usage:
             ::
 
-                driver.uninstall_addon('addon@foo.com')
+                driver.uninstall_addon("addon@foo.com")
         """
         self.execute("UNINSTALL_ADDON", {"id": identifier})
 
@@ -167,7 +167,7 @@ class WebDriver(RemoteWebDriver):
         :Usage:
             ::
 
-                driver.get_full_page_screenshot_as_file('/Screenshots/foo.png')
+                driver.get_full_page_screenshot_as_file("/Screenshots/foo.png")
         """
         if not filename.lower().endswith(".png"):
             warnings.warn(
@@ -196,7 +196,7 @@ class WebDriver(RemoteWebDriver):
         :Usage:
             ::
 
-                driver.save_full_page_screenshot('/Screenshots/foo.png')
+                driver.save_full_page_screenshot("/Screenshots/foo.png")
         """
         return self.get_full_page_screenshot_as_file(filename)
 
@@ -221,3 +221,9 @@ class WebDriver(RemoteWebDriver):
                 driver.get_full_page_screenshot_as_base64()
         """
         return self.execute("FULL_PAGE_SCREENSHOT")["value"]
+
+    def download_file(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def get_downloadable_files(self, *args, **kwargs):
+        raise NotImplementedError

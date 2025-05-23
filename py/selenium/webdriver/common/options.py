@@ -16,11 +16,9 @@
 # under the License.
 
 import warnings
-from abc import ABCMeta
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from enum import Enum
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.common.proxy import Proxy

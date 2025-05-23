@@ -15,15 +15,16 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v134;
+import React from 'react'
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
-
-@AutoService(CdpInfo.class)
-public class v134CdpInfo extends CdpInfo {
-
-  public v134CdpInfo() {
-    super(134, v134Domains::new);
-  }
+const renderWithRouter = (ui, { route = '/' } = {}) => {
+  return render(
+    <MemoryRouter initialEntries={[route]}>
+      {ui}
+    </MemoryRouter>
+  )
 }
+
+export { renderWithRouter as render }

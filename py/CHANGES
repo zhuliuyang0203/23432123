@@ -1,3 +1,17 @@
+Selenium 4.33.0
+* Add CDP for Chrome 137 and remove 134
+* [bidi]: add bidi storage module (#15669)
+* Add session_id property to webelement and fix mypy error  (#15705)
+* [BiDi] use constant for LogLevel (#15677)
+* Missing Headers Assignment in Network Class’s _on_request() (#15736)
+* Correct type annotations of default-None params (#15341)
+* Add missing 'id' property to ShadowRoot class (#15739)
+* Use ruff for linting and code formatting (#15746)
+* return `message` as part of exception in `execute` method (#15751)
+* [bidi]: Add bidi webExtension module (#15749)
+* Better error for downloads on local webdrivers (#15756)
+* Add missing modules to python API docs (#15779)
+
 Selenium 4.32.0
 * Add CDP for Chrome 136 and remove 133
 * BiDi Network implementation of Intercepts and Auth in Python (#14592)

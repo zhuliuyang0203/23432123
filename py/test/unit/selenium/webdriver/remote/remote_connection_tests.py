@@ -20,15 +20,13 @@ from urllib import parse
 
 import pytest
 import urllib3
-from urllib3.util import Retry
-from urllib3.util import Timeout
+from urllib3.util import Retry, Timeout
 
 from selenium import __version__
 from selenium.webdriver import Proxy
 from selenium.webdriver.common.proxy import ProxyType
 from selenium.webdriver.remote.client_config import AuthType
-from selenium.webdriver.remote.remote_connection import ClientConfig
-from selenium.webdriver.remote.remote_connection import RemoteConnection
+from selenium.webdriver.remote.remote_connection import ClientConfig, RemoteConnection
 
 
 @pytest.fixture

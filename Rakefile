@@ -96,7 +96,7 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v134:v134.publish
+  //java/src/org/openqa/selenium/devtools/v137:v137.publish
   //java/src/org/openqa/selenium/devtools/v135:v135.publish
   //java/src/org/openqa/selenium/devtools/v136:v136.publish
   //java/src/org/openqa/selenium/edge:edge.publish
@@ -669,11 +669,6 @@ namespace :py do
     @git.add(conf)
   end
 
-  desc 'Update Python Syntax'
-  task :lint do
-    sh 'tox -c py/tox.ini -e linting'
-  end
-
   namespace :test do
     desc 'Python unit tests'
     task :unit do
@@ -1165,7 +1160,6 @@ namespace :all do
   task :lint do
     ext = /mswin|msys|mingw|cygwin|bccwin|wince|emc/.match?(RbConfig::CONFIG['host_os']) ? 'ps1' : 'sh'
     sh "./scripts/format.#{ext}", verbose: true
-    Rake::Task['py:lint'].invoke
   end
 
   # Example: `./go all:prepare 4.31.0 early-stable`

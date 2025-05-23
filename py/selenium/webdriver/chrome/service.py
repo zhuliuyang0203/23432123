@@ -16,9 +16,7 @@
 # under the License.
 
 
-from typing import List
-from typing import Mapping
-from typing import Optional
+from typing import List, Mapping, Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
