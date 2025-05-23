@@ -18,7 +18,8 @@
 import * as React from 'react'
 import RunningSessions from '../../components/RunningSessions/RunningSessions'
 import SessionInfo from '../../models/session-info'
-import { render, screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
+import { render } from '../utils/render-utils'
 import userEvent from '@testing-library/user-event'
 import { createSessionData } from '../../models/session-data'
 
@@ -131,7 +132,13 @@ it('search field works for multiple results', async () => {
 it('search field works for lazy search', async () => {
   const { getByPlaceholderText, getByText, queryByText } = render(<RunningSessions sessions={sessions} origin={origin} />)
   const user = userEvent.setup()
-  await user.type(getByPlaceholderText('Search…'), 'browserName')
+
+  await act(async () => {
+    await user.type(getByPlaceholderText('Search…'), 'browserName')
+  })
+
+  await new Promise(resolve => setTimeout(resolve, 0))
+
   expect(getByPlaceholderText('Search…')).toHaveValue('browserName')
   expect(queryByText(sessions[0].id)).toBeInTheDocument()
   expect(getByText(sessions[1].id)).toBeInTheDocument()

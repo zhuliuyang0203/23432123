@@ -875,7 +875,7 @@ pub trait SeleniumManager {
                     self.get_driver_version()
                 ));
             }
-        } else {
+        } else if !self.is_safari() {
             // If driver is not in the cache, download it
             self.assert_online_or_err(OFFLINE_DOWNLOAD_ERR_MSG)?;
             self.download_driver()?;

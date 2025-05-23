@@ -15,18 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import * as React from 'react'
-import QueuedSessions from '../../components/QueuedSessions/QueuedSessions'
-import { screen } from '@testing-library/react'
-import { render } from '../utils/render-utils'
-
-const sessionQueueRequests: string[] = [
-  '{"acceptInsecureCerts":true,"browserName":"chrome","goog:chromeOptions":{"args":["--start-maximized"],"extensions":[]}}'
-]
-
-it('renders basic session information', () => {
-  render(<QueuedSessions sessionQueueRequests={sessionQueueRequests} />)
-  const browserLogo = screen.getByAltText('Browser Logo')
-  expect(browserLogo).toBeInTheDocument()
-  expect(browserLogo).toHaveAttribute('src', 'chrome.svg')
-})
+const originalError = console.error;
+console.error = (...args) => {
+  if (/Warning.*not wrapped in act/.test(args[0])) {
+    return;
+  }
+  originalError.call(console, ...args);
+};

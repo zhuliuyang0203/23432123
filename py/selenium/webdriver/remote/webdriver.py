@@ -45,6 +45,7 @@ from selenium.webdriver.common.bidi.network import Network
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.bidi.session import Session
 from selenium.webdriver.common.bidi.storage import Storage
+from selenium.webdriver.common.bidi.webextension import WebExtension
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.options import ArgOptions, BaseOptions
 from selenium.webdriver.common.print_page_options import PrintOptions
@@ -263,6 +264,7 @@ class WebDriver(BaseWebDriver):
         self._bidi_session = None
         self._browsing_context = None
         self._storage = None
+        self._webextension = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -1336,6 +1338,28 @@ class WebDriver(BaseWebDriver):
             self._storage = Storage(self._websocket_connection)
 
         return self._storage
+
+    @property
+    def webextension(self):
+        """Returns a webextension module object for BiDi webextension commands.
+
+        Returns:
+        --------
+        WebExtension: an object containing access to BiDi webextension commands.
+
+        Examples:
+        ---------
+        >>> extension_path = "/path/to/extension"
+        >>> extension_result = driver.webextension.install(path=extension_path)
+        >>> driver.webextension.uninstall(extension_result)
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._webextension is None:
+            self._webextension = WebExtension(self._websocket_connection)
+
+        return self._webextension
 
     def _get_cdp_details(self):
         import json

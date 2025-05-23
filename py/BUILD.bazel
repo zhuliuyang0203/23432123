@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_directory.bzl", "copy_directory")
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 load("@bazel_skylib//rules:select_file.bzl", "select_file")
 load("@py_dev_requirements//:requirements.bzl", "requirement")
@@ -96,6 +97,7 @@ TEST_DEPS = [
     requirement("sortedcontainers"),
     requirement("sniffio"),
     requirement("zipp"),
+    "@rules_python//python/runfiles",
 ]
 
 copy_file(
@@ -162,6 +164,24 @@ copy_file(
     name = "webextensions-selenium-example-unsigned-zip",
     src = "//common/extensions:webextensions-selenium-example-unsigned.zip",
     out = "test/extensions/webextensions-selenium-example-unsigned.zip",
+)
+
+copy_file(
+    name = "webextensions-selenium-example-crx",
+    src = "//common/extensions:webextensions-selenium-example.crx",
+    out = "test/extensions/webextensions-selenium-example.crx",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-dir",
+    src = "//common/extensions:webextensions-selenium-example",
+    out = "test/extensions/webextensions-selenium-example",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-signed-dir",
+    src = "//common/extensions:webextensions-selenium-example-signed",
+    out = "test/extensions/webextensions-selenium-example-signed",
 )
 
 select_file(
@@ -339,6 +359,9 @@ py_library(
         "pyproject.toml",
         "test/selenium/webdriver/common/test_file.txt",
         "test/selenium/webdriver/common/test_file2.txt",
+        ":webextensions-selenium-example-crx",
+        ":webextensions-selenium-example-dir",
+        ":webextensions-selenium-example-signed-dir",
         ":webextensions-selenium-example-unsigned-zip",
         ":webextensions-selenium-example-xpi",
         ":webextensions-selenium-example-zip",
