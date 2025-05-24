@@ -21,7 +21,7 @@ require File.expand_path('../spec_helper', __dir__)
 
 module Selenium
   module WebDriver
-    describe ChildProcess do
+    describe ChildProcess, except: [{platform: :windows, reason: 'This is only for Unix platforms'}] do
       it 'does not raise an error when terminating a non-existent process' do
         process = described_class.new('sleep', '5')
         process.start
