@@ -67,7 +67,7 @@ const sessionWithVnc = {
   capabilities: JSON.stringify({
     'browserName': 'chrome',
     'browserVersion': '88.0',
-    'se:vnc': 'ws://192.168.1.7:5900/websockify'
+    'se:vnc': 'ws://172.17.0.2:4444/session/4d31d065-6cb9-4545-ac8d-d70ed5f5168b/se/vnc'
   }),
   nodeId: node.id
 }
@@ -116,10 +116,10 @@ describe('Node component', () => {
 
   it('opens live view dialog when camera icon is clicked', async () => {
     render(<Node node={node} sessions={[sessionWithVnc]} origin="http://localhost:4444" />)
-    
+
     const user = userEvent.setup()
     await user.click(screen.getByTestId('VideocamIcon'))
-    
+
     expect(screen.getByText('Node Session Live View')).toBeInTheDocument()
     const dialogTitle = screen.getByText('Node Session Live View')
     const dialog = dialogTitle.closest('.MuiDialog-root')
@@ -132,42 +132,40 @@ describe('Node component', () => {
 
   it('closes live view dialog when close button is clicked', async () => {
     render(<Node node={node} sessions={[sessionWithVnc]} origin="http://localhost:4444" />)
-    
+
     const user = userEvent.setup()
     await user.click(screen.getByTestId('VideocamIcon'))
-    
+
     expect(screen.getByText('Node Session Live View')).toBeInTheDocument()
-    
+
     await user.click(screen.getByRole('button', { name: /close/i }))
-    
+
     expect(screen.queryByText('Node Session Live View')).not.toBeInTheDocument()
   })
 
   it('correctly transforms VNC URL for WebSocket connection', async () => {
     const origin = 'https://grid.example.com'
     render(<Node node={node} sessions={[sessionWithVnc]} origin={origin} />)
-    
+
     const user = userEvent.setup()
     await user.click(screen.getByTestId('VideocamIcon'))
-    
+
     const liveView = screen.getByTestId('mock-live-view')
     const url = liveView.getAttribute('data-url')
-    
-    expect(url).toContain('wss:')
-    expect(url).toContain('grid.example.com')
-    expect(url).toContain('/websockify')
+
+    expect(url).toBe('wss://grid.example.com/session/4d31d065-6cb9-4545-ac8d-d70ed5f5168b/se/vnc')
   })
 
   it('handles HTTP to WS protocol conversion correctly', async () => {
     const httpOrigin = 'http://grid.example.com'
     render(<Node node={node} sessions={[sessionWithVnc]} origin={httpOrigin} />)
-    
+
     const user = userEvent.setup()
     await user.click(screen.getByTestId('VideocamIcon'))
-    
+
     const liveView = screen.getByTestId('mock-live-view')
     const url = liveView.getAttribute('data-url')
-    
+
     expect(url).toContain('ws:')
     expect(url).not.toContain('wss:')
   })
@@ -182,15 +180,15 @@ describe('Node component', () => {
       }),
       nodeId: node.id
     }
-    
+
     render(<Node node={node} sessions={[invalidVncSession]} origin="http://localhost:4444" />)
-    
+
     const user = userEvent.setup()
     await user.click(screen.getByTestId('VideocamIcon'))
-    
+
     const liveView = screen.getByTestId('mock-live-view')
     const url = liveView.getAttribute('data-url')
-    
+
     expect(url).toBe('')
   })
 })

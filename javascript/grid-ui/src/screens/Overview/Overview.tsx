@@ -48,7 +48,7 @@ function Overview (): JSX.Element {
     pollInterval: GridConfig.status.xhrPollingIntervalMillis,
     fetchPolicy: 'network-only'
   })
-  
+
   const { data: sessionsData } = useQuery(GRID_SESSIONS_QUERY, {
     pollInterval: GridConfig.status.xhrPollingIntervalMillis,
     fetchPolicy: 'network-only'
@@ -190,7 +190,7 @@ function Overview (): JSX.Element {
             <Select value={sortOption} onChange={handleSortChange}
                     label="Sort By" style={{ minWidth: '170px' }}>
               {Object.keys(sortProperties).map((key) => (
-                <MenuItem value={key}>
+                <MenuItem key={key} value={key}>
                   {sortPropertiesLabel[key]}
                 </MenuItem>
               ))}
@@ -223,8 +223,8 @@ function Overview (): JSX.Element {
                 flexDirection: 'column'
               }}
             >
-              <Node 
-                node={node} 
+              <Node
+                node={node}
                 sessions={sessionsData?.sessionsInfo?.sessions?.filter(
                   session => session.nodeId === node.id
                 ) || []}
