@@ -20,12 +20,14 @@ import time
 
 import pytest
 
-from selenium.webdriver.common.bidi.storage import BrowsingContextPartitionDescriptor
-from selenium.webdriver.common.bidi.storage import BytesValue
-from selenium.webdriver.common.bidi.storage import CookieFilter
-from selenium.webdriver.common.bidi.storage import PartialCookie
-from selenium.webdriver.common.bidi.storage import SameSite
-from selenium.webdriver.common.bidi.storage import StorageKeyPartitionDescriptor
+from selenium.webdriver.common.bidi.storage import (
+    BrowsingContextPartitionDescriptor,
+    BytesValue,
+    CookieFilter,
+    PartialCookie,
+    SameSite,
+    StorageKeyPartitionDescriptor,
+)
 from selenium.webdriver.common.window import WindowTypes
 
 
@@ -76,7 +78,6 @@ def get_document_cookie_or_none(driver):
 
 
 class TestBidiStorage:
-
     @pytest.fixture(autouse=True)
     def setup(self, driver, pages):
         driver.get(pages.url("simpleTest.html"))

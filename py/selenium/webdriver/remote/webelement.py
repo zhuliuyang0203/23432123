@@ -21,14 +21,12 @@ import pkgutil
 import warnings
 import zipfile
 from abc import ABCMeta
-from base64 import b64decode
-from base64 import encodebytes
+from base64 import b64decode, encodebytes
 from hashlib import md5 as md5_hash
 from io import BytesIO
 from typing import List
 
-from selenium.common.exceptions import JavascriptException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import JavascriptException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.utils import keys_to_typing
 
@@ -93,7 +91,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> element = driver.find_element(By.ID, 'foo')
+        >>> element = driver.find_element(By.ID, "foo")
         """
         return self._execute(Command.GET_ELEMENT_TAG_NAME)["value"]
 
@@ -107,7 +105,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> element = driver.find_element(By.ID, 'foo')
+        >>> element = driver.find_element(By.ID, "foo")
         >>> print(element.text)
         """
         return self._execute(Command.GET_ELEMENT_TEXT)["value"]
@@ -117,7 +115,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> element = driver.find_element(By.ID, 'foo')
+        >>> element = driver.find_element(By.ID, "foo")
         >>> element.click()
         """
         self._execute(Command.CLICK_ELEMENT)
@@ -127,7 +125,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> form = driver.find_element(By.NAME, 'login')
+        >>> form = driver.find_element(By.NAME, "login")
         >>> form.submit()
         """
         script = (
@@ -152,7 +150,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> text_field = driver.find_element(By.NAME, 'username')
+        >>> text_field = driver.find_element(By.NAME, "username")
         >>> text_field.clear()
         """
         self._execute(Command.CLEAR_ELEMENT)
@@ -277,11 +275,11 @@ class WebElement(BaseWebElement):
         Examples:
         --------
         To send a simple key event::
-        >>> form_textfield = driver.find_element(By.NAME, 'username')
+        >>> form_textfield = driver.find_element(By.NAME, "username")
         >>> form_textfield.send_keys("admin")
 
         or to set a file input field::
-        >>> file_input = driver.find_element(By.NAME, 'profilePic')
+        >>> file_input = driver.find_element(By.NAME, "profilePic")
         >>> file_input.send_keys("path/to/profilepic.gif")
         >>> # Generally it's better to wrap the file path in one of the methods
         >>> # in os.path to return the actual path to support cross OS testing.
@@ -397,7 +395,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> value = element.value_of_css_property('color')
+        >>> value = element.value_of_css_property("color")
         """
         return self._execute(Command.GET_ELEMENT_VALUE_OF_CSS_PROPERTY, {"propertyName": property_name})["value"]
 
@@ -505,7 +503,7 @@ class WebElement(BaseWebElement):
 
         Element:
         --------
-        >>> element.screenshot('/Screenshots/foo.png')
+        >>> element.screenshot("/Screenshots/foo.png")
         """
         if not filename.lower().endswith(".png"):
             warnings.warn(
@@ -529,7 +527,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> element = driver.find_element(By.ID, 'foo')
+        >>> element = driver.find_element(By.ID, "foo")
         >>> parent_element = element.parent
         """
         return self._parent
@@ -623,7 +621,7 @@ class WebElement(BaseWebElement):
 
         Example:
         --------
-        >>> element = driver.find_elements(By.ID, 'foo')
+        >>> element = driver.find_elements(By.ID, "foo")
 
         Returns:
         -------

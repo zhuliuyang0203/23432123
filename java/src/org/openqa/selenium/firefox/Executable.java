@@ -26,7 +26,13 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.internal.Require;
 
-/** Wrapper around Firefox executable. */
+/**
+ * Wrapper around Firefox executable.
+ *
+ * @deprecated Class {@link FirefoxBinary} will be removed in the future. Functionality of this
+ *     class is already covered by Selenium Manager.
+ */
+@Deprecated
 class Executable {
 
   private final File binary;
@@ -57,6 +63,12 @@ class Executable {
     return version;
   }
 
+  /**
+   * @deprecated Use {@link FirefoxOptions#setBinary(Path)} or {@link
+   *     FirefoxOptions#setBinary(String)} instead. Class {@link Executable} will also be removed in
+   *     the future.
+   */
+  @Deprecated
   public FirefoxBinary.Channel getChannel() {
     if (channel == null) {
       loadChannelPref();

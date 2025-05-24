@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
@@ -27,6 +28,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 public abstract record BytesValue
 {
     public static implicit operator BytesValue(string value) => new StringBytesValue(value);
+    public static implicit operator BytesValue(byte[] value) => new Base64BytesValue(Convert.ToBase64String(value));
 }
 
 public record StringBytesValue(string Value) : BytesValue;

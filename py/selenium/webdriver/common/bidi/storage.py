@@ -15,10 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import Dict, List, Optional, Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 

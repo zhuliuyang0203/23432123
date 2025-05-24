@@ -322,7 +322,7 @@ public class ChromiumDriver extends RemoteWebDriver
   public Map<String, Object> executeCdpCommand(String commandName, Map<String, Object> parameters) {
     Require.nonNull("Command Name", commandName);
     if (this.cdp == null) {
-      return java.util.Collections.emptyMap();
+      return Map.of();
     }
 
     return cdp.executeCdpCommand(commandName, parameters);
@@ -363,7 +363,7 @@ public class ChromiumDriver extends RemoteWebDriver
   @Override
   public List<Map<String, String>> getCastSinks() {
     if (this.casting == null) {
-      return java.util.Collections.emptyList();
+      return List.of();
     }
 
     return casting.getCastSinks();

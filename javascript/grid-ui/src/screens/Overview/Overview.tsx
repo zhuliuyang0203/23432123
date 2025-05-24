@@ -41,9 +41,15 @@ import browserVersion from '../../util/browser-version'
 import Capabilities from '../../models/capabilities'
 import { GridConfig } from '../../config'
 import { NODES_QUERY } from '../../graphql/nodes'
+import { GRID_SESSIONS_QUERY } from '../../graphql/sessions'
 
 function Overview (): JSX.Element {
   const { loading, error, data } = useQuery(NODES_QUERY, {
+    pollInterval: GridConfig.status.xhrPollingIntervalMillis,
+    fetchPolicy: 'network-only'
+  })
+  
+  const { data: sessionsData } = useQuery(GRID_SESSIONS_QUERY, {
     pollInterval: GridConfig.status.xhrPollingIntervalMillis,
     fetchPolicy: 'network-only'
   })
@@ -217,7 +223,13 @@ function Overview (): JSX.Element {
                 flexDirection: 'column'
               }}
             >
-              <Node node={node}/>
+              <Node 
+                node={node} 
+                sessions={sessionsData?.sessionsInfo?.sessions?.filter(
+                  session => session.nodeId === node.id
+                ) || []}
+                origin={window.location.origin}
+              />
             </Paper>
           </Grid>
         )

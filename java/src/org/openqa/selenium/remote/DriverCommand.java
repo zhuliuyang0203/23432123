@@ -24,7 +24,6 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
@@ -341,30 +340,12 @@ public interface DriverCommand {
     return new CommandPayload(PRINT_PAGE, options.toMap());
   }
 
-  @Deprecated
-  static CommandPayload SET_IMPLICIT_WAIT_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("implicit", TimeUnit.MILLISECONDS.convert(time, unit)));
-  }
-
   static CommandPayload SET_IMPLICIT_WAIT_TIMEOUT(Duration duration) {
     return new CommandPayload(SET_TIMEOUT, Map.of("implicit", duration.toMillis()));
   }
 
-  @Deprecated
-  static CommandPayload SET_SCRIPT_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("script", TimeUnit.MILLISECONDS.convert(time, unit)));
-  }
-
   static CommandPayload SET_SCRIPT_TIMEOUT(Duration duration) {
     return new CommandPayload(SET_TIMEOUT, Map.of("script", duration.toMillis()));
-  }
-
-  @Deprecated
-  static CommandPayload SET_PAGE_LOAD_TIMEOUT(long time, TimeUnit unit) {
-    return new CommandPayload(
-        SET_TIMEOUT, Map.of("pageLoad", TimeUnit.MILLISECONDS.convert(time, unit)));
   }
 
   static CommandPayload SET_PAGE_LOAD_TIMEOUT(Duration duration) {
@@ -373,10 +354,6 @@ public interface DriverCommand {
 
   static CommandPayload ACTIONS(Collection<Sequence> actions) {
     return new CommandPayload(ACTIONS, Map.of("actions", actions));
-  }
-
-  static CommandPayload IME_ACTIVATE_ENGINE(String engine) {
-    return new CommandPayload(SET_ALERT_VALUE, Map.of("engine", engine));
   }
 
   static CommandPayload SET_CURRENT_WINDOW_POSITION(Point targetPosition) {

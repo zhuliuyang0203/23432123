@@ -74,7 +74,7 @@ pub fn clear_lock_if_required() {
     if lock_path.is_some() {
         let lock = lock_path.unwrap();
         if lock.exists() {
-            fs::remove_dir_all(lock.parent().unwrap()).unwrap_or_default();
+            fs::remove_file(lock).unwrap_or_default();
         }
     }
 }

@@ -20,15 +20,13 @@ from urllib import parse
 
 import pytest
 import urllib3
-from urllib3.util import Retry
-from urllib3.util import Timeout
+from urllib3.util import Retry, Timeout
 
 from selenium import __version__
 from selenium.webdriver import Proxy
 from selenium.webdriver.common.proxy import ProxyType
 from selenium.webdriver.remote.client_config import AuthType
-from selenium.webdriver.remote.remote_connection import ClientConfig
-from selenium.webdriver.remote.remote_connection import RemoteConnection
+from selenium.webdriver.remote.remote_connection import ClientConfig, RemoteConnection
 
 
 @pytest.fixture
@@ -67,13 +65,12 @@ def test_get_remote_connection_headers_defaults():
     assert headers.get("User-Agent").split(" ")[-1] in {"windows)", "mac)", "linux)", "mac", "windows", "linux"}
 
 
-def test_get_remote_connection_headers_adds_auth_header_if_pass():
+def test_get_remote_connection_headers_adds_auth_header_if_pass(recwarn):
     url = "http://user:pass@remote"
-    with pytest.warns(None) as record:
-        headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
+    headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
     assert headers.get("Authorization") == "Basic dXNlcjpwYXNz"
     assert (
-        record[0].message.args[0]
+        recwarn[0].message.args[0]
         == "Embedding username and password in URL could be insecure, use ClientConfig instead"
     )
 
