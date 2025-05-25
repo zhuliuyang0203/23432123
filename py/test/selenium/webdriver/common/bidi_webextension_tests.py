@@ -121,24 +121,27 @@ def test_install_base64_extension_path(driver, pages):
     uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
 def test_install_unsigned_extension(driver, pages):
     """Test installing an unsigned extension."""
     path = os.path.join(extensions, "webextensions-selenium-example")
 
-    ext_info = install_extension(driver, path=path)
+    if driver.capabilities["browserName"].lower() in ["chrome", "microsoftedge"]:
+        ext_info = driver.webextension.install(path=path)
+    else:
+        ext_info = install_extension(driver, path=path)
     verify_extension_injection(driver, pages)
     uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
 def test_install_with_extension_id_uninstall(driver, pages):
     """Test uninstalling an extension using just the extension ID."""
     path = os.path.join(extensions, EXTENSION_PATH)
 
-    ext_info = install_extension(driver, path=path)
+    if driver.capabilities["browserName"].lower() in ["chrome", "microsoftedge"]:
+        ext_info = driver.webextension.install(path=path)
+    else:
+        ext_info = install_extension(driver, path=path)
+
     extension_id = ext_info.get("extension")
 
     # Uninstall using the extension ID
