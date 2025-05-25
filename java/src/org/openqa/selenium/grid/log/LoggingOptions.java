@@ -76,7 +76,9 @@ public class LoggingOptions {
     try {
       level = Level.parse(configLevel.toUpperCase(Locale.ROOT));
     } catch (IllegalArgumentException e) {
-      throw new ConfigException("Unable to determine log level from " + configLevel);
+      // Logger is not configured yet
+      new ConfigException("Unable to determine log level from " + configLevel +
+       ". Using default " + DEFAULT_LOG_LEVEL).printStackTrace();
     }
   }
 
