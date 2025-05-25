@@ -60,13 +60,36 @@ def test_webextension_initialized(driver):
     assert driver.webextension is not None
 
 
-@pytest.mark.xfail_chrome
 @pytest.mark.xfail_edge
 def test_install_extension_path(driver, pages):
-    """Test installing an extension from a directory path."""
+    """Test installing an extension from a directory path.
+
+    Note: For Chrome, webextensions are enabled when BiDi is used from conftest.py for this test.
+    You can also manually enable them using:
+
+    from selenium.webdriver.chrome.options import Options
+    options = Options()
+    options.enable_webextensions = True
+    driver = webdriver.Chrome(options=options)
+
+    Or directly pass the required flags when creating the driver:
+
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+
+    options = Options()
+    options.add_argument("--remote-debugging-pipe")
+    options.add_argument("--enable-unsafe-extension-debugging")
+
+    driver = webdriver.Chrome(options=options)
+    """
     path = os.path.join(extensions, EXTENSION_PATH)
 
-    ext_info = install_extension(driver, path=path)
+    if driver.capabilities["browserName"].lower() == "chrome":
+        # chrome does not uses extension id from manifest.json so we cannot assert the id
+        ext_info = driver.webextension.install(path=path)
+    else:
+        ext_info = install_extension(driver, path=path)
     verify_extension_injection(driver, pages)
     uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
