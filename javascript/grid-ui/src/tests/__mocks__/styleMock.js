@@ -15,17 +15,4 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium;
-
-/** Thrown by {@link org.openqa.selenium.ContextAware#context(String)}. */
-@Deprecated
-public class NoSuchContextException extends NotFoundException {
-
-  public NoSuchContextException(String reason) {
-    super(reason);
-  }
-
-  public NoSuchContextException(String reason, Throwable cause) {
-    super(reason, cause);
-  }
-}
+module.exports = 'chrome.svg';

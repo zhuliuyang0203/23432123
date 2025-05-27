@@ -16,7 +16,8 @@
 # under the License.
 
 
-from typing import List, Mapping, Optional
+from collections.abc import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
 
@@ -38,7 +39,7 @@ class Service(service.Service):
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         reuse_service=False,
         enable_logging: bool = False,
@@ -60,7 +61,7 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return ["-p", f"{self.port}"] + self.service_args
 
     @property

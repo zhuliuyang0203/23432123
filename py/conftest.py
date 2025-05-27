@@ -90,7 +90,9 @@ def pytest_ignore_collect(collection_path, config):
     _drivers = set(drivers).difference(drivers_opt or drivers)
     if drivers_opt:
         _drivers.add("unit")
-    return len([d for d in _drivers if d.lower() in collection_path.parts]) > 0
+    if len([d for d in _drivers if d.lower() in collection_path.parts]) > 0:
+        return True
+    return None
 
 
 def pytest_generate_tests(metafunc):

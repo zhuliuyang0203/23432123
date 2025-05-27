@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List, Mapping, Optional
+from collections.abc import Mapping
+from typing import Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
@@ -38,7 +39,7 @@ class Service(service.ChromiumService):
         executable_path: Optional[str] = None,
         port: int = 0,
         log_output: Optional[SubprocessStdAlias] = None,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
         **kwargs,

@@ -15,10 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
-
-def command_builder(method: str, params: Dict = None) -> Dict:
+def command_builder(method: str, params: dict = None) -> dict:
     """Build a command iterator to send to the BiDi protocol.
 
     Parameters:

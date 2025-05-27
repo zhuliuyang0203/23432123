@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -55,7 +55,7 @@ class NavigationInfo:
         self.url = url
 
     @classmethod
-    def from_json(cls, json: Dict) -> "NavigationInfo":
+    def from_json(cls, json: dict) -> "NavigationInfo":
         """Creates a NavigationInfo instance from a dictionary.
 
         Parameters:
@@ -81,7 +81,7 @@ class BrowsingContextInfo:
         self,
         context: str,
         url: str,
-        children: Optional[List["BrowsingContextInfo"]],
+        children: Optional[list["BrowsingContextInfo"]],
         parent: Optional[str] = None,
         user_context: Optional[str] = None,
         original_opener: Optional[str] = None,
@@ -96,7 +96,7 @@ class BrowsingContextInfo:
         self.client_window = client_window
 
     @classmethod
-    def from_json(cls, json: Dict) -> "BrowsingContextInfo":
+    def from_json(cls, json: dict) -> "BrowsingContextInfo":
         """Creates a BrowsingContextInfo instance from a dictionary.
 
         Parameters:
@@ -137,7 +137,7 @@ class DownloadWillBeginParams(NavigationInfo):
         self.suggested_filename = suggested_filename
 
     @classmethod
-    def from_json(cls, json: Dict) -> "DownloadWillBeginParams":
+    def from_json(cls, json: dict) -> "DownloadWillBeginParams":
         """Creates a DownloadWillBeginParams instance from a dictionary.
 
         Parameters:
@@ -175,7 +175,7 @@ class UserPromptOpenedParams:
         self.default_value = default_value
 
     @classmethod
-    def from_json(cls, json: Dict) -> "UserPromptOpenedParams":
+    def from_json(cls, json: dict) -> "UserPromptOpenedParams":
         """Creates a UserPromptOpenedParams instance from a dictionary.
 
         Parameters:
@@ -211,7 +211,7 @@ class UserPromptClosedParams:
         self.user_text = user_text
 
     @classmethod
-    def from_json(cls, json: Dict) -> "UserPromptClosedParams":
+    def from_json(cls, json: dict) -> "UserPromptClosedParams":
         """Creates a UserPromptClosedParams instance from a dictionary.
 
         Parameters:
@@ -242,7 +242,7 @@ class HistoryUpdatedParams:
         self.url = url
 
     @classmethod
-    def from_json(cls, json: Dict) -> "HistoryUpdatedParams":
+    def from_json(cls, json: dict) -> "HistoryUpdatedParams":
         """Creates a HistoryUpdatedParams instance from a dictionary.
 
         Parameters:
@@ -267,7 +267,7 @@ class BrowsingContextEvent:
         self.params = kwargs
 
     @classmethod
-    def from_json(cls, json: Dict) -> "BrowsingContextEvent":
+    def from_json(cls, json: dict) -> "BrowsingContextEvent":
         """Creates a BrowsingContextEvent instance from a dictionary.
 
         Parameters:
@@ -323,8 +323,8 @@ class BrowsingContext:
         self,
         context: str,
         origin: str = "viewport",
-        format: Optional[Dict] = None,
-        clip: Optional[Dict] = None,
+        format: Optional[dict] = None,
+        clip: Optional[dict] = None,
     ) -> str:
         """Captures an image of the given navigable, and returns it as a Base64-encoded string.
 
@@ -398,7 +398,7 @@ class BrowsingContext:
         self,
         max_depth: Optional[int] = None,
         root: Optional[str] = None,
-    ) -> List[BrowsingContextInfo]:
+    ) -> list[BrowsingContextInfo]:
         """Returns a tree of all descendent navigables including the given parent itself, or all top-level contexts
         when no parent is provided.
 
@@ -445,11 +445,11 @@ class BrowsingContext:
     def locate_nodes(
         self,
         context: str,
-        locator: Dict,
+        locator: dict,
         max_node_count: Optional[int] = None,
-        serialization_options: Optional[Dict] = None,
-        start_nodes: Optional[List[Dict]] = None,
-    ) -> List[Dict]:
+        serialization_options: Optional[dict] = None,
+        start_nodes: Optional[list[dict]] = None,
+    ) -> list[dict]:
         """Returns a list of all nodes matching the specified locator.
 
         Parameters:
@@ -480,7 +480,7 @@ class BrowsingContext:
         context: str,
         url: str,
         wait: Optional[str] = None,
-    ) -> Dict:
+    ) -> dict:
         """Navigates a navigable to the given URL.
 
         Parameters:
@@ -504,10 +504,10 @@ class BrowsingContext:
         self,
         context: str,
         background: bool = False,
-        margin: Optional[Dict] = None,
+        margin: Optional[dict] = None,
         orientation: str = "portrait",
-        page: Optional[Dict] = None,
-        page_ranges: Optional[List[Union[int, str]]] = None,
+        page: Optional[dict] = None,
+        page_ranges: Optional[list[Union[int, str]]] = None,
         scale: float = 1.0,
         shrink_to_fit: bool = True,
     ) -> str:
@@ -551,7 +551,7 @@ class BrowsingContext:
         context: str,
         ignore_cache: Optional[bool] = None,
         wait: Optional[str] = None,
-    ) -> Dict:
+    ) -> dict:
         """Reloads a navigable.
 
         Parameters:
@@ -576,9 +576,9 @@ class BrowsingContext:
     def set_viewport(
         self,
         context: Optional[str] = None,
-        viewport: Optional[Dict] = None,
+        viewport: Optional[dict] = None,
         device_pixel_ratio: Optional[float] = None,
-        user_contexts: Optional[List[str]] = None,
+        user_contexts: Optional[list[str]] = None,
     ) -> None:
         """Modifies specific viewport characteristics on the given top-level traversable.
 
@@ -605,7 +605,7 @@ class BrowsingContext:
 
         self.conn.execute(command_builder("browsingContext.setViewport", params))
 
-    def traverse_history(self, context: str, delta: int) -> Dict:
+    def traverse_history(self, context: str, delta: int) -> dict:
         """Traverses the history of a given navigable by a delta.
 
         Parameters:
@@ -665,7 +665,7 @@ class BrowsingContext:
 
         return callback_id
 
-    def add_event_handler(self, event: str, callback: callable, contexts: Optional[List[str]] = None) -> int:
+    def add_event_handler(self, event: str, callback: callable, contexts: Optional[list[str]] = None) -> int:
         """Add an event handler to the browsing context.
 
         Parameters:

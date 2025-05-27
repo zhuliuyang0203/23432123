@@ -75,3 +75,9 @@ class WebDriver(RemoteWebDriver):
             pass
         finally:
             self.service.stop()
+
+    def download_file(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def get_downloadable_files(self, *args, **kwargs):
+        raise NotImplementedError

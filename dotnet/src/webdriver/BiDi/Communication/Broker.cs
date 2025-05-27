@@ -378,30 +378,49 @@ public sealed class Broker : IAsyncDisposable
             case "success":
                 if (id is null) throw new JsonException("The remote end responded with 'success' message type, but missed required 'id' property.");
 
-                var successCommand = _pendingCommands[id.Value];
-                var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.ResultType, _jsonSerializerContext)!;
-                successCommand.TaskCompletionSource.SetResult((EmptyResult)messageSuccess);
-                _pendingCommands.TryRemove(id.Value, out _);
+                if (_pendingCommands.TryGetValue(id.Value, out var successCommand))
+                {
+                    var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.ResultType, _jsonSerializerContext)!;
+                    successCommand.TaskCompletionSource.SetResult((EmptyResult)messageSuccess);
+                    _pendingCommands.TryRemove(id.Value, out _);
+                }
+                else
+                {
+                    throw new BiDiException($"The remote end responded with 'success' message type, but no pending command with id {id} was found.");
+                }
+
                 break;
 
             case "event":
                 if (method is null) throw new JsonException("The remote end responded with 'event' message type, but missed required 'method' property.");
 
-                var eventType = _eventTypesMap[method];
+                if (_eventTypesMap.TryGetValue(method, out var eventType))
+                {
+                    var eventArgs = (EventArgs)JsonSerializer.Deserialize(ref paramsReader, eventType, _jsonSerializerContext)!;
 
-                var eventArgs = (EventArgs)JsonSerializer.Deserialize(ref paramsReader, eventType, _jsonSerializerContext)!;
+                    var messageEvent = new MessageEvent(method, eventArgs);
+                    _pendingEvents.Add(messageEvent);
+                }
+                else
+                {
+                    throw new BiDiException($"The remote end responded with 'event' message type, but no event type mapping for method '{method}' was found.");
+                }
 
-                var messageEvent = new MessageEvent(method, eventArgs);
-                _pendingEvents.Add(messageEvent);
                 break;
 
             case "error":
                 if (id is null) throw new JsonException("The remote end responded with 'error' message type, but missed required 'id' property.");
 
-                var messageError = new MessageError(id.Value) { Error = error, Message = message };
-                var errorCommand = _pendingCommands[messageError.Id];
-                errorCommand.TaskCompletionSource.SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
-                _pendingCommands.TryRemove(messageError.Id, out _);
+                if (_pendingCommands.TryGetValue(id.Value, out var errorCommand))
+                {
+                    errorCommand.TaskCompletionSource.SetException(new BiDiException($"{error}: {message}"));
+                    _pendingCommands.TryRemove(id.Value, out _);
+                }
+                else
+                {
+                    throw new BiDiException($"The remote end responded with 'error' message type, but no pending command with id {id} was found.");
+                }
+
                 break;
         }
     }
