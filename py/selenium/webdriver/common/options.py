@@ -18,7 +18,7 @@
 import warnings
 from abc import ABCMeta, abstractmethod
 from enum import Enum
-from typing import List, Optional
+from typing import Optional
 
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.common.proxy import Proxy
@@ -474,7 +474,7 @@ class ArgOptions(BaseOptions):
 
     def __init__(self) -> None:
         super().__init__()
-        self._arguments: List[str] = []
+        self._arguments: list[str] = []
 
     @property
     def arguments(self):

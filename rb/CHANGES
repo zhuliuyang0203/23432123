@@ -1,3 +1,9 @@
+4.33.0 (2025-05-23)
+=========================
+* Add CDP for Chrome 137 and remove 134
+* Let firefox choose the bidi port by default (#15727)
+* Upgrade to Ruby 3.2
+
 4.32.0 (2025-05-02)
 =========================
 * Add CDP for Chrome 136 and remove 133

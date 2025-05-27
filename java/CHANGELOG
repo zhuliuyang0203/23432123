@@ -1,3 +1,21 @@
+v4.33.0
+======
+* Add CDP for Chrome 137 and remove 134
+* Removing deprecated items in Require.java (#15711)
+* Removing RemoteStatus as it was deprecated. (#15712)
+* Fix spotbugs issues
+* fix autoclose casting
+* Use immutable values for return values
+* Deprecating methods that use FirefoxBinary as well.
+* Removing deprecated NATIVE_EVENTS field
+* Removing deprecated SlowLoadableComponent constructor
+* Removing deprecated implicitlyWait timeout
+* Removing unused IME_ACTIVATE_ENGINE.
+* Removing deprecated `setScriptTimeout` and `pageLoadTimeout`. (#15764)
+* Reverting deprecation notice for `getAttribute`.
+* [grid] UI Sessions capability fields to display as additional columns (#15759)
+* [grid] UI Overview is able to see live preview per Node (#15777)
+
 v4.32.0
 ======
 * Add CDP for Chrome 136 and remove 133

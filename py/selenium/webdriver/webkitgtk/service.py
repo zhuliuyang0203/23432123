@@ -16,7 +16,8 @@
 # under the License.
 import shutil
 import warnings
-from typing import List, Mapping, Optional
+from collections.abc import Mapping
+from typing import Optional
 
 from selenium.webdriver.common import service
 
@@ -42,7 +43,7 @@ class Service(service.Service):
         port: int = 0,
         log_path: Optional[str] = None,
         log_output: Optional[str] = None,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ) -> None:
@@ -59,5 +60,5 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return ["-p", f"{self.port}"] + self.service_args

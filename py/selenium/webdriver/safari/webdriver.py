@@ -108,3 +108,9 @@ class WebDriver(RemoteWebDriver):
     def debug(self):
         self.execute("ATTACH_DEBUGGER")
         self.execute_script("debugger;")
+
+    def download_file(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def get_downloadable_files(self, *args, **kwargs):
+        raise NotImplementedError

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -38,7 +38,7 @@ class BytesValue:
         self.type = type
         self.value = value
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Converts the BytesValue to a dictionary.
 
         Returns:
@@ -74,7 +74,7 @@ class Cookie:
         self.expiry = expiry
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "Cookie":
+    def from_dict(cls, data: dict) -> "Cookie":
         """Creates a Cookie instance from a dictionary.
 
         Parameters:
@@ -125,7 +125,7 @@ class CookieFilter:
         self.same_site = same_site
         self.expiry = expiry
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Converts the CookieFilter to a dictionary.
 
         Returns:
@@ -162,7 +162,7 @@ class PartitionKey:
         self.source_origin = source_origin
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "PartitionKey":
+    def from_dict(cls, data: dict) -> "PartitionKey":
         """Creates a PartitionKey instance from a dictionary.
 
         Parameters:
@@ -186,7 +186,7 @@ class BrowsingContextPartitionDescriptor:
         self.type = "context"
         self.context = context
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Converts the BrowsingContextPartitionDescriptor to a dictionary.
 
         Returns:
@@ -204,7 +204,7 @@ class StorageKeyPartitionDescriptor:
         self.user_context = user_context
         self.source_origin = source_origin
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Converts the StorageKeyPartitionDescriptor to a dictionary.
 
         Returns:
@@ -242,7 +242,7 @@ class PartialCookie:
         self.same_site = same_site
         self.expiry = expiry
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Converts the PartialCookie to a dictionary.
 
         Returns:
@@ -270,12 +270,12 @@ class PartialCookie:
 class GetCookiesResult:
     """Represents the result of a getCookies command."""
 
-    def __init__(self, cookies: List[Cookie], partition_key: PartitionKey):
+    def __init__(self, cookies: list[Cookie], partition_key: PartitionKey):
         self.cookies = cookies
         self.partition_key = partition_key
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "GetCookiesResult":
+    def from_dict(cls, data: dict) -> "GetCookiesResult":
         """Creates a GetCookiesResult instance from a dictionary.
 
         Parameters:
@@ -298,7 +298,7 @@ class SetCookieResult:
         self.partition_key = partition_key
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "SetCookieResult":
+    def from_dict(cls, data: dict) -> "SetCookieResult":
         """Creates a SetCookieResult instance from a dictionary.
 
         Parameters:
@@ -320,7 +320,7 @@ class DeleteCookiesResult:
         self.partition_key = partition_key
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "DeleteCookiesResult":
+    def from_dict(cls, data: dict) -> "DeleteCookiesResult":
         """Creates a DeleteCookiesResult instance from a dictionary.
 
         Parameters:

@@ -17,7 +17,8 @@
 """The Utils methods."""
 
 import socket
-from typing import Iterable, List, Optional, Union
+from collections.abc import Iterable
+from typing import Optional, Union
 
 from selenium.types import AnyKey
 from selenium.webdriver.common.keys import Keys
@@ -125,9 +126,9 @@ def is_url_connectable(port: Union[int, str]) -> bool:
         return False
 
 
-def keys_to_typing(value: Iterable[AnyKey]) -> List[str]:
+def keys_to_typing(value: Iterable[AnyKey]) -> list[str]:
     """Processes the values that will be typed in the element."""
-    characters: List[str] = []
+    characters: list[str] = []
     for val in value:
         if isinstance(val, Keys):
             # Todo: Does this even work?

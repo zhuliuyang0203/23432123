@@ -1,3 +1,11 @@
+## 4.33.0
+
+- [cdp] Add CDP for Chrome 137 and remove 134
+- Fixing JS FF test that needs to add arguments.
+- Making Bidi Network, DevTools and Options test pass in RBE
+- Chrome capabilities test passes now in RBE
+- update old freenode channel link to libera (#15698)
+
 ## 4.32.0
 
 - [cdp] Add CDP for Chrome 136 and remove 133
