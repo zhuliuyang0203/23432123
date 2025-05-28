@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
@@ -32,7 +31,9 @@ public sealed class BrowserModule(Broker broker) : Module(broker)
 
     public async Task<UserContextInfo> CreateUserContextAsync(CreateUserContextOptions? options = null)
     {
-        return await Broker.ExecuteCommandAsync<CreateUserContextCommand, UserContextInfo>(new CreateUserContextCommand(), options).ConfigureAwait(false);
+        var @params = new CreateUserContextCommandParameters(options?.AcceptInsecureCerts, options?.Proxy);
+
+        return await Broker.ExecuteCommandAsync<CreateUserContextCommand, UserContextInfo>(new CreateUserContextCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<GetUserContextsResult> GetUserContextsAsync(GetUserContextsOptions? options = null)

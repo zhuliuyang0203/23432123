@@ -6,7 +6,7 @@ section() {
     echo "- $*" >&2
 }
 
-WORKSPACE_ROOT="$(bazel info workspace 2>/dev/null)"
+WORKSPACE_ROOT="$(bazel info workspace)"
 
 GOOGLE_JAVA_FORMAT="$(bazel run --run_under=echo //scripts:google-java-format)"
 
