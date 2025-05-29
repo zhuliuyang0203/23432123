@@ -17,12 +17,12 @@
 
 import base64
 import os
-import pytest
 
+import pytest
 from python.runfiles import Runfiles
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-
 
 EXTENSION_ID = "webextensions-selenium-example-v3@example.com"
 EXTENSION_PATH = "webextensions-selenium-example-signed"

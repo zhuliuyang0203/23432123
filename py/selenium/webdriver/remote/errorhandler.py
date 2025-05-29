@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, Type
+from typing import Any
 
 from selenium.common.exceptions import (
     DetachedShadowRootException,
@@ -141,7 +141,7 @@ class ErrorCode:
 class ErrorHandler:
     """Handles errors returned by the WebDriver server."""
 
-    def check_response(self, response: Dict[str, Any]) -> None:
+    def check_response(self, response: dict[str, Any]) -> None:
         """Checks that a JSON response from the WebDriver does not have an
         error.
 
@@ -179,7 +179,7 @@ class ErrorHandler:
                 except ValueError:
                     pass
 
-        exception_class: Type[WebDriverException]
+        exception_class: type[WebDriverException]
         e = ErrorCode()
         error_codes = [item for item in dir(e) if not item.startswith("__")]
         for error_code in error_codes:

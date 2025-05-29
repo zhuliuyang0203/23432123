@@ -14,7 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from typing import List, Mapping, Optional
+from collections.abc import Mapping
+from typing import Optional
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service, utils
@@ -36,7 +37,7 @@ class Service(service.Service):
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
@@ -59,5 +60,5 @@ class Service(service.Service):
             self.service_args.append("--websocket-port")
             self.service_args.append(f"{utils.free_port()}")
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return ["--port", f"{self.port}"] + self.service_args

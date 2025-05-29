@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, List
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -114,7 +113,7 @@ class ClientWindowInfo:
         return self.active
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "ClientWindowInfo":
+    def from_dict(cls, data: dict) -> "ClientWindowInfo":
         """Creates a ClientWindowInfo instance from a dictionary.
 
         Parameters:
@@ -154,7 +153,7 @@ class Browser:
         result = self.conn.execute(command_builder("browser.createUserContext", {}))
         return result["userContext"]
 
-    def get_user_contexts(self) -> List[str]:
+    def get_user_contexts(self) -> list[str]:
         """Gets all user contexts.
 
         Returns:
@@ -181,7 +180,7 @@ class Browser:
         params = {"userContext": user_context_id}
         self.conn.execute(command_builder("browser.removeUserContext", params))
 
-    def get_client_windows(self) -> List[ClientWindowInfo]:
+    def get_client_windows(self) -> list[ClientWindowInfo]:
         """Gets all client windows.
 
         Returns:

@@ -30,7 +30,7 @@ from abc import ABCMeta
 from base64 import b64decode, urlsafe_b64encode
 from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any, Optional, Union
 
 from selenium.common.exceptions import (
     InvalidArgumentException,
@@ -131,7 +131,7 @@ def get_remote_connection(
     )
 
 
-def create_matches(options: List[BaseOptions]) -> Dict:
+def create_matches(options: list[BaseOptions]) -> dict:
     capabilities = {"capabilities": {}}
     opts = []
     for opt in options:
@@ -195,7 +195,7 @@ class WebDriver(BaseWebDriver):
         command_executor: Union[str, RemoteConnection] = "http://127.0.0.1:4444",
         keep_alive: bool = True,
         file_detector: Optional[FileDetector] = None,
-        options: Optional[Union[BaseOptions, List[BaseOptions]]] = None,
+        options: Optional[Union[BaseOptions, list[BaseOptions]]] = None,
         locator_converter: Optional[LocatorConverter] = None,
         web_element_cls: Optional[type] = None,
         client_config: Optional[ClientConfig] = None,
@@ -274,7 +274,7 @@ class WebDriver(BaseWebDriver):
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
+        exc_type: Optional[type[BaseException]],
         exc: Optional[BaseException],
         traceback: Optional[types.TracebackType],
     ):
@@ -506,7 +506,7 @@ class WebDriver(BaseWebDriver):
         except KeyError:
             raise KeyError(f"No script with key: {script_key} existed in {self.pinned_scripts}") from None
 
-    def get_pinned_scripts(self) -> List[str]:
+    def get_pinned_scripts(self) -> list[str]:
         """Return a list of all pinned scripts.
 
         Example:
@@ -618,7 +618,7 @@ class WebDriver(BaseWebDriver):
         return self.execute(Command.W3C_GET_CURRENT_WINDOW_HANDLE)["value"]
 
     @property
-    def window_handles(self) -> List[str]:
+    def window_handles(self) -> list[str]:
         """Returns the handles of all windows within the current session.
 
         Example:
@@ -716,7 +716,7 @@ class WebDriver(BaseWebDriver):
         self.execute(Command.REFRESH)
 
     # Options
-    def get_cookies(self) -> List[dict]:
+    def get_cookies(self) -> list[dict]:
         """Returns a set of dictionaries, corresponding to cookies visible in
         the current session.
 
@@ -730,7 +730,7 @@ class WebDriver(BaseWebDriver):
         """
         return self.execute(Command.GET_ALL_COOKIES)["value"]
 
-    def get_cookie(self, name) -> Optional[Dict]:
+    def get_cookie(self, name) -> Optional[dict]:
         """Get a single cookie by name. Raises ValueError if the name is empty
         or whitespace. Returns the cookie if found, None if not.
 
@@ -913,7 +913,7 @@ class WebDriver(BaseWebDriver):
 
         return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
 
-    def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
+    def find_elements(self, by=By.ID, value: Optional[str] = None) -> list[WebElement]:
         """Find elements given a By strategy and locator.
 
         Parameters:
@@ -1433,7 +1433,7 @@ class WebDriver(BaseWebDriver):
         self.execute(Command.ADD_CREDENTIAL, {**credential.to_dict(), "authenticatorId": self._authenticator_id})
 
     @required_virtual_authenticator
-    def get_credentials(self) -> List[Credential]:
+    def get_credentials(self) -> list[Credential]:
         """Returns the list of credentials owned by the authenticator.
 
         Example:

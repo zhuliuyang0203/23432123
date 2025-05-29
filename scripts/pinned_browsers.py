@@ -205,7 +205,6 @@ def edge():
     linux_hash = None
     mac = None
     mac_hash = None
-    version = None
 
     for data in all_data:
         if not "Stable" == data.get("product"):

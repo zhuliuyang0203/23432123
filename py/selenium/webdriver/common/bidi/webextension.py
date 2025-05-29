@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, Union
+from typing import Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -28,7 +28,7 @@ class WebExtension:
     def __init__(self, conn):
         self.conn = conn
 
-    def install(self, path=None, archive_path=None, base64_value=None) -> Dict:
+    def install(self, path=None, archive_path=None, base64_value=None) -> dict:
         """Installs a web extension in the remote end.
 
         You must provide exactly one of the parameters.
@@ -57,7 +57,7 @@ class WebExtension:
         result = self.conn.execute(command_builder("webExtension.install", params))
         return result
 
-    def uninstall(self, extension_id_or_result: Union[str, Dict]) -> None:
+    def uninstall(self, extension_id_or_result: Union[str, dict]) -> None:
         """Uninstalls a web extension from the remote end.
 
         Parameters:
