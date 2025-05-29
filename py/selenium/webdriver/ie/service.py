@@ -14,7 +14,6 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from typing import List
 from typing import Optional
 
 from selenium.types import SubprocessStdAlias
@@ -26,13 +25,13 @@ class Service(service.Service):
 
     def __init__(
         self,
-        executable_path: str = None,
+        executable_path: Optional[str] = None,
         port: int = 0,
         host: Optional[str] = None,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         log_level: Optional[str] = None,
-        log_output: SubprocessStdAlias = None,
-        driver_path_env_key: str = None,
+        log_output: Optional[SubprocessStdAlias] = None,
+        driver_path_env_key: Optional[str] = None,
         **kwargs,
     ) -> None:
         """Creates a new instance of the Service.
@@ -62,5 +61,5 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return [f"--port={self.port}"] + self.service_args

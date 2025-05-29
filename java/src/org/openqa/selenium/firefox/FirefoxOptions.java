@@ -62,10 +62,9 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
   public FirefoxOptions() {
     setCapability(CapabilityType.BROWSER_NAME, FIREFOX.browserName());
     setAcceptInsecureCerts(true);
-    // Firefox 129 onwards the CDP protocol will not be enabled by default. Setting this preference
-    // will enable it.
     // https://fxdx.dev/deprecating-cdp-support-in-firefox-embracing-the-future-with-webdriver-bidi/.
-    addPreference("remote.active-protocols", 3);
+    // Enable BiDi only
+    addPreference("remote.active-protocols", 1);
   }
 
   public FirefoxOptions(Capabilities source) {
@@ -153,11 +152,23 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
   /**
    * Constructs a {@link FirefoxBinary} and returns that to be used, and because of this is only
    * useful when actually starting firefox.
+   *
+   * @deprecated This method is deprecated and will be removed in a future version. Selenium Manager
+   *     handles this for you.
    */
+  @Deprecated
   public FirefoxBinary getBinary() {
     return getBinaryOrNull().orElseGet(FirefoxBinary::new);
   }
 
+  /**
+   * Sets the path to the Firefox binary to use. This is useful when you have multiple versions of
+   * Firefox installed on your machine.
+   *
+   * @deprecated This method is deprecated and will be removed in a future version. Use {@link
+   *     #setBinary(Path)} or {@link #setBinary(String)} instead.
+   */
+  @Deprecated
   public FirefoxOptions setBinary(FirefoxBinary binary) {
     Require.nonNull("Binary", binary);
     addArguments(binary.getExtraOptions());
@@ -174,6 +185,14 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
     return setFirefoxOption(Keys.BINARY, path);
   }
 
+  /**
+   * Returns the binary as a {@link FirefoxBinary} if it was set, or an empty {@link Optional} if
+   * not.
+   *
+   * @deprecated This method is deprecated and will be removed in a future version. Selenium Manager
+   *     handles this for you.}
+   */
+  @Deprecated
   public Optional<FirefoxBinary> getBinaryOrNull() {
     Object binary = firefoxOptions.get(Keys.BINARY.key());
     if (!(binary instanceof String)) {

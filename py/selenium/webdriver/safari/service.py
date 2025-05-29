@@ -16,8 +16,7 @@
 # under the License.
 
 
-from typing import List
-from typing import Mapping
+from collections.abc import Mapping
 from typing import Optional
 
 from selenium.webdriver.common import service
@@ -31,19 +30,20 @@ class Service(service.Service):
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
-    :param enable_logging: (Optional) Enable logging of the service. Logs can be located at `~/Library/Logs/com.apple.WebDriver/`
+    :param enable_logging: (Optional) Enable logging of the service. Logs can be located at
+        `~/Library/Logs/com.apple.WebDriver/`
     :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
 
     def __init__(
         self,
-        executable_path: str = None,
+        executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         reuse_service=False,
         enable_logging: bool = False,
-        driver_path_env_key: str = None,
+        driver_path_env_key: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.service_args = service_args or []
@@ -61,7 +61,7 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return ["-p", f"{self.port}"] + self.service_args
 
     @property

@@ -30,7 +30,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 #     old_size = driver.get_window_size()
 #     driver.set_window_size(200, 200)
 #     wait.until(
-#         lambda dr: dr.get_window_size() != old_size if old_size["width"] != 200 and old_size["height"] != 200 else True)
+#         lambda dr: dr.get_window_size() != old_size if old_size["width"] != 200 \
+#             and old_size["height"] != 200 else True)
 #     size = driver.get_window_size()
 #     driver.maximize_window()
 #     wait.until(lambda dr: dr.get_window_size() != size)
@@ -67,6 +68,7 @@ def test_should_get_the_position_of_the_current_window(driver):
 @pytest.mark.xfail_chrome
 @pytest.mark.xfail_edge
 @pytest.mark.xfail_firefox(reason="https://github.com/mozilla/geckodriver/issues/2224")
+@pytest.mark.xfail_remote(reason="https://github.com/mozilla/geckodriver/issues/2224")
 def test_should_set_the_position_of_the_current_window(driver):
     position = driver.get_window_position()
 
@@ -94,6 +96,7 @@ def test_should_get_the_rect_of_the_current_window(driver):
 
 @pytest.mark.xfail_edge
 @pytest.mark.xfail_firefox(reason="https://github.com/mozilla/geckodriver/issues/2224")
+@pytest.mark.xfail_remote(reason="https://github.com/mozilla/geckodriver/issues/2224")
 @pytest.mark.xfail_safari(raises=WebDriverException, reason="Get Window Rect command not implemented")
 def test_should_set_the_rect_of_the_current_window(driver):
     rect = driver.get_window_rect()

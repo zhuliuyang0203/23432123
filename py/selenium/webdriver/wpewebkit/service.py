@@ -15,8 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 import shutil
-from typing import List
-from typing import Mapping
+from collections.abc import Mapping
 from typing import Optional
 
 from selenium.webdriver.common import service
@@ -28,10 +27,12 @@ class Service(service.Service):
     """A Service class that is responsible for the starting and stopping of
     `WPEWebDriver`.
 
-    :param executable_path: install path of the WPEWebDriver executable, defaults to the first `WPEWebDriver` in `$PATH`.
+    :param executable_path: install path of the WPEWebDriver executable, defaults to the first
+        `WPEWebDriver` in `$PATH`.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
     :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
-    :param log_output: (Optional) File path for the file to be opened and passed as the subprocess stdout/stderr handler.
+    :param log_output: (Optional) File path for the file to be opened and passed as the subprocess
+        stdout/stderr handler.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     """
 
@@ -40,7 +41,7 @@ class Service(service.Service):
         executable_path: str = DEFAULT_EXECUTABLE_PATH,
         port: int = 0,
         log_output: Optional[str] = None,
-        service_args: Optional[List[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ):
@@ -53,5 +54,5 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> List[str]:
+    def command_line_args(self) -> list[str]:
         return ["-p", f"{self.port}"] + self.service_args

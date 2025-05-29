@@ -48,7 +48,10 @@ import org.openqa.selenium.os.ExecutableFinder;
 @Deprecated
 public class FirefoxBinary {
 
-  /** Enumerates Firefox channels, according to https://wiki.mozilla.org/RapidRelease */
+  /**
+   * Enumerates Firefox channels, according to <a
+   * href="https://wiki.mozilla.org/RapidRelease">...</a>
+   */
   public enum Channel {
     ESR("esr"),
     RELEASE("release"),

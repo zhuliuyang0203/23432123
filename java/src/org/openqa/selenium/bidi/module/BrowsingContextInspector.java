@@ -140,16 +140,20 @@ public class BrowsingContextInspector implements AutoCloseable {
     addNavigationEventListener("browsingContext.load", consumer);
   }
 
-  private void onDownloadWillBegin(Consumer<NavigationInfo> consumer) {
+  public void onDownloadWillBegin(Consumer<NavigationInfo> consumer) {
     addNavigationEventListener("browsingContext.downloadWillBegin", consumer);
   }
 
-  private void onNavigationAborted(Consumer<NavigationInfo> consumer) {
+  public void onNavigationAborted(Consumer<NavigationInfo> consumer) {
     addNavigationEventListener("browsingContext.navigationAborted", consumer);
   }
 
-  private void onNavigationFailed(Consumer<NavigationInfo> consumer) {
+  public void onNavigationFailed(Consumer<NavigationInfo> consumer) {
     addNavigationEventListener("browsingContext.navigationFailed", consumer);
+  }
+
+  public void onNavigationCommitted(Consumer<NavigationInfo> consumer) {
+    addNavigationEventListener("browsingContext.navigationCommitted", consumer);
   }
 
   public void onUserPromptClosed(Consumer<UserPromptClosed> consumer) {

@@ -52,7 +52,7 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
         {
             result = await _webSocket.ReceiveAsync(_receiveBuffer, cancellationToken).ConfigureAwait(false);
 
-            await _sharedMemoryStream.WriteAsync(_receiveBuffer.Array!, _receiveBuffer.Offset, result.Count, cancellationToken).ConfigureAwait(false);
+            _sharedMemoryStream.Write(_receiveBuffer.Array!, _receiveBuffer.Offset, result.Count);
         }
         while (!result.EndOfMessage);
 
@@ -68,12 +68,10 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
 
     public async Task SendAsync(byte[] data, CancellationToken cancellationToken)
     {
-        var semaphoreTask = _socketSendSemaphoreSlim.WaitAsync(cancellationToken);
+        await _socketSendSemaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
-            await semaphoreTask.ConfigureAwait(false);
-
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
                 _logger.Trace($"BiDi SND --> {Encoding.UTF8.GetString(data)}");

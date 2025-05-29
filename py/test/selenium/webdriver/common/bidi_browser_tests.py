@@ -17,8 +17,7 @@
 
 import pytest
 
-from selenium.webdriver.common.bidi.browser import ClientWindowInfo
-from selenium.webdriver.common.bidi.browser import ClientWindowState
+from selenium.webdriver.common.bidi.browser import ClientWindowInfo, ClientWindowState
 
 
 def test_browser_initialized(driver):

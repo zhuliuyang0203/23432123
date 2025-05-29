@@ -1,3 +1,12 @@
+0.4.33
+======
+* Replace WMIC commands (deprecated) by WinAPI in Windows (#15363)
+* Minor clippy fixes
+
+0.4.32
+======
+*no changes*
+
 0.4.31
 ======
 *no changes*

@@ -909,21 +909,43 @@ public interface WebDriverListener {
 
   /**
    * This action will be performed each time before {@link
-   * WebDriver.Timeouts#setScriptTimeout(Duration)} is called.
+   * WebDriver.Timeouts#scriptTimeout(Duration)} is called.
    *
    * @param timeouts The timeouts object that will be called
    * @param duration The duration that will be passed to the method
+   * @deprecated Use {@link #beforeScriptTimeout(WebDriver.Timeouts, Duration)} instead.
    */
+  @Deprecated
   default void beforeSetScriptTimeout(WebDriver.Timeouts timeouts, Duration duration) {}
 
   /**
-   * This action will be performed each time after {@link
-   * WebDriver.Timeouts#setScriptTimeout(Duration)} is called.
+   * This action will be performed each time before {@link
+   * WebDriver.Timeouts#scriptTimeout(Duration)} is called.
    *
    * @param timeouts The timeouts object that will be called
    * @param duration The duration that will be passed to the method
    */
+  default void beforeScriptTimeout(WebDriver.Timeouts timeouts, Duration duration) {}
+
+  /**
+   * This action will be performed each time after {@link
+   * WebDriver.Timeouts#scriptTimeout(Duration)} is called.
+   *
+   * @param timeouts The timeouts object that will be called
+   * @param duration The duration that will be passed to the method
+   * @deprecated Use {@link #afterScriptTimeout(WebDriver.Timeouts, Duration)} instead.
+   */
+  @Deprecated
   default void afterSetScriptTimeout(WebDriver.Timeouts timeouts, Duration duration) {}
+
+  /**
+   * This action will be performed each time after {@link
+   * WebDriver.Timeouts#scriptTimeout(Duration)} is called.
+   *
+   * @param timeouts The timeouts object that will be called
+   * @param duration The duration that will be passed to the method
+   */
+  default void afterScriptTimeout(WebDriver.Timeouts timeouts, Duration duration) {}
 
   /**
    * This action will be performed each time before {@link

@@ -350,7 +350,7 @@ Issues are labelled to make them easier to categorise and find by:
 ## Communication
 
 Selenium contributors frequent the `#selenium` channel on
-[`irc.freenode.org`](https://webchat.freenode.net/). You can also join
+[`libera.chat`](https://web.libera.chat/). You can also join
 the [`selenium-developers@` mailing list](https://groups.google.com/forum/#!forum/selenium-developers).
 Check https://selenium.dev/support/ for a complete list of options to communicate.
 

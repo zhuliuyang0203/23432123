@@ -202,6 +202,13 @@ for Maven to use locally by deploying to your local maven repository (`~/.m2/rep
 #### Updating Dependencies
 
 Dependencies are defined in the file [MODULE.bazel](https://github.com/SeleniumHQ/selenium/blob/trunk/MODULE.bazel).
+
+To update a dependency, modify the version in the `MODULE.bazel` file and run:
+
+```shell
+RULES_JVM_EXTERNAL_REPIN=1 bazel run @maven//:pin
+```
+
 To automatically update and pin new dependencies, run:
 
 ```shell
@@ -210,21 +217,11 @@ To automatically update and pin new dependencies, run:
 
 ### Python
 
-#### Linting
+#### Linting and Formatting
 
 We follow the [PEP8 Style Guide for Python Code](https://peps.python.org/pep-0008) (except we use a 120 character line length).
-This is checked and enforced with several linting tools, including
-[black](https://pypi.org/project/black),
-[docformatter](https://pypi.org/project/docformatter),
-[flake8](https://flake8.pycqa.org),
-and [isort](https://pycqa.github.io/isort).
-
-To run all of the linting tools:
-```shell
-./go py:lint
-```
-
-You need `tox` installed to run the linting tools (`pip install tox`).
+This is checked and enforced with [ruff](https://docs.astral.sh/ruff/), a linting/formatting tool.
+There is also an auto-formatting script that can be run: `./scripts/format.sh`
 
 #### Local Installation
 
