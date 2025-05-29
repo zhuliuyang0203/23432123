@@ -40,10 +40,11 @@ public class Quotes {
       String[] substringsWithoutQuotes = toEscape.split("\"");
 
       StringBuilder quoted = new StringBuilder("concat(");
-      for (int i = 0; i < substringsWithoutQuotes.length; i++) {
+      int substringCount = substringsWithoutQuotes.length;
+      for (int i = 0; i < substringCount; i++) {
         quoted.append("\"").append(substringsWithoutQuotes[i]).append("\"");
         quoted.append(
-            ((i == substringsWithoutQuotes.length - 1)
+            ((i == substringCount - 1)
                 ? (quoteIsLast ? ", '\"')" : ")")
                 : ", '\"', "));
       }

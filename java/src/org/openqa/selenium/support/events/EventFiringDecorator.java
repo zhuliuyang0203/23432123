@@ -317,10 +317,11 @@ public class EventFiringDecorator<T extends WebDriver> extends WebDriverDecorato
 
   private boolean parametersMatch(Method m, Object[] args) {
     Class<?>[] params = m.getParameterTypes();
-    if (params.length != args.length) {
+    int parameterCount = params.length;
+    if (parameterCount != args.length) {
       return false;
     }
-    for (int i = 0; i < params.length; i++) {
+    for (int i = 0; i < parameterCount; i++) {
       Class<?> param = params[i];
       if (param.isPrimitive()) {
         if (boolean.class.equals(param)) {

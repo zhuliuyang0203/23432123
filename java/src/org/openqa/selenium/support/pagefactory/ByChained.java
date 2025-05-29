@@ -58,12 +58,13 @@ public class ByChained extends By implements Serializable {
 
   @Override
   public List<WebElement> findElements(SearchContext context) {
-    if (bys.length == 0) {
+    int numberOfLocators = bys.length;
+    if (numberOfLocators == 0) {
       return new ArrayList<>();
     }
 
     List<WebElement> elems = bys[0].findElements(context);
-    for (int i = 1; i < bys.length; i++) {
+    for (int i = 1; i < numberOfLocators; i++) {
       if (elems.isEmpty()) {
         break; // if any one of the bys finds no elements, then return no elements
       }

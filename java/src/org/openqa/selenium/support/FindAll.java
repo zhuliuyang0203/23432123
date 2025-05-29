@@ -52,8 +52,9 @@ public @interface FindAll {
       assertValidFindAll(findBys);
 
       FindBy[] findByArray = findBys.value();
-      By[] byArray = new By[findByArray.length];
-      for (int i = 0; i < findByArray.length; i++) {
+      int findByArrayLength = findByArray.length;
+      By[] byArray = new By[findByArrayLength];
+      for (int i = 0; i < findByArrayLength; i++) {
         byArray[i] = buildByFromFindBy(findByArray[i]);
       }
 
