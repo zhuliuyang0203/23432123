@@ -17,8 +17,8 @@
 
 from typing import Union
 
-from selenium.webdriver.common.bidi.common import command_builder
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.bidi.common import command_builder
 
 
 class WebExtension:
