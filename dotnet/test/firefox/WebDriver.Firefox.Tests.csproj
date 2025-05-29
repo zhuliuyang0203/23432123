@@ -16,12 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="BUCK" />
-    <None Remove="build.desc" />
-    <None Remove="Settings.StyleCop" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\common\WebDriver.Common.Tests.csproj" />
   </ItemGroup>
 
