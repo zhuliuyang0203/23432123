@@ -14,9 +14,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+from typing import Generator, Optional
 
 
-def command_builder(method: str, params: dict = None) -> dict:
+def command_builder(method: str, params: Optional[dict] = None) -> Generator[dict, dict, dict]:
     """Build a command iterator to send to the BiDi protocol.
 
     Parameters:
