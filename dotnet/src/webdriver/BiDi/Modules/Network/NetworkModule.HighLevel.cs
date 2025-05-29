@@ -58,7 +58,7 @@ public record InterceptResponseOptions : AddInterceptOptions;
 
 public record InterceptAuthOptions : AddInterceptOptions;
 
-public record InterceptedRequest(BiDi BiDi, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, Initiator Initiator)
+public record InterceptedRequest(BiDi BiDi, BrowsingContext.BrowsingContext? Context, bool IsBlocked, BrowsingContext.Navigation? Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, Initiator Initiator)
     : BeforeRequestSentEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Initiator)
 {
     public Task ContinueAsync(ContinueRequestOptions? options = null)
@@ -77,7 +77,7 @@ public record InterceptedRequest(BiDi BiDi, BrowsingContext.BrowsingContext Cont
     }
 }
 
-public record InterceptedResponse(BiDi BiDi, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
+public record InterceptedResponse(BiDi BiDi, BrowsingContext.BrowsingContext? Context, bool IsBlocked, BrowsingContext.Navigation? Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
     : ResponseStartedEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Response)
 {
     public Task ContinueAsync(ContinueResponseOptions? options = null)
@@ -86,7 +86,7 @@ public record InterceptedResponse(BiDi BiDi, BrowsingContext.BrowsingContext Con
     }
 }
 
-public record InterceptedAuth(BiDi BiDi, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
+public record InterceptedAuth(BiDi BiDi, BrowsingContext.BrowsingContext? Context, bool IsBlocked, BrowsingContext.Navigation? Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, ResponseData Response)
     : AuthRequiredEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Response)
 {
     public Task ContinueAsync(AuthCredentials credentials, ContinueWithAuthCredentialsOptions? options = null)
