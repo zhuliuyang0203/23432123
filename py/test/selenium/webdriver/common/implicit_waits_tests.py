@@ -17,7 +17,9 @@
 
 import pytest
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EXPECTED
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 
@@ -26,7 +28,10 @@ def test_should_implicitly_wait_for_asingle_element(driver, pages):
     add = driver.find_element(By.ID, "adder")
     driver.implicitly_wait(3)
     add.click()
-    driver.find_element(By.ID, "box0")  # All is well if this doesn't throw.
+    try:
+        WebDriverWait(driver, 5).until(EXPECTED.presence_of_element_located((By.ID, "box0")))
+    except TimeoutException:
+        pytest.fail("Element 'box0' was not found within the timeout.")
 
 
 def test_should_still_fail_to_find_an_element_when_implicit_waits_are_enabled(driver, pages):
@@ -52,8 +57,10 @@ def test_should_implicitly_wait_until_at_least_one_element_is_found_when_searchi
     add.click()
     add.click()
 
-    elements = driver.find_elements(By.CLASS_NAME, "redbox")
-    assert len(elements) >= 1
+    try:
+        WebDriverWait(driver, 5).until(lambda driver: len(driver.find_elements(By.CLASS_NAME, "redbox")) >= 1)
+    except TimeoutException:
+        pytest.fail("Expected elements were not found within the timeout.")
 
 
 def test_should_still_fail_to_find_an_elemenst_when_implicit_waits_are_enabled(driver, pages):
