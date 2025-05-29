@@ -15,8 +15,7 @@
   <a href="#developing">Developing</a> •
   <a href="#testing">Testing</a> •
   <a href="#documenting">Documenting</a> •
-  <a href="#releasing">Releasing</a> •
-  <a href="#license">License</a>
+  <a href="#releasing">Releasing</a>
 </p>
 
 <br>
@@ -555,7 +554,3 @@ If you have access to the Selenium EngFlow repository, you can have the assets b
 ```shell
 ./go all:release['--config', 'release']
 ```
-
-## License
-
-Selenium's source code is made available under the [Apache 2.0 license](https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE).
