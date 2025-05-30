@@ -88,9 +88,9 @@ class Cookie:
         value = BytesValue(data.get("value", {}).get("type"), data.get("value", {}).get("value"))
 
         return cls(
-            name=data.get("name"),
+            name=str(data.get("name")),
             value=value,
-            domain=data.get("domain"),
+            domain=str(data.get("domain")),
             path=data.get("path"),
             size=data.get("size"),
             http_only=data.get("httpOnly"),
@@ -136,21 +136,21 @@ class CookieFilter:
         if self.name is not None:
             result["name"] = self.name
         if self.value is not None:
-            result["value"] = self.value.to_dict()
+            result["value"] = str(self.value.to_dict())
         if self.domain is not None:
             result["domain"] = self.domain
         if self.path is not None:
             result["path"] = self.path
         if self.size is not None:
-            result["size"] = self.size
+            result["size"] = str(self.size)
         if self.http_only is not None:
-            result["httpOnly"] = self.http_only
+            result["httpOnly"] = str(self.http_only)
         if self.secure is not None:
-            result["secure"] = self.secure
+            result["secure"] = str(self.secure)
         if self.same_site is not None:
             result["sameSite"] = self.same_site
         if self.expiry is not None:
-            result["expiry"] = self.expiry
+            result["expiry"] = str(self.expiry)
         return result
 
 
@@ -257,13 +257,13 @@ class PartialCookie:
         if self.path is not None:
             result["path"] = self.path
         if self.http_only is not None:
-            result["httpOnly"] = self.http_only
+            result["httpOnly"] = [self.http_only]
         if self.secure is not None:
-            result["secure"] = self.secure
+            result["secure"] = [self.secure]
         if self.same_site is not None:
             result["sameSite"] = self.same_site
         if self.expiry is not None:
-            result["expiry"] = self.expiry
+            result["expiry"] = [self.expiry]
         return result
 
 

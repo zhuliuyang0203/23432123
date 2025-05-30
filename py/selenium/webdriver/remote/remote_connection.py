@@ -23,6 +23,7 @@ from base64 import b64encode
 from typing import Optional
 from urllib import parse
 from urllib.parse import urlparse
+from typing import Any
 
 import urllib3
 
@@ -368,7 +369,7 @@ class RemoteConnection:
             self._conn = self._get_connection_manager()
         self._commands = remote_commands
 
-    extra_commands = {}
+    extra_commands: dict[str, Any] = {}
 
     def add_command(self, name, method, url):
         """Register a new command."""

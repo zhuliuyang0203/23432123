@@ -49,7 +49,7 @@ class ChromiumService(service.Service):
 
         if isinstance(log_output, str):
             self.service_args.append(f"--log-path={log_output}")
-            self.log_output: Optional[IOBase] = None
+            self.log_output: cast(IOBase, None)
         elif isinstance(log_output, IOBase):
             self.log_output = log_output
         else:

@@ -23,7 +23,7 @@ from selenium.webdriver.remote.remote_connection import RemoteConnection
 
 
 class FirefoxRemoteConnection(RemoteConnection):
-    browser_name = DesiredCapabilities.FIREFOX["browserName"]
+    browser_name: str = str(DesiredCapabilities.FIREFOX["browserName"])
 
     def __init__(
         self,

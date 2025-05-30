@@ -21,7 +21,7 @@ from typing import Optional
 
 from selenium.webdriver.common import service
 
-DEFAULT_EXECUTABLE_PATH: str = shutil.which("WebKitWebDriver")
+DEFAULT_EXECUTABLE_PATH: Optional[str] = shutil.which("WebKitWebDriver")
 
 
 class Service(service.Service):

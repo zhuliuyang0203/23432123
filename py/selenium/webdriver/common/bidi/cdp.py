@@ -427,6 +427,10 @@ class CdpConnection(CdpBase, trio.abc.AsyncResource):
         """Returns a new :class:`CdpSession` connected to the specified
         target."""
         global devtools
+        if devtools and devtools.target:
+            session_id = await self.execute(devtools.target.attach_to_target(target_id, True))
+        else:
+            raise RuntimeError("devtools.target is not available.")
         session_id = await self.execute(devtools.target.attach_to_target(target_id, True))
         session = CdpSession(self.ws, session_id, target_id)
         self.sessions[session_id] = session

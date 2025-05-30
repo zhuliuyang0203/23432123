@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional, Union
+from typing import Optional, Union, Callable
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -67,10 +67,10 @@ class NavigationInfo:
             NavigationInfo: A new instance of NavigationInfo.
         """
         return cls(
-            context=json.get("context"),
+            context=str(json.get("context")),
             navigation=json.get("navigation"),
-            timestamp=json.get("timestamp"),
-            url=json.get("url"),
+            timestamp=int(json.get("timestamp") or 0),
+            url=str(json.get("url")),
         )
 
 
@@ -109,11 +109,11 @@ class BrowsingContextInfo:
         """
         children = None
         if json.get("children") is not None:
-            children = [BrowsingContextInfo.from_json(child) for child in json.get("children")]
+            children = [BrowsingContextInfo.from_json(child) for child in json.get("children", [])]
 
         return cls(
-            context=json.get("context"),
-            url=json.get("url"),
+            context=str(json.get("context")),
+            url=str(json.get("url")),
             children=children,
             parent=json.get("parent"),
             user_context=json.get("userContext"),
@@ -149,11 +149,11 @@ class DownloadWillBeginParams(NavigationInfo):
             DownloadWillBeginParams: A new instance of DownloadWillBeginParams.
         """
         return cls(
-            context=json.get("context"),
+            context=str(json.get("context")),
             navigation=json.get("navigation"),
-            timestamp=json.get("timestamp"),
-            url=json.get("url"),
-            suggested_filename=json.get("suggestedFilename"),
+            timestamp=int(json.get("timestamp") or 0),
+            url=str(json.get("url")),
+            suggested_filename=str(json.get("suggestedFilename")),
         )
 
 
@@ -187,10 +187,10 @@ class UserPromptOpenedParams:
             UserPromptOpenedParams: A new instance of UserPromptOpenedParams.
         """
         return cls(
-            context=json.get("context"),
-            handler=json.get("handler"),
-            message=json.get("message"),
-            type=json.get("type"),
+            context=str(json.get("context")),
+            handler=str(json.get("handler")),
+            message=str(json.get("message")),
+            type=str(json.get("type")),
             default_value=json.get("defaultValue"),
         )
 
@@ -223,9 +223,9 @@ class UserPromptClosedParams:
             UserPromptClosedParams: A new instance of UserPromptClosedParams.
         """
         return cls(
-            context=json.get("context"),
-            accepted=json.get("accepted"),
-            type=json.get("type"),
+            context=str(json.get("context")),
+            accepted=bool(json.get("accepted")),
+            type=str(json.get("type")),
             user_text=json.get("userText"),
         )
 
@@ -254,8 +254,8 @@ class HistoryUpdatedParams:
             HistoryUpdatedParams: A new instance of HistoryUpdatedParams.
         """
         return cls(
-            context=json.get("context"),
-            url=json.get("url"),
+            context=str(json.get("context")),
+            url=str(json.get("url")),
         )
 
 
@@ -278,7 +278,7 @@ class BrowsingContextEvent:
         -------
             BrowsingContextEvent: A new instance of BrowsingContextEvent.
         """
-        return cls(event_class=json.get("event_class"), **json)
+        return cls(event_class=str(json.get("event_class")), **json)
 
 
 class BrowsingContext:
@@ -341,9 +341,9 @@ class BrowsingContext:
         """
         params = {"context": context, "origin": origin}
         if format is not None:
-            params["format"] = format
+            params["format"] = str(format)
         if clip is not None:
-            params["clip"] = clip
+            params["clip"] = str(clip)
 
         result = self.conn.execute(command_builder("browsingContext.captureScreenshot", params))
         return result["data"]
@@ -387,7 +387,7 @@ class BrowsingContext:
         if reference_context is not None:
             params["referenceContext"] = reference_context
         if background is not None:
-            params["background"] = background
+            params["background"] = str(background)
         if user_context is not None:
             params["userContext"] = user_context
 
@@ -415,7 +415,7 @@ class BrowsingContext:
         if max_depth is not None:
             params["maxDepth"] = max_depth
         if root is not None:
-            params["root"] = root
+            params["root"] = int(root or 0)
 
         result = self.conn.execute(command_builder("browsingContext.getTree", params))
         return [BrowsingContextInfo.from_json(context) for context in result["contexts"]]
@@ -436,7 +436,7 @@ class BrowsingContext:
         """
         params = {"context": context}
         if accept is not None:
-            params["accept"] = accept
+            params["accept"] = str(accept)
         if user_text is not None:
             params["userText"] = user_text
 
@@ -466,7 +466,7 @@ class BrowsingContext:
         """
         params = {"context": context, "locator": locator}
         if max_node_count is not None:
-            params["maxNodeCount"] = max_node_count
+            params["maxNodeCount"] = [int(max_node_count or 0)]
         if serialization_options is not None:
             params["serializationOptions"] = serialization_options
         if start_nodes is not None:
@@ -566,7 +566,7 @@ class BrowsingContext:
         """
         params = {"context": context}
         if ignore_cache is not None:
-            params["ignoreCache"] = ignore_cache
+            params["ignoreCache"] = str(ignore_cache)
         if wait is not None:
             params["wait"] = wait
 
@@ -597,11 +597,11 @@ class BrowsingContext:
         if context is not None:
             params["context"] = context
         if viewport is not None:
-            params["viewport"] = viewport
+            params["viewport"] = str(viewport)
         if device_pixel_ratio is not None:
-            params["devicePixelRatio"] = device_pixel_ratio
+            params["devicePixelRatio"] = str(device_pixel_ratio)
         if user_contexts is not None:
-            params["userContexts"] = user_contexts
+            params["userContexts"] = str(user_contexts)
 
         self.conn.execute(command_builder("browsingContext.setViewport", params))
 
@@ -621,7 +621,7 @@ class BrowsingContext:
         result = self.conn.execute(command_builder("browsingContext.traverseHistory", params))
         return result
 
-    def _on_event(self, event_name: str, callback: callable) -> int:
+    def _on_event(self, event_name: str, callback: Callable) -> int:
         """Set a callback function to subscribe to a browsing context event.
 
         Parameters:
@@ -665,7 +665,7 @@ class BrowsingContext:
 
         return callback_id
 
-    def add_event_handler(self, event: str, callback: callable, contexts: Optional[list[str]] = None) -> int:
+    def add_event_handler(self, event: str, callback: Callable, contexts: Optional[list[str]] = None) -> int:
         """Add an event handler to the browsing context.
 
         Parameters:
@@ -710,7 +710,7 @@ class BrowsingContext:
         except KeyError:
             raise Exception(f"Event {event} not found")
 
-        event = BrowsingContextEvent(event_name)
+        event = str(BrowsingContextEvent(event_name))
 
         self.conn.remove_callback(event, callback_id)
         self.subscriptions[event_name].remove(callback_id)

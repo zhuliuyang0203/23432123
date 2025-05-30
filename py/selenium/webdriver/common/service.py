@@ -58,12 +58,12 @@ class Service(ABC):
     ) -> None:
         if isinstance(log_output, str):
             self.log_output = cast(IOBase, open(log_output, "a+", encoding="utf-8"))
-        elif log_output == subprocess.STDOUT:
-            self.log_output = cast(Optional[Union[int, IOBase]], None)
-        elif log_output is None or log_output == subprocess.DEVNULL:
-            self.log_output = cast(Optional[Union[int, IOBase]], subprocess.DEVNULL)
-        else:
+        elif log_output in {subprocess.STDOUT, subprocess.DEVNULL, None}:
+            self.log_output = cast(IOBase, subprocess.DEVNULL)
+        elif isinstance(log_output, IOBase):
             self.log_output = log_output
+        else:
+            raise TypeError("log_output must be a string, IOBase, or a valid subprocess constant")
 
         self.port = port or utils.free_port()
         # Default value for every python subprocess: subprocess.Popen(..., creationflags=0)

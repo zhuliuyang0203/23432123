@@ -30,7 +30,7 @@ from abc import ABCMeta
 from base64 import b64decode, urlsafe_b64encode
 from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, cast
 
 from selenium.common.exceptions import (
     InvalidArgumentException,
@@ -124,7 +124,7 @@ def get_remote_connection(
     handler = next((c for c in candidates if c.browser_name == capabilities.get("browserName")), RemoteConnection)
 
     return handler(
-        remote_server_addr=command_executor,
+        remote_server_addr=str(command_executor),
         keep_alive=keep_alive,
         ignore_proxy=ignore_local_proxy,
         client_config=client_config,
@@ -132,7 +132,7 @@ def get_remote_connection(
 
 
 def create_matches(options: list[BaseOptions]) -> dict:
-    capabilities = {"capabilities": {}}
+    capabilities: dict[str, Any] = {"capabilities": {}}
     opts = []
     for opt in options:
         opts.append(opt.to_capabilities())
@@ -156,8 +156,10 @@ def create_matches(options: list[BaseOptions]) -> dict:
         always[k] = v
 
     for i in opts:
-        for k in always:
-            del i[k]
+        # Ensure `i` is a dictionary before we delete from it
+        if isinstance(i, dict):
+            for k in always:
+                del i[k]
 
     capabilities["capabilities"]["alwaysMatch"] = always
     capabilities["capabilities"]["firstMatch"] = opts
@@ -242,16 +244,19 @@ class WebDriver(BaseWebDriver):
                 ignore_local_proxy=_ignore_local_proxy,
                 client_config=client_config,
             )
+        if web_element_cls and not issubclass(web_element_cls, WebElement):
+            raise TypeError("web_element_cls must be a subclass of WebElement")
+
         self._is_remote = True
         self.session_id = None
-        self.caps = {}
-        self.pinned_scripts = {}
+        self.caps: dict[str, Any] = {}
+        self.pinned_scripts: dict[str, Any] = {}
         self.error_handler = ErrorHandler()
         self._switch_to = SwitchTo(self)
         self._mobile = Mobile(self)
         self.file_detector = file_detector or LocalFileDetector()
         self.locator_converter = locator_converter or LocatorConverter()
-        self._web_element_cls = web_element_cls or self._web_element_cls
+        self._web_element_cls = cast(type[WebElement], web_element_cls) if web_element_cls else WebElement
         self._authenticator_id = None
         self.start_client()
         self.start_session(capabilities)
@@ -442,7 +447,13 @@ class WebDriver(BaseWebDriver):
             elif "sessionId" not in params:
                 params["sessionId"] = self.session_id
 
-        response = self.command_executor.execute(driver_command, params)
+        # Ensure `self.command_executor` is an instance of `RemoteConnection`
+        # before attempting to call its `execute` method.
+        if isinstance(self.command_executor, RemoteConnection):
+            response = self.command_executor.execute(driver_command, params)
+        else:
+            raise TypeError("command_executor must be an instance of RemoteConnection")
+
         if response:
             self.error_handler.check_response(response)
             response["value"] = self._unwrap_value(response.get("value", None))
@@ -605,7 +616,8 @@ class WebDriver(BaseWebDriver):
             self.execute(Command.QUIT)
         finally:
             self.stop_client()
-            self.command_executor.close()
+            if isinstance(self.command_executor, RemoteConnection):
+                self.command_executor.close()
 
     @property
     def current_window_handle(self) -> str:
@@ -660,9 +672,9 @@ class WebDriver(BaseWebDriver):
         --------
         >>> driver.print_page()
         """
-        options = {}
+        options: dict[str, Any] = {}
         if print_options:
-            options = print_options.to_dict()
+            options = cast(dict[str, Any], print_options.to_dict())
 
         return self.execute(Command.PRINT_PAGE, options)["value"]
 
@@ -943,8 +955,10 @@ class WebDriver(BaseWebDriver):
 
         if isinstance(by, RelativeBy):
             _pkg = ".".join(__name__.split(".")[:-1])
-            raw_function = pkgutil.get_data(_pkg, "findElements.js").decode("utf8")
-            find_element_js = f"/* findElements */return ({raw_function}).apply(null, arguments);"
+            raw_function = pkgutil.get_data(_pkg, "findElements.js")
+            if raw_function is None:
+                raise ValueError("Failed to load 'findElements.js' using pkgutil.get_data.")
+            find_element_js = f"/* findElements */return ({raw_function.decode('utf8')}).apply(null, arguments);"
             return self.execute_script(find_element_js, by.to_dict())
 
         # Return empty list if driver returns null
@@ -1404,7 +1418,7 @@ class WebDriver(BaseWebDriver):
         --------
         >>> print(driver.virtual_authenticator_id)
         """
-        return self._authenticator_id
+        return self._authenticator_id or ""
 
     @required_virtual_authenticator
     def remove_virtual_authenticator(self) -> None:

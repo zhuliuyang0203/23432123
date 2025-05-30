@@ -33,10 +33,12 @@ class ChromiumDriver(RemoteWebDriver):
         self,
         browser_name: Optional[str] = None,
         vendor_prefix: Optional[str] = None,
-        options: ArgOptions = ArgOptions(),
+        options: ArgOptions = None,
         service: Optional[Service] = None,
         keep_alive: bool = True,
     ) -> None:
+        if options is None:
+            options = ArgOptions()
         """Creates a new WebDriver instance of the ChromiumDriver. Starts the
         service and then creates new WebDriver instance of ChromiumDriver.
 
@@ -49,6 +51,9 @@ class ChromiumDriver(RemoteWebDriver):
         """
         self.service = service
 
+        if self.service is None:
+            raise ValueError("Service must be provided and cannot be None")
+
         finder = DriverFinder(self.service, options)
         if finder.get_browser_path():
             options.binary_location = finder.get_browser_path()
@@ -59,8 +64,8 @@ class ChromiumDriver(RemoteWebDriver):
 
         executor = ChromiumRemoteConnection(
             remote_server_addr=self.service.service_url,
-            browser_name=browser_name,
-            vendor_prefix=vendor_prefix,
+            browser_name=browser_name or "",
+            vendor_prefix=vendor_prefix or "",
             keep_alive=keep_alive,
             ignore_proxy=options._ignore_local_proxy,
         )
@@ -221,7 +226,8 @@ class ChromiumDriver(RemoteWebDriver):
             # We don't care about the message because something probably has gone wrong
             pass
         finally:
-            self.service.stop()
+            if self.service is not None:
+                self.service.stop()
 
     def download_file(self, *args, **kwargs):
         raise NotImplementedError
