@@ -54,7 +54,6 @@ def test_emulation_initialized(driver):
     assert isinstance(driver.emulation, Emulation)
 
 
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_with_coordinates_in_context(driver, pages):
     """Test setting geolocation override with coordinates."""
     context_id = driver.current_window_handle
@@ -71,7 +70,6 @@ def test_set_geolocation_override_with_coordinates_in_context(driver, pages):
     assert abs(result["accuracy"] - coords.accuracy) < 1.0, f"Accuracy mismatch: {result['accuracy']}"
 
 
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_with_coordinates_in_user_context(driver, pages):
     """Test setting geolocation override with coordinates in a user context."""
     # Create a user context
@@ -97,7 +95,6 @@ def test_set_geolocation_override_with_coordinates_in_user_context(driver, pages
     driver.browser.remove_user_context(user_context)
 
 
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_all_coords(driver, pages):
     """Test setting geolocation override with coordinates."""
     context_id = driver.current_window_handle
@@ -124,7 +121,6 @@ def test_set_geolocation_override_all_coords(driver, pages):
     driver.browsing_context.close(context_id)
 
 
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_with_multiple_contexts(driver, pages):
     """Test setting geolocation override with multiple browsing contexts."""
     # Create two browsing contexts
@@ -159,7 +155,6 @@ def test_set_geolocation_override_with_multiple_contexts(driver, pages):
     driver.browsing_context.close(context2_id)
 
 
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_with_multiple_user_contexts(driver, pages):
     """Test setting geolocation override with multiple user contexts."""
     # Create two user contexts
