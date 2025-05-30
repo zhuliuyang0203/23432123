@@ -485,21 +485,21 @@ def firefox_options(request):
 @pytest.fixture
 def chromium_options(request):
     try:
-        driver_option = request.config.option.drivers[0].lower()
+        driver_class = request.config.option.drivers[0].lower()
     except (AttributeError, TypeError):
         raise Exception("This test requires a --driver to be specified")
-
     # Skip if not Chrome or Edge
-    if driver_option not in ("chrome", "edge"):
-        pytest.skip(f"This test requires Chrome or Edge, got {driver_option}")
+    if driver_class not in ("chrome", "edge"):
+        pytest.skip(f"This test requires Chrome or Edge, got {driver_class}")
 
+    selenium_driver = Driver(driver_class, request)
     # skip tests in the 'remote' directory if run with a local driver
-    if request.node.path.parts[-2] == "remote" and get_driver_class(driver_option) != "Remote":
-        pytest.skip(f"Remote tests can't be run with driver '{driver_option}'")
+    if selenium_driver.skip_remote_tests:
+        pytest.skip(f"Remote tests can't be run with driver '{driver_class}'")
 
-    if driver_option == "chrome":
+    if driver_class == "chrome":
         options = webdriver.ChromeOptions()
-    elif driver_option == "edge":
+    elif driver_class == "edge":
         options = webdriver.EdgeOptions()
 
     if request.config.option.headless:
