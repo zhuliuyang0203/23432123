@@ -132,7 +132,7 @@ js_library(
 """
 
     url = [d["url"] for d in chrome_downloads if d["platform"] == "mac-x64"][0]
-    sha = calculate_hash(url) # Calculate SHA for Mac chrome
+    sha = calculate_hash(url)  # Calculate SHA for Mac chrome
 
     content += f"""    http_archive(
         name = "mac_{workspace_prefix}chrome",
@@ -158,6 +158,7 @@ js_library(
 """
 
     return content
+
 
 def convert_keys_to_lowercase(obj):
     if isinstance(obj, dict):
