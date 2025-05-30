@@ -207,7 +207,7 @@ class Driver:
         self._headless = self._request.config.option.headless
         if self._headless:
             if cls_name.lower() == "chrome" or cls_name.lower() == "edge":
-                self._options.add_argument("--headless=new")
+                self._options.add_argument("--headless")
             if cls_name.lower() == "firefox":
                 self._options.add_argument("-headless")
 
