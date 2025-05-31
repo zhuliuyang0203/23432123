@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import hashlib
 import json
 import os
@@ -25,7 +26,14 @@ def calculate_hash(url):
     return h.hexdigest()
 
 
-def get_chrome_info_for_channel(channel):
+def get_chrome_milestone():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--chrome_channel", default="Stable", help="Set the Chrome channel"
+    )
+    args = parser.parse_args()
+    channel = args.chrome_channel
+
     r = http.request(
         "GET",
         f"https://chromiumdash.appspot.com/fetch_releases?channel={channel}&num=1&platform=Mac,Linux",
@@ -47,18 +55,20 @@ def get_chrome_info_for_channel(channel):
     )[-1]
 
 
-def chromedriver(selected_version, workspace_prefix=""):
+def chromedriver(selected_version):
     content = ""
 
     drivers = selected_version["downloads"]["chromedriver"]
 
-    url = [d["url"] for d in drivers if d["platform"] == "linux64"][0]
-    sha = calculate_hash(url)
+    linux = [d["url"] for d in drivers if d["platform"] == "linux64"][0]
+    sha = calculate_hash(linux)
 
-    content += f"""    http_archive(
-        name = "linux_{workspace_prefix}chromedriver",
-        url = "{url}",
-        sha256 = "{sha}",
+    content = (
+        content
+        + """    http_archive(
+        name = "linux_chromedriver",
+        url = "%s",
+        sha256 = "%s",
         strip_prefix = "chromedriver-linux64",
         build_file_content = \"\"\"
 load("@aspect_rules_js//js:defs.bzl", "js_library")
@@ -73,15 +83,18 @@ js_library(
 \"\"\",
     )
 """
+        % (linux, sha)
+    )
 
-    url = [d["url"] for d in drivers if d["platform"] == "mac-x64"][0]
-    sha = calculate_hash(url)
-
-    content += f"""
+    mac = [d["url"] for d in drivers if d["platform"] == "mac-x64"][0]
+    sha = calculate_hash(mac)
+    content = (
+        content
+        + """
     http_archive(
-        name = "mac_{workspace_prefix}chromedriver",
-        url = "{url}",
-        sha256 = "{sha}",
+        name = "mac_chromedriver",
+        url = "%s",
+        sha256 = "%s",
         strip_prefix = "chromedriver-mac-x64",
         build_file_content = \"\"\"
 load("@aspect_rules_js//js:defs.bzl", "js_library")
@@ -96,22 +109,23 @@ js_library(
 \"\"\",
     )
 """
+        % (mac, sha)
+    )
 
     return content
 
 
-def chrome(selected_version, workspace_prefix=""):
-    content = ""
+def chrome(selected_version):
     chrome_downloads = selected_version["downloads"]["chrome"]
 
-    url = [d["url"] for d in chrome_downloads if d["platform"] == "linux64"][0]
-    sha = calculate_hash(url)
+    linux = [d["url"] for d in chrome_downloads if d["platform"] == "linux64"][0]
+    sha = calculate_hash(linux)
 
-    content += f"""
+    content = """
     http_archive(
-        name = "linux_{workspace_prefix}chrome",
-        url = "{url}",
-        sha256 = "{sha}",
+        name = "linux_chrome",
+        url = "%s",
+        sha256 = "%s",
         build_file_content = \"\"\"
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -129,15 +143,19 @@ js_library(
 )
 \"\"\",
     )
-"""
 
-    url = [d["url"] for d in chrome_downloads if d["platform"] == "mac-x64"][0]
-    sha = calculate_hash(url)  # Calculate SHA for Mac chrome
+""" % (
+        linux,
+        sha,
+    )
 
-    content += f"""    http_archive(
-        name = "mac_{workspace_prefix}chrome",
-        url = "{url}",
-        sha256 = "{sha}",
+    mac = [d["url"] for d in chrome_downloads if d["platform"] == "mac-x64"][0]
+    sha = calculate_hash(mac)
+
+    content += """    http_archive(
+        name = "mac_chrome",
+        url = "%s",
+        sha256 = "%s",
         strip_prefix = "chrome-mac-x64",
         patch_cmds = [
             "mv 'Google Chrome for Testing.app' Chrome.app",
@@ -155,7 +173,11 @@ js_library(
 )
 \"\"\",
     )
-"""
+
+""" % (
+        mac,
+        sha,
+    )
 
     return content
 
@@ -500,17 +522,9 @@ def pin_browsers():
     content = content + geckodriver()
     content = content + edge()
     content = content + edgedriver()
-
-    # Stable Chrome
-    stable_chrome_info = get_chrome_info_for_channel(channel="Stable")
-    content = content + chrome(stable_chrome_info, workspace_prefix="")
-    content = content + chromedriver(stable_chrome_info, workspace_prefix="")
-
-    # Beta Chrome
-    beta_chrome_info = get_chrome_info_for_channel(channel="Beta")
-    content = content + chrome(beta_chrome_info, workspace_prefix="beta_")
-    content = content + chromedriver(beta_chrome_info, workspace_prefix="beta_")
-
+    chrome_milestone = get_chrome_milestone()
+    content = content + chrome(chrome_milestone)
+    content = content + chromedriver(chrome_milestone)
     content += """
 def _pin_browsers_extension_impl(_ctx):
     pin_browsers()
