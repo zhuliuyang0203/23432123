@@ -288,7 +288,10 @@ class Driver:
 
     @property
     def skip_remote_tests(self):
-        if self._request.node.path.parts[-2] == "remote" and self.driver_class != "Remote":
+        if (
+            self._request.node.path.parts[-2] == "remote"
+            and self.driver_class != "Remote"
+        ):
             return True
         return False
 
@@ -315,11 +318,15 @@ def driver(request):
 
     # skip tests if not available on the platform
     if not selenium_driver.is_platform_valid:
-        pytest.skip(f"{driver_class} tests can only run on {selenium_driver.exe_platform}")
+        pytest.skip(
+            f"{driver_class} tests can only run on {selenium_driver.exe_platform}"
+        )
 
     # skip tests in the 'remote' directory if run with a local driver
     if selenium_driver.skip_remote_tests:
-        pytest.skip(f"Remote tests can't be run with driver '{selenium_driver.driver_class}'")
+        pytest.skip(
+            f"Remote tests can't be run with driver '{selenium_driver.driver_class}'"
+        )
 
     # skip tests for drivers that don't support BiDi when --bidi is enabled
     if selenium_driver.bidi:
@@ -441,7 +448,9 @@ def driver_executable(request):
 def clean_driver(request):
     _supported_drivers = SupportedDrivers()
     try:
-        driver_class = getattr(_supported_drivers, request.config.option.drivers[0].lower())
+        driver_class = getattr(
+            _supported_drivers, request.config.option.drivers[0].lower()
+        )
     except (AttributeError, TypeError):
         raise Exception("This test requires a --driver to be specified.")
     driver_reference = getattr(webdriver, driver_class)
