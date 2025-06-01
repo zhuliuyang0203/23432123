@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\webdriver\WebDriver.csproj" />
+    <ProjectReference Include="..\..\src\webdriver\Selenium.WebDriver.csproj" />
   </ItemGroup>
 
   <ItemGroup>

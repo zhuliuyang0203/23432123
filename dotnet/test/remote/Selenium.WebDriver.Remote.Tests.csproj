@@ -1,19 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
-    <AssemblyName>WebDriver.Safari.Tests</AssemblyName>
+    <AssemblyName>WebDriver.Remote.Tests</AssemblyName>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
@@ -22,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\common\WebDriver.Common.Tests.csproj" />
+    <ProjectReference Include="..\common\Selenium.WebDriver.Common.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="WebDriver.Safari.Tests.nunit">
+    <None Update="WebDriver.Remote.Tests.nunit">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
