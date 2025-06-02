@@ -35,6 +35,7 @@ public class BiDi : IAsyncDisposable
     private readonly Lazy<Script.ScriptModule> _scriptModule;
     private readonly Lazy<Log.LogModule> _logModule;
     private readonly Lazy<Storage.StorageModule> _storageModule;
+    private readonly Lazy<WebExtension.WebExtensionModule> _webExtensionModule;
 
     internal BiDi(string url)
     {
@@ -50,6 +51,7 @@ public class BiDi : IAsyncDisposable
         _scriptModule = new Lazy<Script.ScriptModule>(() => new Script.ScriptModule(_broker));
         _logModule = new Lazy<Log.LogModule>(() => new Log.LogModule(_broker));
         _storageModule = new Lazy<Storage.StorageModule>(() => new Storage.StorageModule(_broker));
+        _webExtensionModule = new Lazy<WebExtension.WebExtensionModule>(() => new WebExtension.WebExtensionModule(_broker));
     }
 
     internal Session.SessionModule SessionModule => _sessionModule.Value;
@@ -60,6 +62,7 @@ public class BiDi : IAsyncDisposable
     public Script.ScriptModule Script => _scriptModule.Value;
     public Log.LogModule Log => _logModule.Value;
     public Storage.StorageModule Storage => _storageModule.Value;
+    public WebExtension.WebExtensionModule WebExtension => _webExtensionModule.Value;
 
     public Task<Session.StatusResult> StatusAsync()
     {
