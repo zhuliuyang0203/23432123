@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional, Union, Any
+from typing import Any, Optional, Union
+
 from selenium.webdriver.common.bidi.common import command_builder
 
 
@@ -88,10 +89,10 @@ class Cookie:
         name = data.get("name")
         if not name:
             raise ValueError("name is required and cannot be empty")
-        domain = data.get("domain") 
+        domain = data.get("domain")
         if not domain:
             raise ValueError("domain is required and cannot be empty")
-        
+
         value = BytesValue(data.get("value", {}).get("type"), data.get("value", {}).get("value"))
         return cls(
             name=str(name),
