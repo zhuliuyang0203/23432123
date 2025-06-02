@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
-
+#
 # This script updates the development dependendencies used for the Python bindings.
 #
-# When you run it, it will
+# When you run it, it will:
 # - create and activate a temporary virtual env
-# - install the current package dependencies
+# - install the current package dependencies from `py/requirements.txt`
 # - upgrade the package dependencies to the latest versions available on PyPI
-# - generate new requirements.txt and requirements_lock.txt files
+# - run `pip freeze` to generate a new `py/requirements.txt` file
+# - run `bazel run //py:requirements.update` to generate a new `py/requirements_lock.txt` file
 # - deactivate and remove the temporary virtual env
 #
-# After running this, create a new Pull Request with the changes. You should
-# also manually check package dependency versions in `py/pyproject.toml` and
-# `py/tox.ini` and update those if needed.
-
+# After running this script, you should also manually check package dependency versions in
+# `py/pyproject.toml` and `py/tox.ini` and update those if needed.
+#
+# Once all dependencies are updated, create a new Pull Request with the changes.
 
 set -e
 
-
 REQUIREMENTS_FILE="./py/requirements.txt"
 VENV="./temp_virtualenv"
-
 
 cd "$(git rev-parse --show-toplevel)"
 
@@ -60,7 +59,7 @@ echo "generating new ${REQUIREMENTS_FILE}"
 pip freeze > "${REQUIREMENTS_FILE}"
 
 echo "generating new lock file"
-#bazel run //py:requirements.update
+bazel run //py:requirements.update
 
 echo
 echo "deleting virtual env: ${VENV}"
