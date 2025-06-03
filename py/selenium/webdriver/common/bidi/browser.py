@@ -27,6 +27,8 @@ class ClientWindowState:
     MINIMIZED = "minimized"
     NORMAL = "normal"
 
+    VALID_STATES = {FULLSCREEN, MAXIMIZED, MINIMIZED, NORMAL}
+
 
 class ClientWindowInfo:
     """Represents a client window information."""
@@ -129,7 +131,7 @@ class ClientWindowInfo:
             ValueError: If required fields are missing or have invalid types.
         """
         try:
-            client_window = data.get("clientWindow")
+            client_window = data("clientWindow")
             if not isinstance(client_window, str):
                 raise ValueError("clientWindow must be a string")
 
@@ -139,7 +141,7 @@ class ClientWindowInfo:
             if state not in ClientWindowState.VALID_STATES:
                 raise ValueError(f"Invalid state: {state}. Must be one of {ClientWindowState.VALID_STATES}")
 
-			width = data["width"]
+            width = data["width"]
             if not isinstance(width, int) or width < 0:
                 raise ValueError(f"width must be a non-negative integer, got {width}")
 
@@ -147,7 +149,7 @@ class ClientWindowInfo:
             if not isinstance(height, int) or height < 0:
                 raise ValueError(f"height must be a non-negative integer, got {height}")
 
-			x = data["x"]
+            x = data["x"]
             if not isinstance(x, int):
                 raise ValueError(f"x must be an integer, got {type(x).__name__}")
 
