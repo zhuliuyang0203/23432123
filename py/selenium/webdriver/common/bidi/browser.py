@@ -139,9 +139,9 @@ class ClientWindowInfo:
             if state not in ClientWindowState.VALID_STATES:
                 raise ValueError(f"Invalid state: {state}. Must be one of {ClientWindowState.VALID_STATES}")
 
-            width = data.get("width")
-            if not isinstance(width, int):
-                raise ValueError("width must be an integer")
+			width = data["width"]
+            if not isinstance(width, int) or width < 0:
+                raise ValueError(f"width must be a non-negative integer, got {width}")
 
             height = data.get("height")
             if not isinstance(height, int):
