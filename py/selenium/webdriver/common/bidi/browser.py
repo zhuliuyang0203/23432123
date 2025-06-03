@@ -125,13 +125,13 @@ class ClientWindowInfo:
             ClientWindowInfo: A new instance of ClientWindowInfo.
         """
         return cls(
-            client_window=data.get("clientWindow"),
-            state=data.get("state"),
-            width=data.get("width"),
-            height=data.get("height"),
-            x=data.get("x"),
-            y=data.get("y"),
-            active=data.get("active"),
+            client_window=str(data.get("clientWindow", "")),
+            state=str(data.get("state", "")),
+            width=int(data.get("width", 0)),
+            height=int(data.get("height", 0)),
+            x=int(data.get("x", 0)),
+            y=int(data.get("y", 0)),
+            active=bool(data.get("active", False)),
         )
 
 
