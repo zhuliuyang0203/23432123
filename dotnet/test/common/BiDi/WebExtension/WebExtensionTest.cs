@@ -18,6 +18,8 @@
 // </copyright>
 
 using NUnit.Framework;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.WebExtension;
@@ -25,9 +27,31 @@ namespace OpenQA.Selenium.BiDi.WebExtension;
 class WebExtensionTest : BiDiTestFixture
 {
     [Test]
-    public async Task CanInstallWebExtension()
+    public async Task CanInstallPathWebExtension()
     {
-        var result = await bidi.WebExtension.InstallAsync(new ExtensionArchivePath("qwe"));
+        string path = Path.GetFullPath("data/extensions/webextensions-selenium-example");
+
+        var result = await bidi.WebExtension.InstallAsync(new ExtensionPath(path));
+
+        Assert.That(result, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task CanInstallArchiveWebExtension()
+    {
+        string path = Path.GetFullPath("data/extensions/webextensions-selenium-example.zip");
+
+        var result = await bidi.WebExtension.InstallAsync(new ExtensionArchivePath(path));
+
+        Assert.That(result, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task CanInstallBase64WebExtension()
+    {
+        string base64 = Convert.ToBase64String(File.ReadAllBytes("data/extensions/webextensions-selenium-example.zip"));
+
+        var result = await bidi.WebExtension.InstallAsync(new ExtensionBase64Encoded(base64));
 
         Assert.That(result, Is.Not.Null);
     }
