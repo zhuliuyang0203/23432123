@@ -133,9 +133,11 @@ class ClientWindowInfo:
             if not isinstance(client_window, str):
                 raise ValueError("clientWindow must be a string")
 
-            state = data.get("state")
+            state = data["state"]
             if not isinstance(state, str):
                 raise ValueError("state must be a string")
+            if state not in ClientWindowState.VALID_STATES:
+                raise ValueError(f"Invalid state: {state}. Must be one of {ClientWindowState.VALID_STATES}")
 
             width = data.get("width")
             if not isinstance(width, int):
