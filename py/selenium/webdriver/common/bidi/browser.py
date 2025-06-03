@@ -147,9 +147,9 @@ class ClientWindowInfo:
             if not isinstance(height, int) or height < 0:
                 raise ValueError(f"height must be a non-negative integer, got {height}")
 
-            x = data.get("x")
+			x = data["x"]
             if not isinstance(x, int):
-                raise ValueError("x must be an integer")
+                raise ValueError(f"x must be an integer, got {type(x).__name__}")
 
             y = data.get("y")
             if not isinstance(y, int):
