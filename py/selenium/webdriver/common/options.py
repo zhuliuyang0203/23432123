@@ -422,7 +422,7 @@ class BaseOptions(metaclass=ABCMeta):
         self._caps = self.default_capabilities
         self._proxy = None
         self.set_capability("pageLoadStrategy", PageLoadStrategy.normal)
-        self.mobile_options = None
+        self.mobile_options: Optional[dict[str, str]] = None
         self._ignore_local_proxy = False
 
     @property
