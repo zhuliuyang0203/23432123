@@ -24,17 +24,17 @@ from typing import Any, Optional, Union
 class Protocol(str, Enum):
     """Protocol to communicate with the authenticator."""
 
-    CTAP2: str = "ctap2"
-    U2F: str = "ctap1/u2f"
+    CTAP2 = "ctap2"
+    U2F = "ctap1/u2f"
 
 
 class Transport(str, Enum):
     """Transport method to communicate with the authenticator."""
 
-    BLE: str = "ble"
-    USB: str = "usb"
-    NFC: str = "nfc"
-    INTERNAL: str = "internal"
+    BLE = "ble"
+    USB = "usb"
+    NFC = "nfc"
+    INTERNAL = "internal"
 
 
 class VirtualAuthenticatorOptions:

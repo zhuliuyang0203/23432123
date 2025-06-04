@@ -14,7 +14,7 @@ build:
   commands:
     - pip install -r py/docs/requirements.txt
     - pip install -r py/requirements.txt
-    - PYTHONPATH=py python3 py/generate_api_module_listing.py
+    - cd py && python3 generate_api_module_listing.py && cd
     - PYTHONPATH=py sphinx-autogen -o $READTHEDOCS_OUTPUT/html py/docs/source/api.rst
     - PYTHONPATH=py sphinx-build -b html -d build/docs/doctrees py/docs/source $READTHEDOCS_OUTPUT/html
 
