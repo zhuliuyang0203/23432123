@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 from __future__ import annotations
 
 from ..utils import keys_to_typing
@@ -27,7 +28,7 @@ class KeyActions(Interaction):
     def __init__(self, source: KeyInput | PointerInput | WheelInput | None = None) -> None:
         if source is None:
             source = KeyInput(KEY)
-        self.input_source = source
+        self.input_source = source  # Store the actual input object
 
         # Determine the correct source type string based on the input object
         if isinstance(source, KeyInput):
@@ -38,18 +39,17 @@ class KeyActions(Interaction):
             source_type = WHEEL
         else:
             source_type = KEY  # fallback
-            
-        super().__init__(source_type)
-      
+
+        super().__init__(source_type)  # Pass string to parent
 
     def key_down(self, letter: str) -> KeyActions:
-        return self.keyaction("create_key_down", letter)
+        return self._key_action("create_key_down", letter)
 
     def key_up(self, letter: str) -> KeyActions:
-        return self.keyaction("create_key_up", letter)
+        return self._key_action("create_key_up", letter)
 
     def pause(self, duration: int = 0) -> KeyActions:
-        return self.keyaction("create_pause", duration)
+        return self._key_action("create_pause", duration)
 
     def send_keys(self, text: str | list) -> KeyActions:
         if not isinstance(text, list):
@@ -59,7 +59,7 @@ class KeyActions(Interaction):
             self.key_up(letter)
         return self
 
-    def keyaction(self, action: str, letter) -> KeyActions:
-        meth = getattr(self.input_source, action)
+    def _key_action(self, action: str, letter) -> KeyActions:
+        meth = getattr(self.input_source, action)  # Use input_source, not source
         meth(letter)
         return self
