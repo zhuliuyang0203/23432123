@@ -94,7 +94,7 @@ def test_finding_multiple_elements_by_id_with_space_should_return_empty_list(dri
 
 def test_no_such_element_error(driver, pages):
     pages.load("formPage.html")
-    msg = r"\/errors#no-such-element-exception"
+    msg = r"\/errors#nosuchelementexception"
     with pytest.raises(NoSuchElementException, match=msg):
         driver.find_element(By.ID, "non_Existent_Button")
 
