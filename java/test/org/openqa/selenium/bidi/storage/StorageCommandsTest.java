@@ -258,7 +258,6 @@ class StorageCommandsTest extends JupiterTestBase {
   }
 
   @Test
-  @NotYetImplemented(EDGE)
   public void canGetAllCookies() {
     String key1 = generateUniqueKey();
     String key2 = generateUniqueKey();

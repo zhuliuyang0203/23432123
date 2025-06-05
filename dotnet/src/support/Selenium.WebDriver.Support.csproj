@@ -37,7 +37,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(CsprojIncludePath)\WebDriver.csproj" />
+    <ProjectReference Include="$(CsprojIncludePath)\Selenium.WebDriver.csproj" />
   </ItemGroup>
 
 </Project>
