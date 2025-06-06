@@ -28,7 +28,7 @@ class KeyActions(Interaction):
     def __init__(self, source: KeyInput | PointerInput | WheelInput | None = None) -> None:
         if source is None:
             source = KeyInput(KEY)
-        self.input_source = source  # Store the actual input object
+        self.input_source = source
 
         # Determine the correct source type string based on the input object
         if isinstance(source, KeyInput):
@@ -38,9 +38,9 @@ class KeyActions(Interaction):
         elif isinstance(source, WheelInput):
             source_type = WHEEL
         else:
-            source_type = KEY  # fallback
+            source_type = KEY
 
-        super().__init__(source_type)  # Pass string to parent
+        super().__init__(source_type)
 
     def key_down(self, letter: str) -> KeyActions:
         return self._key_action("create_key_down", letter)
@@ -60,6 +60,6 @@ class KeyActions(Interaction):
         return self
 
     def _key_action(self, action: str, letter) -> KeyActions:
-        meth = getattr(self.input_source, action)  # Use input_source, not source
+        meth = getattr(self.input_source, action)
         meth(letter)
         return self
