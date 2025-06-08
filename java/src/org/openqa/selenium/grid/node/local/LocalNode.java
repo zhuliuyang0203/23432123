@@ -1194,6 +1194,7 @@ public class LocalNode extends Node implements Closeable {
             sessionHistoryFilePath.get(),
             historyJson.getBytes(),
             StandardOpenOption.CREATE,
+            StandardOpenOption.WRITE,
             StandardOpenOption.TRUNCATE_EXISTING);
       } catch (IOException e) {
         LOG.log(Level.WARNING, "Unable to write session history to file", e);
