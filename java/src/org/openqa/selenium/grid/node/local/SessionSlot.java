@@ -37,6 +37,7 @@ import org.openqa.selenium.WebDriverInfo;
 import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.grid.data.CreateSessionRequest;
 import org.openqa.selenium.grid.data.SessionClosedEvent;
+import org.openqa.selenium.grid.data.SessionStartedEvent;
 import org.openqa.selenium.grid.node.ActiveSession;
 import org.openqa.selenium.grid.node.SessionFactory;
 import org.openqa.selenium.grid.node.relay.RelaySessionFactory;
@@ -153,6 +154,7 @@ public class SessionSlot
         ActiveSession session = possibleSession.right();
         currentSession = session;
         connectionCounter.set(0);
+        bus.fire(new SessionStartedEvent(session.getId()));
         return Either.right(session);
       } else {
         return Either.left(possibleSession.left());

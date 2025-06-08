@@ -47,16 +47,24 @@ import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -87,6 +95,9 @@ import org.openqa.selenium.grid.data.NodeHeartBeatEvent;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.Session;
+import org.openqa.selenium.grid.data.SessionClosedEvent;
+import org.openqa.selenium.grid.data.SessionHistoryEntry;
+import org.openqa.selenium.grid.data.SessionStartedEvent;
 import org.openqa.selenium.grid.data.Slot;
 import org.openqa.selenium.grid.data.SlotId;
 import org.openqa.selenium.grid.jmx.JMXHelper;
@@ -146,6 +157,10 @@ public class LocalNode extends Node implements Closeable {
   private final AtomicInteger sessionCount = new AtomicInteger();
   private final Runnable shutdown;
   private final ReadWriteLock drainLock = new ReentrantReadWriteLock();
+  private final Optional<Path> statusFilePath;
+  private final Optional<Path> sessionHistoryFilePath;
+  private final Queue<SessionHistoryEntry> sessionHistory = new ConcurrentLinkedQueue<>();
+  private final Map<SessionId, Instant> sessionStartTimes = new ConcurrentHashMap<>();
 
   protected LocalNode(
       Tracer tracer,
@@ -163,7 +178,9 @@ public class LocalNode extends Node implements Closeable {
       List<SessionSlot> factories,
       Secret registrationSecret,
       boolean managedDownloadsEnabled,
-      int connectionLimitPerSession) {
+      int connectionLimitPerSession,
+      Optional<Path> statusFilePath,
+      Optional<Path> sessionHistoryFilePath) {
     super(
         tracer,
         new NodeId(UUID.randomUUID()),
@@ -187,6 +204,8 @@ public class LocalNode extends Node implements Closeable {
     this.bidiEnabled = bidiEnabled;
     this.managedDownloadsEnabled = managedDownloadsEnabled;
     this.connectionLimitPerSession = connectionLimitPerSession;
+    this.statusFilePath = statusFilePath;
+    this.sessionHistoryFilePath = sessionHistoryFilePath;
 
     this.healthCheck =
         healthCheck == null
@@ -277,10 +296,18 @@ public class LocalNode extends Node implements Closeable {
               return thread;
             });
     heartbeatNodeService.scheduleAtFixedRate(
-        GuardedRunnable.guard(() -> bus.fire(new NodeHeartBeatEvent(getStatus()))),
+        GuardedRunnable.guard(
+            () -> {
+              NodeStatus status = getStatus();
+              bus.fire(new NodeHeartBeatEvent(status));
+              writeStatusToFile(status);
+            }),
         heartbeatPeriod.getSeconds(),
         heartbeatPeriod.getSeconds(),
         TimeUnit.SECONDS);
+
+    bus.addListener(SessionStartedEvent.listener(this::recordSessionStart));
+    bus.addListener(SessionClosedEvent.listener(this::recordSessionStop));
 
     shutdown =
         () -> {
@@ -1006,6 +1033,11 @@ public class LocalNode extends Node implements Closeable {
   }
 
   @Override
+  public List<SessionHistoryEntry> getSessionHistory() {
+    return new ArrayList<>(sessionHistory);
+  }
+
+  @Override
   public HealthCheck getHealthCheck() {
     return healthCheck;
   }
@@ -1081,6 +1113,68 @@ public class LocalNode extends Node implements Closeable {
         "draining", isDraining(),
         "capabilities",
             factories.stream().map(SessionSlot::getStereotype).collect(Collectors.toSet()));
+  }
+
+  private void writeStatusToFile(NodeStatus status) {
+    if (statusFilePath.isEmpty()) {
+      return;
+    }
+
+    try {
+      String statusJson = JSON.toJson(status);
+      Files.write(
+          statusFilePath.get(),
+          statusJson.getBytes(),
+          StandardOpenOption.CREATE,
+          StandardOpenOption.WRITE,
+          StandardOpenOption.TRUNCATE_EXISTING);
+    } catch (IOException e) {
+      LOG.log(Level.WARNING, "Failed to write status to file: " + statusFilePath.get(), e);
+    }
+  }
+
+  private void recordSessionStart(SessionId sessionId) {
+    if (!isSessionOwner(sessionId)) {
+      return;
+    }
+    Instant startTime = Instant.now();
+    sessionStartTimes.put(sessionId, startTime);
+    sessionHistory.add(new SessionHistoryEntry(sessionId, startTime, null));
+    writeSessionHistoryToFile();
+  }
+
+  private void recordSessionStop(SessionId sessionId) {
+    if (!isSessionOwner(sessionId)) {
+      return;
+    }
+    Instant stopTime = Instant.now();
+    Instant startTime = sessionStartTimes.remove(sessionId);
+    if (startTime != null) {
+      // Find and update the existing history entry
+      sessionHistory.stream()
+          .filter(entry -> entry.getSessionId().equals(sessionId))
+          .findFirst()
+          .ifPresent(entry -> entry.setStopTime(stopTime));
+      writeSessionHistoryToFile();
+    }
+  }
+
+  private void writeSessionHistoryToFile() {
+    if (sessionHistoryFilePath.isPresent()) {
+      try {
+        List<SessionHistoryEntry> sortedHistory = new ArrayList<>(sessionHistory);
+        sortedHistory.sort((a, b) -> a.getStartTime().compareTo(b.getStartTime()));
+
+        String historyJson = JSON.toJson(sortedHistory);
+        Files.write(
+            sessionHistoryFilePath.get(),
+            historyJson.getBytes(),
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING);
+      } catch (IOException e) {
+        LOG.log(Level.WARNING, "Unable to write session history to file", e);
+      }
+    }
   }
 
   public static class Builder {
@@ -1177,7 +1271,9 @@ public class LocalNode extends Node implements Closeable {
           factories.build(),
           registrationSecret,
           managedDownloadsEnabled,
-          connectionLimitPerSession);
+          connectionLimitPerSession,
+          Optional.empty(),
+          Optional.empty());
     }
 
     public Advanced advanced() {
@@ -1200,6 +1296,40 @@ public class LocalNode extends Node implements Closeable {
       public Advanced healthCheck(HealthCheck healthCheck) {
         Builder.this.healthCheck = Require.nonNull("Health check", healthCheck);
         return this;
+      }
+
+      public Advanced statusFile(Optional<String> statusFile) {
+        return sessionHistoryFile(statusFile, Optional.empty());
+      }
+
+      public Advanced sessionHistoryFile(
+          Optional<String> statusFile, Optional<String> sessionHistoryFile) {
+        Optional<Path> statusFilePath = statusFile.map(Paths::get);
+        Optional<Path> sessionHistoryFilePath = sessionHistoryFile.map(Paths::get);
+        return new Advanced() {
+          @Override
+          public Node build() {
+            return new LocalNode(
+                tracer,
+                bus,
+                uri,
+                gridUri,
+                healthCheck,
+                maxSessions,
+                drainAfterSessionCount,
+                cdpEnabled,
+                bidiEnabled,
+                ticker,
+                sessionTimeout,
+                heartbeatPeriod,
+                factories.build(),
+                registrationSecret,
+                managedDownloadsEnabled,
+                connectionLimitPerSession,
+                statusFilePath,
+                sessionHistoryFilePath);
+          }
+        };
       }
 
       public Node build() {
