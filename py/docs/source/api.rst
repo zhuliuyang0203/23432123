@@ -67,6 +67,7 @@ webdriver.common
    selenium.webdriver.common.bidi.console
    selenium.webdriver.common.bidi.log
    selenium.webdriver.common.bidi.network
+   selenium.webdriver.common.bidi.permissions
    selenium.webdriver.common.bidi.script
    selenium.webdriver.common.bidi.session
    selenium.webdriver.common.bidi.storage
@@ -120,6 +121,7 @@ webdriver.common.bidi
    selenium.webdriver.common.bidi.console
    selenium.webdriver.common.bidi.log
    selenium.webdriver.common.bidi.network
+   selenium.webdriver.common.bidi.permissions
    selenium.webdriver.common.bidi.script
    selenium.webdriver.common.bidi.session
    selenium.webdriver.common.bidi.storage

@@ -140,10 +140,11 @@ public class DockerOptions {
         config.getAll(DOCKER_SECTION, "host-config-keys").orElseGet(Collections::emptyList);
 
     Multimap<String, Capabilities> kinds = HashMultimap.create();
-    for (int i = 0; i < allConfigs.size(); i++) {
+    int configsCount = allConfigs.size();
+    for (int i = 0; i < configsCount; i++) {
       String imageName = allConfigs.get(i);
       i++;
-      if (i == allConfigs.size()) {
+      if (i == configsCount) {
         throw new DockerException("Unable to find JSON config");
       }
       Capabilities stereotype =

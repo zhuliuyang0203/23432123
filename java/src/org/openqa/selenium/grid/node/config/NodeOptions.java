@@ -17,6 +17,8 @@
 
 package org.openqa.selenium.grid.node.config;
 
+import static org.openqa.selenium.remote.CapabilityType.ENABLE_DOWNLOADS;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -749,8 +751,7 @@ public class NodeOptions {
               .setCapability("se:noVncPort", noVncPort());
     }
     if (isManagedDownloadsEnabled() && canConfigureDownloadsDir(capabilities)) {
-      capabilities =
-          new PersistentCapabilities(capabilities).setCapability("se:downloadsEnabled", true);
+      capabilities = new PersistentCapabilities(capabilities).setCapability(ENABLE_DOWNLOADS, true);
     }
     return capabilities;
   }
