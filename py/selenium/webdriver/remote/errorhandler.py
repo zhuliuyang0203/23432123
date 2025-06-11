@@ -162,9 +162,9 @@ class ErrorHandler:
         if isinstance(status, int):
             value_json = response.get("value", None)
             if value_json and isinstance(value_json, str):
-                if not value_json.isdigit():
-                    try:
-                        value = json.loads(value_json)
+                try:
+                    value = json.loads(value_json)
+                    if isinstance(value, dict):
                         if len(value) == 1:
                             value = value["value"]
                         status = value.get("error", None)
@@ -176,8 +176,8 @@ class ErrorHandler:
                                 message = message.get("message")
                         else:
                             message = value.get("message", None)
-                    except ValueError:
-                        pass
+                except ValueError:
+                    pass
 
         exception_class: type[WebDriverException]
         e = ErrorCode()

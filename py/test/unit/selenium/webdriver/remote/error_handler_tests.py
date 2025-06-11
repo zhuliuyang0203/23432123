@@ -259,7 +259,7 @@ def test_relays_exception_stacktrace(handler, key):
     assert "Spam.ham" in e.value.stacktrace[0]
 
 
-def test_handle_errors_better(handler):
+def test_handle_json_error_with_message(handler):
     response = {
         "status": 500,
         "value": json.dumps(
@@ -281,17 +281,7 @@ def test_handle_errors_better(handler):
     assert "Could not start a new session." in e.value.msg
 
 
-def test_handle_numeric_value_error(handler):
-    response = {
-        "status": 999,
-        "value": "0",
-    }
-    with pytest.raises(exceptions.WebDriverException) as e:
-        handler.check_response(response)
-    assert e.value.msg == "0"
-
-
-def test_handle_non_json_error(handler):
+def test_handle_string_error(handler):
     response = {
         "status": 407,
         "value": "Proxy Authentication Required",
@@ -299,3 +289,13 @@ def test_handle_non_json_error(handler):
     with pytest.raises(exceptions.WebDriverException) as e:
         handler.check_response(response)
     assert e.value.msg == "Proxy Authentication Required"
+
+
+def test_handle_numeric_error(handler):
+    response = {
+        "status": 999,
+        "value": "0",
+    }
+    with pytest.raises(exceptions.WebDriverException) as e:
+        handler.check_response(response)
+    assert e.value.msg == "0"
