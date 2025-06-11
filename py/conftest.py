@@ -443,6 +443,19 @@ def clean_driver(request):
     except (AttributeError, TypeError):
         raise Exception("This test requires a --driver to be specified.")
     driver_reference = getattr(webdriver, driver_class)
+
+    # conditionally mark tests as expected to fail based on driver
+    marker = request.node.get_closest_marker(f"xfail_{driver_class.lower()}")
+    if marker is not None:
+        if "run" in marker.kwargs:
+            if marker.kwargs["run"] is False:
+                pytest.skip()
+                yield
+                return
+        if "raises" in marker.kwargs:
+            marker.kwargs.pop("raises")
+        pytest.xfail(**marker.kwargs)
+
     yield driver_reference
     if request.node.get_closest_marker("no_driver_after_test"):
         driver_reference = None
