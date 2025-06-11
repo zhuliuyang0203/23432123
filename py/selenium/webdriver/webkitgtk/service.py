@@ -53,6 +53,7 @@ class Service(service.Service):
             warnings.warn("log_path is deprecated, use log_output instead", DeprecationWarning, stacklevel=2)
             log_path = open(log_path, "wb")
         log_output = open(log_output, "wb") if log_output else None
+
         super().__init__(
             executable_path=executable_path,
             port=port,
@@ -70,6 +71,6 @@ class Service(service.Service):
 
     @service_args.setter
     def service_args(self, value: Sequence[str]):
-        if not isinstance(value, Sequence):
+        if not isinstance(value, Sequence) or isinstance(value, str):
             raise TypeError("service_args must be a sequence")
         self._service_args = value
