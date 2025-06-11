@@ -60,6 +60,6 @@ class Service(service.ChromiumService):
 
     @service_args.setter
     def service_args(self, value: Sequence[str]):
-        if not isinstance(value, Sequence) or isinstance(value, str):
+        if isinstance(value, str) or not isinstance(value, Sequence):
             raise TypeError("service_args must be a sequence")
         self._service_args = list(value)
