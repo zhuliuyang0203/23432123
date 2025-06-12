@@ -26,6 +26,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.openqa.selenium.remote.CapabilityType.ENABLE_DOWNLOADS;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.StringReader;
@@ -156,7 +157,7 @@ class NodeOptionsTest {
             .filter(caps -> expected.equalsIgnoreCase(caps.getBrowserName()))
             .findFirst()
             .orElseThrow(() -> new AssertionError("Unable to find " + customMsg + " info"));
-    return Optional.ofNullable(found.getCapability("se:downloadsEnabled"))
+    return Optional.ofNullable(found.getCapability(ENABLE_DOWNLOADS))
         .map(value -> Boolean.parseBoolean(value.toString()))
         .orElse(Boolean.FALSE);
   }
