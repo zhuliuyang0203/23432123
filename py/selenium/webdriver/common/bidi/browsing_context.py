@@ -335,9 +335,11 @@ class HistoryUpdatedParams:
     def __init__(
         self,
         context: str,
+        timestamp: int,
         url: str,
     ):
         self.context = context
+        self.timestamp = timestamp
         self.url = url
 
     @classmethod
@@ -356,12 +358,17 @@ class HistoryUpdatedParams:
         if context is None or not isinstance(context, str):
             raise ValueError("context is required and must be a string")
 
+        timestamp = json.get("timestamp")
+        if timestamp is None or not isinstance(timestamp, int) or timestamp < 0:
+            raise ValueError("timestamp is required and must be a non-negative integer")
+
         url = json.get("url")
         if url is None or not isinstance(url, str):
             raise ValueError("url is required and must be a string")
 
         return cls(
             context=context,
+            timestamp=timestamp,
             url=url,
         )
 
