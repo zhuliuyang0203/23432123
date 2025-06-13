@@ -24,6 +24,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 namespace OpenQA.Selenium.BiDi.Script;
 
@@ -282,7 +283,7 @@ public abstract record LocalValue
 
 public abstract record PrimitiveProtocolLocalValue : LocalValue;
 
-public record NumberLocalValue(double Value) : PrimitiveProtocolLocalValue
+public record NumberLocalValue([property: JsonConverter(typeof(BiDiDoubleConverter))] double Value) : PrimitiveProtocolLocalValue
 {
     public static explicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
 }

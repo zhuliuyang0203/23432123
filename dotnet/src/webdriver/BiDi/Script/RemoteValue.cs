@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 namespace OpenQA.Selenium.BiDi.Script;
 
@@ -97,7 +98,7 @@ public abstract record RemoteValue
     }
 }
 
-public record NumberRemoteValue(double Value) : PrimitiveProtocolRemoteValue;
+public record NumberRemoteValue([property: JsonConverter(typeof(BiDiDoubleConverter))] double Value) : PrimitiveProtocolRemoteValue;
 
 public record BooleanRemoteValue(bool Value) : PrimitiveProtocolRemoteValue;
 
