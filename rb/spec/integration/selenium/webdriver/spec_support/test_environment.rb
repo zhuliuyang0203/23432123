@@ -57,6 +57,10 @@ module Selenium
           end
         end
 
+        def browser_version
+          driver_instance.capabilities.browser_version
+        end
+
         def driver_instance(...)
           @driver_instance || create_driver!(...)
         end
@@ -204,7 +208,7 @@ module Selenium
           {
             browser: browser,
             driver: driver,
-            version: driver_instance.capabilities.browser_version,
+            version: browser_version,
             platform: Platform.os,
             ci: Platform.ci,
             rbe: rbe?
