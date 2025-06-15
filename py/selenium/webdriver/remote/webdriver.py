@@ -126,7 +126,7 @@ def get_remote_connection(
     if hasattr(command_executor, "client_config") and command_executor.client_config:
         remote_server_addr = command_executor.client_config.remote_server_addr
     else:
-        None
+        remote_server_addr = command_executor
 
     return handler(
         remote_server_addr=remote_server_addr,
@@ -447,8 +447,7 @@ class WebDriver(BaseWebDriver):
             elif "sessionId" not in params:
                 params["sessionId"] = self.session_id
 
-        executor = cast(RemoteConnection, self.command_executor)
-        response = executor.execute(driver_command, params)
+        response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
 
         if response:
             self.error_handler.check_response(response)
