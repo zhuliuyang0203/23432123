@@ -557,6 +557,6 @@ def test_multiple_navigation_events(driver, pages):
             assert "/bidi/logEntryAdded.html" in navigation_info.url
 
     finally:
-        for callback_id in callbacks:
-            for event_name in ["navigation_started", "dom_content_loaded", "load"]:
-                driver.browsing_context.remove_event_handler(event_name, callback_id)
+        event_names = ["navigation_started", "dom_content_loaded", "load"]
+        for i, callback_id in enumerate(callbacks):
+            driver.browsing_context.remove_event_handler(event_names[i], callback_id)
