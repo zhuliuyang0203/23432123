@@ -20,7 +20,6 @@ package org.openqa.selenium.bidi.browsingcontext;
 import static java.util.Collections.unmodifiableMap;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 import org.openqa.selenium.json.JsonInput;
 

@@ -29,10 +29,10 @@ import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.Event;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.browsingcontext.BrowsingContextInfo;
+import org.openqa.selenium.bidi.browsingcontext.HistoryUpdated;
 import org.openqa.selenium.bidi.browsingcontext.NavigationInfo;
 import org.openqa.selenium.bidi.browsingcontext.UserPromptClosed;
 import org.openqa.selenium.bidi.browsingcontext.UserPromptOpened;
-import org.openqa.selenium.bidi.browsingcontext.HistoryUpdated;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.json.Json;
 import org.openqa.selenium.json.JsonInput;
@@ -90,14 +90,14 @@ public class BrowsingContextInspector implements AutoCloseable {
           });
 
   private final Event<HistoryUpdated> historyUpdated =
-    new Event<>(
-      "browsingContext.historyUpdated",
-      params -> {
-        try (StringReader reader = new StringReader(JSON.toJson(params));
-             JsonInput input = JSON.newInput(reader)) {
-          return input.read(HistoryUpdated.class);
-        }
-      });
+      new Event<>(
+          "browsingContext.historyUpdated",
+          params -> {
+            try (StringReader reader = new StringReader(JSON.toJson(params));
+                JsonInput input = JSON.newInput(reader)) {
+              return input.read(HistoryUpdated.class);
+            }
+          });
 
   public BrowsingContextInspector(WebDriver driver) {
     this(new HashSet<>(), driver);
