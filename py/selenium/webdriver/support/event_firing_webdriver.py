@@ -73,7 +73,8 @@ class EventFiringWebDriver:
         if not isinstance(event_listener, AbstractEventListener):
             raise WebDriverException("Event listener must be a subclass of AbstractEventListener")
         self._driver = driver
-        self._driver._wrap_value = self._wrap_value
+        self._original_wrap_value = getattr(self._driver, "_wrap_value", None)
+        setattr(self._driver, "_wrap_value", self._wrap_value)
         self._listener = event_listener
 
     @property

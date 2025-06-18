@@ -22,7 +22,7 @@ from typing import Optional, Sequence
 
 from selenium.webdriver.common import service
 
-DEFAULT_EXECUTABLE_PATH: str = shutil.which("WebKitWebDriver")
+DEFAULT_EXECUTABLE_PATH: Optional[str] = shutil.which("WebKitWebDriver")
 
 
 class Service(service.Service):
@@ -40,7 +40,7 @@ class Service(service.Service):
 
     def __init__(
         self,
-        executable_path: str = DEFAULT_EXECUTABLE_PATH,
+        executable_path: Optional[str] = DEFAULT_EXECUTABLE_PATH,
         port: int = 0,
         log_path: Optional[str] = None,
         log_output: Optional[str] = None,
@@ -49,15 +49,17 @@ class Service(service.Service):
         **kwargs,
     ) -> None:
         self._service_args = list(service_args or [])
+        log_file = None
+        output_file = None
         if log_path is not None:
             warnings.warn("log_path is deprecated, use log_output instead", DeprecationWarning, stacklevel=2)
-            log_path = open(log_path, "wb")
-        log_output = open(log_output, "wb") if log_output else None
-
+            log_file = open(log_path, "wb")
+        if log_output:
+            output_file = open(log_output, "wb")
         super().__init__(
             executable_path=executable_path,
             port=port,
-            log_output=log_path or log_output,
+            log_output=log_file or output_file,
             env=env,
             **kwargs,
         )
