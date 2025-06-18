@@ -14,7 +14,6 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
 """The WebDriver implementation."""
 
 import base64
@@ -30,7 +29,7 @@ from abc import ABCMeta
 from base64 import b64decode, urlsafe_b64encode
 from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Type, Union, cast
 
 from selenium.common.exceptions import (
     InvalidArgumentException,
@@ -42,6 +41,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
+from selenium.webdriver.common.bidi.permissions import Permissions
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.bidi.session import Session
 from selenium.webdriver.common.bidi.storage import Storage
@@ -74,7 +74,6 @@ from .webelement import WebElement
 from .websocket_connection import WebSocketConnection
 
 cdp = None
-devtools = None
 
 
 def import_cdp():
@@ -123,8 +122,13 @@ def get_remote_connection(
     candidates = [ChromeRemoteConnection, EdgeRemoteConnection, SafariRemoteConnection, FirefoxRemoteConnection]
     handler = next((c for c in candidates if c.browser_name == capabilities.get("browserName")), RemoteConnection)
 
+    if hasattr(command_executor, "client_config") and command_executor.client_config:
+        remote_server_addr = command_executor.client_config.remote_server_addr
+    else:
+        remote_server_addr = command_executor
+
     return handler(
-        remote_server_addr=command_executor,
+        remote_server_addr=remote_server_addr,
         keep_alive=keep_alive,
         ignore_proxy=ignore_local_proxy,
         client_config=client_config,
@@ -132,7 +136,7 @@ def get_remote_connection(
 
 
 def create_matches(options: list[BaseOptions]) -> dict:
-    capabilities = {"capabilities": {}}
+    capabilities: Dict[str, Any] = {"capabilities": {}}
     opts = []
     for opt in options:
         opts.append(opt.to_capabilities())
@@ -155,9 +159,9 @@ def create_matches(options: list[BaseOptions]) -> dict:
     for k, v in samesies.items():
         always[k] = v
 
-    for i in opts:
+    for opt_dict in opts:
         for k in always:
-            del i[k]
+            del opt_dict[k]
 
     capabilities["capabilities"]["alwaysMatch"] = always
     capabilities["capabilities"]["firstMatch"] = opts
@@ -197,7 +201,7 @@ class WebDriver(BaseWebDriver):
         file_detector: Optional[FileDetector] = None,
         options: Optional[Union[BaseOptions, list[BaseOptions]]] = None,
         locator_converter: Optional[LocatorConverter] = None,
-        web_element_cls: Optional[type] = None,
+        web_element_cls: Optional[Type[WebElement]] = None,
         client_config: Optional[ClientConfig] = None,
     ) -> None:
         """Create a new driver that will issue commands using the wire
@@ -243,9 +247,9 @@ class WebDriver(BaseWebDriver):
                 client_config=client_config,
             )
         self._is_remote = True
-        self.session_id = None
-        self.caps = {}
-        self.pinned_scripts = {}
+        self.session_id: Optional[str] = None
+        self.caps: Dict[str, Any] = {}
+        self.pinned_scripts: Dict[str, Any] = {}
         self.error_handler = ErrorHandler()
         self._switch_to = SwitchTo(self)
         self._mobile = Mobile(self)
@@ -265,6 +269,8 @@ class WebDriver(BaseWebDriver):
         self._browsing_context = None
         self._storage = None
         self._webextension = None
+        self._permissions = None
+        self._devtools = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -442,7 +448,8 @@ class WebDriver(BaseWebDriver):
             elif "sessionId" not in params:
                 params["sessionId"] = self.session_id
 
-        response = self.command_executor.execute(driver_command, params)
+        response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+
         if response:
             self.error_handler.check_response(response)
             response["value"] = self._unwrap_value(response.get("value", None))
@@ -605,7 +612,8 @@ class WebDriver(BaseWebDriver):
             self.execute(Command.QUIT)
         finally:
             self.stop_client()
-            self.command_executor.close()
+            executor = cast(RemoteConnection, self.command_executor)
+            executor.close()
 
     @property
     def current_window_handle(self) -> str:
@@ -660,7 +668,7 @@ class WebDriver(BaseWebDriver):
         --------
         >>> driver.print_page()
         """
-        options = {}
+        options: Union[Dict[str, Any], Any] = {}
         if print_options:
             options = print_options.to_dict()
 
@@ -943,7 +951,10 @@ class WebDriver(BaseWebDriver):
 
         if isinstance(by, RelativeBy):
             _pkg = ".".join(__name__.split(".")[:-1])
-            raw_function = pkgutil.get_data(_pkg, "findElements.js").decode("utf8")
+            raw_data = pkgutil.get_data(_pkg, "findElements.js")
+            if raw_data is None:
+                raise FileNotFoundError(f"Could not find findElements.js in package {_pkg}")
+            raw_function = raw_data.decode("utf8")
             find_element_js = f"/* findElements */return ({raw_function}).apply(null, arguments);"
             return self.execute_script(find_element_js, by.to_dict())
 
@@ -1180,32 +1191,28 @@ class WebDriver(BaseWebDriver):
             raise WebDriverException("You can only set the orientation to 'LANDSCAPE' and 'PORTRAIT'")
 
     def start_devtools(self):
-        global devtools
-        if self._websocket_connection:
-            return devtools, self._websocket_connection
+        global cdp
+        import_cdp()
+        if self.caps.get("se:cdp"):
+            ws_url = self.caps.get("se:cdp")
+            version = self.caps.get("se:cdpVersion").split(".")[0]
         else:
-            global cdp
-            import_cdp()
+            version, ws_url = self._get_cdp_details()
 
-            if not devtools:
-                if self.caps.get("se:cdp"):
-                    ws_url = self.caps.get("se:cdp")
-                    version = self.caps.get("se:cdpVersion").split(".")[0]
-                else:
-                    version, ws_url = self._get_cdp_details()
+        if not ws_url:
+            raise WebDriverException("Unable to find url to connect to from capabilities")
 
-                if not ws_url:
-                    raise WebDriverException("Unable to find url to connect to from capabilities")
-
-                devtools = cdp.import_devtools(version)
-                if self.caps["browserName"].lower() == "firefox":
-                    raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
-            self._websocket_connection = WebSocketConnection(ws_url)
-            targets = self._websocket_connection.execute(devtools.target.get_targets())
-            target_id = targets[0].target_id
-            session = self._websocket_connection.execute(devtools.target.attach_to_target(target_id, True))
-            self._websocket_connection.session_id = session
-            return devtools, self._websocket_connection
+        self._devtools = cdp.import_devtools(version)
+        if self._websocket_connection:
+            return self._devtools, self._websocket_connection
+        if self.caps["browserName"].lower() == "firefox":
+            raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
+        self._websocket_connection = WebSocketConnection(ws_url)
+        targets = self._websocket_connection.execute(self._devtools.target.get_targets())
+        target_id = targets[0].target_id
+        session = self._websocket_connection.execute(self._devtools.target.attach_to_target(target_id, True))
+        self._websocket_connection.session_id = session
+        return self._devtools, self._websocket_connection
 
     @asynccontextmanager
     async def bidi_connection(self):
@@ -1280,9 +1287,8 @@ class WebDriver(BaseWebDriver):
 
     @property
     def _session(self):
-        """
-        Returns the BiDi session object for the current WebDriver session.
-        """
+        """Returns the BiDi session object for the current WebDriver
+        session."""
         if not self._websocket_connection:
             self._start_bidi()
 
@@ -1293,7 +1299,8 @@ class WebDriver(BaseWebDriver):
 
     @property
     def browsing_context(self):
-        """Returns a browsing context module object for BiDi browsing context commands.
+        """Returns a browsing context module object for BiDi browsing context
+        commands.
 
         Returns:
         --------
@@ -1338,6 +1345,28 @@ class WebDriver(BaseWebDriver):
             self._storage = Storage(self._websocket_connection)
 
         return self._storage
+
+    @property
+    def permissions(self):
+        """Returns a permissions module object for BiDi permissions commands.
+
+        Returns:
+        --------
+        Permissions: an object containing access to BiDi permissions commands.
+
+        Examples:
+        ---------
+        >>> from selenium.webdriver.common.bidi.permissions import PermissionDescriptor, PermissionState
+        >>> descriptor = PermissionDescriptor("geolocation")
+        >>> driver.permissions.set_permission(descriptor, PermissionState.GRANTED, "https://example.com")
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._permissions is None:
+            self._permissions = Permissions(self._websocket_connection)
+
+        return self._permissions
 
     @property
     def webextension(self):
@@ -1397,7 +1426,7 @@ class WebDriver(BaseWebDriver):
         self._authenticator_id = self.execute(Command.ADD_VIRTUAL_AUTHENTICATOR, options.to_dict())["value"]
 
     @property
-    def virtual_authenticator_id(self) -> str:
+    def virtual_authenticator_id(self) -> Optional[str]:
         """Returns the id of the virtual authenticator.
 
         Example:

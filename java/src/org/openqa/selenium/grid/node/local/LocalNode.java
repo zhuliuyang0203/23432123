@@ -23,6 +23,7 @@ import static org.openqa.selenium.grid.data.Availability.DOWN;
 import static org.openqa.selenium.grid.data.Availability.DRAINING;
 import static org.openqa.selenium.grid.data.Availability.UP;
 import static org.openqa.selenium.grid.node.CapabilityResponseEncoder.getEncoder;
+import static org.openqa.selenium.remote.CapabilityType.ENABLE_DOWNLOADS;
 import static org.openqa.selenium.remote.HttpSessionId.getSessionId;
 import static org.openqa.selenium.remote.RemoteTags.CAPABILITIES;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID;
@@ -575,7 +576,7 @@ public class LocalNode extends Node implements Closeable {
   }
 
   private boolean managedDownloadsRequested(Capabilities capabilities) {
-    Object downloadsEnabled = capabilities.getCapability("se:downloadsEnabled");
+    Object downloadsEnabled = capabilities.getCapability(ENABLE_DOWNLOADS);
     return managedDownloadsEnabled
         && downloadsEnabled != null
         && Boolean.parseBoolean(downloadsEnabled.toString());

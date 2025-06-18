@@ -33,6 +33,7 @@ class ChromiumOptions(ArgOptions):
         self._extensions: list[str] = []
         self._experimental_options: dict[str, Union[str, int, dict, list[str]]] = {}
         self._debugger_address: Optional[str] = None
+        self._enable_webextensions: bool = False
 
     @property
     def binary_location(self) -> str:
@@ -125,6 +126,39 @@ class ChromiumOptions(ArgOptions):
           value: The option value.
         """
         self._experimental_options[name] = value
+
+    @property
+    def enable_webextensions(self) -> bool:
+        """Returns whether webextension support is enabled for Chromium-based browsers.
+
+        :Returns: True if webextension support is enabled, False otherwise.
+        """
+        return self._enable_webextensions
+
+    @enable_webextensions.setter
+    def enable_webextensions(self, value: bool) -> None:
+        """Enables or disables webextension support for Chromium-based browsers.
+
+        When enabled, this automatically adds the required Chromium flags:
+        - --enable-unsafe-extension-debugging
+        - --remote-debugging-pipe
+
+        :Args:
+         - value: True to enable webextension support, False to disable.
+        """
+        self._enable_webextensions = value
+        if value:
+            # Add required flags for Chromium webextension support
+            required_flags = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in required_flags:
+                if flag not in self._arguments:
+                    self.add_argument(flag)
+        else:
+            # Remove webextension flags if disabling
+            flags_to_remove = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in flags_to_remove:
+                if flag in self._arguments:
+                    self._arguments.remove(flag)
 
     def to_capabilities(self) -> dict:
         """Creates a capabilities with all the options that have been set

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import pytest
 
 from selenium.webdriver.common.bidi.log import LogLevel
 from selenium.webdriver.common.by import By

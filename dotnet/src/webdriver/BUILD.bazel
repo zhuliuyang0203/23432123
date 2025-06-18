@@ -103,7 +103,7 @@ csharp_library(
         "**/*.cs",
     ]) + devtools_version_targets(),
     out = "WebDriver.StrongNamed",
-    keyfile = "//dotnet:WebDriver.snk",
+    keyfile = "//dotnet:Selenium.snk",
     langversion = "12.0",
     nullable = "enable",
     resources = [
@@ -141,7 +141,7 @@ csharp_library(
     defines = [
         "NET8_0_OR_GREATER",
     ],
-    keyfile = "//dotnet:WebDriver.snk",
+    keyfile = "//dotnet:Selenium.snk",
     langversion = "12.0",
     nullable = "enable",
     resources = [
@@ -216,7 +216,7 @@ nuget_pack(
         ":webdriver-net8.0": "WebDriver",
         ":webdriver-netstandard2.0": "WebDriver",
     },
-    nuspec_template = "WebDriver.nuspec",
+    nuspec_template = "Selenium.WebDriver.nuspec",
     tags = [
         "block-network",
     ],
@@ -242,7 +242,7 @@ nuget_pack(
         ":webdriver-net8.0-strongnamed": "WebDriver.StrongNamed",
         ":webdriver-netstandard2.0-strongnamed": "WebDriver.StrongNamed",
     },
-    nuspec_template = "WebDriver.StrongNamed.nuspec",
+    nuspec_template = "Selenium.WebDriver.StrongNamed.nuspec",
     property_group_vars = {
         "BaseImagePath": "images",
         "BaseSeleniumManagerPath": "manager",

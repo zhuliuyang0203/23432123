@@ -649,6 +649,11 @@ public class RemoteWebDriver
         Map.of("authenticatorId", authenticator.getId()));
   }
 
+  @Override
+  public boolean isDownloadsEnabled() {
+    return HasDownloads.isDownloadsEnabled(capabilities);
+  }
+
   /**
    * Retrieves the names of the downloadable files.
    *

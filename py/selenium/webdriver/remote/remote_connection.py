@@ -145,7 +145,7 @@ class RemoteConnection:
     https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol
     """
 
-    browser_name = None
+    browser_name: Optional[str] = None
     # Keep backward compatibility for AppiumConnection - https://github.com/SeleniumHQ/selenium/issues/14694
     import os
     import socket

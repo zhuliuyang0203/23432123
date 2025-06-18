@@ -17,6 +17,7 @@
 
 from typing import Union
 
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.bidi.common import command_builder
 
 
@@ -54,8 +55,17 @@ class WebExtension:
             extension_data = {"type": "base64", "value": base64_value}
 
         params = {"extensionData": extension_data}
-        result = self.conn.execute(command_builder("webExtension.install", params))
-        return result
+
+        try:
+            result = self.conn.execute(command_builder("webExtension.install", params))
+            return result
+        except WebDriverException as e:
+            if "Method not available" in str(e):
+                raise WebDriverException(
+                    f"{str(e)}. If you are using Chrome or Edge, add '--enable-unsafe-extension-debugging' "
+                    "and '--remote-debugging-pipe' arguments or set options.enable_webextensions = True"
+                ) from e
+            raise
 
     def uninstall(self, extension_id_or_result: Union[str, dict]) -> None:
         """Uninstalls a web extension from the remote end.
