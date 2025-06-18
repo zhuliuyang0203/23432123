@@ -58,5 +58,7 @@ public record ElementClipRectangle(Script.ISharedReference Element) : ClipRectan
 
 public record CaptureScreenshotResult(string Data) : EmptyResult
 {
+    public static implicit operator byte[](CaptureScreenshotResult captureScreenshotResult) => captureScreenshotResult.ToByteArray();
+
     public byte[] ToByteArray() => System.Convert.FromBase64String(Data);
 }
