@@ -193,6 +193,19 @@ module Selenium
           raise e
         end
 
+        def beta_chrome_version
+          chrome_beta_url = 'https://chromereleases.googleblog.com/search/label/Beta%20updates'
+
+          uri = URI.parse(chrome_beta_url)
+          response = Net::HTTP.get_response(uri)
+
+          if response.is_a?(Net::HTTPSuccess)
+            response.body.match(/Chrome Beta\s+\d+\s+\((\d+\.\d+\.\d+\.\d+)\)/)[1]
+          else
+            "Failed to fetch Chrome Beta page: #{response&.code}"
+          end
+        end
+
         private
 
         def build_options(**)

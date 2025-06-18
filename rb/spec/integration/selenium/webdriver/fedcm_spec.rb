@@ -23,7 +23,7 @@ module Selenium
   module WebDriver
     module FedCM
       describe FedCM,
-               exclude: {version: '138.0.7204.23'},
+               exclude: {version: GlobalTestEnv.beta_chrome_version},
                exclusive: [{bidi: false, reason: 'Not yet implemented with BiDi'}, {browser: %i[chrome edge]}] do
         let(:dialog) { driver.fedcm_dialog }
 

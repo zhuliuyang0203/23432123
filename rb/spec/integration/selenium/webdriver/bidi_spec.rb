@@ -21,8 +21,7 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe BiDi, exclude: {version: '138.0.7204.23'},
-                   exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
+    describe BiDi, exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
                    only: {browser: %i[chrome edge firefox]} do
       after { |example| reset_driver!(example: example) }
 

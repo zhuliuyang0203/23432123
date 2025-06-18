@@ -21,7 +21,7 @@ require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe Network, exclude: {version: '138.0.7204.23'},
+    describe Network, exclude: {version: GlobalTestEnv.beta_chrome_version},
                       exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
                       only: {browser: %i[chrome edge firefox]} do
       let(:username) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.first }
