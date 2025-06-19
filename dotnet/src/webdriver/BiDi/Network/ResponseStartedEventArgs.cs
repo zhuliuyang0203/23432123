@@ -22,7 +22,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-public sealed record ResponseStartedEventArgs(BiDi BiDi,
+public record ResponseStartedEventArgs(BiDi BiDi,
     BrowsingContext.BrowsingContext? Context,
     bool IsBlocked,
     Navigation? Navigation,
