@@ -21,5 +21,5 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public record HistoryUpdatedEventArgs(BiDi BiDi, BrowsingContext Context, DateTimeOffset Timestamp, string Url)
+public sealed record HistoryUpdatedEventArgs(BiDi BiDi, BrowsingContext Context, DateTimeOffset Timestamp, string Url)
     : BrowsingContextEventArgs(BiDi, Context);

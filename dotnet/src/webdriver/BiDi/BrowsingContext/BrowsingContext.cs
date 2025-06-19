@@ -23,7 +23,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContext
+public sealed class BrowsingContext
 {
     internal BrowsingContext(BiDi bidi, string id)
     {
