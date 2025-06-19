@@ -52,11 +52,11 @@ public partial class NetworkModule
     }
 }
 
-public sealed record InterceptRequestOptions : AddInterceptOptions;
+public sealed class InterceptRequestOptions : AddInterceptOptions;
 
-public sealed record InterceptResponseOptions : AddInterceptOptions;
+public sealed class InterceptResponseOptions : AddInterceptOptions;
 
-public sealed record InterceptAuthOptions : AddInterceptOptions;
+public sealed class InterceptAuthOptions : AddInterceptOptions;
 
 public sealed record InterceptedRequest(BiDi BiDi, BrowsingContext.BrowsingContext? Context, bool IsBlocked, BrowsingContext.Navigation? Navigation, long RedirectCount, RequestData Request, DateTimeOffset Timestamp, Initiator Initiator)
     : BeforeRequestSentEventArgs(BiDi, Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp, Initiator)

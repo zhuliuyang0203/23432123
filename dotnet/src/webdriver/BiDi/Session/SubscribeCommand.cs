@@ -27,7 +27,7 @@ internal sealed class SubscribeCommand(SubscribeCommandParameters @params)
 
 internal sealed record SubscribeCommandParameters(IEnumerable<string> Events, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
 
-public sealed record SubscribeOptions : CommandOptions
+public sealed class SubscribeOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }

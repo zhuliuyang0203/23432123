@@ -31,7 +31,7 @@ internal sealed class UnsubscribeByAttributesCommand(UnsubscribeByAttributesComm
 
 internal sealed record UnsubscribeByIdCommandParameters(IEnumerable<Subscription> Subscriptions) : CommandParameters;
 
-public sealed record UnsubscribeByIdOptions : CommandOptions;
+public sealed class UnsubscribeByIdOptions : CommandOptions;
 
 internal sealed record UnsubscribeByAttributesCommandParameters(
     IEnumerable<string> Events,
@@ -39,7 +39,7 @@ internal sealed record UnsubscribeByAttributesCommandParameters(
     // https://w3c.github.io/webdriver-bidi/#type-session-UnsubscribeByAttributesRequest
     IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
 
-public sealed record UnsubscribeByAttributesOptions : CommandOptions
+public sealed class UnsubscribeByAttributesOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }

@@ -26,6 +26,6 @@ internal sealed class TraverseHistoryCommand(TraverseHistoryCommandParameters @p
 
 internal sealed record TraverseHistoryCommandParameters(BrowsingContext Context, long Delta) : CommandParameters;
 
-public sealed record TraverseHistoryOptions : CommandOptions;
+public sealed class TraverseHistoryOptions : CommandOptions;
 
 public sealed record TraverseHistoryResult : EmptyResult;

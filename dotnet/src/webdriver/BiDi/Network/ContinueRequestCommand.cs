@@ -27,7 +27,7 @@ internal sealed class ContinueRequestCommand(ContinueRequestCommandParameters @p
 
 internal sealed record ContinueRequestCommandParameters(Request Request, BytesValue? Body, IEnumerable<CookieHeader>? Cookies, IEnumerable<Header>? Headers, string? Method, string? Url) : CommandParameters;
 
-public sealed record ContinueRequestOptions : CommandOptions
+public sealed class ContinueRequestOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

@@ -27,4 +27,4 @@ internal sealed class PerformActionsCommand(PerformActionsCommandParameters @par
 
 internal sealed record PerformActionsCommandParameters(BrowsingContext.BrowsingContext Context, IEnumerable<SourceActions> Actions) : CommandParameters;
 
-public sealed record PerformActionsOptions : CommandOptions;
+public sealed class PerformActionsOptions : CommandOptions;

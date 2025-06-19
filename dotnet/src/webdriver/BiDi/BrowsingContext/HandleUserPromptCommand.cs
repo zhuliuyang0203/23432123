@@ -26,7 +26,7 @@ internal sealed class HandleUserPromptCommand(HandleUserPromptCommandParameters 
 
 internal sealed record HandleUserPromptCommandParameters(BrowsingContext Context, bool? Accept, string? UserText) : CommandParameters;
 
-public sealed record HandleUserPromptOptions : CommandOptions
+public sealed class HandleUserPromptOptions : CommandOptions
 {
     public bool? Accept { get; set; }
 

@@ -26,7 +26,7 @@ internal sealed class CreateUserContextCommand(CreateUserContextCommandParameter
 
 internal sealed record CreateUserContextCommandParameters(bool? AcceptInsecureCerts, Session.ProxyConfiguration? Proxy) : CommandParameters;
 
-public sealed record CreateUserContextOptions : CommandOptions
+public sealed class CreateUserContextOptions : CommandOptions
 {
     public bool? AcceptInsecureCerts { get; set; }
 

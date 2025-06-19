@@ -27,7 +27,7 @@ internal sealed class AddInterceptCommand(AddInterceptCommandParameters @params)
 
 internal sealed record AddInterceptCommandParameters(IEnumerable<InterceptPhase> Phases, IEnumerable<BrowsingContext.BrowsingContext>? Contexts, IEnumerable<UrlPattern>? UrlPatterns) : CommandParameters;
 
-public record AddInterceptOptions : CommandOptions
+public class AddInterceptOptions : CommandOptions
 {
     public AddInterceptOptions() { }
 

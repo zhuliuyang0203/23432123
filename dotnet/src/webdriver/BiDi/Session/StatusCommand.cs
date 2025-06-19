@@ -26,4 +26,4 @@ internal sealed class StatusCommand()
 
 public sealed record StatusResult(bool Ready, string Message) : EmptyResult;
 
-public sealed record StatusOptions : CommandOptions;
+public sealed class StatusOptions : CommandOptions;

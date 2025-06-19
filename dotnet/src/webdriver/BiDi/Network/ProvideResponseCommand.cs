@@ -27,7 +27,7 @@ internal sealed class ProvideResponseCommand(ProvideResponseCommandParameters @p
 
 internal sealed record ProvideResponseCommandParameters(Request Request, BytesValue? Body, IEnumerable<SetCookieHeader>? Cookies, IEnumerable<Header>? Headers, string? ReasonPhrase, long? StatusCode) : CommandParameters;
 
-public sealed record ProvideResponseOptions : CommandOptions
+public sealed class ProvideResponseOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

@@ -27,7 +27,7 @@ internal sealed class CallFunctionCommand(CallFunctionCommandParameters @params)
 
 internal sealed record CallFunctionCommandParameters(string FunctionDeclaration, bool AwaitPromise, Target Target, IEnumerable<LocalValue>? Arguments, ResultOwnership? ResultOwnership, SerializationOptions? SerializationOptions, LocalValue? This, bool? UserActivation) : CommandParameters;
 
-public sealed record CallFunctionOptions : CommandOptions
+public sealed class CallFunctionOptions : CommandOptions
 {
     public IEnumerable<LocalValue>? Arguments { get; set; }
 

@@ -24,4 +24,4 @@ namespace OpenQA.Selenium.BiDi.Session;
 internal sealed class EndCommand()
     : Command<CommandParameters, EmptyResult>(CommandParameters.Empty, "session.end");
 
-public sealed record EndOptions : CommandOptions;
+public sealed class EndOptions : CommandOptions;

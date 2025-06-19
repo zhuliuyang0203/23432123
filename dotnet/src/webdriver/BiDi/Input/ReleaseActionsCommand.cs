@@ -26,4 +26,4 @@ internal sealed class ReleaseActionsCommand(ReleaseActionsCommandParameters @par
 
 internal sealed record ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext Context) : CommandParameters;
 
-public sealed record ReleaseActionsOptions : CommandOptions;
+public sealed class ReleaseActionsOptions : CommandOptions;

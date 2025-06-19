@@ -26,7 +26,7 @@ internal sealed class CloseCommand(CloseCommandParameters @params)
 
 internal sealed record CloseCommandParameters(BrowsingContext Context, bool? PromptUnload) : CommandParameters;
 
-public sealed record CloseOptions : CommandOptions
+public sealed class CloseOptions : CommandOptions
 {
     public bool? PromptUnload { get; set; }
 }

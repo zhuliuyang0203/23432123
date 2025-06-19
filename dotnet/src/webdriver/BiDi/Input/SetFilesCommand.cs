@@ -27,4 +27,4 @@ internal sealed class SetFilesCommand(SetFilesCommandParameters @params)
 
 internal sealed record SetFilesCommandParameters(BrowsingContext.BrowsingContext Context, Script.ISharedReference Element, IEnumerable<string> Files) : CommandParameters;
 
-public sealed record SetFilesOptions : CommandOptions;
+public sealed class SetFilesOptions : CommandOptions;
