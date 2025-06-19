@@ -34,7 +34,7 @@ public record AutoDetectProxyConfiguration : ProxyConfiguration;
 
 public record DirectProxyConfiguration : ProxyConfiguration;
 
-public record ManualProxyConfiguration : ProxyConfiguration
+public record ManualProxyConfiguration : ProxyConfiguration, ISocksProxyConfiguration
 {
     public string? HttpProxy { get; set; }
 
@@ -42,7 +42,7 @@ public record ManualProxyConfiguration : ProxyConfiguration
 
     public string? SocksProxy { get; set; }
 
-    public int? SocksVersion { get; set; } // 0..255
+    public int? SocksVersion { get; set; }
 
     public IEnumerable<string>? NoProxy { get; set; }
 }
@@ -50,3 +50,10 @@ public record ManualProxyConfiguration : ProxyConfiguration
 public record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
 
 public record SystemProxyConfiguration : ProxyConfiguration;
+
+public interface ISocksProxyConfiguration
+{
+    public string? SocksProxy { get; set; }
+
+    public int? SocksVersion { get; set; } // 0..255
+}
