@@ -173,7 +173,6 @@ class ElementNotVisibleException(InvalidElementStateException):
         super().__init__(with_support, screen, stacktrace)
 
 
-
 class ElementNotInteractableException(InvalidElementStateException):
     """Thrown when an element is present in the DOM but interactions with that
     element will hit another element due to paint order."""
@@ -184,7 +183,6 @@ class ElementNotInteractableException(InvalidElementStateException):
         with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#elementnotinteractableexception"
 
         super().__init__(with_support, screen, stacktrace)
-
 
 
 class ElementNotSelectableException(InvalidElementStateException):
@@ -274,7 +272,6 @@ class ElementClickInterceptedException(WebDriverException):
         with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#elementclickinterceptedexception"
 
         super().__init__(with_support, screen, stacktrace)
-
 
 
 class InsecureCertificateException(WebDriverException):
