@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-public class Intercept : IAsyncDisposable
+public sealed class Intercept : IAsyncDisposable
 {
     private readonly BiDi _bidi;
 
