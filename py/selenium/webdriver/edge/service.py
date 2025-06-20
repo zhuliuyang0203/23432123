@@ -39,7 +39,7 @@ class Service(service.ChromiumService):
         executable_path: Optional[str] = None,
         port: int = 0,
         log_output: Optional[SubprocessStdAlias] = None,
-        service_args: Optional[Sequence[str]] = None,
+        service_args: Optional[list[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
         **kwargs,
@@ -58,11 +58,11 @@ class Service(service.ChromiumService):
         )
 
     @property
-    def service_args(self) -> Sequence[str]:
+    def service_args(self) -> list[str]:
         return self._service_args
 
     @service_args.setter
-    def service_args(self, value: Sequence[str]):
+    def service_args(self, value: list[str]):
         if isinstance(value, str) or not isinstance(value, Sequence):
             raise TypeError("service_args must be a sequence")
         self._service_args = list(value)

@@ -15,12 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional
 
+from selenium.webdriver.chromium.options import ChromiumOptions
 from selenium.webdriver.chromium.remote_connection import ChromiumRemoteConnection
+from selenium.webdriver.chromium.service import ChromiumService
 from selenium.webdriver.common.driver_finder import DriverFinder
-from selenium.webdriver.common.options import ArgOptions
-from selenium.webdriver.common.service import Service
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 
@@ -31,10 +30,10 @@ class ChromiumDriver(RemoteWebDriver):
 
     def __init__(
         self,
-        browser_name: Optional[str] = None,
-        vendor_prefix: Optional[str] = None,
-        options: ArgOptions = ArgOptions(),
-        service: Optional[Service] = None,
+        browser_name: str,
+        vendor_prefix: str,
+        options: ChromiumOptions = ChromiumOptions(),
+        service: ChromiumService = ChromiumService(),
         keep_alive: bool = True,
     ) -> None:
         """Creates a new WebDriver instance of the ChromiumDriver. Starts the

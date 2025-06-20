@@ -17,7 +17,7 @@
 
 from collections.abc import Mapping, Sequence
 from io import IOBase
-from typing import Optional
+from typing import Optional, Union
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.common import service
@@ -34,12 +34,14 @@ class ChromiumService(service.Service):
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     :param driver_path_env_key: (Optional) Environment variable to use to get the path to the driver executable.
     """
+    _service_args: list[str]
+    log_output: Union[Optional[IOBase], Optional[Union[int, IOBase]], Optional[SubprocessStdAlias]]
 
     def __init__(
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[Sequence[str]] = None,
+        service_args: Optional[list[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
@@ -69,11 +71,11 @@ class ChromiumService(service.Service):
         return [f"--port={self.port}"] + self._service_args
 
     @property
-    def service_args(self) -> Sequence[str]:
+    def service_args(self) -> list[str]:
         return self._service_args
 
     @service_args.setter
-    def service_args(self, value: Sequence[str]):
+    def service_args(self, value: list[str]):
         if isinstance(value, str) or not isinstance(value, Sequence):
             raise TypeError("service_args must be a sequence")
         self._service_args = list(value)
