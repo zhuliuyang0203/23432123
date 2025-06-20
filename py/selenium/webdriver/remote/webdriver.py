@@ -29,7 +29,7 @@ from abc import ABCMeta
 from base64 import b64decode, urlsafe_b64encode
 from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any, Dict, Optional, Type, Union, cast
+from typing import Any, Optional, Union, cast
 
 from selenium.common.exceptions import (
     InvalidArgumentException,
@@ -136,7 +136,7 @@ def get_remote_connection(
 
 
 def create_matches(options: list[BaseOptions]) -> dict:
-    capabilities: Dict[str, Any] = {"capabilities": {}}
+    capabilities: dict[str, Any] = {"capabilities": {}}
     opts = []
     for opt in options:
         opts.append(opt.to_capabilities())
@@ -201,7 +201,7 @@ class WebDriver(BaseWebDriver):
         file_detector: Optional[FileDetector] = None,
         options: Optional[Union[BaseOptions, list[BaseOptions]]] = None,
         locator_converter: Optional[LocatorConverter] = None,
-        web_element_cls: Optional[Type[WebElement]] = None,
+        web_element_cls: Optional[type[WebElement]] = None,
         client_config: Optional[ClientConfig] = None,
     ) -> None:
         """Create a new driver that will issue commands using the wire
@@ -248,8 +248,8 @@ class WebDriver(BaseWebDriver):
             )
         self._is_remote = True
         self.session_id: Optional[str] = None
-        self.caps: Dict[str, Any] = {}
-        self.pinned_scripts: Dict[str, Any] = {}
+        self.caps: dict[str, Any] = {}
+        self.pinned_scripts: dict[str, Any] = {}
         self.error_handler = ErrorHandler()
         self._switch_to = SwitchTo(self)
         self._mobile = Mobile(self)
@@ -668,7 +668,7 @@ class WebDriver(BaseWebDriver):
         --------
         >>> driver.print_page()
         """
-        options: Union[Dict[str, Any], Any] = {}
+        options: Union[dict[str, Any], Any] = {}
         if print_options:
             options = print_options.to_dict()
 

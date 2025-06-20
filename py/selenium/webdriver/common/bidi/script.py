@@ -16,7 +16,7 @@
 # under the License.
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from selenium.webdriver.common.bidi.common import command_builder
 
@@ -55,7 +55,7 @@ class RealmInfo:
     sandbox: Optional[str] = None
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "RealmInfo":
+    def from_json(cls, json: dict[str, Any]) -> "RealmInfo":
         """Creates a RealmInfo instance from a dictionary.
 
         Parameters:
@@ -90,7 +90,7 @@ class Source:
     context: Optional[str] = None
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "Source":
+    def from_json(cls, json: dict[str, Any]) -> "Source":
         """Creates a Source instance from a dictionary.
 
         Parameters:
@@ -120,7 +120,7 @@ class EvaluateResult:
     exception_details: Optional[dict] = None
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "EvaluateResult":
+    def from_json(cls, json: dict[str, Any]) -> "EvaluateResult":
         """Creates an EvaluateResult instance from a dictionary.
 
         Parameters:
@@ -155,7 +155,7 @@ class ScriptMessage:
         self.source = source
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "ScriptMessage":
+    def from_json(cls, json: dict[str, Any]) -> "ScriptMessage":
         """Creates a ScriptMessage instance from a dictionary.
 
         Parameters:
@@ -189,7 +189,7 @@ class RealmCreated:
         self.realm_info = realm_info
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "RealmCreated":
+    def from_json(cls, json: dict[str, Any]) -> "RealmCreated":
         """Creates a RealmCreated instance from a dictionary.
 
         Parameters:
@@ -212,7 +212,7 @@ class RealmDestroyed:
         self.realm = realm
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> "RealmDestroyed":
+    def from_json(cls, json: dict[str, Any]) -> "RealmDestroyed":
         """Creates a RealmDestroyed instance from a dictionary.
 
         Parameters:
@@ -262,9 +262,9 @@ class Script:
     def _add_preload_script(
         self,
         function_declaration: str,
-        arguments: Optional[List[Dict[str, Any]]] = None,
-        contexts: Optional[List[str]] = None,
-        user_contexts: Optional[List[str]] = None,
+        arguments: Optional[list[dict[str, Any]]] = None,
+        contexts: Optional[list[str]] = None,
+        user_contexts: Optional[list[str]] = None,
         sandbox: Optional[str] = None,
     ) -> str:
         """Adds a preload script.
@@ -288,7 +288,7 @@ class Script:
         if contexts is not None and user_contexts is not None:
             raise ValueError("Cannot specify both contexts and user_contexts")
 
-        params: Dict[str, Any] = {"functionDeclaration": function_declaration}
+        params: dict[str, Any] = {"functionDeclaration": function_declaration}
 
         if arguments is not None:
             params["arguments"] = arguments
@@ -312,7 +312,7 @@ class Script:
         params = {"script": script_id}
         self.conn.execute(command_builder("script.removePreloadScript", params))
 
-    def _disown(self, handles: List[str], target: dict) -> None:
+    def _disown(self, handles: list[str], target: dict) -> None:
         """Disowns the given handles.
 
         Parameters:
@@ -331,7 +331,7 @@ class Script:
         function_declaration: str,
         await_promise: bool,
         target: dict,
-        arguments: Optional[List[dict]] = None,
+        arguments: Optional[list[dict]] = None,
         result_ownership: Optional[str] = None,
         serialization_options: Optional[dict] = None,
         this: Optional[dict] = None,
@@ -416,7 +416,7 @@ class Script:
         self,
         context: Optional[str] = None,
         type: Optional[str] = None,
-    ) -> List[RealmInfo]:
+    ) -> list[RealmInfo]:
         """Returns a list of all realms, optionally filtered.
 
         Parameters:

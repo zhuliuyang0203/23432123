@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Session;
@@ -33,19 +34,26 @@ public record AutoDetectProxyConfiguration : ProxyConfiguration;
 
 public record DirectProxyConfiguration : ProxyConfiguration;
 
-public record ManualProxyConfiguration : ProxyConfiguration
+public record ManualProxyConfiguration : ProxyConfiguration, ISocksProxyConfiguration
 {
-    public string? FtpProxy { get; set; }
-
     public string? HttpProxy { get; set; }
 
     public string? SslProxy { get; set; }
 
     public string? SocksProxy { get; set; }
 
-    public long? SocksVersion { get; set; }
+    public int? SocksVersion { get; set; }
+
+    public IEnumerable<string>? NoProxy { get; set; }
 }
 
 public record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
 
 public record SystemProxyConfiguration : ProxyConfiguration;
+
+public interface ISocksProxyConfiguration
+{
+    public string? SocksProxy { get; set; }
+
+    public int? SocksVersion { get; set; } // 0..255
+}
