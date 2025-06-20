@@ -24,7 +24,6 @@ import static org.openqa.selenium.grid.router.httpd.RouterOptions.ROUTER_SECTION
 import com.beust.jcommander.Parameter;
 import com.google.auto.service.AutoService;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import org.openqa.selenium.grid.config.ConfigValue;
 import org.openqa.selenium.grid.config.HasRoles;
@@ -74,28 +73,6 @@ public class RouterFlags implements HasRoles {
       description = "Disable the Grid UI")
   @ConfigValue(section = ROUTER_SECTION, name = "disable-ui", example = "true")
   public boolean disableUi = false;
-
-  @Parameter(
-      names = {"--blocked-routes"},
-      description =
-          "Route to block in format 'METHOD:path'. Can be specified multiple times."
-              + " Example: --blocked-routes DELETE:/session/{session-id} --blocked-routes"
-              + " DELETE:/se/grid/distributor/node/{node-id}")
-  @ConfigValue(
-      section = ROUTER_SECTION,
-      name = "blocked-routes",
-      example =
-          "[\"DELETE:/session/{session-id}\", \"DELETE:/se/grid/distributor/node/{node-id}\"]")
-  public List<String> blockedRoutes;
-
-  @Parameter(
-      names = {"--blocked-delete-session"},
-      arity = 1,
-      description =
-          "A flag to prevent deleting a session proactively by blocking DELETE requests to"
-              + " /session/{session-id} route")
-  @ConfigValue(section = ROUTER_SECTION, name = "blocked-delete-session", example = "true")
-  public boolean blockedDeleteSession = false;
 
   @Override
   public Set<Role> getRoles() {

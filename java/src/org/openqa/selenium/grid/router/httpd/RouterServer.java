@@ -37,7 +37,6 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -172,13 +171,6 @@ public class RouterServer extends TemplateGridServerCommand {
     if (uap != null) {
       LOG.info("Requiring authentication to connect");
       route = route.with(new BasicAuthenticationFilter(uap.username(), uap.password()));
-    }
-
-    // Apply blocked routes filter
-    List<BlockedRoute> blockedRoutes = routerOptions.getBlockedRoutes();
-    if (!blockedRoutes.isEmpty()) {
-      LOG.info("Blocking " + blockedRoutes.size() + " route(s): " + blockedRoutes);
-      route = BlockedRoutesFilter.with(route, blockedRoutes);
     }
 
     HttpHandler readinessCheck =

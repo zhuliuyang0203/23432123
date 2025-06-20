@@ -17,9 +17,6 @@
 
 package org.openqa.selenium.grid.router.httpd;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.openqa.selenium.grid.config.Config;
 
 public class RouterOptions {
@@ -53,52 +50,5 @@ public class RouterOptions {
 
   public boolean disableUi() {
     return config.get(ROUTER_SECTION, "disable-ui").map(Boolean::parseBoolean).orElse(false);
-  }
-
-  /**
-   * Returns a list of blocked routes from the configuration. Each blocked route should be specified
-   * in the format "METHOD:path" (e.g., "DELETE:/session/{session-id}"). Multiple routes can be
-   * specified as a list. If the blocked-delete-session flag is enabled,
-   * DELETE:/session/{session-id} will be automatically added.
-   *
-   * @return List of blocked routes
-   */
-  public List<BlockedRoute> getBlockedRoutes() {
-    List<BlockedRoute> routes =
-        config
-            .getAll(ROUTER_SECTION, "blocked-routes")
-            .map(
-                blockedRoutesList -> {
-                  if (blockedRoutesList.isEmpty()) {
-                    return List.<BlockedRoute>of();
-                  }
-
-                  return blockedRoutesList.stream()
-                      .map(String::trim)
-                      .filter(s -> !s.isEmpty())
-                      .map(BlockedRoute::fromString)
-                      .collect(Collectors.toList());
-                })
-            .orElse(List.of());
-
-    // Add DELETE session route if the flag is enabled
-    boolean blockedDeleteSession =
-        config.getBool(ROUTER_SECTION, "blocked-delete-session").orElse(false);
-
-    if (blockedDeleteSession) {
-      BlockedRoute deleteSessionRoute = new BlockedRoute("DELETE", "/session/{session-id}");
-      // Only add if not already present
-      if (routes.stream()
-          .noneMatch(
-              route ->
-                  "DELETE".equals(route.getMethod())
-                      && "/session/{session-id}".equals(route.getPath()))) {
-        routes =
-            Stream.concat(routes.stream(), Stream.of(deleteSessionRoute))
-                .collect(Collectors.toList());
-      }
-    }
-
-    return routes;
   }
 }

@@ -32,7 +32,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,8 +53,6 @@ import org.openqa.selenium.grid.node.Node;
 import org.openqa.selenium.grid.node.ProxyNodeWebsockets;
 import org.openqa.selenium.grid.node.config.NodeOptions;
 import org.openqa.selenium.grid.router.Router;
-import org.openqa.selenium.grid.router.httpd.BlockedRoute;
-import org.openqa.selenium.grid.router.httpd.BlockedRoutesFilter;
 import org.openqa.selenium.grid.router.httpd.RouterOptions;
 import org.openqa.selenium.grid.security.BasicAuthenticationFilter;
 import org.openqa.selenium.grid.security.Secret;
@@ -214,13 +211,6 @@ public class Standalone extends TemplateGridServerCommand {
     if (uap != null) {
       LOG.info("Requiring authentication to connect");
       httpHandler = httpHandler.with(new BasicAuthenticationFilter(uap.username(), uap.password()));
-    }
-
-    // Apply blocked routes filter
-    List<BlockedRoute> blockedRoutes = routerOptions.getBlockedRoutes();
-    if (!blockedRoutes.isEmpty()) {
-      LOG.info("Blocking " + blockedRoutes.size() + " route(s): " + blockedRoutes);
-      httpHandler = BlockedRoutesFilter.with(httpHandler, blockedRoutes);
     }
 
     // Allow the liveness endpoint to be reached, since k8s doesn't make it easy to authenticate
