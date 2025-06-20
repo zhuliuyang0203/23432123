@@ -27,6 +27,7 @@ import org.openqa.selenium.remote.RemoteWebDriverBuilder;
 import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.service.DriverCommandExecutor;
 import org.openqa.selenium.remote.service.DriverFinder;
+import org.jspecify.annotations.Nullable;
 
 public class InternetExplorerDriver extends RemoteWebDriver {
 
@@ -108,9 +109,9 @@ public class InternetExplorerDriver extends RemoteWebDriver {
    * @param options The options required from InternetExplorerDriver.
    */
   public InternetExplorerDriver(
-      InternetExplorerDriverService service,
-      InternetExplorerOptions options,
-      ClientConfig clientConfig) {
+      @Nullable InternetExplorerDriverService service,
+      @Nullable InternetExplorerOptions options,
+      @Nullable ClientConfig clientConfig) {
     if (options == null) {
       options = new InternetExplorerOptions();
     }
