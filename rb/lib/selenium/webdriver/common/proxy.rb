@@ -77,7 +77,7 @@ module Selenium
       alias eql? ==
 
       def ftp=(value)
-        warn "[DEPRECATED] FTP proxy support is deprecated and will be removed in the 4.37 version."
+        WebDriver.logger.deprecate('FTP proxy support', nil, id: :ftp_proxy)
         self.type = :manual
         @ftp = value
       end
