@@ -21,16 +21,16 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Session;
 
-internal class NewCommand(NewCommandParameters @params)
+internal sealed class NewCommand(NewCommandParameters @params)
     : Command<NewCommandParameters, NewResult>(@params, "session.new");
 
-internal record NewCommandParameters(CapabilitiesRequest Capabilities) : CommandParameters;
+internal sealed record NewCommandParameters(CapabilitiesRequest Capabilities) : CommandParameters;
 
-public record NewOptions : CommandOptions;
+public sealed class NewOptions : CommandOptions;
 
-public record NewResult(string SessionId, Capability Capability) : EmptyResult;
+public sealed record NewResult(string SessionId, Capability Capability) : EmptyResult;
 
-public record Capability(bool AcceptInsecureCerts, string BrowserName, string BrowserVersion, string PlatformName, bool SetWindowRect, string UserAgent)
+public sealed record Capability(bool AcceptInsecureCerts, string BrowserName, string BrowserVersion, string PlatformName, bool SetWindowRect, string UserAgent)
 {
     public ProxyConfiguration? Proxy { get; set; }
 

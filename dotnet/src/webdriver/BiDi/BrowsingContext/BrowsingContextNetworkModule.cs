@@ -23,7 +23,7 @@ using OpenQA.Selenium.BiDi.Network;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule networkModule)
+public sealed class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule networkModule)
 {
     public async Task<Intercept> InterceptRequestAsync(Func<InterceptedRequest, Task> handler, InterceptRequestOptions? options = null)
     {
@@ -134,8 +134,8 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
     }
 }
 
-public record InterceptRequestOptions : BrowsingContextAddInterceptOptions;
+public sealed record InterceptRequestOptions : BrowsingContextAddInterceptOptions;
 
-public record InterceptResponseOptions : BrowsingContextAddInterceptOptions;
+public sealed record InterceptResponseOptions : BrowsingContextAddInterceptOptions;
 
-public record InterceptAuthOptions : BrowsingContextAddInterceptOptions;
+public sealed record InterceptAuthOptions : BrowsingContextAddInterceptOptions;

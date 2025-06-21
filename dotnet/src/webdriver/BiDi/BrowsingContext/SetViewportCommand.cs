@@ -21,12 +21,12 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-internal class SetViewportCommand(SetViewportCommandParameters @params)
+internal sealed class SetViewportCommand(SetViewportCommandParameters @params)
     : Command<SetViewportCommandParameters, EmptyResult>(@params, "browsingContext.setViewport");
 
-internal record SetViewportCommandParameters(BrowsingContext Context, Viewport? Viewport, double? DevicePixelRatio) : CommandParameters;
+internal sealed record SetViewportCommandParameters(BrowsingContext Context, Viewport? Viewport, double? DevicePixelRatio) : CommandParameters;
 
-public record SetViewportOptions : CommandOptions
+public sealed class SetViewportOptions : CommandOptions
 {
     public Viewport? Viewport { get; set; }
 

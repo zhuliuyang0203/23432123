@@ -21,11 +21,11 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-internal class TraverseHistoryCommand(TraverseHistoryCommandParameters @params)
+internal sealed class TraverseHistoryCommand(TraverseHistoryCommandParameters @params)
     : Command<TraverseHistoryCommandParameters, TraverseHistoryResult>(@params, "browsingContext.traverseHistory");
 
-internal record TraverseHistoryCommandParameters(BrowsingContext Context, long Delta) : CommandParameters;
+internal sealed record TraverseHistoryCommandParameters(BrowsingContext Context, long Delta) : CommandParameters;
 
-public record TraverseHistoryOptions : CommandOptions;
+public sealed class TraverseHistoryOptions : CommandOptions;
 
-public record TraverseHistoryResult : EmptyResult;
+public sealed record TraverseHistoryResult : EmptyResult;

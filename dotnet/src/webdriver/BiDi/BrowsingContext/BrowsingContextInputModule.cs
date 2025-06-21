@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContextInputModule(BrowsingContext context, InputModule inputModule)
+public sealed class BrowsingContextInputModule(BrowsingContext context, InputModule inputModule)
 {
     public Task PerformActionsAsync(IEnumerable<SourceActions> actions, PerformActionsOptions? options = null)
     {
