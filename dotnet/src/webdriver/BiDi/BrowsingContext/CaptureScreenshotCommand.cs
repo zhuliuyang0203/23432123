@@ -22,12 +22,12 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
+internal sealed class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
     : Command<CaptureScreenshotCommandParameters, CaptureScreenshotResult>(@params, "browsingContext.captureScreenshot");
 
-internal record CaptureScreenshotCommandParameters(BrowsingContext Context, ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
+internal sealed record CaptureScreenshotCommandParameters(BrowsingContext Context, ScreenshotOrigin? Origin, ImageFormat? Format, ClipRectangle? Clip) : CommandParameters;
 
-public record CaptureScreenshotOptions : CommandOptions
+public sealed class CaptureScreenshotOptions : CommandOptions
 {
     public ScreenshotOrigin? Origin { get; set; }
 
@@ -52,11 +52,11 @@ public record struct ImageFormat(string Type)
 [JsonDerivedType(typeof(ElementClipRectangle), "element")]
 public abstract record ClipRectangle;
 
-public record BoxClipRectangle(double X, double Y, double Width, double Height) : ClipRectangle;
+public sealed record BoxClipRectangle(double X, double Y, double Width, double Height) : ClipRectangle;
 
-public record ElementClipRectangle(Script.ISharedReference Element) : ClipRectangle;
+public sealed record ElementClipRectangle(Script.ISharedReference Element) : ClipRectangle;
 
-public record CaptureScreenshotResult(string Data) : EmptyResult
+public sealed record CaptureScreenshotResult(string Data) : EmptyResult
 {
     public static implicit operator byte[](CaptureScreenshotResult captureScreenshotResult) => captureScreenshotResult.ToByteArray();
 

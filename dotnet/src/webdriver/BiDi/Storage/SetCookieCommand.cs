@@ -22,12 +22,12 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Storage;
 
-internal class SetCookieCommand(SetCookieCommandParameters @params)
+internal sealed class SetCookieCommand(SetCookieCommandParameters @params)
     : Command<SetCookieCommandParameters, SetCookieResult>(@params, "storage.setCookie");
 
-internal record SetCookieCommandParameters(PartialCookie Cookie, PartitionDescriptor? Partition) : CommandParameters;
+internal sealed record SetCookieCommandParameters(PartialCookie Cookie, PartitionDescriptor? Partition) : CommandParameters;
 
-public record PartialCookie(string Name, Network.BytesValue Value, string Domain)
+public sealed record PartialCookie(string Name, Network.BytesValue Value, string Domain)
 {
     public string? Path { get; set; }
 
@@ -40,9 +40,9 @@ public record PartialCookie(string Name, Network.BytesValue Value, string Domain
     public DateTimeOffset? Expiry { get; set; }
 }
 
-public record SetCookieOptions : CommandOptions
+public sealed class SetCookieOptions : CommandOptions
 {
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public record SetCookieResult(PartitionKey PartitionKey) : EmptyResult;
+public sealed record SetCookieResult(PartitionKey PartitionKey) : EmptyResult;

@@ -30,11 +30,11 @@ namespace OpenQA.Selenium.BiDi.Session;
 [JsonDerivedType(typeof(SystemProxyConfiguration), "system")]
 public abstract record ProxyConfiguration;
 
-public record AutoDetectProxyConfiguration : ProxyConfiguration;
+public sealed record AutoDetectProxyConfiguration : ProxyConfiguration;
 
-public record DirectProxyConfiguration : ProxyConfiguration;
+public sealed record DirectProxyConfiguration : ProxyConfiguration;
 
-public record ManualProxyConfiguration : ProxyConfiguration, ISocksProxyConfiguration
+public sealed record ManualProxyConfiguration : ProxyConfiguration, ISocksProxyConfiguration
 {
     public string? HttpProxy { get; set; }
 
@@ -47,9 +47,9 @@ public record ManualProxyConfiguration : ProxyConfiguration, ISocksProxyConfigur
     public IEnumerable<string>? NoProxy { get; set; }
 }
 
-public record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
+public sealed record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
 
-public record SystemProxyConfiguration : ProxyConfiguration;
+public sealed record SystemProxyConfiguration : ProxyConfiguration;
 
 public interface ISocksProxyConfiguration
 {

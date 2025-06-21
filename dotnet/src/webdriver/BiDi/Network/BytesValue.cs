@@ -31,6 +31,6 @@ public abstract record BytesValue
     public static implicit operator BytesValue(byte[] value) => new Base64BytesValue(Convert.ToBase64String(value));
 }
 
-public record StringBytesValue(string Value) : BytesValue;
+public sealed record StringBytesValue(string Value) : BytesValue;
 
-public record Base64BytesValue(string Value) : BytesValue;
+public sealed record Base64BytesValue(string Value) : BytesValue;

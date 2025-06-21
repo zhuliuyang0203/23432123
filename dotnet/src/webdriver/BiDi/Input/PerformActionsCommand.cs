@@ -22,9 +22,9 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Input;
 
-internal class PerformActionsCommand(PerformActionsCommandParameters @params)
+internal sealed class PerformActionsCommand(PerformActionsCommandParameters @params)
     : Command<PerformActionsCommandParameters, EmptyResult>(@params, "input.performActions");
 
-internal record PerformActionsCommandParameters(BrowsingContext.BrowsingContext Context, IEnumerable<SourceActions> Actions) : CommandParameters;
+internal sealed record PerformActionsCommandParameters(BrowsingContext.BrowsingContext Context, IEnumerable<SourceActions> Actions) : CommandParameters;
 
-public record PerformActionsOptions : CommandOptions;
+public sealed class PerformActionsOptions : CommandOptions;

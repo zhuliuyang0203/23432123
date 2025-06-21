@@ -22,12 +22,12 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-internal class SetCacheBehaviorCommand(SetCacheBehaviorCommandParameters @params)
+internal sealed class SetCacheBehaviorCommand(SetCacheBehaviorCommandParameters @params)
     : Command<SetCacheBehaviorCommandParameters, EmptyResult>(@params, "network.setCacheBehavior");
 
-internal record SetCacheBehaviorCommandParameters(CacheBehavior CacheBehavior, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
+internal sealed record SetCacheBehaviorCommandParameters(CacheBehavior CacheBehavior, IEnumerable<BrowsingContext.BrowsingContext>? Contexts) : CommandParameters;
 
-public record SetCacheBehaviorOptions : CommandOptions
+public sealed class SetCacheBehaviorOptions : CommandOptions
 {
     public SetCacheBehaviorOptions()
     {
@@ -42,10 +42,7 @@ public record SetCacheBehaviorOptions : CommandOptions
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
 
-public record BrowsingContextSetCacheBehaviorOptions
-{
-
-}
+public sealed record BrowsingContextSetCacheBehaviorOptions;
 
 public enum CacheBehavior
 {
