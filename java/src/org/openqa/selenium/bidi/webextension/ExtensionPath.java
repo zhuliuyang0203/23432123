@@ -15,25 +15,20 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.remote;
+package org.openqa.selenium.bidi.webextension;
 
 import java.util.Map;
 
-public class CommandPayload {
+public class ExtensionPath extends ExtensionData {
+  private final String path;
 
-  private final String name;
-  private final Map<String, ?> parameters;
-
-  public CommandPayload(String name, Map<String, ?> parameters) {
-    this.name = name;
-    this.parameters = parameters;
+  public ExtensionPath(String path) {
+    this.path = path;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public Map<String, ?> getParameters() {
-    return parameters;
+  @Override
+  public Map<String, Object> toMap() {
+    String type = "path";
+    return Map.of("extensionData", Map.of("type", type, "path", path));
   }
 }
