@@ -111,7 +111,6 @@ pub const NOT_ADMIN_FOR_EDGE_INSTALLER_ERR_MSG: &str =
     "{} can only be installed in Windows with administrator permissions";
 pub const ONLINE_DISCOVERY_ERROR_MESSAGE: &str = "Unable to discover {}{} in online repository";
 pub const UNC_PREFIX: &str = r"\\?\";
-pub const SM_BETA_LABEL: &str = "0.";
 
 pub trait SeleniumManager {
     // ----------------------------------------------------------
