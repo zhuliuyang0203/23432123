@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Beta;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
@@ -145,15 +146,15 @@ public class DriverService implements Closeable {
     return new ImmutableCapabilities();
   }
 
-  protected String getDriverName() {
+  protected @Nullable String getDriverName() {
     return null;
   }
 
-  public String getDriverProperty() {
+  public @Nullable String getDriverProperty() {
     return null;
   }
 
-  protected File getDriverExecutable() {
+  protected @Nullable File getDriverExecutable() {
     return null;
   }
 
