@@ -864,8 +864,8 @@ class NodeOptionsTest {
             });
 
     assertThat(reported)
-      .filteredOn(capabilities -> capabilities.getCapability("se:deleteSessionOnUi") == null)
-      .hasSize(reported.size());
+        .filteredOn(capabilities -> capabilities.getCapability("se:deleteSessionOnUi") == null)
+        .hasSize(reported.size());
   }
 
   private Condition<? super List<? extends Capabilities>> supporting(String name) {
