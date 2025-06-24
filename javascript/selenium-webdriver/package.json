@@ -20,7 +20,7 @@
     "url": "https://github.com/SeleniumHQ/selenium.git"
   },
   "engines": {
-    "node": ">= 18.20.5"
+    "node": ">= 20.0.0"
   },
   "dependencies": {
     "@bazel/runfiles": "^6.3.1",
