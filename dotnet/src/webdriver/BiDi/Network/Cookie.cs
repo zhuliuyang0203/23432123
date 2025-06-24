@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-public record Cookie(string Name, BytesValue Value, string Domain, string Path, long Size, bool HttpOnly, bool Secure, SameSite SameSite)
+public sealed record Cookie(string Name, BytesValue Value, string Domain, string Path, long Size, bool HttpOnly, bool Secure, SameSite SameSite)
 {
     [JsonInclude]
     public DateTimeOffset? Expiry { get; internal set; }

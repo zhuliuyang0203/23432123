@@ -52,11 +52,6 @@
     <InternalsVisibleTo Include="WebDriver.Common.Tests" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Settings.StyleCop" />
-    <None Remove="WebDriver.ruleset" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>

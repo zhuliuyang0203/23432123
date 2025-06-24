@@ -27,6 +27,8 @@ class ClientWindowState:
     MINIMIZED = "minimized"
     NORMAL = "normal"
 
+    VALID_STATES = {FULLSCREEN, MAXIMIZED, MINIMIZED, NORMAL}
+
 
 class ClientWindowInfo:
     """Represents a client window information."""
@@ -123,16 +125,53 @@ class ClientWindowInfo:
         Returns:
         -------
             ClientWindowInfo: A new instance of ClientWindowInfo.
+
+        Raises:
+        ------
+            ValueError: If required fields are missing or have invalid types.
         """
-        return cls(
-            client_window=data.get("clientWindow"),
-            state=data.get("state"),
-            width=data.get("width"),
-            height=data.get("height"),
-            x=data.get("x"),
-            y=data.get("y"),
-            active=data.get("active"),
-        )
+        try:
+            client_window = data["clientWindow"]
+            if not isinstance(client_window, str):
+                raise ValueError("clientWindow must be a string")
+
+            state = data["state"]
+            if not isinstance(state, str):
+                raise ValueError("state must be a string")
+            if state not in ClientWindowState.VALID_STATES:
+                raise ValueError(f"Invalid state: {state}. Must be one of {ClientWindowState.VALID_STATES}")
+
+            width = data["width"]
+            if not isinstance(width, int) or width < 0:
+                raise ValueError(f"width must be a non-negative integer, got {width}")
+
+            height = data["height"]
+            if not isinstance(height, int) or height < 0:
+                raise ValueError(f"height must be a non-negative integer, got {height}")
+
+            x = data["x"]
+            if not isinstance(x, int):
+                raise ValueError(f"x must be an integer, got {type(x).__name__}")
+
+            y = data["y"]
+            if not isinstance(y, int):
+                raise ValueError(f"y must be an integer, got {type(y).__name__}")
+
+            active = data["active"]
+            if not isinstance(active, bool):
+                raise ValueError("active must be a boolean")
+
+            return cls(
+                client_window=client_window,
+                state=state,
+                width=width,
+                height=height,
+                x=x,
+                y=y,
+                active=active,
+            )
+        except (KeyError, TypeError) as e:
+            raise ValueError(f"Invalid data format for ClientWindowInfo: {e}")
 
 
 class Browser:

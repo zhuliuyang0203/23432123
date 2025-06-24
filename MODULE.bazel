@@ -206,7 +206,7 @@ maven.install(
         "io.opentelemetry:opentelemetry-sdk-testing",
         "io.opentelemetry:opentelemetry-sdk-trace",
         "it.ozimov:embedded-redis:0.7.3",
-        "net.bytebuddy:byte-buddy:1.17.5",
+        "net.bytebuddy:byte-buddy:1.17.6",
         "org.htmlunit:htmlunit-core-js:4.12.0",
         "org.apache.commons:commons-exec:1.4.0",
         "org.apache.logging.log4j:log4j-core:2.24.3",
@@ -370,6 +370,8 @@ use_repo(
 pin_browsers_extension = use_extension("//common:repositories.bzl", "pin_browsers_extension")
 use_repo(
     pin_browsers_extension,
+    "linux_beta_chrome",
+    "linux_beta_chromedriver",
     "linux_beta_firefox",
     "linux_chrome",
     "linux_chromedriver",
@@ -377,6 +379,8 @@ use_repo(
     "linux_edgedriver",
     "linux_firefox",
     "linux_geckodriver",
+    "mac_beta_chrome",
+    "mac_beta_chromedriver",
     "mac_beta_firefox",
     "mac_chrome",
     "mac_chromedriver",

@@ -21,9 +21,9 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-internal class ActivateCommand(ActivateCommandParameters @params)
+internal sealed class ActivateCommand(ActivateCommandParameters @params)
     : Command<ActivateCommandParameters, EmptyResult>(@params, "browsingContext.activate");
 
-internal record ActivateCommandParameters(BrowsingContext Context) : CommandParameters;
+internal sealed record ActivateCommandParameters(BrowsingContext Context) : CommandParameters;
 
-public record ActivateOptions : CommandOptions;
+public sealed class ActivateOptions : CommandOptions;

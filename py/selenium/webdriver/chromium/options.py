@@ -33,6 +33,7 @@ class ChromiumOptions(ArgOptions):
         self._extensions: list[str] = []
         self._experimental_options: dict[str, Union[str, int, dict, list[str]]] = {}
         self._debugger_address: Optional[str] = None
+        self._enable_webextensions: bool = False
 
     @property
     def binary_location(self) -> str:
@@ -43,8 +44,9 @@ class ChromiumOptions(ArgOptions):
     def binary_location(self, value: str) -> None:
         """Allows you to set where the chromium binary lives.
 
-        :Args:
-         - value: path to the Chromium binary
+        Parameters:
+        ----------
+            value: path to the Chromium binary
         """
         if not isinstance(value, str):
             raise TypeError(self.BINARY_LOCATION_ERROR)
@@ -60,8 +62,9 @@ class ChromiumOptions(ArgOptions):
         """Allows you to set the address of the remote devtools instance that
         the ChromeDriver instance will try to connect to during an active wait.
 
-        :Args:
-         - value: address of remote devtools instance if any (hostname[:port])
+        Parameters:
+        ----------
+            value: address of remote devtools instance if any (hostname[:port])
         """
         if not isinstance(value, str):
             raise TypeError("Debugger Address must be a string")
@@ -88,8 +91,9 @@ class ChromiumOptions(ArgOptions):
         """Adds the path to the extension to a list that will be used to
         extract it to the ChromeDriver.
 
-        :Args:
-         - extension: path to the \\*.crx file
+        Parameters:
+        ----------
+            extension: path to the \\*.crx file
         """
         if extension:
             extension_to_add = os.path.abspath(os.path.expanduser(extension))
@@ -104,8 +108,9 @@ class ChromiumOptions(ArgOptions):
         """Adds Base64 encoded string with extension data to a list that will
         be used to extract it to the ChromeDriver.
 
-        :Args:
-         - extension: Base64 encoded string with extension data
+        Parameters:
+        ----------
+            extension: Base64 encoded string with extension data
         """
         if extension:
             self._extensions.append(extension)
@@ -120,15 +125,59 @@ class ChromiumOptions(ArgOptions):
     def add_experimental_option(self, name: str, value: Union[str, int, dict, list[str]]) -> None:
         """Adds an experimental option which is passed to chromium.
 
-        :Args:
+        Parameters:
+        ----------
           name: The experimental option name.
           value: The option value.
         """
         self._experimental_options[name] = value
 
+    @property
+    def enable_webextensions(self) -> bool:
+        """:Returns: Whether webextension support is enabled for Chromium-based browsers.
+        True if webextension support is enabled, False otherwise.
+        """
+        return self._enable_webextensions
+
+    @enable_webextensions.setter
+    def enable_webextensions(self, value: bool) -> None:
+        """Enables or disables webextension support for Chromium-based browsers.
+
+        Parameters:
+        ----------
+            value : bool
+                True to enable webextension support, False to disable.
+
+        Notes:
+        -----
+        - When enabled, this automatically adds the required Chromium flags:
+            - --enable-unsafe-extension-debugging
+            - --remote-debugging-pipe
+        - Enabling --remote-debugging-pipe makes the connection b/w chromedriver
+        and the browser use a pipe instead of a port, disabling many CDP functionalities
+        like devtools
+        """
+        self._enable_webextensions = value
+        if value:
+            # Add required flags for Chromium webextension support
+            required_flags = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in required_flags:
+                if flag not in self._arguments:
+                    self.add_argument(flag)
+        else:
+            # Remove webextension flags if disabling
+            flags_to_remove = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in flags_to_remove:
+                if flag in self._arguments:
+                    self._arguments.remove(flag)
+
     def to_capabilities(self) -> dict:
         """Creates a capabilities with all the options that have been set
-        :Returns: A dictionary with everything."""
+
+        Returns:
+        -------
+            dict : a dictionary with all set options
+        """
         caps = self._caps
         chrome_options = self.experimental_options.copy()
         if self.mobile_options:

@@ -963,9 +963,9 @@ namespace :java do
     ENV['MAVEN_USER'] ||= ENV.fetch('SEL_M2_USER', nil)
     ENV['MAVEN_PASSWORD'] ||= ENV.fetch('SEL_M2_PASS', nil)
     read_m2_user_pass unless ENV['MAVEN_PASSWORD'] && ENV['MAVEN_USER']
-
-    repo = nightly ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2'
-    ENV['MAVEN_REPO'] = "https://oss.sonatype.org/#{repo}"
+    repo_domain = 'central.sonatype.com'
+    repo = nightly ? "#{repo_domain}/repository/maven-snapshots" : "ossrh-staging-api.#{repo_domain}/service/local/"
+    ENV['MAVEN_REPO'] = "https://#{repo}"
     ENV['GPG_SIGN'] = (!nightly).to_s
 
     if nightly
@@ -1105,7 +1105,7 @@ namespace :all do
 
     ['common/devtools/',
      'dotnet/src/webdriver/DevTools/',
-     'dotnet/src/webdriver/WebDriver.csproj',
+     'dotnet/src/webdriver/Selenium.WebDriver.csproj',
      'dotnet/test/common/DevTools/',
      'dotnet/test/common/CustomDriverConfigs/',
      'dotnet/selenium-dotnet-version.bzl',

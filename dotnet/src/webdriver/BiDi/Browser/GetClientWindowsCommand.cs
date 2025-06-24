@@ -23,12 +23,12 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Browser;
 
-internal class GetClientWindowsCommand()
+internal sealed class GetClientWindowsCommand()
     : Command<CommandParameters, GetClientWindowsResult>(CommandParameters.Empty, "browser.getClientWindows");
 
-public record GetClientWindowsOptions : CommandOptions;
+public sealed class GetClientWindowsOptions : CommandOptions;
 
-public record GetClientWindowsResult : EmptyResult, IReadOnlyList<ClientWindowInfo>
+public sealed record GetClientWindowsResult : EmptyResult, IReadOnlyList<ClientWindowInfo>
 {
     private readonly IReadOnlyList<ClientWindowInfo> _clientWindows;
 

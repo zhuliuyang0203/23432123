@@ -23,7 +23,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContext
+public sealed class BrowsingContext
 {
     internal BrowsingContext(BiDi bidi, string id)
     {
@@ -145,6 +145,16 @@ public class BrowsingContext
     public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
     {
         return BiDi.BrowsingContext.OnFragmentNavigatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
+    public Task<Subscription> OnHistoryUpdatedAsync(Func<HistoryUpdatedEventArgs, Task> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnHistoryUpdatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
+    public Task<Subscription> OnHistoryUpdatedAsync(Action<HistoryUpdatedEventArgs> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnHistoryUpdatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
     public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> handler, SubscriptionOptions? options = null)

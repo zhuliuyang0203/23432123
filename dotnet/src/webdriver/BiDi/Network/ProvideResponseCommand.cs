@@ -22,12 +22,12 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-internal class ProvideResponseCommand(ProvideResponseCommandParameters @params)
+internal sealed class ProvideResponseCommand(ProvideResponseCommandParameters @params)
     : Command<ProvideResponseCommandParameters, EmptyResult>(@params, "network.provideResponse");
 
-internal record ProvideResponseCommandParameters(Request Request, BytesValue? Body, IEnumerable<SetCookieHeader>? Cookies, IEnumerable<Header>? Headers, string? ReasonPhrase, long? StatusCode) : CommandParameters;
+internal sealed record ProvideResponseCommandParameters(Request Request, BytesValue? Body, IEnumerable<SetCookieHeader>? Cookies, IEnumerable<Header>? Headers, string? ReasonPhrase, long? StatusCode) : CommandParameters;
 
-public record ProvideResponseOptions : CommandOptions
+public sealed class ProvideResponseOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

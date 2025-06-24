@@ -32,23 +32,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Settings.StyleCop" />
-    <None Remove="WebDriver.Support.ruleset" />
-  </ItemGroup>
-
   <PropertyGroup>
     <CsprojIncludePath>..\webdriver</CsprojIncludePath>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(CsprojIncludePath)\WebDriver.csproj" />
+    <ProjectReference Include="$(CsprojIncludePath)\Selenium.WebDriver.csproj" />
   </ItemGroup>
 
 </Project>
