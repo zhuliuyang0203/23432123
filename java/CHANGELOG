@@ -1,3 +1,68 @@
+v4.34.0
+======
+* Removing deprecated BrowsingContext constructor.
+* [grid] Silent fail on invalid log level (#15796)
+    > * [grid] Silent fail on invalid log level
+    > Fixing issue where providing an invalid log level to Grid will fail silently.
+    > Since the logger is not yet configured a stacktrace with the exception is printed to console and we continue since the default log level is already configured.
+    > Fixes #15790
+    > * [grid] Silent fail on invalid log level
+    > Adding link to logging levels as suggested by @diemol and formatting.
+    > * [grid] Silent fail on invalid log level
+    > Adding hardcoded log levels as suggested by review.
+* Removing deprecated OsProcess class.
+* Removing deprecated CommandLine class.
+* Removing deprecated ContextAware interface.
+* Fixing `getCredential` for VirtualAuthenticator
+* Caching the size/length in loops to slightly improve performance (#15852)
+    > caching the size/length in loops to slightly improve performance and readability
+* [feature] add method RemoteWebDriver.isDownloadsEnabled() (#15868)
+* [refactor] use constant `CapabilityType.ENABLE_DOWNLOADS` instead of hard-coded value `se:downloadsEnabled` (#15867)
+    > [refactor] use constant CapabilityType.ENABLE_DOWNLOADS instead of hard-coded value "se:downloadsEnabled"
+* [bidi] Add new fields of BrowsingContextInfo
+* [bidi]Add method to get browsing context tree with root
+* Fix code formatting (#15903)
+* [grid] Add GreedySlotSelector as a built-in slot-selector option (#15897)
+* deprecate FtpProxy (#15907)
+    > Deprecates FTP Proxy as it is no longer supported by browsers
+* [grid] Add config `blocked-routes` and specific `blocked-delete-session` in Router (#15920)
+* Revert "[grid] Add config `blocked-routes` and specific `blocked-delete-session` in Router" (#15921)
+* [BiDi] implement browsingContext.historyUpdated (#15901)
+* [refactor] Remove Empty Space in CommandPayload (#15934)
+    > - Remove an empty space in the constructor.
+    > [skip ci]
+* [FEAT] Add macOS-specific keys (OPTION, FN) to Keys enum for improved… (#15910)
+    > * [FEAT] Add macOS-specific keys (OPTION, FN) to Keys enum for improved platform support
+    > * [FEAT] These additions (RIGHT_SHIFT, RIGHT_CONTROL, RIGHT_ALT, RIGHT_COMMAND) follow conventions already in use by ChromeDriver and allow for more accurate key simulations. While not currently in the W3C WebDriver specification, they represent a practical standard used in the field.
+    > * [FEAT] Add macOS-specific and ChromeDriver-aligned extended keys
+    >        - Added RIGHT_SHIFT, RIGHT_CONTROL, RIGHT_ALT, and RIGHT_COMMAND using Unicode PUA codes observed in ChromeDriver.
+    >        - Included symbolic macOS keys OPTION and FN, marked with TODO comments for future validation against W3C WebDriver spec.
+    >        - Updated class-level Javadoc to clarify the role of PUA mappings and their interoperability considerations.
+    >        These additions improve platform representation and lay the groundwork for consistent macOS key handling.
+    > * Format script
+* [BiDi] implement web extensions (#15660)
+    > * [BiDi] implement web extensions
+    > * cleanup
+    > * fix spotbug
+* Made ``JsonToWebElementConverter`` methods/fields protected (#15885)
+    > Made ``JsonToWebElementConverter`` methods protected
+    > so that the class can be properly extended
+* [grid] Session can be deleted via Grid UI (#15808)
+    > * [grid] Session can be deleted via Grid UI
+    > * Add notification on the flag to disable session deletion
+    > * Use Node config to disable delete session on UI
+    > * Add unit test
+    > * Run format
+    > * Disable by default
+    > * Run format
+* Feat 14291/jspecify nullable annotation (#15924)
+* Use Environment variable to set driver location (#15653)
+    > * Use environment variable to set driver locations
+    > Related to #14045
+    > * Fix formatting
+    > * Repinning deps
+* update devtools versions
+
 v4.33.0
 ======
 * Add CDP for Chrome 137 and remove 134

@@ -1,3 +1,7 @@
+0.4.34
+======
+* Electron support in Selenium-Manager (#13954) (#15752)
+
 0.4.33
 ======
 * Replace WMIC commands (deprecated) by WinAPI in Windows (#15363)

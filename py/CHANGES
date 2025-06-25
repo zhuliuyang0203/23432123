@@ -1,3 +1,59 @@
+Selenium 4.34.0
+* Bumping to nightly versions
+* Upgrade type hints (#15784)
+    > - Upgrade type hints to Python 3.9+ syntax throughout codebase
+    > - Replace legacy List, Dict, Tuple, etc. with built-in generics (e.g., list, dict, tuple)
+    > - Move type hints to use collections.abc where appropriate
+* Fix type error for attribute in remote_connection.py (#15810)
+* Fixed type hint (#15814)
+    > Fixed type hint in selenium/webdriver/common/bidi/common.py
+* Fix import for type hint (#15817)
+* [bidi]: add `enable_webextensions` option for chromium-based browsers (#15794)
+    > * add `enable_webextensions` method and exception for chrome webextensions
+    > * add chrome test for webextension from path
+    > * add separate test class and driver for chrome/edge tests
+* Fix type annotation errors (#15841)
+    > Fixes type annotation errors in storage.py, options.py, and virtual_authenticator.py
+* Fixed type annotation issues (#15847)
+* [bidi]: implement bidi permissions module (#15830)
+    > * implement bidi permissions module
+    > * add tests
+    > Thank you @navin772
+* Fixed mypy error and change source var (#15853)
+* do not use global var for devtools, allows multiple devtools to run (#15881)
+* Fix : Mypy type annotation errors - 2 (#15848)
+    > * Fix : Mypy type annotation errors
+    > * Reverted changes in py\selenium\webdriver\common\bidi\browser.py
+    > * Fix: two more files
+    > * Remove browser.py from PR
+    > * make changes as per bidi spec
+* [bidi]: add `timestamp` to `HistoryUpdatedParams` class (#15892)
+    > add `timestamp` to `HistoryUpdatedParams` class
+* Fix possible TypeError in expected conditions (#15891)
+* Refactor server.py to use properties (#15840)
+* Add properties (getter/setter) for service args (#15889)
+* Fix error handler for non-json response bodies (#15887)
+    > Fix error handler `check_response` for non-json responses from webdriver so it doesn't raise a cryptic error.
+* [bidi]: add BiDi script module commands (#15880)
+    > * add bidi script commands
+    > * add bidi script tests
+    > * improve some test assertions
+    > * modify tests for `result_ownership` and `serialization_options`
+    > * modify tests for `disown` and `user_activation`
+    > * resolve mypy type errors
+    > * change to private methods
+* Fix: Mypy type annotation errors in remote/webdriver.py (#15900)
+* Deprecate support for FTP proxies (#15906)
+* Type hint cleanup (#15917)
+    > Moves some types from typing to collections.abc, and replaces some type hints with native data types.
+* Adding Note to enable_webextensions() regarding CDP (plus gen docstring updates) (#15927)
+    > * Adding Note to enable_webextensions() regarding CDP (plus some docstring updates)
+    > * format.sh
+    > * update error message
+    > * Update py/selenium/webdriver/chromium/options.py
+    > Per @navin772 suggestions
+* bump versions in preparation for release
+
 Selenium 4.33.0
 * Add CDP for Chrome 137 and remove 134
 * [bidi]: add bidi storage module (#15669)

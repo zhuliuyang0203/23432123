@@ -1,3 +1,23 @@
+4.34.0 (2025-06-25)
+=========================
+* Bumping to nightly versions
+* Fix child process terminate method when a process is already terminated (#15789)
+    > * [build] allow tests tagged exclusive-if-local to run on rbe
+    > * Add rescue and test for child_process terminate method
+    > * Add rescue for kill method
+    > * guard against windows
+    > * guard against windows
+    > * move child process test
+    > * remove guard
+    > * Update test
+    > * add windows guard
+    > * add windows guard
+* Feat 15905/deprecate ftp proxy (#15926)
+    > * add deprecation warn for ftp proxy type
+    > * [proxy] Replace deprecation warning for FTP proxy support with logger method
+* update devtools versions
+* bump versions in preparation for release
+
 4.33.0 (2025-05-23)
 =========================
 * Add CDP for Chrome 137 and remove 134
