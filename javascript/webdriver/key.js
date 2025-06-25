@@ -89,5 +89,15 @@ webdriver.Key = {
   F12:          '\uE03C',
 
   COMMAND:      '\uE03D',  // Apple command key
-  META:         '\uE03D'   // alias for Windows key
+  META:         '\uE03D',   // alias for Windows key
+
+  // Extended macOS/ChromeDriver keys
+  RIGHT_SHIFT:   '\uE050',
+  RIGHT_CONTROL: '\uE051',
+  RIGHT_ALT:     '\uE052',
+  RIGHT_COMMAND: '\uE053',
+
+  // Symbolic macOS keys
+  OPTIONS:       '\uE050',  // TODO: verify Unicode value with WebDriver spec
+  FUNCTION:      '\uE051'   // TODO: symbolic only; confirm or remove in future
 };
