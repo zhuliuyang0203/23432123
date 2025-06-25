@@ -1396,10 +1396,13 @@ class WebDriver(BaseWebDriver):
         import urllib3
 
         http = urllib3.PoolManager()
-        if self.caps.get("browserName") == "chrome":
-            debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
-        elif self.caps.get("browserName") == "MicrosoftEdge":
-            debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
+        try:
+            if self.caps.get("browserName") == "chrome":
+                debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
+            elif self.caps.get("browserName") == "MicrosoftEdge":
+                debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
+        except AttributeError:
+            raise WebDriverException("Can't get debugger address.")
 
         res = http.request("GET", f"http://{debugger_address}/json/version")
         data = json.loads(res.data)

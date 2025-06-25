@@ -46,6 +46,8 @@ public class EdgeDriverService extends DriverService {
    */
   public static final String EDGE_DRIVER_EXE_PROPERTY = "webdriver.edge.driver";
 
+  public static final String EDGE_DRIVER_EXE_ENVIRONMENT_VARIABLE = "SE_EDGEDRIVER";
+
   /** System property that toggles the formatting of the timestamps of the logs */
   public static final String EDGE_DRIVER_READABLE_TIMESTAMP = "webdriver.edge.readableTimestamp";
 
@@ -109,6 +111,10 @@ public class EdgeDriverService extends DriverService {
 
   public String getDriverProperty() {
     return EDGE_DRIVER_EXE_PROPERTY;
+  }
+
+  public String getDriverEnvironmentVariable() {
+    return EDGE_DRIVER_EXE_ENVIRONMENT_VARIABLE;
   }
 
   @Override
