@@ -375,7 +375,7 @@ public static class Keys
     /// <summary>
     /// Represents the macOS Options key (same Unicode value as RightShift).
     /// </summary>
-    public static readonly string Options = Convert.ToString(Convert.ToChar(0xE050, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+    public static readonly string Options = Convert.ToString(Convert.ToChar(0xE052, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Represents the macOS Function key (same Unicode value as RightControl).
