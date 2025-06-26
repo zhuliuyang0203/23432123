@@ -14,8 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import pytest
 
-from selenium.webdriver.common.bidi.emulation import Emulation, GeolocationCoordinates
+from selenium.webdriver.common.bidi.emulation import Emulation, GeolocationCoordinates, GeolocationPositionError
 from selenium.webdriver.common.bidi.permissions import PermissionState
 from selenium.webdriver.common.window import WindowTypes
 
@@ -201,14 +202,16 @@ def test_set_geolocation_override_with_multiple_user_contexts(driver, pages):
     driver.browser.remove_user_context(user_context2)
 
 
-# the error param returns "invalid argument: Invalid input in "coordinates" error, Chrome 138 fixes this
-# @pytest.mark.xfail_firefox
-# def test_set_geolocation_override_with_error(driver):
-#     """Test setting geolocation override with error."""
-#     context_id = driver.current_window_handle
-#
-#     error = GeolocationPositionError()
-#
-#     driver.emulation.set_geolocation_override(error=error, contexts=[context_id])
-#
-#     # assert "error" after inspecting the get_browser_geolocation script's response
+@pytest.mark.xfail_firefox
+@pytest.mark.xfail_edge
+def test_set_geolocation_override_with_error(driver, pages):
+    """Test setting geolocation override with error."""
+    context_id = driver.current_window_handle
+    pages.load("blank.html")
+
+    error = GeolocationPositionError()
+
+    driver.emulation.set_geolocation_override(error=error, contexts=[context_id])
+
+    result = get_browser_geolocation(driver)
+    assert "error" in result, f"Expected geolocation error, got: {result}"
