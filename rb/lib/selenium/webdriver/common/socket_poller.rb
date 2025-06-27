@@ -106,7 +106,7 @@ module Selenium
         sock.getsockopt(Socket::SOL_SOCKET, Socket::SO_ERROR).int.zero?
       end
 
-      def with_timeout?
+      def with_timeout
         max_time = current_time + @timeout
 
         until current_time > max_time
