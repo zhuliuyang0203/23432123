@@ -46,6 +46,8 @@ public class InternetExplorerDriverService extends DriverService {
    */
   public static final String IE_DRIVER_EXE_PROPERTY = "webdriver.ie.driver";
 
+  public static final String IE_DRIVER_EXE_ENVIRONMENT_VARIABLE = "SE_IEDRIVER";
+
   /**
    * System property that defines the location of the file where IEDriverServer should write log
    * messages to.
@@ -96,6 +98,10 @@ public class InternetExplorerDriverService extends DriverService {
 
   public String getDriverProperty() {
     return IE_DRIVER_EXE_PROPERTY;
+  }
+
+  public String getDriverEnvironmentVariable() {
+    return IE_DRIVER_EXE_ENVIRONMENT_VARIABLE;
   }
 
   @Override

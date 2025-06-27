@@ -15,25 +15,17 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.remote;
+package org.openqa.selenium.bidi.webextension;
 
-import java.util.Map;
+public class InstallExtensionParameters {
 
-public class CommandPayload {
+  private final ExtensionData extensionData;
 
-  private final String name;
-  private final Map<String, ?> parameters;
-
-  public CommandPayload(String name, Map<String, ?> parameters) {
-    this.name = name;
-    this.parameters = parameters;
+  public InstallExtensionParameters(ExtensionData extensionData) {
+    this.extensionData = extensionData;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public Map<String, ?> getParameters() {
-    return parameters;
+  public ExtensionData getExtensionData() {
+    return extensionData;
   }
 }

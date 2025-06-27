@@ -48,6 +48,8 @@ public class GeckoDriverService extends FirefoxDriverService {
    */
   public static final String GECKO_DRIVER_EXE_PROPERTY = "webdriver.gecko.driver";
 
+  public static final String GECKO_DRIVER_EXE_ENVIRONMENT_VARIABLE = "SE_GECKODRIVER";
+
   /**
    * System property that defines the location of the file where GeckoDriver should write log
    * messages to.
@@ -101,6 +103,10 @@ public class GeckoDriverService extends FirefoxDriverService {
 
   public String getDriverProperty() {
     return GECKO_DRIVER_EXE_PROPERTY;
+  }
+
+  public String getDriverEnvironmentVariable() {
+    return GECKO_DRIVER_EXE_ENVIRONMENT_VARIABLE;
   }
 
   @Override

@@ -15,25 +15,25 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.remote;
+use crate::common::get_selenium_manager;
 
-import java.util.Map;
+use rstest::rstest;
 
-public class CommandPayload {
+mod common;
 
-  private final String name;
-  private final Map<String, ?> parameters;
+#[test]
+fn electron_latest_test() {
+    let mut cmd = get_selenium_manager();
+    let cmd_assert = cmd.args(["--browser", "electron"]).assert();
+    cmd_assert.success();
+}
 
-  public CommandPayload(String name, Map<String, ?> parameters) {
-    this.name = name;
-    this.parameters = parameters;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Map<String, ?> getParameters() {
-    return parameters;
-  }
+#[rstest]
+#[case("36.2.1")]
+fn electron_version_test(#[case] driver_version: String) {
+    let mut cmd = get_selenium_manager();
+    let cmd_assert = cmd
+        .args(["--browser", "electron", "--driver-version", &driver_version])
+        .assert();
+    cmd_assert.success();
 }

@@ -33,7 +33,7 @@ platformdirs==4.3.8
 pluggy==1.6.0
 py==1.11.0
 pycparser==2.22
-Pygments==2.19.1
+Pygments==2.19.2
 pyproject-api==1.9.1
 PySocks==1.7.1
 pytest==8.4.1

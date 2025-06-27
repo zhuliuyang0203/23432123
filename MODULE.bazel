@@ -31,7 +31,7 @@ bazel_dep(name = "rules_ruby", version = "0.19.0")
 # Until `rules_jvm_external` 6.8 ships
 git_override(
     module_name = "rules_jvm_external",
-    commit = "d8af22108bd8b353a226140570008231f2921931",
+    commit = "29c451d2a62aa2451f5810c005ecac925b4772b6",
     patch_strip = 1,
     patches = ["//java:rules_jvm_external_javadoc.patch"],
     remote = "https://github.com/bazel-contrib/rules_jvm_external.git",
@@ -206,7 +206,7 @@ maven.install(
         "io.opentelemetry:opentelemetry-sdk-testing",
         "io.opentelemetry:opentelemetry-sdk-trace",
         "it.ozimov:embedded-redis:0.7.3",
-        "net.bytebuddy:byte-buddy:1.17.5",
+        "net.bytebuddy:byte-buddy:1.17.6",
         "org.htmlunit:htmlunit-core-js:4.12.0",
         "org.apache.commons:commons-exec:1.4.0",
         "org.apache.logging.log4j:log4j-core:2.24.3",
@@ -228,6 +228,8 @@ maven.install(
         "org.slf4j:slf4j-jdk14:2.0.17",
         "org.tomlj:tomlj:1.1.1",
         "org.zeromq:jeromq:0.6.0",
+        "uk.org.webcompere:system-stubs-jupiter:2.1.8",
+        "uk.org.webcompere:system-stubs-core:2.1.8",
     ],
     boms = [
         "io.opentelemetry:opentelemetry-bom:1.50.0",
