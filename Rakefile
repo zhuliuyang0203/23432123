@@ -964,7 +964,7 @@ namespace :java do
     ENV['MAVEN_PASSWORD'] ||= ENV.fetch('SEL_M2_PASS', nil)
     read_m2_user_pass unless ENV['MAVEN_PASSWORD'] && ENV['MAVEN_USER']
     repo_domain = 'central.sonatype.com'
-    repo = nightly ? "#{repo_domain}/repository/maven-snapshots" : "ossrh-staging-api.#{repo_domain}/service/local/"
+    repo = nightly ? "#{repo_domain}/repository/maven-snapshots" : "ossrh-staging-api.#{repo_domain}/service/local/staging/deploy/maven2/"
     ENV['MAVEN_REPO'] = "https://#{repo}"
     ENV['GPG_SIGN'] = (!nightly).to_s
 

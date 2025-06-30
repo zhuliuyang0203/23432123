@@ -1,8 +1,9 @@
-4.34.0 (2025-06-25)
+4.34.0 (2025-06-29)
 =========================
 * Add CDP for Chrome 138 and remove 135
 * Fix child process terminate method when a process is already terminated (#15789)
 * Deprecate ftp proxy (#15926)
+* Add macOS key mappings for Options and Function keys (#15959)
 
 4.33.0 (2025-05-23)
 =========================
