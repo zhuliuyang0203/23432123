@@ -21,6 +21,8 @@ Selenium 4.34.0
 * Deprecate support for FTP proxies (#15906)
 * Type hint cleanup (#15917)
 * Adding Note to enable_webextensions() regarding CDP (plus gen docstring updates) (#15927)
+* Return HTTP response reason when remote connection error occurs (#15942)
+* [py] add macOS specific keys to Key enum (#15948)
 
 Selenium 4.33.0
 * Add CDP for Chrome 137 and remove 134
