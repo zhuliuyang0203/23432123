@@ -203,7 +203,6 @@ def test_set_geolocation_override_with_multiple_user_contexts(driver, pages):
 
 
 @pytest.mark.xfail_firefox
-@pytest.mark.xfail_edge
 def test_set_geolocation_override_with_error(driver, pages):
     """Test setting geolocation override with error."""
     context_id = driver.current_window_handle
