@@ -1,0 +1,13 @@
+selenium.webdriver.remote.client\_config
+========================================
+
+.. automodule:: selenium.webdriver.remote.client_config
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AuthType
+      ClientConfig
+   

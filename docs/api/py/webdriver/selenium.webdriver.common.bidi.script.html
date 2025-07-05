@@ -46,10 +46,10 @@
   
   
   
-    <title>selenium.webdriver.common.bidi.script &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.common.bidi.script &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
-    <script src="../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../_static/documentation_options.js?v=9464611f"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -77,7 +77,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -89,7 +89,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.bidi.script </span>
         </div>
       </div>
@@ -146,7 +146,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -181,8 +181,102 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#webdriver-selenium-webdriver-common-bidi-script--page-root" class="md-nav__link">selenium.webdriver.common.bidi.script</a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ResultOwnership" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ResultOwnership</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ResultOwnership.NONE" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ResultOwnership.NONE</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ResultOwnership.ROOT" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ResultOwnership.ROOT</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.WINDOW" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.WINDOW</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.DEDICATED_WORKER" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.DEDICATED_WORKER</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.SHARED_WORKER" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.SHARED_WORKER</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.SERVICE_WORKER" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.SERVICE_WORKER</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.WORKER" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.WORKER</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.PAINT_WORKLET" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.PAINT_WORKLET</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.AUDIO_WORKLET" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.AUDIO_WORKLET</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmType.WORKLET" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmType.WORKLET</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.realm" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.realm</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.origin" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.origin</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.type" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.type</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.context" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.context</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.sandbox" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.sandbox</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmInfo.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmInfo.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Source" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Source.realm" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Source.realm</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Source.context" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Source.context</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Source.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Source.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult.type" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult.type</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult.realm" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult.realm</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult.result" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult.result</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult.exception_details" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult.exception_details</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.EvaluateResult.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">EvaluateResult.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ScriptMessage" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ScriptMessage</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ScriptMessage.event_class" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ScriptMessage.event_class</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.ScriptMessage.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">ScriptMessage.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmCreated" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmCreated</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmCreated.event_class" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmCreated.event_class</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmCreated.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmCreated.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmDestroyed" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmDestroyed</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmDestroyed.event_class" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmDestroyed.event_class</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.RealmDestroyed.from_json" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RealmDestroyed.from_json()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script</span></code></a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.EVENTS" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.EVENTS</span></code></a>
+        </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.add_console_message_handler" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.add_console_message_handler()</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.add_javascript_error_handler" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.add_javascript_error_handler()</span></code></a>
@@ -190,6 +284,12 @@
         <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.remove_console_message_handler" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.remove_console_message_handler()</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.remove_javascript_error_handler" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.remove_javascript_error_handler()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.pin" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.pin()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.unpin" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.unpin()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.script.Script.execute" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Script.execute()</span></code></a>
         </li></ul>
             </nav>
         </li></ul>
@@ -214,15 +314,258 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.common.bidi.script.Script" title="selenium.webdriver.common.bidi.script.Script"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Script</span></code></a>(conn)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.common.bidi.script.Script" title="selenium.webdriver.common.bidi.script.Script"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Script</span></code></a>(conn[, driver])</p></td>
+<td><p>BiDi implementation of the script module.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ResultOwnership">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">ResultOwnership</span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#ResultOwnership"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ResultOwnership" title="Link to this definition">¶</a></dt>
+<dd><p>Represents the possible result ownership types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ResultOwnership.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'none'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ResultOwnership.NONE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ResultOwnership.ROOT">
+<span class="sig-name descname"><span class="pre">ROOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'root'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ResultOwnership.ROOT" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">RealmType</span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType" title="Link to this definition">¶</a></dt>
+<dd><p>Represents the possible realm types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.WINDOW">
+<span class="sig-name descname"><span class="pre">WINDOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'window'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.WINDOW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.DEDICATED_WORKER">
+<span class="sig-name descname"><span class="pre">DEDICATED_WORKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dedicated-worker'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.DEDICATED_WORKER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.SHARED_WORKER">
+<span class="sig-name descname"><span class="pre">SHARED_WORKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'shared-worker'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.SHARED_WORKER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.SERVICE_WORKER">
+<span class="sig-name descname"><span class="pre">SERVICE_WORKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'service-worker'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.SERVICE_WORKER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.WORKER">
+<span class="sig-name descname"><span class="pre">WORKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'worker'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.WORKER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.PAINT_WORKLET">
+<span class="sig-name descname"><span class="pre">PAINT_WORKLET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'paint-worklet'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.PAINT_WORKLET" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.AUDIO_WORKLET">
+<span class="sig-name descname"><span class="pre">AUDIO_WORKLET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'audio-worklet'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.AUDIO_WORKLET" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmType.WORKLET">
+<span class="sig-name descname"><span class="pre">WORKLET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'worklet'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmType.WORKLET" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">RealmInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sandbox</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo" title="Link to this definition">¶</a></dt>
+<dd><p>Represents information about a realm.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.realm">
+<span class="sig-name descname"><span class="pre">realm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.realm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.origin" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.context">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.sandbox">
+<span class="sig-name descname"><span class="pre">sandbox</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.sandbox" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmInfo.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.RealmInfo" title="selenium.webdriver.common.bidi.script.RealmInfo"><span class="pre">RealmInfo</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmInfo.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmInfo.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a RealmInfo instance from a dictionary.</p>
+<section id="parameters">
+<h2 id="parameters">Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the realm information.</p>
+</div></blockquote>
+</section>
+<section id="returns">
+<h2 id="returns">Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>RealmInfo: A new instance of RealmInfo.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Source">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Source" title="Link to this definition">¶</a></dt>
+<dd><p>Represents the source of a script message.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Source.realm">
+<span class="sig-name descname"><span class="pre">realm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Source.realm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Source.context">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Source.context" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Source.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.Source" title="selenium.webdriver.common.bidi.script.Source"><span class="pre">Source</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Source.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Source.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a Source instance from a dictionary.</p>
+<section id="id1">
+<h2 id="id1">Parameters:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the source information.</p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2 id="id2">Returns:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Source: A new instance of Source.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">EvaluateResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">realm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_details</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#EvaluateResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult" title="Link to this definition">¶</a></dt>
+<dd><p>Represents the result of script evaluation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult.realm">
+<span class="sig-name descname"><span class="pre">realm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult.realm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult.result">
+<span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult.result" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult.exception_details">
+<span class="sig-name descname"><span class="pre">exception_details</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult.exception_details" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.EvaluateResult.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.EvaluateResult" title="selenium.webdriver.common.bidi.script.EvaluateResult"><span class="pre">EvaluateResult</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#EvaluateResult.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.EvaluateResult.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates an EvaluateResult instance from a dictionary.</p>
+<section id="id3">
+<h2 id="id3">Parameters:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the evaluation result.</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2 id="id4">Returns:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>EvaluateResult: A new instance of EvaluateResult.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ScriptMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">ScriptMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.Source" title="selenium.webdriver.common.bidi.script.Source"><span class="pre">Source</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#ScriptMessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ScriptMessage" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a script message event.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ScriptMessage.event_class">
+<span class="sig-name descname"><span class="pre">event_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'script.message'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ScriptMessage.event_class" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.ScriptMessage.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.ScriptMessage" title="selenium.webdriver.common.bidi.script.ScriptMessage"><span class="pre">ScriptMessage</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#ScriptMessage.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.ScriptMessage.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a ScriptMessage instance from a dictionary.</p>
+<section id="id5">
+<h2 id="id5">Parameters:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the script message.</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h2 id="id6">Returns:<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>ScriptMessage: A new instance of ScriptMessage.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmCreated">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">RealmCreated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realm_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.RealmInfo" title="selenium.webdriver.common.bidi.script.RealmInfo"><span class="pre">RealmInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmCreated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmCreated" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a realm created event.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmCreated.event_class">
+<span class="sig-name descname"><span class="pre">event_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'script.realmCreated'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmCreated.event_class" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmCreated.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.RealmCreated" title="selenium.webdriver.common.bidi.script.RealmCreated"><span class="pre">RealmCreated</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmCreated.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmCreated.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a RealmCreated instance from a dictionary.</p>
+<section id="id7">
+<h2 id="id7">Parameters:<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the realm created event.</p>
+</div></blockquote>
+</section>
+<section id="id8">
+<h2 id="id8">Returns:<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>RealmCreated: A new instance of RealmCreated.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmDestroyed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">RealmDestroyed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmDestroyed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmDestroyed" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a realm destroyed event.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmDestroyed.event_class">
+<span class="sig-name descname"><span class="pre">event_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'script.realmDestroyed'</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmDestroyed.event_class" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.RealmDestroyed.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="#selenium.webdriver.common.bidi.script.RealmDestroyed" title="selenium.webdriver.common.bidi.script.RealmDestroyed"><span class="pre">RealmDestroyed</span></a></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#RealmDestroyed.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.RealmDestroyed.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a RealmDestroyed instance from a dictionary.</p>
+<section id="id9">
+<h2 id="id9">Parameters:<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>json: A dictionary containing the realm destroyed event.</p>
+</div></blockquote>
+</section>
+<section id="id10">
+<h2 id="id10">Returns:<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>RealmDestroyed: A new instance of RealmDestroyed.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
 <dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">Script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script" title="Link to this definition">¶</a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.script.</span></span><span class="sig-name descname"><span class="pre">Script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script" title="Link to this definition">¶</a></dt>
+<dd><p>BiDi implementation of the script module.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.EVENTS">
+<span class="sig-name descname"><span class="pre">EVENTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'message':</span> <span class="pre">'script.message',</span> <span class="pre">'realm_created':</span> <span class="pre">'script.realmCreated',</span> <span class="pre">'realm_destroyed':</span> <span class="pre">'script.realmDestroyed'}</span></em><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.EVENTS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.add_console_message_handler">
 <span class="sig-name descname"><span class="pre">add_console_message_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script.add_console_message_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.add_console_message_handler" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -238,6 +581,58 @@
 <dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.remove_javascript_error_handler">
 <span class="sig-name descname"><span class="pre">remove_javascript_error_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.remove_javascript_error_handler" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.pin">
+<span class="sig-name descname"><span class="pre">pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script.pin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.pin" title="Link to this definition">¶</a></dt>
+<dd><p>Pins a script to the current browsing context.</p>
+<section id="id11">
+<h2 id="id11">Parameters:<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>script: The script to pin.</p>
+</div></blockquote>
+</section>
+<section id="id12">
+<h2 id="id12">Returns:<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>str: The ID of the pinned script.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.unpin">
+<span class="sig-name descname"><span class="pre">unpin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script.unpin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.unpin" title="Link to this definition">¶</a></dt>
+<dd><p>Unpins a script from the current browsing context.</p>
+<section id="id13">
+<h2 id="id13">Parameters:<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>script_id: The ID of the pinned script to unpin.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.script.Script.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/script.html#Script.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.script.Script.execute" title="Link to this definition">¶</a></dt>
+<dd><p>Executes a script in the current browsing context.</p>
+<section id="id14">
+<h2 id="id14">Parameters:<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>script: The script function to execute.
+<a href="#id15"><span class="problematic" id="id16">*</span></a>args: Arguments to pass to the script function.</p>
+</div></blockquote>
+</section>
+<section id="id17">
+<h2 id="id17">Returns:<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>dict: The result value from the script execution.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h2 id="raises">Raises:<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>WebDriverException: If the script execution fails.</p>
+</div></blockquote>
+</section>
+</dd></dl>
 </dd></dl>
 </section>
 

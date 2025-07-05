@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.virtual_authenticator &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.common.virtual_authenticator &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../../../../_static/documentation_options.js?v=9464611f"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.virtual_authenticator </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -212,7 +212,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsafe_b64decode</span><span class="p">,</span> <span class="n">urlsafe_b64encode</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 
 <div class="viewcode-block" id="Protocol">
@@ -220,8 +220,8 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Protocol</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Protocol to communicate with the authenticator."""</span>
 
-    <span class="n">CTAP2</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ctap2"</span>
-    <span class="n">U2F</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ctap1/u2f"</span></div>
+    <span class="n">CTAP2</span> <span class="o">=</span> <span class="s2">"ctap2"</span>
+    <span class="n">U2F</span> <span class="o">=</span> <span class="s2">"ctap1/u2f"</span></div>
 
 
 
@@ -230,10 +230,10 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Transport</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Transport method to communicate with the authenticator."""</span>
 
-    <span class="n">BLE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ble"</span>
-    <span class="n">USB</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"usb"</span>
-    <span class="n">NFC</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"nfc"</span>
-    <span class="n">INTERNAL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"internal"</span></div>
+    <span class="n">BLE</span> <span class="o">=</span> <span class="s2">"ble"</span>
+    <span class="n">USB</span> <span class="o">=</span> <span class="s2">"usb"</span>
+    <span class="n">NFC</span> <span class="o">=</span> <span class="s2">"nfc"</span>
+    <span class="n">INTERNAL</span> <span class="o">=</span> <span class="s2">"internal"</span></div>
 
 
 
@@ -268,7 +268,7 @@
 
 <div class="viewcode-block" id="VirtualAuthenticatorOptions.to_dict">
 <a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.virtual_authenticator.html#selenium.webdriver.common.virtual_authenticator.VirtualAuthenticatorOptions.to_dict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"protocol"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span>
             <span class="s2">"transport"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">,</span>
@@ -378,7 +378,7 @@
 
 <div class="viewcode-block" id="Credential.to_dict">
 <a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.virtual_authenticator.html#selenium.webdriver.common.virtual_authenticator.Credential.to_dict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">credential_data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"credentialId"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="s2">"isResidentCredential"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_resident_credential</span><span class="p">,</span>
@@ -396,7 +396,7 @@
 <div class="viewcode-block" id="Credential.from_dict">
 <a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.virtual_authenticator.html#selenium.webdriver.common.virtual_authenticator.Credential.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"Credential"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"Credential"</span><span class="p">:</span>
         <span class="n">_id</span> <span class="o">=</span> <span class="n">urlsafe_b64decode</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">'credentialId'</span><span class="p">]</span><span class="si">}</span><span class="s2">=="</span><span class="p">)</span>
         <span class="n">is_resident_credential</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"isResidentCredential"</span><span class="p">])</span>
         <span class="n">rp_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"rpId"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>

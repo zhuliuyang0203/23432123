@@ -1,0 +1,23 @@
+selenium.webdriver.common.bidi.storage
+======================================
+
+.. automodule:: selenium.webdriver.common.bidi.storage
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BrowsingContextPartitionDescriptor
+      BytesValue
+      Cookie
+      CookieFilter
+      DeleteCookiesResult
+      GetCookiesResult
+      PartialCookie
+      PartitionKey
+      SameSite
+      SetCookieResult
+      Storage
+      StorageKeyPartitionDescriptor
+   

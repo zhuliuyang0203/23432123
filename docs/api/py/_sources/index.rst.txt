@@ -23,7 +23,7 @@ The `selenium` package is used to automate web browser interaction from Python.
 | **API Docs**:     | `api.html <api.html>`_                         |
 +-------------------+------------------------------------------------+
 
-Updated documentation published with each commit is available at: https://selenium-python-api-docs.readthedocs.io
+Updated documentation published with each commit is available at: `readthedocs.io <https://selenium-python-api-docs.readthedocs.io/en/latest>`_
 
 ----
 

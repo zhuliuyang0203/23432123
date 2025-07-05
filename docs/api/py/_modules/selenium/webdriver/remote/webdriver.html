@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.remote.webdriver &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.remote.webdriver &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../../../../_static/documentation_options.js?v=9464611f"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.remote.webdriver </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -208,7 +208,6 @@
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
-
 <span class="sd">"""The WebDriver implementation."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
@@ -224,7 +223,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">b64decode</span><span class="p">,</span> <span class="n">urlsafe_b64encode</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">asynccontextmanager</span><span class="p">,</span> <span class="n">contextmanager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_module</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">InvalidArgumentException</span><span class="p">,</span>
@@ -236,6 +235,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.browser</span><span class="w"> </span><span class="kn">import</span> <span class="n">Browser</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.browsing_context</span><span class="w"> </span><span class="kn">import</span> <span class="n">BrowsingContext</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.network</span><span class="w"> </span><span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.permissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Permissions</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.script</span><span class="w"> </span><span class="kn">import</span> <span class="n">Script</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">Storage</span>
@@ -268,7 +268,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.websocket_connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSocketConnection</span>
 
 <span class="n">cdp</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">devtools</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="import_cdp">
@@ -322,8 +321,13 @@
     <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChromeRemoteConnection</span><span class="p">,</span> <span class="n">EdgeRemoteConnection</span><span class="p">,</span> <span class="n">SafariRemoteConnection</span><span class="p">,</span> <span class="n">FirefoxRemoteConnection</span><span class="p">]</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">browser_name</span> <span class="o">==</span> <span class="n">capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"browserName"</span><span class="p">)),</span> <span class="n">RemoteConnection</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">command_executor</span><span class="p">,</span> <span class="s2">"client_config"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">command_executor</span><span class="o">.</span><span class="n">client_config</span><span class="p">:</span>
+        <span class="n">remote_server_addr</span> <span class="o">=</span> <span class="n">command_executor</span><span class="o">.</span><span class="n">client_config</span><span class="o">.</span><span class="n">remote_server_addr</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">remote_server_addr</span> <span class="o">=</span> <span class="n">command_executor</span>
+
     <span class="k">return</span> <span class="n">handler</span><span class="p">(</span>
-        <span class="n">remote_server_addr</span><span class="o">=</span><span class="n">command_executor</span><span class="p">,</span>
+        <span class="n">remote_server_addr</span><span class="o">=</span><span class="n">remote_server_addr</span><span class="p">,</span>
         <span class="n">keep_alive</span><span class="o">=</span><span class="n">keep_alive</span><span class="p">,</span>
         <span class="n">ignore_proxy</span><span class="o">=</span><span class="n">ignore_local_proxy</span><span class="p">,</span>
         <span class="n">client_config</span><span class="o">=</span><span class="n">client_config</span><span class="p">,</span>
@@ -333,8 +337,8 @@
 
 <div class="viewcode-block" id="create_matches">
 <a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.chrome.webdriver.create_matches">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">create_matches</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-    <span class="n">capabilities</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"capabilities"</span><span class="p">:</span> <span class="p">{}}</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_matches</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">capabilities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"capabilities"</span><span class="p">:</span> <span class="p">{}}</span>
     <span class="n">opts</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">to_capabilities</span><span class="p">())</span>
@@ -357,9 +361,9 @@
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">samesies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">always</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">opt_dict</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">always</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">i</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">opt_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
     <span class="n">capabilities</span><span class="p">[</span><span class="s2">"capabilities"</span><span class="p">][</span><span class="s2">"alwaysMatch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">always</span>
     <span class="n">capabilities</span><span class="p">[</span><span class="s2">"capabilities"</span><span class="p">][</span><span class="s2">"firstMatch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">opts</span>
@@ -403,9 +407,9 @@
         <span class="n">command_executor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RemoteConnection</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"http://127.0.0.1:4444"</span><span class="p">,</span>
         <span class="n">keep_alive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">file_detector</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FileDetector</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseOptions</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">locator_converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LocatorConverter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">web_element_cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">web_element_cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">client_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClientConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Create a new driver that will issue commands using the wire</span>
@@ -451,9 +455,9 @@
                 <span class="n">client_config</span><span class="o">=</span><span class="n">client_config</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_remote</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">session_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">caps</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pinned_scripts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinned_scripts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">error_handler</span> <span class="o">=</span> <span class="n">ErrorHandler</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_to</span> <span class="o">=</span> <span class="n">SwitchTo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mobile</span> <span class="o">=</span> <span class="n">Mobile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -473,6 +477,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_browsing_context</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_webextension</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_permissions</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">'&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (session="</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s1">")&gt;'</span>
@@ -482,7 +488,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">exc_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]],</span>
+        <span class="n">exc_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]],</span>
         <span class="n">exc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">],</span>
         <span class="n">traceback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">TracebackType</span><span class="p">],</span>
     <span class="p">):</span>
@@ -670,7 +676,8 @@
             <span class="k">elif</span> <span class="s2">"sessionId"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
                 <span class="n">params</span><span class="p">[</span><span class="s2">"sessionId"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_id</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_executor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">driver_command</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">RemoteConnection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_executor</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">driver_command</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">error_handler</span><span class="o">.</span><span class="n">check_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
             <span class="n">response</span><span class="p">[</span><span class="s2">"value"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unwrap_value</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
@@ -746,7 +753,7 @@
 
 <div class="viewcode-block" id="WebDriver.get_pinned_scripts">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.get_pinned_scripts">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_pinned_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pinned_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Return a list of all pinned scripts.</span>
 
 <span class="sd">        Example:</span>
@@ -857,7 +864,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">QUIT</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stop_client</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">command_executor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+            <span class="n">executor</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">RemoteConnection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_executor</span><span class="p">)</span>
+            <span class="n">executor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
     <span class="nd">@property</span>
@@ -871,7 +879,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">W3C_GET_CURRENT_WINDOW_HANDLE</span><span class="p">)[</span><span class="s2">"value"</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">window_handles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">window_handles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns the handles of all windows within the current session.</span>
 
 <span class="sd">        Example:</span>
@@ -924,7 +932,7 @@
 <span class="sd">        --------</span>
 <span class="sd">        &gt;&gt;&gt; driver.print_page()</span>
 <span class="sd">        """</span>
-        <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">print_options</span><span class="p">:</span>
             <span class="n">options</span> <span class="o">=</span> <span class="n">print_options</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 
@@ -992,7 +1000,7 @@
     <span class="c1"># Options</span>
 <div class="viewcode-block" id="WebDriver.get_cookies">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.get_cookies">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns a set of dictionaries, corresponding to cookies visible in</span>
 <span class="sd">        the current session.</span>
 
@@ -1009,7 +1017,7 @@
 
 <div class="viewcode-block" id="WebDriver.get_cookie">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.get_cookie">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Get a single cookie by name. Raises ValueError if the name is empty</span>
 <span class="sd">        or whitespace. Returns the cookie if found, None if not.</span>
 
@@ -1216,7 +1224,7 @@
 
 <div class="viewcode-block" id="WebDriver.find_elements">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.find_elements">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Find elements given a By strategy and locator.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1246,7 +1254,10 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">RelativeBy</span><span class="p">):</span>
             <span class="n">_pkg</span> <span class="o">=</span> <span class="s2">"."</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="vm">__name__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">raw_function</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">_pkg</span><span class="p">,</span> <span class="s2">"findElements.js"</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">)</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">_pkg</span><span class="p">,</span> <span class="s2">"findElements.js"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">raw_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not find findElements.js in package </span><span class="si">{</span><span class="n">_pkg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">raw_function</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">)</span>
             <span class="n">find_element_js</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"/* findElements */return (</span><span class="si">{</span><span class="n">raw_function</span><span class="si">}</span><span class="s2">).apply(null, arguments);"</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="n">find_element_js</span><span class="p">,</span> <span class="n">by</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
@@ -1516,32 +1527,28 @@
 <div class="viewcode-block" id="WebDriver.start_devtools">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.start_devtools">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">start_devtools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">global</span> <span class="n">devtools</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">devtools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span>
+        <span class="k">global</span> <span class="n">cdp</span>
+        <span class="n">import_cdp</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdp"</span><span class="p">):</span>
+            <span class="n">ws_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdp"</span><span class="p">)</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdpVersion"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">global</span> <span class="n">cdp</span>
-            <span class="n">import_cdp</span><span class="p">()</span>
+            <span class="n">version</span><span class="p">,</span> <span class="n">ws_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cdp_details</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">devtools</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdp"</span><span class="p">):</span>
-                    <span class="n">ws_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdp"</span><span class="p">)</span>
-                    <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"se:cdpVersion"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">version</span><span class="p">,</span> <span class="n">ws_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cdp_details</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ws_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">"Unable to find url to connect to from capabilities"</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">ws_url</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">"Unable to find url to connect to from capabilities"</span><span class="p">)</span>
-
-                <span class="n">devtools</span> <span class="o">=</span> <span class="n">cdp</span><span class="o">.</span><span class="n">import_devtools</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="p">[</span><span class="s2">"browserName"</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"firefox"</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"CDP support for Firefox has been removed. Please switch to WebDriver BiDi."</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="n">ws_url</span><span class="p">)</span>
-            <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">devtools</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
-            <span class="n">target_id</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">target_id</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">devtools</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">attach_to_target</span><span class="p">(</span><span class="n">target_id</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">session_id</span> <span class="o">=</span> <span class="n">session</span>
-            <span class="k">return</span> <span class="n">devtools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span> <span class="o">=</span> <span class="n">cdp</span><span class="o">.</span><span class="n">import_devtools</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="p">[</span><span class="s2">"browserName"</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"firefox"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"CDP support for Firefox has been removed. Please switch to WebDriver BiDi."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span> <span class="o">=</span> <span class="n">WebSocketConnection</span><span class="p">(</span><span class="n">ws_url</span><span class="p">)</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_targets</span><span class="p">())</span>
+        <span class="n">target_id</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">target_id</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">attach_to_target</span><span class="p">(</span><span class="n">target_id</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="o">.</span><span class="n">session_id</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span></div>
 
 
 <div class="viewcode-block" id="WebDriver.bidi_connection">
@@ -1573,7 +1580,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_start_bidi</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_script</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_script</span> <span class="o">=</span> <span class="n">Script</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_script</span> <span class="o">=</span> <span class="n">Script</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_script</span>
 
@@ -1620,9 +1627,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Returns the BiDi session object for the current WebDriver session.</span>
-<span class="sd">        """</span>
+<span class="w">        </span><span class="sd">"""Returns the BiDi session object for the current WebDriver</span>
+<span class="sd">        session."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_start_bidi</span><span class="p">()</span>
 
@@ -1633,7 +1639,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">browsing_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Returns a browsing context module object for BiDi browsing context commands.</span>
+<span class="w">        </span><span class="sd">"""Returns a browsing context module object for BiDi browsing context</span>
+<span class="sd">        commands.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        --------</span>
@@ -1680,6 +1687,28 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Returns a permissions module object for BiDi permissions commands.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Permissions: an object containing access to BiDi permissions commands.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">        ---------</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.common.bidi.permissions import PermissionDescriptor, PermissionState</span>
+<span class="sd">        &gt;&gt;&gt; descriptor = PermissionDescriptor("geolocation")</span>
+<span class="sd">        &gt;&gt;&gt; driver.permissions.set_permission(descriptor, PermissionState.GRANTED, "https://example.com")</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_start_bidi</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_permissions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_permissions</span> <span class="o">=</span> <span class="n">Permissions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_websocket_connection</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_permissions</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">webextension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Returns a webextension module object for BiDi webextension commands.</span>
 
@@ -1707,10 +1736,13 @@
         <span class="kn">import</span><span class="w"> </span><span class="nn">urllib3</span>
 
         <span class="n">http</span> <span class="o">=</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">PoolManager</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"browserName"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"chrome"</span><span class="p">:</span>
-            <span class="n">debugger_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"goog:chromeOptions"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"debuggerAddress"</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"browserName"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"MicrosoftEdge"</span><span class="p">:</span>
-            <span class="n">debugger_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ms:edgeOptions"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"debuggerAddress"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"browserName"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"chrome"</span><span class="p">:</span>
+                <span class="n">debugger_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"goog:chromeOptions"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"debuggerAddress"</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"browserName"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"MicrosoftEdge"</span><span class="p">:</span>
+                <span class="n">debugger_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ms:edgeOptions"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"debuggerAddress"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">"Can't get debugger address."</span><span class="p">)</span>
 
         <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"http://</span><span class="si">{</span><span class="n">debugger_address</span><span class="si">}</span><span class="s2">/json/version"</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
@@ -1740,7 +1772,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">virtual_authenticator_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">virtual_authenticator_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns the id of the virtual authenticator.</span>
 
 <span class="sd">        Example:</span>
@@ -1784,7 +1816,7 @@
 <div class="viewcode-block" id="WebDriver.get_credentials">
 <a class="viewcode-back" href="../../../../webdriver_wpewebkit/selenium.webdriver.wpewebkit.webdriver.html#selenium.webdriver.chrome.webdriver.WebDriver.get_credentials">[docs]</a>
     <span class="nd">@required_virtual_authenticator</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Credential</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Credential</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns the list of credentials owned by the authenticator.</span>
 
 <span class="sd">        Example:</span>

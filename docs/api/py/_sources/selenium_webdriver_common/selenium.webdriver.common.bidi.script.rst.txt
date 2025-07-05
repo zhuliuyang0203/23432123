@@ -1,0 +1,20 @@
+selenium.webdriver.common.bidi.script
+=====================================
+
+.. automodule:: selenium.webdriver.common.bidi.script
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      EvaluateResult
+      RealmCreated
+      RealmDestroyed
+      RealmInfo
+      RealmType
+      ResultOwnership
+      Script
+      ScriptMessage
+      Source
+   

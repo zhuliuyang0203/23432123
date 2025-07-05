@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.bidi.browsing_context &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.common.bidi.browsing_context &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../../../../../_static/documentation_options.js?v=9464611f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../../../../../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.bidi.browsing_context </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -209,7 +209,7 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">command_builder</span>
 
@@ -259,7 +259,7 @@
 <div class="viewcode-block" id="NavigationInfo.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.NavigationInfo.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"NavigationInfo"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"NavigationInfo"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a NavigationInfo instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -270,12 +270,23 @@
 <span class="sd">        -------</span>
 <span class="sd">            NavigationInfo: A new instance of NavigationInfo.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">navigation</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"navigation"</span><span class="p">),</span>
-            <span class="n">timestamp</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timestamp"</span><span class="p">),</span>
-            <span class="n">url</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">),</span>
-        <span class="p">)</span></div>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">navigation</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"navigation"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">navigation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">navigation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"navigation must be a string"</span><span class="p">)</span>
+
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timestamp"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">timestamp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"timestamp is required and must be a non-negative integer"</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"url is required and must be a string"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">navigation</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
 </div>
 
 
@@ -289,11 +300,11 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">children</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">"BrowsingContextInfo"</span><span class="p">]],</span>
+        <span class="n">children</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="s2">"BrowsingContextInfo"</span><span class="p">]],</span>
+        <span class="n">client_window</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">user_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">parent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">user_context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">original_opener</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">client_window</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
@@ -306,7 +317,7 @@
 <div class="viewcode-block" id="BrowsingContextInfo.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.BrowsingContextInfo.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BrowsingContextInfo"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BrowsingContextInfo"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a BrowsingContextInfo instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -318,17 +329,49 @@
 <span class="sd">            BrowsingContextInfo: A new instance of BrowsingContextInfo.</span>
 <span class="sd">        """</span>
         <span class="n">children</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"children"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">BrowsingContextInfo</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"children"</span><span class="p">)]</span>
+        <span class="n">raw_children</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"children"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">raw_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_children</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"children must be a list if provided"</span><span class="p">)</span>
+
+            <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">raw_children</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Each child must be a dictionary, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BrowsingContextInfo</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"url is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"parent must be a string if provided"</span><span class="p">)</span>
+
+        <span class="n">user_context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"userContext"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user_context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"userContext is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">original_opener</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"originalOpener"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">original_opener</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">original_opener</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"originalOpener must be a string if provided"</span><span class="p">)</span>
+
+        <span class="n">client_window</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"clientWindow"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">client_window</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_window</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"clientWindow is required and must be a string"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">url</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">children</span><span class="o">=</span><span class="n">children</span><span class="p">,</span>
-            <span class="n">parent</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">),</span>
-            <span class="n">user_context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"userContext"</span><span class="p">),</span>
-            <span class="n">original_opener</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"originalOpener"</span><span class="p">),</span>
-            <span class="n">client_window</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"clientWindow"</span><span class="p">),</span>
+            <span class="n">client_window</span><span class="o">=</span><span class="n">client_window</span><span class="p">,</span>
+            <span class="n">user_context</span><span class="o">=</span><span class="n">user_context</span><span class="p">,</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">original_opener</span><span class="o">=</span><span class="n">original_opener</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -353,7 +396,7 @@
 <div class="viewcode-block" id="DownloadWillBeginParams.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.DownloadWillBeginParams.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DownloadWillBeginParams"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"DownloadWillBeginParams"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a DownloadWillBeginParams instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -364,12 +407,32 @@
 <span class="sd">        -------</span>
 <span class="sd">            DownloadWillBeginParams: A new instance of DownloadWillBeginParams.</span>
 <span class="sd">        """</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">navigation</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"navigation"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">navigation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">navigation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"navigation must be a string"</span><span class="p">)</span>
+
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timestamp"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">timestamp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"timestamp is required and must be a non-negative integer"</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"url is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">suggested_filename</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"suggestedFilename"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">suggested_filename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">suggested_filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"suggestedFilename is required and must be a string"</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">navigation</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"navigation"</span><span class="p">),</span>
-            <span class="n">timestamp</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timestamp"</span><span class="p">),</span>
-            <span class="n">url</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">),</span>
-            <span class="n">suggested_filename</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"suggestedFilename"</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">navigation</span><span class="o">=</span><span class="n">navigation</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">suggested_filename</span><span class="o">=</span><span class="n">suggested_filename</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -397,7 +460,7 @@
 <div class="viewcode-block" id="UserPromptOpenedParams.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.UserPromptOpenedParams.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"UserPromptOpenedParams"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"UserPromptOpenedParams"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a UserPromptOpenedParams instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -408,12 +471,32 @@
 <span class="sd">        -------</span>
 <span class="sd">            UserPromptOpenedParams: A new instance of UserPromptOpenedParams.</span>
 <span class="sd">        """</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"handler"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"handler is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"message"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"message is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">type_value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"type is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">default_value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"defaultValue"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">default_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"defaultValue must be a string if provided"</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">handler</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"handler"</span><span class="p">),</span>
-            <span class="n">message</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"message"</span><span class="p">),</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">),</span>
-            <span class="n">default_value</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"defaultValue"</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">type_value</span><span class="p">,</span>
+            <span class="n">default_value</span><span class="o">=</span><span class="n">default_value</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -439,7 +522,7 @@
 <div class="viewcode-block" id="UserPromptClosedParams.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.UserPromptClosedParams.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"UserPromptClosedParams"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"UserPromptClosedParams"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a UserPromptClosedParams instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -450,11 +533,27 @@
 <span class="sd">        -------</span>
 <span class="sd">            UserPromptClosedParams: A new instance of UserPromptClosedParams.</span>
 <span class="sd">        """</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">accepted</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"accepted"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">accepted</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accepted</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"accepted is required and must be a boolean"</span><span class="p">)</span>
+
+        <span class="n">type_value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"type is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">user_text</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"userText"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"userText must be a string if provided"</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">accepted</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"accepted"</span><span class="p">),</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">),</span>
-            <span class="n">user_text</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"userText"</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">accepted</span><span class="o">=</span><span class="n">accepted</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">type_value</span><span class="p">,</span>
+            <span class="n">user_text</span><span class="o">=</span><span class="n">user_text</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -468,15 +567,17 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
 
 <div class="viewcode-block" id="HistoryUpdatedParams.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.HistoryUpdatedParams.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"HistoryUpdatedParams"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"HistoryUpdatedParams"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a HistoryUpdatedParams instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -487,9 +588,22 @@
 <span class="sd">        -------</span>
 <span class="sd">            HistoryUpdatedParams: A new instance of HistoryUpdatedParams.</span>
 <span class="sd">        """</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"context is required and must be a string"</span><span class="p">)</span>
+
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timestamp"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">timestamp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">timestamp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"timestamp is required and must be a non-negative integer"</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"url is required and must be a string"</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">context</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">),</span>
-            <span class="n">url</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -507,7 +621,7 @@
 <div class="viewcode-block" id="BrowsingContextEvent.from_json">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.BrowsingContextEvent.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BrowsingContextEvent"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BrowsingContextEvent"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a BrowsingContextEvent instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -518,7 +632,11 @@
 <span class="sd">        -------</span>
 <span class="sd">            BrowsingContextEvent: A new instance of BrowsingContextEvent.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">event_class</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"event_class"</span><span class="p">),</span> <span class="o">**</span><span class="n">json</span><span class="p">)</span></div>
+        <span class="n">event_class</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"event_class"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">event_class</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event_class</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"event_class is required and must be a string"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">event_class</span><span class="o">=</span><span class="n">event_class</span><span class="p">,</span> <span class="o">**</span><span class="n">json</span><span class="p">)</span></div>
 </div>
 
 
@@ -572,8 +690,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"viewport"</span><span class="p">,</span>
-        <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">clip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Captures an image of the given navigable, and returns it as a Base64-encoded string.</span>
 
@@ -588,7 +706,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            str: The Base64-encoded screenshot.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">,</span> <span class="s2">"origin"</span><span class="p">:</span> <span class="n">origin</span><span class="p">}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">,</span> <span class="s2">"origin"</span><span class="p">:</span> <span class="n">origin</span><span class="p">}</span>
         <span class="k">if</span> <span class="nb">format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"format"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">format</span>
         <span class="k">if</span> <span class="n">clip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -638,7 +756,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            str: The browsing context ID of the created navigable.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="nb">type</span><span class="p">}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="nb">type</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">reference_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"referenceContext"</span><span class="p">]</span> <span class="o">=</span> <span class="n">reference_context</span>
         <span class="k">if</span> <span class="n">background</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -656,7 +774,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">max_depth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BrowsingContextInfo</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">BrowsingContextInfo</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns a tree of all descendent navigables including the given parent itself, or all top-level contexts</span>
 <span class="sd">        when no parent is provided.</span>
 
@@ -669,7 +787,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            List[BrowsingContextInfo]: A list of browsing context information.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">max_depth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"maxDepth"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_depth</span>
         <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -695,7 +813,7 @@
 <span class="sd">            accept: Whether to accept the prompt.</span>
 <span class="sd">            user_text: The text to enter in the prompt.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">accept</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"accept"</span><span class="p">]</span> <span class="o">=</span> <span class="n">accept</span>
         <span class="k">if</span> <span class="n">user_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -709,11 +827,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">locate_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">locator</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+        <span class="n">locator</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">max_node_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">serialization_options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">start_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="n">serialization_options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Returns a list of all nodes matching the specified locator.</span>
 
 <span class="sd">        Parameters:</span>
@@ -728,7 +846,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            List[Dict]: A list of nodes.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">,</span> <span class="s2">"locator"</span><span class="p">:</span> <span class="n">locator</span><span class="p">}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">,</span> <span class="s2">"locator"</span><span class="p">:</span> <span class="n">locator</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">max_node_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"maxNodeCount"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_node_count</span>
         <span class="k">if</span> <span class="n">serialization_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -747,7 +865,7 @@
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">wait</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Navigates a navigable to the given URL.</span>
 
 <span class="sd">        Parameters:</span>
@@ -774,10 +892,10 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">background</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">margin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">orientation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"portrait"</span><span class="p">,</span>
-        <span class="n">page</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">page_ranges</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">page</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">page_ranges</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">shrink_to_fit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -824,7 +942,7 @@
         <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">ignore_cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">wait</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Reloads a navigable.</span>
 
 <span class="sd">        Parameters:</span>
@@ -837,7 +955,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            Dict: A dictionary containing the navigation result.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">ignore_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"ignoreCache"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ignore_cache</span>
         <span class="k">if</span> <span class="n">wait</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -852,9 +970,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">set_viewport</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">viewport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">viewport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">device_pixel_ratio</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">user_contexts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">user_contexts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Modifies specific viewport characteristics on the given top-level traversable.</span>
 
@@ -869,7 +987,7 @@
 <span class="sd">        ------</span>
 <span class="sd">            Exception: If the browsing context is not a top-level traversable.</span>
 <span class="sd">        """</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">"context"</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span>
         <span class="k">if</span> <span class="n">viewport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -884,7 +1002,7 @@
 
 <div class="viewcode-block" id="BrowsingContext.traverse_history">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.BrowsingContext.traverse_history">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">traverse_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">traverse_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Traverses the history of a given navigable by a delta.</span>
 
 <span class="sd">        Parameters:</span>
@@ -901,7 +1019,7 @@
         <span class="k">return</span> <span class="n">result</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="nb">callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Set a callback function to subscribe to a browsing context event.</span>
 
 <span class="sd">        Parameters:</span>
@@ -947,7 +1065,7 @@
 
 <div class="viewcode-block" id="BrowsingContext.add_event_handler">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browsing_context.html#selenium.webdriver.common.bidi.browsing_context.BrowsingContext.add_event_handler">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_event_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">contexts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_event_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">contexts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Add an event handler to the browsing context.</span>
 
 <span class="sd">        Parameters:</span>
@@ -995,15 +1113,18 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Event </span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s2"> not found"</span><span class="p">)</span>
 
-        <span class="n">event</span> <span class="o">=</span> <span class="n">BrowsingContextEvent</span><span class="p">(</span><span class="n">event_name</span><span class="p">)</span>
+        <span class="n">event_obj</span> <span class="o">=</span> <span class="n">BrowsingContextEvent</span><span class="p">(</span><span class="n">event_name</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">remove_callback</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">callback_id</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">event_name</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">callback_id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">event_name</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"events"</span><span class="p">:</span> <span class="p">[</span><span class="n">event_name</span><span class="p">]}</span>
-            <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">))</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">event_name</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">remove_callback</span><span class="p">(</span><span class="n">event_obj</span><span class="p">,</span> <span class="n">callback_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">event_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">:</span>
+            <span class="n">callbacks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">event_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">callback_id</span> <span class="ow">in</span> <span class="n">callbacks</span><span class="p">:</span>
+                <span class="n">callbacks</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">callback_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">callbacks</span><span class="p">:</span>
+                    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"events"</span><span class="p">:</span> <span class="p">[</span><span class="n">event_name</span><span class="p">]}</span>
+                    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">))</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">[</span><span class="n">event_name</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="BrowsingContext.clear_event_handlers">

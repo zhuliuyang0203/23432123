@@ -1,0 +1,12 @@
+selenium.webdriver.remote.fedcm
+===============================
+
+.. automodule:: selenium.webdriver.remote.fedcm
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FedCM
+   

@@ -46,10 +46,10 @@
   
   
   
-    <title>selenium.webdriver.chrome.options &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.chrome.options &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
-    <script src="../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../_static/documentation_options.js?v=9464611f"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -77,7 +77,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -89,7 +89,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.chrome.options </span>
         </div>
       </div>
@@ -146,7 +146,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -209,6 +209,8 @@
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.debugger_address" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.debugger_address</span></code></a>
         </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.enable_webextensions" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.enable_webextensions</span></code></a>
+        </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.experimental_options" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.experimental_options</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.extensions" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.extensions</span></code></a>
@@ -218,6 +220,8 @@
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.set_capability" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.set_capability()</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.to_capabilities" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.to_capabilities()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.mobile_options" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.mobile_options</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.chrome.options.Options.browser_version" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Options.browser_version</span></code></a>
         </li>
@@ -318,37 +322,36 @@
 <span class="sig-name descname"><span class="pre">add_encoded_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.add_encoded_extension" title="Link to this definition">¶</a></dt>
 <dd><p>Adds Base64 encoded string with extension data to a list that will
 be used to extract it to the ChromeDriver.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Args<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>extension: Base64 encoded string with extension data</p></li>
-</ul>
-</dd>
-</dl>
+<section id="parameters">
+<h2 id="parameters">Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>extension: Base64 encoded string with extension data</p>
+</div></blockquote>
+</section>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.add_experimental_option">
-<span class="sig-name descname"><span class="pre">add_experimental_option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.add_experimental_option" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_experimental_option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.add_experimental_option" title="Link to this definition">¶</a></dt>
 <dd><p>Adds an experimental option which is passed to chromium.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Args<span class="colon">:</span></dt>
-<dd class="field-odd"><p>name: The experimental option name.
+<section id="id1">
+<h2 id="id1">Parameters:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>name: The experimental option name.
 value: The option value.</p>
-</dd>
-</dl>
+</div></blockquote>
+</section>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.add_extension">
 <span class="sig-name descname"><span class="pre">add_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.add_extension" title="Link to this definition">¶</a></dt>
 <dd><p>Adds the path to the extension to a list that will be used to
 extract it to the ChromeDriver.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Args<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>extension: path to the *.crx file</p></li>
-</ul>
-</dd>
-</dl>
+<section id="id2">
+<h2 id="id2">Parameters:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>extension: path to the *.crx file</p>
+</div></blockquote>
+</section>
 </dd></dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.arguments">
@@ -382,6 +385,16 @@ extract it to the ChromeDriver.</p>
 </dl>
 </dd></dl>
 <dl class="py property">
+<dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.enable_webextensions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enable_webextensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.enable_webextensions" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether webextension support is enabled for Chromium-based browsers.</p>
+</dd>
+</dl>
+<p>True if webextension support is enabled, False otherwise.</p>
+</dd></dl>
+<dl class="py property">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.experimental_options">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experimental_options</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.experimental_options" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -392,7 +405,7 @@ extract it to the ChromeDriver.</p>
 </dd></dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.extensions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.extensions" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.extensions" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A list of encoded extensions that will be loaded.</p>
@@ -413,9 +426,18 @@ being picked up and used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.to_capabilities">
 <span class="sig-name descname"><span class="pre">to_capabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.to_capabilities" title="Link to this definition">¶</a></dt>
-<dd><p>Creates a capabilities with all the options that have been set
-:Returns: A dictionary with everything.</p>
+<dd><p>Creates a capabilities with all the options that have been set</p>
+<section id="returns">
+<h2 id="returns">Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>dict : a dictionary with all set options</p>
+</div></blockquote>
+</section>
 </dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.mobile_options">
+<span class="sig-name descname"><span class="pre">mobile_options</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.mobile_options" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.browser_version">
 <span class="sig-name descname"><span class="pre">browser_version</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.browser_version" title="Link to this definition">¶</a></dt>
@@ -439,12 +461,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="parameters">
-<h2 id="parameters">Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h2 id="id3">Parameters:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>str</cite></p>
 </section>
-<section id="returns">
-<h2 id="returns">Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<section id="id4">
+<h2 id="id4">Returns:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -467,8 +489,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.platform_name">
 <span class="sig-name descname"><span class="pre">platform_name</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.platform_name" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Sets name of the platform.</p>
-<section id="id1">
-<h2 id="id1">Usage:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<section id="id5">
+<h2 id="id5">Usage:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -486,12 +508,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id2">
-<h2 id="id2">Parameters:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h2 id="id6">Parameters:<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>str</cite></p>
 </section>
-<section id="id3">
-<h2 id="id3">Returns:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<section id="id7">
+<h2 id="id7">Returns:<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -514,8 +536,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.accept_insecure_certs">
 <span class="sig-name descname"><span class="pre">accept_insecure_certs</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.accept_insecure_certs" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Set whether the session accepts insecure certificates.</p>
-<section id="id4">
-<h2 id="id4">Usage:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<section id="id8">
+<h2 id="id8">Usage:<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -533,12 +555,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id5">
-<h2 id="id5">Parameters:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="id9">
+<h2 id="id9">Parameters:<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>bool</cite></p>
 </section>
-<section id="id6">
-<h2 id="id6">Returns:<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<section id="id10">
+<h2 id="id10">Returns:<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -561,8 +583,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.strict_file_interactability">
 <span class="sig-name descname"><span class="pre">strict_file_interactability</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.strict_file_interactability" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Sets whether session is about file interactability.</p>
-<section id="id7">
-<h2 id="id7">Usage:<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<section id="id11">
+<h2 id="id11">Usage:<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -580,12 +602,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id8">
-<h2 id="id8">Parameters:<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="id12">
+<h2 id="id12">Parameters:<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>bool</cite></p>
 </section>
-<section id="id9">
-<h2 id="id9">Returns:<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<section id="id13">
+<h2 id="id13">Returns:<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -608,8 +630,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.set_window_rect">
 <span class="sig-name descname"><span class="pre">set_window_rect</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.set_window_rect" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Sets window size and position.</p>
-<section id="id10">
-<h2 id="id10">Usage:<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<section id="id14">
+<h2 id="id14">Usage:<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -627,12 +649,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id11">
-<h2 id="id11">Parameters:<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<section id="id15">
+<h2 id="id15">Parameters:<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>bool</cite></p>
 </section>
-<section id="id12">
-<h2 id="id12">Returns:<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h2 id="id16">Returns:<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -655,8 +677,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.enable_bidi">
 <span class="sig-name descname"><span class="pre">enable_bidi</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.enable_bidi" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Set whether the session has WebDriverBiDi enabled.</p>
-<section id="id13">
-<h2 id="id13">Usage:<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
+<section id="id17">
+<h2 id="id17">Usage:<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -674,12 +696,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id14">
-<h2 id="id14">Parameters:<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<section id="id18">
+<h2 id="id18">Parameters:<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>bool</cite></p>
 </section>
-<section id="id15">
-<h2 id="id15">Returns:<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id19">
+<h2 id="id19">Returns:<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -702,8 +724,8 @@ being picked up and used.</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.page_load_strategy">
 <span class="sig-name descname"><span class="pre">page_load_strategy</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.page_load_strategy" title="Link to this definition">¶</a></dt>
 <dd><p>:Gets and Sets page load strategy, the default is “normal”.</p>
-<section id="id16">
-<h2 id="id16">Usage:<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
+<section id="id20">
+<h2 id="id20">Usage:<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -721,12 +743,12 @@ being picked up and used.</p>
 </li>
 </ul>
 </section>
-<section id="id17">
-<h2 id="id17">Parameters:<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<section id="id21">
+<h2 id="id21">Parameters:<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>str</cite></p>
 </section>
-<section id="id18">
-<h2 id="id18">Returns:<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<section id="id22">
+<h2 id="id22">Returns:<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -750,8 +772,8 @@ being picked up and used.</p>
 <span class="sig-name descname"><span class="pre">unhandled_prompt_behavior</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.unhandled_prompt_behavior" title="Link to this definition">¶</a></dt>
 <dd><p>:Gets and Sets unhandled prompt behavior, the default is “dismiss and
 notify”.</p>
-<section id="id19">
-<h2 id="id19">Usage:<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
+<section id="id23">
+<h2 id="id23">Usage:<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -769,12 +791,12 @@ notify”.</p>
 </li>
 </ul>
 </section>
-<section id="id20">
-<h2 id="id20">Parameters:<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
+<section id="id24">
+<h2 id="id24">Parameters:<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>str</cite></p>
 </section>
-<section id="id21">
-<h2 id="id21">Returns:<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
+<section id="id25">
+<h2 id="id25">Returns:<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -798,8 +820,8 @@ notify”.</p>
 <span class="sig-name descname"><span class="pre">timeouts</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.timeouts" title="Link to this definition">¶</a></dt>
 <dd><p>:Gets and Sets implicit timeout, pageLoad timeout and script timeout if
 set (in milliseconds)</p>
-<section id="id22">
-<h2 id="id22">Usage:<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<section id="id26">
+<h2 id="id26">Usage:<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -817,12 +839,12 @@ set (in milliseconds)</p>
 </li>
 </ul>
 </section>
-<section id="id23">
-<h2 id="id23">Parameters:<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<section id="id27">
+<h2 id="id27">Parameters:<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>dict</cite></p>
 </section>
-<section id="id24">
-<h2 id="id24">Returns:<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
+<section id="id28">
+<h2 id="id28">Returns:<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -845,8 +867,8 @@ set (in milliseconds)</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.proxy">
 <span class="sig-name descname"><span class="pre">proxy</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.proxy" title="Link to this definition">¶</a></dt>
 <dd><p>Sets and Gets Proxy.</p>
-<section id="id25">
-<h2 id="id25">Usage:<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
+<section id="id29">
+<h2 id="id29">Usage:<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -864,12 +886,12 @@ set (in milliseconds)</p>
 </li>
 </ul>
 </section>
-<section id="id26">
-<h2 id="id26">Parameters:<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h2>
+<section id="id30">
+<h2 id="id30">Parameters:<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>Proxy</cite></p>
 </section>
-<section id="id27">
-<h2 id="id27">Returns:<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
+<section id="id31">
+<h2 id="id31">Returns:<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -892,8 +914,8 @@ set (in milliseconds)</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.enable_downloads">
 <span class="sig-name descname"><span class="pre">enable_downloads</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.enable_downloads" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Sets whether session can download files.</p>
-<section id="id28">
-<h2 id="id28">Usage:<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
+<section id="id32">
+<h2 id="id32">Usage:<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -911,12 +933,12 @@ set (in milliseconds)</p>
 </li>
 </ul>
 </section>
-<section id="id29">
-<h2 id="id29">Parameters:<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
+<section id="id33">
+<h2 id="id33">Parameters:<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>bool</cite></p>
 </section>
-<section id="id30">
-<h2 id="id30">Returns:<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h2>
+<section id="id34">
+<h2 id="id34">Returns:<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -939,8 +961,8 @@ set (in milliseconds)</p>
 <dt class="sig sig-object py" id="selenium.webdriver.chrome.options.Options.web_socket_url">
 <span class="sig-name descname"><span class="pre">web_socket_url</span></span><a class="headerlink" href="#selenium.webdriver.chrome.options.Options.web_socket_url" title="Link to this definition">¶</a></dt>
 <dd><p>Gets and Sets WebSocket URL.</p>
-<section id="id31">
-<h2 id="id31">Usage:<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h2>
+<section id="id35">
+<h2 id="id35">Usage:<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>
@@ -958,12 +980,12 @@ set (in milliseconds)</p>
 </li>
 </ul>
 </section>
-<section id="id32">
-<h2 id="id32">Parameters:<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h2>
+<section id="id36">
+<h2 id="id36">Parameters:<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h2>
 <p><cite>value</cite>: <cite>str</cite></p>
 </section>
-<section id="id33">
-<h2 id="id33">Returns:<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
+<section id="id37">
+<h2 id="id37">Returns:<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Get</dt><dd><ul>

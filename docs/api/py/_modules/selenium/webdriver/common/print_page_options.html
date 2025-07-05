@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.print_page_options &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.common.print_page_options &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../../../../_static/documentation_options.js?v=9464611f"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.print_page_options </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -210,7 +210,7 @@
 <span class="c1"># under the License.</span>
 
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">TypedDict</span>
@@ -234,13 +234,13 @@
         <span class="n">orientation</span><span class="p">:</span> <span class="n">Orientation</span>
         <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span>
         <span class="n">shrinkToFit</span><span class="p">:</span> <span class="nb">bool</span>
-        <span class="n">pageRanges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+        <span class="n">pageRanges</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
     <span class="n">Orientation</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="n">_MarginOpts</span> <span class="o">=</span> <span class="n">_PageOpts</span> <span class="o">=</span> <span class="n">_PrintOpts</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">_MarginOpts</span> <span class="o">=</span> <span class="n">_PageOpts</span> <span class="o">=</span> <span class="n">_PrintOpts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_PageSettingsDescriptor</span><span class="p">:</span>
@@ -315,7 +315,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">_ValidateTypeDescriptor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Base Class Descriptor which validates type of any subclass attribute."""</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expected_type</span> <span class="o">=</span> <span class="n">expected_type</span>
 

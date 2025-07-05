@@ -1,0 +1,14 @@
+selenium.webdriver.common.bidi.permissions
+==========================================
+
+.. automodule:: selenium.webdriver.common.bidi.permissions
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PermissionDescriptor
+      PermissionState
+      Permissions
+   

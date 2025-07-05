@@ -1,0 +1,12 @@
+selenium.webdriver.common.bidi.webextension
+===========================================
+
+.. automodule:: selenium.webdriver.common.bidi.webextension
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      WebExtension
+   

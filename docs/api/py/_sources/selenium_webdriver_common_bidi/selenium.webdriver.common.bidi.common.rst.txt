@@ -1,0 +1,12 @@
+selenium.webdriver.common.bidi.common
+=====================================
+
+.. automodule:: selenium.webdriver.common.bidi.common
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      command_builder
+   

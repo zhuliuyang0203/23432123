@@ -1,0 +1,12 @@
+selenium.webdriver.common.bidi.session
+======================================
+
+.. automodule:: selenium.webdriver.common.bidi.session
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Session
+   

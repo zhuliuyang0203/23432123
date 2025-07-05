@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.bidi.browser &#8212; Selenium 4.33.0 documentation</title>
+    <title>selenium.webdriver.common.bidi.browser &#8212; Selenium 4.35.0.202506301117 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../../_static/documentation_options.js?v=250cdb37"></script>
+    <script src="../../../../../_static/documentation_options.js?v=9464611f"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../../index.html" title="Selenium 4.33.0 documentation"
+        <a href="../../../../../index.html" title="Selenium 4.35.0.202506301117 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.35.0.202506301117 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.bidi.browser </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.35.0.202506301117 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../../index.html" title="Selenium 4.35.0.202506301117 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../../index.html"
-       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
+       title="Selenium 4.35.0.202506301117 documentation">Selenium 4.35.0.202506301117 documentation</a>
   </label>
   
 
@@ -209,7 +209,6 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">command_builder</span>
 
@@ -222,7 +221,9 @@
     <span class="n">FULLSCREEN</span> <span class="o">=</span> <span class="s2">"fullscreen"</span>
     <span class="n">MAXIMIZED</span> <span class="o">=</span> <span class="s2">"maximized"</span>
     <span class="n">MINIMIZED</span> <span class="o">=</span> <span class="s2">"minimized"</span>
-    <span class="n">NORMAL</span> <span class="o">=</span> <span class="s2">"normal"</span></div>
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="s2">"normal"</span>
+
+    <span class="n">VALID_STATES</span> <span class="o">=</span> <span class="p">{</span><span class="n">FULLSCREEN</span><span class="p">,</span> <span class="n">MAXIMIZED</span><span class="p">,</span> <span class="n">MINIMIZED</span><span class="p">,</span> <span class="n">NORMAL</span><span class="p">}</span></div>
 
 
 
@@ -336,7 +337,7 @@
 <div class="viewcode-block" id="ClientWindowInfo.from_dict">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browser.html#selenium.webdriver.common.bidi.browser.ClientWindowInfo.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ClientWindowInfo"</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ClientWindowInfo"</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Creates a ClientWindowInfo instance from a dictionary.</span>
 
 <span class="sd">        Parameters:</span>
@@ -346,16 +347,53 @@
 <span class="sd">        Returns:</span>
 <span class="sd">        -------</span>
 <span class="sd">            ClientWindowInfo: A new instance of ClientWindowInfo.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        ------</span>
+<span class="sd">            ValueError: If required fields are missing or have invalid types.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">client_window</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"clientWindow"</span><span class="p">),</span>
-            <span class="n">state</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"state"</span><span class="p">),</span>
-            <span class="n">width</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"width"</span><span class="p">),</span>
-            <span class="n">height</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"height"</span><span class="p">),</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"x"</span><span class="p">),</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"y"</span><span class="p">),</span>
-            <span class="n">active</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"active"</span><span class="p">),</span>
-        <span class="p">)</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">client_window</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"clientWindow"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_window</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"clientWindow must be a string"</span><span class="p">)</span>
+
+            <span class="n">state</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"state"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"state must be a string"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ClientWindowState</span><span class="o">.</span><span class="n">VALID_STATES</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid state: </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">ClientWindowState</span><span class="o">.</span><span class="n">VALID_STATES</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="n">width</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"width"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"width must be a non-negative integer, got </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="n">height</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"height must be a non-negative integer, got </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x must be an integer, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"y must be an integer, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="n">active</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"active"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"active must be a boolean"</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="n">client_window</span><span class="o">=</span><span class="n">client_window</span><span class="p">,</span>
+                <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">active</span><span class="o">=</span><span class="n">active</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid data format for ClientWindowInfo: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 </div>
 
 
@@ -385,7 +423,7 @@
 
 <div class="viewcode-block" id="Browser.get_user_contexts">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browser.html#selenium.webdriver.common.bidi.browser.Browser.get_user_contexts">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_contexts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_contexts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Gets all user contexts.</span>
 
 <span class="sd">        Returns:</span>
@@ -418,7 +456,7 @@
 
 <div class="viewcode-block" id="Browser.get_client_windows">
 <a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.browser.html#selenium.webdriver.common.bidi.browser.Browser.get_client_windows">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_client_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ClientWindowInfo</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_client_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ClientWindowInfo</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">"""Gets all client windows.</span>
 
 <span class="sd">        Returns:</span>
