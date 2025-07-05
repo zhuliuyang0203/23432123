@@ -15,23 +15,15 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.html5;
+package org.openqa.selenium.devtools.v138;
 
-import java.util.Set;
+import com.google.auto.service.AutoService;
+import org.openqa.selenium.devtools.CdpInfo;
 
-/** Represents common operations available for all web storage types (session or local). */
-@Deprecated
-public interface Storage {
+@AutoService(CdpInfo.class)
+public class v138CdpInfo extends CdpInfo {
 
-  String getItem(String key);
-
-  Set<String> keySet();
-
-  void setItem(String key, String value);
-
-  String removeItem(String key);
-
-  void clear();
-
-  int size();
+  public v138CdpInfo() {
+    super(138, v138Domains::new);
+  }
 }

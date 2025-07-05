@@ -1,3 +1,18 @@
+v4.34.0
+======
+* Add CDP for Chrome 138 and remove 135
+* [bidi] Add AcceptInsecureCerts and Proxy options when create new user context (#15795)
+* [bidi] Actively use TryGetValue while processing incoming messages
+* [bidi] Declare allowed nullable objects in constructors type (#15809)
+* [bidi] Simplify modules namespace (breaking change) (#15820)
+* Remove unnecessary stylecop files (#15824)
+* Align CS projects name to understand the editing context (#15843)
+* [bidi] Implicit conversion screenshot to bytes
+* [bidi] Adjust proxy configuration for new sessions (#15914)
+* [bidi] Add OnHistoryUpdated event (#15916)
+* Mark FTP proxy support as deprecated (#15925)
+* [bidi] Protect DTO types from inheritance (#15919)
+
 v4.33.0
 ======
 * Add CDP for Chrome 137 and remove 134

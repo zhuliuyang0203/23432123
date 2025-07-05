@@ -18,7 +18,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
@@ -91,13 +90,11 @@ public sealed class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(GetTreeOptions? options = null)
+    public async Task<GetTreeResult> GetTreeAsync(GetTreeOptions? options = null)
     {
         var @params = new GetTreeCommandParameters(options?.MaxDepth, options?.Root);
 
-        var getTreeResult = await Broker.ExecuteCommandAsync<GetTreeCommand, GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
-
-        return getTreeResult.Contexts;
+        return await Broker.ExecuteCommandAsync<GetTreeCommand, GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = null)
