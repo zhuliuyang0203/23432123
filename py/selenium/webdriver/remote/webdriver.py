@@ -1240,7 +1240,7 @@ class WebDriver(BaseWebDriver):
             self._start_bidi()
 
         if not self._script:
-            self._script = Script(self._websocket_connection)
+            self._script = Script(self._websocket_connection, self)
 
         return self._script
 
