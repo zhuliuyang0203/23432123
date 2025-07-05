@@ -50,7 +50,7 @@ public enum Browser {
       }
 
       if (Boolean.getBoolean("webdriver.headless")) {
-        options.addArguments("--headless=new");
+        options.addArguments("--headless");
       }
 
       options.addArguments(
@@ -84,7 +84,7 @@ public enum Browser {
       }
 
       if (Boolean.getBoolean("webdriver.headless")) {
-        options.addArguments("--headless=new");
+        options.addArguments("--headless");
       }
 
       options.addArguments(
@@ -115,9 +115,6 @@ public enum Browser {
     public Capabilities getCapabilities() {
       InternetExplorerOptions options = new InternetExplorerOptions();
 
-      if (Boolean.getBoolean("selenium.ie.disable_native_events")) {
-        options.disableNativeEvents();
-      }
       if (Boolean.getBoolean("selenium.ie.require_window_focus")) {
         options.requireWindowFocus();
       }

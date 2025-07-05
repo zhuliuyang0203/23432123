@@ -48,6 +48,8 @@ public class ChromeDriverService extends DriverService {
    */
   public static final String CHROME_DRIVER_EXE_PROPERTY = "webdriver.chrome.driver";
 
+  public static final String CHROME_DRIVER_EXE_ENVIRONMENT_VARIABLE = "SE_CHROMEDRIVER";
+
   /** System property that toggles the formatting of the timestamps of the logs */
   public static final String CHROME_DRIVER_READABLE_TIMESTAMP =
       "webdriver.chrome.readableTimestamp";
@@ -120,6 +122,10 @@ public class ChromeDriverService extends DriverService {
 
   public String getDriverProperty() {
     return CHROME_DRIVER_EXE_PROPERTY;
+  }
+
+  public String getDriverEnvironmentVariable() {
+    return CHROME_DRIVER_EXE_ENVIRONMENT_VARIABLE;
   }
 
   @Override
