@@ -1,3 +1,6 @@
+Selenium 4.34.1
+* Updated urllib3 due to security issue https://github.com/urllib3/urllib3/security/advisories/GHSA-48p4-8xcf-vxj5
+
 Selenium 4.34.0
 * Add CDP for Chrome 138 and remove 135
 * Upgrade type hints (#15784)
