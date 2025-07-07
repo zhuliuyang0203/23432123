@@ -1,3 +1,29 @@
+## 4.34.0
+
+- Bumping to nightly versions
+- Add warning when ftp proxy is used (#15905)
+- specify min required node version to >=20.0.0
+- [cdp] Add CDP for Chrome 138 and remove 135
+
+## 4.33.0
+
+- [cdp] Add CDP for Chrome 137 and remove 134
+- Fixing JS FF test that needs to add arguments.
+- Making Bidi Network, DevTools and Options test pass in RBE
+- Chrome capabilities test passes now in RBE
+- update old freenode channel link to libera (#15698)
+
+## 4.32.0
+
+- [cdp] Add CDP for Chrome 136 and remove 133
+- Set remote active protocol in Firefox to BiDi only
+
+## 4.31.0
+
+- [bidi]: fix storage module instance checks and add user context cookie test (#15467)
+- [JS] Add websocket port option in Firefox ServiceBuilder when '--connect-existing' is not passed (#15557)
+- [cdp] add support for 135 and remove 132
+
 ## 4.30.0
 
 - [bidi] fix chrome and firefox test for CI RBE (#15405)

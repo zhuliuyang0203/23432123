@@ -296,6 +296,7 @@ public abstract class By {
 
   public static class ByClassName extends PreW3CLocator {
 
+    private static final Pattern AT_LEAST_ONE_WHITESPACE = Pattern.compile(".*\\s.*");
     private final String className;
 
     public ByClassName(String className) {
@@ -305,7 +306,7 @@ public abstract class By {
               .nonNull("Cannot find elements when the class name expression is null."),
           ".%s");
 
-      if (className.matches(".*\\s.*")) {
+      if (AT_LEAST_ONE_WHITESPACE.matcher(className).matches()) {
         throw new InvalidSelectorException("Compound class names not permitted");
       }
 
