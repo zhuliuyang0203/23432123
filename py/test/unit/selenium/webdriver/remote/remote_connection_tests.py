@@ -277,7 +277,7 @@ def test_get_connection_manager_with_auth_https_proxy(mock_proxy_auth_settings):
         "*",
         ".localhost",
         "localhost:80",
-        "locahost",
+        "localhost",
         "LOCALHOST",
         "LOCALHOST:80",
         "http://localhost",
