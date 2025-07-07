@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_directory.bzl", "copy_directory")
 load("@bazel_skylib//rules:select_file.bzl", "select_file")
 load("@py_dev_requirements//:requirements.bzl", "requirement")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
@@ -62,12 +63,12 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.31.0.202503211716"
+SE_VERSION = "4.35.0.202506301117"
 
 BROWSER_VERSIONS = [
-    "v134",
-    "v132",
-    "v133",
+    "v137",
+    "v138",
+    "v136",
 ]
 
 TEST_DEPS = [
@@ -78,7 +79,7 @@ TEST_DEPS = [
     requirement("iniconfig"),
     requirement("importlib_metadata"),
     requirement("h11"),
-    requirement("more_itertools"),
+    requirement("more-itertools"),
     requirement("multidict"),
     requirement("outcome"),
     requirement("pluggy"),
@@ -90,6 +91,7 @@ TEST_DEPS = [
     requirement("sortedcontainers"),
     requirement("sniffio"),
     requirement("zipp"),
+    "@rules_python//python/runfiles",
 ]
 
 copy_file(
@@ -158,6 +160,24 @@ copy_file(
     out = "test/extensions/webextensions-selenium-example-unsigned.zip",
 )
 
+copy_file(
+    name = "webextensions-selenium-example-crx",
+    src = "//common/extensions:webextensions-selenium-example.crx",
+    out = "test/extensions/webextensions-selenium-example.crx",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-dir",
+    src = "//common/extensions:webextensions-selenium-example",
+    out = "test/extensions/webextensions-selenium-example",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-signed-dir",
+    src = "//common/extensions:webextensions-selenium-example-signed",
+    out = "test/extensions/webextensions-selenium-example-signed",
+)
+
 select_file(
     name = "global-license",
     srcs = "//:license",
@@ -198,7 +218,7 @@ py_library(
     deps = [
         requirement("urllib3"),
         requirement("trio"),
-        requirement("trio_websocket"),
+        requirement("trio-websocket"),
         requirement("certifi"),
         requirement("typing_extensions"),
         requirement("websocket-client"),
@@ -269,7 +289,6 @@ py_wheel(
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: Apache Software License",
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: MacOS :: MacOS X",
@@ -289,12 +308,12 @@ py_wheel(
     python_requires = ">=3.9",
     python_tag = "py3",
     requires = [
-        "urllib3[socks]>=1.26,<3",
-        "trio~=0.17",
-        "trio-websocket~=0.9",
-        "certifi>=2021.10.8",
-        "typing_extensions~=4.9",
-        "websocket-client~=1.8",
+        "urllib3[socks]~=2.5.0",
+        "trio~=0.30.0",
+        "trio-websocket~=0.12.2",
+        "certifi>=2025.6.15",
+        "typing_extensions~=4.14.0",
+        "websocket-client~=1.8.0",
     ],
     strip_path_prefixes = [
         "py/",
@@ -321,7 +340,6 @@ py_library(
         "test/selenium/webdriver/__init__.py",
         "test/selenium/webdriver/chrome/__init__.py",
         "test/selenium/webdriver/common/__init__.py",
-        "test/selenium/webdriver/common/conftest.py",
         "test/selenium/webdriver/common/network.py",
         "test/selenium/webdriver/common/webserver.py",
         "test/selenium/webdriver/firefox/__init__.py",
@@ -330,12 +348,14 @@ py_library(
         "test/selenium/webdriver/marionette/conftest.py",
         "test/selenium/webdriver/safari/conftest.py",
         "test/selenium/webdriver/support/__init__.py",
-        "test/selenium/webdriver/support/conftest.py",
     ],
     data = [
         "pyproject.toml",
         "test/selenium/webdriver/common/test_file.txt",
         "test/selenium/webdriver/common/test_file2.txt",
+        ":webextensions-selenium-example-crx",
+        ":webextensions-selenium-example-dir",
+        ":webextensions-selenium-example-signed-dir",
         ":webextensions-selenium-example-unsigned-zip",
         ":webextensions-selenium-example-xpi",
         ":webextensions-selenium-example-zip",
@@ -405,7 +425,6 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=false",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -432,7 +451,7 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=true",
+            "--bidi",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -480,7 +499,7 @@ py_test_suite(
     ),
     args = [
         "--instafail",
-        "--headless=true",
+        "--headless",
     ] + BROWSERS["chrome"]["args"],
     data = BROWSERS["chrome"]["data"],
     env_inherit = ["DISPLAY"],
@@ -548,6 +567,7 @@ py_test_suite(
     srcs = glob(
         [
             "test/selenium/webdriver/common/**/*.py",
+            "test/selenium/webdriver/remote/**/*.py",
             "test/selenium/webdriver/support/**/*.py",
         ],
         exclude = BIDI_TESTS,

@@ -17,26 +17,32 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
 public abstract class Command
 {
-    protected Command(string method)
+    protected Command(string method, Type resultType)
     {
         Method = method;
+        ResultType = resultType;
     }
 
     [JsonPropertyOrder(1)]
     public string Method { get; }
 
     [JsonPropertyOrder(0)]
-    public int Id { get; internal set; }
+    public long Id { get; internal set; }
+
+    [JsonIgnore]
+    public Type ResultType { get; }
 }
 
-internal abstract class Command<TCommandParameters>(TCommandParameters @params, string method) : Command(method)
+internal abstract class Command<TCommandParameters, TCommandResult>(TCommandParameters @params, string method) : Command(method, typeof(TCommandResult))
     where TCommandParameters : CommandParameters
+    where TCommandResult : EmptyResult
 {
     [JsonPropertyOrder(2)]
     public TCommandParameters Params { get; } = @params;
@@ -46,3 +52,5 @@ internal record CommandParameters
 {
     public static CommandParameters Empty { get; } = new CommandParameters();
 }
+
+public record EmptyResult;

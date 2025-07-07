@@ -16,29 +16,25 @@
 # under the License.
 
 import functools
-from base64 import urlsafe_b64decode
-from base64 import urlsafe_b64encode
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 from enum import Enum
-from typing import Any
-from typing import Dict
-from typing import Optional
-from typing import Union
+from typing import Any, Optional, Union
 
 
 class Protocol(str, Enum):
     """Protocol to communicate with the authenticator."""
 
-    CTAP2: str = "ctap2"
-    U2F: str = "ctap1/u2f"
+    CTAP2 = "ctap2"
+    U2F = "ctap1/u2f"
 
 
 class Transport(str, Enum):
     """Transport method to communicate with the authenticator."""
 
-    BLE: str = "ble"
-    USB: str = "usb"
-    NFC: str = "nfc"
-    INTERNAL: str = "internal"
+    BLE = "ble"
+    USB = "usb"
+    NFC = "nfc"
+    INTERNAL = "internal"
 
 
 class VirtualAuthenticatorOptions:
@@ -68,7 +64,7 @@ class VirtualAuthenticatorOptions:
         self.is_user_consenting: bool = is_user_consenting
         self.is_user_verified: bool = is_user_verified
 
-    def to_dict(self) -> Dict[str, Union[str, bool]]:
+    def to_dict(self) -> dict[str, Union[str, bool]]:
         return {
             "protocol": self.protocol,
             "transport": self.transport,
@@ -166,7 +162,7 @@ class Credential:
         """
         return cls(id, True, rp_id, user_handle, private_key, sign_count)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         credential_data = {
             "credentialId": self.id,
             "isResidentCredential": self._is_resident_credential,
@@ -181,7 +177,7 @@ class Credential:
         return credential_data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Credential":
+    def from_dict(cls, data: dict[str, Any]) -> "Credential":
         _id = urlsafe_b64decode(f"{data['credentialId']}==")
         is_resident_credential = bool(data["isResidentCredential"])
         rp_id = data.get("rpId", None)

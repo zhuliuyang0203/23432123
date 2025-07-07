@@ -26,4 +26,7 @@ public class BiDiException : Exception
     public BiDiException(string message) : base(message)
     {
     }
+    public BiDiException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
 }
