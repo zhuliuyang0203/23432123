@@ -147,7 +147,7 @@ public class Augmenter {
 
     if (driver instanceof Decorated<?>) {
       LOG.warning(
-        """
+          """
           Warning: In future versions, passing a decorated driver will no longer be allowed.
            Instead, augment the driver first and then use it to created a decorated\
            driver.
@@ -156,7 +156,8 @@ public class Augmenter {
            For example, augmenting HasDevTools interface to a decorated driver.\s
            The decorated driver is not aware that after augmentation it is an instance of\
            HasDevTools. So it does not invoke the close() method of the underlying\
-           websocket, potentially causing a memory leak.\s""");
+           websocket, potentially causing a memory leak.\s\
+          """);
     }
 
     Capabilities caps = ImmutableCapabilities.copyOf(((HasCapabilities) driver).getCapabilities());

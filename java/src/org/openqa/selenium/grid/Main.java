@@ -143,7 +143,7 @@ public class Main {
 
         outWriter.write("\nFor each command, run with `--help` for command-specific help\n");
         outWriter.write(
-          """
+            """
 
             Use the `--ext` flag before the command name to specify an additional \
             classpath to use with the server (for example, to provide additional \

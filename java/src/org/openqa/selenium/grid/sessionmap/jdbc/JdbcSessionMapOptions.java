@@ -46,12 +46,13 @@ public class JdbcSessionMapOptions {
       }
     } catch (NoSuchElementException e) {
       throw new JdbcException(
-        """
+          """
           Missing session options. Check and add all the following options\s
            \
           --jdbc-url <url>\s
            --jdbc-user <user>\s
-           --jdbc-password <password>""");
+           --jdbc-password <password>\
+          """);
     }
   }
 

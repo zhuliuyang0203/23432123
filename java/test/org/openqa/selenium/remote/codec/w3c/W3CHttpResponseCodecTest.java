@@ -60,13 +60,14 @@ class W3CHttpResponseCodecTest {
   @Test
   void shouldBeAbleToHandleGatewayTimeoutError() {
     String responseString =
-      """
+        """
         <html>\r
         <body>\r
         <h1>504 Gateway Time-out</h1>\r
         The server didn't respond in time.\r
         </body>\r
-        </html>""";
+        </html>\
+        """;
 
     byte[] contents = responseString.getBytes(UTF_8);
 
@@ -86,14 +87,15 @@ class W3CHttpResponseCodecTest {
   @Test
   void shouldBeAbleToHandleBadGatewayError() {
     String responseString =
-      """
+        """
         <html>\r
         <head><title>502 Bad Gateway</title></head>\r
         <body>\r
         <center><h1>502 Bad Gateway</h1></center>\r
         <hr><center>nginx</center>\r
         </body>\r
-        </html>""";
+        </html>\
+        """;
 
     byte[] contents = responseString.getBytes(UTF_8);
 

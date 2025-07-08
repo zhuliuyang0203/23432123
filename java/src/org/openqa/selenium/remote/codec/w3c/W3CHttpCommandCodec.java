@@ -214,10 +214,11 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
 
       case GET_PAGE_SOURCE:
         return toScript(
-          """
+            """
             var source = document.documentElement.outerHTML;\s
             if (!source) { source = new XMLSerializer().serializeToString(document); }
-            return source;""");
+            return source;\
+            """);
 
       case CLEAR_LOCAL_STORAGE:
         return toScript("localStorage.clear()");
@@ -328,7 +329,7 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
         }
       case SUBMIT_ELEMENT:
         return toScript(
-          """
+            """
             /* submitForm */var form = arguments[0];
             while (form.nodeName != "FORM" && form.parentNode) {
               form = form.parentNode;

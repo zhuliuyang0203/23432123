@@ -51,11 +51,12 @@ public class RelayFlags implements HasRoles {
       name = "configs",
       prefixed = true,
       example =
-        """
+          """
 
           max-sessions = 2
           stereotype = "{\\"browserName\\": \\"safari\\", \\"platformName\\":\
-           \\"iOS\\", \\"appium:platformVersion\\": \\"14.5\\" }}\"""")
+           \\"iOS\\", \\"appium:platformVersion\\": \\"14.5\\" }}\"\
+          """)
   public List<String> driverConfiguration;
 
   @Parameter(
