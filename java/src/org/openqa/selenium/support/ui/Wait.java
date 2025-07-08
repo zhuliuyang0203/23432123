@@ -33,7 +33,7 @@ public interface Wait<F> {
    *
    * <p>If the condition does not become true within a certain time (as defined by the implementing
    * class), this method will throw a non-specified {@link Throwable}. This is so that an
-   * implementor may throw whatever is idiomatic for a given test infrastructure (e.g. JUnit4 would
+   * implementer may throw whatever is idiomatic for a given test infrastructure (e.g. JUnit4 would
    * throw {@link AssertionError}).
    *
    * @param <T> the return type of the method, which must not be Void
