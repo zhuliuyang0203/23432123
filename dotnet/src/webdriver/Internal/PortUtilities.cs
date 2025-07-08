@@ -37,17 +37,17 @@ public static class PortUtilities
     /// </exception>
     public static int FindFreePort()
     {
-        using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        var tcpListener = new TcpListener(IPAddress.IPv6Any, 0);
 
         try
         {
-            socket.Bind(new IPEndPoint(IPAddress.Any, 0));
+            tcpListener.Start();
 
-            return ((IPEndPoint)socket.LocalEndPoint!).Port;
+            return ((IPEndPoint)tcpListener.LocalEndpoint).Port;
         }
-        catch (SocketException ex)
+        finally
         {
-            throw new InvalidOperationException("Unable to find a free port.", ex);
+            tcpListener.Stop();
         }
     }
 }
