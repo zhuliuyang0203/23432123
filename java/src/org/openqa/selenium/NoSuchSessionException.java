@@ -17,16 +17,20 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Thrown by any command being called after {@link WebDriver#quit() WebDriver.quit()}. */
+@NullMarked
 public class NoSuchSessionException extends WebDriverException {
 
   public NoSuchSessionException() {}
 
-  public NoSuchSessionException(String reason) {
+  public NoSuchSessionException(@Nullable String reason) {
     super(reason);
   }
 
-  public NoSuchSessionException(String reason, Throwable cause) {
+  public NoSuchSessionException(@Nullable String reason, @Nullable Throwable cause) {
     super(reason, cause);
   }
 }
