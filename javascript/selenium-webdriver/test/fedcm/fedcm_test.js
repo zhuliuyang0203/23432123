@@ -35,7 +35,7 @@ suite(
     })
 
     describe('Federated Credential Management Test', function () {
-      it('credential mangement dialog should appear', async function () {
+      it('credential management dialog should appear', async function () {
         await driver.get(Pages.fedcm)
 
         let triggerButton = await driver.findElement(By.id('triggerButton'))
