@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using System;
 using System.Net;
 using System.Net.Sockets;
 
@@ -34,20 +33,23 @@ public static class PortUtilities
     /// <returns>A random, free port to be listened on.</returns>
     public static int FindFreePort()
     {
-        var tcpListener = new TcpListener(IPAddress.IPv6Any, 0);
-
-        // Enable dual-mode to also work with IPv4 connections
-        tcpListener.Server.DualMode = true;
-
         try
         {
-            tcpListener.Start();
-
-            return ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+            var listener = new TcpListener(IPAddress.IPv6Any, 0);
+            listener.Server.DualMode = true; // Listen on both IPv4 and IPv6
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
         }
-        finally
+        catch (SocketException)
         {
-            tcpListener.Stop();
+            // If IPv6Any is not supported, fallback to IPv4
+            var listener = new TcpListener(IPAddress.Any, 0);
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
         }
     }
 }
