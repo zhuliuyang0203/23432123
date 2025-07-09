@@ -67,7 +67,7 @@ public class LoadableComponentTests
             () => loadThrows.Load(),
             Throws.Exception
             .With.Message.EqualTo("HandleLoadError called")
-            .And.InnerException.Message.EqualTo("Excpected failure in ExecuteLoad"));
+            .And.InnerException.Message.EqualTo("Expected failure in ExecuteLoad"));
 
     }
 
@@ -128,7 +128,7 @@ public class LoadableComponentTests
     {
         protected override void ExecuteLoad()
         {
-            throw new WebDriverException("Excpected failure in ExecuteLoad");
+            throw new WebDriverException("Expected failure in ExecuteLoad");
         }
 
         protected override bool EvaluateLoadedStatus()
