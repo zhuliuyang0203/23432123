@@ -31,7 +31,7 @@ public sealed class BrowserModule(Broker broker) : Module(broker)
 
     public async Task<UserContextInfo> CreateUserContextAsync(CreateUserContextOptions? options = null)
     {
-        var @params = new CreateUserContextCommandParameters(options?.AcceptInsecureCerts, options?.Proxy);
+        var @params = new CreateUserContextCommandParameters(options?.AcceptInsecureCerts, options?.Proxy, options?.UnhandledPromptBehavior);
 
         return await Broker.ExecuteCommandAsync<CreateUserContextCommand, UserContextInfo>(new CreateUserContextCommand(@params), options).ConfigureAwait(false);
     }
