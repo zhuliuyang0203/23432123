@@ -16,7 +16,6 @@
 # under the License.
 
 import http.server
-import socket
 import socketserver
 import threading
 
@@ -29,65 +28,16 @@ from selenium.webdriver.common.utils import free_port
 from selenium.webdriver.common.window import WindowTypes
 
 
-class FakeProxyHandler(http.server.BaseHTTPRequestHandler):
+class FakeProxyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        print(f"[Fake Proxy] Intercepted GET request to: {self.path}")
+        print(f"[Fake Proxy] Intercepted request to: {self.path}")
         self.send_response(200)
-        self.send_header("Content-Type", "text/html")
         self.end_headers()
-        self.wfile.write(b"<html><body>proxied response</body></html>")
-
-    def do_POST(self):
-        print(f"[Fake Proxy] Intercepted POST request to: {self.path}")
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        self.wfile.write(b"<html><body>proxied response</body></html>")
-
-    def do_CONNECT(self):
-        """Handle CONNECT requests for HTTPS tunneling."""
-        print(f"[Fake Proxy] Intercepted CONNECT request to: {self.path}")
-
-        self.send_response(200, "Connection established")
-        self.end_headers()
-
-        try:
-            request_data = b""
-            while True:
-                try:
-                    chunk = self.rfile.read(1024)
-                    if not chunk:
-                        break
-                    request_data += chunk
-                    if b"\r\n\r\n" in request_data:
-                        break
-                except socket.timeout:
-                    break
-
-            if request_data:
-                print(f"[Fake Proxy] Received tunneled request: {request_data[:100]}...")
-                response = (
-                    b"HTTP/1.1 200 OK\r\n"
-                    b"Content-Type: text/html\r\n"
-                    b"Content-Length: 37\r\n"
-                    b"Connection: close\r\n"
-                    b"\r\n"
-                    b"<html><body>proxied response</body></html>"
-                )
-                self.wfile.write(response)
-                self.wfile.flush()
-        except Exception as e:
-            print(f"[Fake Proxy] Error handling CONNECT: {e}")
-        finally:
-            self.wfile.close()
-
-    def log_message(self, format, *args):
-        pass
+        self.wfile.write(b"proxied response")
 
 
 def start_fake_proxy(port):
     server = socketserver.TCPServer(("localhost", port), FakeProxyHandler)
-    server.timeout = 5
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     return server
