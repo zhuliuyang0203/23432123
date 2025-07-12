@@ -45,6 +45,7 @@
 
     <file src="build/Selenium.WebDriver.targets" target="build/Selenium.WebDriver.targets"/>
     <file src="buildTransitive/Selenium.WebDriver.targets" target="buildTransitive/Selenium.WebDriver.targets"/>
+    <file src="buildMultiTargeting/Selenium.WebDriver.targets" target="buildMultiTargeting/Selenium.WebDriver.targets"/>
 
     <file src="manager/linux/selenium-manager" target="manager/linux/selenium-manager" />
     <file src="manager/macos/selenium-manager" target="manager/macos/selenium-manager" />

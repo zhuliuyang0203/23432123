@@ -61,7 +61,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-
     <None Include="$(BaseImagePath)\selenium_logo_small.png" Pack="true" PackagePath="logo.png" Visible="false" />
 
     <None Include="$(BaseSeleniumManagerPath)\linux\selenium-manager" Pack="true" PackagePath="manager\linux" Visible="false" />
@@ -70,7 +69,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="assets\nuget\Selenium.WebDriver.targets" Pack="true" PackagePath="build\" />
+    <None Update="assets\nuget\build\Selenium.WebDriver.targets" Pack="true" PackagePath="build\" />
+    <None Update="assets\nuget\buildTransitive\Selenium.WebDriver.targets" Pack="true" PackagePath="build\buildTransitive\" />
+    <None Update="assets\nuget\buildMultiTargeting\Selenium.WebDriver.targets" Pack="true" PackagePath="build\buildMultiTargeting\" />
   </ItemGroup>
 
   <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="BeforeBuild">
