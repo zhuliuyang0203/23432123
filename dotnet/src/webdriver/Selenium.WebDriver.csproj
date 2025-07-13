@@ -70,8 +70,8 @@
 
   <ItemGroup>
     <None Update="assets\nuget\build\Selenium.WebDriver.targets" Pack="true" PackagePath="build\" />
-    <None Update="assets\nuget\buildTransitive\Selenium.WebDriver.targets" Pack="true" PackagePath="build\buildTransitive\" />
-    <None Update="assets\nuget\buildMultiTargeting\Selenium.WebDriver.targets" Pack="true" PackagePath="build\buildMultiTargeting\" />
+    <None Update="assets\nuget\buildTransitive\Selenium.WebDriver.targets" Pack="true" PackagePath="buildTransitive\" />
+    <None Update="assets\nuget\buildMultiTargeting\Selenium.WebDriver.targets" Pack="true" PackagePath="buildMultiTargeting\" />
   </ItemGroup>
 
   <Target Name="GenerateSeleniumManagerBinaries" BeforeTargets="BeforeBuild">
