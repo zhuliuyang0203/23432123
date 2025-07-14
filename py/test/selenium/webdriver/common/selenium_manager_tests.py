@@ -14,8 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import json
-import platform
 import sys
 from pathlib import Path
 from unittest import mock
@@ -78,7 +78,7 @@ def test_uses_linux(monkeypatch):
     assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager")
 
 
-def test_uses_linux(monkeypatch):
+def test_uses_linux_arm(monkeypatch):
     monkeypatch.setattr(sys, "platform", "linux")
     monkeypatch.setattr("platform.machine", lambda: "arm64")
 
