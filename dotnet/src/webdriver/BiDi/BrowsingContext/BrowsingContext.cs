@@ -17,13 +17,12 @@
 // under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContext
+public sealed class BrowsingContext
 {
     internal BrowsingContext(BiDi bidi, string id)
     {
@@ -117,7 +116,7 @@ public class BrowsingContext
         return BiDi.BrowsingContext.HandleUserPromptAsync(this, options);
     }
 
-    public Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(BrowsingContextGetTreeOptions? options = null)
+    public Task<GetTreeResult> GetTreeAsync(BrowsingContextGetTreeOptions? options = null)
     {
         GetTreeOptions getTreeOptions = new(options)
         {
@@ -145,6 +144,16 @@ public class BrowsingContext
     public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> handler, SubscriptionOptions? options = null)
     {
         return BiDi.BrowsingContext.OnFragmentNavigatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
+    public Task<Subscription> OnHistoryUpdatedAsync(Func<HistoryUpdatedEventArgs, Task> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnHistoryUpdatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
+    }
+
+    public Task<Subscription> OnHistoryUpdatedAsync(Action<HistoryUpdatedEventArgs> handler, SubscriptionOptions? options = null)
+    {
+        return BiDi.BrowsingContext.OnHistoryUpdatedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
     public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> handler, SubscriptionOptions? options = null)

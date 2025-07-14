@@ -18,13 +18,12 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContextModule(Broker broker) : Module(broker)
+public sealed class BrowsingContextModule(Broker broker) : Module(broker)
 {
     public async Task<BrowsingContext> CreateAsync(ContextType type, CreateOptions? options = null)
     {
@@ -91,13 +90,11 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(GetTreeOptions? options = null)
+    public async Task<GetTreeResult> GetTreeAsync(GetTreeOptions? options = null)
     {
         var @params = new GetTreeCommandParameters(options?.MaxDepth, options?.Root);
 
-        var getTreeResult = await Broker.ExecuteCommandAsync<GetTreeCommand, GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
-
-        return getTreeResult.Contexts;
+        return await Broker.ExecuteCommandAsync<GetTreeCommand, GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = null)
@@ -132,6 +129,16 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
     public async Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> handler, BrowsingContextsSubscriptionOptions? options = null)
     {
         return await Broker.SubscribeAsync("browsingContext.fragmentNavigated", handler, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnHistoryUpdatedAsync(Func<HistoryUpdatedEventArgs, Task> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.historyUpdated", handler, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnHistoryUpdatedAsync(Action<HistoryUpdatedEventArgs> handler, BrowsingContextsSubscriptionOptions? options = null)
+    {
+        return await Broker.SubscribeAsync("browsingContext.historyUpdated", handler, options).ConfigureAwait(false);
     }
 
     public async Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = null)

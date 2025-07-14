@@ -21,9 +21,9 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Script;
 
-internal class RemovePreloadScriptCommand(RemovePreloadScriptCommandParameters @params)
+internal sealed class RemovePreloadScriptCommand(RemovePreloadScriptCommandParameters @params)
     : Command<RemovePreloadScriptCommandParameters, EmptyResult>(@params, "script.removePreloadScript");
 
-internal record RemovePreloadScriptCommandParameters(PreloadScript Script) : CommandParameters;
+internal sealed record RemovePreloadScriptCommandParameters(PreloadScript Script) : CommandParameters;
 
-public record RemovePreloadScriptOptions : CommandOptions;
+public sealed class RemovePreloadScriptOptions : CommandOptions;

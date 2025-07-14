@@ -376,7 +376,7 @@
     function testTableRowCollapsedVisibility() {
       expectedFailures.expectFailureFor(
           (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(8)),
-          'IE does not support visibilty:collapsed until IE8');
+          'IE does not support visibility:collapsed until IE8');
       var elem = findElement({id: 'collapsed-row'});
       expectedFailures.run(function() {
         assertFalse(isShown(elem));

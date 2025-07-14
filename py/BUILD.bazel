@@ -63,11 +63,11 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.34.0.202505232017"
+SE_VERSION = "4.35.0.202507081456"
 
 BROWSER_VERSIONS = [
     "v137",
-    "v135",
+    "v138",
     "v136",
 ]
 
@@ -308,10 +308,10 @@ py_wheel(
     python_requires = ">=3.9",
     python_tag = "py3",
     requires = [
-        "urllib3[socks]~=2.4.0",
+        "urllib3[socks]~=2.5.0",
         "trio~=0.30.0",
         "trio-websocket~=0.12.2",
-        "certifi>=2025.4.26",
+        "certifi>=2025.6.15",
         "typing_extensions~=4.14.0",
         "websocket-client~=1.8.0",
     ],

@@ -27,39 +27,167 @@ public class BiDi : IAsyncDisposable
 {
     private readonly Broker _broker;
 
-    private readonly Lazy<Session.SessionModule> _sessionModule;
-    private readonly Lazy<BrowsingContext.BrowsingContextModule> _browsingContextModule;
-    private readonly Lazy<Browser.BrowserModule> _browserModule;
-    private readonly Lazy<Network.NetworkModule> _networkModule;
-    private readonly Lazy<Input.InputModule> _inputModule;
-    private readonly Lazy<Script.ScriptModule> _scriptModule;
-    private readonly Lazy<Log.LogModule> _logModule;
-    private readonly Lazy<Storage.StorageModule> _storageModule;
+    private Session.SessionModule? _sessionModule;
+    private BrowsingContext.BrowsingContextModule? _browsingContextModule;
+    private Browser.BrowserModule? _browserModule;
+    private Network.NetworkModule? _networkModule;
+    private Input.InputModule? _inputModule;
+    private Script.ScriptModule? _scriptModule;
+    private Log.LogModule? _logModule;
+    private Storage.StorageModule? _storageModule;
+
+    private readonly object _moduleLock = new();
 
     internal BiDi(string url)
     {
         var uri = new Uri(url);
 
         _broker = new Broker(this, uri);
-
-        _sessionModule = new Lazy<Session.SessionModule>(() => new Session.SessionModule(_broker));
-        _browsingContextModule = new Lazy<BrowsingContext.BrowsingContextModule>(() => new BrowsingContext.BrowsingContextModule(_broker));
-        _browserModule = new Lazy<Browser.BrowserModule>(() => new Browser.BrowserModule(_broker));
-        _networkModule = new Lazy<Network.NetworkModule>(() => new Network.NetworkModule(_broker));
-        _inputModule = new Lazy<Input.InputModule>(() => new Input.InputModule(_broker));
-        _scriptModule = new Lazy<Script.ScriptModule>(() => new Script.ScriptModule(_broker));
-        _logModule = new Lazy<Log.LogModule>(() => new Log.LogModule(_broker));
-        _storageModule = new Lazy<Storage.StorageModule>(() => new Storage.StorageModule(_broker));
     }
 
-    internal Session.SessionModule SessionModule => _sessionModule.Value;
-    public BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
-    public Browser.BrowserModule Browser => _browserModule.Value;
-    public Network.NetworkModule Network => _networkModule.Value;
-    internal Input.InputModule InputModule => _inputModule.Value;
-    public Script.ScriptModule Script => _scriptModule.Value;
-    public Log.LogModule Log => _logModule.Value;
-    public Storage.StorageModule Storage => _storageModule.Value;
+    internal Session.SessionModule SessionModule
+    {
+        get
+        {
+            if (_sessionModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_sessionModule is null)
+                    {
+                        _sessionModule = new Session.SessionModule(_broker);
+                    }
+                }
+            }
+            return _sessionModule;
+        }
+    }
+
+    public BrowsingContext.BrowsingContextModule BrowsingContext
+    {
+        get
+        {
+            if (_browsingContextModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_browsingContextModule is null)
+                    {
+                        _browsingContextModule = new BrowsingContext.BrowsingContextModule(_broker);
+                    }
+                }
+            }
+            return _browsingContextModule;
+        }
+    }
+
+    public Browser.BrowserModule Browser
+    {
+        get
+        {
+            if (_browserModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_browserModule is null)
+                    {
+                        _browserModule = new Browser.BrowserModule(_broker);
+                    }
+                }
+            }
+            return _browserModule;
+        }
+    }
+
+    public Network.NetworkModule Network
+    {
+        get
+        {
+            if (_networkModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_networkModule is null)
+                    {
+                        _networkModule = new Network.NetworkModule(_broker);
+                    }
+                }
+            }
+            return _networkModule;
+        }
+    }
+
+    internal Input.InputModule InputModule
+    {
+        get
+        {
+            if (_inputModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_inputModule is null)
+                    {
+                        _inputModule = new Input.InputModule(_broker);
+                    }
+                }
+            }
+            return _inputModule;
+        }
+    }
+
+    public Script.ScriptModule Script
+    {
+        get
+        {
+            if (_scriptModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_scriptModule is null)
+                    {
+                        _scriptModule = new Script.ScriptModule(_broker);
+                    }
+                }
+            }
+            return _scriptModule;
+        }
+    }
+
+    public Log.LogModule Log
+    {
+        get
+        {
+            if (_logModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_logModule is null)
+                    {
+                        _logModule = new Log.LogModule(_broker);
+                    }
+                }
+            }
+            return _logModule;
+        }
+    }
+
+    public Storage.StorageModule Storage
+    {
+        get
+        {
+            if (_storageModule is null)
+            {
+                lock (_moduleLock)
+                {
+                    if (_storageModule is null)
+                    {
+                        _storageModule = new Storage.StorageModule(_broker);
+                    }
+                }
+            }
+            return _storageModule;
+        }
+    }
 
     public Task<Session.StatusResult> StatusAsync()
     {
