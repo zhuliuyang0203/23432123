@@ -85,16 +85,30 @@ public static class SeleniumManager
         }
 #endif
 
-        var currentDirectory = AppContext.BaseDirectory;
+        var baseDirectory = AppContext.BaseDirectory;
 
-        binaryFullPath = platform switch
+        List<string> probingPaths = platform switch
         {
-            SupportedPlatform.Windows => Path.Combine(currentDirectory, "runtimes", "win", "native", "selenium-manager.exe"),
-            SupportedPlatform.Linux => Path.Combine(currentDirectory, "runtimes", "linux", "native", "selenium-manager"),
-            SupportedPlatform.MacOS => Path.Combine(currentDirectory, "runtimes", "osx", "native", "selenium-manager"),
+            SupportedPlatform.Windows => [
+                Path.Combine(baseDirectory, "selenium-manager.exe"),
+                Path.Combine(baseDirectory, "runtimes", "win", "native", "selenium-manager.exe")],
+            SupportedPlatform.Linux => [
+                Path.Combine(baseDirectory, "selenium-manager"),
+                Path.Combine(baseDirectory, "runtimes", "linux", "native", "selenium-manager")],
+            SupportedPlatform.MacOS => [
+                Path.Combine(baseDirectory, "selenium-manager"),
+                Path.Combine(baseDirectory, "runtimes", "osx", "native", "selenium-manager")],
             _ => throw new PlatformNotSupportedException(
                 $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
         };
+
+        binaryFullPath = probingPaths.Find(path => File.Exists(path));
+
+        if (binaryFullPath is null)
+        {
+            throw new FileNotFoundException(
+                $"Unable to locate Selenium Manager binary in the following paths: {string.Join(", ", probingPaths)}");
+        }
 
         return binaryFullPath;
     });
