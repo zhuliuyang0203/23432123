@@ -100,7 +100,25 @@ public static class SeleniumManager
 
         var baseDirectory = AppContext.BaseDirectory;
 
-        List<string> probingPaths = [Path.Combine(baseDirectory, seleniumManagerFileName)];
+        List<string> probingPaths = [];
+
+        if (baseDirectory is not null)
+        {
+            probingPaths.Add(Path.Combine(baseDirectory, seleniumManagerFileName));
+
+            switch (platform)
+            {
+                case SupportedPlatform.Windows:
+                    probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
+                    break;
+                case SupportedPlatform.Linux:
+                    probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
+                    break;
+                case SupportedPlatform.MacOS:
+                    probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
+                    break;
+            }
+        }
 
         // Supporting .NET5+ applications deployed as self-contained applications (single file or AOT)
         var nativeDllSearchDirectories = AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES")?.ToString();
@@ -116,19 +134,6 @@ public static class SeleniumManager
         if (assemblyDirectory is not null)
         {
             probingPaths.Add(Path.Combine(assemblyDirectory, seleniumManagerFileName));
-        }
-
-        switch (platform)
-        {
-            case SupportedPlatform.Windows:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
-                break;
-            case SupportedPlatform.Linux:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
-                break;
-            case SupportedPlatform.MacOS:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
-                break;
         }
 
         probingPaths = [.. probingPaths.Distinct()];
