@@ -20,11 +20,9 @@
 
 <br>
 
-Selenium is an umbrella project encapsulating a variety of tools and
-libraries enabling web browser automation. Selenium specifically
-provides an infrastructure for the [W3C WebDriver specification](https://w3c.github.io/webdriver/)
-— a platform and language-neutral coding interface compatible with all
-major web browsers.
+Selenium is an umbrella project that includes a variety of tools and libraries for automating web 
+browsers. Specifically, Selenium provides infrastructure for the [W3C WebDriver specification](https://w3c.github.io/webdriver/) — 
+a platform- and language-neutral interface compatible with all major web browsers.Selenium specifically provides an infrastructure for the 
 
 The project is made possible by volunteer contributors who've
 generously donated thousands of hours in code development and upkeep.
@@ -32,7 +30,7 @@ generously donated thousands of hours in code development and upkeep.
 This README is for developers interested in contributing to the project.
 For people looking to get started using Selenium, please check out
 our [User Manual](https://selenium.dev/documentation/) for detailed examples and descriptions, and if you
-get stuck, there are several ways to [Get Help](https://www.selenium.dev/support/).
+get stuck, there are several ways to [get help](https://www.selenium.dev/support/).
 
 [![CI](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml/badge.svg)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci.yml)
 [![CI - RBE](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml/badge.svg)](https://github.com/SeleniumHQ/selenium/actions/workflows/ci-rbe.yml)
@@ -58,7 +56,7 @@ These are the requirements to create your own local dev environment to contribut
   installed. If you're met with a list of command-line options, you're referencing the JDK properly.
 
 ### MacOS
-  * Xcode including the command-line tools. Install the latest version using: `xcode-select --install`
+  * Xcode including the command-line tools. Install the latest version using: `xcode-select --install`.
   * Rosetta for Apple Silicon Macs. Add `build --host_platform=//:rosetta` to the `.bazelrc.local` file. We are working
   to make sure this isn't required in the long run.
 
@@ -145,7 +143,7 @@ The common Bazel commands are:
 It's used to create executable binaries, libraries, or other artifacts.
 * `bazel run` — builds the target and then executes it.
 It's typically used for targets that produce executable binaries.
-* `bazel test` — builds and runs the target in a context with additional testing functionality
+* `bazel test` — builds and runs the target in a context with additional testing functionality.
 * `bazel query` — identifies available targets for the provided path.
 
 Each module that can be built is defined in a `BUILD.bazel` file. To execute the module you refer to it starting with a
@@ -533,7 +531,7 @@ Note that JavaScript generation is [currently broken](https://github.com/Seleniu
 
 ## Releasing
 
-The full process for doing a release can be found in [the wiki](https://github.com/SeleniumHQ/selenium/wiki/Releasing-Selenium)
+The full process for doing a release can be found in [the wiki](https://github.com/SeleniumHQ/selenium/wiki/Releasing-Selenium).
 
 Releasing is a combination of building and publishing, which often requires coordination of multiple executions
 and additional processing.
