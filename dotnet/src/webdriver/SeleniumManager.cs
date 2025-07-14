@@ -62,18 +62,18 @@ public static class SeleniumManager
         SupportedPlatform? platform = null;
 
 #if NET8_0_OR_GREATER
-            if (OperatingSystem.IsWindows())
-            {
-                platform = SupportedPlatform.Windows;
-            }
-            else if (OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
-            {
-                platform = SupportedPlatform.Linux;
-            }
-            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-            {
-                platform = SupportedPlatform.MacOS;
-            }
+        if (OperatingSystem.IsWindows())
+        {
+            platform = SupportedPlatform.Windows;
+        }
+        else if (OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+        {
+            platform = SupportedPlatform.Linux;
+        }
+        else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+        {
+            platform = SupportedPlatform.MacOS;
+        }
 #else
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -107,7 +107,7 @@ public static class SeleniumManager
 
         if (nativeDllSearchDirectories is not null)
         {
-            probingPaths.AddRange(nativeDllSearchDirectories.Split([';'], StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
+            probingPaths.AddRange(nativeDllSearchDirectories.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
         // Still falling back to the assembly directory for compatibility with .NET Framework applications
