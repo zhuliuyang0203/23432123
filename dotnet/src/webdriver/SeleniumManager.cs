@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -85,22 +86,40 @@ public static class SeleniumManager
         }
 #endif
 
-        var baseDirectory = AppContext.BaseDirectory;
-
-        List<string> probingPaths = platform switch
+        var seleniumManagerFileName = platform switch
         {
-            SupportedPlatform.Windows => [
-                Path.Combine(baseDirectory, "selenium-manager.exe"),
-                Path.Combine(baseDirectory, "runtimes", "win", "native", "selenium-manager.exe")],
-            SupportedPlatform.Linux => [
-                Path.Combine(baseDirectory, "selenium-manager"),
-                Path.Combine(baseDirectory, "runtimes", "linux", "native", "selenium-manager")],
-            SupportedPlatform.MacOS => [
-                Path.Combine(baseDirectory, "selenium-manager"),
-                Path.Combine(baseDirectory, "runtimes", "osx", "native", "selenium-manager")],
+            SupportedPlatform.Windows => "selenium-manager.exe",
+            SupportedPlatform.Linux => "selenium-manager",
+            SupportedPlatform.MacOS => "selenium-manager",
             _ => throw new PlatformNotSupportedException(
                 $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
         };
+
+        var baseDirectory = AppContext.BaseDirectory;
+
+        List<string> probingPaths = [Path.Combine(baseDirectory, seleniumManagerFileName)];
+
+        // Supporting .NET5+ applications deployed as self-contained applications (single file or AOT)
+        var nativeDllSearchDirectories = AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES")?.ToString();
+
+        if (nativeDllSearchDirectories is not null)
+        {
+            probingPaths.AddRange(nativeDllSearchDirectories.Split(';').Select(path => Path.Combine(path, seleniumManagerFileName)));
+        }
+
+        // Still falling back to the runtimes directory for compatibility with .NET Framework applications
+        switch (platform)
+        {
+            case SupportedPlatform.Windows:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
+                break;
+            case SupportedPlatform.Linux:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
+                break;
+            case SupportedPlatform.MacOS:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
+                break;
+        }
 
         binaryFullPath = probingPaths.Find(path => File.Exists(path));
 
