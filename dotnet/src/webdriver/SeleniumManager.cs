@@ -107,7 +107,7 @@ public static class SeleniumManager
 
         if (nativeDllSearchDirectories is not null)
         {
-            probingPaths.AddRange(nativeDllSearchDirectories.Split(';').Select(path => Path.Combine(path, seleniumManagerFileName)));
+            probingPaths.AddRange(nativeDllSearchDirectories.Split([';'], StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
         // Still falling back to the assembly directory for compatibility with .NET Framework applications
@@ -131,12 +131,22 @@ public static class SeleniumManager
                 break;
         }
 
+        probingPaths = [.. probingPaths.Distinct()];
+
         binaryFullPath = probingPaths.Find(path => File.Exists(path));
 
         if (binaryFullPath is null)
         {
-            throw new FileNotFoundException(
-                $"Unable to locate Selenium Manager binary in the following paths: {string.Join(", ", probingPaths)}");
+            var messageBuilder = new StringBuilder();
+            messageBuilder.AppendFormat("Selenium Manager binary '{0}' was not found in the following paths:", seleniumManagerFileName);
+
+            foreach (var probingPath in probingPaths)
+            {
+                messageBuilder.AppendLine();
+                messageBuilder.AppendFormat("  - {0}", probingPath);
+            }
+
+            throw new FileNotFoundException(messageBuilder.ToString());
         }
 
         return binaryFullPath;
