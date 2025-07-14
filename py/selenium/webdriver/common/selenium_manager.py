@@ -84,10 +84,13 @@ class SeleniumManager:
                 ("cygwin", "arm64"): "windows/selenium-manager-arm64.exe",
                 ("linux", "x86_64"): "linux/selenium-manager",
                 ("linux", "arm64"): "linux/selenium-manager-arm64",
+                ("linux", "aarch64"): "linux/selenium-manager-arm64",
                 ("freebsd", "x86_64"): "linux/selenium-manager",
                 ("freebsd", "arm64"): "linux/selenium-manager-arm64",
+                ("freebsd", "aarch64"): "linux/selenium-manager-arm64",
                 ("openbsd", "x86_64"): "linux/selenium-manager",
                 ("openbsd", "arm64"): "linux/selenium-manager-arm64",
+                ("openbsd", "aarch64"): "linux/selenium-manager-arm64",
             }
 
             arch = "any" if sys.platform == "darwin" else platform.machine().lower()
