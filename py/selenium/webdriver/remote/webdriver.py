@@ -40,6 +40,7 @@ from selenium.common.exceptions import (
 )
 from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
+from selenium.webdriver.common.bidi.emulation import Emulation
 from selenium.webdriver.common.bidi.input import Input
 from selenium.webdriver.common.bidi.network import Network
 from selenium.webdriver.common.bidi.permissions import Permissions
@@ -271,6 +272,7 @@ class WebDriver(BaseWebDriver):
         self._storage = None
         self._webextension = None
         self._permissions = None
+        self._emulation = None
         self._input = None
         self._devtools = None
 
@@ -1391,6 +1393,28 @@ class WebDriver(BaseWebDriver):
             self._webextension = WebExtension(self._websocket_connection)
 
         return self._webextension
+
+    @property
+    def emulation(self):
+        """Returns an emulation module object for BiDi emulation commands.
+
+        Returns:
+        --------
+        Emulation: an object containing access to BiDi emulation commands.
+
+        Examples:
+        ---------
+        >>> from selenium.webdriver.common.bidi.emulation import GeolocationCoordinates
+        >>> coordinates = GeolocationCoordinates(37.7749, -122.4194)
+        >>> driver.emulation.set_geolocation_override(coordinates=coordinates, contexts=[context_id])
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._emulation is None:
+            self._emulation = Emulation(self._websocket_connection)
+
+        return self._emulation
 
     @property
     def input(self):
