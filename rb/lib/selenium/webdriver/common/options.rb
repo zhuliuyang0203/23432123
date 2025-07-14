@@ -26,6 +26,8 @@ module Selenium
 
       GRID_OPTIONS = %i[enable_downloads].freeze
 
+      WEBSOCKET_OPTIONS = %i[ws_response_timeout ws_response_interval].freeze
+
       class << self
         attr_reader :driver_path
 
@@ -52,7 +54,7 @@ module Selenium
         end
 
         def set_capabilities
-          (W3C_OPTIONS + GRID_OPTIONS + self::CAPABILITIES.keys).each do |key|
+          (W3C_OPTIONS + GRID_OPTIONS + WEBSOCKET_OPTIONS + self::CAPABILITIES.keys).each do |key|
             next if method_defined? key
 
             define_method key do

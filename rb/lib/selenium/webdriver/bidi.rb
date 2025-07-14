@@ -31,8 +31,8 @@ module Selenium
       autoload :InterceptedAuth, 'selenium/webdriver/bidi/network/intercepted_auth'
       autoload :InterceptedItem, 'selenium/webdriver/bidi/network/intercepted_item'
 
-      def initialize(url:)
-        @ws = WebSocketConnection.new(url: url)
+      def initialize(url:, **)
+        @ws = WebSocketConnection.new(url: url, **)
       end
 
       def close

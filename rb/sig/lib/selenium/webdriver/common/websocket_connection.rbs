@@ -5,6 +5,8 @@ module Selenium
 
       @callback_threads: untyped
 
+      @response_interval: Float
+      @response_timeout: Integer
       @session_id: untyped
 
       @url: untyped
