@@ -45,9 +45,17 @@ public static class SeleniumManager
     {
         string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
 
-        if (binaryFullPath == null)
+        if (binaryFullPath is not null)
         {
-            SupportedPlatform? platform = null;
+            if (!File.Exists(binaryFullPath))
+            {
+                throw new FileNotFoundException($"Unable to locate provided Selenium Manager binary at '{binaryFullPath}'.");
+            }
+
+            return binaryFullPath;
+        }
+
+        SupportedPlatform? platform = null;
 
 #if NET8_0_OR_GREATER
             if (OperatingSystem.IsWindows())
@@ -63,41 +71,30 @@ public static class SeleniumManager
                 platform = SupportedPlatform.MacOS;
             }
 #else
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                platform = SupportedPlatform.Windows;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                platform = SupportedPlatform.Linux;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                platform = SupportedPlatform.MacOS;
-            }
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            platform = SupportedPlatform.Windows;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            platform = SupportedPlatform.Linux;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            platform = SupportedPlatform.MacOS;
+        }
 #endif
 
-            if (platform is null)
-            {
-                throw new PlatformNotSupportedException($"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}");
-            }
+        var currentDirectory = AppContext.BaseDirectory;
 
-            var currentDirectory = AppContext.BaseDirectory;
-
-            binaryFullPath = platform switch
-            {
-                SupportedPlatform.Windows => Path.Combine(currentDirectory, "runtimes", "win", "native", "selenium-manager.exe"),
-                SupportedPlatform.Linux => Path.Combine(currentDirectory, "runtimes", "linux", "native", "selenium-manager"),
-                SupportedPlatform.MacOS => Path.Combine(currentDirectory, "runtimes", "osx", "native", "selenium-manager"),
-                _ => throw new PlatformNotSupportedException(
-                    $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
-            };
-        }
-
-        if (!File.Exists(binaryFullPath))
+        binaryFullPath = platform switch
         {
-            throw new WebDriverException($"Unable to locate or obtain Selenium Manager binary at {binaryFullPath}");
-        }
+            SupportedPlatform.Windows => Path.Combine(currentDirectory, "runtimes", "win", "native", "selenium-manager.exe"),
+            SupportedPlatform.Linux => Path.Combine(currentDirectory, "runtimes", "linux", "native", "selenium-manager"),
+            SupportedPlatform.MacOS => Path.Combine(currentDirectory, "runtimes", "osx", "native", "selenium-manager"),
+            _ => throw new PlatformNotSupportedException(
+                $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
+        };
 
         return binaryFullPath;
     });
