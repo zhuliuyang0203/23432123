@@ -42,6 +42,9 @@ public static class SeleniumManager
 
     private static readonly ILogger _logger = Log.GetLogger(typeof(SeleniumManager));
 
+    // This logic to find Selenium Manager binary is complex and strange.
+    // As soon as Selenium Manager will be real native library (dll ,so, dynlib),
+    // we will be able to use it directly from the .NET bindings, and this logic will be removed.
     private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
     {
         string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
@@ -107,20 +110,26 @@ public static class SeleniumManager
             probingPaths.AddRange(nativeDllSearchDirectories.Split(';').Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
-        // Still falling back to the runtimes directory for compatibility with .NET Framework applications
-        // TESTING IT
-        //switch (platform)
-        //{
-        //    case SupportedPlatform.Windows:
-        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
-        //        break;
-        //    case SupportedPlatform.Linux:
-        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
-        //        break;
-        //    case SupportedPlatform.MacOS:
-        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
-        //        break;
-        //}
+        // Still falling back to the assembly directory for compatibility with .NET Framework applications
+        var assemblyDirectory = Path.GetDirectoryName(typeof(SeleniumManager).Assembly.Location);
+
+        if (assemblyDirectory is not null)
+        {
+            probingPaths.Add(Path.Combine(assemblyDirectory, seleniumManagerFileName));
+        }
+
+        switch (platform)
+        {
+            case SupportedPlatform.Windows:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
+                break;
+            case SupportedPlatform.Linux:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
+                break;
+            case SupportedPlatform.MacOS:
+                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
+                break;
+        }
 
         binaryFullPath = probingPaths.Find(path => File.Exists(path));
 
