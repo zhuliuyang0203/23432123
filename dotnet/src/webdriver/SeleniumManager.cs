@@ -159,7 +159,7 @@ public static class SeleniumManager
             argsBuilder.Append(" --debug");
         }
 
-        var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
+        var smCommandResult = RunCommand(argsBuilder.ToString());
         Dictionary<string, string> binaryPaths = new()
         {
             { BrowserPathKey, smCommandResult.BrowserPath },
@@ -178,12 +178,11 @@ public static class SeleniumManager
     /// <summary>
     /// Executes a process with the given arguments.
     /// </summary>
-    /// <param name="fileName">The path to the Selenium Manager.</param>
     /// <param name="arguments">The switches to be used by Selenium Manager.</param>
     /// <returns>
     /// the standard output of the execution.
     /// </returns>
-    private static ResultResponse RunCommand(string fileName, string arguments)
+    private static ResultResponse RunCommand(string arguments)
     {
         Process process = new Process();
         process.StartInfo.FileName = _lazyBinaryFullPath.Value;
@@ -217,7 +216,7 @@ public static class SeleniumManager
             {
                 // We do not log any warnings coming from Selenium Manager like the other bindings, as we don't have any logging in the .NET bindings
 
-                var exceptionMessageBuilder = new StringBuilder($"Selenium Manager process exited abnormally with {process.ExitCode} code: {fileName} {arguments}");
+                var exceptionMessageBuilder = new StringBuilder($"Selenium Manager process exited abnormally with {process.ExitCode} code: {process.StartInfo.FileName} {arguments}");
 
                 if (!string.IsNullOrWhiteSpace(errorOutputBuilder.ToString()))
                 {
@@ -240,7 +239,7 @@ public static class SeleniumManager
         }
         catch (Exception ex)
         {
-            throw new WebDriverException($"Error starting process: {fileName} {arguments}", ex);
+            throw new WebDriverException($"Error starting process: {process.StartInfo.FileName} {arguments}", ex);
         }
         finally
         {
