@@ -180,12 +180,6 @@ copy_file(
 )
 
 copy_file(
-    name = "multitargeting-props",
-    src = "//dotnet/src/webdriver/assets:nuget/buildMultiTargeting/Selenium.WebDriver.targets",
-    out = "multitargeting.Selenium.WebDriver.targets",
-)
-
-copy_file(
     name = "manager-linux",
     src = "//common/manager:selenium-manager-linux",
     out = "manager/linux/selenium-manager",
@@ -216,7 +210,6 @@ nuget_pack(
         ":readme": "README.md",
         ":props": "build/Selenium.WebDriver.targets",
         ":transitive-props": "buildTransitive/Selenium.WebDriver.targets",
-        ":multitargeting-props": "buildMultiTargeting/Selenium.WebDriver.targets",
     },
     id = "Selenium.WebDriver",
     libs = {
@@ -243,7 +236,6 @@ nuget_pack(
         ":readme": "README.md",
         ":props": "build/Selenium.WebDriver.StrongNamed.targets",
         ":transitive-props": "buildTransitive/Selenium.WebDriver.StrongNamed.targets",
-        ":multitargeting-props": "buildMultiTargeting/Selenium.WebDriver.targets",
     },
     id = "Selenium.WebDriver.StrongNamed",
     libs = {
