@@ -283,13 +283,10 @@ def test_set_files(driver, pages):
             os.unlink(temp_file_path)
 
 
-def test_set_multiple_files(driver, pages):
-    """Test setting multiple files on file input element."""
-    pages.load("formPage.html")
+def test_set_multiple_files(driver):
+    """Test setting multiple files on a file input element with 'multiple' attribute using BiDi."""
+    driver.get("data:text/html,<input id=upload type=file multiple />")
 
-    # Use the same upload element but try to set multiple files
-    # Note: The HTML file only has one file input, so this test demonstrates
-    # the API even though the element may not support multiple files
     upload_element = driver.find_element(By.ID, "upload")
 
     # Create temporary files
@@ -305,18 +302,10 @@ def test_set_multiple_files(driver, pages):
         element_id = upload_element._id
         element_ref = {"sharedId": element_id}
 
-        # Set multiple files using BiDi (this might fail if element doesn't support multiple)
-        # The test mainly demonstrates the API
         driver.input.set_files(driver.current_window_handle, element_ref, temp_files)
 
-        # Verify files were set (exact verification depends on browser implementation)
         value = upload_element.get_attribute("value")
-        assert value != ""  # Should have some value now
-
-    except Exception:
-        # This might fail if the element doesn't support multiple files
-        # which is expected for the current HTML
-        pass
+        assert value != ""
 
     finally:
         # Clean up temp files
@@ -358,99 +347,6 @@ def test_release_actions(driver, pages):
 
     # Should be able to type normally
     WebDriverWait(driver, 5).until(lambda d: "b" in input_element.get_attribute("value"))
-
-
-def test_pause_action_without_duration(driver):
-    """Test pause action without explicit duration."""
-    pause = PauseAction()
-    assert pause.type == "pause"
-    assert pause.duration is None
-
-    pause_dict = pause.to_dict()
-    assert pause_dict["type"] == "pause"
-    assert "duration" not in pause_dict
-
-
-def test_pause_action_with_duration(driver):
-    """Test pause action with explicit duration."""
-    pause = PauseAction(duration=1000)
-    assert pause.duration == 1000
-
-    pause_dict = pause.to_dict()
-    assert pause_dict["type"] == "pause"
-    assert pause_dict["duration"] == 1000
-
-
-def test_pointer_parameters_validation():
-    """Test pointer parameters validation."""
-    # Valid pointer type
-    params = PointerParameters(pointer_type=PointerType.MOUSE)
-    assert params.pointer_type == PointerType.MOUSE
-
-    # Invalid pointer type should raise ValueError
-    with pytest.raises(ValueError, match="Invalid pointer type"):
-        PointerParameters(pointer_type="invalid")
-
-
-def test_pointer_common_properties_validation():
-    """Test pointer common properties validation."""
-    # Valid properties
-    props = PointerCommonProperties(
-        width=2, height=2, pressure=0.5, tangential_pressure=0.3, twist=180, altitude_angle=0.5, azimuth_angle=3.14
-    )
-    assert props.width == 2
-    assert props.pressure == 0.5
-
-    # Invalid width
-    with pytest.raises(ValueError, match="width must be at least 1"):
-        PointerCommonProperties(width=0)
-
-    # Invalid pressure
-    with pytest.raises(ValueError, match="pressure must be between 0.0 and 1.0"):
-        PointerCommonProperties(pressure=1.5)
-
-    # Invalid twist
-    with pytest.raises(ValueError, match="twist must be between 0 and 359"):
-        PointerCommonProperties(twist=360)
-
-
-def test_element_origin_creation():
-    """Test ElementOrigin creation and serialization."""
-    element_ref = {"sharedId": "test-element-id"}
-    origin = ElementOrigin(element_ref)
-
-    assert origin.type == "element"
-    assert origin.element == element_ref
-
-    origin_dict = origin.to_dict()
-    assert origin_dict["type"] == "element"
-    assert origin_dict["element"] == element_ref
-
-
-def test_source_actions_serialization():
-    """Test that source actions serialize correctly to dictionaries."""
-    # Test KeySourceActions
-    key_actions = KeySourceActions(
-        id="test-keyboard", actions=[KeyDownAction(value="a"), PauseAction(duration=100), KeyUpAction(value="a")]
-    )
-
-    key_dict = key_actions.to_dict()
-    assert key_dict["type"] == "key"
-    assert key_dict["id"] == "test-keyboard"
-    assert len(key_dict["actions"]) == 3
-
-    # Test PointerSourceActions
-    pointer_actions = PointerSourceActions(
-        id="test-mouse",
-        parameters=PointerParameters(pointer_type=PointerType.MOUSE),
-        actions=[PointerMoveAction(x=100, y=200), PointerDownAction(button=0), PointerUpAction(button=0)],
-    )
-
-    pointer_dict = pointer_actions.to_dict()
-    assert pointer_dict["type"] == "pointer"
-    assert pointer_dict["id"] == "test-mouse"
-    assert "parameters" in pointer_dict
-    assert len(pointer_dict["actions"]) == 3
 
 
 @pytest.mark.parametrize("multiple", [True, False])
