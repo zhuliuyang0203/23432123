@@ -108,18 +108,19 @@ public static class SeleniumManager
         }
 
         // Still falling back to the runtimes directory for compatibility with .NET Framework applications
-        switch (platform)
-        {
-            case SupportedPlatform.Windows:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
-                break;
-            case SupportedPlatform.Linux:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
-                break;
-            case SupportedPlatform.MacOS:
-                probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
-                break;
-        }
+        // TESTING IT
+        //switch (platform)
+        //{
+        //    case SupportedPlatform.Windows:
+        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "win", "native", seleniumManagerFileName));
+        //        break;
+        //    case SupportedPlatform.Linux:
+        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "linux", "native", seleniumManagerFileName));
+        //        break;
+        //    case SupportedPlatform.MacOS:
+        //        probingPaths.Add(Path.Combine(baseDirectory, "runtimes", "osx", "native", seleniumManagerFileName));
+        //        break;
+        //}
 
         binaryFullPath = probingPaths.Find(path => File.Exists(path));
 
