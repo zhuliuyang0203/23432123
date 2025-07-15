@@ -122,7 +122,7 @@ public static class SeleniumManager
 
         // Supporting .NET5+ applications deployed as bundled applications (single file or AOT).
         // In this case bootstrapper extracts the native libraries into a temporary directory.
-        // Most interesting build properties: "IncludeNativeLibrariesForSelfExtract" and "IncludeAllContentForSelfExtract". 
+        // Most interesting build properties: "IncludeNativeLibrariesForSelfExtract" and "IncludeAllContentForSelfExtract".
         var nativeDllSearchDirectories = AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES")?.ToString();
 
         if (nativeDllSearchDirectories is not null)
