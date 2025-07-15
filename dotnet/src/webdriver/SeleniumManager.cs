@@ -127,7 +127,7 @@ public static class SeleniumManager
 
         if (nativeDllSearchDirectories is not null)
         {
-            probingPaths.AddRange(nativeDllSearchDirectories.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
+            probingPaths.AddRange(nativeDllSearchDirectories.Split(new char[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
         // Covering the case when the application is hosted by another application, most likely
