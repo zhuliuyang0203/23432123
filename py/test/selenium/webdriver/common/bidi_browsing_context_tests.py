@@ -16,6 +16,7 @@
 # under the License.
 
 import base64
+import threading
 
 import pytest
 
@@ -525,3 +526,216 @@ def test_locate_nodes_given_start_nodes(driver, pages):
     )
     # The login form should have 3 input elements (email, age, and submit button)
     assert len(elements) == 3
+
+
+# Tests for event handlers
+
+
+def test_add_event_handler_context_created(driver):
+    """Test adding event handler for context_created event."""
+    events_received = []
+
+    def on_context_created(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("context_created", on_context_created)
+    assert callback_id is not None
+
+    # Create a new context to trigger the event
+    context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Verify the event was received (might be > 1 since default context is also included)
+    assert len(events_received) >= 1
+    assert events_received[0].context == context_id or events_received[1].context == context_id
+
+    driver.browsing_context.close(context_id)
+    driver.browsing_context.remove_event_handler("context_created", callback_id)
+
+
+def test_add_event_handler_context_destroyed(driver):
+    """Test adding event handler for context_destroyed event."""
+    events_received = []
+
+    def on_context_destroyed(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("context_destroyed", on_context_destroyed)
+    assert callback_id is not None
+
+    # Create and then close a context to trigger the event
+    context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+    driver.browsing_context.close(context_id)
+
+    assert len(events_received) == 1
+    assert events_received[0].context == context_id
+
+    driver.browsing_context.remove_event_handler("context_destroyed", callback_id)
+
+
+def test_add_event_handler_navigation_committed(driver, pages):
+    """Test adding event handler for navigation_committed event."""
+    events_received = []
+
+    def on_navigation_committed(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("navigation_committed", on_navigation_committed)
+    assert callback_id is not None
+
+    # Navigate to trigger the event
+    context_id = driver.current_window_handle
+    url = pages.url("simpleTest.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    assert len(events_received) >= 1
+    assert any(url in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("navigation_committed", callback_id)
+
+
+def test_add_event_handler_with_specific_contexts(driver):
+    """Test adding event handler with specific browsing contexts."""
+    events_received = []
+
+    def on_context_created(info):
+        events_received.append(info)
+
+    context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Add event handler for specific context
+    callback_id = driver.browsing_context.add_event_handler(
+        "context_created", on_context_created, contexts=[context_id]
+    )
+    assert callback_id is not None
+
+    # Create another context (should trigger event)
+    new_context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    assert len(events_received) >= 1
+
+    driver.browsing_context.close(context_id)
+    driver.browsing_context.close(new_context_id)
+    driver.browsing_context.remove_event_handler("context_created", callback_id)
+
+
+def test_remove_event_handler(driver):
+    """Test removing event handler."""
+    events_received = []
+
+    def on_context_created(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("context_created", on_context_created)
+
+    # Create a context to trigger the event
+    context_id_1 = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    initial_events = len(events_received)
+
+    # Remove the event handler
+    driver.browsing_context.remove_event_handler("context_created", callback_id)
+
+    # Create another context (should not trigger event after removal)
+    context_id_2 = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Verify no new events were received after removal
+    assert len(events_received) == initial_events
+
+    driver.browsing_context.close(context_id_1)
+    driver.browsing_context.close(context_id_2)
+
+
+def test_multiple_event_handlers_same_event(driver):
+    """Test adding multiple event handlers for the same event."""
+    events_received_1 = []
+    events_received_2 = []
+
+    def on_context_created_1(info):
+        events_received_1.append(info)
+
+    def on_context_created_2(info):
+        events_received_2.append(info)
+
+    # Add multiple event handlers for the same event
+    callback_id_1 = driver.browsing_context.add_event_handler("context_created", on_context_created_1)
+    callback_id_2 = driver.browsing_context.add_event_handler("context_created", on_context_created_2)
+
+    # Create a context to trigger both handlers
+    context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Verify both handlers received the event
+    assert len(events_received_1) >= 1
+    assert len(events_received_2) >= 1
+    # Check any of the events has the required context ID
+    assert any(event.context == context_id for event in events_received_1)
+    assert any(event.context == context_id for event in events_received_2)
+
+    driver.browsing_context.close(context_id)
+    driver.browsing_context.remove_event_handler("context_created", callback_id_1)
+    driver.browsing_context.remove_event_handler("context_created", callback_id_2)
+
+
+def test_remove_specific_event_handler_multiple_handlers(driver):
+    """Test removing a specific event handler when multiple handlers exist."""
+    events_received_1 = []
+    events_received_2 = []
+
+    def on_context_created_1(info):
+        events_received_1.append(info)
+
+    def on_context_created_2(info):
+        events_received_2.append(info)
+
+    # Add multiple event handlers
+    callback_id_1 = driver.browsing_context.add_event_handler("context_created", on_context_created_1)
+    callback_id_2 = driver.browsing_context.add_event_handler("context_created", on_context_created_2)
+
+    # Create a context to trigger both handlers
+    context_id_1 = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Verify both handlers received the event
+    assert len(events_received_1) >= 1
+    assert len(events_received_2) >= 1
+
+    # store the initial event counts
+    initial_count_1 = len(events_received_1)
+    initial_count_2 = len(events_received_2)
+
+    # Remove only the first handler
+    driver.browsing_context.remove_event_handler("context_created", callback_id_1)
+
+    # Create another context
+    context_id_2 = driver.browsing_context.create(type=WindowTypes.TAB)
+
+    # Verify only the second handler received the new event
+    assert len(events_received_1) == initial_count_1  # No new events
+    assert len(events_received_2) == initial_count_2 + 1  # 1 new event
+
+    driver.browsing_context.close(context_id_1)
+    driver.browsing_context.close(context_id_2)
+    driver.browsing_context.remove_event_handler("context_created", callback_id_2)
+
+
+def test_event_handler_thread_safety(driver):
+    """Test event handlers are thread-safe."""
+    events_received = []
+    event_lock = threading.Lock()
+
+    def on_context_created(info):
+        with event_lock:
+            events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("context_created", on_context_created)
+
+    # Create multiple contexts in rapid succession
+    context_ids = []
+    for i in range(3):
+        context_id = driver.browsing_context.create(type=WindowTypes.TAB)
+        context_ids.append(context_id)
+
+    # Verify all events were received (might be 1 more than 3 due to default context)
+    assert len(events_received) >= 3
+
+    for context_id in context_ids:
+        driver.browsing_context.close(context_id)
+    driver.browsing_context.remove_event_handler("context_created", callback_id)

@@ -399,6 +399,154 @@ class BrowsingContextEvent:
         return cls(event_class=event_class, **json)
 
 
+class ContextCreated:
+    """Event class for browsingContext.contextCreated event."""
+
+    event_class = "browsingContext.contextCreated"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, BrowsingContextInfo):
+            return json
+        return BrowsingContextInfo.from_json(json)
+
+
+class ContextDestroyed:
+    """Event class for browsingContext.contextDestroyed event."""
+
+    event_class = "browsingContext.contextDestroyed"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, BrowsingContextInfo):
+            return json
+        return BrowsingContextInfo.from_json(json)
+
+
+class NavigationStarted:
+    """Event class for browsingContext.navigationStarted event."""
+
+    event_class = "browsingContext.navigationStarted"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class NavigationCommitted:
+    """Event class for browsingContext.navigationCommitted event."""
+
+    event_class = "browsingContext.navigationCommitted"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class NavigationFailed:
+    """Event class for browsingContext.navigationFailed event."""
+
+    event_class = "browsingContext.navigationFailed"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class NavigationAborted:
+    """Event class for browsingContext.navigationAborted event."""
+
+    event_class = "browsingContext.navigationAborted"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class DomContentLoaded:
+    """Event class for browsingContext.domContentLoaded event."""
+
+    event_class = "browsingContext.domContentLoaded"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class Load:
+    """Event class for browsingContext.load event."""
+
+    event_class = "browsingContext.load"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class FragmentNavigated:
+    """Event class for browsingContext.fragmentNavigated event."""
+
+    event_class = "browsingContext.fragmentNavigated"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        if isinstance(json, NavigationInfo):
+            return json
+        return NavigationInfo.from_json(json)
+
+
+class DownloadWillBegin:
+    """Event class for browsingContext.downloadWillBegin event."""
+
+    event_class = "browsingContext.downloadWillBegin"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return DownloadWillBeginParams.from_json(json)
+
+
+class UserPromptOpened:
+    """Event class for browsingContext.userPromptOpened event."""
+
+    event_class = "browsingContext.userPromptOpened"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return UserPromptOpenedParams.from_json(json)
+
+
+class UserPromptClosed:
+    """Event class for browsingContext.userPromptClosed event."""
+
+    event_class = "browsingContext.userPromptClosed"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return UserPromptClosedParams.from_json(json)
+
+
+class HistoryUpdated:
+    """Event class for browsingContext.historyUpdated event."""
+
+    event_class = "browsingContext.historyUpdated"
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return HistoryUpdatedParams.from_json(json)
+
+
 class BrowsingContext:
     """BiDi implementation of the browsingContext module."""
 
@@ -416,6 +564,22 @@ class BrowsingContext:
         "navigation_started": "browsingContext.navigationStarted",
         "user_prompt_closed": "browsingContext.userPromptClosed",
         "user_prompt_opened": "browsingContext.userPromptOpened",
+    }
+
+    EVENT_CLASSES = {
+        "browsingContext.contextCreated": ContextCreated,
+        "browsingContext.contextDestroyed": ContextDestroyed,
+        "browsingContext.domContentLoaded": DomContentLoaded,
+        "browsingContext.downloadWillBegin": DownloadWillBegin,
+        "browsingContext.fragmentNavigated": FragmentNavigated,
+        "browsingContext.historyUpdated": HistoryUpdated,
+        "browsingContext.load": Load,
+        "browsingContext.navigationAborted": NavigationAborted,
+        "browsingContext.navigationCommitted": NavigationCommitted,
+        "browsingContext.navigationFailed": NavigationFailed,
+        "browsingContext.navigationStarted": NavigationStarted,
+        "browsingContext.userPromptClosed": UserPromptClosed,
+        "browsingContext.userPromptOpened": UserPromptOpened,
     }
 
     def __init__(self, conn):
@@ -751,30 +915,16 @@ class BrowsingContext:
         -------
             int: callback id
         """
-        event = BrowsingContextEvent(event_name)
+        event_class = self.EVENT_CLASSES.get(event_name)
+        if not event_class:
+            raise Exception(f"Event class for {event_name} not found")
 
         def _callback(event_data):
-            if event_name == self.EVENTS["context_created"] or event_name == self.EVENTS["context_destroyed"]:
-                info = BrowsingContextInfo.from_json(event_data.params)
-                callback(info)
-            elif event_name == self.EVENTS["download_will_begin"]:
-                params = DownloadWillBeginParams.from_json(event_data.params)
-                callback(params)
-            elif event_name == self.EVENTS["user_prompt_opened"]:
-                params = UserPromptOpenedParams.from_json(event_data.params)
-                callback(params)
-            elif event_name == self.EVENTS["user_prompt_closed"]:
-                params = UserPromptClosedParams.from_json(event_data.params)
-                callback(params)
-            elif event_name == self.EVENTS["history_updated"]:
-                params = HistoryUpdatedParams.from_json(event_data.params)
-                callback(params)
-            else:
-                # For navigation events
-                info = NavigationInfo.from_json(event_data.params)
-                callback(info)
+            # Parse the event data using the appropriate event class
+            parsed_data = event_class.from_json(event_data)
+            callback(parsed_data)
 
-        callback_id = self.conn.add_callback(event, _callback)
+        callback_id = self.conn.add_callback(event_class, _callback)
 
         if event_name in self.callbacks:
             self.callbacks[event_name].append(callback_id)
@@ -806,11 +956,11 @@ class BrowsingContext:
         if event_name in self.subscriptions:
             self.subscriptions[event_name].append(callback_id)
         else:
-            params = {"events": [event_name]}
-            if contexts is not None:
-                params["browsingContexts"] = contexts
             session = Session(self.conn)
-            self.conn.execute(session.subscribe(**params))
+            if contexts is not None:
+                self.conn.execute(session.subscribe(event_name, browsing_contexts=contexts))
+            else:
+                self.conn.execute(session.subscribe(event_name))
             self.subscriptions[event_name] = [callback_id]
 
         return callback_id
@@ -828,26 +978,39 @@ class BrowsingContext:
         except KeyError:
             raise Exception(f"Event {event} not found")
 
-        event_obj = BrowsingContextEvent(event_name)
+        event_class = self.EVENT_CLASSES.get(event_name)
+        if not event_class:
+            raise Exception(f"Event class for {event_name} not found")
 
-        self.conn.remove_callback(event_obj, callback_id)
-        if event_name in self.subscriptions:
-            callbacks = self.subscriptions[event_name]
+        self.conn.remove_callback(event_class, callback_id)
+
+        # Remove from callbacks tracking
+        if event_name in self.callbacks:
+            callbacks = self.callbacks[event_name]
             if callback_id in callbacks:
                 callbacks.remove(callback_id)
                 if not callbacks:
-                    params = {"events": [event_name]}
+                    del self.callbacks[event_name]
+
+        # Remove from subscriptions and unsubscribe if no more callbacks
+        if event_name in self.subscriptions:
+            subscription_callbacks = self.subscriptions[event_name]
+            if callback_id in subscription_callbacks:
+                subscription_callbacks.remove(callback_id)
+                if not subscription_callbacks:
                     session = Session(self.conn)
-                    self.conn.execute(session.unsubscribe(**params))
+                    self.conn.execute(session.unsubscribe(event_name))
                     del self.subscriptions[event_name]
 
     def clear_event_handlers(self) -> None:
         """Clear all event handlers from the browsing context."""
-        for event_name in self.subscriptions:
-            event = BrowsingContextEvent(event_name)
-            for callback_id in self.subscriptions[event_name]:
-                self.conn.remove_callback(event, callback_id)
-            params = {"events": [event_name]}
-            session = Session(self.conn)
-            self.conn.execute(session.unsubscribe(**params))
+        for event_name in list(self.subscriptions.keys()):
+            event_class = self.EVENT_CLASSES.get(event_name)
+            if event_class:
+                for callback_id in self.subscriptions[event_name]:
+                    self.conn.remove_callback(event_class, callback_id)
+                session = Session(self.conn)
+                self.conn.execute(session.unsubscribe(event_name))
+
         self.subscriptions = {}
+        self.callbacks = {}
