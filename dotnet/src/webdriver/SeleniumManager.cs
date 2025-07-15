@@ -142,7 +142,7 @@ public static class SeleniumManager
 
         probingPaths = [.. probingPaths.Distinct()];
 
-        binaryFullPath = probingPaths.Find(path => File.Exists(path));
+        binaryFullPath = probingPaths.FirstOrDefault(File.Exists);
 
         if (binaryFullPath is null)
         {
