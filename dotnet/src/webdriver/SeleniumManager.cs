@@ -130,7 +130,9 @@ public static class SeleniumManager
             probingPaths.AddRange(nativeDllSearchDirectories.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
-        // In .NET 5 and later versions, for bundled assemblies, the value returned is an empty string
+        // Covering the case when the application is hosted by another application, most likely
+        // we can find Selenium Manager in the assembly location, because "AppContext.BaseDirectory"
+        // might return the path of the host application.
         var assemblyDirectory = Path.GetDirectoryName(typeof(SeleniumManager).Assembly.Location);
 
         if (assemblyDirectory is not null)
