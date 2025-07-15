@@ -120,7 +120,9 @@ public static class SeleniumManager
             }
         }
 
-        // Supporting .NET5+ applications deployed as self-contained applications (single file or AOT)
+        // Supporting .NET5+ applications deployed as bundled applications (single file or AOT).
+        // In this case bootstrapper extracts the native libraries into a temporary directory.
+        // Most interesting build properties: "IncludeNativeLibrariesForSelfExtract" and "IncludeAllContentForSelfExtract". 
         var nativeDllSearchDirectories = AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES")?.ToString();
 
         if (nativeDllSearchDirectories is not null)
@@ -128,7 +130,7 @@ public static class SeleniumManager
             probingPaths.AddRange(nativeDllSearchDirectories.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(path => Path.Combine(path, seleniumManagerFileName)));
         }
 
-        // Still falling back to the assembly directory for compatibility with .NET Framework applications
+        // In .NET 5 and later versions, for bundled assemblies, the value returned is an empty string
         var assemblyDirectory = Path.GetDirectoryName(typeof(SeleniumManager).Assembly.Location);
 
         if (assemblyDirectory is not null)
