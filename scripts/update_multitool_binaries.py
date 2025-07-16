@@ -37,12 +37,8 @@ def run(lockfile_path):
         data = json.load(f)
 
     for tool in [tool for tool in data if tool != "$schema"]:
-        version = re.search(f"download/(.*?)/{tool}", data[tool]["binaries"][0]["url"])[
-            1
-        ]
-        match = re.search(
-            f"github.com/(.*?)/releases", data[tool]["binaries"][0]["url"]
-        )
+        version = re.search(f"download/(.*?)/{tool}", data[tool]["binaries"][0]["url"])[1]
+        match = re.search("github.com/(.*?)/releases", data[tool]["binaries"][0]["url"])
         if match:
             user_repo = match[1]
         else:
