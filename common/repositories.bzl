@@ -165,7 +165,7 @@ js_library(
 
     http_archive(
         name = "linux_edgedriver",
-        url = "https://msedgedriver.azureedge.net/138.0.3351.83/edgedriver_linux64.zip",
+        url = "https://msedgedriver.microsoft.com/138.0.3351.83/edgedriver_linux64.zip",
         sha256 = "ed7d3651a5087bf7cdd383c244de29fa9e6a347473ff53c0172583380c5f7256",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
@@ -182,7 +182,7 @@ js_library(
 
     http_archive(
         name = "mac_edgedriver",
-        url = "https://msedgedriver.azureedge.net/138.0.3351.83/edgedriver_mac64.zip",
+        url = "https://msedgedriver.microsoft.com/138.0.3351.83/edgedriver_mac64.zip",
         sha256 = "a9e267a880300ed8dc77fc4ff12d4a66b49e3443d23c1091af277f332b2fc041",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
