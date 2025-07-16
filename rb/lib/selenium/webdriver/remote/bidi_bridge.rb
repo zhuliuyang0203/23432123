@@ -23,10 +23,15 @@ module Selenium
       class BiDiBridge < Bridge
         attr_reader :bidi
 
+        def initialize(url:, http_client: nil, ws_options: {})
+          super(url: url, http_client: http_client)
+          @ws_options = ws_options
+        end
+
         def create_session(capabilities)
           super
           socket_url = @capabilities[:web_socket_url]
-          @bidi = Selenium::WebDriver::BiDi.new(url: socket_url)
+          @bidi = Selenium::WebDriver::BiDi.new(url: socket_url, options: @ws_options)
         end
 
         def get(url)

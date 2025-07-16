@@ -320,8 +320,21 @@ module Selenium
       attr_reader :bridge
 
       def create_bridge(caps:, url:, http_client: nil)
-        klass = caps['webSocketUrl'] ? Remote::BiDiBridge : Remote::Bridge
-        klass.new(http_client: http_client, url: url).tap do |bridge|
+        if caps['webSocketUrl']
+          ws_options =
+            {
+              response_timeout: caps['wsResponseTimeout'],
+              response_interval: caps['wsResponseInterval']
+            }.compact
+
+          klass = Remote::BiDiBridge
+          bridge_opts = { http_client: http_client, url: url, ws_options: ws_options }
+        else
+          klass = Remote::Bridge
+          bridge_opts = { http_client: http_client, url: url }
+        end
+
+        klass.new(**bridge_opts).tap do |bridge|
           bridge.create_session(caps)
         end
       end
