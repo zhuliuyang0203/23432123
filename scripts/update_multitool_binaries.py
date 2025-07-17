@@ -28,7 +28,11 @@ def run(lockfile_path):
         data = json.load(f)
 
     for tool in [tool for tool in data if tool != "$schema"]:
-        version = re.search(f"download/(.*?)/{tool}", data[tool]["binaries"][0]["url"])[1]
+        match = re.search(f"download/(.*?)/{tool}", data[tool]["binaries"][0]["url"])
+        if match:
+            version = match[1]
+        else:
+            continue
         match = re.search("github.com/(.*?)/releases", data[tool]["binaries"][0]["url"])
         if match:
             releases_url = f"https://api.github.com/repos/{match[1]}/releases/latest"
