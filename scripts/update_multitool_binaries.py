@@ -17,7 +17,6 @@ options:
 """
 
 import argparse
-import hashlib
 import json
 import os
 import re
