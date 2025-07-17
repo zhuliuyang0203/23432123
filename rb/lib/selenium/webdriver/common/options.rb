@@ -26,7 +26,7 @@ module Selenium
 
       GRID_OPTIONS = %i[enable_downloads].freeze
 
-      WEBSOCKET_OPTIONS = %i[ws_response_timeout ws_response_interval].freeze
+      WEBSOCKET_OPTIONS = %i[ws:response_timeout ws:response_interval].freeze
 
       class << self
         attr_reader :driver_path

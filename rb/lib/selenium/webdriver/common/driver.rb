@@ -323,8 +323,8 @@ module Selenium
         if caps['webSocketUrl']
           ws_options =
             {
-              response_timeout: caps['wsResponseTimeout'],
-              response_interval: caps['wsResponseInterval']
+              response_timeout: caps[:'ws:response_timeout'],
+              response_interval: caps[:'ws:response_interval']
             }.compact
 
           klass = Remote::BiDiBridge
