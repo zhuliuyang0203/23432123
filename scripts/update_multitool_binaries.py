@@ -1,22 +1,19 @@
 #!/usr/bin/env python
 
 """
-This script updates the version of tool binaries defined in a Bazel rules_multitool lockfile.
-If the tool has binaries hosted in a public GitHub repo's Release assets, it will update the
-lockfile's URL and hash to the latest versions, otherwise it will skip it.
+This script updates the version of tool binaries defined in a Bazel rules_multitool lockfile. If the tool has binaries
+hosted in a public GitHub repo's Release assets, it will update the lockfile's URL and hash to the latest versions,
+otherwise it will skip it.
 
 See: https://github.com/theoremlp/rules_multitool
 
-Requires:
-  - github module (pip install PyGithub)
-
-```
+-----------------------------------------------------------------------------------------------------------
 usage: update_multitool_binaries.py [-h] [--file LOCKFILE_PATH]
 
 options:
   -h, --help            show this help message and exit
   --file LOCKFILE_PATH  path to multitool lockfile (defaults to 'multitool.lock.json' in current directory)
-```
+-----------------------------------------------------------------------------------------------------------
 """
 
 import argparse
@@ -25,11 +22,6 @@ import json
 import os
 import re
 import urllib.request
-
-try:
-    from github import Github
-except ModuleNotFoundError:
-    exit("requires github module (run: pip install PyGithub)")
 
 
 def run(lockfile_path):
@@ -40,26 +32,25 @@ def run(lockfile_path):
         version = re.search(f"download/(.*?)/{tool}", data[tool]["binaries"][0]["url"])[1]
         match = re.search("github.com/(.*?)/releases", data[tool]["binaries"][0]["url"])
         if match:
-            user_repo = match[1]
+            releases_url = f"https://api.github.com/repos/{match[1]}/releases/latest"
         else:
             continue
         try:
-            new_version = Github().get_repo(user_repo).get_releases()[0].title
+            with urllib.request.urlopen(releases_url) as response:
+                json_resp = json.loads(response.read())
+                new_version = json_resp["tag_name"]
+                assets = json_resp["assets"]
         except Exception:
             continue
         if new_version != version:
             print(f"found new version of '{tool}': {new_version}")
+            urls = [asset.get("browser_download_url") for asset in assets]
+            hashes = [asset.get("digest").split(":")[1] for asset in assets]
             for binary in data[tool]["binaries"]:
                 new_url = binary["url"].replace(version, new_version)
-                try:
-                    with urllib.request.urlopen(new_url) as response:
-                        sha256_hash = hashlib.sha256()
-                        sha256_hash.update(response.read())
-                        new_hash = sha256_hash.hexdigest()
-                    binary["url"] = new_url
-                    binary["sha256"] = new_hash
-                except Exception:
-                    continue
+                new_hash = hashes[urls.index(new_url)]
+                binary["url"] = new_url
+                binary["sha256"] = new_hash
 
     with open(lockfile_path, "w") as f:
         json.dump(data, f, indent=2)
