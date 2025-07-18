@@ -473,7 +473,7 @@ public class DevToolsSession : IDevToolsSession
         await this.Domains.Target.SetAutoAttach().ConfigureAwait(false);
         LogTrace("AutoAttach is set.", this.attachedTargetId);
 
-        // The Target domain needs to send Session-less commands! Else the waitForDebugger setting in setAutoAttach wont work!
+        // The Target domain needs to send Session-less commands! Else the waitForDebugger setting in setAutoAttach won't work!
         if (options.WaitForDebuggerOnStart)
         {
             var setAutoAttachCommand = Domains.Target.CreateSetAutoAttachCommand(true);
