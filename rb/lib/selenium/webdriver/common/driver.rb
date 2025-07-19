@@ -320,23 +320,11 @@ module Selenium
       attr_reader :bridge
 
       def create_bridge(caps:, url:, http_client: nil)
-        if caps['webSocketUrl']
-          ws_options =
-            {
-              response_timeout: caps[:'ws:response_timeout'],
-              response_interval: caps[:'ws:response_interval']
-            }.compact
+        klass = caps['webSocketUrl'] ? Remote::BiDiBridge : Remote::Bridge
 
-          klass = Remote::BiDiBridge
-          bridge_opts = { http_client: http_client, url: url, ws_options: ws_options }
-        else
-          klass = Remote::Bridge
-          bridge_opts = { http_client: http_client, url: url }
-        end
-
-        klass.new(**bridge_opts).tap do |bridge|
-          bridge.create_session(caps)
-        end
+        bridge = klass.new(http_client: http_client, url: url)
+        bridge.create_session(caps)
+        bridge
       end
 
       def service_url(service)

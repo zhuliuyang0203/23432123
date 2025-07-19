@@ -133,19 +133,11 @@ module Selenium
           expect(driver.execute_script('return document.hasFocus();')).to be_truthy
         end
 
-        it 'times out if a bidi command takes too long to receive a response' do
-          reset_driver!(web_socket_url: true, 'ws:response_timeout': 1) do |driver|
+        it 'times out if a command takes too long' do
+          reset_driver!(web_socket_url: true, web_socket_timeout: 0.1, web_socket_interval: 1) do |driver|
             expect {
-              driver.navigate.to url_for('sleep?time=2')
+              driver.navigate.to url_for('sleep?time=0.2')
             }.to raise_error(Selenium::WebDriver::Error::TimeoutError)
-          end
-        end
-
-        it 'does not time out if a bidi command is fast enough' do
-          reset_driver!(web_socket_url: true, 'ws:response_timeout': 5) do |driver|
-            expect {
-              driver.navigate.to url_for('sleep?time=1')
-            }.not_to raise_error
           end
         end
       end
