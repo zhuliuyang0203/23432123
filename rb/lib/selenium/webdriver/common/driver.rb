@@ -321,10 +321,9 @@ module Selenium
 
       def create_bridge(caps:, url:, http_client: nil)
         klass = caps['webSocketUrl'] ? Remote::BiDiBridge : Remote::Bridge
-
-        bridge = klass.new(http_client: http_client, url: url)
-        bridge.create_session(caps)
-        bridge
+        klass.new(http_client: http_client, url: url).tap do |bridge|
+          bridge.create_session(caps)
+        end
       end
 
       def service_url(service)
