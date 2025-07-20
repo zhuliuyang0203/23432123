@@ -52,6 +52,7 @@ java_library(
         ":bidi-mutation-listener",
         ":get-attribute",
         ":is-displayed",
+        ":is-pointer-reachable",
     ],
     visibility = [
         "//java/src/org/openqa/selenium/bidi:__pkg__",
@@ -92,6 +93,12 @@ copy_file(
     name = "is-displayed",
     src = "//javascript/atoms/fragments:is-displayed.js",
     out = "isDisplayed.js",
+)
+
+copy_file(
+    name = "is-pointer-reachable",
+    src = "//javascript/atoms/fragments:is-pointer-reachable.js",
+    out = "isPointerReachable.js",
 )
 
 copy_file(

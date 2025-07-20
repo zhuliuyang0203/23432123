@@ -461,6 +461,7 @@ namespace :node do
   atom_list = %w[
     //javascript/atoms/fragments:find-elements
     //javascript/atoms/fragments:is-displayed
+    //javascript/atoms/fragments:is-pointer-reachable
     //javascript/webdriver/atoms:get-attribute
   ]
 
@@ -469,6 +470,7 @@ namespace :node do
     mkdir_p base_dir
 
     ['bazel-bin/javascript/atoms/fragments/is-displayed.js',
+     'bazel-bin/javascript/webdriver/atoms/is-pointer-reachable.js',
      'bazel-bin/javascript/webdriver/atoms/get-attribute.js',
      'bazel-bin/javascript/atoms/fragments/find-elements.js'].each do |atom|
       name = File.basename(atom)
@@ -733,6 +735,7 @@ namespace :rb do
     {
       '//javascript/atoms/fragments:find-elements': 'findElements.js',
       '//javascript/atoms/fragments:is-displayed': 'isDisplayed.js',
+      '//javascript/atoms/fragments:is-pointer-reachable': 'isPointerReachable.js',
       '//javascript/webdriver/atoms:get-attribute': 'getAttribute.js'
     }.each do |target, name|
       puts "Generating #{target} as #{name}"

@@ -616,6 +616,15 @@ bot.dom.isShown = function (elem, opt_ignoreOpacity) {
   return bot.dom.isShown_(elem, !!opt_ignoreOpacity, displayed);
 };
 
+/**
+ * @param {!Element} elem The element to check.
+ * @param {boolean} scrollToElement Scroll to the element before checking it.
+ * @return {?Object} An object describing whether the element is partially hidden
+ *      as a JSON string.
+ */
+bot.dom.isPointerReachable = function (elem, scrollToElement) {
+    return {};
+};
 
 /**
  * The kind of overflow area in which an element may be located. NONE if it does
