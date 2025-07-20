@@ -168,6 +168,9 @@ jobs:
     if: github.event_name != 'schedule'
     env:
       RUSTFLAGS: '-Ctarget-feature=+crt-static'
+      APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+      APPLE_CERTIFICATE_PASSCODE: ${{ secrets.APPLE_CERTIFICATE_PASSCODE }}
+      APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
     steps:
       - name: "Checkout project"
         uses: actions/checkout@v4
@@ -186,6 +189,16 @@ jobs:
             target/aarch64-apple-darwin/release/selenium-manager \
             target/x86_64-apple-darwin/release/selenium-manager
         working-directory: rust
+      - name: Code sign binary
+        run: |
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          security create-keychain -p "$APPLE_KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$APPLE_KEYCHAIN_PASSWORD" build.keychain
+          security import certificate.p12 -k build.keychain -P "$APPLE_CERTIFICATE_PASSCODE" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_PASSWORD" build.keychain
+          codesign --timestamp --options runtime --sign "Puja Jagani" rust/target/selenium-manager-macos
+          codesign --verify --verbose rust/target/selenium-manager-macos
       - name: "Upload release binary"
         uses: actions/upload-artifact@v4
         with:
