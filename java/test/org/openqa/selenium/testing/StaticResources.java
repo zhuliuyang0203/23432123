@@ -51,6 +51,10 @@ class StaticResources {
     // W3C emulation
     bazel.build("//javascript/atoms/fragments:is-displayed");
     copy("javascript/atoms/fragments/is-displayed.js", "org/openqa/selenium/remote/isDisplayed.js");
+    bazel.build("//javascript/atoms/fragments:is-pointer-reachable");
+    copy(
+        "javascript/atoms/fragments/is-pointer-reachable.js",
+        "org/openqa/selenium/remote/isPointerReachable.js");
     bazel.build("//javascript/webdriver/atoms:get-attribute");
     copy(
         "javascript/webdriver/atoms/get-attribute.js",

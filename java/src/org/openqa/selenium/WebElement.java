@@ -18,6 +18,7 @@
 package org.openqa.selenium;
 
 import java.util.List;
+import java.util.Map;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -284,6 +285,19 @@ public interface WebElement extends SearchContext, TakesScreenshot {
    * @return Whether the element is displayed
    */
   boolean isDisplayed();
+
+  /**
+   * Is this element pointer reachable inside the current viewport or not? Will return null in case
+   * the element is bigger than the viewport or one of its scrollable parent containers. The check
+   * will check the upper left, upper center, upper right, center left, center center, center right,
+   * lower left, lower center, lower right points of the element for interactability. In case the
+   * element is hidden by one of its children, the check will still pass.
+   *
+   * @param scrollToElement scroll to the element before checking the state
+   * @return The overlapping elements of this element, in case the elements are not one of its
+   *     children or null in case the element is too big to reach all of its borders.
+   */
+  Map<Position, WebElement> isPointerReachable(boolean scrollToElement);
 
   /**
    * Where on the page is the top left-hand corner of the rendered element?

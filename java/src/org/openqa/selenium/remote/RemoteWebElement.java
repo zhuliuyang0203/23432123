@@ -32,6 +32,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Position;
 import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
@@ -288,6 +289,22 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
       return (Boolean) value;
     } catch (ClassCastException ex) {
       throw new WebDriverException("Returned value cannot be converted to Boolean: " + value, ex);
+    }
+  }
+
+  @Override
+  public Map<Position, WebElement> isPointerReachable(boolean scrollToElement) {
+    Object value =
+        execute(DriverCommand.IS_ELEMENT_POINTER_REACHABLE(id, scrollToElement)).getValue();
+    try {
+      if (value == null) {
+        return null;
+      }
+      return ((Map<String, WebElement>) value)
+          .entrySet().stream()
+              .collect(Collectors.toMap((e) -> Position.valueOf(e.getKey()), Map.Entry::getValue));
+    } catch (ClassCastException ex) {
+      throw new WebDriverException("Returned value cannot be converted to Map: " + value, ex);
     }
   }
 

@@ -57,6 +57,7 @@ import static org.openqa.selenium.remote.DriverCommand.GET_SESSION_STORAGE_KEYS;
 import static org.openqa.selenium.remote.DriverCommand.GET_SESSION_STORAGE_SIZE;
 import static org.openqa.selenium.remote.DriverCommand.GET_WINDOW_HANDLES;
 import static org.openqa.selenium.remote.DriverCommand.IS_ELEMENT_DISPLAYED;
+import static org.openqa.selenium.remote.DriverCommand.IS_ELEMENT_POINTER_REACHABLE;
 import static org.openqa.selenium.remote.DriverCommand.MAXIMIZE_CURRENT_WINDOW;
 import static org.openqa.selenium.remote.DriverCommand.MINIMIZE_CURRENT_WINDOW;
 import static org.openqa.selenium.remote.DriverCommand.PRINT_PAGE;
@@ -111,6 +112,7 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
     alias(GET_ELEMENT_LOCATION_ONCE_SCROLLED_INTO_VIEW, EXECUTE_SCRIPT);
     alias(GET_ELEMENT_SIZE, GET_ELEMENT_RECT);
     alias(IS_ELEMENT_DISPLAYED, EXECUTE_SCRIPT);
+    alias(IS_ELEMENT_POINTER_REACHABLE, EXECUTE_SCRIPT);
     alias(SUBMIT_ELEMENT, EXECUTE_SCRIPT);
 
     defineCommand(EXECUTE_SCRIPT, post(sessionId + "/execute/sync"));
@@ -268,6 +270,10 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
 
       case IS_ELEMENT_DISPLAYED:
         return executeAtom("isDisplayed.js", asElement(parameters.get("id")));
+
+      case IS_ELEMENT_POINTER_REACHABLE:
+        return executeAtom(
+            "isPointerReachable.js", asElement(parameters.get("id")), parameters.get("scroll"));
 
       case SEND_KEYS_TO_ELEMENT:
         // When converted from JSON, this is a list, not an array

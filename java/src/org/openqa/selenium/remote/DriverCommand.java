@@ -83,6 +83,7 @@ public interface DriverCommand {
   String IS_ELEMENT_SELECTED = "isElementSelected";
   String IS_ELEMENT_ENABLED = "isElementEnabled";
   String IS_ELEMENT_DISPLAYED = "isElementDisplayed";
+  String IS_ELEMENT_POINTER_REACHABLE = "isElementPointerReachable";
   String GET_ELEMENT_RECT = "getElementRect";
   String GET_ELEMENT_LOCATION = "getElementLocation";
   String GET_ELEMENT_LOCATION_ONCE_SCROLLED_INTO_VIEW = "getElementLocationOnceScrolledIntoView";
@@ -283,6 +284,11 @@ public interface DriverCommand {
 
   static CommandPayload IS_ELEMENT_DISPLAYED(String id) {
     return new CommandPayload(IS_ELEMENT_DISPLAYED, Map.of("id", id));
+  }
+
+  static CommandPayload IS_ELEMENT_POINTER_REACHABLE(String id, boolean scrollToElement) {
+    return new CommandPayload(
+        IS_ELEMENT_POINTER_REACHABLE, Map.of("id", id, "scroll", scrollToElement));
   }
 
   static CommandPayload GET_ELEMENT_RECT(String id) {

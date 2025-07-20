@@ -18,6 +18,7 @@
 package org.openqa.selenium;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A WebElement that wraps another WebElement, for purposes of testing that JSON converters
@@ -93,6 +94,11 @@ public class WrappedWebElement implements WebElement, WrapsElement {
 
   @Override
   public boolean isDisplayed() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Map<Position, WebElement> isPointerReachable(boolean scrollToElement) {
     throw new UnsupportedOperationException();
   }
 

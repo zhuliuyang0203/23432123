@@ -289,6 +289,18 @@ class RemoteWebElementTest {
   }
 
   @Test
+  void canHandleIsPointerReachableCommand() {
+    WebElementFixture fixture = new WebElementFixture(echoCapabilities, valueResponder(null));
+
+    assertThat(fixture.element.isPointerReachable(true)).isNull();
+
+    fixture.verifyCommands(
+        new CommandPayload(
+            DriverCommand.IS_ELEMENT_POINTER_REACHABLE,
+            ImmutableMap.of("id", fixture.element.getId(), "scroll", true)));
+  }
+
+  @Test
   void canHandleGeTextCommand() {
     WebElementFixture fixture = new WebElementFixture(echoCapabilities, valueResponder("test"));
 
