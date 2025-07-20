@@ -623,7 +623,63 @@ bot.dom.isShown = function (elem, opt_ignoreOpacity) {
  *      as a JSON string.
  */
 bot.dom.isPointerReachable = function (elem, scrollToElement) {
-    return {};
+    if (scrollToElement) {
+      // use center to avoid issues with overlapping fixed elements like header or footers
+      elem.scrollIntoView({
+        "behavior": "instant",
+        "block": "center",
+        "inline": "center"
+      });
+    }
+
+    function checkCoordinates(doc, x, y) {
+      // ensure the point is inside the viewport
+      if (doc.elementFromPoint(x, y) === null) {
+        return null;
+      }
+
+      // for chrome / edge the doc.elementFromPoint() does not allways return doc.elementsFromPoint()[0], perhaps a broken fastpath?
+      var elements = doc.elementsFromPoint(x, y);
+
+      if (elements.length == 0) {
+        return true;
+      }
+
+      var e = elements[0];
+
+      // check any of the parents is the element
+      while (e) {
+        if (elem === e) {
+          return true;
+        }
+        e = e.parentElement;
+      }
+
+      return elements[0];
+    }
+
+    var box = elem.getBoundingClientRect();
+
+    // +1 / -1 to avoid issues due to floating numbers of the box
+    var result = Object.entries({
+      "UpperLeft": checkCoordinates(elem.ownerDocument, Math.floor(box.left + 1), Math.floor(box.top + 1)),
+      "UpperCenter": checkCoordinates(elem.ownerDocument, Math.floor(box.left + box.width / 2 + 1), Math.floor(box.top + 1)),
+      "UpperRight": checkCoordinates(elem.ownerDocument, Math.floor(box.right - 1), Math.floor(box.top + 1)),
+      "CenterLeft": checkCoordinates(elem.ownerDocument, Math.floor(box.left + 1), Math.floor(box.top + box.height / 2 + 1)),
+      "CenterCenter": checkCoordinates(elem.ownerDocument, Math.floor(box.left + box.width / 2 + 1), Math.floor(box.top + box.height / 2 + 1)),
+      "CenterRight": checkCoordinates(elem.ownerDocument, Math.floor(box.right - 1), Math.floor(box.top + box.height / 2 + 1)),
+      "LowerLeft": checkCoordinates(elem.ownerDocument, Math.floor(box.left + 1), Math.floor(box.bottom - 1)),
+      "LowerCenter": checkCoordinates(elem.ownerDocument, Math.floor(box.left + box.width / 2 + 1), Math.floor(box.bottom - 1)),
+      "LowerRight": checkCoordinates(elem.ownerDocument, Math.floor(box.right - 1), Math.floor(box.bottom - 1)),
+    });
+
+    // remove all positions where we detected nothing
+    return result.reduce((filtered, [key, value]) => {
+      if (filtered !== true && value !== null) {
+        filtered[key] = value;
+      }
+      return filtered;
+    }, {});
 };
 
 /**
