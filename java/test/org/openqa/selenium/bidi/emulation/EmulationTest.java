@@ -50,7 +50,7 @@ class EmulationTest extends JupiterTestBase {
     String originValue = (String) origin;
 
     permission.setPermission(
-        Map.of("name", "geolocation"), PermissionState.GRANTED, originValue, userContext);
+        Map.of("name", "geolocation"), PermissionState.GRANTED, originValue);
 
     return executor.executeAsyncScript(
         "const callback = arguments[arguments.length - 1];\n"
