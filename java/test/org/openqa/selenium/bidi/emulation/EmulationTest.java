@@ -40,6 +40,11 @@ class EmulationTest extends JupiterTestBase {
   Object getBrowserGeolocation(WebDriver driver, String userContext) {
     JavascriptExecutor executor = (JavascriptExecutor) driver;
 
+    BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+    String url = appServer.whereIs("blank.html");
+    context.navigate(url, ReadinessState.COMPLETE);
+    driver.switchTo().window(context.getId());
+
     Permission permission = new Permission(driver);
     var origin = executor.executeScript("return window.location.origin;");
     String originValue = (String) origin;
