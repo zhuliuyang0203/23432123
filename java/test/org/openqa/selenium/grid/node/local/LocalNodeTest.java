@@ -25,8 +25,11 @@ import static org.openqa.selenium.remote.http.HttpMethod.GET;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -433,5 +436,144 @@ class LocalNodeTest {
     Object bidiEnabled = capabilities.getCapability("se:bidiEnabled");
     assertThat(bidiEnabled).isNotNull();
     assertThat(Boolean.parseBoolean(bidiEnabled.toString())).isFalse();
+  }
+
+  @Test
+  void statusFileIsWrittenWhenConfigured() throws URISyntaxException, IOException {
+    Tracer tracer = DefaultTestTracer.createTracer();
+    EventBus bus = new GuavaEventBus();
+    URI uri = new URI("http://localhost:7890");
+    Capabilities stereotype = new ImmutableCapabilities("browserName", "cheese");
+
+    Path tempStatusFile = Files.createTempFile("node-status", ".json");
+    tempStatusFile.toFile().deleteOnExit();
+
+    LocalNode localNode =
+        LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
+            .add(
+                stereotype,
+                new TestSessionFactory(
+                    (id, caps) -> new Session(id, uri, stereotype, caps, Instant.now())))
+            .advanced()
+            .statusFile(Optional.of(tempStatusFile.toString()))
+            .build();
+
+    NodeStatus status = localNode.getStatus();
+    assertThat(status).isNotNull();
+
+    assertThat(Files.exists(tempStatusFile)).isTrue();
+    String statusContent = Files.readString(tempStatusFile);
+    assertThat(statusContent).isNotEmpty();
+    assertThat(statusContent).contains("\"nodeId\"");
+    assertThat(statusContent).contains("\"uri\"");
+  }
+
+  @Test
+  void statusFileIsNotWrittenWhenNotConfigured() throws URISyntaxException {
+    Tracer tracer = DefaultTestTracer.createTracer();
+    EventBus bus = new GuavaEventBus();
+    URI uri = new URI("http://localhost:7890");
+    Capabilities stereotype = new ImmutableCapabilities("browserName", "cheese");
+
+    LocalNode localNode =
+        LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
+            .add(
+                stereotype,
+                new TestSessionFactory(
+                    (id, caps) -> new Session(id, uri, stereotype, caps, Instant.now())))
+            .build();
+
+    NodeStatus status = localNode.getStatus();
+    assertThat(status).isNotNull();
+  }
+
+  @Test
+  void sessionHistoryIsWrittenWhenConfigured() throws URISyntaxException, IOException {
+    Tracer tracer = DefaultTestTracer.createTracer();
+    EventBus bus = new GuavaEventBus();
+    URI uri = new URI("http://localhost:7890");
+    Capabilities stereotype = new ImmutableCapabilities("browserName", "cheese");
+
+    Path tempHistoryFile = Files.createTempFile("session-history", ".json");
+    tempHistoryFile.toFile().deleteOnExit();
+
+    LocalNode localNode =
+        LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
+            .add(
+                stereotype,
+                new TestSessionFactory(
+                    (id, caps) -> new Session(id, uri, stereotype, caps, Instant.now())))
+            .advanced()
+            .sessionHistoryFile(Optional.empty(), Optional.of(tempHistoryFile.toString()))
+            .build();
+
+    Either<WebDriverException, CreateSessionResponse> response =
+        localNode.newSession(
+            new CreateSessionRequest(ImmutableSet.of(W3C), stereotype, ImmutableMap.of()));
+    assertThat(response.isRight()).isTrue();
+
+    SessionId sessionId = response.right().getSession().getId();
+    localNode.stop(sessionId);
+
+    assertThat(Files.exists(tempHistoryFile)).isTrue();
+    String historyContent = Files.readString(tempHistoryFile);
+    assertThat(historyContent).isNotEmpty();
+    assertThat(historyContent).contains(sessionId.toString());
+    assertThat(historyContent).contains("startTime");
+    assertThat(historyContent).contains("stopTime");
+  }
+
+  @Test
+  void sessionHistoryIsNotWrittenWhenNotConfigured() throws URISyntaxException {
+    Tracer tracer = DefaultTestTracer.createTracer();
+    EventBus bus = new GuavaEventBus();
+    URI uri = new URI("http://localhost:7890");
+    Capabilities stereotype = new ImmutableCapabilities("browserName", "cheese");
+
+    LocalNode localNode =
+        LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
+            .add(
+                stereotype,
+                new TestSessionFactory(
+                    (id, caps) -> new Session(id, uri, stereotype, caps, Instant.now())))
+            .build();
+
+    Either<WebDriverException, CreateSessionResponse> response =
+        localNode.newSession(
+            new CreateSessionRequest(ImmutableSet.of(W3C), stereotype, ImmutableMap.of()));
+    assertThat(response.isRight()).isTrue();
+
+    SessionId sessionId = response.right().getSession().getId();
+    localNode.stop(sessionId);
+  }
+
+  @Test
+  void sessionHistoryEndpointReturnsCorrectData() throws URISyntaxException {
+    Tracer tracer = DefaultTestTracer.createTracer();
+    EventBus bus = new GuavaEventBus();
+    URI uri = new URI("http://localhost:7890");
+    Capabilities stereotype = new ImmutableCapabilities("browserName", "cheese");
+
+    LocalNode localNode =
+        LocalNode.builder(tracer, bus, uri, uri, registrationSecret)
+            .add(
+                stereotype,
+                new TestSessionFactory(
+                    (id, caps) -> new Session(id, uri, stereotype, caps, Instant.now())))
+            .build();
+
+    Either<WebDriverException, CreateSessionResponse> response =
+        localNode.newSession(
+            new CreateSessionRequest(ImmutableSet.of(W3C), stereotype, ImmutableMap.of()));
+    assertThat(response.isRight()).isTrue();
+
+    SessionId sessionId = response.right().getSession().getId();
+    localNode.stop(sessionId);
+
+    List<SessionHistoryEntry> history = localNode.getSessionHistory();
+    assertThat(history).hasSize(1);
+    assertThat(history.get(0).getSessionId()).isEqualTo(sessionId);
+    assertThat(history.get(0).getStartTime()).isNotNull();
+    assertThat(history.get(0).getStopTime()).isNotNull();
   }
 }

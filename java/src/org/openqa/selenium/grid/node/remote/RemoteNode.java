@@ -38,6 +38,7 @@ import java.io.UncheckedIOException;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,6 +54,7 @@ import org.openqa.selenium.grid.data.CreateSessionResponse;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.Session;
+import org.openqa.selenium.grid.data.SessionHistoryEntry;
 import org.openqa.selenium.grid.node.HealthCheck;
 import org.openqa.selenium.grid.node.Node;
 import org.openqa.selenium.grid.security.AddSecretFilter;
@@ -206,6 +208,16 @@ public class RemoteNode extends Node implements Closeable {
     HttpResponse res = client.with(addSecret).execute(req);
 
     Values.get(res, Void.class);
+  }
+
+  @Override
+  public List<SessionHistoryEntry> getSessionHistory() {
+    HttpRequest req = new HttpRequest(GET, "/se/grid/node/session-history");
+    HttpTracing.inject(tracer, tracer.getCurrentContext(), req);
+
+    HttpResponse res = client.with(addSecret).execute(req);
+
+    return Values.get(res, List.class);
   }
 
   @Override

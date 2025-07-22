@@ -100,7 +100,10 @@ public class LocalNodeFactory {
           .forEach((caps, factories) -> factories.forEach(factory -> builder.add(caps, factory)));
     }
 
-    return builder.build();
+    return builder
+        .advanced()
+        .sessionHistoryFile(nodeOptions.getStatusFile(), nodeOptions.getSessionHistoryFile())
+        .build();
   }
 
   private static Collection<SessionFactory> createSessionFactory(

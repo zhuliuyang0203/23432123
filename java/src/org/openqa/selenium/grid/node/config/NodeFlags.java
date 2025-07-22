@@ -291,6 +291,27 @@ public class NodeFlags implements HasRoles {
   @ConfigValue(section = NODE_SECTION, name = "enable-managed-downloads", example = "false")
   public Boolean managedDownloadsEnabled;
 
+  @Parameter(
+      names = {"--status-to-file"},
+      description =
+          "Path to a local file where the Node will write its status information "
+              + "in JSON format. This file will be updated periodically and can be "
+              + "consumed by other services running on the same machine.")
+  @ConfigValue(section = NODE_SECTION, name = "status-to-file", example = "node-status.json")
+  public String statusFile;
+
+  @Parameter(
+      names = {"--session-history-to-file"},
+      description =
+          "Path to a local file where the Node will write session history information "
+              + "in JSON format. This file will contain chronological records of session "
+              + "start and stop events with sessionId, startTime, and stopTime.")
+  @ConfigValue(
+      section = NODE_SECTION,
+      name = "session-history-to-file",
+      example = "session-history.json")
+  public String sessionHistoryFile;
+
   @Override
   public Set<Role> getRoles() {
     return Collections.singleton(NODE_ROLE);

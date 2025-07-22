@@ -169,6 +169,14 @@ public class NodeOptions {
     return config.getBool(NODE_SECTION, "enable-managed-downloads").orElse(Boolean.FALSE);
   }
 
+  public Optional<String> getStatusFile() {
+    return config.get(NODE_SECTION, "status-to-file");
+  }
+
+  public Optional<String> getSessionHistoryFile() {
+    return config.get(NODE_SECTION, "session-history-to-file");
+  }
+
   public String getGridSubPath() {
     return normalizeSubPath(getPublicGridUri().map(URI::getPath).orElse(""));
   }

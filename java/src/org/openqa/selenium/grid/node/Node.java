@@ -29,6 +29,8 @@ import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -45,6 +47,7 @@ import org.openqa.selenium.grid.data.CreateSessionResponse;
 import org.openqa.selenium.grid.data.NodeId;
 import org.openqa.selenium.grid.data.NodeStatus;
 import org.openqa.selenium.grid.data.Session;
+import org.openqa.selenium.grid.data.SessionHistoryEntry;
 import org.openqa.selenium.grid.security.RequiresSecretFilter;
 import org.openqa.selenium.grid.security.Secret;
 import org.openqa.selenium.internal.Either;
@@ -189,6 +192,9 @@ public abstract class Node implements HasReadyState, Routable {
             delete("/se/grid/node/session/{sessionId}")
                 .to(params -> new StopNodeSession(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.stop_session").andThen(requiresSecret)),
+            get("/se/grid/node/session-history")
+                .to(() -> new GetNodeSessionHistory(this))
+                .with(spanDecorator("node.get_session_history").andThen(requiresSecret)),
             get("/se/grid/node/session/{sessionId}")
                 .to(params -> new GetNodeSession(this, sessionIdFrom(params)))
                 .with(spanDecorator("node.get_session").andThen(requiresSecret)),
@@ -267,6 +273,10 @@ public abstract class Node implements HasReadyState, Routable {
   public abstract NodeStatus getStatus();
 
   public abstract HealthCheck getHealthCheck();
+
+  public List<SessionHistoryEntry> getSessionHistory() {
+    return Collections.emptyList();
+  }
 
   public Duration getSessionTimeout() {
     return sessionTimeout;
