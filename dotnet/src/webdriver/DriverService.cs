@@ -243,13 +243,12 @@ public abstract class DriverService : ICommandServer
         this.driverServiceProcess.StartInfo.UseShellExecute = false;
         this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
 
-        DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
-        this.OnDriverProcessStarting(eventArgs);
+        this.DriverProcessStarting?.Invoke(this, new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo));
 
         this.driverServiceProcess.Start();
         bool serviceAvailable = this.WaitForServiceInitialization();
-        DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(this.driverServiceProcess);
-        this.OnDriverProcessStarted(processStartedEventArgs);
+
+        this.DriverProcessStarted?.Invoke(this, new DriverProcessStartedEventArgs(this.driverServiceProcess));
 
         if (!serviceAvailable)
         {
@@ -278,34 +277,6 @@ public abstract class DriverService : ICommandServer
 
             this.isDisposed = true;
         }
-    }
-
-    /// <summary>
-    /// Raises the <see cref="DriverProcessStarting"/> event.
-    /// </summary>
-    /// <param name="eventArgs">A <see cref="DriverProcessStartingEventArgs"/> that contains the event data.</param>
-    protected void OnDriverProcessStarting(DriverProcessStartingEventArgs eventArgs)
-    {
-        if (eventArgs == null)
-        {
-            throw new ArgumentNullException(nameof(eventArgs), "eventArgs must not be null");
-        }
-
-        this.DriverProcessStarting?.Invoke(this, eventArgs);
-    }
-
-    /// <summary>
-    /// Raises the <see cref="DriverProcessStarted"/> event.
-    /// </summary>
-    /// <param name="eventArgs">A <see cref="DriverProcessStartedEventArgs"/> that contains the event data.</param>
-    protected void OnDriverProcessStarted(DriverProcessStartedEventArgs eventArgs)
-    {
-        if (eventArgs == null)
-        {
-            throw new ArgumentNullException(nameof(eventArgs), "eventArgs must not be null");
-        }
-
-        this.DriverProcessStarted?.Invoke(this, eventArgs);
     }
 
     /// <summary>
