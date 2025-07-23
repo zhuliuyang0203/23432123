@@ -64,7 +64,7 @@ class GeolocationCoordinates:
     @latitude.setter
     def latitude(self, value):
         if not (-90.0 <= value <= 90.0):
-            raise ValueError("Latitude must be between -90.0 and 90.0")
+            raise ValueError("latitude must be between -90.0 and 90.0")
         self._latitude = value
 
     @property
@@ -74,7 +74,7 @@ class GeolocationCoordinates:
     @longitude.setter
     def longitude(self, value):
         if not (-180.0 <= value <= 180.0):
-            raise ValueError("Longitude must be between -180.0 and 180.0")
+            raise ValueError("longitude must be between -180.0 and 180.0")
         self._longitude = value
 
     @property
@@ -84,7 +84,7 @@ class GeolocationCoordinates:
     @accuracy.setter
     def accuracy(self, value):
         if value < 0.0:
-            raise ValueError("Accuracy must be >= 0.0")
+            raise ValueError("accuracy must be >= 0.0")
         self._accuracy = value
 
     @property
@@ -104,7 +104,7 @@ class GeolocationCoordinates:
         if value is not None and self.altitude is None:
             raise ValueError("altitude_accuracy cannot be set without altitude")
         if value is not None and value < 0.0:
-            raise ValueError("Altitude accuracy must be >= 0.0")
+            raise ValueError("altitude_accuracy must be >= 0.0")
         self._altitude_accuracy = value
 
     @property
@@ -114,7 +114,7 @@ class GeolocationCoordinates:
     @heading.setter
     def heading(self, value):
         if value is not None and not (0.0 <= value < 360.0):
-            raise ValueError("Heading must be between 0.0 and 360.0")
+            raise ValueError("heading must be between 0.0 and 360.0")
         self._heading = value
 
     @property
@@ -124,7 +124,7 @@ class GeolocationCoordinates:
     @speed.setter
     def speed(self, value):
         if value is not None and value < 0.0:
-            raise ValueError("Speed must be >= 0.0")
+            raise ValueError("speed must be >= 0.0")
         self._speed = value
 
     def to_dict(self) -> dict[str, Union[float, None]]:
