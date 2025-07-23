@@ -32,7 +32,7 @@ namespace OpenQA.Selenium.Firefox;
 public sealed class FirefoxDriverService : DriverService
 {
     private const string DefaultFirefoxDriverServiceFileName = "geckodriver";
-    
+
     /// <summary>
     /// Process management fields for the log writer.
     /// </summary>
@@ -102,7 +102,7 @@ public sealed class FirefoxDriverService : DriverService
     /// offer a way to specify a log file path directly.
     /// </remarks>
     public string? LogPath { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the level at which log output is displayed.
     /// </summary>
@@ -192,7 +192,7 @@ public sealed class FirefoxDriverService : DriverService
             return argsBuilder.ToString().Trim();
         }
     }
-    
+
     /// <summary>
     /// Handles the event when the driver service process is starting.
     /// </summary>
@@ -209,18 +209,18 @@ public sealed class FirefoxDriverService : DriverService
             {
                 Directory.CreateDirectory(directory);
             }
-    
+
             // Initialize the log writer
             logWriter = new StreamWriter(this.LogPath, append: true) { AutoFlush = true };
-    
+
             // Configure process to redirect output
             eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
             eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
         }
-    
+
         base.OnDriverProcessStarting(eventArgs);
     }
-    
+
     /// <summary>
     /// Handles the event when the driver process has started.
     /// </summary>
@@ -235,10 +235,10 @@ public sealed class FirefoxDriverService : DriverService
         {
             _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardOutputStreamReader));
         }
-    
+
         if (eventArgs.StandardErrorStreamReader != null)
         {
-            _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardErrorStreamReader));                
+            _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardErrorStreamReader));
         }
 
         base.OnDriverProcessStarted(eventArgs);
@@ -342,7 +342,7 @@ public sealed class FirefoxDriverService : DriverService
 
         return fileName;
     }
-    
+
     private async Task ReadStreamAsync(StreamReader reader)
     {
         string? line;
