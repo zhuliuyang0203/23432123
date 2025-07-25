@@ -345,13 +345,21 @@ public sealed class FirefoxDriverService : DriverService
 
     private async Task ReadStreamAsync(StreamReader reader)
     {
-        string? line;
-        while ((line = await reader.ReadLineAsync()) != null)
+        try
         {
-            if (logWriter != null)
+            string? line;
+            while ((line = await reader.ReadLineAsync()) != null)
             {
-                logWriter.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} {line}");
+                if (logWriter != null)
+                {
+                    logWriter.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} {line}");
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception appropriately
+            System.Diagnostics.Debug.WriteLine($"Error reading stream: {ex.Message}");
         }
     }
 }
