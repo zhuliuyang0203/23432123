@@ -256,6 +256,7 @@ public sealed class FirefoxDriverService : DriverService
         if (logWriter != null && disposing)
         {
             logWriter.Dispose();
+            logWriter = null;
         }
 
         base.Dispose(disposing);
