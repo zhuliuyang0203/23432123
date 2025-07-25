@@ -16,8 +16,8 @@
 # under the License.
 
 import math
-from dataclasses import dataclass
-from typing import List, Optional, Union
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 from selenium.webdriver.common.bidi.session import Session
@@ -101,7 +101,7 @@ class PointerCommonProperties:
 
     def to_dict(self) -> dict:
         """Convert the PointerCommonProperties to a dictionary."""
-        result = {}
+        result: Dict[str, Any] = {}
         if self.width != 1:
             result["width"] = self.width
         if self.height != 1:
@@ -132,7 +132,7 @@ class PauseAction:
 
     def to_dict(self) -> dict:
         """Convert the PauseAction to a dictionary."""
-        result = {"type": self.type}
+        result: Dict[str, Any] = {"type": self.type}
         if self.duration is not None:
             result["duration"] = self.duration
         return result
@@ -181,7 +181,7 @@ class PointerDownAction:
 
     def to_dict(self) -> dict:
         """Convert the PointerDownAction to a dictionary."""
-        result = {"type": self.type, "button": self.button}
+        result: Dict[str, Any] = {"type": self.type, "button": self.button}
         if self.properties:
             result.update(self.properties.to_dict())
         return result
@@ -218,7 +218,7 @@ class PointerMoveAction:
 
     def to_dict(self) -> dict:
         """Convert the PointerMoveAction to a dictionary."""
-        result = {"type": self.type, "x": self.x, "y": self.y}
+        result: Dict[str, Any] = {"type": self.type, "x": self.x, "y": self.y}
         if self.duration is not None:
             result["duration"] = self.duration
         if self.origin is not None:
@@ -248,7 +248,13 @@ class WheelScrollAction:
 
     def to_dict(self) -> dict:
         """Convert the WheelScrollAction to a dictionary."""
-        result = {"type": self.type, "x": self.x, "y": self.y, "deltaX": self.delta_x, "deltaY": self.delta_y}
+        result: Dict[str, Any] = {
+            "type": self.type,
+            "x": self.x,
+            "y": self.y,
+            "deltaX": self.delta_x,
+            "deltaY": self.delta_y,
+        }
         if self.duration is not None:
             result["duration"] = self.duration
         if self.origin is not None:
@@ -265,11 +271,7 @@ class NoneSourceActions:
     """Represents a sequence of none actions."""
 
     id: str = ""
-    actions: List[PauseAction] = None
-
-    def __post_init__(self):
-        if self.actions is None:
-            self.actions = []
+    actions: List[PauseAction] = field(default_factory=list)
 
     @property
     def type(self) -> str:
@@ -285,11 +287,7 @@ class KeySourceActions:
     """Represents a sequence of key actions."""
 
     id: str = ""
-    actions: List[Union[PauseAction, KeyDownAction, KeyUpAction]] = None
-
-    def __post_init__(self):
-        if self.actions is None:
-            self.actions = []
+    actions: List[Union[PauseAction, KeyDownAction, KeyUpAction]] = field(default_factory=list)
 
     @property
     def type(self) -> str:
@@ -306,11 +304,11 @@ class PointerSourceActions:
 
     id: str = ""
     parameters: Optional[PointerParameters] = None
-    actions: List[Union[PauseAction, PointerDownAction, PointerUpAction, PointerMoveAction]] = None
+    actions: List[Union[PauseAction, PointerDownAction, PointerUpAction, PointerMoveAction]] = field(
+        default_factory=list
+    )
 
     def __post_init__(self):
-        if self.actions is None:
-            self.actions = []
         if self.parameters is None:
             self.parameters = PointerParameters()
 
@@ -320,7 +318,11 @@ class PointerSourceActions:
 
     def to_dict(self) -> dict:
         """Convert the PointerSourceActions to a dictionary."""
-        result = {"type": self.type, "id": self.id, "actions": [action.to_dict() for action in self.actions]}
+        result: Dict[str, Any] = {
+            "type": self.type,
+            "id": self.id,
+            "actions": [action.to_dict() for action in self.actions],
+        }
         if self.parameters:
             result["parameters"] = self.parameters.to_dict()
         return result
@@ -331,11 +333,7 @@ class WheelSourceActions:
     """Represents a sequence of wheel actions."""
 
     id: str = ""
-    actions: List[Union[PauseAction, WheelScrollAction]] = None
-
-    def __post_init__(self):
-        if self.actions is None:
-            self.actions = []
+    actions: List[Union[PauseAction, WheelScrollAction]] = field(default_factory=list)
 
     @property
     def type(self) -> str:
