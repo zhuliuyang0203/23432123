@@ -440,7 +440,7 @@ public class HttpCommandExecutor : ICommandExecutor
         /// <returns>The http response message content.</returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var responseTask = base.SendAsync(request, cancellationToken);
+            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             StringBuilder requestLogMessageBuilder = new();
             requestLogMessageBuilder.AppendFormat(">> {0} RequestUri: {1}, Content: {2}, Headers: {3}",
@@ -451,20 +451,27 @@ public class HttpCommandExecutor : ICommandExecutor
 
             if (request.Content != null)
             {
+#if NET8_0_OR_GREATER
+                var requestContent = await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#else
                 var requestContent = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
+#endif
                 requestLogMessageBuilder.AppendFormat("{0}{1}", Environment.NewLine, requestContent);
             }
 
             _logger.Trace(requestLogMessageBuilder.ToString());
-
-            var response = await responseTask.ConfigureAwait(false);
 
             StringBuilder responseLogMessageBuilder = new();
             responseLogMessageBuilder.AppendFormat("<< StatusCode: {0}, ReasonPhrase: {1}, Content: {2}, Headers: {3}", (int)response.StatusCode, response.ReasonPhrase, response.Content, response.Headers?.Count());
 
             if (!response.IsSuccessStatusCode && response.Content != null)
             {
+#if NET8_0_OR_GREATER
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#else
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#endif
+
                 responseLogMessageBuilder.AppendFormat("{0}{1}", Environment.NewLine, responseContent);
             }
 
