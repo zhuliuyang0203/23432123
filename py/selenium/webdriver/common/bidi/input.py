@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import math
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
@@ -93,9 +94,9 @@ class PointerCommonProperties:
             raise ValueError("tangential_pressure must be between 0.0 and 1.0")
         if not (0 <= self.twist <= 359):
             raise ValueError("twist must be between 0 and 359")
-        if not (0.0 <= self.altitude_angle <= 1.5707963267948966):
+        if not (0.0 <= self.altitude_angle <= math.pi / 2):
             raise ValueError("altitude_angle must be between 0.0 and π/2")
-        if not (0.0 <= self.azimuth_angle <= 6.283185307179586):
+        if not (0.0 <= self.azimuth_angle <= 2 * math.pi):
             raise ValueError("azimuth_angle must be between 0.0 and 2π")
 
     def to_dict(self) -> dict:
@@ -123,8 +124,11 @@ class PointerCommonProperties:
 class PauseAction:
     """Represents a pause action."""
 
-    type: str = "pause"
     duration: Optional[int] = None
+
+    @property
+    def type(self) -> str:
+        return "pause"
 
     def to_dict(self) -> dict:
         """Convert the PauseAction to a dictionary."""
@@ -138,8 +142,11 @@ class PauseAction:
 class KeyDownAction:
     """Represents a key down action."""
 
-    type: str = "keyDown"
     value: str = ""
+
+    @property
+    def type(self) -> str:
+        return "keyDown"
 
     def to_dict(self) -> dict:
         """Convert the KeyDownAction to a dictionary."""
@@ -150,8 +157,11 @@ class KeyDownAction:
 class KeyUpAction:
     """Represents a key up action."""
 
-    type: str = "keyUp"
     value: str = ""
+
+    @property
+    def type(self) -> str:
+        return "keyUp"
 
     def to_dict(self) -> dict:
         """Convert the KeyUpAction to a dictionary."""
@@ -162,9 +172,12 @@ class KeyUpAction:
 class PointerDownAction:
     """Represents a pointer down action."""
 
-    type: str = "pointerDown"
     button: int = 0
     properties: Optional[PointerCommonProperties] = None
+
+    @property
+    def type(self) -> str:
+        return "pointerDown"
 
     def to_dict(self) -> dict:
         """Convert the PointerDownAction to a dictionary."""
@@ -178,8 +191,11 @@ class PointerDownAction:
 class PointerUpAction:
     """Represents a pointer up action."""
 
-    type: str = "pointerUp"
     button: int = 0
+
+    @property
+    def type(self) -> str:
+        return "pointerUp"
 
     def to_dict(self) -> dict:
         """Convert the PointerUpAction to a dictionary."""
@@ -190,12 +206,15 @@ class PointerUpAction:
 class PointerMoveAction:
     """Represents a pointer move action."""
 
-    type: str = "pointerMove"
     x: float = 0
     y: float = 0
     duration: Optional[int] = None
     origin: Optional[Union[str, ElementOrigin]] = None
     properties: Optional[PointerCommonProperties] = None
+
+    @property
+    def type(self) -> str:
+        return "pointerMove"
 
     def to_dict(self) -> dict:
         """Convert the PointerMoveAction to a dictionary."""
@@ -216,13 +235,16 @@ class PointerMoveAction:
 class WheelScrollAction:
     """Represents a wheel scroll action."""
 
-    type: str = "scroll"
     x: int = 0
     y: int = 0
     delta_x: int = 0
     delta_y: int = 0
     duration: Optional[int] = None
     origin: Optional[Union[str, ElementOrigin]] = Origin.VIEWPORT
+
+    @property
+    def type(self) -> str:
+        return "scroll"
 
     def to_dict(self) -> dict:
         """Convert the WheelScrollAction to a dictionary."""
@@ -242,13 +264,16 @@ class WheelScrollAction:
 class NoneSourceActions:
     """Represents a sequence of none actions."""
 
-    type: str = "none"
     id: str = ""
     actions: List[PauseAction] = None
 
     def __post_init__(self):
         if self.actions is None:
             self.actions = []
+
+    @property
+    def type(self) -> str:
+        return "none"
 
     def to_dict(self) -> dict:
         """Convert the NoneSourceActions to a dictionary."""
@@ -259,13 +284,16 @@ class NoneSourceActions:
 class KeySourceActions:
     """Represents a sequence of key actions."""
 
-    type: str = "key"
     id: str = ""
     actions: List[Union[PauseAction, KeyDownAction, KeyUpAction]] = None
 
     def __post_init__(self):
         if self.actions is None:
             self.actions = []
+
+    @property
+    def type(self) -> str:
+        return "key"
 
     def to_dict(self) -> dict:
         """Convert the KeySourceActions to a dictionary."""
@@ -276,7 +304,6 @@ class KeySourceActions:
 class PointerSourceActions:
     """Represents a sequence of pointer actions."""
 
-    type: str = "pointer"
     id: str = ""
     parameters: Optional[PointerParameters] = None
     actions: List[Union[PauseAction, PointerDownAction, PointerUpAction, PointerMoveAction]] = None
@@ -286,6 +313,10 @@ class PointerSourceActions:
             self.actions = []
         if self.parameters is None:
             self.parameters = PointerParameters()
+
+    @property
+    def type(self) -> str:
+        return "pointer"
 
     def to_dict(self) -> dict:
         """Convert the PointerSourceActions to a dictionary."""
@@ -299,13 +330,16 @@ class PointerSourceActions:
 class WheelSourceActions:
     """Represents a sequence of wheel actions."""
 
-    type: str = "wheel"
     id: str = ""
     actions: List[Union[PauseAction, WheelScrollAction]] = None
 
     def __post_init__(self):
         if self.actions is None:
             self.actions = []
+
+    @property
+    def type(self) -> str:
+        return "wheel"
 
     def to_dict(self) -> dict:
         """Convert the WheelSourceActions to a dictionary."""
@@ -335,6 +369,7 @@ class FileDialogInfo:
         return cls(context=data["context"], multiple=data["multiple"], element=data.get("element"))
 
 
+# Event Class
 class FileDialogOpened:
     """Event class for input.fileDialogOpened event."""
 

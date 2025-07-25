@@ -137,7 +137,7 @@ def test_pointer_move_with_element_origin(driver, pages):
     button = driver.find_element(By.ID, "clickField")
 
     # Get element reference for BiDi
-    element_id = button._id  # This gets the internal element ID
+    element_id = button.id
     element_ref = {"sharedId": element_id}
     element_origin = ElementOrigin(element_ref)
 
@@ -267,7 +267,7 @@ def test_set_files(driver, pages):
 
     try:
         # Get element reference for BiDi
-        element_id = upload_element._id
+        element_id = upload_element.id
         element_ref = {"sharedId": element_id}
 
         # Set files using BiDi
@@ -299,7 +299,7 @@ def test_set_multiple_files(driver):
 
     try:
         # Get element reference for BiDi
-        element_id = upload_element._id
+        element_id = upload_element.id
         element_ref = {"sharedId": element_id}
 
         driver.input.set_files(driver.current_window_handle, element_ref, temp_files)
