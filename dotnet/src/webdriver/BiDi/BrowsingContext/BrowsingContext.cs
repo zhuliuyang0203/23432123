@@ -91,16 +91,6 @@ public sealed class BrowsingContext
         return BiDi.BrowsingContext.TraverseHistoryAsync(this, delta, options);
     }
 
-    public Task NavigateBackAsync(TraverseHistoryOptions? options = null)
-    {
-        return TraverseHistoryAsync(-1, options);
-    }
-
-    public Task NavigateForwardAsync(TraverseHistoryOptions? options = null)
-    {
-        return TraverseHistoryAsync(1, options);
-    }
-
     public Task SetViewportAsync(SetViewportOptions? options = null)
     {
         return BiDi.BrowsingContext.SetViewportAsync(this, options);
