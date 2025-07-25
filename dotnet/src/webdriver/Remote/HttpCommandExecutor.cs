@@ -440,8 +440,6 @@ public class HttpCommandExecutor : ICommandExecutor
         /// <returns>The http response message content.</returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
             StringBuilder requestLogMessageBuilder = new();
             requestLogMessageBuilder.AppendFormat(">> {0} RequestUri: {1}, Content: {2}, Headers: {3}",
                 request.Method,
@@ -461,7 +459,10 @@ public class HttpCommandExecutor : ICommandExecutor
 
             _logger.Trace(requestLogMessageBuilder.ToString());
 
+            var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
             StringBuilder responseLogMessageBuilder = new();
+
             responseLogMessageBuilder.AppendFormat("<< StatusCode: {0}, ReasonPhrase: {1}, Content: {2}, Headers: {3}", (int)response.StatusCode, response.ReasonPhrase, response.Content, response.Headers?.Count());
 
             if (!response.IsSuccessStatusCode && response.Content != null)
