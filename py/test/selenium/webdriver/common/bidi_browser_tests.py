@@ -91,7 +91,7 @@ def test_remove_user_context(driver):
 
 def test_get_client_windows(driver):
     """Test getting client windows."""
-    client_windows = driver.browser.client_windows()
+    client_windows = driver.browser.get_client_windows()
 
     assert client_windows is not None
     assert len(client_windows) > 0
