@@ -66,6 +66,10 @@ class ClientWindowInfo:
 
     @state.setter
     def state(self, value) -> None:
+        """Sets the state of the client window.
+
+        Returns: None
+        """
         if not isinstance(value, str):
             raise ValueError("state must be a string")
         if value not in ClientWindowState.VALID_STATES:
@@ -84,6 +88,10 @@ class ClientWindowInfo:
 
     @client_window.setter
     def client_window(self, value) -> None:
+        """Sets the client window identifier.
+
+        Returns: None
+        """
         if not isinstance(value, str):
             raise ValueError("clientWindow must be a string")
         self._client_window = value
@@ -100,6 +108,10 @@ class ClientWindowInfo:
 
     @width.setter
     def width(self, value) -> None:
+        """Sets the width of the client window.
+
+        Returns: None
+        """
         if not isinstance(value, int) or value < 0:
             raise ValueError(f"width must be a non-negative integer, got {value}")
         self._width = value
@@ -116,6 +128,10 @@ class ClientWindowInfo:
 
     @height.setter
     def height(self, value) -> None:
+        """Sets the height of the client window.
+
+        Returns: None
+        """
         if not isinstance(value, int) or value < 0:
             raise ValueError(f"height must be a non-negative integer, got {value}")
         self._height = value
@@ -132,6 +148,10 @@ class ClientWindowInfo:
 
     @x.setter
     def x(self, value) -> None:
+        """Sets the x coordinate of the client window.
+
+        Returns: None
+        """
         if not isinstance(value, int):
             raise ValueError(f"x must be an integer, got {type(value).__name__}")
         self._x = value
@@ -148,16 +168,30 @@ class ClientWindowInfo:
 
     @y.setter
     def y(self, value) -> None:
+        """Sets the y coordinate of the client window.
+
+        Returns: None
+        """
         if not isinstance(value, int):
             raise ValueError(f"y must be an integer, got {type(value).__name__}")
         self._y = value
 
     @property
     def active(self):
+        """Gets the Window Status
+
+        Returns:
+        -------
+            bool: The boolen value of Window Status
+        """
         return self._active
 
     @active.setter
     def active(self, value) -> None:
+        """Sets the Window Status
+
+        Returns: None
+        """
         if not isinstance(value, bool):
             raise ValueError("active must be a boolean")
         self._active = value
