@@ -216,10 +216,6 @@ class ClientWindowInfo:
         Returns:
         -------
             ClientWindowInfo: A new instance of ClientWindowInfo.
-
-        Raises:
-        ------
-            ValueError: If required fields are missing or have invalid types.
         """
         return cls(
             client_window = data.get("clientWindow"),
