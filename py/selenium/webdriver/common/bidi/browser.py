@@ -188,7 +188,7 @@ class ClientWindowInfo:
             ValueError: If required fields are missing or have invalid types.
         """
         return cls(
-            client_window=data.get("client_window"),
+            client_window=data.get("clientWindow"),
             state=data.get("state"),
             width=data.get("width"),
             height=data.get("height"),
