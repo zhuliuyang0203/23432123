@@ -529,6 +529,113 @@ class EventConfig:
     event_class: type
 
 
+class _EventManager:
+    """Class to manage event subscriptions and callbacks for BrowsingContext."""
+
+    def __init__(self, conn, event_configs: dict[str, EventConfig]):
+        self.conn = conn
+        self.event_configs = event_configs
+        self.subscriptions = {}
+        self._bidi_to_class = {config.bidi_event: config.event_class for config in event_configs.values()}
+        self._available_events = ", ".join(sorted(event_configs.keys()))
+
+    def validate_event(self, event: str) -> EventConfig:
+        event_config = self.event_configs.get(event)
+        if not event_config:
+            raise ValueError(f"Event '{event}' not found. Available events: {self._available_events}")
+        return event_config
+
+    def create_event_callback(self, event_class: type, user_callback: Callable) -> Callable:
+        """
+        Create a wrapped callback that parses event data.
+        """
+
+        def _callback(event_data):
+            parsed_data = event_class.from_json(event_data)
+            user_callback(parsed_data)
+
+        return _callback
+
+    def subscribe_to_event(self, bidi_event: str, contexts: Optional[list[str]] = None) -> None:
+        """Subscribe to a BiDi event if not already subscribed.
+
+        Parameters:
+        ----------
+            bidi_event: The BiDi event name.
+            contexts: Optional browsing context IDs to subscribe to.
+        """
+        if bidi_event not in self.subscriptions:
+            session = Session(self.conn)
+            self.conn.execute(session.subscribe(bidi_event, browsing_contexts=contexts))
+            self.subscriptions[bidi_event] = []
+
+    def unsubscribe_from_event(self, bidi_event: str) -> None:
+        """Unsubscribe from a BiDi event if no more callbacks exist.
+
+        Parameters:
+        ----------
+            bidi_event: The BiDi event name.
+        """
+        callback_list = self.subscriptions.get(bidi_event)
+        if callback_list is not None and not callback_list:
+            session = Session(self.conn)
+            self.conn.execute(session.unsubscribe(bidi_event))
+            del self.subscriptions[bidi_event]
+
+    def add_callback_to_tracking(self, bidi_event: str, callback_id: int) -> None:
+        self.subscriptions[bidi_event].append(callback_id)
+
+    def remove_callback_from_tracking(self, bidi_event: str, callback_id: int) -> None:
+        callback_list = self.subscriptions.get(bidi_event)
+        if callback_list and callback_id in callback_list:
+            callback_list.remove(callback_id)
+
+    def add_event_handler(self, event: str, callback: Callable, contexts: Optional[list[str]] = None) -> int:
+        event_config = self.validate_event(event)
+
+        # Create and register the wrapped callback
+        wrapped_callback = self.create_event_callback(event_config.event_class, callback)
+        callback_id = self.conn.add_callback(event_config.event_class, wrapped_callback)
+
+        # Subscribe to the event if needed
+        self.subscribe_to_event(event_config.bidi_event, contexts)
+
+        # Track the callback
+        self.add_callback_to_tracking(event_config.bidi_event, callback_id)
+
+        return callback_id
+
+    def remove_event_handler(self, event: str, callback_id: int) -> None:
+        event_config = self.validate_event(event)
+
+        # Remove the callback from the connection
+        self.conn.remove_callback(event_config.event_class, callback_id)
+
+        # Remove from tracking collections
+        self.remove_callback_from_tracking(event_config.bidi_event, callback_id)
+
+        # Unsubscribe if no more callbacks exist
+        self.unsubscribe_from_event(event_config.bidi_event)
+
+    def clear_event_handlers(self) -> None:
+        """Clear all event handlers from the browsing context."""
+        if not self.subscriptions:
+            return
+
+        session = Session(self.conn)
+
+        for bidi_event, callback_ids in list(self.subscriptions.items()):
+            event_class = self._bidi_to_class.get(bidi_event)
+            if event_class:
+                # Remove all callbacks for this event
+                for callback_id in callback_ids:
+                    self.conn.remove_callback(event_class, callback_id)
+
+                self.conn.execute(session.unsubscribe(bidi_event))
+
+        self.subscriptions.clear()
+
+
 class BrowsingContext:
     """BiDi implementation of the browsingContext module."""
 
@@ -554,8 +661,7 @@ class BrowsingContext:
 
     def __init__(self, conn):
         self.conn = conn
-        self.subscriptions = {}
-        self.callbacks = {}
+        self._event_manager = _EventManager(conn, self.EVENT_CONFIGS)
 
     @classmethod
     def get_event_names(cls) -> list[str]:
@@ -883,34 +989,6 @@ class BrowsingContext:
         result = self.conn.execute(command_builder("browsingContext.traverseHistory", params))
         return result
 
-    def _on_event(self, event_name: str, event_class: type, callback: Callable) -> int:
-        """Set a callback function to subscribe to a browsing context event.
-
-        Parameters:
-        ----------
-            event_name: The BiDi event name to subscribe to.
-            event_class: The event class for parsing.
-            callback: The callback function to execute on event.
-
-        Returns:
-        -------
-            int: callback id
-        """
-
-        def _callback(event_data):
-            # Parse the event data using the appropriate event class
-            parsed_data = event_class.from_json(event_data)
-            callback(parsed_data)
-
-        callback_id = self.conn.add_callback(event_class, _callback)
-
-        if event_name in self.callbacks:
-            self.callbacks[event_name].append(callback_id)
-        else:
-            self.callbacks[event_name] = [callback_id]
-
-        return callback_id
-
     def add_event_handler(self, event: str, callback: Callable, contexts: Optional[list[str]] = None) -> int:
         """Add an event handler to the browsing context.
 
@@ -924,24 +1002,7 @@ class BrowsingContext:
         -------
             int: callback id
         """
-        event_config = self.EVENT_CONFIGS.get(event)
-        if not event_config:
-            available = ", ".join(sorted(self.get_event_names()))
-            raise ValueError(f"Event '{event}' not found. Available events: {available}")
-
-        callback_id = self._on_event(event_config.bidi_event, event_config.event_class, callback)
-
-        if event_config.bidi_event in self.subscriptions:
-            self.subscriptions[event_config.bidi_event].append(callback_id)
-        else:
-            session = Session(self.conn)
-            if contexts is not None:
-                self.conn.execute(session.subscribe(event_config.bidi_event, browsing_contexts=contexts))
-            else:
-                self.conn.execute(session.subscribe(event_config.bidi_event))
-            self.subscriptions[event_config.bidi_event] = [callback_id]
-
-        return callback_id
+        return self._event_manager.add_event_handler(event, callback, contexts)
 
     def remove_event_handler(self, event: str, callback_id: int) -> None:
         """Remove an event handler from the browsing context.
@@ -951,46 +1012,8 @@ class BrowsingContext:
             event: The event to unsubscribe from.
             callback_id: The callback id to remove.
         """
-        event_config = self.EVENT_CONFIGS.get(event)
-        if not event_config:
-            available = ", ".join(sorted(self.get_event_names()))
-            raise ValueError(f"Event '{event}' not found. Available events: {available}")
-
-        self.conn.remove_callback(event_config.event_class, callback_id)
-
-        # Remove from callbacks tracking
-        if event_config.bidi_event in self.callbacks:
-            callbacks = self.callbacks[event_config.bidi_event]
-            if callback_id in callbacks:
-                callbacks.remove(callback_id)
-                if not callbacks:
-                    del self.callbacks[event_config.bidi_event]
-
-        # Remove from subscriptions and unsubscribe if no more callbacks
-        if event_config.bidi_event in self.subscriptions:
-            subscription_callbacks = self.subscriptions[event_config.bidi_event]
-            if callback_id in subscription_callbacks:
-                subscription_callbacks.remove(callback_id)
-                if not subscription_callbacks:
-                    session = Session(self.conn)
-                    self.conn.execute(session.unsubscribe(event_config.bidi_event))
-                    del self.subscriptions[event_config.bidi_event]
+        self._event_manager.remove_event_handler(event, callback_id)
 
     def clear_event_handlers(self) -> None:
         """Clear all event handlers from the browsing context."""
-        for event_name in list(self.subscriptions.keys()):
-            # Find the event class for this BiDi event name
-            event_class = None
-            for config in self.EVENT_CONFIGS.values():
-                if config.bidi_event == event_name:
-                    event_class = config.event_class
-                    break
-
-            if event_class:
-                for callback_id in self.subscriptions[event_name]:
-                    self.conn.remove_callback(event_class, callback_id)
-                session = Session(self.conn)
-                self.conn.execute(session.unsubscribe(event_name))
-
-        self.subscriptions = {}
-        self.callbacks = {}
+        self._event_manager.clear_event_handlers()
