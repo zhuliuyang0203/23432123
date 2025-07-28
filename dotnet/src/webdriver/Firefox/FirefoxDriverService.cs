@@ -213,10 +213,9 @@ public sealed class FirefoxDriverService : DriverService
             // Initialize the log writer
             logWriter = new StreamWriter(this.LogPath, append: true) { AutoFlush = true };
 
-            // LogToConsole and LogPath are mutually exclusive. LogPath takes precedence.
+            // LogToConsole and LogPath are mutually exclusive, therefore we redirect log output.
             if (this.LogToConsole)
             {
-                this.LogToConsole = false;
                 eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
                 eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
             }
