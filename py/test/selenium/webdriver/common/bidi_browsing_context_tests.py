@@ -593,6 +593,220 @@ def test_add_event_handler_navigation_committed(driver, pages):
     driver.browsing_context.remove_event_handler("navigation_committed", callback_id)
 
 
+def test_add_event_handler_dom_content_loaded(driver, pages):
+    """Test adding event handler for dom_content_loaded event."""
+    events_received = []
+
+    def on_dom_content_loaded(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("dom_content_loaded", on_dom_content_loaded)
+    assert callback_id is not None
+
+    # Navigate to trigger the event
+    context_id = driver.current_window_handle
+    url = pages.url("simpleTest.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    assert len(events_received) == 1
+    assert any("simpleTest" in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("dom_content_loaded", callback_id)
+
+
+def test_add_event_handler_load(driver, pages):
+    """Test adding event handler for load event."""
+    events_received = []
+
+    def on_load(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("load", on_load)
+    assert callback_id is not None
+
+    context_id = driver.current_window_handle
+    url = pages.url("simpleTest.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    assert len(events_received) == 1
+    assert any("simpleTest" in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("load", callback_id)
+
+
+def test_add_event_handler_navigation_started(driver, pages):
+    """Test adding event handler for navigation_started event."""
+    events_received = []
+
+    def on_navigation_started(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("navigation_started", on_navigation_started)
+    assert callback_id is not None
+
+    context_id = driver.current_window_handle
+    url = pages.url("simpleTest.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    assert len(events_received) == 1
+    assert any("simpleTest" in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("navigation_started", callback_id)
+
+
+def test_add_event_handler_fragment_navigated(driver, pages):
+    """Test adding event handler for fragment_navigated event."""
+    events_received = []
+
+    def on_fragment_navigated(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("fragment_navigated", on_fragment_navigated)
+    assert callback_id is not None
+
+    # First navigate to a page
+    context_id = driver.current_window_handle
+    url = pages.url("linked_image.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    # Then navigate to the same page with a fragment to trigger the event
+    fragment_url = url + "#link"
+    driver.browsing_context.navigate(context=context_id, url=fragment_url, wait=ReadinessState.COMPLETE)
+
+    assert len(events_received) == 1
+    assert any("link" in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("fragment_navigated", callback_id)
+
+
+@pytest.mark.xfail_firefox
+def test_add_event_handler_navigation_failed(driver):
+    """Test adding event handler for navigation_failed event."""
+    events_received = []
+
+    def on_navigation_failed(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("navigation_failed", on_navigation_failed)
+    assert callback_id is not None
+
+    # Navigate to an invalid URL to trigger the event
+    context_id = driver.current_window_handle
+    try:
+        driver.browsing_context.navigate(context=context_id, url="http://invalid-domain-that-does-not-exist.test/")
+    except Exception:
+        # Expect an exception due to navigation failure
+        pass
+
+    assert len(events_received) == 1
+    assert events_received[0].url == "http://invalid-domain-that-does-not-exist.test/"
+    assert events_received[0].context == context_id
+
+    driver.browsing_context.remove_event_handler("navigation_failed", callback_id)
+
+
+def test_add_event_handler_user_prompt_opened(driver, pages):
+    """Test adding event handler for user_prompt_opened event."""
+    events_received = []
+
+    def on_user_prompt_opened(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("user_prompt_opened", on_user_prompt_opened)
+    assert callback_id is not None
+
+    # Create an alert to trigger the event
+    create_alert_page(driver, pages)
+    driver.find_element(By.ID, "alert").click()
+    WebDriverWait(driver, 5).until(EC.alert_is_present())
+
+    assert len(events_received) == 1
+    assert events_received[0].type == "alert"
+    assert events_received[0].message == "cheese"
+
+    # Clean up the alert
+    driver.browsing_context.handle_user_prompt(context=driver.current_window_handle)
+    driver.browsing_context.remove_event_handler("user_prompt_opened", callback_id)
+
+
+def test_add_event_handler_user_prompt_closed(driver, pages):
+    """Test adding event handler for user_prompt_closed event."""
+    events_received = []
+
+    def on_user_prompt_closed(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("user_prompt_closed", on_user_prompt_closed)
+    assert callback_id is not None
+
+    create_prompt_page(driver, pages)
+    driver.execute_script("prompt('Enter something')")
+    WebDriverWait(driver, 5).until(EC.alert_is_present())
+
+    driver.browsing_context.handle_user_prompt(
+        context=driver.current_window_handle, accept=True, user_text="test input"
+    )
+
+    assert len(events_received) == 1
+    assert events_received[0].accepted is True
+    assert events_received[0].user_text == "test input"
+
+    driver.browsing_context.remove_event_handler("user_prompt_closed", callback_id)
+
+
+@pytest.mark.xfail_chrome
+@pytest.mark.xfail_firefox
+@pytest.mark.xfail_edge
+def test_add_event_handler_history_updated(driver, pages):
+    """Test adding event handler for history_updated event."""
+    events_received = []
+
+    def on_history_updated(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("history_updated", on_history_updated)
+    assert callback_id is not None
+
+    # Navigate to a page and use history API to trigger the event
+    context_id = driver.current_window_handle
+    url = pages.url("simpleTest.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    # Use history.pushState to trigger history updated event
+    driver.execute_script("history.pushState({}, '', '/new-path');")
+
+    assert len(events_received) == 1
+    assert any("/new-path" in event.url for event in events_received)
+
+    driver.browsing_context.remove_event_handler("history_updated", callback_id)
+
+
+@pytest.mark.xfail_firefox
+def test_add_event_handler_download_will_begin(driver, pages):
+    """Test adding event handler for download_will_begin event."""
+    events_received = []
+
+    def on_download_will_begin(info):
+        events_received.append(info)
+
+    callback_id = driver.browsing_context.add_event_handler("download_will_begin", on_download_will_begin)
+    assert callback_id is not None
+
+    # click on a download link to trigger the event
+    context_id = driver.current_window_handle
+    url = pages.url("downloads/download.html")
+    driver.browsing_context.navigate(context=context_id, url=url, wait=ReadinessState.COMPLETE)
+
+    download_xpath_file_1_txt = '//*[@id="file-1"]'
+    driver.find_element(By.XPATH, download_xpath_file_1_txt).click()
+    WebDriverWait(driver, 5).until(lambda d: len(events_received) > 0)
+
+    assert len(events_received) == 1
+    assert events_received[0].suggested_filename == "file_1.txt"
+
+    driver.browsing_context.remove_event_handler("download_will_begin", callback_id)
+
+
 def test_add_event_handler_with_specific_contexts(driver):
     """Test adding event handler with specific browsing contexts."""
     events_received = []
