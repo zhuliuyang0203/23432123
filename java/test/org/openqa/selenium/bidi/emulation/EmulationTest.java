@@ -48,37 +48,10 @@ class EmulationTest extends JupiterTestBase {
   Object getBrowserGeolocation(WebDriver driver, String userContext) {
     JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-    BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
-    String url = appServer.whereIs("blank.html");
-    context.navigate(url, ReadinessState.COMPLETE);
-    driver.switchTo().window(context.getId());
+    String originValue = (String) executor.executeScript("return window.location.origin;");
 
     Permission permission = new Permission(driver);
-    Script script = new Script(driver);
-    EvaluateResult origin =
-        script.callFunctionInBrowsingContext(
-            context.getId(),
-            "() => {return window.location.origin;}",
-            true,
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty());
-
-    String originValue = (String) ((EvaluateResultSuccess) origin).getResult().getValue().get();
-
-    permission.setPermission(Map.of("name", "geolocation"), PermissionState.GRANTED, originValue);
-
-    EvaluateResult result =
-        script.callFunctionInBrowsingContext(
-            context.getId(),
-            GET_GEOLOCATION_PERMISSION,
-            true,
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty());
-
-    String resultValue = (String) ((EvaluateResultSuccess) result).getResult().getValue().get();
-    System.out.println(resultValue);
+    permission.setPermission(Map.of("name", "geolocation"), PermissionState.GRANTED, originValue, userContext);
 
     return executor.executeAsyncScript(
         "const callback = arguments[arguments.length - 1];\n"
