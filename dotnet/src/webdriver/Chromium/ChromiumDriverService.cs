@@ -161,7 +161,10 @@ public abstract class ChromiumDriverService : DriverService
 
             if (this.LogLevel != ChromiumDriverLogLevel.Default)
             {
-                argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --log-level={0}", this.LogLevel.ToString().ToUpperInvariant()));
+                if (Enum.IsDefined(typeof(ChromiumDriverLogLevel), this.LogLevel))
+                {
+                    argsBuilder.Append($" --log-level={this.LogLevel.ToString().ToUpperInvariant()}");
+                }
             }
 
 
