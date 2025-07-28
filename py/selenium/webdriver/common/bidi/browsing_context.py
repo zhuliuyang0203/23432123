@@ -535,7 +535,7 @@ class _EventManager:
     def __init__(self, conn, event_configs: dict[str, EventConfig]):
         self.conn = conn
         self.event_configs = event_configs
-        self.subscriptions = {}
+        self.subscriptions: dict = {}
         self._bidi_to_class = {config.bidi_event: config.event_class for config in event_configs.values()}
         self._available_events = ", ".join(sorted(event_configs.keys()))
 
@@ -544,17 +544,6 @@ class _EventManager:
         if not event_config:
             raise ValueError(f"Event '{event}' not found. Available events: {self._available_events}")
         return event_config
-
-    def create_event_callback(self, event_class: type, user_callback: Callable) -> Callable:
-        """
-        Create a wrapped callback that parses event data.
-        """
-
-        def _callback(event_data):
-            parsed_data = event_class.from_json(event_data)
-            user_callback(parsed_data)
-
-        return _callback
 
     def subscribe_to_event(self, bidi_event: str, contexts: Optional[list[str]] = None) -> None:
         """Subscribe to a BiDi event if not already subscribed.
@@ -593,9 +582,7 @@ class _EventManager:
     def add_event_handler(self, event: str, callback: Callable, contexts: Optional[list[str]] = None) -> int:
         event_config = self.validate_event(event)
 
-        # Create and register the wrapped callback
-        wrapped_callback = self.create_event_callback(event_config.event_class, callback)
-        callback_id = self.conn.add_callback(event_config.event_class, wrapped_callback)
+        callback_id = self.conn.add_callback(event_config.event_class, callback)
 
         # Subscribe to the event if needed
         self.subscribe_to_event(event_config.bidi_event, contexts)
