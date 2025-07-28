@@ -20,13 +20,19 @@ package org.openqa.selenium.grid.sessionmap.local;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID_EVENT;
 
-import java.util.List;
+import java.net.URI;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.events.Event;
 import org.openqa.selenium.events.EventBus;
 import org.openqa.selenium.grid.config.Config;
 import org.openqa.selenium.grid.data.NodeRemovedEvent;
@@ -48,7 +54,8 @@ public class LocalSessionMap extends SessionMap {
   private static final Logger LOG = Logger.getLogger(LocalSessionMap.class.getName());
 
   private final EventBus bus;
-  private final ConcurrentMap<SessionId, Session> knownSessions = new ConcurrentHashMap<>();
+  private final IndexedSessionMap knownSessions = new IndexedSessionMap();
+  private final ReadWriteLock sessionMapLock = new ReentrantReadWriteLock();
 
   public LocalSessionMap(Tracer tracer, EventBus bus) {
     super(tracer);
@@ -59,23 +66,14 @@ public class LocalSessionMap extends SessionMap {
 
     bus.addListener(
         NodeRemovedEvent.listener(
-            nodeStatus ->
-                nodeStatus.getSlots().stream()
-                    .filter(slot -> slot.getSession() != null)
-                    .map(slot -> slot.getSession().getId())
-                    .forEach(this::remove)));
+            nodeStatus -> {
+              batchRemoveByUri(nodeStatus.getExternalUri(), NodeRemovedEvent.class);
+            }));
 
     bus.addListener(
         NodeRestartedEvent.listener(
             previousNodeStatus -> {
-              List<SessionId> toRemove =
-                  knownSessions.entrySet().stream()
-                      .filter(
-                          (e) -> e.getValue().getUri().equals(previousNodeStatus.getExternalUri()))
-                      .map(Map.Entry::getKey)
-                      .collect(Collectors.toList());
-
-              toRemove.forEach(this::remove);
+              batchRemoveByUri(previousNodeStatus.getExternalUri(), NodeRestartedEvent.class);
             }));
   }
 
@@ -94,45 +92,202 @@ public class LocalSessionMap extends SessionMap {
   @Override
   public boolean add(Session session) {
     Require.nonNull("Session", session);
+    SessionId id = session.getId();
+    sessionMapLock.writeLock().lock();
+    try {
+      knownSessions.put(id, session);
+    } finally {
+      sessionMapLock.writeLock().unlock();
+    }
 
     try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.add")) {
       AttributeMap attributeMap = tracer.createAttributeMap();
       attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
-      SessionId id = session.getId();
       SESSION_ID.accept(span, id);
       SESSION_ID_EVENT.accept(attributeMap, id);
-      knownSessions.put(session.getId(), session);
-      span.addEvent("Added session into local session map", attributeMap);
-
-      return true;
+      span.addEvent("Added session into local Session Map", attributeMap);
     }
+
+    return true;
   }
 
   @Override
   public Session get(SessionId id) {
     Require.nonNull("Session ID", id);
 
-    Session session = knownSessions.get(id);
-    if (session == null) {
-      throw new NoSuchSessionException("Unable to find session with ID: " + id);
+    Session session;
+    sessionMapLock.readLock().lock();
+    try {
+      session = knownSessions.get(id);
+      if (session == null) {
+        throw new NoSuchSessionException("Unable to find session with ID: " + id);
+      }
+    } finally {
+      sessionMapLock.readLock().unlock();
     }
-
     return session;
   }
 
   @Override
   public void remove(SessionId id) {
     Require.nonNull("Session ID", id);
+    Session removedSession;
+    sessionMapLock.writeLock().lock();
+    try {
+      removedSession = knownSessions.remove(id);
+    } finally {
+      sessionMapLock.writeLock().unlock();
+    }
 
     try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.remove")) {
       AttributeMap attributeMap = tracer.createAttributeMap();
       attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
       SESSION_ID.accept(span, id);
       SESSION_ID_EVENT.accept(attributeMap, id);
-      knownSessions.remove(id);
-      String sessionDeletedMessage = "Deleted session from local Session Map";
+      String sessionDeletedMessage =
+          String.format(
+              "Deleted session from local Session Map, Id: %s, Node: %s",
+              id,
+              removedSession != null ? String.valueOf(removedSession.getUri()) : "unidentified");
       span.addEvent(sessionDeletedMessage, attributeMap);
-      LOG.info(String.format("%s, Id: %s", sessionDeletedMessage, id));
+      LOG.info(sessionDeletedMessage);
+    }
+  }
+
+  /** Batch remove sessions by URI with proper locking to prevent race conditions */
+  private void batchRemoveByUri(URI externalUri, Class<? extends Event> eventClass) {
+    sessionMapLock.writeLock().lock();
+    Set<SessionId> sessionsToRemove;
+    try {
+      sessionsToRemove = knownSessions.getSessionsByUri(externalUri);
+      if (!sessionsToRemove.isEmpty()) {
+        knownSessions.batchRemove(sessionsToRemove);
+      }
+    } finally {
+      sessionMapLock.writeLock().unlock();
+    }
+
+    try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.batch_remove")) {
+      AttributeMap attributeMap = tracer.createAttributeMap();
+      attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
+      attributeMap.put("event.class", eventClass.getName());
+      attributeMap.put("node.uri", externalUri.toString());
+      attributeMap.put("sessions.count", sessionsToRemove.size());
+
+      LOG.info(
+          String.format(
+              "Event %s triggered batch remove from local Session Map for Node %s",
+              eventClass.getName(), externalUri));
+      String eventMessage = "";
+      if (!sessionsToRemove.isEmpty()) {
+        eventMessage =
+            String.format(
+                "Batch removed %d sessions belonging to Node %s including: %s",
+                sessionsToRemove.size(), externalUri, sessionsToRemove);
+      } else {
+        eventMessage =
+            String.format(
+                "No sessions found to remove from local Session Map for Node %s", externalUri);
+      }
+      span.addEvent(eventMessage, attributeMap);
+      LOG.info(eventMessage);
+    }
+  }
+
+  /** Custom ConcurrentMap implementation that automatically maintains a URI-to-SessionId index */
+  private static class IndexedSessionMap {
+    private final ConcurrentMap<SessionId, Session> sessions = new ConcurrentHashMap<>();
+    private final ConcurrentMap<URI, Set<SessionId>> sessionsByUri = new ConcurrentHashMap<>();
+
+    public Session get(SessionId id) {
+      return sessions.get(id);
+    }
+
+    public Session put(SessionId id, Session session) {
+      Session previous = sessions.put(id, session);
+
+      if (previous != null && previous.getUri() != null) {
+        sessionsByUri.computeIfPresent(
+            previous.getUri(),
+            (k, sessionIds) -> {
+              sessionIds.remove(id);
+              return sessionIds.isEmpty() ? null : sessionIds;
+            });
+      }
+
+      URI sessionUri = session.getUri();
+      if (sessionUri != null) {
+        sessionsByUri.computeIfAbsent(sessionUri, k -> ConcurrentHashMap.newKeySet()).add(id);
+      }
+
+      return previous;
+    }
+
+    public Session remove(SessionId id) {
+      Session removed = sessions.remove(id);
+
+      if (removed != null && removed.getUri() != null) {
+        sessionsByUri.computeIfPresent(
+            removed.getUri(),
+            (k, sessionIds) -> {
+              sessionIds.remove(id);
+              return sessionIds.isEmpty() ? null : sessionIds;
+            });
+      }
+
+      return removed;
+    }
+
+    public void batchRemove(Set<SessionId> sessionIds) {
+      Map<URI, Set<SessionId>> uriToSessionIds = new HashMap<>();
+
+      for (SessionId id : sessionIds) {
+        Session session = sessions.get(id);
+        if (session != null && session.getUri() != null) {
+          uriToSessionIds.computeIfAbsent(session.getUri(), k -> new HashSet<>()).add(id);
+        }
+      }
+
+      for (SessionId id : sessionIds) {
+        sessions.remove(id);
+      }
+
+      for (Map.Entry<URI, Set<SessionId>> entry : uriToSessionIds.entrySet()) {
+        URI uri = entry.getKey();
+        Set<SessionId> idsToRemove = entry.getValue();
+
+        sessionsByUri.computeIfPresent(
+            uri,
+            (k, existingIds) -> {
+              existingIds.removeAll(idsToRemove);
+              return existingIds.isEmpty() ? null : existingIds;
+            });
+      }
+    }
+
+    public Set<Map.Entry<SessionId, Session>> entrySet() {
+      return sessions.entrySet();
+    }
+
+    public Collection<Session> values() {
+      return sessions.values();
+    }
+
+    public Set<SessionId> getSessionsByUri(URI uri) {
+      return sessionsByUri.getOrDefault(uri, Set.of());
+    }
+
+    public int size() {
+      return sessions.size();
+    }
+
+    public boolean isEmpty() {
+      return sessions.isEmpty();
+    }
+
+    public void clear() {
+      sessions.clear();
+      sessionsByUri.clear();
     }
   }
 }
