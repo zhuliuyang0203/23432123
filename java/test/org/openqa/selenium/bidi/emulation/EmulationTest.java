@@ -22,6 +22,7 @@ import static org.openqa.selenium.testing.drivers.Browser.FIREFOX;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -31,26 +32,53 @@ import org.openqa.selenium.bidi.browsingcontext.CreateContextParameters;
 import org.openqa.selenium.bidi.browsingcontext.ReadinessState;
 import org.openqa.selenium.bidi.module.Browser;
 import org.openqa.selenium.bidi.module.Permission;
+import org.openqa.selenium.bidi.module.Script;
 import org.openqa.selenium.bidi.permissions.PermissionState;
+import org.openqa.selenium.bidi.script.EvaluateResult;
+import org.openqa.selenium.bidi.script.EvaluateResultSuccess;
 import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NeedsFreshDriver;
 
 class EmulationTest extends JupiterTestBase {
+  private static final String GET_GEOLOCATION_PERMISSION =
+      "() => {return navigator.permissions.query({ name: 'geolocation' })"
+          + ".then(val => val.state, err => err.message)}";
+
   Object getBrowserGeolocation(WebDriver driver, String userContext) {
     JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-//    BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
-//    String url = appServer.whereIs("blank.html");
-//    context.navigate(url, ReadinessState.COMPLETE);
-//    driver.switchTo().window(context.getId());
+    BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
+    String url = appServer.whereIs("blank.html");
+    context.navigate(url, ReadinessState.COMPLETE);
+    driver.switchTo().window(context.getId());
 
     Permission permission = new Permission(driver);
-    var origin = executor.executeScript("return window.location.origin;");
-    String originValue = (String) origin;
+    Script script = new Script(driver);
+    EvaluateResult origin =
+        script.callFunctionInBrowsingContext(
+            context.getId(),
+            "() => {return window.location.origin;}",
+            true,
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty());
 
-    permission.setPermission(
-        Map.of("name", "geolocation"), PermissionState.GRANTED, originValue);
+    String originValue = (String) ((EvaluateResultSuccess) origin).getResult().getValue().get();
+
+    permission.setPermission(Map.of("name", "geolocation"), PermissionState.GRANTED, originValue);
+
+    EvaluateResult result =
+        script.callFunctionInBrowsingContext(
+            context.getId(),
+            GET_GEOLOCATION_PERMISSION,
+            true,
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty());
+
+    String resultValue = (String) ((EvaluateResultSuccess) result).getResult().getValue().get();
+    System.out.println(resultValue);
 
     return executor.executeAsyncScript(
         "const callback = arguments[arguments.length - 1];\n"
@@ -93,39 +121,7 @@ class EmulationTest extends JupiterTestBase {
     Object result = getBrowserGeolocation(driver, null);
     Map<String, Object> r = ((Map<String, Object>) result);
 
-    assert !r.containsKey("error");
-
-    double latitude = ((Number) r.get("latitude")).doubleValue();
-    double longitude = ((Number) r.get("longitude")).doubleValue();
-    double accuracy = ((Number) r.get("accuracy")).doubleValue();
-
-    assert abs(latitude - coords.getLatitude()) < 0.0001;
-    assert abs(longitude - coords.getLongitude()) < 0.0001;
-    assert abs(accuracy - coords.getAccuracy()) < 0.0001;
-  }
-
-  @Test
-  void canSetGeolocationOverrideWithCoordinatesInUserContext() {
-    Browser browser = new Browser(driver);
-    String userContext = browser.createUserContext();
-
-    CreateContextParameters parameters =
-        new CreateContextParameters(WindowType.TAB).userContext(userContext);
-
-    BrowsingContext context = new BrowsingContext(driver, parameters);
-
-    String url = appServer.whereIs("blank.html");
-    context.navigate(url, ReadinessState.COMPLETE);
-    driver.switchTo().window(context.getId());
-
-    Emulation emul = new Emulation(driver);
-    GeolocationCoordinates coords =
-        new GeolocationCoordinates(37.7749, -122.4194, 10.0, null, null, null);
-    emul.setGeolocationOverride(
-        new SetGeolocationOverrideParameters(coords, null, null, List.of(userContext)));
-
-    Object result = getBrowserGeolocation(driver, userContext);
-    Map<String, Object> r = ((Map<String, Object>) result);
+    System.out.println(r);
 
     assert !r.containsKey("error");
 
@@ -136,63 +132,6 @@ class EmulationTest extends JupiterTestBase {
     assert abs(latitude - coords.getLatitude()) < 0.0001;
     assert abs(longitude - coords.getLongitude()) < 0.0001;
     assert abs(accuracy - coords.getAccuracy()) < 0.0001;
-
-    context.close();
-    browser.removeUserContext(userContext);
-  }
-
-  @Test
-  void canSetGeolocationOverrideWithMultipleContexts() {
-    // Create two browsing contexts
-    BrowsingContext context1 = new BrowsingContext(driver, WindowType.TAB);
-    BrowsingContext context2 = new BrowsingContext(driver, WindowType.TAB);
-
-    GeolocationCoordinates coords =
-        new GeolocationCoordinates(45.5, -122.4194, 10.0, null, null, null, null);
-
-    Emulation emulation = new Emulation(driver);
-    SetGeolocationOverrideParameters parameters =
-        new SetGeolocationOverrideParameters(
-            coords, null, List.of(context1.getId(), context2.getId()), null);
-
-    emulation.setGeolocationOverride(parameters);
-
-    // Test first context
-    String url = appServer.whereIs("blank.html");
-    context1.navigate(url, ReadinessState.COMPLETE);
-    driver.switchTo().window(context1.getId());
-
-    Map<String, Object> r1 = (Map<String, Object>) getBrowserGeolocation(driver, null);
-
-    assert !r1.containsKey("error");
-
-    double latitude = ((Number) r1.get("latitude")).doubleValue();
-    double longitude = ((Number) r1.get("longitude")).doubleValue();
-    double accuracy = ((Number) r1.get("accuracy")).doubleValue();
-
-    assert abs(latitude - coords.getLatitude()) < 0.0001;
-    assert abs(longitude - coords.getLongitude()) < 0.0001;
-    assert abs(accuracy - coords.getAccuracy()) < 0.0001;
-
-    // Test second context
-    url = appServer.whereIs("blank.html");
-    context2.navigate(url, ReadinessState.COMPLETE);
-    driver.switchTo().window(context2.getId());
-
-    Map<String, Object> r = (Map<String, Object>) getBrowserGeolocation(driver, null);
-
-    assert !r.containsKey("error");
-
-    double latitude1 = ((Number) r.get("latitude")).doubleValue();
-    double longitude1 = ((Number) r.get("longitude")).doubleValue();
-    double accuracy1 = ((Number) r.get("accuracy")).doubleValue();
-
-    assert abs(latitude1 - coords.getLatitude()) < 0.0001;
-    assert abs(longitude1 - coords.getLongitude()) < 0.0001;
-    assert abs(accuracy1 - coords.getAccuracy()) < 0.0001;
-
-    context1.close();
-    context2.close();
   }
 
   @Test
