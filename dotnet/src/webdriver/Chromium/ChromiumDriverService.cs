@@ -158,12 +158,12 @@ public abstract class ChromiumDriverService : DriverService
             {
                 argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " -allowed-ips={0}", this.AllowedIPAddresses));
             }
-            
+
             if (this.LogLevel != ChromiumDriverLogLevel.Default)
             {
                 argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --log-level={0}", this.LogLevel.ToString().ToUpperInvariant()));
             }
-            
+
 
             return argsBuilder.ToString();
         }
