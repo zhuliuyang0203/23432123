@@ -22,7 +22,6 @@ import static org.openqa.selenium.testing.drivers.Browser.FIREFOX;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,10 +31,7 @@ import org.openqa.selenium.bidi.browsingcontext.CreateContextParameters;
 import org.openqa.selenium.bidi.browsingcontext.ReadinessState;
 import org.openqa.selenium.bidi.module.Browser;
 import org.openqa.selenium.bidi.module.Permission;
-import org.openqa.selenium.bidi.module.Script;
 import org.openqa.selenium.bidi.permissions.PermissionState;
-import org.openqa.selenium.bidi.script.EvaluateResult;
-import org.openqa.selenium.bidi.script.EvaluateResultSuccess;
 import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NeedsFreshDriver;
@@ -45,13 +41,12 @@ class EmulationTest extends JupiterTestBase {
       "() => {return navigator.permissions.query({ name: 'geolocation' })"
           + ".then(val => val.state, err => err.message)}";
 
-  Object getBrowserGeolocation(WebDriver driver, String userContext) {
+  Object getBrowserGeolocation(WebDriver driver, String userContext, String origin) {
     JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-    String originValue = (String) executor.executeScript("return window.location.origin;");
-
     Permission permission = new Permission(driver);
-    permission.setPermission(Map.of("name", "geolocation"), PermissionState.GRANTED, originValue, userContext);
+    permission.setPermission(
+        Map.of("name", "geolocation"), PermissionState.GRANTED, origin, userContext);
 
     return executor.executeAsyncScript(
         "const callback = arguments[arguments.length - 1];\n"
@@ -85,13 +80,16 @@ class EmulationTest extends JupiterTestBase {
     context.navigate(url, ReadinessState.COMPLETE);
     driver.switchTo().window(context.getId());
 
+    String origin =
+        (String) ((JavascriptExecutor) driver).executeScript("return window.location.origin;");
+
     Emulation emul = new Emulation(driver);
     GeolocationCoordinates coords =
         new GeolocationCoordinates(37.7749, -122.4194, 10.0, null, null, null);
     emul.setGeolocationOverride(
         new SetGeolocationOverrideParameters(coords, null, List.of(contextId), null));
 
-    Object result = getBrowserGeolocation(driver, null);
+    Object result = getBrowserGeolocation(driver, null, origin);
     Map<String, Object> r = ((Map<String, Object>) result);
 
     System.out.println(r);
@@ -131,8 +129,11 @@ class EmulationTest extends JupiterTestBase {
     // Test first user context
     driver.switchTo().window(context1.getId());
     context1.navigate(appServer.whereIs("blank.html"), ReadinessState.COMPLETE);
+    String origin1 =
+        (String) ((JavascriptExecutor) driver).executeScript("return window.location.origin;");
 
-    Map<String, Object> r = (Map<String, Object>) getBrowserGeolocation(driver, userContext1);
+    Map<String, Object> r =
+        (Map<String, Object>) getBrowserGeolocation(driver, userContext1, origin1);
 
     assert !r.containsKey("error");
 
@@ -147,7 +148,10 @@ class EmulationTest extends JupiterTestBase {
     // Test second user context
     driver.switchTo().window(context2.getId());
     context2.navigate(appServer.whereIs("blank.html"), ReadinessState.COMPLETE);
-    Map<String, Object> r2 = (Map<String, Object>) getBrowserGeolocation(driver, userContext2);
+    String origin2 =
+        (String) ((JavascriptExecutor) driver).executeScript("return window.location.origin;");
+    Map<String, Object> r2 =
+        (Map<String, Object>) getBrowserGeolocation(driver, userContext2, origin2);
 
     assert !r2.containsKey("error");
 
@@ -177,13 +181,16 @@ class EmulationTest extends JupiterTestBase {
     // Switch to the new context
     driver.switchTo().window(contextId);
 
+    String origin =
+        (String) ((JavascriptExecutor) driver).executeScript("return window.location.origin;");
+
     GeolocationPositionError error = new GeolocationPositionError();
 
     Emulation emul = new Emulation(driver);
     emul.setGeolocationOverride(
         new SetGeolocationOverrideParameters(null, error, List.of(contextId), null));
 
-    Object result = getBrowserGeolocation(driver, null);
+    Object result = getBrowserGeolocation(driver, null, origin);
     Map<String, Object> r = ((Map<String, Object>) result);
 
     assert r.containsKey("error");
