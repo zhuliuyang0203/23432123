@@ -21,6 +21,7 @@ import static org.openqa.selenium.remote.RemoteTags.SESSION_ID;
 import static org.openqa.selenium.remote.RemoteTags.SESSION_ID_EVENT;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,7 +56,6 @@ public class LocalSessionMap extends SessionMap {
 
   private final EventBus bus;
   private final IndexedSessionMap knownSessions = new IndexedSessionMap();
-  private final ReadWriteLock sessionMapLock = new ReentrantReadWriteLock();
 
   public LocalSessionMap(Tracer tracer, EventBus bus) {
     super(tracer);
@@ -93,12 +93,9 @@ public class LocalSessionMap extends SessionMap {
   public boolean add(Session session) {
     Require.nonNull("Session", session);
     SessionId id = session.getId();
-    sessionMapLock.writeLock().lock();
-    try {
-      knownSessions.put(id, session);
-    } finally {
-      sessionMapLock.writeLock().unlock();
-    }
+
+    // IndexedSessionMap now handles internal synchronization
+    knownSessions.put(id, session);
 
     try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.add")) {
       AttributeMap attributeMap = tracer.createAttributeMap();
@@ -115,15 +112,10 @@ public class LocalSessionMap extends SessionMap {
   public Session get(SessionId id) {
     Require.nonNull("Session ID", id);
 
-    Session session;
-    sessionMapLock.readLock().lock();
-    try {
-      session = knownSessions.get(id);
-      if (session == null) {
-        throw new NoSuchSessionException("Unable to find session with ID: " + id);
-      }
-    } finally {
-      sessionMapLock.readLock().unlock();
+    // IndexedSessionMap now handles internal synchronization
+    Session session = knownSessions.get(id);
+    if (session == null) {
+      throw new NoSuchSessionException("Unable to find session with ID: " + id);
     }
     return session;
   }
@@ -131,13 +123,9 @@ public class LocalSessionMap extends SessionMap {
   @Override
   public void remove(SessionId id) {
     Require.nonNull("Session ID", id);
-    Session removedSession;
-    sessionMapLock.writeLock().lock();
-    try {
-      removedSession = knownSessions.remove(id);
-    } finally {
-      sessionMapLock.writeLock().unlock();
-    }
+
+    // IndexedSessionMap now handles internal synchronization
+    Session removedSession = knownSessions.remove(id);
 
     try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.remove")) {
       AttributeMap attributeMap = tracer.createAttributeMap();
@@ -156,15 +144,10 @@ public class LocalSessionMap extends SessionMap {
 
   /** Batch remove sessions by URI with proper locking to prevent race conditions */
   private void batchRemoveByUri(URI externalUri, Class<? extends Event> eventClass) {
-    sessionMapLock.writeLock().lock();
-    Set<SessionId> sessionsToRemove;
-    try {
-      sessionsToRemove = knownSessions.getSessionsByUri(externalUri);
-      if (!sessionsToRemove.isEmpty()) {
-        knownSessions.batchRemove(sessionsToRemove);
-      }
-    } finally {
-      sessionMapLock.writeLock().unlock();
+    // IndexedSessionMap now handles internal synchronization
+    Set<SessionId> sessionsToRemove = knownSessions.getSessionsByUri(externalUri);
+    if (!sessionsToRemove.isEmpty()) {
+      knownSessions.batchRemove(sessionsToRemove);
     }
 
     try (Span span = tracer.getCurrentContext().createSpan("local_sessionmap.batch_remove")) {
@@ -198,83 +181,157 @@ public class LocalSessionMap extends SessionMap {
   private static class IndexedSessionMap {
     private final ConcurrentMap<SessionId, Session> sessions = new ConcurrentHashMap<>();
     private final ConcurrentMap<URI, Set<SessionId>> sessionsByUri = new ConcurrentHashMap<>();
+    // Internal lock to ensure atomicity of multi-step operations across both maps
+    private final ReadWriteLock internalLock = new ReentrantReadWriteLock();
 
     public Session get(SessionId id) {
+      // Read operations are atomic on ConcurrentHashMap - no lock needed
       return sessions.get(id);
     }
 
     public Session put(SessionId id, Session session) {
-      Session previous = sessions.put(id, session);
+      // Write lock needed: multiple operations across both maps must be atomic
+      internalLock.writeLock().lock();
+      try {
+        Session previous = sessions.put(id, session);
 
-      if (previous != null && previous.getUri() != null) {
-        sessionsByUri.computeIfPresent(
-            previous.getUri(),
-            (k, sessionIds) -> {
-              sessionIds.remove(id);
-              return sessionIds.isEmpty() ? null : sessionIds;
-            });
+        if (previous != null && previous.getUri() != null) {
+          cleanupUriIndex(previous.getUri(), id);
+        }
+
+        URI sessionUri = session.getUri();
+        if (sessionUri != null) {
+          sessionsByUri.computeIfAbsent(sessionUri, k -> ConcurrentHashMap.newKeySet()).add(id);
+        }
+
+        return previous;
+      } finally {
+        internalLock.writeLock().unlock();
       }
-
-      URI sessionUri = session.getUri();
-      if (sessionUri != null) {
-        sessionsByUri.computeIfAbsent(sessionUri, k -> ConcurrentHashMap.newKeySet()).add(id);
-      }
-
-      return previous;
     }
 
     public Session remove(SessionId id) {
-      Session removed = sessions.remove(id);
+      // Write lock needed: multiple operations across both maps must be atomic
+      internalLock.writeLock().lock();
+      try {
+        Session removed = sessions.remove(id);
 
-      if (removed != null && removed.getUri() != null) {
-        sessionsByUri.computeIfPresent(
-            removed.getUri(),
-            (k, sessionIds) -> {
-              sessionIds.remove(id);
-              return sessionIds.isEmpty() ? null : sessionIds;
-            });
+        if (removed != null && removed.getUri() != null) {
+          cleanupUriIndex(removed.getUri(), id);
+        }
+
+        return removed;
+      } finally {
+        internalLock.writeLock().unlock();
       }
-
-      return removed;
     }
 
     public void batchRemove(Set<SessionId> sessionIds) {
-      Map<URI, Set<SessionId>> uriToSessionIds = new HashMap<>();
+      // Write lock needed: multiple operations across both maps must be atomic
+      internalLock.writeLock().lock();
+      try {
+        Map<URI, Set<SessionId>> uriToSessionIds = new HashMap<>();
 
-      for (SessionId id : sessionIds) {
-        Session session = sessions.get(id);
-        if (session != null && session.getUri() != null) {
-          uriToSessionIds.computeIfAbsent(session.getUri(), k -> new HashSet<>()).add(id);
+        for (SessionId id : sessionIds) {
+          Session session = sessions.get(id);
+          if (session != null && session.getUri() != null) {
+            uriToSessionIds.computeIfAbsent(session.getUri(), k -> new HashSet<>()).add(id);
+          }
+        }
+
+        for (SessionId id : sessionIds) {
+          sessions.remove(id);
+        }
+
+        // Robust cleanup for each URI
+        for (Map.Entry<URI, Set<SessionId>> entry : uriToSessionIds.entrySet()) {
+          URI uri = entry.getKey();
+          Set<SessionId> idsToRemove = entry.getValue();
+          cleanupUriIndex(uri, idsToRemove);
+        }
+      } finally {
+        internalLock.writeLock().unlock();
+      }
+    }
+
+    /**
+     * Robust cleanup of URI index to prevent memory leaks from empty sets. Handles single session
+     * removal with explicit empty set cleanup.
+     */
+    private void cleanupUriIndex(URI uri, SessionId sessionId) {
+      Set<SessionId> sessionIds = sessionsByUri.get(uri);
+      if (sessionIds != null) {
+        sessionIds.remove(sessionId);
+        // Explicit check and removal to prevent memory leaks
+        if (sessionIds.isEmpty()) {
+          sessionsByUri.remove(uri, sessionIds);
         }
       }
+    }
 
-      for (SessionId id : sessionIds) {
-        sessions.remove(id);
-      }
-
-      for (Map.Entry<URI, Set<SessionId>> entry : uriToSessionIds.entrySet()) {
-        URI uri = entry.getKey();
-        Set<SessionId> idsToRemove = entry.getValue();
-
-        sessionsByUri.computeIfPresent(
-            uri,
-            (k, existingIds) -> {
-              existingIds.removeAll(idsToRemove);
-              return existingIds.isEmpty() ? null : existingIds;
-            });
+    /**
+     * Robust cleanup of URI index to prevent memory leaks from empty sets. Handles batch session
+     * removal with explicit empty set cleanup.
+     */
+    private void cleanupUriIndex(URI uri, Set<SessionId> sessionIdsToRemove) {
+      Set<SessionId> sessionIds = sessionsByUri.get(uri);
+      if (sessionIds != null) {
+        sessionIds.removeAll(sessionIdsToRemove);
+        // Explicit check and removal to prevent memory leaks
+        if (sessionIds.isEmpty()) {
+          sessionsByUri.remove(uri, sessionIds);
+        }
       }
     }
 
-    public Set<Map.Entry<SessionId, Session>> entrySet() {
-      return sessions.entrySet();
-    }
+    /**
+     * Periodic cleanup to remove any empty sets that may have been missed. Should be called
+     * periodically to prevent memory leaks.
+     */
+    public void performMaintenanceCleanup() {
+      internalLock.writeLock().lock();
+      try {
+        // Find and remove empty URI sets
+        Set<URI> emptyUris = new HashSet<>();
+        for (Map.Entry<URI, Set<SessionId>> entry : sessionsByUri.entrySet()) {
+          if (entry.getValue().isEmpty()) {
+            emptyUris.add(entry.getKey());
+          }
+        }
 
-    public Collection<Session> values() {
-      return sessions.values();
+        for (URI emptyUri : emptyUris) {
+          sessionsByUri.remove(emptyUri);
+        }
+      } finally {
+        internalLock.writeLock().unlock();
+      }
     }
 
     public Set<SessionId> getSessionsByUri(URI uri) {
-      return sessionsByUri.getOrDefault(uri, Set.of());
+      // Read operations are atomic on ConcurrentHashMap - no lock needed
+      Set<SessionId> result = sessionsByUri.get(uri);
+      // Return empty set instead of null, and ensure we don't return empty sets
+      return (result != null && !result.isEmpty()) ? result : Set.of();
+    }
+
+    public Set<Map.Entry<SessionId, Session>> entrySet() {
+      // Read lock to ensure consistent view during iteration
+      internalLock.readLock().lock();
+      try {
+        return new HashSet<>(sessions.entrySet());
+      } finally {
+        internalLock.readLock().unlock();
+      }
+    }
+
+    public Collection<Session> values() {
+      // Read lock to ensure consistent view during iteration
+      internalLock.readLock().lock();
+      try {
+        return new ArrayList<>(sessions.values());
+      } finally {
+        internalLock.readLock().unlock();
+      }
     }
 
     public int size() {
@@ -286,8 +343,14 @@ public class LocalSessionMap extends SessionMap {
     }
 
     public void clear() {
-      sessions.clear();
-      sessionsByUri.clear();
+      // Write lock needed: multiple operations across both maps must be atomic
+      internalLock.writeLock().lock();
+      try {
+        sessions.clear();
+        sessionsByUri.clear();
+      } finally {
+        internalLock.writeLock().unlock();
+      }
     }
   }
 }
