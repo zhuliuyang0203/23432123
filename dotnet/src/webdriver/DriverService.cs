@@ -152,6 +152,13 @@ public abstract class DriverService : ICommandServer
     public string? DriverServicePath { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the driver process console output should be logged
+    /// to the console. Defaults to <see langword="false"/>, meaning console output from the
+    /// driver will be suppressed.
+    /// </summary>
+    public bool LogToConsole { get; set; }
+
+    /// <summary>
     /// Gets the command-line arguments for the driver service.
     /// </summary>
     protected virtual string CommandLineArguments => string.Format(CultureInfo.InvariantCulture, "--port={0}", this.Port);
@@ -242,6 +249,12 @@ public abstract class DriverService : ICommandServer
         this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
         this.driverServiceProcess.StartInfo.UseShellExecute = false;
         this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
+
+        if (!this.LogToConsole)
+        {
+            this.driverServiceProcess.StartInfo.RedirectStandardOutput = true;
+            this.driverServiceProcess.StartInfo.RedirectStandardError = true;
+        }
 
         DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
         this.OnDriverProcessStarting(eventArgs);

@@ -213,9 +213,13 @@ public sealed class FirefoxDriverService : DriverService
             // Initialize the log writer
             logWriter = new StreamWriter(this.LogPath, append: true) { AutoFlush = true };
 
-            // Configure process to redirect output
-            eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
-            eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
+            // LogToConsole and LogPath are mutually exclusive. LogPath takes precedence.
+            if (this.LogToConsole)
+            {
+                this.LogToConsole = false;
+                eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
+                eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
+            }
         }
 
         base.OnDriverProcessStarting(eventArgs);
