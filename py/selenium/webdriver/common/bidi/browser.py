@@ -218,7 +218,7 @@ class ClientWindowInfo:
             ClientWindowInfo: A new instance of ClientWindowInfo.
         """
         return cls(
-            client_window = data.get("clientWindow"),
+            client_window=data.get("clientWindow"),
             state=data.get("state"),
             width=data.get("width"),
             height=data.get("height"),
