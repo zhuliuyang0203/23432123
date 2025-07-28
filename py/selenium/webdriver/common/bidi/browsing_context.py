@@ -374,32 +374,6 @@ class HistoryUpdatedParams:
         )
 
 
-class BrowsingContextEvent:
-    """Base class for browsing context events."""
-
-    def __init__(self, event_class: str, **kwargs):
-        self.event_class = event_class
-        self.params = kwargs
-
-    @classmethod
-    def from_json(cls, json: dict) -> "BrowsingContextEvent":
-        """Creates a BrowsingContextEvent instance from a dictionary.
-
-        Parameters:
-        -----------
-            json: A dictionary containing the event information.
-
-        Returns:
-        -------
-            BrowsingContextEvent: A new instance of BrowsingContextEvent.
-        """
-        event_class = json.get("event_class")
-        if event_class is None or not isinstance(event_class, str):
-            raise ValueError("event_class is required and must be a string")
-
-        return cls(event_class=event_class, **json)
-
-
 class ContextCreated:
     """Event class for browsingContext.contextCreated event."""
 
