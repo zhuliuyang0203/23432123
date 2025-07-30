@@ -27,7 +27,7 @@ public class SetGeolocationOverrideParameters {
   private final List<String> contexts;
   private final List<String> userContexts;
 
-  SetGeolocationOverrideParameters(
+  public SetGeolocationOverrideParameters(
       GeolocationCoordinates coordinates,
       GeolocationPositionError error,
       List<String> contexts,

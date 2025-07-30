@@ -20,9 +20,9 @@ package org.openqa.selenium.bidi.emulation;
 import java.util.Map;
 
 public class GeolocationPositionError {
-  String type = "positionUnavailable";
 
   public Map<String, Object> toMap() {
+    String type = "positionUnavailable";
     return Map.of("type", type);
   }
 }
