@@ -16,7 +16,9 @@
 # under the License.
 
 import base64
+import concurrent.futures
 import threading
+import time
 
 import pytest
 
@@ -930,197 +932,149 @@ def test_remove_specific_event_handler_multiple_handlers(driver):
     driver.browsing_context.remove_event_handler("context_created", callback_id_2)
 
 
-def test_event_handler_thread_safety(driver):
-    """Test thread safety with multiple non-atomic operations in callbacks."""
-    import concurrent.futures
-    import time
+class _EventHandlerTestHelper:
+    def __init__(self, driver):
+        self.driver = driver
+        self.events_received = []
+        self.context_counts = {}
+        self.event_type_counts = {}
+        self.processing_times = []
+        self.consistency_errors = []
+        self.thread_errors = []
+        self.callback_ids = []
+        self.data_lock = threading.Lock()
+        self.registration_complete = threading.Event()
 
-    events_received = []
-    context_counts = {}
-    event_type_counts = {}
-    processing_times = []
-    consistency_errors = []
-    thread_errors = []
+    def make_callback(self):
+        def callback(info):
+            start_time = time.time()
+            time.sleep(0.02)  # Simulate race window
 
-    data_lock = threading.Lock()
-    callback_ids = []
-    registration_complete = threading.Event()
+            with self.data_lock:
+                initial_event_count = len(self.events_received)
 
-    def complex_event_callback(info):
-        """Callback with multiple non-atomic operations that require thread synchronization."""
-        start_time = time.time()
-        time.sleep(0.02)  # Create race condition window
+                self.events_received.append(info)
 
-        with data_lock:
-            # Multiple operations that could race without proper locking
-            initial_event_count = len(events_received)
-            _ = sum(context_counts.values()) if context_counts else 0
-            _ = sum(event_type_counts.values()) if event_type_counts else 0
+                context_id = info.context
+                self.context_counts.setdefault(context_id, 0)
+                self.context_counts[context_id] += 1
 
-            events_received.append(info)
+                event_type = info.__class__.__name__
+                self.event_type_counts.setdefault(event_type, 0)
+                self.event_type_counts[event_type] += 1
 
-            context_id = info.context
-            if context_id not in context_counts:
-                context_counts[context_id] = 0
-            context_counts[context_id] += 1
+                processing_time = time.time() - start_time
+                self.processing_times.append(processing_time)
 
-            event_type = info.__class__.__name__
-            if event_type not in event_type_counts:
-                event_type_counts[event_type] = 0
-            event_type_counts[event_type] += 1
+                final_event_count = len(self.events_received)
+                final_context_total = sum(self.context_counts.values())
+                final_type_total = sum(self.event_type_counts.values())
+                final_processing_count = len(self.processing_times)
 
-            processing_time = time.time() - start_time
-            processing_times.append(processing_time)
+                expected_count = initial_event_count + 1
+                if not (
+                    final_event_count
+                    == final_context_total
+                    == final_type_total
+                    == final_processing_count
+                    == expected_count
+                ):
+                    self.consistency_errors.append("Data consistency error")
 
-            # Verify data consistency
-            final_event_count = len(events_received)
-            final_context_total = sum(context_counts.values())
-            final_type_total = sum(event_type_counts.values())
-            final_processing_count = len(processing_times)
+        return callback
 
-            expected_count = initial_event_count + 1
-            if not (
-                final_event_count == final_context_total == final_type_total == final_processing_count == expected_count
-            ):
-                error_msg = (
-                    f"Data consistency error! Events: {final_event_count}, "
-                    f"Contexts: {final_context_total}, Types: {final_type_total}, "
-                    f"Times: {final_processing_count}, Expected: {expected_count}"
-                )
-                consistency_errors.append(error_msg)
-
-    def register_handler(thread_id):
+    def register_handler(self, thread_id):
         try:
-            callback_id = driver.browsing_context.add_event_handler("context_created", complex_event_callback)
-            with data_lock:
-                callback_ids.append(callback_id)
-                if len(callback_ids) == 5:
-                    registration_complete.set()
+            callback = self.make_callback()
+            callback_id = self.driver.browsing_context.add_event_handler("context_created", callback)
+            with self.data_lock:
+                self.callback_ids.append(callback_id)
+                if len(self.callback_ids) == 5:
+                    self.registration_complete.set()
             return callback_id
         except Exception as e:
-            with data_lock:
-                thread_errors.append(f"Thread {thread_id}: Registration failed: {e}")
+            with self.data_lock:
+                self.thread_errors.append(f"Thread {thread_id}: Registration failed: {e}")
             return None
 
-    def remove_handler(callback_id, thread_id):
+    def remove_handler(self, callback_id, thread_id):
         try:
-            driver.browsing_context.remove_event_handler("context_created", callback_id)
+            self.driver.browsing_context.remove_event_handler("context_created", callback_id)
         except Exception as e:
-            with data_lock:
-                thread_errors.append(f"Thread {thread_id}: Removal failed: {e}")
+            with self.data_lock:
+                self.thread_errors.append(f"Thread {thread_id}: Removal failed: {e}")
 
-    initial_context = driver.browsing_context.create(type=WindowTypes.TAB)
 
-    # Concurrent registration
+def test_concurrent_event_handler_registration(driver):
+    helper = _EventHandlerTestHelper(driver)
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        futures = {}
-        for i in range(5):
-            future = executor.submit(register_handler, f"reg-{i}")
-            futures[future] = f"reg-{i}"
-
+        futures = [executor.submit(helper.register_handler, f"reg-{i}") for i in range(5)]
         for future in futures:
-            thread_id = futures[future]
-            try:
-                future.result(timeout=15)
-            except concurrent.futures.TimeoutError:
-                with data_lock:
-                    thread_errors.append(f"Thread {thread_id}: Registration timed out")
-            except Exception as e:
-                with data_lock:
-                    thread_errors.append(f"Thread {thread_id}: Registration exception: {e}")
+            future.result(timeout=15)
 
-    registration_complete.wait(timeout=5)
+    helper.registration_complete.wait(timeout=5)
+    assert len(helper.callback_ids) == 5, f"Expected 5 handlers, got {len(helper.callback_ids)}"
+    assert not helper.thread_errors, "Errors during registration: \n" + "\n".join(helper.thread_errors)
 
-    with data_lock:
-        successful_registrations = len(callback_ids)
 
-    # Trigger events while handlers are active
-    if successful_registrations > 0:
-        test_contexts = []
-        for i in range(3):
-            try:
-                context = driver.browsing_context.create(type=WindowTypes.TAB)
-                test_contexts.append(context)
-                time.sleep(0.1)
-            except Exception as e:
-                thread_errors.append(f"Failed to create test context {i}: {e}")
+def test_event_callback_data_consistency(driver):
+    helper = _EventHandlerTestHelper(driver)
 
-        time.sleep(1.0)  # Allow event processing
+    for i in range(5):
+        helper.register_handler(f"reg-{i}")
 
-        for context in test_contexts:
-            try:
-                driver.browsing_context.close(context)
-            except Exception:
-                pass
+    test_contexts = []
+    for _ in range(3):
+        context = driver.browsing_context.create(type=WindowTypes.TAB)
+        test_contexts.append(context)
 
-    # Concurrent removal
-    if callback_ids:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-            futures = {}
-            for i, callback_id in enumerate(callback_ids):
-                future = executor.submit(remove_handler, callback_id, f"rem-{i}")
-                futures[future] = f"rem-{i}"
+    for ctx in test_contexts:
+        driver.browsing_context.close(ctx)
 
-            for future in futures:
-                thread_id = futures[future]
-                try:
-                    future.result(timeout=15)
-                except concurrent.futures.TimeoutError:
-                    with data_lock:
-                        thread_errors.append(f"Thread {thread_id}: Removal timed out")
-                except Exception as e:
-                    with data_lock:
-                        thread_errors.append(f"Thread {thread_id}: Removal exception: {e}")
+    with helper.data_lock:
+        assert not helper.consistency_errors, "Consistency errors: " + str(helper.consistency_errors)
+        assert len(helper.events_received) > 0, "No events received"
+        assert len(helper.events_received) == sum(helper.context_counts.values())
+        assert len(helper.events_received) == sum(helper.event_type_counts.values())
+        assert len(helper.events_received) == len(helper.processing_times)
 
-    time.sleep(0.5)
 
-    # Verify handlers are removed
-    with data_lock:
-        events_before_removal_test = len(events_received)
+def test_concurrent_event_handler_removal(driver):
+    helper = _EventHandlerTestHelper(driver)
 
-    try:
-        post_removal_context = driver.browsing_context.create(type=WindowTypes.TAB)
-        time.sleep(0.8)
-        driver.browsing_context.close(post_removal_context)
-    except Exception as e:
-        thread_errors.append(f"Failed to create post-removal test context: {e}")
+    for i in range(5):
+        helper.register_handler(f"reg-{i}")
 
-    with data_lock:
-        events_after_removal = len(events_received) - events_before_removal_test
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        futures = [
+            executor.submit(helper.remove_handler, callback_id, f"rem-{i}")
+            for i, callback_id in enumerate(helper.callback_ids)
+        ]
+        for future in futures:
+            future.result(timeout=15)
 
-    # Cleanup
-    try:
-        driver.browsing_context.close(initial_context)
-    except Exception as e:
-        thread_errors.append(f"Cleanup error: {e}")
+    assert not helper.thread_errors, "Errors during removal: \n" + "\n".join(helper.thread_errors)
 
-    # Assertions
-    all_errors = thread_errors + consistency_errors
-    if all_errors:
-        pytest.fail("Thread safety test failed with errors:\n" + "\n".join(all_errors))
 
-    assert successful_registrations > 0, f"No handlers were successfully registered (got {successful_registrations})"
-    assert len(events_received) > 0, "No events were received during test"
+def test_no_event_after_handler_removal(driver):
+    helper = _EventHandlerTestHelper(driver)
 
-    # Verify data consistency across multiple counters
-    with data_lock:
-        total_context_events = sum(context_counts.values()) if context_counts else 0
-        total_type_events = sum(event_type_counts.values()) if event_type_counts else 0
+    for i in range(5):
+        helper.register_handler(f"reg-{i}")
 
-    assert len(events_received) == total_context_events, (
-        f"Context count mismatch: {len(events_received)} vs {total_context_events}"
-    )
-    assert len(events_received) == total_type_events, (
-        f"Type count mismatch: {len(events_received)} vs {total_type_events}"
-    )
-    assert len(events_received) == len(processing_times), (
-        f"Processing time count mismatch: {len(events_received)} vs {len(processing_times)}"
-    )
+    context = driver.browsing_context.create(type=WindowTypes.TAB)
+    driver.browsing_context.close(context)
 
-    # Verify handlers were properly removed
-    assert events_after_removal == 0, f"Handlers still active after removal! Got {events_after_removal} events"
+    events_before = len(helper.events_received)
 
-    # Verify event object
-    for i, event in enumerate(events_received):
-        assert hasattr(event, "context"), f"Event {i} missing 'context' attribute"
-        assert isinstance(event.context, str), f"Event {i} 'context' is not string: {type(event.context)}"
+    for i, callback_id in enumerate(helper.callback_ids):
+        helper.remove_handler(callback_id, f"rem-{i}")
+
+    post_context = driver.browsing_context.create(type=WindowTypes.TAB)
+    driver.browsing_context.close(post_context)
+
+    with helper.data_lock:
+        new_events = len(helper.events_received) - events_before
+
+    assert new_events == 0, f"Expected 0 new events after removal, got {new_events}"
