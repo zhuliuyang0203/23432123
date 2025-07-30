@@ -58,7 +58,14 @@ public enum Browser {
           "disable-breakpad",
           "disable-dev-shm-usage",
           "no-sandbox",
-          "disable-search-engine-choice-screen");
+          "disable-search-engine-choice-screen",
+          "ignore-certificate-errors",
+          "ignore-ssl-errors",
+          "ignore-certificate-errors-spki-list",
+          "ignore-urlfetcher-cert-requests");
+
+      // Accept self-signed and invalid certificates for HTTPS testing
+      options.setAcceptInsecureCerts(true);
 
       Map<String, Object> prefs = new HashMap<>();
       prefs.put("exit_type", "None");
@@ -92,7 +99,14 @@ public enum Browser {
           "disable-infobars",
           "disable-breakpad",
           "disable-dev-shm-usage",
-          "no-sandbox");
+          "no-sandbox",
+          "ignore-certificate-errors",
+          "ignore-ssl-errors",
+          "ignore-certificate-errors-spki-list",
+          "ignore-urlfetcher-cert-requests");
+
+      // Accept self-signed and invalid certificates for HTTPS testing
+      options.setAcceptInsecureCerts(true);
 
       Map<String, Object> prefs = new HashMap<>();
       prefs.put("exit_type", "None");
