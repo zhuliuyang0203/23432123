@@ -68,8 +68,8 @@ binding = "Exec"
     "selenium-manager",
     "selenium-manager.exe",
     "CHANGES",
-    "LICENSE"
-    "NOTICE"
+    "LICENSE",
+    "NOTICE",
 ]
 
 [tool.pytest.ini_options]
