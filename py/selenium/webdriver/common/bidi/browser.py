@@ -16,7 +16,7 @@
 # under the License.
 
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from selenium.webdriver.common.bidi.common import command_builder
 from selenium.webdriver.common.bidi.session import UserPromptHandler
@@ -204,7 +204,7 @@ class Browser:
         -------
             str: The ID of the created user context.
         """
-        params: Dict[str, Any] = {}
+        params: dict[str, Any] = {}
 
         if accept_insecure_certs is not None:
             params["acceptInsecureCerts"] = accept_insecure_certs

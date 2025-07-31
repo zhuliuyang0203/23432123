@@ -84,19 +84,20 @@ class UserPromptHandler:
         -------
             Dict[str, str]: Dictionary representation suitable for BiDi protocol
         """
+        field_mapping = {
+            "alert": "alert",
+            "before_unload": "beforeUnload",
+            "confirm": "confirm",
+            "default": "default",
+            "file": "file",
+            "prompt": "prompt",
+        }
+
         result = {}
-        if self.alert is not None:
-            result["alert"] = self.alert
-        if self.before_unload is not None:
-            result["beforeUnload"] = self.before_unload
-        if self.confirm is not None:
-            result["confirm"] = self.confirm
-        if self.default is not None:
-            result["default"] = self.default
-        if self.file is not None:
-            result["file"] = self.file
-        if self.prompt is not None:
-            result["prompt"] = self.prompt
+        for attr_name, dict_key in field_mapping.items():
+            value = getattr(self, attr_name)
+            if value is not None:
+                result[dict_key] = value
         return result
 
 
