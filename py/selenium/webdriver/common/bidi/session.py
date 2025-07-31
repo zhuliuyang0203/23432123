@@ -15,7 +15,89 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from typing import Dict, Optional
+
 from selenium.webdriver.common.bidi.common import command_builder
+
+
+class UserPromptHandlerType:
+    """Represents the behavior of the user prompt handler."""
+
+    ACCEPT = "accept"
+    DISMISS = "dismiss"
+    IGNORE = "ignore"
+
+    VALID_TYPES = {ACCEPT, DISMISS, IGNORE}
+
+
+class UserPromptHandler:
+    """Represents the configuration of the user prompt handler."""
+
+    def __init__(
+        self,
+        alert: Optional[str] = None,
+        before_unload: Optional[str] = None,
+        confirm: Optional[str] = None,
+        default: Optional[str] = None,
+        file: Optional[str] = None,
+        prompt: Optional[str] = None,
+    ):
+        """Initialize UserPromptHandler.
+
+        Parameters:
+        -----------
+            alert: Handler type for alert prompts
+            before_unload: Handler type for beforeUnload prompts
+            confirm: Handler type for confirm prompts
+            default: Default handler type for all prompts
+            file: Handler type for file picker prompts
+            prompt: Handler type for prompt dialogs
+
+        Raises:
+        ------
+            ValueError: If any handler type is not valid
+        """
+        for field_name, value in [
+            ("alert", alert),
+            ("before_unload", before_unload),
+            ("confirm", confirm),
+            ("default", default),
+            ("file", file),
+            ("prompt", prompt),
+        ]:
+            if value is not None and value not in UserPromptHandlerType.VALID_TYPES:
+                raise ValueError(
+                    f"Invalid {field_name} handler type: {value}. Must be one of {UserPromptHandlerType.VALID_TYPES}"
+                )
+
+        self.alert = alert
+        self.before_unload = before_unload
+        self.confirm = confirm
+        self.default = default
+        self.file = file
+        self.prompt = prompt
+
+    def to_dict(self) -> Dict[str, str]:
+        """Convert the UserPromptHandler to a dictionary for BiDi protocol.
+
+        Returns:
+        -------
+            Dict[str, str]: Dictionary representation suitable for BiDi protocol
+        """
+        result = {}
+        if self.alert is not None:
+            result["alert"] = self.alert
+        if self.before_unload is not None:
+            result["beforeUnload"] = self.before_unload
+        if self.confirm is not None:
+            result["confirm"] = self.confirm
+        if self.default is not None:
+            result["default"] = self.default
+        if self.file is not None:
+            result["file"] = self.file
+        if self.prompt is not None:
+            result["prompt"] = self.prompt
+        return result
 
 
 class Session:
