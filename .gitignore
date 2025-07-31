@@ -79,6 +79,7 @@ py/docs/source/**/*
 !py/docs/source/*.rst
 py/build/
 py/LICENSE
+py/NOTICE
 py/pytestdebug.log
 py/python.iml
 selenium.egg-info/
