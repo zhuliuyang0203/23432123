@@ -196,6 +196,12 @@ copy_file(
     out = "selenium-%s.dist-info/LICENSE" % SE_VERSION,
 )
 
+select_file(
+    name = "global-notice",
+    srcs = "//:license",
+    subpath = "NOTICE",
+)
+
 copy_file(
     name = "notice",
     src = ":global-notice",
