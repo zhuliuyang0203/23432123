@@ -395,9 +395,9 @@ closure_js_deps(
 )
 
 closure_test_suite(
-    name = "test",
+    name = "tests",
     data = [
         ":atoms",
         ":deps",
-    ],
+    ] + glob(["**/*"]),
 )
