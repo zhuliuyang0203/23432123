@@ -23,6 +23,7 @@ goog.provide('webdriver.atoms.inputs');
 
 goog.require('bot.Keyboard');
 goog.require('bot.Mouse');
+goog.require('bot.Touchscreen');
 goog.require('bot.action');
 goog.require('bot.dom');
 goog.require('goog.dom');
@@ -76,6 +77,18 @@ webdriver.atoms.inputs.click = function(element, opt_state) {
   return mouse.getState();
 };
 
+/**
+ * Tap on an element.
+ *
+ * @param {?Element} element The element to tap.
+ */
+webdriver.atoms.inputs.tap = function(element) {
+  var touchScreen = new bot.Touchscreen();
+  if (!element) {
+    throw Error('No element to send keys to');
+  }
+  bot.action.tap(element, null, touchScreen);
+};
 
 /**
  * Move the mouse to a specific element and/or coordinate location.

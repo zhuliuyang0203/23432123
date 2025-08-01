@@ -185,6 +185,15 @@ closure_fragment(
 )
 
 closure_fragment(
+    name = "tap",
+    function = "webdriver.atoms.inject.action.tap",
+    module = "webdriver.atoms.inject.action",
+    deps = [
+        ":action",
+    ],
+)
+
+closure_fragment(
     name = "clear-local-storage",
     function = "webdriver.atoms.inject.storage.local.clear",
     module = "webdriver.atoms.inject.storage.local",
