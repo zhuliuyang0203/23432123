@@ -50,6 +50,11 @@ public class SetGeolocationOverrideParameters {
     }
   }
 
+  public SetGeolocationOverrideParameters(
+      GeolocationCoordinates coordinates, GeolocationPositionError error) {
+    this(coordinates, error, null, null);
+  }
+
   public Map<String, Object> toMap() {
     Map<String, Object> param = new HashMap<>();
 

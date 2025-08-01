@@ -63,7 +63,6 @@ class EmulationTest extends JupiterTestBase {
             + "                });\n"
             + "            },\n"
             + "            error => {\n"
-            + "                console.log('Geolocation error:', error);\n"
             + "                callback({ error: error.message });\n"
             + "            },\n"
             + "            { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 }\n"

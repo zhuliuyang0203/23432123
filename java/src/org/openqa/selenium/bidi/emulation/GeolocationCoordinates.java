@@ -40,6 +40,38 @@ public class GeolocationCoordinates {
     this(latitude, longitude, 1.0, altitude, altitudeAccuracy, heading, speed);
   }
 
+  // Constructor with no altitude, altitudeAccuracy, heading, or speed
+  public GeolocationCoordinates(double latitude, double longitude, double accuracy) {
+    this(latitude, longitude, accuracy, null, null, null, null);
+  }
+
+  // Constructor with no altitudeAccuracy, heading, or speed
+  public GeolocationCoordinates(
+      double latitude, double longitude, double accuracy, Double altitude) {
+    this(latitude, longitude, accuracy, altitude, null, null, null);
+  }
+
+  // Constructor no heading or speed
+  public GeolocationCoordinates(
+      double latitude,
+      double longitude,
+      double accuracy,
+      Double altitude,
+      Double altitudeAccuracy) {
+    this(latitude, longitude, accuracy, altitude, altitudeAccuracy, null, null);
+  }
+
+  // Constructor with no speed
+  public GeolocationCoordinates(
+      double latitude,
+      double longitude,
+      double accuracy,
+      Double altitude,
+      Double altitudeAccuracy,
+      Double heading) {
+    this(latitude, longitude, accuracy, altitude, altitudeAccuracy, heading, null);
+  }
+
   public GeolocationCoordinates(
       double latitude,
       double longitude,
