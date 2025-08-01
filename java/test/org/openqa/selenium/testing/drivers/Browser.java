@@ -58,11 +58,7 @@ public enum Browser {
           "disable-breakpad",
           "disable-dev-shm-usage",
           "no-sandbox",
-          "disable-search-engine-choice-screen",
-          "ignore-certificate-errors",
-          "ignore-ssl-errors",
-          "ignore-certificate-errors-spki-list",
-          "ignore-urlfetcher-cert-requests");
+          "disable-search-engine-choice-screen");
 
       // Accept self-signed and invalid certificates for HTTPS testing
       options.setAcceptInsecureCerts(true);
@@ -99,11 +95,7 @@ public enum Browser {
           "disable-infobars",
           "disable-breakpad",
           "disable-dev-shm-usage",
-          "no-sandbox",
-          "ignore-certificate-errors",
-          "ignore-ssl-errors",
-          "ignore-certificate-errors-spki-list",
-          "ignore-urlfetcher-cert-requests");
+          "no-sandbox");
 
       // Accept self-signed and invalid certificates for HTTPS testing
       options.setAcceptInsecureCerts(true);
