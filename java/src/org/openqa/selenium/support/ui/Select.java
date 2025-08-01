@@ -123,17 +123,28 @@ public class Select implements ISelect, WrapsElement {
   @Override
   public void selectByVisibleText(String text) {
     assertSelectIsEnabled();
+    assertSelectIsVisible();
 
     // try to find the option via XPATH ...
     List<WebElement> options =
         element.findElements(
             By.xpath(".//option[normalize-space(.) = " + Quotes.escape(text) + "]"));
 
+    boolean selectedAnyVisible = false;
+
     for (WebElement option : options) {
-      setSelected(option, true);
-      if (!isMultiple()) {
-        return;
+      if (hasCssPropertyAndVisible(option)) {
+        setSelected(option, true);
+        selectedAnyVisible = true;
+        if (!isMultiple()) {
+          return;
+        }
       }
+    }
+
+    if (!selectedAnyVisible && !options.isEmpty()) {
+      // if we found options, but none of them was visible, we throw an exception
+      throw new NoSuchElementException("No visible option with text: " + text);
     }
 
     boolean matched = !options.isEmpty();
