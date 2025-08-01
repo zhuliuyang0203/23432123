@@ -119,17 +119,13 @@ public class HttpCommandInfo : CommandInfo
                 propertyValue = commandToExecute.SessionId.ToString();
             }
         }
-        else if (commandToExecute.Parameters != null && commandToExecute.Parameters.Count > 0)
+        else if (commandToExecute.HasParameters())
         {
             // Extract the URL parameter, and remove it from the parameters dictionary
             // so it doesn't get transmitted as a JSON parameter.
-            if (commandToExecute.Parameters.TryGetValue(propertyName, out var propertyValueObject))
+            if (commandToExecute.TryGetValueAndRemoveIfNotNull(propertyName, out var propertyValueObject))
             {
-                if (propertyValueObject != null)
-                {
-                    propertyValue = propertyValueObject.ToString()!;
-                    commandToExecute.Parameters.Remove(propertyName);
-                }
+                propertyValue = propertyValueObject.ToString()!;
             }
         }
 
