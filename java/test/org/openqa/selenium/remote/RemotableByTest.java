@@ -20,7 +20,6 @@ package org.openqa.selenium.remote;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.openqa.selenium.remote.ErrorCodes.SUCCESS_STRING;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -42,7 +41,6 @@ import org.openqa.selenium.WebElement;
 class RemotableByTest {
 
   private final SessionId id = new SessionId(UUID.randomUUID());
-  private final ErrorCodes errorCodes = new ErrorCodes();
 
   @Test
   void shouldCallW3CLocatorWithW3CParameters() {
@@ -198,7 +196,7 @@ class RemotableByTest {
 
   private Response createResponse(Object value) {
     Response res = new Response();
-    res.setState(SUCCESS_STRING);
+    res.setState("success");
     res.setSessionId(id.toString());
     res.setValue(value);
     return res;
@@ -206,8 +204,7 @@ class RemotableByTest {
 
   private Response createError(Exception e) {
     Response res = new Response();
-    res.setStatus(errorCodes.toStatusCode(e));
-    res.setState(errorCodes.toState(res.getStatus()));
+    res.setState(res.getStatus().toString());
     res.setValue(ErrorCodec.createDefault().encode(e));
     return res;
   }
