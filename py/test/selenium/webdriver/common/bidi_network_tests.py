@@ -68,8 +68,6 @@ def test_clear_request_handlers(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
 def test_continue_request(driver, pages):
     def callback(request: Request):
         request.continue_request()
@@ -80,8 +78,6 @@ def test_continue_request(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
 def test_continue_with_auth(driver):
     callback_id = driver.network.add_auth_handler("user", "passwd")
     assert callback_id is not None, "Request handler not added"
@@ -89,8 +85,6 @@ def test_continue_with_auth(driver):
     assert "authenticated" in driver.page_source, "Authorization failed"
 
 
-@pytest.mark.xfail_chrome
-@pytest.mark.xfail_edge
 def test_remove_auth_handler(driver):
     callback_id = driver.network.add_auth_handler("user", "passwd")
     assert callback_id is not None, "Request handler not added"
