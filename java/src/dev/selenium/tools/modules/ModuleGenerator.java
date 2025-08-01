@@ -60,6 +60,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -213,11 +214,9 @@ public class ModuleGenerator {
     }
     if (result != 0) {
       throw new RuntimeException(
-          "Unable to process module:\n"
-              + "jdeps "
-              + String.join(" ", jdepsArgs)
-              + "\n"
-              + new String(bos.toByteArray()));
+          String.format(
+              "Unable to process module:%njdeps %s%n%s",
+              String.join(" ", jdepsArgs), bos.toString(StandardCharsets.UTF_8)));
     }
 
     AtomicReference<Path> moduleInfo = new AtomicReference<>();
