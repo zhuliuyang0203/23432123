@@ -41,6 +41,16 @@ public interface IDevTools
     DevToolsSession GetDevToolsSession();
 
     /// <summary>
+    /// Creates a session to communicate with a browser using a specific version of the Developer Tools debugging protocol.
+    /// </summary>
+    /// <param name="options">The options for the DevToolsSession to use.</param>
+    /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
+    [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+    [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+    DevToolsSession GetDevToolsSession(DevToolsOptions options);
+
+    /// <summary>
     /// Closes a DevTools session
     /// </summary>
     [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
