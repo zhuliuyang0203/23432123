@@ -101,6 +101,9 @@ GEM
       ffi (~> 1.0)
     rbs (3.9.4)
       logger
+    rbs-trace (0.5.1)
+      prism (>= 0.3.0)
+      rbs (>= 3.5.0)
     rchardet (1.9.0)
     rdoc (6.14.1)
       erb
@@ -201,6 +204,7 @@ DEPENDENCIES
   git (~> 1.19)
   rack (~> 2.0)
   rake (~> 13.0)
+  rbs-trace (~> 0.5.1)
   rspec (~> 3.0)
   rubocop (~> 1.75)
   rubocop-performance (~> 1.25)

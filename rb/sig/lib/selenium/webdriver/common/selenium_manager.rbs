@@ -1,30 +1,13 @@
-module Selenium
-  module WebDriver
-    class SeleniumManager
-      include _Platform
-      include Open3
+class Selenium::WebDriver::SeleniumManager
+  def self.binary_paths: (*String) -> Hash[untyped, untyped]
 
-      self.@bin_path: String
+  def self.binary: () -> String
 
-      self.@binary: String
+  def self.run: (*String) -> Hash[untyped, untyped]
 
-      attr_writer self.bin_path: String
+  def self.execute_command: (*String) -> Array[untyped]
 
-      def self.bin_path: () -> String
+  def self.parse_result_and_log: (String) -> Hash[untyped, untyped]
 
-      def self.binary_paths: (*String arguments) -> Hash[untyped, Array[String]]
-
-      private
-
-      def self.generate_command: (untyped binary, untyped options) -> untyped
-
-      def self.binary: () -> String
-
-      def self.validate_location: (untyped location) -> untyped
-
-      def self.run: (String | Array[String] command) -> Hash[String, Array[String]]
-
-      def self.platform_location: -> String
-    end
-  end
+  def self.validate_command_result: (Array[untyped], Process::Status, Hash[untyped, untyped], String) -> void
 end

@@ -1,25 +1,7 @@
-module Selenium
-  module WebDriver
-    class Wait
-      @timeout: Numeric
+class Selenium::WebDriver::Wait
+  def initialize: (?Hash[untyped, untyped]) -> void
 
-      @interval: Numeric
+  def until: () -> Selenium::WebDriver::FedCM::Dialog
 
-      @message: String
-
-      @ignored: Array[Exception]
-
-      DEFAULT_TIMEOUT: Integer
-
-      DEFAULT_INTERVAL: Float
-
-      def initialize: (Hash[untyped, untyped] opts) -> void
-
-      def until: () { () -> untyped } -> untyped
-
-      private
-
-      def current_time: () -> untyped
-    end
-  end
+  def current_time: () -> Float
 end

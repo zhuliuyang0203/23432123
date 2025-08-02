@@ -1,26 +1,9 @@
-module Selenium
-  module WebDriver
-    module WheelActions
-      include _ActionBuilder
-      include _Driver
+module Selenium::WebDriver::WheelActions
+  def scroll_by: (Integer, Integer, ?device: nil) -> Selenium::WebDriver::ActionBuilder
 
-      @default_scroll_duration: untyped
+  def scroll: (**Integer?) -> Selenium::WebDriver::ActionBuilder
 
-      attr_writer default_scroll_duration: untyped
+  def default_scroll_duration: () -> Float
 
-      def default_scroll_duration: () -> untyped
-
-      def scroll_to: (untyped element, ?device: untyped?) -> untyped
-
-      def scroll_by: (untyped delta_x, untyped delta_y, ?device: untyped?) -> untyped
-
-      def scroll_from: (untyped scroll_origin, untyped delta_x, untyped delta_y, ?device: untyped?) -> untyped
-
-      private
-
-      def scroll: (**untyped opts) -> self
-
-      def wheel_input: (?untyped? name) -> untyped
-    end
-  end
+  def wheel_input: (?nil) -> Selenium::WebDriver::Interactions::WheelInput
 end

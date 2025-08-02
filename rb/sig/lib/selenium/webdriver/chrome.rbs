@@ -1,13 +1,3 @@
-module Selenium
-  module WebDriver
-    module Chrome
-      self.@path: String
-
-      @path: String
-
-      def self.path=: (String path) -> String
-
-      def self.path: () -> String?
-    end
-  end
+module Selenium::WebDriver::Chrome
+  def self.path: () -> nil
 end

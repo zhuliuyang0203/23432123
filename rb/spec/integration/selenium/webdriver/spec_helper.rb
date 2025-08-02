@@ -34,10 +34,23 @@ class SeleniumTestListener
     exception = notification.example.exception
     assertion_failed = exception &&
                        (exception.is_a?(RSpec::Expectations::ExpectationNotMetError) ||
-                        exception.is_a?(RSpec::Core::Pending::PendingExampleFixedError))
+                         exception.is_a?(RSpec::Core::Pending::PendingExampleFixedError))
     pending_exception = exception.nil? && notification.example.pending && !notification.example.skip
 
     GlobalTestEnv.reset_driver! if (exception && !assertion_failed) || pending_exception
+  end
+end
+
+module TraceHelper
+  def self.trace
+    @trace ||= unless WebDriver::Platform.ci
+                 require 'rbs-trace'
+                 RBS::Trace.new
+               end
+  end
+
+  def self.enabled?
+    !trace.nil?
   end
 end
 
@@ -53,9 +66,14 @@ RSpec.configure do |c|
   c.before(:suite) do
     GlobalTestEnv.remote_server.start if GlobalTestEnv.driver == :remote && ENV['WD_REMOTE_URL'].nil?
     GlobalTestEnv.print_env
+    TraceHelper.trace.enable if TraceHelper.enabled?
   end
 
   c.after(:suite) do
+    if TraceHelper.enabled?
+      TraceHelper.trace.disable
+      TraceHelper.trace.save_files(out_dir: 'sig/')
+    end
     GlobalTestEnv.quit_driver
   end
 

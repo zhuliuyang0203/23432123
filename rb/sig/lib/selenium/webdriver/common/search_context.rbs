@@ -1,21 +1,7 @@
-module Selenium
-  module WebDriver
-    module SearchContext
-      include _Driver
+module Selenium::WebDriver::SearchContext
+  def find_element: (*Hash[untyped, untyped]) -> Selenium::WebDriver::Element
 
-      FINDERS: untyped
+  def extract_args: (Array[untyped]) -> Array[untyped]
 
-      attr_accessor self.extra_finders: untyped
-
-      def self.finders: -> untyped
-
-      def find_element: (*untyped args) -> untyped
-
-      def find_elements: (*untyped args) -> untyped
-
-      private
-
-      def extract_args: (untyped args) -> untyped
-    end
-  end
+  def self.finders: () -> Hash[untyped, untyped]
 end

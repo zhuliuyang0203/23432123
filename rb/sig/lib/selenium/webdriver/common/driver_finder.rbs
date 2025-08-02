@@ -1,26 +1,13 @@
-module Selenium
-  module WebDriver
-    class DriverFinder
-      @options: untyped
+class Selenium::WebDriver::DriverFinder
+  def initialize: (Selenium::WebDriver::Chrome::Options, Selenium::WebDriver::Chrome::Service) -> void
 
-      @paths: untyped
-      @service: untyped
+  def browser_path?: () -> bool
 
-      def initialize: (untyped options,untyped  service) -> void
+  def browser_path: () -> String
 
-      def self.path: (untyped options, untyped klass) -> untyped
+  def paths: () -> Hash[untyped, untyped]
 
-      def browser_path: -> untyped
+  def to_args: () -> Array[untyped]
 
-      def browser_path?: -> untyped
-
-      def driver_path: -> untyped
-
-      private
-
-      def paths: -> untyped
-
-      def to_args: -> Array[String]
-    end
-  end
+  def driver_path: () -> String
 end

@@ -1,27 +1,7 @@
-module Selenium
-  module WebDriver
-    module Interactions
-      class Scroll < Interaction
-        @type: untyped
+class Selenium::WebDriver::Interactions::Scroll
+  def initialize: (source: Selenium::WebDriver::Interactions::WheelInput, ?origin: Symbol, ?duration: Float, **Integer) -> void
 
-        @duration: untyped
+  def assert_source: (Selenium::WebDriver::Interactions::WheelInput) -> nil
 
-        @origin: untyped
-
-        @x_offset: untyped
-
-        @y_offset: untyped
-
-        @delta_x: untyped
-
-        @delta_y: untyped
-
-        def initialize: (source: untyped, ?origin: Symbol, ?duration: Float, **untyped opts) -> void
-
-        def assert_source: (untyped source) -> untyped?
-
-        def encode: () -> Hash[String, untyped]
-      end
-    end
-  end
+  def encode: () -> Hash[untyped, untyped]
 end

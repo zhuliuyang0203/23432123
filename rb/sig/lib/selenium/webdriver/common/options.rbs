@@ -1,66 +1,40 @@
-module Selenium
-  module WebDriver
-    class Options
-      @options: Hash[untyped, untyped]
+class Selenium::WebDriver::Options
+  def self.chrome: (**Array[untyped]) -> Selenium::WebDriver::Chrome::Options
+                 | (**nil) -> Selenium::WebDriver::Chrome::Options
 
-      W3C_OPTIONS: Array[Symbol]
+  def initialize: (**Array[untyped]) -> void
+                | (**nil) -> void
 
-      GRID_OPTIONS: Array[Symbol]
+  def as_json: (*untyped) -> Hash[untyped, untyped]
 
-      BROWSER: Symbol
+  def process_w3c_options: (Hash[untyped, untyped]) -> Hash[untyped, untyped]
 
-      KEY: untyped
+  def w3c?: (Symbol) -> bool
 
-      CAPABILITIES: Hash[String | Symbol, String | Numeric | bool?]
+  def generate_as_json: (String, ?camelize_keys: bool) -> String
+                      | (Array[untyped], ?camelize_keys: bool) -> Array[untyped]
+                      | (Hash[untyped, untyped], ?camelize_keys: bool) -> Hash[untyped, untyped]
 
-      attr_reader self.driver_path: String
+  def process_json_hash: (Hash[untyped, untyped], bool) -> Hash[untyped, untyped]
 
-      def self.chrome: (**String | Symbol | Integer | bool opts) -> Chrome::Options
+  def convert_json_key: (Symbol, ?camelize: bool) -> String
+                      | (String, ?camelize: bool) -> String
 
-      def self.firefox: (**String | Symbol | Integer | bool  opts) -> Firefox::Options
+  def camel_case: (String) -> String
+end
 
-      def self.ie: (**String | Symbol | Integer | bool  opts) -> IE::Options
+class Selenium::WebDriver::Chrome::Options
+  def self.set_capabilities: () -> void
 
-      alias self.internet_explorer self.ie
+  def browser_name: () -> String
 
-      def self.edge: (**String | Symbol | Integer | bool  opts) -> Edge::Options
+  def browser_version: () -> nil
 
-      alias self.microsoftedge self.edge
+  def binary: () -> nil
 
-      def self.safari: (**String | Symbol | Integer | bool  opts) -> Safari::Options
+  def proxy: () -> nil
 
-      def self.set_capabilities: () -> untyped
+  def binary=: (String) -> String
 
-      attr_accessor options: Hash[String | Symbol, String | Numeric | bool?]
-
-      def initialize: (Hash[String | Symbol, String | Numeric | bool] opts) -> void
-
-      def add_option: (String | Symbol name, String | Numeric | bool? value) -> (String | Numeric | bool)?
-
-      def ==: (untyped other) -> bool
-
-      alias eql? ==
-
-      def as_json: (*untyped) -> untyped
-
-      private
-
-      def w3c?: (untyped key) -> untyped
-
-      def process_w3c_options: (untyped options) -> untyped
-
-      def process_browser_options: (untyped _browser_options) -> nil
-
-      def camelize?: (untyped _key) -> true
-
-      def generate_as_json: (Array[untyped] | Hash[untyped, untyped] | String | Symbol value, ?camelize_keys: bool)
-        -> (Array[untyped] | Hash[untyped, untyped] | String | Symbol)
-
-      def process_json_hash: (Hash[untyped, untyped] value, bool camelize_keys) -> Hash[untyped, untyped]
-
-      def convert_json_key: (String | Symbol key, camelize: bool) -> String
-
-      def camel_case: (String str) -> String
-    end
-  end
+  def browser_version=: (nil) -> nil
 end

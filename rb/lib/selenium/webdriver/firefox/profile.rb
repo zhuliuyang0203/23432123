@@ -227,9 +227,7 @@ module Selenium
             end
           end
         end
-      end
-
-      # Profile
+      end # Profile
     end # Firefox
   end # WebDriver
 end # Selenium

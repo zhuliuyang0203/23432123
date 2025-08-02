@@ -1,15 +1,5 @@
-module Selenium
-  module WebDriver
-    class Navigation
-      def initialize: (untyped bridge) -> void
+class Selenium::WebDriver::Navigation
+  def initialize: (Selenium::WebDriver::Remote::Bridge) -> void
 
-      def to: (String url) -> untyped
-
-      def back: () -> untyped
-
-      def forward: () -> untyped
-
-      def refresh: () -> untyped
-    end
-  end
+  def to: (String) -> void
 end
