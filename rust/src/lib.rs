@@ -896,6 +896,8 @@ pub trait SeleniumManager {
 
     fn stats(&self) -> Result<(), Error> {
         if !self.is_avoid_stats() && !self.is_offline() {
+            let _report = first_report_msg();
+
             let props = Props {
                 browser: self.get_browser_name().to_ascii_lowercase(),
                 browser_version: self.get_browser_version().to_ascii_lowercase(),
@@ -1723,4 +1725,19 @@ fn get_index_version(full_version: &str, index: usize) -> Result<String, Error> 
         .get(index)
         .ok_or(anyhow!(format!("Wrong version: {}", full_version)))?
         .to_string())
+}
+
+fn first_report_msg() -> Result<(), Error> {
+    let cache_dir = default_cache_folder();
+    let first_report_marker = cache_dir.join("initialized");
+
+    if !first_report_marker.exists() {
+        println!("\nSelenium Manager collects anonymous telemetry to improve the project.");
+        println!("Detailed information and instructions for opting out may be found at:");
+        println!("https://www.selenium.dev/privacy/\n");
+
+        create_path_if_not_exists(&cache_dir)?;
+        fs::write(first_report_marker, "")?;
+    }
+    Ok(())
 }
