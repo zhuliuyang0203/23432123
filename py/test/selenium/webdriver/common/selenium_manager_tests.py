@@ -61,14 +61,10 @@ def test_uses_windows(monkeypatch):
 
 def test_uses_linux(monkeypatch):
     monkeypatch.setattr(sys, "platform", "linux")
-
-    if platform.machine() == "arm64":
-        with pytest.raises(WebDriverException, match="Unsupported platform/architecture combination: linux/arm64"):
-            SeleniumManager()._get_binary()
-    else:
-        binary = SeleniumManager()._get_binary()
-        project_root = Path(selenium.__file__).parent.parent
-        assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager")
+    binary = SeleniumManager()._get_binary()
+    
+    project_root = Path(selenium.__file__).parent.parent
+    assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager")
 
 
 def test_uses_mac(monkeypatch):
