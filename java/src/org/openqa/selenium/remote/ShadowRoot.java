@@ -31,6 +31,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.internal.Require;
+import org.openqa.selenium.remote.shadow.FirefoxClassNameWorkaround;
 
 // Note: we want people to code against the SearchContext API, so we keep this class package private
 class ShadowRoot implements SearchContext, WrapsDriver {
@@ -44,18 +45,20 @@ class ShadowRoot implements SearchContext, WrapsDriver {
 
   @Override
   public List<WebElement> findElements(By by) {
+    By resolved = FirefoxClassNameWorkaround.resolveForShadow(by, this);
     return parent.findElements(
         this,
         (using, value) -> FIND_ELEMENTS_FROM_SHADOW_ROOT(id, using, String.valueOf(value)),
-        by);
+        resolved);
   }
 
   @Override
   public WebElement findElement(By by) {
+    By resolved = FirefoxClassNameWorkaround.resolveForShadow(by, this);
     return parent.findElement(
         this,
         (using, value) -> FIND_ELEMENT_FROM_SHADOW_ROOT(id, using, String.valueOf(value)),
-        by);
+        resolved);
   }
 
   @Override
@@ -73,12 +76,8 @@ class ShadowRoot implements SearchContext, WrapsDriver {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     ShadowRoot that = (ShadowRoot) o;
     return Objects.equals(parent, that.parent) && Objects.equals(id, that.id);
   }
