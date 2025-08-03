@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Internal.Logging;
 
 namespace OpenQA.Selenium.Firefox;
 
@@ -32,7 +33,8 @@ namespace OpenQA.Selenium.Firefox;
 public sealed class FirefoxDriverService : DriverService
 {
     private const string DefaultFirefoxDriverServiceFileName = "geckodriver";
-
+    private static readonly ILogger _logger = Log.GetLogger(typeof(FirefoxDriverService));
+    
     /// <summary>
     /// Process management fields for the log writer.
     /// </summary>
@@ -210,15 +212,10 @@ public sealed class FirefoxDriverService : DriverService
                 Directory.CreateDirectory(directory);
             }
 
-            // Initialize the log writer
             logWriter = new StreamWriter(this.LogPath, append: true) { AutoFlush = true };
 
-            // LogToConsole and LogPath are mutually exclusive, therefore we redirect log output.
-            if (this.LogToConsole)
-            {
-                eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
-                eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
-            }
+            eventArgs.DriverServiceProcessStartInfo.RedirectStandardOutput = true;
+            eventArgs.DriverServiceProcessStartInfo.RedirectStandardError = true;
         }
 
         base.OnDriverProcessStarting(eventArgs);
@@ -233,13 +230,12 @@ public sealed class FirefoxDriverService : DriverService
     /// </remarks>
     protected override void OnDriverProcessStarted(DriverProcessStartedEventArgs eventArgs)
     {
-        if (logWriter == null) return;
-        if (eventArgs.StandardOutputStreamReader != null)
+        if (!string.IsNullOrEmpty(this.LogPath) && eventArgs.StandardOutputStreamReader != null)
         {
             _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardOutputStreamReader));
         }
 
-        if (eventArgs.StandardErrorStreamReader != null)
+        if (!string.IsNullOrEmpty(this.LogPath) && eventArgs.StandardErrorStreamReader != null)
         {
             _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardErrorStreamReader));
         }
@@ -362,8 +358,10 @@ public sealed class FirefoxDriverService : DriverService
         }
         catch (Exception ex)
         {
-            // Log or handle the exception appropriately
-            System.Diagnostics.Debug.WriteLine($"Error reading stream: {ex.Message}");
-        }
+            if (_logger.IsEnabled(LogEventLevel.Error))
+            {
+                _logger.Error($"Error reading stream: {ex.Message}");
+            }
+        }        
     }
 }

@@ -17,26 +17,51 @@
 // under the License.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using System.IO;
+using OpenQA.Selenium.Internal.Logging;
 
 namespace OpenQA.Selenium.Firefox;
 
 [TestFixture]
-public class FirefoxDriverServiceTest : DriverTestFixture
+public class FirefoxDriverServiceTest
 {
+    private TestLogHandler testLogHandler;
+
+    private void ResetGlobalLog()
+    {
+        Log.SetLevel(LogEventLevel.Info);
+        Log.Handlers.Clear().Handlers.Add(new TextWriterHandler(Console.Error));
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+        ResetGlobalLog();
+
+        testLogHandler = new TestLogHandler();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        ResetGlobalLog();
+    }
+
     [Test]
     public void ShouldRedirectGeckoDriverLogsToFile()
     {
         FirefoxOptions options = new FirefoxOptions();
         string logPath = Path.GetTempFileName();
         options.LogLevel = FirefoxDriverLogLevel.Trace;
-
+    
         FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
         service.LogPath = logPath;
-
-        IWebDriver driver2 = new FirefoxDriver(service, options);
-
+    
+        IWebDriver firefoxDriver = new FirefoxDriver(service, options);
+    
         try
         {
             Assert.That(File.Exists(logPath), Is.True);
@@ -45,9 +70,46 @@ public class FirefoxDriverServiceTest : DriverTestFixture
         }
         finally
         {
-            driver2.Quit();
+            firefoxDriver.Quit();
             File.Delete(logPath);
         }
     }
+    
+    [Test]
+    public void ShouldRedirectGeckoDriverLogsToConsole()
+    {
+        Log.SetLevel(LogEventLevel.Info).Handlers.Add(testLogHandler);
+        FirefoxOptions options = new FirefoxOptions();
+        options.LogLevel = FirefoxDriverLogLevel.Info;
+    
+        FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+        service.LogToConsole = true;
+    
+        IWebDriver firefoxDriver = new FirefoxDriver(service, options);
+    
+        try
+        {
+            Assert.That(testLogHandler.Events, Has.Count.AtLeast(1));
+            Assert.That(testLogHandler.Events[0].Message, Does.Contain("geckodriver"));
+        }
+        finally
+        {
+            firefoxDriver.Quit();
+        }
+    }    
+}
 
+class TestLogHandler : ILogHandler
+{
+    public ILogHandler Clone()
+    {
+        return this;
+    }
+
+    public void Handle(LogEvent logEvent)
+    {
+        Events.Add(logEvent);
+    }
+
+    public IList<LogEvent> Events { get; internal set; } = new List<LogEvent>();
 }
