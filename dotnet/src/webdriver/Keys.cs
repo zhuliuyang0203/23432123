@@ -352,6 +352,36 @@ public static class Keys
     /// </summary>
     public static readonly string ZenkakuHankaku = Convert.ToString(Convert.ToChar(0xE040, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
+    /// <summary>
+    /// Represents the right Shift key.
+    /// </summary>
+    public static readonly string RightShift = Convert.ToString(Convert.ToChar(0xE050, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Represents the right Control key.
+    /// </summary>
+    public static readonly string RightControl = Convert.ToString(Convert.ToChar(0xE051, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Represents the right Alt key.
+    /// </summary>
+    public static readonly string RightAlt = Convert.ToString(Convert.ToChar(0xE052, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Represents the right Command key (macOS).
+    /// </summary>
+    public static readonly string RightCommand = Convert.ToString(Convert.ToChar(0xE053, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Represents the macOS Options key (same Unicode value as RightShift).
+    /// </summary>
+    public static readonly string Options = Convert.ToString(Convert.ToChar(0xE052, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Represents the macOS Function key (same Unicode value as RightControl).
+    /// </summary>
+    public static readonly string Function = Convert.ToString(Convert.ToChar(0xE051, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+
     private static Dictionary<string, string>? descriptions;
 
     /// <summary>
@@ -422,6 +452,12 @@ public static class Keys
             descriptions.Add(Meta, "Meta");
             descriptions.Add(Command, "Command");
             descriptions.Add(ZenkakuHankaku, "Zenkaku Hankaku");
+            descriptions.Add(RightShift, "Right Shift");
+            descriptions.Add(RightControl, "Right Control");
+            descriptions.Add(RightAlt, "Right Alt");
+            descriptions.Add(RightCommand, "Right Command");
+            descriptions.Add(Options, "Options");
+            descriptions.Add(Function, "Function");
         }
 
         if (descriptions.TryGetValue(value, out string? description))
