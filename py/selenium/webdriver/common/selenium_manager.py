@@ -14,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import json
 import logging
 import os
@@ -77,14 +78,29 @@ class SeleniumManager:
         else:
             allowed = {
                 ("darwin", "any"): "macos/selenium-manager",
-                ("win32", "any"): "windows/selenium-manager.exe",
-                ("cygwin", "any"): "windows/selenium-manager.exe",
+                ("win32", "amd64"): "windows/selenium-manager.exe",
+                ("win32", "x86_64"): "windows/selenium-manager.exe",
+                ("win32", "arm64"): "windows/selenium-manager-arm64.exe",
+                ("win32", "aarch64"): "windows/selenium-manager-arm64.exe",
+                ("cygwin", "amd64"): "windows/selenium-manager.exe",
+                ("cygwin", "x86_64"): "windows/selenium-manager.exe",
+                ("cygwin", "arm64"): "windows/selenium-manager-arm64.exe",
+                ("cygwin", "aarch64"): "windows/selenium-manager-arm64.exe",
+                ("linux", "amd64"): "linux/selenium-manager",
                 ("linux", "x86_64"): "linux/selenium-manager",
+                ("linux", "arm64"): "linux/selenium-manager-arm64",
+                ("linux", "aarch64"): "linux/selenium-manager-arm64",
+                ("freebsd", "amd64"): "linux/selenium-manager",
                 ("freebsd", "x86_64"): "linux/selenium-manager",
+                ("freebsd", "arm64"): "linux/selenium-manager-arm64",
+                ("freebsd", "aarch64"): "linux/selenium-manager-arm64",
+                ("openbsd", "amd64"): "linux/selenium-manager",
                 ("openbsd", "x86_64"): "linux/selenium-manager",
+                ("openbsd", "arm64"): "linux/selenium-manager-arm64",
+                ("openbsd", "aarch64"): "linux/selenium-manager-arm64",
             }
 
-            arch = platform.machine() if sys.platform in ("linux", "freebsd", "openbsd") else "any"
+            arch = "any" if sys.platform == "darwin" else platform.machine().lower()
             if sys.platform in ["freebsd", "openbsd"]:
                 logger.warning("Selenium Manager binary may not be compatible with %s; verify settings", sys.platform)
 

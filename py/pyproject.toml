@@ -65,7 +65,9 @@ binding = "Exec"
     "prune*",
     "selenium.egg-info*",
     "selenium-manager",
+    "selenium-manager-arm64",
     "selenium-manager.exe",
+    "selenium-manager-arm64.exe",
     "CHANGES",
     "LICENSE"
 ]

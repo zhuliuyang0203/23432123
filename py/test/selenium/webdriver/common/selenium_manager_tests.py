@@ -14,8 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 import json
-import platform
 import sys
 from pathlib import Path
 from unittest import mock
@@ -53,22 +53,38 @@ def test_uses_environment_variable(monkeypatch):
 
 def test_uses_windows(monkeypatch):
     monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setattr("platform.machine", lambda: "AMD64")
     binary = SeleniumManager()._get_binary()
 
     project_root = Path(selenium.__file__).parent.parent
     assert binary == project_root.joinpath("selenium/webdriver/common/windows/selenium-manager.exe")
 
 
+def test_uses_windows_arm(monkeypatch):
+    monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setattr("platform.machine", lambda: "arm64")
+    binary = SeleniumManager()._get_binary()
+
+    project_root = Path(selenium.__file__).parent.parent
+    assert binary == project_root.joinpath("selenium/webdriver/common/windows/selenium-manager-arm64.exe")
+
+
 def test_uses_linux(monkeypatch):
     monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
 
-    if platform.machine() == "arm64":
-        with pytest.raises(WebDriverException, match="Unsupported platform/architecture combination: linux/arm64"):
-            SeleniumManager()._get_binary()
-    else:
-        binary = SeleniumManager()._get_binary()
-        project_root = Path(selenium.__file__).parent.parent
-        assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager")
+    binary = SeleniumManager()._get_binary()
+    project_root = Path(selenium.__file__).parent.parent
+    assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager")
+
+
+def test_uses_linux_arm(monkeypatch):
+    monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setattr("platform.machine", lambda: "arm64")
+
+    binary = SeleniumManager()._get_binary()
+    project_root = Path(selenium.__file__).parent.parent
+    assert binary == project_root.joinpath("selenium/webdriver/common/linux/selenium-manager-arm64")
 
 
 def test_uses_mac(monkeypatch):
