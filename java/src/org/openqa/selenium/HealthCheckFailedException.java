@@ -17,10 +17,12 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.Nullable;
+
 /** Indicates that a Node health check failed. */
 public class HealthCheckFailedException extends WebDriverException {
 
-  public HealthCheckFailedException(String msg, Throwable cause) {
+  public HealthCheckFailedException(@Nullable String msg, @Nullable Throwable cause) {
     super(msg, cause);
   }
 }

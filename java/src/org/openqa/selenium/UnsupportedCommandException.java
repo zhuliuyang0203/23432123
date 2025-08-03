@@ -17,22 +17,26 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Used to indicate that a command used by the remote webdriver is unsupported. */
+@NullMarked
 public class UnsupportedCommandException extends WebDriverException {
 
   public UnsupportedCommandException() {
     super();
   }
 
-  public UnsupportedCommandException(String message) {
+  public UnsupportedCommandException(@Nullable String message) {
     super(message);
   }
 
-  public UnsupportedCommandException(Throwable cause) {
+  public UnsupportedCommandException(@Nullable Throwable cause) {
     super(cause);
   }
 
-  public UnsupportedCommandException(String message, Throwable cause) {
+  public UnsupportedCommandException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

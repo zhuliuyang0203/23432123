@@ -17,24 +17,28 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Indicates that a {@link WebElement} is in a state that means actions cannot be performed with it.
  * For example, attempting to clear an element that isn’t both editable and resettable.
  */
+@NullMarked
 public class InvalidElementStateException extends WebDriverException {
   public InvalidElementStateException() {
     super();
   }
 
-  public InvalidElementStateException(String message) {
+  public InvalidElementStateException(@Nullable String message) {
     super(message);
   }
 
-  public InvalidElementStateException(Throwable cause) {
+  public InvalidElementStateException(@Nullable Throwable cause) {
     super(cause);
   }
 
-  public InvalidElementStateException(String message, Throwable cause) {
+  public InvalidElementStateException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

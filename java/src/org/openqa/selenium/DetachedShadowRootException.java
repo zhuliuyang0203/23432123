@@ -17,16 +17,20 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Indicates that a reference to a shadow root is now "detached" --- the element no longer appears
  * on the DOM of the page.
  */
+@NullMarked
 public class DetachedShadowRootException extends WebDriverException {
-  public DetachedShadowRootException(String message) {
+  public DetachedShadowRootException(@Nullable String message) {
     super(message);
   }
 
-  public DetachedShadowRootException(String message, Throwable cause) {
+  public DetachedShadowRootException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

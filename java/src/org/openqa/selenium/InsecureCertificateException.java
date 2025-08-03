@@ -17,20 +17,24 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Indicates that navigation caused by the user agent hit a certificate warning, which is usually
  * the result of an expired or invalid TLS certificate.
  */
+@NullMarked
 public class InsecureCertificateException extends WebDriverException {
-  public InsecureCertificateException(String message) {
+  public InsecureCertificateException(@Nullable String message) {
     super(message);
   }
 
-  public InsecureCertificateException(Throwable cause) {
+  public InsecureCertificateException(@Nullable Throwable cause) {
     super(cause);
   }
 
-  public InsecureCertificateException(String message, Throwable cause) {
+  public InsecureCertificateException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

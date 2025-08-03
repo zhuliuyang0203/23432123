@@ -17,17 +17,21 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Indicates that a click could not be properly executed because the target element was obscured in
  * some way.
  */
+@NullMarked
 public class ElementClickInterceptedException extends ElementNotInteractableException {
 
-  public ElementClickInterceptedException(String message) {
+  public ElementClickInterceptedException(@Nullable String message) {
     super(message);
   }
 
-  public ElementClickInterceptedException(String message, Throwable cause) {
+  public ElementClickInterceptedException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

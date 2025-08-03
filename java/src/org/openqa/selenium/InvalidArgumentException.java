@@ -17,12 +17,16 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public class InvalidArgumentException extends WebDriverException {
-  public InvalidArgumentException(String message) {
+  public InvalidArgumentException(@Nullable String message) {
     super(message);
   }
 
-  public InvalidArgumentException(String message, Throwable cause) {
+  public InvalidArgumentException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }
