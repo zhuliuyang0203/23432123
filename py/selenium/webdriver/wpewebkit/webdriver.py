@@ -28,9 +28,11 @@ from .service import Service
 class WebDriver(RemoteWebDriver):
     """Controls the WPEWebKitDriver and allows you to drive the browser."""
 
+    service: Service
+
     def __init__(
         self,
-        options=None,
+        options: Optional[Options] = None,
         service: Optional[Service] = None,
     ):
         """Creates a new instance of the WPEWebKit driver.

@@ -34,6 +34,8 @@ class Service(service.ChromiumService):
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     """
 
+    _service_args: list[str]
+
     def __init__(
         self,
         executable_path: Optional[str] = None,
@@ -43,7 +45,7 @@ class Service(service.ChromiumService):
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ) -> None:
-        self._service_args = service_args or []
+        self._service_args = list(service_args or [])
 
         super().__init__(
             executable_path=executable_path,
@@ -55,11 +57,11 @@ class Service(service.ChromiumService):
         )
 
     @property
-    def service_args(self) -> Sequence[str]:
+    def service_args(self) -> list[str]:
         return self._service_args
 
     @service_args.setter
-    def service_args(self, value: Sequence[str]):
+    def service_args(self, value: list[str]):
         if isinstance(value, str) or not isinstance(value, Sequence):
             raise TypeError("service_args must be a sequence")
         self._service_args = list(value)

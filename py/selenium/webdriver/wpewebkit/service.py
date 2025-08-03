@@ -37,6 +37,8 @@ class Service(service.Service):
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     """
 
+    _service_args: list[str]
+
     def __init__(
         self,
         executable_path: str = DEFAULT_EXECUTABLE_PATH,
