@@ -554,7 +554,7 @@ impl SeleniumManager for FirefoxManager {
             if X32.is(arch) || major_browser_version < 42 {
                 platform_label = "win32";
             } else if ARM64.is(arch) {
-                platform_label = "win-aarch64";
+                platform_label = "win64-aarch64";
             } else {
                 platform_label = "win64";
             }
