@@ -106,18 +106,6 @@ public interface DriverCommand {
   String SET_SCRIPT_TIMEOUT = "setScriptTimeout";
   String GET_LOCATION = "getLocation";
   String SET_LOCATION = "setLocation";
-  String GET_LOCAL_STORAGE_ITEM = "getLocalStorageItem";
-  String GET_LOCAL_STORAGE_KEYS = "getLocalStorageKeys";
-  String SET_LOCAL_STORAGE_ITEM = "setLocalStorageItem";
-  String REMOVE_LOCAL_STORAGE_ITEM = "removeLocalStorageItem";
-  String CLEAR_LOCAL_STORAGE = "clearLocalStorage";
-  String GET_LOCAL_STORAGE_SIZE = "getLocalStorageSize";
-  String GET_SESSION_STORAGE_ITEM = "getSessionStorageItem";
-  String GET_SESSION_STORAGE_KEYS = "getSessionStorageKey";
-  String SET_SESSION_STORAGE_ITEM = "setSessionStorageItem";
-  String REMOVE_SESSION_STORAGE_ITEM = "removeSessionStorageItem";
-  String CLEAR_SESSION_STORAGE = "clearSessionStorage";
-  String GET_SESSION_STORAGE_SIZE = "getSessionStorageSize";
   // W3C Actions APIs
   String ACTIONS = "actions";
   String CLEAR_ACTIONS_STATE = "clearActionState";
