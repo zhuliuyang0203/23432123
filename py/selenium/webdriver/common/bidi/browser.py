@@ -55,59 +55,147 @@ class ClientWindowInfo:
         self.y = y
         self.active = active
 
-    def get_state(self) -> str:
+    @property
+    def state(self) -> str:
         """Gets the state of the client window.
 
         Returns:
         -------
             str: The state of the client window (one of the ClientWindowState constants).
         """
-        return self.state
+        return self._state
 
-    def get_client_window(self) -> str:
+    @state.setter
+    def state(self, value) -> None:
+        """Sets the state of the client window.
+
+        Returns: None
+        """
+        if not isinstance(value, str):
+            raise ValueError("state must be a string")
+        if value not in ClientWindowState.VALID_STATES:
+            raise ValueError(f"Invalid state: {value}. Must be one of {ClientWindowState.VALID_STATES}")
+        self._state = value
+
+    @property
+    def client_window(self) -> str:
         """Gets the client window identifier.
 
         Returns:
         -------
             str: The client window identifier.
         """
-        return self.client_window
+        return self._client_window
 
-    def get_width(self) -> int:
+    @client_window.setter
+    def client_window(self, value) -> None:
+        """Sets the client window identifier.
+
+        Returns: None
+        """
+        if not isinstance(value, str):
+            raise ValueError("clientWindow must be a string")
+        self._client_window = value
+
+    @property
+    def width(self) -> int:
         """Gets the width of the client window.
 
         Returns:
         -------
             int: The width of the client window.
         """
-        return self.width
+        return self._width
 
-    def get_height(self) -> int:
+    @width.setter
+    def width(self, value) -> None:
+        """Sets the width of the client window.
+
+        Returns: None
+        """
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"width must be a non-negative integer, got {value}")
+        self._width = value
+
+    @property
+    def height(self) -> int:
         """Gets the height of the client window.
 
         Returns:
         -------
             int: The height of the client window.
         """
-        return self.height
+        return self._height
 
-    def get_x(self) -> int:
+    @height.setter
+    def height(self, value) -> None:
+        """Sets the height of the client window.
+
+        Returns: None
+        """
+        if not isinstance(value, int) or value < 0:
+            raise ValueError(f"height must be a non-negative integer, got {value}")
+        self._height = value
+
+    @property
+    def x(self) -> int:
         """Gets the x coordinate of the client window.
 
         Returns:
         -------
             int: The x coordinate of the client window.
         """
-        return self.x
+        return self._x
 
-    def get_y(self) -> int:
+    @x.setter
+    def x(self, value) -> None:
+        """Sets the x coordinate of the client window.
+
+        Returns: None
+        """
+        if not isinstance(value, int):
+            raise ValueError(f"x must be an integer, got {type(value).__name__}")
+        self._x = value
+
+    @property
+    def y(self) -> int:
         """Gets the y coordinate of the client window.
 
         Returns:
         -------
             int: The y coordinate of the client window.
         """
-        return self.y
+        return self._y
+
+    @y.setter
+    def y(self, value) -> None:
+        """Sets the y coordinate of the client window.
+
+        Returns: None
+        """
+        if not isinstance(value, int):
+            raise ValueError(f"y must be an integer, got {type(value).__name__}")
+        self._y = value
+
+    @property
+    def active(self):
+        """Gets the Window Status
+
+        Returns:
+        -------
+            bool: The boolen value of Window Status
+        """
+        return self._active
+
+    @active.setter
+    def active(self, value) -> None:
+        """Sets the Window Status
+
+        Returns: None
+        """
+        if not isinstance(value, bool):
+            raise ValueError("active must be a boolean")
+        self._active = value
 
     def is_active(self) -> bool:
         """Checks if the client window is active.
@@ -129,53 +217,16 @@ class ClientWindowInfo:
         Returns:
         -------
             ClientWindowInfo: A new instance of ClientWindowInfo.
-
-        Raises:
-        ------
-            ValueError: If required fields are missing or have invalid types.
         """
-        try:
-            client_window = data["clientWindow"]
-            if not isinstance(client_window, str):
-                raise ValueError("clientWindow must be a string")
-
-            state = data["state"]
-            if not isinstance(state, str):
-                raise ValueError("state must be a string")
-            if state not in ClientWindowState.VALID_STATES:
-                raise ValueError(f"Invalid state: {state}. Must be one of {ClientWindowState.VALID_STATES}")
-
-            width = data["width"]
-            if not isinstance(width, int) or width < 0:
-                raise ValueError(f"width must be a non-negative integer, got {width}")
-
-            height = data["height"]
-            if not isinstance(height, int) or height < 0:
-                raise ValueError(f"height must be a non-negative integer, got {height}")
-
-            x = data["x"]
-            if not isinstance(x, int):
-                raise ValueError(f"x must be an integer, got {type(x).__name__}")
-
-            y = data["y"]
-            if not isinstance(y, int):
-                raise ValueError(f"y must be an integer, got {type(y).__name__}")
-
-            active = data["active"]
-            if not isinstance(active, bool):
-                raise ValueError("active must be a boolean")
-
-            return cls(
-                client_window=client_window,
-                state=state,
-                width=width,
-                height=height,
-                x=x,
-                y=y,
-                active=active,
-            )
-        except (KeyError, TypeError) as e:
-            raise ValueError(f"Invalid data format for ClientWindowInfo: {e}")
+        return cls(
+            client_window=data.get("clientWindow"),
+            state=data.get("state"),
+            width=data.get("width"),
+            height=data.get("height"),
+            x=data.get("x"),
+            y=data.get("y"),
+            active=data.get("active"),
+        )
 
 
 class Browser:
