@@ -26,6 +26,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Internal.Logging;
 
 namespace OpenQA.Selenium;
 
@@ -36,6 +37,8 @@ public abstract class DriverService : ICommandServer
 {
     private bool isDisposed;
     private Process? driverServiceProcess;
+
+    private static readonly ILogger _logger = Log.GetLogger(typeof(DriverService));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DriverService"/> class.
@@ -152,6 +155,13 @@ public abstract class DriverService : ICommandServer
     public string? DriverServicePath { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the driver process console output should be logged
+    /// to the console. Defaults to <see langword="false"/>, meaning console output from the
+    /// driver will be suppressed.
+    /// </summary>
+    public bool LogToConsole { get; set; } = false;
+
+    /// <summary>
     /// Gets the command-line arguments for the driver service.
     /// </summary>
     protected virtual string CommandLineArguments => string.Format(CultureInfo.InvariantCulture, "--port={0}", this.Port);
@@ -243,6 +253,9 @@ public abstract class DriverService : ICommandServer
         this.driverServiceProcess.StartInfo.UseShellExecute = false;
         this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
 
+        this.driverServiceProcess.StartInfo.RedirectStandardOutput = this.LogToConsole;
+        this.driverServiceProcess.StartInfo.RedirectStandardError = this.LogToConsole;
+
         DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
         this.OnDriverProcessStarting(eventArgs);
 
@@ -303,6 +316,16 @@ public abstract class DriverService : ICommandServer
         if (eventArgs == null)
         {
             throw new ArgumentNullException(nameof(eventArgs), "eventArgs must not be null");
+        }
+
+        if (this.LogToConsole && eventArgs.StandardOutputStreamReader != null)
+        {
+            _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardOutputStreamReader, "stdout"));
+        }
+
+        if (this.LogToConsole && eventArgs.StandardErrorStreamReader != null)
+        {
+            _ = Task.Run(() => ReadStreamAsync(eventArgs.StandardErrorStreamReader, "stderr"));
         }
 
         this.DriverProcessStarted?.Invoke(this, eventArgs);
@@ -386,4 +409,37 @@ public abstract class DriverService : ICommandServer
 
         return isInitialized;
     }
+
+    private async Task ReadStreamAsync(StreamReader reader, string streamType)
+    {
+        try
+        {
+            string? line;
+            while ((line = await reader.ReadLineAsync()) != null)
+            {
+                if (streamType.Equals("stdout", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (_logger.IsEnabled(LogEventLevel.Info))
+                    {
+                        _logger.Info(line);
+                    }
+                }
+                else
+                {
+                    if (_logger.IsEnabled(LogEventLevel.Error))
+                    {
+                        _logger.Error(line);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (_logger.IsEnabled(LogEventLevel.Error))
+            {
+                _logger.Error($"Error reading stream: {ex.Message}");
+            }
+        }
+    }
+
 }
