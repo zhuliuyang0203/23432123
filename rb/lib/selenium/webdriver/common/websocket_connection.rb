@@ -32,8 +32,11 @@ module Selenium
 
       MAX_LOG_MESSAGE_SIZE = 9999
 
-      def initialize(url:)
+      def initialize(url:, options: {})
         @callback_threads = ThreadGroup.new
+
+        @response_timeout = options.fetch(:response_timeout, RESPONSE_WAIT_TIMEOUT)
+        @response_interval = options.fetch(:response_interval, RESPONSE_WAIT_INTERVAL)
 
         @session_id = nil
         @url = url
@@ -147,7 +150,7 @@ module Selenium
       end
 
       def wait
-        @wait ||= Wait.new(timeout: RESPONSE_WAIT_TIMEOUT, interval: RESPONSE_WAIT_INTERVAL)
+        @wait ||= Wait.new(timeout: @response_timeout, interval: @response_interval)
       end
 
       def socket

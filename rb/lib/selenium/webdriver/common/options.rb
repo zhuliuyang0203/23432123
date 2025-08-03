@@ -26,6 +26,8 @@ module Selenium
 
       GRID_OPTIONS = %i[enable_downloads].freeze
 
+      WEBSOCKET_OPTIONS = %i[web_socket_timeout web_socket_interval].freeze
+
       class << self
         attr_reader :driver_path
 
@@ -52,7 +54,7 @@ module Selenium
         end
 
         def set_capabilities
-          (W3C_OPTIONS + GRID_OPTIONS + self::CAPABILITIES.keys).each do |key|
+          (W3C_OPTIONS + GRID_OPTIONS + WEBSOCKET_OPTIONS + self::CAPABILITIES.keys).each do |key|
             next if method_defined? key
 
             define_method key do
@@ -108,6 +110,8 @@ module Selenium
 
         downloads = options.delete(:enable_downloads)
         options['se:downloadsEnabled'] = downloads unless downloads.nil?
+        options['ws:response_timeout'] = options.delete(:web_socket_timeout) if options[:web_socket_timeout]
+        options['ws:response_interval'] = options.delete(:web_socket_interval) if options[:web_socket_interval]
         w3c_options = process_w3c_options(options)
 
         browser_options = self.class::CAPABILITIES.each_with_object({}) do |(capability_alias, capability_name), hash|

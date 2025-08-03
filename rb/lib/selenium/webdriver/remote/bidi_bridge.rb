@@ -26,7 +26,13 @@ module Selenium
         def create_session(capabilities)
           super
           socket_url = @capabilities[:web_socket_url]
-          @bidi = Selenium::WebDriver::BiDi.new(url: socket_url)
+
+          ws_options = {
+            response_timeout: capabilities['ws:responseTimeout'],
+            response_interval: capabilities['ws:responseInterval']
+          }.compact
+
+          @bidi = Selenium::WebDriver::BiDi.new(url: socket_url, options: ws_options)
         end
 
         def get(url)
