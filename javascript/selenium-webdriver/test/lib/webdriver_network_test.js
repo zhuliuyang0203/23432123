@@ -22,6 +22,8 @@ const { Browser } = require('selenium-webdriver')
 const { Pages, suite } = require('../../lib/test')
 const until = require('selenium-webdriver/lib/until')
 const { By } = require('selenium-webdriver')
+const { Request, Response } = require('selenium-webdriver/http')
+const { Network } = require('selenium-webdriver/bidi/network')
 
 suite(
   function (env) {
@@ -111,6 +113,206 @@ suite(
         } catch (e) {
           assert.strictEqual(e.name, 'UnexpectedAlertOpenError')
         }
+      })
+
+      it('can add request handler to modify method', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('HEAD', Pages.logEntryAdded, null)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('log entry added events'), false)
+      })
+
+      it('can add request handler to modify uri', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('GET', Pages.blankPage, null)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('blank'), true)
+      })
+
+      it('can add request handler to modify body', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('POST', Pages.addRequestBody, 'hello world!')
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('hello world'), true)
+      })
+
+      it('can add multiple request handlers', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('GET', Pages.blankPage, null)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.network().addRequestHandler(
+          (req) => req.path.includes('hello.html'),
+          () => new Request('GET', Pages.logEntryAdded, null),
+        )
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('blank'), true)
+      })
+
+      it('can add multiple request handlers with same filter', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('GET', Pages.blankPage, null)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('blank'), true)
+      })
+
+      it('can remove request handler', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('GET', Pages.blankPage, null)
+
+        const id = await driver.network().addRequestHandler(filter, handler)
+
+        await driver.network().removeRequestHandler(id)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('entry added'), true)
+      })
+
+      it('throws an error when removing request handler that does not exist', async function () {
+        try {
+          await driver.network().removeRequestHandler(10)
+          assert.fail('Expected error not thrown. Non-existent handler cannot be removed')
+        } catch (e) {
+          assert.strictEqual(e.message, 'Callback with id 10 not found')
+        }
+      })
+
+      it('can clear request handlers', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Request('GET', Pages.blankPage, null)
+
+        await driver.network().addRequestHandler(filter, handler)
+
+        await driver.network().addRequestHandler(
+          (req) => req.path.includes('hello.html'),
+          () => new Request('GET', Pages.logEntryAdded, null),
+        )
+
+        await driver.network().clearRequestHandlers()
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('entry added'), true)
+      })
+
+      it('can add response handler to mock complete response', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Response(500, { test: 'header-value' }, 'Internal server error')
+
+        const network = await Network(driver)
+
+        let onResponseCompleted = null
+
+        await network.responseStarted(function (event) {
+          if (event.response.url.includes('logEntryAdded')) {
+            onResponseCompleted = event.response
+          }
+        })
+
+        await driver.network().addResponseHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('Internal server error'), true)
+
+        assert.strictEqual(onResponseCompleted.status, 500)
+        assert.strictEqual(onResponseCompleted.headers[0].name, 'test')
+        assert.strictEqual(onResponseCompleted.headers[0].value.value, 'header-value')
+      })
+
+      it('can add multiple response handler with same filter', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Response(500, { test: 'header-value' }, 'Internal server error')
+
+        const network = await Network(driver)
+
+        let onResponseCompleted = null
+
+        await network.responseStarted(function (event) {
+          if (event.response.url.includes('logEntryAdded')) {
+            onResponseCompleted = event.response
+          }
+        })
+
+        await driver.network().addResponseHandler(filter, handler)
+        await driver.network().addResponseHandler(filter, handler)
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('Internal server error'), true)
+
+        assert.strictEqual(onResponseCompleted.status, 500)
+        assert.strictEqual(onResponseCompleted.headers[0].name, 'test')
+        assert.strictEqual(onResponseCompleted.headers[0].value.value, 'header-value')
+      })
+
+      it('throws an error when removing response handler that does not exist', async function () {
+        try {
+          await driver.network().removeResponseHandler(10)
+          assert.fail('Expected error not thrown. Non-existent handler cannot be removed')
+        } catch (e) {
+          assert.strictEqual(e.message, 'Callback with id 10 not found')
+        }
+      })
+
+      it('can clear response handlers', async function () {
+        const filter = (req) => req.path.includes('bidi/logEntryAdded.html')
+        const handler = () => new Response(200, { test: 'header' }, 'Hello!')
+
+        await driver.network().addResponseHandler(filter, handler)
+
+        await driver.network().addResponseHandler(
+          (req) => req.path.includes('hello.html'),
+          () => new Response(401, { test: 'header' }, 'Not found!'),
+        )
+
+        await driver.network().clearResponseHandlers()
+
+        await driver.get(Pages.logEntryAdded)
+
+        const pageSource = await driver.getPageSource()
+
+        assert.strictEqual(pageSource.includes('entry added'), true)
       })
     })
   },

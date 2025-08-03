@@ -154,19 +154,10 @@ class Network {
 
     this.ws = await this.bidi.socket
     this.ws.on('message', (event) => {
-      const { params } = JSON.parse(Buffer.from(event.toString()))
+      const { method, params } = JSON.parse(Buffer.from(event.toString()))
       if (params) {
         let response = null
-        if ('initiator' in params) {
-          response = new BeforeRequestSent(
-            params.context,
-            params.navigation,
-            params.redirectCount,
-            params.request,
-            params.timestamp,
-            params.initiator,
-          )
-        } else if ('response' in params) {
+        if ('request' in params && 'response' in params) {
           response = new ResponseStarted(
             params.context,
             params.navigation,
@@ -174,6 +165,15 @@ class Network {
             params.request,
             params.timestamp,
             params.response,
+          )
+        } else if ('initiator' in params && !('response' in params)) {
+          response = new BeforeRequestSent(
+            params.context,
+            params.navigation,
+            params.redirectCount,
+            params.request,
+            params.timestamp,
+            params.initiator,
           )
         } else if ('errorText' in params) {
           response = new FetchError(
@@ -185,7 +185,7 @@ class Network {
             params.errorText,
           )
         }
-        this.invokeCallbacks(eventType, response)
+        this.invokeCallbacks(method, response)
       }
     })
     return id

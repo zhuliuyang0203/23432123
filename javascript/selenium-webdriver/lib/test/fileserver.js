@@ -45,6 +45,7 @@ const Pages = (function () {
     })
   }
 
+  addPage('addRequestBody', 'addRequestBody')
   addPage('ajaxyPage', 'ajaxy_page.html')
   addPage('alertsPage', 'alerts.html')
   addPage('basicAuth', 'basicAuth')
@@ -131,6 +132,7 @@ const Path = {
   PAGE: WEB_ROOT + '/page',
   SLEEP: WEB_ROOT + '/sleep',
   UPLOAD: WEB_ROOT + '/upload',
+  ADD_REQUEST_BODY: WEB_ROOT + '/addRequestBody',
 }
 
 var app = express()
@@ -143,6 +145,7 @@ app
   })
   .use(JS_ROOT, serveIndex(jsDirectory), express.static(jsDirectory))
   .post(Path.UPLOAD, handleUpload)
+  .post(Path.ADD_REQUEST_BODY, addRequestBody)
   .use(WEB_ROOT, serveIndex(baseDirectory), express.static(baseDirectory))
   .use(DATA_ROOT, serveIndex(dataDirectory), express.static(dataDirectory))
   .get(Path.ECHO, sendEcho)
@@ -185,6 +188,32 @@ function sendInifinitePage(request, response) {
     'Content-Type': 'text/html; charset=utf-8',
   })
   response.end(body)
+}
+
+function addRequestBody(request, response) {
+  let requestBody = ''
+
+  request.on('data', (chunk) => {
+    requestBody += chunk
+  })
+
+  request.on('end', () => {
+    let body = [
+      '<!DOCTYPE html>',
+      '<html>',
+      '<head><title>Page</title></head>',
+      '<body>',
+      `<p>Request Body:</p><pre>${requestBody}</pre>`,
+      '</body>',
+      '</html>',
+    ].join('')
+
+    response.writeHead(200, {
+      'Content-Length': Buffer.byteLength(body, 'utf8'),
+      'Content-Type': 'text/html; charset=utf-8',
+    })
+    response.end(body)
+  })
 }
 
 function sendBasicAuth(request, response) {

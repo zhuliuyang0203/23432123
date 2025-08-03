@@ -88,12 +88,18 @@ class Request {
    * @param {string} method The HTTP method to use for the request.
    * @param {string} path The path on the server to send the request to.
    * @param {Object=} opt_data This request's non-serialized JSON payload data.
+   * @param {Map<string, string>} [headers=new Map()] - The optional headers as a Map.
    */
-  constructor(method, path, opt_data) {
+  constructor(method, path, opt_data, headers = new Map()) {
     this.method = /** string */ method
     this.path = /** string */ path
     this.data = /** Object */ opt_data
-    this.headers = /** !Map<string, string> */ new Map([['Accept', 'application/json; charset=utf-8']])
+
+    if (headers.size > 0) {
+      this.headers = headers
+    } else {
+      this.headers = /** !Map<string, string> */ new Map([['Accept', 'application/json; charset=utf-8']])
+    }
   }
 
   /** @override */
