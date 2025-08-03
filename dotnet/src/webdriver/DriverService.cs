@@ -37,8 +37,8 @@ public abstract class DriverService : ICommandServer
 {
     private bool isDisposed;
     private Process? driverServiceProcess;
-    
-    private static readonly ILogger _logger = Log.GetLogger(typeof(DriverService));    
+
+    private static readonly ILogger _logger = Log.GetLogger(typeof(DriverService));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DriverService"/> class.
@@ -409,7 +409,7 @@ public abstract class DriverService : ICommandServer
 
         return isInitialized;
     }
-    
+
     private async Task ReadStreamAsync(StreamReader reader, string streamType)
     {
         try
@@ -441,5 +441,5 @@ public abstract class DriverService : ICommandServer
             }
         }
     }
-    
+
 }

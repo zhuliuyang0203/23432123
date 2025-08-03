@@ -34,7 +34,7 @@ public sealed class FirefoxDriverService : DriverService
 {
     private const string DefaultFirefoxDriverServiceFileName = "geckodriver";
     private static readonly ILogger _logger = Log.GetLogger(typeof(FirefoxDriverService));
-    
+
     /// <summary>
     /// Process management fields for the log writer.
     /// </summary>
@@ -362,6 +362,6 @@ public sealed class FirefoxDriverService : DriverService
             {
                 _logger.Error($"Error reading stream: {ex.Message}");
             }
-        }        
+        }
     }
 }

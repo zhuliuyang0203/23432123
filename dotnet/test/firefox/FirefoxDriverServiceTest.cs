@@ -56,12 +56,12 @@ public class FirefoxDriverServiceTest
         FirefoxOptions options = new FirefoxOptions();
         string logPath = Path.GetTempFileName();
         options.LogLevel = FirefoxDriverLogLevel.Trace;
-    
+
         FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
         service.LogPath = logPath;
-    
+
         IWebDriver firefoxDriver = new FirefoxDriver(service, options);
-    
+
         try
         {
             Assert.That(File.Exists(logPath), Is.True);
@@ -74,19 +74,19 @@ public class FirefoxDriverServiceTest
             File.Delete(logPath);
         }
     }
-    
+
     [Test]
     public void ShouldRedirectGeckoDriverLogsToConsole()
     {
         Log.SetLevel(LogEventLevel.Info).Handlers.Add(testLogHandler);
         FirefoxOptions options = new FirefoxOptions();
         options.LogLevel = FirefoxDriverLogLevel.Info;
-    
+
         FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
         service.LogToConsole = true;
-    
+
         IWebDriver firefoxDriver = new FirefoxDriver(service, options);
-    
+
         try
         {
             Assert.That(testLogHandler.Events, Has.Count.AtLeast(1));
@@ -96,7 +96,7 @@ public class FirefoxDriverServiceTest
         {
             firefoxDriver.Quit();
         }
-    }    
+    }
 }
 
 class TestLogHandler : ILogHandler
