@@ -17,16 +17,20 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Indicates that a session could not be created. */
+@NullMarked
 public class SessionNotCreatedException extends WebDriverException {
-  public SessionNotCreatedException(String msg) {
+  public SessionNotCreatedException(@Nullable String msg) {
     super(
         "Could not start a new session. "
             + msg
             + (msg != null && msg.contains("Host info") ? "" : " \n" + getHostInformation()));
   }
 
-  public SessionNotCreatedException(String msg, Throwable cause) {
+  public SessionNotCreatedException(@Nullable String msg, @Nullable Throwable cause) {
     super(
         "Could not start a new session. "
             + msg

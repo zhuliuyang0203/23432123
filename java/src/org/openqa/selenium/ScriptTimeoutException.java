@@ -17,20 +17,24 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Thrown when an async execute script command does not complete in enough time. */
+@NullMarked
 public class ScriptTimeoutException extends WebDriverException {
 
   public ScriptTimeoutException() {}
 
-  public ScriptTimeoutException(String message) {
+  public ScriptTimeoutException(@Nullable String message) {
     super(message);
   }
 
-  public ScriptTimeoutException(Throwable cause) {
+  public ScriptTimeoutException(@Nullable Throwable cause) {
     super(cause);
   }
 
-  public ScriptTimeoutException(String message, Throwable cause) {
+  public ScriptTimeoutException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }

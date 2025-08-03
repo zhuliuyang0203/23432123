@@ -17,20 +17,24 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 /** Thrown when a command does not complete in enough time. */
+@NullMarked
 public class TimeoutException extends WebDriverException {
 
   public TimeoutException() {}
 
-  public TimeoutException(String message) {
+  public TimeoutException(@Nullable String message) {
     super(message);
   }
 
-  public TimeoutException(Throwable cause) {
+  public TimeoutException(@Nullable Throwable cause) {
     super(cause);
   }
 
-  public TimeoutException(String message, Throwable cause) {
+  public TimeoutException(@Nullable String message, @Nullable Throwable cause) {
     super(message, cause);
   }
 }
