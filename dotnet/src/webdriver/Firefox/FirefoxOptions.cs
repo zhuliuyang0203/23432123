@@ -59,7 +59,6 @@ public class FirefoxOptions : DriverOptions
     private const string FirefoxPrefsCapability = "prefs";
     private const string FirefoxEnvCapability = "env";
     private const string FirefoxOptionsCapability = "moz:firefoxOptions";
-    private const string FirefoxEnableDevToolsProtocolCapability = "moz:debuggerAddress";
     private readonly List<string> firefoxArguments = new List<string>();
     private readonly Dictionary<string, object> profilePreferences = new Dictionary<string, object>();
     private readonly Dictionary<string, object> additionalFirefoxOptions = new Dictionary<string, object>();
@@ -82,7 +81,6 @@ public class FirefoxOptions : DriverOptions
         this.AddKnownCapabilityName(FirefoxOptions.FirefoxLogCapability, "LogLevel property");
         this.AddKnownCapabilityName(FirefoxOptions.FirefoxLegacyProfileCapability, "Profile property");
         this.AddKnownCapabilityName(FirefoxOptions.FirefoxLegacyBinaryCapability, "BrowserExecutableLocation property");
-        this.AddKnownCapabilityName(FirefoxOptions.FirefoxEnableDevToolsProtocolCapability, "EnableDevToolsProtocol property");
         // https://fxdx.dev/deprecating-cdp-support-in-firefox-embracing-the-future-with-webdriver-bidi/.
         // Enable BiDi only
         this.SetPreference("remote.active-protocols", 1);
@@ -102,11 +100,6 @@ public class FirefoxOptions : DriverOptions
     /// Gets or sets the logging level of the Firefox driver.
     /// </summary>
     public FirefoxDriverLogLevel LogLevel { get; set; } = FirefoxDriverLogLevel.Default;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to enable the DevTools protocol for the launched browser.
-    /// </summary>
-    public bool EnableDevToolsProtocol { get; set; }
 
     /// <summary>
     /// Gets or sets the options for automating Firefox on Android.
@@ -258,10 +251,6 @@ public class FirefoxOptions : DriverOptions
         IWritableCapabilities capabilities = GenerateDesiredCapabilities(true);
         Dictionary<string, object> firefoxOptions = this.GenerateFirefoxOptionsDictionary();
         capabilities.SetCapability(FirefoxOptionsCapability, firefoxOptions);
-        if (this.EnableDevToolsProtocol)
-        {
-            capabilities.SetCapability(FirefoxEnableDevToolsProtocolCapability, true);
-        }
 
         return capabilities.AsReadOnly();
     }

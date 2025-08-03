@@ -42,6 +42,6 @@ public class NightlyChannelFirefoxDriver : FirefoxDriver
 
     public static FirefoxOptions DefaultOptions
     {
-        get { return new FirefoxOptions() { BrowserVersion = "nightly", AcceptInsecureCertificates = true, EnableDevToolsProtocol = true }; }
+        get { return new FirefoxOptions() { BrowserVersion = "nightly", AcceptInsecureCertificates = true }; }
     }
 }
