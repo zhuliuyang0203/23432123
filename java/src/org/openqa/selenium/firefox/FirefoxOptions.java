@@ -305,7 +305,8 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
         List<String> arguments = (List<String>) (capabilities.getCapability(("args")));
         arguments.forEach(
             arg -> {
-              if (!((List<String>) newInstance.firefoxOptions.get(Keys.ARGS.key())).contains(arg)) {
+              List<String> existingArgs = (List<String>) newInstance.firefoxOptions.get(Keys.ARGS.key());
+              if (existingArgs == null || !existingArgs.contains(arg)) {
                 newInstance.addArguments(arg);
               }
             });
@@ -367,7 +368,8 @@ public class FirefoxOptions extends AbstractDriverOptions<FirefoxOptions> {
 
         arguments.forEach(
             arg -> {
-              if (!((List<String>) newInstance.firefoxOptions.get(Keys.ARGS.key())).contains(arg)) {
+              List<String> existingArgs = (List<String>) newInstance.firefoxOptions.get(Keys.ARGS.key());
+              if (existingArgs == null || !existingArgs.contains(arg)) {
                 newInstance.addArguments(arg);
               }
             });
