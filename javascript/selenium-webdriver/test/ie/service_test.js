@@ -18,13 +18,13 @@
 'use strict'
 
 const assert = require('node:assert')
-const edge = require('selenium-webdriver/edge')
+const ie = require('selenium-webdriver/ie')
 const test = require('../../lib/test')
 const { getBinaryPaths } = require('selenium-webdriver/common/driverFinder')
 
 test.suite(
   function (_env) {
-    describe('msedgedriver', function () {
+    describe('iedriver', function () {
       let service
 
       afterEach(function () {
@@ -33,9 +33,15 @@ test.suite(
         }
       })
 
-      it('can start msedgedriver', async function () {
-        service = new edge.ServiceBuilder().build()
-        service.setExecutable(getBinaryPaths(new edge.Options()).driverPath)
+      it('can start iedriver', async function () {
+        // Skip on non-Windows platforms
+        if (process.platform !== 'win32') {
+          this.skip()
+          return
+        }
+
+        service = new ie.ServiceBuilder().build()
+        service.setExecutable(getBinaryPaths(new ie.Options()).driverPath)
         let url = await service.start()
         assert(/127\.0\.0\.1/.test(url), `unexpected url: ${url}`)
       })
@@ -44,47 +50,44 @@ test.suite(
         let originalEnvValue
 
         beforeEach(function () {
-          originalEnvValue = process.env.SE_EDGEDRIVER
+          originalEnvValue = process.env.SE_IEDRIVER
         })
 
         afterEach(function () {
           if (originalEnvValue) {
-            process.env.SE_EDGEDRIVER = originalEnvValue
+            process.env.SE_IEDRIVER = originalEnvValue
           } else {
-            delete process.env.SE_EDGEDRIVER
+            delete process.env.SE_IEDRIVER
           }
         })
 
-        it('uses SE_EDGEDRIVER environment variable when set', function () {
-          const testPath = '/custom/path/to/edgedriver'
-          process.env.SE_EDGEDRIVER = testPath
+        it('uses SE_IEDRIVER environment variable when set', function () {
+          const testPath = '/custom/path/to/iedriver'
+          process.env.SE_IEDRIVER = testPath
 
-          const serviceBuilder = new edge.ServiceBuilder()
-          const service = serviceBuilder.build()
-          assert.strictEqual(service.getExecutable(), testPath)
+          const serviceBuilder = new ie.ServiceBuilder()
+          assert.strictEqual(serviceBuilder.getExecutable(), testPath)
         })
 
         it('explicit path overrides environment variable', function () {
-          const envPath = '/env/path/to/edgedriver'
-          const explicitPath = '/explicit/path/to/edgedriver'
+          const envPath = '/env/path/to/iedriver'
+          const explicitPath = '/explicit/path/to/iedriver'
 
-          process.env.SE_EDGEDRIVER = envPath
-          const serviceBuilder = new edge.ServiceBuilder(explicitPath)
-          const service = serviceBuilder.build()
+          process.env.SE_IEDRIVER = envPath
+          const serviceBuilder = new ie.ServiceBuilder(explicitPath)
 
-          assert.strictEqual(service.getExecutable(), explicitPath)
+          assert.strictEqual(serviceBuilder.getExecutable(), explicitPath)
         })
 
         it('falls back to default behavior when environment variable is not set', function () {
-          delete process.env.SE_EDGEDRIVER
+          delete process.env.SE_IEDRIVER
 
-          const serviceBuilder = new edge.ServiceBuilder()
-          const service = serviceBuilder.build()
+          const serviceBuilder = new ie.ServiceBuilder()
           // Should be null/undefined when no explicit path and no env var
-          assert.ok(!service.getExecutable())
+          assert.ok(!serviceBuilder.getExecutable())
         })
       })
     })
   },
-  { browsers: ['MicrosoftEdge'] },
+  { browsers: ['ie'] },
 )

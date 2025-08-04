@@ -123,6 +123,18 @@ const { Zip } = require('./io/zip')
 const { getBinaryPaths } = require('./common/driverFinder')
 const { findFreePort } = require('./net/portprober')
 const FIREFOX_CAPABILITY_KEY = 'moz:firefoxOptions'
+let runfiles = null
+try {
+  runfiles = require('@bazel/runfiles').runfiles
+} catch {
+  // Ignore if @bazel/runfiles is not available
+}
+
+/**
+ * Environment variable that defines the location of the GeckoDriver executable.
+ * @const {string}
+ */
+const GECKO_DRIVER_EXE_ENV_VAR = 'SE_GECKODRIVER'
 
 /**
  * Thrown when there an add-on is malformed.
@@ -489,10 +501,25 @@ function configureExecutor(executor) {
 class ServiceBuilder extends remote.DriverService.Builder {
   /**
    * @param {string=} opt_exe Path to the server executable to use. If omitted,
-   *     the builder will attempt to locate the geckodriver on the system PATH.
+   *     the builder will attempt to use the geckodriver path from the
+   *     SE_GECKODRIVER environment variable, then locate the geckodriver on the system PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe)
+    let exePath = opt_exe || process.env[GECKO_DRIVER_EXE_ENV_VAR]
+
+    // If path is from env variable and appears to be a relative path, try to resolve it using runfiles
+    if (!opt_exe && exePath && !path.isAbsolute(exePath) && runfiles) {
+      try {
+        const resolvedPath = runfiles.resolve(exePath)
+        if (resolvedPath) {
+          exePath = resolvedPath
+        }
+      } catch {
+        // If resolution fails, use the original path
+      }
+    }
+
+    super(exePath)
     this.setLoopback(true) // Required.
   }
 

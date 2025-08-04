@@ -30,6 +30,12 @@ const { Browser, Capabilities } = require('./lib/capabilities')
 const { getBinaryPaths } = require('./common/driverFinder')
 
 /**
+ * Environment variable that defines the location of the SafariDriver executable.
+ * @const {string}
+ */
+const SAFARI_DRIVER_EXE_ENV_VAR = 'SE_SAFARIDRIVER'
+
+/**
  * Creates {@link remote.DriverService} instances that manage
  * a [safaridriver] server in a child process.
  *
@@ -38,10 +44,11 @@ const { getBinaryPaths } = require('./common/driverFinder')
 class ServiceBuilder extends remote.DriverService.Builder {
   /**
    * @param {string=} opt_exe Path to the server executable to use. If omitted,
-   *     the builder will attempt to locate the safaridriver on the system PATH.
+   *     the builder will attempt to use the safaridriver path from the
+   *     SE_SAFARIDRIVER environment variable, then locate the safaridriver on the system PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe)
+    super(opt_exe || process.env[SAFARI_DRIVER_EXE_ENV_VAR])
     this.setLoopback(true) // Required.
   }
 }

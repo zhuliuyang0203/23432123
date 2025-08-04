@@ -41,6 +41,51 @@ test.suite(
           assert.ok(url.endsWith('/foo/bar/baz'), 'unexpected url: ' + url)
         })
       })
+
+      describe('environment variable support', function () {
+        let originalEnvValue
+
+        beforeEach(function () {
+          originalEnvValue = process.env.SE_CHROMEDRIVER
+        })
+
+        afterEach(function () {
+          if (originalEnvValue) {
+            process.env.SE_CHROMEDRIVER = originalEnvValue
+          } else {
+            delete process.env.SE_CHROMEDRIVER
+          }
+        })
+
+        it('uses SE_CHROMEDRIVER environment variable when set', function () {
+          const testPath = '/custom/path/to/chromedriver'
+          process.env.SE_CHROMEDRIVER = testPath
+
+          const serviceBuilder = new chrome.ServiceBuilder()
+          const service = serviceBuilder.build()
+          assert.strictEqual(service.getExecutable(), testPath)
+        })
+
+        it('explicit path overrides environment variable', function () {
+          const envPath = '/env/path/to/chromedriver'
+          const explicitPath = '/explicit/path/to/chromedriver'
+
+          process.env.SE_CHROMEDRIVER = envPath
+          const serviceBuilder = new chrome.ServiceBuilder(explicitPath)
+          const service = serviceBuilder.build()
+
+          assert.strictEqual(service.getExecutable(), explicitPath)
+        })
+
+        it('falls back to default behavior when environment variable is not set', function () {
+          delete process.env.SE_CHROMEDRIVER
+
+          const serviceBuilder = new chrome.ServiceBuilder()
+          const service = serviceBuilder.build()
+          // Should be null/undefined when no explicit path and no env var
+          assert.ok(!service.getExecutable())
+        })
+      })
     })
   },
   { browsers: ['chrome'] },

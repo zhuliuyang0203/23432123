@@ -38,6 +38,7 @@ const error = require('./lib/error')
 const { getBinaryPaths } = require('./common/driverFinder')
 
 const OPTIONS_CAPABILITY_KEY = 'se:ieOptions'
+const IE_DRIVER_EXE_ENV_VAR = 'SE_IEDRIVER'
 const SCROLL_BEHAVIOUR = {
   BOTTOM: 1,
   TOP: 0,
@@ -422,10 +423,11 @@ function createServiceFromCapabilities(capabilities) {
 class ServiceBuilder extends remote.DriverService.Builder {
   /**
    * @param {string=} opt_exe Path to the server executable to use. If omitted,
-   *     the builder will attempt to locate the IEDriverServer on the system PATH.
+   *     the builder will attempt to use the IEDriverServer path from the
+   *     SE_IEDRIVER environment variable, then locate the IEDriverServer on the system PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe)
+    super(opt_exe || process.env[IE_DRIVER_EXE_ENV_VAR])
     this.setLoopback(true) // Required.
   }
 }

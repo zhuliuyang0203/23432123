@@ -83,6 +83,12 @@ const { Browser } = require('./lib/capabilities')
 const chromium = require('./chromium')
 const EDGE_CAPABILITY_KEY = 'ms:edgeOptions'
 
+/**
+ * Environment variable that defines the location of the MSEdgeDriver executable.
+ * @const {string}
+ */
+const EDGE_DRIVER_EXE_ENV_VAR = 'SE_EDGEDRIVER'
+
 /** @type {remote.DriverService} */
 
 /**
@@ -93,13 +99,14 @@ const EDGE_CAPABILITY_KEY = 'ms:edgeOptions'
 class ServiceBuilder extends chromium.ServiceBuilder {
   /**
    * @param {string=} opt_exe Path to the server executable to use. If omitted,
-   *     the builder will attempt to locate the msedgedriver on the current
+   *     the builder will attempt to use the msedgedriver path from the
+   *     SE_EDGEDRIVER environment variable, then locate the msedgedriver on the current
    *     PATH.
    * @throws {Error} If provided executable does not exist, or the msedgedriver
    *     cannot be found on the PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe)
+    super(opt_exe || process.env[EDGE_DRIVER_EXE_ENV_VAR])
     this.setLoopback(true)
   }
 }

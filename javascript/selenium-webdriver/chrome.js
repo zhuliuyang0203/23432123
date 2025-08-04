@@ -127,6 +127,21 @@
 const { Browser } = require('./lib/capabilities')
 const chromium = require('./chromium')
 const CHROME_CAPABILITY_KEY = 'goog:chromeOptions'
+const path = require('node:path')
+
+/**
+ * Environment variable that defines the location of the ChromeDriver executable.
+ * @const {string}
+ */
+const CHROME_DRIVER_EXE_ENV_VAR = 'SE_CHROMEDRIVER'
+
+// Try to load @bazel/runfiles for resolving paths in Bazel environments
+let runfiles = null
+try {
+  runfiles = require('@bazel/runfiles').runfiles
+} catch {
+  // Ignore if @bazel/runfiles is not available
+}
 
 /** @type {remote.DriverService} */
 
@@ -138,14 +153,29 @@ const CHROME_CAPABILITY_KEY = 'goog:chromeOptions'
 class ServiceBuilder extends chromium.ServiceBuilder {
   /**
    * @param {string=} opt_exe Path to the server executable to use. If omitted,
-   *     the builder will attempt to locate the chromedriver on the current
+   *     the builder will attempt to use the chromedriver path from the
+   *     SE_CHROMEDRIVER environment variable, then locate the chromedriver on the current
    *     PATH. If the chromedriver is not available in path, selenium-manager will
    *     download the chromedriver
    * @throws {Error} If provided executable does not exist, or the chromedriver
    *     cannot be found on the PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe)
+    let exePath = opt_exe || process.env[CHROME_DRIVER_EXE_ENV_VAR]
+
+    // If path is from env variable and appears to be a relative path, try to resolve it using runfiles
+    if (!opt_exe && exePath && !path.isAbsolute(exePath) && runfiles) {
+      try {
+        const resolvedPath = runfiles.resolve(exePath)
+        if (resolvedPath) {
+          exePath = resolvedPath
+        }
+      } catch {
+        // If resolution fails, use the original path
+      }
+    }
+
+    super(exePath)
   }
 }
 
