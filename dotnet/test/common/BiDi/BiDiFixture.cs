@@ -44,9 +44,14 @@ public class BiDiTestFixture
 
         driver = EnvironmentManager.Instance.CreateDriverInstance(options);
 
-        bidi = await driver.AsBiDiAsync();
+        bidi = await CreateBiDi(driver);
 
         context = (await bidi.BrowsingContext.GetTreeAsync())[0].Context;
+    }
+
+    protected virtual async Task<BiDi> CreateBiDi(IWebDriver driver)
+    {
+        return await driver.AsBiDiAsync();
     }
 
     [TearDown]
